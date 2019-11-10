@@ -6,7 +6,8 @@ permalink: /asteroids/
 # Introduction
 Observables allow us to capture asynchronous actions like user interface events in streams.  These allow us to "linearise" the flow of control, avoid deeply nested loops, and process the stream with pure, referentially transparent functions.
 
-As an example we will build a little "Asteroids" game using Observables.  We are going to render it in HTML using SVG.
+As an example we will build a little "Asteroids" game using Observables.  We're going to use [rxjs](https://rxjs-dev.firebaseapp.com/) as our Observable implementation, and we are going to render it in HTML using SVG.
+We're also going to take some pains to make pure functional code (and lots of beautiful curried lambda (arrow) functions). We'll use [typescript type annotations](https://www.typescriptlang.org/) to help us ensure that our data is indeed immutable and to guide us in plugging everything together without type errors.
 
 We'll build it up in several steps.
  * First, we'll just [rotate the ship](#rotating-the-ship)
@@ -35,7 +36,7 @@ And here's the snippet of html that creates the ship:
 
 Note that the ship is rendered inside a transform group `<g>`.  We will be changing the `transform` attribute to move the ship around.  
 
-## Rotating the ship
+# Rotating the ship
 To begin with we'll make it possible for the player to rotate the ship with the arrow keys.  First, by directly adding listeners to keyboard events.  Then, by using events via Observable streams.  Here's a preview of what it's going to look like [live editor](https://stackblitz.com/edit/asteroids01):
 
 [![Rotation animation](AsteroidsRotate.gif)](https://stackblitz.com/edit/asteroids01)
@@ -44,7 +45,7 @@ There are basically just two states, as sketched in the following state machine:
 
 <img width="300" src="TurnStateMachine.png"/>
 
-### Using Events
+## Using Events
 The first event we assign a function to is the window load event.  This function will not be invoked until the page is fully loaded, and therefore the SVG objects will be available.  Thus, our code begins:
 
 ```javascript
@@ -98,7 +99,7 @@ We're not done yet.  We have to stop the rotation on keyup by calling `clearInte
 ```
 And finally we're done.  But it was surprisingly messy for what should be a relatively straightforward and commonplace interaction.  Furthermore, the imperative style code above finished up deeply nested with function declarations inside function declarations, inside `if`s and variables like `d`, `handle` and `keyupListener` are referenced from inside these nested function scopes in ways that are difficult to read and make sense of.  The state machine is relatively straightforward, but it's tangled up by imperative code blocks.
 
-### Using Observable
+## Using Observable
 Observable (we'll use the implementation from rxjs) wraps common asynchronous actions like user events and intervals in streams, that we can process with a chain of 'operators' applied to the chain through a `pipe`.
 
 We start more or less the same as before, inside a function applied on `window.onload` and we still need local variables for the ship visual and its position/angle:
@@ -143,7 +144,7 @@ Arguably, the Observable code has many advantages over the event handling code:
  * the 'stream' abstraction provided by observable gives us an intuitive way to think about asynchronous behaviour and chain transformations of the stream together through `pipe`s.
  * We didn't see it so much here, but the various observable streams we created are composable, in the sense that adding new pipes (or potentially multiple `subscribe`s) to them allow us to reuse and plug them together in powerful ways.
 
-## Pure Observable Streams
+# Pure Observable Streams
 
 A weakness of the above implementation using Observable streams, is that we still have global mutable state.  Deep in the function passed to subscribe we alter the angle attribute on the `state` object.  Another Observable operator `scan`, allows us to capture this state transformation inside the stream, using a pure function to transform the state, i.e. a function that takes an input state object and---rather than altering it in-place---creates a new output state object with whatever change is required.
 
@@ -197,7 +198,7 @@ And now our main `pipe` (collapsed into one) ends with a `scan` which "transduce
 ```
 The code above is a bit longer than what we started with, but it's starting to lay a more extensible framework for a more complete game.  And it has some nice architectural properties, in particular we've completely decoupled our view code from our state management.  We could swap out SVG for a completely different UI by replacing the updateView function.
 
-## Adding Physics and Handling More Inputs
+# Adding Physics and Handling More Inputs
 Classic Asteroids is more of a space flight simulator in a weird toroidal topology than the 'static' rotation that we've provided above.  We will make our spaceship a freely floating body in space, with directional and rotational velocity.
 We are going to need more inputs than just left and right arrow keys to pilot our ship too.  
 
@@ -328,7 +329,7 @@ And finally we `merge` our different inputs and scan over `State`, and the final
       scan(reduceState, initialState))
     .subscribe(updateView);
 ```
-## View
+# View
 Once again, the above completely decouples the view from state management.  But now we have a richer state, we have more stuff we can show in the view.  We'll start with a little CSS, not only to style elements, but also to hide or show flame from our boosters.
 ```css
 .ship {
@@ -378,7 +379,7 @@ And here's our updated updateView function where we not only move the ship but a
     else hide(thruster);
   }
 ```
-## Additional Objects
+# Additional Objects
 Things get more complicated when we start adding more objects to the canvas that all participate in the physics simulation.  Furthermore, objects like asteroids and bullets will need to be added and removed from the canvas dynamically - unlike the ship whose visual is currently defined in the `svg` and never leaves.  We'll start with bullets that can be fired with the Space key, and which expire after a set period of time:
 
 [![Spaceship flying](AsteroidsShoot.gif)](https://stackblitz.com/edit/asteroids04?file=index.ts)
@@ -522,12 +523,12 @@ And we tack a bit on to `updateView` to draw and remove bullets:
     })
   }
 ```
-### Collisions
+# Collisions
 So far the game we have built allows you to hoon around in a space-ship blasting the void with fireballs which is kind of fun, but not very challenging.  The Asteroids game doesn't really become "Asteroids" until you actually have... asteroids.  Also, you should be able to break them up with your blaster and crashing into them should end the game.  Here's a preview:
 
 [![Spaceship flying](AsteroidsComplete.gif)](https://stackblitz.com/edit/asteroids05?file=index.ts)
 
-#### State
+## Initial State
 We will need to store two new pieces of state: the collection of asteroids (`rocks`) which is another array of `Body`, just like bullets; and also a boolean that will become `true` when the game ends due to collision between the ship and a rock. 
 ```typescript
   interface State {
@@ -553,7 +554,11 @@ Our initial state is going to include several rocks from the outside, as follows
       gameOver: false
     }
 ```
-Our `tick` function is more or less the same as above, but it will apply one more transformation to the state that it returns, by applying the following function.  This function checks for collisions between the ship and rocks, and also between bullets and rocks.  
+
+## Reducing State
+
+Our `tick` function is more or less the same as above, but it will apply one more transformation to the state that it returns, by applying the following function.  This function checks for collisions between the ship and rocks, and also between bullets and rocks. 
+
 ```typescript```
   handleCollisions = (s:State) => {
     const
@@ -582,6 +587,9 @@ Our `tick` function is more or less the same as above, but it will apply one mor
     }
   };
 ```
+
+## View
+
 Finally, we need to update `updateView` function.  First, we need to update the visuals for each of the rocks, but these are the same as bullets.  The second, slightly bigger, change, is simply to display the text "Game Over" on `s.gameover` true. 
 ```typescript
   function updateView(s: State) {
