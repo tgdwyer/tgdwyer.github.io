@@ -30,7 +30,7 @@ To begin with we'll make it possible for the player to rotate the ship with the 
 
 There are basically just two states, as sketched in the following state machine:
 
-<img width="300" src="TurningStateMachine.png"/>
+<img width="300" src="TurnStateMachine.png"/>
 
 ### Using Events
 The first event we assign a function to is the window load event.  This function will not be invoked until the page is fully loaded, and therefore the SVG objects will be available.  Thus, our code begins:
