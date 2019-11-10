@@ -3,10 +3,22 @@ layout: page
 title: "Observable Asteroids"
 permalink: /asteroids/
 ---
-# Asteroids
+# Introduction
 Observables allow us to capture asynchronous actions like user interface events in streams.  These allow us to "linearise" the flow of control, avoid deeply nested loops, and process the stream with pure, referentially transparent functions.
 
-As an example we will build a little "Asteroids" game using Observables.  We are going to render it in html using svg.  Let's start by making the svg with a simple polygon for the ship.  It will look like this:
+As an example we will build a little "Asteroids" game using Observables.  We are going to render it in HTML using SVG.
+
+We'll build it up in several steps.
+ * First, we'll just [rotate the ship](#rotating-the-ship)
+  1. [with old-school events](#using-events)
+  2. [with an Observable](#using-observable)
+ * Then, we'll [eliminate global state using "Pure" Observable Streams](#pure-observable-streams)
+ * Then, we'll [add physics and handling more inputs](#adding-physics-and-handling-more-inputs)
+ * We'll [isolate the view](#view)
+ * Next, we'll [introduce other objects, starting with bullets](#additional-objects)
+ * Finally, we'll [deal with collisions](#collisions)
+
+Let's start by making the svg with a simple polygon for the ship.  It will look like this:
 
 <img width="100" src="ship.png"/>
 
@@ -131,7 +143,7 @@ Arguably, the Observable code has many advantages over the event handling code:
  * the 'stream' abstraction provided by observable gives us an intuitive way to think about asynchronous behaviour and chain transformations of the stream together through `pipe`s.
  * We didn't see it so much here, but the various observable streams we created are composable, in the sense that adding new pipes (or potentially multiple `subscribe`s) to them allow us to reuse and plug them together in powerful ways.
 
-### "Pure" Observable Streams
+## Pure Observable Streams
 
 A weakness of the above implementation using Observable streams, is that we still have global mutable state.  Deep in the function passed to subscribe we alter the angle attribute on the `state` object.  Another Observable operator `scan`, allows us to capture this state transformation inside the stream, using a pure function to transform the state, i.e. a function that takes an input state object and---rather than altering it in-place---creates a new output state object with whatever change is required.
 
@@ -185,7 +197,7 @@ And now our main `pipe` (collapsed into one) ends with a `scan` which "transduce
 ```
 The code above is a bit longer than what we started with, but it's starting to lay a more extensible framework for a more complete game.  And it has some nice architectural properties, in particular we've completely decoupled our view code from our state management.  We could swap out SVG for a completely different UI by replacing the updateView function.
 
-### Adding Physics and Handling More Inputs
+## Adding Physics and Handling More Inputs
 Classic Asteroids is more of a space flight simulator in a weird toroidal topology than the 'static' rotation that we've provided above.  We will make our spaceship a freely floating body in space, with directional and rotational velocity.
 We are going to need more inputs than just left and right arrow keys to pilot our ship too.  
 
@@ -316,7 +328,7 @@ And finally we `merge` our different inputs and scan over `State`, and the final
       scan(reduceState, initialState))
     .subscribe(updateView);
 ```
-### View
+## View
 Once again, the above completely decouples the view from state management.  But now we have a richer state, we have more stuff we can show in the view.  We'll start with a little CSS, not only to style elements, but also to hide or show flame from our boosters.
 ```css
 .ship {
@@ -366,7 +378,7 @@ And here's our updated updateView function where we not only move the ship but a
     else hide(thruster);
   }
 ```
-### Additional Objects
+## Additional Objects
 Things get more complicated when we start adding more objects to the canvas that all participate in the physics simulation.  Furthermore, objects like asteroids and bullets will need to be added and removed from the canvas dynamically - unlike the ship whose visual is currently defined in the `svg` and never leaves.  We'll start with bullets that can be fired with the Space key, and which expire after a set period of time:
 
 [![Spaceship flying](AsteroidsShoot.gif)](https://stackblitz.com/edit/asteroids04?file=index.ts)
