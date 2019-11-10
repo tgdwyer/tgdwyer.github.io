@@ -6,8 +6,10 @@ layout: home
 ---
 Some content. Some more.
 ```typescript
-const x:number = 1;
+const x:number = 2;
 function fun<T>(o:number) {
     return <T>{x:blah}
 }
 ```
+
+[Observable Asteroids](asteroids)

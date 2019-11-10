@@ -1,0 +1,14 @@
+{
+  "name": "asteroids1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "asteroids.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "rxjs": "^6.5.3"
+  }
+}
