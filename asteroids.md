@@ -555,7 +555,22 @@ We will need to store two new pieces of state: the collection of asteroids (`roc
     gameOver:boolean
   }>
 ```
-Our initial state is going to include several rocks from the outside, as follows:
+Since bullets and rocks are both just circular `Body`s with constant velocity, we can generalise what was previously the `createBullet` function to create either:
+```typescript
+  const createCircle = (viewType: ViewType)=> (oid:number)=> (time:number)=> (radius:number)=> (pos:Vec)=> (vel:Vec)=>
+    <Body>{
+      createTime: time,
+      pos:pos,
+      vel:vel,
+      acc:Vec.Zero,
+      angle:0, rotation:0, torque:0,
+      radius: radius,
+      id: viewType+oid,
+      viewType: viewType
+    };
+```
+
+Our initial state is going to include several rocks drifting in random directions, as follows:
 ```typescript
   const
     startRocks = [...Array(Constants.StartRocksCount)]
