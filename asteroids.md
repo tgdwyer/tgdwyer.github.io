@@ -153,11 +153,11 @@ A weakness of the above implementation using Observable streams, is that we stil
 We'll start by altering the start of our code to define an `interface` for `State` with `readonly` members, and we'll place our `initialState` in a `const` variable that matches this interface.  You can also [play with the code in a live editor](https://stackblitz.com/edit/asteroids02).
 ```typescript
 window.onload = function() {
-  interface State {
-    readonly x: number;
-    readonly y: number;
-    readonly angle: number;
-  }
+  type State = Readonly<{
+    x: number;
+    y: number;
+    angle: number;
+  }>
   const initialState: State = { x: 100, y: 100, angle: 0};
 ```
 Now we'll create a function that is a pure transformation of `State`:
@@ -284,14 +284,14 @@ const
 ```
 We'll use `Vec` in a slightly richer set of State.
 ```typescript
-  interface State {
-    readonly pos:Vec, 
-    readonly vel:Vec,
-    readonly thrust:boolean,
-    readonly angle:number,
-    readonly rotation:number,
-    readonly torque:number
-  }
+  type State = Readonly<{
+    pos:Vec, 
+    vel:Vec,
+    thrust:boolean,
+    angle:number,
+    rotation:number,
+    torque:number
+  }>
 ```
 We create an `initialState` using `CanvasSize` to start the spaceship at the centre:
 ```typescript
@@ -388,25 +388,25 @@ Things get more complicated when we start adding more objects to the canvas that
 
 However, the basic framework above is a good basis on which to extend.  The first complication is generalising bodies that participate in the force model with their own type `Body`, separate from the `State`:
 ```typescript
-  interface Body {
-    readonly id:string,
-    readonly pos:Vec, 
-    readonly vel:Vec,
-    readonly thrust:boolean,
-    readonly angle:number,
-    readonly rotation:number,
-    readonly torque:number,
-    readonly radius:number,
-    readonly createTime:number
-  }
-  interface State {
-    readonly time:number,
-    readonly ship:Body,
-    readonly bullets:ReadonlyArray<Body>,
-    readonly rocks:ReadonlyArray<Body>,
-    readonly exit:ReadonlyArray<Body>,
-    readonly objCount:number
-  }
+  type Body = Readonly<{
+    id:string,
+    pos:Vec, 
+    vel:Vec,
+    thrust:boolean,
+    angle:number,
+    rotation:number,
+    torque:number,
+    radius:number,
+    createTime:number
+  }>
+  type State = Readonly<{
+    time:number,
+    ship:Body,
+    bullets:ReadonlyArray<Body>,
+    rocks:ReadonlyArray<Body>,
+    exit:ReadonlyArray<Body>,
+    objCount:number
+  }>
 ```
 So the `ship` is a `Body`, and we will have collections of `Body` for both `bullets` and `rocks`.  What's this `exit` thing?  Well, when we remove something from the canvas, e.g. a bullet, we'll create a new state with a copy of the `bullets` array minus the removed bullet, and we'll place that removed bullet - together with other removed `Body`s to the `exit` array.  This notifies the `updateView` function that they can be removed.
 
@@ -530,14 +530,30 @@ So far the game we have built allows you to hoon around in a space-ship blasting
 
 [![Spaceship flying](AsteroidsComplete.gif)](https://stackblitz.com/edit/asteroids05?file=index.ts)
 
+Before we go forward, let's put all the magic numbers that are starting to permeate our code in one, immutable place:
+```typescript
+const 
+  Constants = new class {
+    readonly CanvasSize = 600;
+    readonly BulletExpirationTime = 1000;
+    readonly BulletRadius = 3;
+    readonly BulletVelocity = 2;
+    readonly StartRockRadius = 30;
+    readonly StartRocksCount = 5;
+    readonly RotationAcc = 0.1;
+    readonly ThrustAcc = 0.1;
+    readonly StartTime = 0;
+  }
+```
+
 ## Initial State
 We will need to store two new pieces of state: the collection of asteroids (`rocks`) which is another array of `Body`, just like bullets; and also a boolean that will become `true` when the game ends due to collision between the ship and a rock. 
 ```typescript
-  interface State {
+  type State = Readonly<{
     ...
-    readonly rocks:ReadonlyArray<Body>,
-    readonly gameOver:boolean
-  }
+    rocks:ReadonlyArray<Body>,
+    gameOver:boolean
+  }>
 ```
 Our initial state is going to include several rocks from the outside, as follows:
 ```typescript
