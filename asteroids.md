@@ -365,22 +365,16 @@ And here's our updated updateView function where we not only move the ship but a
   function updateView(s: State) {
     const 
       ship = document.getElementById("ship")!,
-      leftThruster = document.getElementById("leftThrust")!,
-      rightThruster = document.getElementById("rightThrust")!,
-      thruster = document.getElementById("thruster")!,
-      show = (e:HTMLElement) => e.classList.remove('hidden'),
-      hide = (e:HTMLElement) => e.classList.add('hidden');
+      show = (id:string,condition:boolean)=>((e:HTMLElement) => 
+        condition ? e.classList.remove('hidden')
+                  : e.classList.add('hidden'))(document.getElementById(id)!),
+    show("leftThrust",  s.ship.torque<0);
+    show("rightThrust", s.ship.torque>0);
+    show("thruster",    s.ship.acc.len()>0);
     ship.setAttribute('transform', `translate(${s.pos.x},${s.pos.y}) rotate(${s.angle})`);
-    if (s.torque < 0) show(leftThruster);
-    else if (s.torque > 0) show(rightThruster);
-    else {
-      hide(leftThruster);
-      hide(rightThruster);
-    }
-    if (s.thrust) show(thruster);
-    else hide(thruster);
   }
 ```
+
 # Additional Objects
 Things get more complicated when we start adding more objects to the canvas that all participate in the physics simulation.  Furthermore, objects like asteroids and bullets will need to be added and removed from the canvas dynamically - unlike the ship whose visual is currently defined in the `svg` and never leaves.  We'll start with bullets that can be fired with the Space key, and which expire after a set period of time:
 
@@ -641,6 +635,12 @@ Finally, we need to update `updateView` function.  First, we need to update the 
       svg.appendChild(v);
     }
   }
+```
+where we've created a little helper function `attr` to bulk set properties on an `Element`:
+```typescript
+  const
+    attr = (e:Element,o:any) =>
+      { for(const k in o) e.setAttribute(k,String(o[k])) },
 ```
 The other thing happening at game over, is the call to `subscription.unsubscribe`.  This `subscription` is the object returned by the subscribe call on our main Observable:
 ```typescript
