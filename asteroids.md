@@ -220,7 +220,7 @@ Before we had just left and right rotations coming out of our stream.  Our new s
 Each of these has some data, we'll model them as simple classes:
 ```typescript
 class Tick { constructor(public readonly elapsed:number) {} }
-class Rotate { constructor(public readonly angle:number) {} }
+class Rotate { constructor(public readonly direction:number) {} }
 class Thrust { constructor(public readonly on:boolean) {} }
 ```
 
@@ -287,7 +287,7 @@ We'll use `Vec` in a slightly richer set of State.
   type State = Readonly<{
     pos:Vec, 
     vel:Vec,
-    thrust:boolean,
+    acc:Vec,
     angle:number,
     rotation:number,
     torque:number
@@ -308,7 +308,7 @@ We can encapsulate all the possible transformations of state in a function:
 ```typescript
   const reduceState = (s:State, e:Rotate|Thrust|Tick)=>
     e instanceof Rotate ? {...s,
-      torque:e.angle
+      torque:e.direction
     } :
     e instanceof Thrust ? {...s,
       thrust:e.on
