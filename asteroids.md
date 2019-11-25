@@ -39,7 +39,7 @@ And here's the snippet of html that creates the ship:
 Note that the ship is rendered inside a transform group `<g>`.  We will be changing the `transform` attribute to move the ship around.  
 
 ## Rotating the ship
-To begin with we'll make it possible for the player to rotate the ship with the arrow keys.  First, by directly adding listeners to keyboard events.  Then, by using events via Observable streams.  Here's a preview of what it's going to look like [live editor](https://stackblitz.com/edit/asteroids01):
+To begin with we'll make it possible for the player to rotate the ship with the arrow keys.  First, by directly adding listeners to keyboard events.  Then, by using events via Observable streams.  Here's a preview of what it's going to look like ([or you can play with it in a live editor](https://stackblitz.com/edit/asteroids01)):
 
 [![Rotation animation](AsteroidsRotate.gif)](https://stackblitz.com/edit/asteroids01)
 
