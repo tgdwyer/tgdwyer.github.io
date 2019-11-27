@@ -1,21 +1,23 @@
 ---
 layout: page
-title: "Observable Asteroids"
+title: "FRP Asteroids"
 permalink: /asteroids/
 ---
 ### Introduction
-Observables allow us to capture asynchronous actions like user interface events in streams.  These allow us to "linearise" the flow of control, avoid deeply nested loops, and process the stream with pure, referentially transparent functions.
+Functional Reactive Programming (specifically the Observable/Observer pattern) allows us to capture asynchronous actions like user interface events in streams.  These allow us to "linearise" the flow of control, avoid deeply nested loops, and process the stream with pure, referentially transparent functions.
 
-As an example we will build a little "Asteroids" game using Observables.  We're going to use [rxjs](https://rxjs-dev.firebaseapp.com/) as our Observable implementation, and we are going to render it in HTML using SVG.
-We're also going to take some pains to make pure functional code (and lots of beautiful curried lambda (arrow) functions). We'll use [typescript type annotations](https://www.typescriptlang.org/) to help us ensure that our data is indeed immutable and to guide us in plugging everything together without type errors.
+As an example we will build a little "Asteroids" game using FRP.  We're going to use [rxjs](https://rxjs-dev.firebaseapp.com/) as our Observable implementation, and we are going to render it in HTML using SVG.
+We're also going to take some pains to make pure functional code (and lots of beautiful curried lambda (arrow) functions). We'll use [typescript type annotations](https://www.typescriptlang.org/) to help us ensure that our data is indeed immutable and to guide us in plugging everything together without type errors into a nicely decoupled [Model-View-Controller (MVC) architecture](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller):
+
+![MVC Architecture](GeneralMVC.png)
 
 If you're the kind of person who likes to work backwards, [you can jump straight to playing the final result](https://asteroids05.stackblitz.io/) and you can also [live edit its code](https://stackblitz.com/edit/asteroids05).
 
 We'll build it up in several steps.
  * First, we'll just [rotate the ship](#rotating-the-ship)
-  1. [with old-school events](#using-events-directly)
-  2. [with an Observable](#using-observable)
- * Then, we'll [eliminate global state using "Pure" Observable Streams](#pure-observable-streams)
+  1. [directly with old-school events](#using-events-directly)
+  2. [abstracting away event handling with an Observable](#using-observable)
+ * Then, we'll [eliminate global mutable state using "Pure" Observable Streams](#pure-observable-streams)
  * Then, we'll [add physics and handling more inputs](#adding-physics-and-handling-more-inputs)
  * We'll [isolate the view](#view)
  * Next, we'll [introduce other objects, starting with bullets](#additional-objects)
@@ -379,7 +381,19 @@ And here's our updated updateView function where we not only move the ship but a
 ```
 
 ## Additional Objects
-Things get more complicated when we start adding more objects to the canvas that all participate in the physics simulation.  Furthermore, objects like asteroids and bullets will need to be added and removed from the canvas dynamically - unlike the ship whose visual is currently defined in the `svg` and never leaves.  We'll start with bullets that can be fired with the Space key, and which expire after a set period of time:
+Things get more complicated when we start adding more objects to the canvas that all participate in the physics simulation.  Furthermore, objects like asteroids and bullets will need to be added and removed from the canvas dynamically - unlike the ship whose visual is currently defined in the `svg` and never leaves.  
+
+However, we now have all the pieces of our MVC architecture in place, all tied together with an observable stream:
+
+![Observable MVC Architecture](MVC.png)
+
+So completing the game is just a matter of:
+ * adding more input actions (e.g. `Shoot`)
+ * extending our state data structure to include bullets, rocks, etc.
+ * extending our reduce state function to manipulate this State
+ * extending the `updateView` function so the user can see it
+
+We'll start with bullets that can be fired with the Space key, and which expire after a set period of time:
 
 [![Spaceship flying](AsteroidsShoot.gif)](https://stackblitz.com/edit/asteroids04?file=index.ts)
 
