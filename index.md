@@ -4,12 +4,11 @@
 
 layout: home
 ---
-Some content. Some more.
-```typescript
-const x:number = 2;
-function fun<T>(o:number) {
-    return <T>{x:blah}
-}
-```
+
+[Introduction to JavaScript](javascript1)
+
+[Functional JavaScript](functionaljavascript)
+
+[Introduction to TypeScript](typescript1)
 
 [Observable Asteroids](asteroids)
