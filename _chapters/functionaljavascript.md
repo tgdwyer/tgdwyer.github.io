@@ -86,9 +86,9 @@ With just the above definition we can construct a list (the term cons dates back
 const list123 = cons(1, cons(2, cons(3, null)));
 ```
 
-The data element, and the reference to the next node in the list are stored in the closure returned by the cons function.  Created like this, the only side-effect of growing the list is creation of new cons closures.  Mutation of more complex structures such as trees can be managed in a similarly ‘pure’ way, and surprisingly efficiently, as we will see later in this course. 
+The data element, and the reference to the next node in the list are stored in the closure returned by the ```cons``` function.  Created like this, the only side-effect of growing the list is creation of new cons closures.  Mutation of more complex structures such as trees can be managed in a similarly ‘pure’ way, and surprisingly efficiently, as we will see later in this course. 
 
-So cons is a function that takes two parameters (head and rest), and returns a function that itself takes a function (selector) as argument.  The selector function is then applied to head and rest.  What might the selector function be and how do we apply it to a list element?  Well we don’t exactly apply it ourselves, we give it to the closure returned by the cons function and it applies it for us.  There are the two selectors we need to work with the list:
+So cons is a function that takes two parameters (```head``` and ```rest```), and returns a function that itself takes a function (selector) as argument.  The selector function is then applied to ```head``` and ```rest```.  What might the selector function be and how do we apply it to a list element?  Well we don’t exactly apply it ourselves, we give it to the closure returned by the ```cons``` function and it applies it for us.  There are the two selectors we need to work with the list:
 
 ```javascript
 const   
@@ -96,7 +96,7 @@ const
     rest = list=> list((head, rest)=> rest);
 ```
 
-Now, head gives us the first data element from the list, and rest gives us another list.  Now we can access things in the list like so:
+Now, ```head``` gives us the first data element from the list, and rest gives us another list.  Now we can access things in the list like so:
 
 ```javascript
 const one = head(list123), // ===1
@@ -108,9 +108,10 @@ const one = head(list123), // ===1
 Now, here’s the ubiquitous map function:
 
 ```javascript
-const map = (f, list)=> !list ? null 
+const map = (f, list)=> !list ? null
 : cons(f(head(list)), map(f, rest(list)))
 ```
+
 ---------------
 
 ## Exercises
@@ -123,7 +124,67 @@ const map = (f, list)=> !list ? null
 
 -------------
 
-# Conclusion
+## Updating Data Structures With Pure Functions
+
+We saw in the [introduction to JavaScript](javascript1) that one can create objects with a straightforward chunk of JSON:
+
+```javascript
+const studentVersion1 = {
+  name: "Tim",
+  assignmentMark: 20,
+  examMark: 15
+}
+```
+
+> studentVersion1  
+> {name: "Tim", assignmentMark: 20, examMark: 15}
+
+Conveniently, one can copy all of the properties from an existing object into a new object using the "spread" operator ```...```, followed by more JSON properties that can potentially overwrite those of the original.  For example, the following creates a new object with all the properties of the first, but with a different assignmentMark:
+
+```javascript
+const studentVersion2 = {
+    ...studentVersion1,
+    assignmentMark: 19
+}
+```
+
+> studentVersion2  
+> {name: "Tim", assignmentMark: 19, examMark: 15}
+
+One can encapsulate such updates in a succinct pure function:
+
+```javascript
+function updateExamMark(student, newMark) {
+    return {...student, examMark: newMark}
+}
+
+const studentVersion3 = updateExamMark(studentVersion2, 19)
+```
+
+> studentVersion3  
+> {name: "Tim", assignmentMark: 19, examMark: 19}
+
+Note that when we declared each of the variables ```studentVersion1-3``` as ```const```, these variables are only constant in the sense that the object reference cannot be changed.  That is, they cannot be reassigned to refer to different objects:
+
+```javascript
+studentVersion1 = studentVersion2
+```
+
+> VM430:1 Uncaught TypeError: Assignment to constant variable.  
+
+However, there is nothing in these definitions to prevent the properties of those objects from being changed:
+```javascript
+studentVersion1.name = "Tom"
+```
+
+> studentVersion1  
+> {name: "Tom", assignmentMark: 20, examMark: 15}
+
+We will see later how the [TypeScript compiler](typescript1) allows us to create deeply immutable objects that will trigger compile errors if we try to change their properties.
+
+You may wonder how pure functions can be efficient if the only way to mutate data structures is by returning a modified copy of the original.  There are two responses to such a question, one is: "purity helps us avoid errors in state management through wanton mutation effects - in modern programming correctness is often a bigger concern than efficiency", the other is "properly structured data permits log(n) time copy-updates, which should be good enough for most purposes".  We'll explore what is meant by the latter in later sections of these notes.
+
+## Conclusion
 
 Thus, with only pure function expressions and JavaScript conditional expressions (?:) we can begin to perform complex computations.  We can actually go further and eliminate the conditional expressions with more functions! Here’s the gist of it: we wrap list nodes with another function of two arguments, one argument, whenempty, is a function to apply when the list is empty, the other argument, notempty, is applied by all internal nodes in the list.  An empty list node (instead of null) applies the whenempty function when visited, a non-empty node applies the notempty function. The implementations of each of these functions then form the two conditions to be handled by a recursive algorithm like map or reduce.  See “Making Data out of Functions” by Braithwaite for a more detailed exposition of this idea.
 
