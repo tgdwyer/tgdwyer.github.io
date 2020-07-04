@@ -13,7 +13,7 @@ permalink: /javascript1/
 - Compare [arrow functions](#Arrow-Functions) and regular function syntax
 - Explain JavaScript’s [prototype mechanism](#Prototype-Class-Mechanism) for creating classes from functions
 - Create [ES6 style classes](#EcmaScript-6-Class-Syntax) with constructors and getters
-- Compare object oriented polymorphism to [dependency injection](#Dependency-Injection) through functions
+- Compare object oriented [polymorphism](#Polymorphism) to [dependency injection](#Dependency-Injection) through functions
 
 ## Introduction
 
