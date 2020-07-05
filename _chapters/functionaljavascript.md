@@ -66,13 +66,88 @@ function send(message, recipient) {
 ```
 
 This function is impure in three ways:
-it mutates the state of the count variable messagesSent from the enclosing scope
-it (likely) does something (what exactly is unclear) to recipient
-finally, it sends output to the console.  Outputting to a device (although only for display purposes) is definitely a side effect.
+
+* it mutates the state of the count variable messagesSent from the enclosing scope
+* it (likely) does something (what exactly is unclear) to recipient
+* finally, it sends output to the console.  Outputting to a device (although only for display purposes) is definitely a side effect.
 
 Side effects are bad for transparency (knowing everything about what a function is going to do) and maintainability.  When state in your program is being changed from all over the place bugs become very difficult to track down.
 
-# Computation with Pure Functions
+## Functional Patterns
+Passing functions around, anonymous or not, is incredibly useful and pops up in many practical programming situations.
+
+### Eliminating Loops
+Loops are the source of many bugs: fence-post errors, range errors, typos, incrementing the wrong counter, etc.
+
+A typical for loop has four distinct places where it’s easy to make errors that can cause critical problems:
+
+```javascript
+for ([initialization]; [condition]; [final-expression])
+   statement
+```
+
+* The initialization can initialise to the wrong value (e.g. n instead of n-1, 1 instead of 0) or initialise the wrong variable.
+* The condition test can use = instead of ==, <= instead of < or test the wrong variable, etc.
+* The final-expression can (again) increment the wrong variable
+* The statement body might change the state of variables being tested in the termination condition since they are in scope.
+
+For many standard loops, however, the logic is the same every time and can easily be abstracted into a function.  Examples: Array.map, Array.reduce, Array.forEach, etc.  The logic of the loop body is specified with a function which can execute in its own scope, without the risk of breaking the loop logic.
+
+### Callbacks
+In JavaScript and HTML5 events trigger actions associated with all mouse clicks and other interactions with the page.  You subscribe to an event on a given HTML element as follows:
+```javascript
+element.addEventHandler('click', 
+e=>{
+// do something when the event occurs, 
+// maybe using the result of the event e
+})
+```
+
+Note that callback functions passed as event handlers are a situation where the difference between the arrow syntax and regular anonymous function syntax really matters.  In the body of the arrow function above this will be bound to the context of the caller, which is probably what you want if you are coding a class for a reusable component.  
+
+### Continuations
+
+Continuations are functions which, instead of returning the result of a computation directly to the caller, pass the result on to another function, specified by the caller.  
+We can rewrite basically any function to pass their result to a continuation function instead of returning the result directly.
+
+```javascript
+function simplePlus(a: number, b: number): number {
+   return a + b;
+}
+function continuationPlus(a:number, b:number, done:(result:number)=>void) {
+   done(a+b);
+}
+```
+
+We can also rewrite tail-recursive functions to end with continuations, which specify some custom action to perform when the recursion is complete:
+
+```javascript
+function tailRecFactorial(a: number, n: number): number {
+   return n<=1 ? a : tailRecFactorial(n*a, n-1);
+}
+function continuationFactorial(
+a: number, n: number, finalAction: (result:number)=>void): void 
+{
+   if (n<=1) finalAction(a);
+   else continuationFactorial(n*a, n-1, finalAction);
+}
+```
+
+Continuations are essential in asynchronous processing, because the function will return immediately after dispatching the job, e.g. to the JavaScript event loop:
+
+```javascript
+setTimeout(()=>console.log('done.'), 0);
+// the above tells the event loop to execute 
+// the continuation after 0 milliseconds delay.
+// even with a zero-length delay, the synchronous code
+// after the setTimeout will be run first...
+console.log('job queued on the event loop...');
+```
+
+> job queued on the event loop...  
+> done.
+
+## Computation with Pure Functions
 
 Pure functions may seem restrictive, but in fact pure function expressions and higher-order functions can be combined into powerful programs.  In fact, anything you can compute with an imperative program can be computed through function composition.  Side effects are required eventually, but they can be managed and the places they occur can be isolated.  Let’s do a little demonstration, although it might be a bit impractical, we’ll make a little list processing environment with just functions:
 
@@ -114,14 +189,20 @@ const map = (f, list)=> !list ? null
 
 In the above, we are using closures to store data.  It's just a trick to show the power of functions and to into the right state of mind for the Lambda Calculus - which provides a complete model of computation using only anonymous functions like those above.  In a real program I would expect you would use JavaScript's class and object facilities to create data structures.
 
+### Towards Lambda Calculus and Church Encoding
+
+Thus, with only pure function expressions and JavaScript conditional expressions (```?:```) we can begin to perform complex computations.  We can actually go further and eliminate the conditional expressions with more functions! Here’s the gist of it: we wrap list nodes with another function of two arguments, one argument, ```whenempty```, is a function to apply when the list is empty, the other argument, ```notempty```, is applied by all internal nodes in the list.  An empty list node (instead of null) applies the ```whenempty``` function when visited, a non-empty node applies the ```notempty``` function. The implementations of each of these functions then form the two conditions to be handled by a recursive algorithm like ```map``` or ```reduce```.  See [“Making Data out of Functions” by Braithwaite](https://leanpub.com/javascriptallongesix/read#leanpub-auto-making-data-out-of-functions) for a more detailed exposition of this idea.
+
+These ideas, of computation through pure function expressions, are inspired by Alonzo Church’s *lambda calculus*.   We’ll be looking again at the lambda calculus later.  Obviously, for the program to be at all useful you will need some sort of side effect, such as outputting the results of a computation to a display device.  When we begin to explore PureScript and Haskell later in this course we will discuss how such languages manage this trick while remaining “pure”.
+
 ---------------
 
 ## Exercises
 
-- Implement a fromArray function to construct a list from an array
-- Implement a filter function, which takes a function and a list, and returns another list populated only with those elements of the list for which the function returns true
-- Implement a reduce function for these functional lists, similar to javascript’s Array.reduce
-- Implement a concat function that takes two lists as arguments and returns a new list of their concatenation.
+- Implement a ```fromArray``` function to construct a ```cons``` list from an array
+- Implement a ```filter``` function, which takes a function and a cons list, and returns another cons list populated only with those elements of the list for which the function returns true
+- Implement a ```reduce``` function for these cons lists, similar to javascript’s ```Array.reduce```
+- Implement a ```concat``` function that takes two lists as arguments and returns a new list of their concatenation.
 - How can we update just one element in this list without mutating any data and what is the run-time complexity of such an operation?
 
 -------------
@@ -175,6 +256,7 @@ studentVersion1 = studentVersion2
 > VM430:1 Uncaught TypeError: Assignment to constant variable.  
 
 However, there is nothing in these definitions to prevent the properties of those objects from being changed:
+
 ```javascript
 studentVersion1.name = "Tom"
 ```
@@ -185,11 +267,5 @@ studentVersion1.name = "Tom"
 We will see later how the [TypeScript compiler](../typescript1) allows us to create deeply immutable objects that will trigger compile errors if we try to change their properties.
 
 You may wonder how pure functions can be efficient if the only way to mutate data structures is by returning a modified copy of the original.  There are two responses to such a question, one is: "purity helps us avoid errors in state management through wanton mutation effects - in modern programming correctness is often a bigger concern than efficiency", the other is "properly structured data permits log(n) time copy-updates, which should be good enough for most purposes".  We'll explore what is meant by the latter in later sections of these notes.
-
-## Conclusion
-
-Thus, with only pure function expressions and JavaScript conditional expressions (?:) we can begin to perform complex computations.  We can actually go further and eliminate the conditional expressions with more functions! Here’s the gist of it: we wrap list nodes with another function of two arguments, one argument, whenempty, is a function to apply when the list is empty, the other argument, notempty, is applied by all internal nodes in the list.  An empty list node (instead of null) applies the whenempty function when visited, a non-empty node applies the notempty function. The implementations of each of these functions then form the two conditions to be handled by a recursive algorithm like map or reduce.  See “Making Data out of Functions” by Braithwaite for a more detailed exposition of this idea.
-
-These ideas, of computation through pure function expressions, are inspired by Alonzo Church’s lambda calculus.   We’ll be looking again at the lambda calculus later.  Obviously, for the program to be at all useful you will need some sort of side effect, such as outputting the results of a computation to a display device.  When we begin to explore PureScript and Haskell later in this course we will discuss how such languages manage this trick while remaining “pure”.
 
 

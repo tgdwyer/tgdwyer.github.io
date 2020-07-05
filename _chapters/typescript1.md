@@ -165,6 +165,7 @@ interface Student {
 Note that this interface guarantees that there is a function returning a number called ```markAdjustment``` available on any object implementing the ```Student``` interface, but it says nothing about how the adjustment is calculated.  Software engineers like to talk about [Separation of Concerns (SoC)](https://en.wikipedia.org/wiki/Separation_of_concerns).  To me, the implementation of markAdjustment is Someone Else's Problem (SEP).
 
 Now I can define functions which work with students, for example to calculate the average score for the class:
+
 ```typescript
 function averageScore(students: Student[]): number {
   return students.reduce((total, s) =>
@@ -259,6 +260,47 @@ Note that each of these functions returns a list, so that we can chain the opera
 list.filter(x=>x%2===0).reduce((x,y)=>x+y,0)
 ```
 -------------
+
+## Using the compiler to ensure immutability
+
+We saw [earlier](../functionaljavascript), that while an object reference can be declared const:
+
+```javascript
+const studentVersion1 = {
+  name: "Tim",
+  assignmentMark: 20,
+  examMark: 15
+}
+```
+
+Which prevents reassigning ```studentVersion1``` to any other object, the ```const``` declaration does not prevent properties of the object from being changed:
+
+```javascript
+studentVersion1.name = "Tom"
+```
+
+Typescript will not complain about the above assignment at all.
+
+However, we can declare immutable types using the ```Readonly``` construct:
+
+```javascript
+type ImmutableStudent = Readonly<{
+name: string;
+assignmentMark: number;
+examMark: number;
+}>
+
+const studentVersion1:ImmutableStudent = {
+name: "Tim",
+assignmentMark: 20,
+examMark: 15
+}
+
+studentVersion1.name = "Tom"
+```
+
+Now we get the squiggly:
+![Compile Error Screenshot](readonly.png)
 
 ## Typing systems with different ‘degrees’ of strictness
 
