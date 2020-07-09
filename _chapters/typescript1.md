@@ -43,6 +43,77 @@ i = 'hello!';
 
 > [TS compiler says] Type '"hello!"' is not assignable to type 'number'.
 
+## Type Annotations Cheat Sheet
+
+Type annotation begins with ```:``` and goes after the variable name, but before any assignment. 
+Primitive types include ```number```, ```string```, ```boolean```.
+
+```typescript
+let x: number, s: string, b: boolean = false;
+x = "hello" // type error: x can only be assigned numbers!
+```
+
+[Union types](#Union-Types) allow more than one option for the type of value that can be assigned to a variable:
+
+```typescript
+let x: number | string;
+x = 123;
+x = "hello" // no problem now
+x = false; // type error!  only numbers or strings allowed.
+```
+
+Function parameter types are declared similarly, the return type of the function goes after the ```)``` of the parameter list:
+
+```typescript
+function theFunction(x: number, y: number): number {
+  return x + y; // returns a number
+}
+```
+
+When working with higher-order functions you'll need to pass functions into and/or return them from other functions.  Function types use the fat-arrow syntax:
+
+```typescript
+function curry(f: (x:number, y:number)=>number): (x:number)=>(y:number)=>number {
+  return x=>y=>f(x,y)
+}
+```
+
+The function above only works for functions that are operations on two numbers.  We can make it [*generic*](#Generic-Types) by parameterising the argument types:
+
+```typescript
+function curry<U,V,W>(f:(x:U,y:V)=>W): (x:U)=>(y:V)=>W {
+  return x=>y=>f(x,y)
+  // return x=>y=>f(y,x) -- ERROR!
+}
+```
+
+The commented out line would be in error because the order the returned function passes parameters into f does not match the declaration of f.
+
+We can declare types for objects with multiple properties using [interfaces](#Interfaces)
+
+```typescript
+interface Student {
+  name: string
+  mark: number
+}
+```
+
+We can declare interfaces readonly to make them [immutable](#Using-the-compiler-to-ensure-immutability)
+
+```typescript
+const student: Readonly<Student> = { name:"Tim", mark:51 }
+```
+
+When type annotations get long and complex we can declare aliases for them using the ```type``` keyword:
+
+```typescript
+type CurriedFunc<U,V,W> = (x:U)=>(y:V)=>W
+
+function curry<U,V,W>(f:(x:U,y:V)=>W): CurriedFunc<U,V,W> {
+  return x=>y=>f(x,y)
+}
+```
+
 ## Why should we declare types?
 
 Declaring types for variables, functions and their parameters, and so on, provides more information to the person reading and using the code, but also to the compiler, which will check that you are using them consistently and correctly.  This prevents a lot of errors.
@@ -130,7 +201,7 @@ So this function accepts either a string or a number for the ```value``` paramet
 function setLeftPadding(elem: Element, value: string | number) {...
 ```
 
-Going further, the following allows either a number, or a string, or a function that needs to be called to retrieve the ```string```:
+Going further, the following allows either a number, or a string, or a function that needs to be called to retrieve the ```string```.  It uses ```typeof``` to query the type of the parameter and do the right thing in each case.
 
 ```typescript
 function setLeftPadding(elem: Element, value: number | string | (()=>string)) {
@@ -143,8 +214,6 @@ function setLeftPadding(elem: Element, value: number | string | (()=>string)) {
 }
 ```
 
-Note that typescript's notation for function types uses the fat-arrow syntax.
-
 The TypeScript typechecker also knows about typeof expressions (as used above) and will also typecheck the different clauses of if statements that use them for consistency with the expected types.
 
 ## Interfaces
@@ -156,8 +225,8 @@ For example, when tallying scores at the end of semester, I will need to work wi
 ```typescript
 interface Student {
   name: string
-  AssignmentMark: number
-  ExamMark: number
+  assignmentMark: number
+  examMark: number
   markAdjustment(): number
 }
 ```
