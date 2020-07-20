@@ -192,6 +192,7 @@ function fork(join, f, g) {
 ```
 
 ----
+
 ## Exercise
 
 * Use the fork-join combinator to compute the average over a sequence of numeric values.
