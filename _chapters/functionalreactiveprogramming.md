@@ -163,7 +163,13 @@ A simple example that begins to show the problem is implementing a UI to allow a
 
 ![Mouse drag state machine](mousedragstatemachine.png)
 
-There are only three transitions, each triggered by an event.  Here’s an event-driven code fragment that provides such dragging for some SVG element ```draggableRect```, that is a child of an SVG canvas element referred to by the variable ```svg```:
+There are only three transitions, each triggered by an event.  
+
+### Turning a State-Machine into Code with Event Listeners
+
+The typical way to add interaction in web-pages and other UIs has historically been creating the Event Listeners.  In software engineering terms it's typically referred to as the [Observer Pattern](https://en.wikipedia.org/wiki/Observer_pattern) (not to be confused with the "Observable" FRP abstraction we have been discussing).
+
+Here’s an event-driven code fragment that provides such dragging for some SVG element ```draggableRect```, that is a child of an SVG canvas element referred to by the variable ```svg```:
 
 ```javascript
 const svg = document.getElementById("svgCanvas")!;
@@ -196,7 +202,9 @@ The last issue is not unlike the kind of resource cleanup that [RAII](https://en
 Generally speaking, nothing about this function resembles the state machine diagram.  
 The code sequencing has little sensible flow.
 
-Functional Reactive Programming or FRP is another functional programming pattern (enabled by a data-structure called Observable that has much in common with the functional linked lists and trees we have looked at earlier.  
+### The FRP Solution
+
+We now rewrite precisely the same behaviour using Observable FRP:
 
 ```javascript
   const svg = document.getElementById("svgCanvas")!;
