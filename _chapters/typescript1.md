@@ -45,6 +45,8 @@ i = 'hello!';
 
 ## Type Annotations Cheat Sheet
 
+(Each of these features is described in more detail in subsequent sections - this is just a summary and roadmap)
+
 Type annotation begins with ```:``` and goes after the variable name, but before any assignment. 
 Primitive types include ```number```, ```string```, ```boolean```.
 

@@ -13,4 +13,8 @@ layout: home
 
 [Introduction to TypeScript](typescript1)
 
+[Lazy Evaluation](lazyevaluation)
+
+[Functional Reactive Programming](functionalreactiveprogramming)
+
 [Observable Asteroids](asteroids)

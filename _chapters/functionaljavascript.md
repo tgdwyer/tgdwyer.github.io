@@ -111,10 +111,10 @@ Continuations are functions which, instead of returning the result of a computat
 We can rewrite basically any function to pass their result to a continuation function instead of returning the result directly.
 
 ```javascript
-function simplePlus(a: number, b: number): number {
+function simplePlus(a, b) {
    return a + b;
 }
-function continuationPlus(a:number, b:number, done:(result:number)=>void) {
+function continuationPlus(a, b, done:(result)=>void) {
    done(a+b);
 }
 ```
@@ -122,11 +122,11 @@ function continuationPlus(a:number, b:number, done:(result:number)=>void) {
 We can also rewrite tail-recursive functions to end with continuations, which specify some custom action to perform when the recursion is complete:
 
 ```javascript
-function tailRecFactorial(a: number, n: number): number {
+function tailRecFactorial(a, n) {
    return n<=1 ? a : tailRecFactorial(n*a, n-1);
 }
 function continuationFactorial(
-a: number, n: number, finalAction: (result:number)=>void): void 
+a, n, finalAction: (result)=>void): void 
 {
    if (n<=1) finalAction(a);
    else continuationFactorial(n*a, n-1, finalAction);
