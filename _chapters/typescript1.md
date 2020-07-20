@@ -72,7 +72,7 @@ function theFunction(x: number, y: number): number {
 }
 ```
 
-When working with higher-order functions you'll need to pass functions into and/or return them from other functions.  Function types use the fat-arrow syntax:
+When working with [higher-order functions](higherorderfunctions) you'll need to pass functions into and/or return them from other functions.  Function types use the fat-arrow syntax:
 
 ```typescript
 function curry(f: (x:number, y:number)=>number): (x:number)=>(y:number)=>number {

@@ -5,8 +5,6 @@
 layout: home
 ---
 
-# Chapters
-
 [Levels of Abstraction](levelsofabstraction)
 
 [Introduction to JavaScript](javascript1)
