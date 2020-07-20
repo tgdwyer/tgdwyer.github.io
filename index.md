@@ -5,6 +5,8 @@
 layout: home
 ---
 
+# Chapters
+
 [Levels of Abstraction](levelsofabstraction)
 
 [Introduction to JavaScript](javascript1)
@@ -14,6 +16,8 @@ layout: home
 [Introduction to TypeScript](typescript1)
 
 [Lazy Evaluation](lazyevaluation)
+
+[Higher Order Functions](higherorderfunctions)
 
 [Functional Reactive Programming](functionalreactiveprogramming)
 
