@@ -145,6 +145,69 @@ key$.pipe(
 ).subscribe(console.log)
 ```
 
+## Observable Cheatsheet
+
+The following is a very small (but sufficiently useful) subset of the functionality available for [rx.js](https://www.learnrxjs.io/).
+I've simplified the types rather greatly for readability and not always included all the optional arguments.
+
+### Creation
+
+```typescript
+// produces the list of arguments as elements of the stream
+of<T>(...args: T[]): Observable<T> 
+
+// produces a stream of numbers from 'start' until 'count' have been emitted
+range(start?: number, count?: number): Observable<number>
+
+// produces a stream for the specified event, element type depends on 
+// event type and should be specified by the type parameter, e.g.: MouseEvent, KeyboardEvent
+fromEvent<T>(target: FromEventTarget<T>, eventName: string): Observable<T>
+
+// produces a stream of increasing numbers, emitted every 'period' milliseconds
+interval(period?: number): Observable<number>
+```
+
+### Observable methods
+```typescript
+// composes together a sequence of operators (see below) that are applied to transform the stream
+pipe<A>(...op1: OperatorFunction<T, A>): Observable<A>;
+
+// {next} is a function applied to each element of the stream
+// {error} is a function applied in case of error (only really applicable for communications)
+// {complete} is a function applied on completion of the stream (e.g. cleanup)
+// @return {Subscription} returns an object whose "unsubscribe" method may be called to cleanup
+//              e.g. unsubscribe could be called to cancel an ongoing Observable
+subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): Subscription;
+```
+
+### Operators
+
+Operators are passed to ```pipe```.  They all have return type an ```OperatorFunction``` which is used by ```pipe```.
+
+```typescript
+// transform the elements of the input stream using the `project' function
+map<T, R>(project: (value: T) => R)
+
+// only take elements which satisfy the predicate
+filter<T>(predicate: (value: T) => boolean)
+
+// take `n' elements
+take<T>(n: number)
+
+// take the last element
+last<T>()
+
+// AKA concatMap: produces an Observable<R> for every input stream element<T>
+flatMap<T, R>(project: (value: T) => Observable<R>)
+
+// accumulates values from the stream
+scan<T, R>(accumulator: (acc: R, value: T) => R, seed?: R)
+
+// merge multiple Observable streams.  Actually, the resulting stream will have elements of Union type.
+// i.e. the type of the elements will be the Union of the types of each of the merged streams
+merge<T, R>(...observables: Observable<T>[])
+```
+
 ## A User Interface Example
 
 Modern computer systems often have to deal with asynchronous processing.  Examples abound:
@@ -171,7 +234,7 @@ The typical way to add interaction in web-pages and other UIs has historically b
 
 Here’s an event-driven code fragment that provides such dragging for some SVG element ```draggableRect```, that is a child of an SVG canvas element referred to by the variable ```svg```:
 
-```javascript
+```typescript
 const svg = document.getElementById("svgCanvas")!;
 const rect = document.getElementById("draggableRect")!;
 rect.addEventListener('mousedown',e => {
@@ -206,7 +269,7 @@ The code sequencing has little sensible flow.
 
 We now rewrite precisely the same behaviour using Observable FRP:
 
-```javascript
+```typescript
   const svg = document.getElementById("svgCanvas")!;
   const rect = document.getElementById("draggableRect")!;
 
