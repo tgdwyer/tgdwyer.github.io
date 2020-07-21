@@ -116,7 +116,7 @@ Note that compose let us define roundFloat without any messing around with anony
 * Create a ```pipe``` function which composes its arguments in the opposite order to the ```compose``` function above.  That is, left-to-right.  Note that in [rx.js](https://www.learnrxjs.io/), such a ```pipe``` function is an important way to create chains of operations (over Observable streams).
 
 ## Combinators
-Combinators are higher-order functions which perform pure operations on their arguments to perform a result.  They may seem very basic, but as their name suggests, they provide useful building blocks for manipulating and composing functions to create new functions.
+Combinators are higher-order functions which perform pure operations on their arguments to perform a result.  They may seem very basic, but as their name suggests, they provide useful building blocks for manipulating and composing functions to create new functions.  The [`compose`](#composition) function is a combinator.  Some more examples follow.
 
 ### Identity I-Combinator
 
