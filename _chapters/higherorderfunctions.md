@@ -9,7 +9,7 @@ permalink: /higherorderfunctions/
 
 - Recall that High-Order Functions are those which take other functions as input parameters or which return functions
 - Recall that a Combinator is a higher-order function that uses only function application and earlier defined combinators to define a result from its arguments
-- Use simple Combinator functions to manipulate and compose other functions
+- Use simple Combinator functions ([identity](#identity-i-combinator)) to manipulate and compose other functions
 
 ## Introduction
 
@@ -115,9 +115,12 @@ Note that compose let us define roundFloat without any messing around with anony
 
 * Create a ```pipe``` function which composes its arguments in the opposite order to the ```compose``` function above.  That is, left-to-right.  Note that in [rx.js](https://www.learnrxjs.io/), such a ```pipe``` function is an important way to create chains of operations (over Observable streams).
 
-## Identity (I-Combinator)
+## Combinators
+Combinators are higher-order functions which perform pure operations on their arguments to perform a result.  They may seem very basic, but as their name suggests, they provide useful building blocks for manipulating and composing functions to create new functions.
 
-This may seem trivial:
+### Identity I-Combinator
+
+The following may seem trivial:
 
 ```javascript
 function identity<T>(value: T): T {
@@ -130,7 +133,7 @@ In order to wrap a value in a function that can be passed to other functions exp
 For mocking in tests
 For extracting data from encapsulated types (e.g. by passing identity into map).
 
-## K-Combinator
+### K-Combinator
 
 The curried K-Combinator looks like:
 
@@ -186,7 +189,7 @@ Now we can try to find an id for each student, first from ```class1``` but fall 
 const ids = students.map(or(lookup(class1))(lookup(class2)))
 ```
 
-## Fork-Join Combinator
+### Fork-Join Combinator
 
 ```javascript
 function fork(join, f, g) {

@@ -32,7 +32,8 @@ We have already discussed combinators in JavaScript, now we can give them a more
 -------
 ### Exercise
 
-* When we discussed Combinators, we gave this function a name.  What was it?
+* When we discussed combinators in JavaScript, we gave this function a name.  What was it? *[spoiler](/higherorderfunctions#identity-i-combinator)*
+
 -------
 
 Some things to note about such a lambda expression:
@@ -162,6 +163,7 @@ The answer is due to the American mathematician Haskell Curry and is called the 
 ### Exercise
 
 * Try using Beta reduction on the application of the Y combinator to another function (e.g. g).  A miracle occurs!
+
 -------
 If we try to directly translate the above version of the Y-combinator into JavaScript we get the following:
 
