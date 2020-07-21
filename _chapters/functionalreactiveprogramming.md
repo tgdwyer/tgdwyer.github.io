@@ -154,6 +154,8 @@ I've simplified the types rather greatly for readability and not always included
 
 ### Creation
 
+The following functions create Observable streams from various sources.
+
 ```typescript
 // produces the list of arguments as elements of the stream
 of<T>(...args: T[]): Observable<T> 
@@ -170,6 +172,9 @@ interval(period?: number): Observable<number>
 ```
 
 ### Observable methods
+
+Methods on the Observable object itself that may be chained.
+
 ```typescript
 // composes together a sequence of operators (see below) that are applied to transform the stream
 pipe<A>(...op1: OperatorFunction<T, A>): Observable<A>;
