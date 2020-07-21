@@ -8,6 +8,7 @@ permalink: /functionaljavascript/
 
 * Create programs in JavaScript in a functional style
 * Explain the role of pure functional programming style in managing side effects
+* See how pure functions can be used to [model sophisticated computation](#computation-with-pure-functions)
 
 ## Introduction
 

@@ -3,7 +3,7 @@ layout: page
 title: "FRP Asteroids"
 permalink: /asteroids/
 ---
-### Introduction
+## Introduction
 Functional Reactive Programming (specifically the Observable/Observer pattern) allows us to capture asynchronous actions like user interface events in streams.  These allow us to "linearise" the flow of control, avoid deeply nested loops, and process the stream with pure, referentially transparent functions.
 
 As an example we will build a little "Asteroids" game using FRP.  We're going to use [rxjs](https://rxjs-dev.firebaseapp.com/) as our Observable implementation, and we are going to render it in HTML using SVG.

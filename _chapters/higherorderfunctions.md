@@ -7,6 +7,9 @@ permalink: /higherorderfunctions/
 
 ## Learning Outcomes
 
+- Recall that High-Order Functions are those which take other functions as input parameters or which return functions
+- Recall that a Combinator is a higher-order function that uses only function application and earlier defined combinators to define a result from its arguments
+- Use simple Combinator functions to manipulate and compose other functions
 
 ## Introduction
 
@@ -135,7 +138,7 @@ The curried K-Combinator looks like:
 const K = x=> y=> x
 ```
 
-So it is a function that ignores its second argument and returns its first argument directly.  Note the similarity to the head function of our cons list earlier.  In fact, we can derive both the head and tail functions used earlier from K and I combinators:
+So it is a function that ignores its second argument and returns its first argument directly.  Note the similarity to the head function of our [cons list](/functionaljavascript#computation-with-pure-functions).  In fact, we can derive both the head and tail functions used earlier from K and I combinators:
 
 ```javascript
 const

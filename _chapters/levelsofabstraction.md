@@ -4,6 +4,14 @@ title: "Levels of Abstraction"
 permalink: /levelsofabstraction/
 ---
 
+## Learning Outcomes
+
+- Understand the motivation for different programming paradigms: to abstract machine operation into human understandable and composable programs
+- Understand the difference between *syntax* the textual symbols and grammatical rules of a program, and *semantics* the meaning of what is computed
+- Understand that there are different models of computation upon which different programming languages are based, including machine models such as Turing Machines and von Neumann architecture, and the Lambda Calculus based on mathematical functions.
+
+## Syntax versus Semantics
+
 As a branch of Computer Science, the theory and practice of programming has grown from a very practical need: to create tools to help us get computers to perform useful and often complex tasks.  Programming languages are tools, that are designed and built by people to make life easier in this endeavour.  Furthermore, they are rapidly evolving tools that have grown in subtlety and complexity over the many decades to take advantage of changing computer hardware and to take advantage of different ways to model computation.
 
 An important distinction to make when considering different programming languages, is between syntax and semantics. The syntax of a programming language is the set of symbols and rules for combining them (the grammar) into a correctly structured program.  These rules are often arbitrary and chosen for historical reasons, ease of implementation or even aesthetics.  An example of a syntactic design choice is the use of indentation to denote block structure or symbols such as “BEGIN” and “END” or “{” and “}”.
@@ -45,7 +53,7 @@ Then we will dive a little-more deeply into a language that more completely “b
 
 In summary, the languages we will study (in varying degrees of depth) will be Assembler, C/C++, JavaScript (ES2017 and TypeScript), PureScript, Haskell and MiniZinc, with JavaScript/TypeScript and Haskell being the main languages explored in problem sets and assignments.  Thus, this course will be a tour through programming paradigms that represent different levels of abstraction from the underlying machine architecture.  To begin, we spend just a little time at the level of least abstraction: the hardware itself.
 
-# The Machine Level
+## The Machine Level
 
 Conceptually, modern computer architecture deviates little from the von Neumann model proposed in 1945 by Hungarian-American computer scientist John von Neumann.  The development of the von Neumann model occurred shortly after the introduction of the theoretical Turing Machine concept.
 
@@ -68,3 +76,11 @@ Programs run on an x86 machine according to the Instruction Execution Cycle:
 - If necessary, CPU stores result, sets status flags, etc.
 
 Registers are locations on the CPU with very low-latency access due to their physical proximity to the execution engine.  Modern x86 processors also have 2 or 3 levels of cache memory physically on-board the CPU.  Accessing cache memory is slower than accessing registers (with all sorts of very complicated special cases) but still many times faster than accessing main memory.  The CPU handles the movement of instructions and data between levels of cache memory and main memory automatically, cleverly and—for the most part—transparently.  To cut a long story short, it can be very difficult to predict how long a particular memory access will take.  Probably, accessing small amounts of memory repeatedly will be cached at a high-level and therefore fast.
+
+## Other Models of Computation
+
+Turing Machines are a conceptual model of computation based on a physical analogy of tapes being written to and read from as they feed through a machine.  The operations written on the tape determine the machine's operation.
+
+The von Neumann model of computation is a very practical one, upon which most modern computers base their architecture.
+
+We will see there are other models of computation that are also useful.  In particular, we will look at the [Lambda Calculus](lambdacalculus), which was roughly a contemporary of these other models but based on mathematical functions, their application and composition.  We will see that while imperative programming languages are roughly abstractions of machine architecture, functional programming languages provide an alternative abstraction built upon the rules of the lambda calculus.  They provide advantages 

@@ -6,14 +6,14 @@ permalink: /javascript1/
 ## Learning Outcomes
 
 - Understand and use basic JavaScript coding concepts and features
-- Understand the difference between [mutable and immutable (const) variables](#Declaring-Variables)
-- Explain the relationship between javascript [functions](#Functions) and [objects](#Objects)
-- Understand function scope and the concept of a [closure](#Closures)
-- Create and apply [anonymous functions](#Anonymous-Functions) to fluent style code
-- Compare [arrow functions](#Arrow-Functions) and regular function syntax
-- Explain JavaScript’s [prototype mechanism](#Prototype-Class-Mechanism) for creating classes from functions
-- Create [ES6 style classes](#EcmaScript-6-Class-Syntax) with constructors and getters
-- Compare object oriented [polymorphism](#Polymorphism) to [dependency injection](#Dependency-Injection) through functions
+- Understand the difference between [mutable and immutable (const) variables](#declaring-variables)
+- Explain the relationship between javascript [functions](#functions) and [objects](#objects)
+- Understand function scope and the concept of a [closure](#closures)
+- Create and apply [anonymous functions](#anonymous-functions) to fluent style code
+- Compare [arrow functions](#arrow-functions) and regular function syntax
+- Explain JavaScript’s [prototype mechanism](#prototype-class-mechanism) for creating classes from functions
+- Create [ES6 style classes](#ecmascript-6-class-syntax) with constructors and getters
+- Compare object oriented [polymorphism](#polymorphism) to [dependency injection](#dependency-injection) through functions
 
 ## Introduction
 
