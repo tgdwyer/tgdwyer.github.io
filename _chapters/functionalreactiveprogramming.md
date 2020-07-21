@@ -7,11 +7,16 @@ permalink: /functionalreactiveprogramming/
 
 ## Learning Outcomes
 
+- Understand that the Functional Reactive Programming Observable construct is just another container of elements, but whose "push-based" architecture allows them to be used to capture asynchronous behaviour
+- Understand that Observables provide the benefits of functional programming: composability, reusability.
+- See that Observables structure complex stateful programs in a more linear and understandable way that maps more easily to the underlying state machine.
+- Use Observables to create simple UI programs in-place of asynchronous event handling.
+
 ## Introduction
 
 Functional Reactive Programming describes an approach to modelling complex, asynchronous behaviours that uses many of the functional programming principles we have already explored.  In particular:
 
-- Applications of functions to elements of containers to transform to a new container (i.e. map, filter, reduce etc. over arrays).
+- Applications of functions to elements of containers to transform to a new container (e.g. map, filter, reduce etc. over arrays).
 - Use of function composition and higher-order functions to define complex transformations from simple, reusable function elements.
 
 We will explore FRP through an implementation of the [Observable](#observable-streams) data structure in [the Reactive Extensions for Javascript (rx.js) library](https://www.learnrxjs.io/).  We will then see it applied in application to a straight-forward [browser-based user interface problem](#a-user-interface-example).
