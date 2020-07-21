@@ -87,10 +87,10 @@ for ([initialization]; [condition]; [final-expression])
    statement
 ```
 
-* The initialization can initialise to the wrong value (e.g. n instead of n-1, 1 instead of 0) or initialise the wrong variable.
-* The condition test can use = instead of ==, <= instead of < or test the wrong variable, etc.
-* The final-expression can (again) increment the wrong variable
-* The statement body might change the state of variables being tested in the termination condition since they are in scope.
+* The **initialization** can initialise to the wrong value (e.g. n instead of n-1, 1 instead of 0) or initialise the wrong variable.
+* The **condition** test can use = instead of ==, <= instead of < or test the wrong variable, etc.
+* The **final-expression** can (again) increment the wrong variable
+* The **statement** body might change the state of variables being tested in the termination condition since they are in scope.
 
 For many standard loops, however, the logic is the same every time and can easily be abstracted into a function.  Examples: Array.map, Array.reduce, Array.forEach, etc.  The logic of the loop body is specified with a function which can execute in its own scope, without the risk of breaking the loop logic.
 
@@ -148,6 +148,64 @@ console.log('job queued on the event loop...');
 > job queued on the event loop...  
 > done.
 
+### Method Chaining
+
+*Chained functions* are a common pattern.  Assuming definitions for map, filter and take similar to:
+
+```javascript
+// maps an Iterable (an interface like our IListNode with a way to get a value of 
+// the current node or iterate to the next element) containing elements of 
+// type T, to an Iterable with elements of type V 
+function map<T,V>(f: (_:T)=>V, l: Iterable<T>): Iterable<V> { …
+
+// create a new Iterable containing only the elements of l that 
+// satisfy the predicate f
+
+function filter<T>(f: (t:T)=>boolean, l: Iterable<T>): Iterable<T> { …
+// create a new Iterable containing only the fist n elements of l
+
+function take<T>(n: number, l: Iterable<T>): Iterable<T> { ...
+```
+
+We can chain calls to these functions like so:
+
+```javascript
+take(3,
+   filter(x=>x%2===0,
+       map(x=>x+1, someIterable)
+   )
+)
+```
+
+But in the function call chain above you have to read them inside-out to understand the flow.  Also, keeping track of how many brackets to close gets a bit annoying.  Thus, you will often see class definitions that allow for method chaining, by providing methods that return an instance of the class itself, or another chainable class.
+
+```javascript
+class List<T> {
+   map<V>(f: (item: T) => V): List<V> {
+       return new List(map(f, this.head));
+   }
+...
+```
+
+Then the same flow as above is possible without the nesting and can be read left-to-right, top-to-bottom:
+
+```javascript
+someIterable
+   .map(x=>x+1)
+   .filter(x=>x%2===0)
+   .take(3)
+```
+
+This is called “fluent” programming style.
+
+## Fluent Interfaces (pure vs impure)
+
+Interfaces like the above in object-oriented languages are often called fluent interfaces.  One thing to be careful about fluent interfaces in JavaScript is that the methods may or may not be pure.  That is, the type system does not warn you whether the method mutates the object upon which it is invoked and simply returns this, or creates a new object, leaving the original object untouched.  We can see,  however, that List.map as defined above, creates a new list and is pure.
+
+### Exercise
+
+* If ```someIterable``` above were declared const, would it protect you against mutations in ```someIterable``` due to impure methods?
+
 ## Computation with Pure Functions
 
 Pure functions may seem restrictive, but in fact pure function expressions and higher-order functions can be combined into powerful programs.  In fact, anything you can compute with an imperative program can be computed through function composition.  Side effects are required eventually, but they can be managed and the places they occur can be isolated.  Let’s do a little demonstration, although it might be a bit impractical, we’ll make a little list processing environment with just functions:
@@ -167,7 +225,7 @@ The data element, and the reference to the next node in the list are stored in t
 So cons is a function that takes two parameters (```head``` and ```rest```), and returns a function that itself takes a function (selector) as argument.  The selector function is then applied to ```head``` and ```rest```.  What might the selector function be and how do we apply it to a list element?  Well we don’t exactly apply it ourselves, we give it to the closure returned by the ```cons``` function and it applies it for us.  There are the two selectors we need to work with the list:
 
 ```javascript
-const   
+const
     head = list=> list((head, rest)=> head),
     rest = list=> list((head, rest)=> rest);
 ```

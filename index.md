@@ -5,7 +5,7 @@
 layout: home
 ---
 
-## [Levels of Abstraction](levelsofabstraction) 
+## [Levels of Abstraction](/levelsofabstraction) 
 
 - Understand the motivation for different programming paradigms: to abstract machine operation into human understandable and composable programs
 - Understand the difference between *syntax* the textual symbols and grammatical rules of a program, and *semantics* the meaning of what is computed
@@ -59,3 +59,9 @@ layout: home
 ## [Observable Asteroids](asteroids)
 
 A fully worked example of FRP using rx.js Observables to create an in-browser version of a classic arcade game.
+
+## [Lambda Calculus](/lambdacalculus)
+
+* Understand that the lambda calculus provides a complete model of computation
+* Relate the lambda calculus to functional programming
+* Apply conversion and reduction rules to simplify lambda expressions
