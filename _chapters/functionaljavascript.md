@@ -18,9 +18,27 @@ The elements of JavaScript covered in [our introduction](../javascript1), specif
 * Binding functions to variables
 * Higher-order functions
 
-are sufficient for us to explore a paradigm called functional programming.  In the functional programming paradigm the primary model of computation is through the evaluation of functions.  While JavaScript (and many---but not all, as we shall see---other languages inspired by the functional paradigm) do not enforce it, true functional programming mandates the functions be pure in the sense of not causing side effects.  Side effects are changes to state outside of the result returned by the function directly.
+are sufficient for us to explore a paradigm called *functional programming*.  In the functional programming paradigm the primary model of computation is through the evaluation of functions.  While JavaScript (and many---but not all, as we shall see---other languages inspired by the functional paradigm) do not enforce it, true functional programming mandates the functions be pure in the sense of not causing *side effects*.  
 
-# Function Purity vs Side Effects
+## Side Effects
+
+Side effects of a function are changes to state outside of the result explicitly returned by the function.
+
+Examples of side-effects from inside a function:
+
+* changing the value of a variable declared outside the function scope
+  - mutating global state in this way can cause difficult to diagnose bugs: for example, an effective debugging strategy is dividing the program up into little pieces which can easily be proven correct or unit tested - sources of side-effects deep inside functions are a hidden form of coupling making such a strategy very difficult.
+* printing to the console changing the state of the world in such a way can also be dangerous
+  - for example, filling a disk with log messages is a good way to crash the whole computer!.
+
+In languages without compilers that specifically guard against them, side effects can occur:
+
+* intentionally through sloppy coding practices, where a misguided programmer may think it's more convenient to have a function do multiple things at once;
+* unintentially, for example by accidently setting a global variable instead of a local one.
+
+We'll see more examples in actual code below.
+
+## Function Purity vs Side Effects
 
 A *pure function*:
 
