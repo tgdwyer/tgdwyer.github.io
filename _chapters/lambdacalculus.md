@@ -199,4 +199,5 @@ It just goes on forever, expanding nested expressions of FAC without actually in
 ### Exercise
 
 * Write a version of the Y-Combinator in JavaScript such that Y(Fac)(6) successfully evaluates to 120.
+
 -------------

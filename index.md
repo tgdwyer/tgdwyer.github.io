@@ -5,6 +5,8 @@
 layout: home
 ---
 
+# Chapters
+
 ## [Levels of Abstraction](/levelsofabstraction) 
 
 - Understand the motivation for different programming paradigms: to abstract machine operation into human understandable and composable programs
