@@ -145,6 +145,8 @@ key$.pipe(
 ).subscribe(console.log)
 ```
 
+----------
+
 ## Observable Cheatsheet
 
 The following is a very small (but sufficiently useful) subset of the functionality available for [rx.js](https://www.learnrxjs.io/).
@@ -207,6 +209,8 @@ scan<T, R>(accumulator: (acc: R, value: T) => R, seed?: R)
 // i.e. the type of the elements will be the Union of the types of each of the merged streams
 merge<T, R>(...observables: Observable<T>[])
 ```
+
+----------------
 
 ## A User Interface Example
 
