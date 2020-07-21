@@ -21,6 +21,12 @@ The elements of JavaScript covered in [our introduction](../javascript1), specif
 are sufficient for us to explore a paradigm called functional programming.  In the functional programming paradigm the primary model of computation is through the evaluation of functions.  While JavaScript (and many---but not all, as we shall see---other languages inspired by the functional paradigm) do not enforce it, true functional programming mandates the functions be pure in the sense of not causing side effects.  Side effects are changes to state outside of the result returned by the function directly.
 
 # Function Purity vs Side Effects
+
+A *pure function*:
+
+* has no *side effects*: i.e. it has no effects other than to create a return value;
+* always produces the same result for the same input.
+
 Pure functions are perhaps most easily illustrated with some examples and counterexamples. The following function has no effect outside its return result and is therefore pure:
 
 ```javascript
