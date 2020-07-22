@@ -521,7 +521,7 @@ addNine(1)
 
 > 10
 
-Functions that take other functions as parameters (like ```[].forEach```) or which return functions (like the above definition of ```add```) are called higher-order functions.  
+## Prototype Class Mechanism
 
 In JavaScript you can also create functions as members of objects:
 
@@ -535,9 +535,6 @@ say.hello("tim")
 > "hello tim"
 
 But these objects are only single instances.  
-
-## Prototype Class Mechanism
-
 JavaScript supports creating object instances of a certain type (i.e. having a set of archetypical members, like a Java class) through a function prototype mechanism.  You create a constructor function:
 
 ```javascript
