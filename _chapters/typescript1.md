@@ -43,6 +43,8 @@ i = 'hello!';
 
 > [TS compiler says] Type '"hello!"' is not assignable to type 'number'.
 
+-----------
+
 ## Type Annotations Cheat Sheet
 
 (Each of these features is described in more detail in subsequent sections - this is just a summary and roadmap)
@@ -55,7 +57,7 @@ let x: number, s: string, b: boolean = false;
 x = "hello" // type error: x can only be assigned numbers!
 ```
 
-[Union types](#Union-Types) allow more than one option for the type of value that can be assigned to a variable:
+[Union types](#union-types) allow more than one option for the type of value that can be assigned to a variable:
 
 ```typescript
 let x: number | string;
@@ -72,7 +74,7 @@ function theFunction(x: number, y: number): number {
 }
 ```
 
-When working with [higher-order functions](higherorderfunctions) you'll need to pass functions into and/or return them from other functions.  Function types use the fat-arrow syntax:
+When working with [higher-order functions](/functionaljavascript#higher-order-functions) you'll need to pass functions into and/or return them from other functions.  Function types use the fat-arrow syntax:
 
 ```typescript
 function curry(f: (x:number, y:number)=>number): (x:number)=>(y:number)=>number {
@@ -80,18 +82,15 @@ function curry(f: (x:number, y:number)=>number): (x:number)=>(y:number)=>number 
 }
 ```
 
-The function above only works for functions that are operations on two numbers.  We can make it [*generic*](#Generic-Types) by parameterising the argument types:
+The [`curry`](/functionaljavascript#curried-functions) function above only works for functions that are operations on two numbers.  We can make it [*generic*](#generic-types) by parameterising the argument types.  
 
 ```typescript
 function curry<U,V,W>(f:(x:U,y:V)=>W): (x:U)=>(y:V)=>W {
   return x=>y=>f(x,y)
-  // return x=>y=>f(y,x) -- ERROR!
 }
 ```
 
-The commented out line would be in error because the order the returned function passes parameters into f does not match the declaration of f.
-
-We can declare types for objects with multiple properties using [interfaces](#Interfaces)
+We can declare types for objects with multiple properties using [interfaces](#interfaces)
 
 ```typescript
 interface Student {
@@ -100,7 +99,7 @@ interface Student {
 }
 ```
 
-We can declare interfaces readonly to make them [immutable](#Using-the-compiler-to-ensure-immutability)
+We can declare interfaces readonly to make them [immutable](#using-the-compiler-to-ensure-immutability)
 
 ```typescript
 const student: Readonly<Student> = { name:"Tim", mark:51 }
@@ -115,6 +114,8 @@ function curry<U,V,W>(f:(x:U,y:V)=>W): CurriedFunc<U,V,W> {
   return x=>y=>f(x,y)
 }
 ```
+
+-----------------------
 
 ## Why should we declare types?
 
@@ -249,28 +250,33 @@ Other parts of my program might work with richer interfaces for the student data
 
 ## Generic Types
 
-What if sometimes students have other information that I need to know exists, for example I might need to pass it on to someone else, but I don't really care about what type of information it is myself?  This might matter if I am preparing class lists for exams.  Certain students might need special support, such as a scribe or reader.  The type of support might come in many forms - perhaps that I can't even predict in advance.  However, if there is information about special support for a student, I will have to make sure that it is passed along to the invigilators who will know what to do with it.  The type particulars don't matter to me, but it's important that I pass it along at the right time, and that I don't mix it up with something else.  In this case I can add a *type parameter* to my definition of Student, and a property that has that type:
+Sometimes when we do marking we get lists of students indexed by their Student Number (a `number`).  Sometimes its by email address (a `string`).  You can see the concept of student numbers probably predates the existence of student emails (yes, universities often predate the internet!).
+What if one day our systems will use yet another identifier?  We can future proof a program that works with lists of students by deferring the decision of the particular type of the id:
 
 ```typescript
 interface Student<T> {
-  name: string
-  specialConsideration: T
-  ...
+  id: T;
+  name: string;
+  ... // other properties such as marks etc...
 }
 ```
 
-Here ```T``` is the type parameter, and the compiler will infer its type when it is used.  Type parameters can have more descriptive names if you like, but they must start with a capital.  The convention though is to use rather terse single letter parameter names in the same vicinity of the alphabet as T.  This habit comes from C++, where T used to stand for "Template", and the terseness stems from the fact that we don't really care about the details of what it is in places where we used such type parameters.  As in functions parameter lists, you can also have more than one type parameter:
+Here ```T``` is the *type parameter*, and the compiler will infer its type when it is used.  It could be `number`, or it could be a `string` (e.g. if it's an email), or it could be something else. 
+
+Type parameters can have more descriptive names if you like, but they must start with a capital.  The convention though is to use rather terse single letter parameter names in the same vicinity of the alphabet as T.  This habit comes from C++, where T used to stand for "Template", and the terseness stems from the fact that we don't really care about the details of what it is.  
+
+As in function parameter lists, you can also have more than one type parameter:
 
 ```typescript
 interface Student<T,U> {
-  name: string
-  specialConsideration: T
+  id: T;
+  name: string;
   someOtherThingThatWeDontCareMuchAbout: U
   ...
 }
 ```
 
-Formally, this is a kind of "parametric polymorphism".  T may be referred to as a *type parameter*, *type variable* or *generic type*.  
+Formally, this is a kind of "parametric polymorphism".  The `T` and `U` here may be referred to as *type parameters* or *type variables*. We say that `id` has *generic type*.  
 
 You see generic types definitions used a lot in algorithm and data structure libraries, to give a type---to be specified by the calling code---for the data stored in the data structures.  For example, the following interface might be the basis of a linked list element:
 
@@ -282,6 +288,108 @@ interface IListNode<T> {
 ```
 
 The specific type of ```T``` will be resolved when ```data``` is assigned a specific type value.
+
+We can add type parameters to interfaces, ES6 classes, type aliases, and also functions.  Consider the function which performs a binary search over an array of numbers (it assumes the array is sorted):
+
+```javascript
+function binarySearch1(arr:number[], key:number): number {
+    function bs(start:number, end:number): number {
+        if(start > end) return -1;
+        const mid = Math.floor((start + end) / 2);
+        if(key > arr[mid]) return bs(mid + 1, end);
+        if(key < arr[mid]) return bs(start, mid - 1);
+        return mid;
+    }
+    return bs(0,arr.length);
+}
+
+const studentsById = [
+  {id: 123, name: "Harry Smith"},
+  {id: 125, name: "Cindy Wu"},
+  ...
+]
+
+console.log(binarySearch1(studentsById,"125").name)
+```
+
+> Cindy Wu
+
+If we parameterise the type of elements in the array, we can search on sorted arrays of strings as well as numbers:
+
+```javascript
+function binarySearch2<T>(arr:T[], key:T): number {
+    function bs(start:number, end:number): number {
+        if(start > end) return -1;
+        const mid = Math.floor((start + end) / 2);
+        if(key > arr[mid]) return bs(mid + 1, end);
+        if(key < arr[mid]) return bs(start, mid - 1);
+        return mid;
+    }
+    return bs(0,arr.length);
+}
+
+const studentsByEmail = [
+  {id: "cindy@monash.edu", name: "Cindy Wu"},
+  {id: "harry@monash.edu", name: "Harry Smith"},
+  ...
+]
+
+console.log(binarySearch2(studentsByEmail,"harry@monash.edu").name)
+```
+> Harry Smith
+
+Why is this better than raw JavaScript with no type checking, or simply using TypeScript's wildcard `any` type?  Well it ensures that we use the types *consistently*.
+For example:
+```javascript
+binarySearch(studentsById,"harry@monash.edu")
+```
+> TYPE ERROR!
+
+The `binarySearch2` function above is usable with more types than `binarySearch1`, but it still requires that T does something sensible with `<` and `>`.  
+We can add a function to use for comparison, so now we can use it with students uniquely identified by some other weird thing that we don't even know about yet:
+
+```javascript
+function binarySearch3<T>(arr:T[], key:T, compare: (a:T,b:T)=>number): number {
+    function bs(start:number, end:number): number {
+        if(start > end) return -1;
+        const mid = Math.floor((start + end) / 2),
+              comp = compare(key,arr[mid]);
+        if(comp>0) return bs(mid + 1, end);
+        if(comp<0) return bs(start, mid - 1);
+        return mid;
+    }
+    return bs(0,arr.length);
+}
+```
+
+Elsewhere in our program where we know how students are sorted, we can specify the appropriate compare function:
+
+```javascript
+binarySearch3(students, (a,b)=>/* return 1 if a is greater than b, 0 if they are the same, -1 otherwise */)
+```
+
+We can also have multiple type parameters for a single function.
+The following version of [`curry`](/higher-order-functions#curried-functions) uses type parameters to catch errors without loss of generality:
+
+```typescript
+function curry<U,V,W>(f:(x:U,y:V)=>W): (x:U)=>(y:V)=>W {
+  return x=>y=>f(x,y)
+  // return x=>y=>f(y,x) -- ERROR!
+}
+
+function prefix(s: string, n: number) {
+  return s.slice(0,n);
+}
+
+const first = curry(prefix)
+
+first(hello)(3) // ERROR!
+```
+
+So type checking helps us to create functions correctly, but also to use them correctly.
+The first commented out line would be in error because the order the returned function passes parameters into f does not match the declaration of f.
+The second error occurs when we try to pass the parameters in the wrong order.
+
 
 ## Optional Properties
 Look again at the ```next``` property of ```IListNode```:
