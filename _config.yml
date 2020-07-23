@@ -48,4 +48,7 @@ collections:
       - javascript1.md
       - functionaljavascript.md
       - typescript1.md
+      - higherorderfunctions.md
+      - lazyevaluation.md
       - asteroids.md
+      - lambdacalculus.md
