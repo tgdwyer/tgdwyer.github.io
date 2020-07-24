@@ -3,7 +3,7 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 layout: home
-title: "Chapters"
+title: "Notes on Programming Paradigms"
 ---
 
 ## [Levels of Abstraction](/levelsofabstraction) 
@@ -72,6 +72,14 @@ A fully worked example of FRP using rx.js Observables to create an in-browser ve
 * Compare a lambda-calculus inspired Haskell-like language (PureScript) with the functional programming concepts explored earlier in JavaScript
 * Understand how tail call optimisation is applied in languages which support it
 
-## [Haskell 1](/haskell1)
+## [Creating and Running Haskell Programs](/haskell1)
 
-## [Haskell 2](/haskell2)
+- Use the GHCi REPL to test Haskell programs and expressions
+- Compare the syntax of Haskell programs to Functional-style code in JavaScript
+
+## [Data and Type Classes](/haskell2)
+
+- Define data structures using Haskell's [Algebraic Data Types](/haskell2#algebraic-data-types) and use [pattern matching](/haskell2#pattern-matching) to define functions that handle each of the possible instances
+- Use the alternate [record syntax](/haskell2#record-syntax) to define data structures with named fields
+- Understand that Haskell [type classes](/haskell2#typeclasses) are similar to TypeScript interfaces in provide a definition for the set of functions that must be available for instances of those type classes and that typeclasses can extend upon one another to create rich hierarchies
+- Understand that the [Maybe](/haskell2#maybe) typeclass provides an elegant way to handle *partial functions*

@@ -7,8 +7,12 @@ permalink: /haskell2/
 
 ## Learning Outcomes
 
+- Define data structures using Haskell's [Algebraic Data Types](/haskell2#algebraic-data-types) and use [pattern matching](/haskell2#pattern-matching) to define functions that handle each of the possible instances
+- Use the alternate [record syntax](/haskell2#record-syntax) to define data structures with named fields
+- Understand that Haskell [type classes](/haskell2#typeclasses) are similar to TypeScript interfaces in provide a definition for the set of functions that must be available for instances of those type classes and that typeclasses can extend upon one another to create rich hierarchies
+- Understand that the [Maybe](/haskell2#maybe) typeclass provides an elegant way to handle *partial functions*
 
-## Introduction
+## Algebraic Data Types
 
 We can declare custom types for data in Haskell using the data keyword.  Consider the following declaration of our familiar cons list:
 
@@ -21,21 +25,28 @@ The `|` operator looks rather like the union type operator in TypeScript, and in
 Note that neither `Nil` or `Cons` are built in.  They are simply labels for constructor functions for the different versions of a `ConsList` node.  You could equally well call them `EndOfList` and `MakeList` or anything else that’s meaningful to you. `Nil` is a function with no parameters, `Cons` is a function with two parameters.  `Int` is a built-in primitive type for limited-precision integers.
 
 Now we can create a small list like so:
+
 ```haskell
 l = Cons 1 $ Cons 2 $ Cons 3 Nil  
 ```
 
-And we can create a function to determine a ConsList’s length using pattern matching; to not only create different definitions of the function for each of the possible instances of a ConsList, but also to destructure the non-empty Cons:
+## Pattern Matching
+
+In Haskell, we can define multiple versions of a function to handle the instances of an algebraic data types.  This is done by providing a *pattern* in the variable list of the function definition, in the form of an expression beginning with the constructor of the data instance (e.g. `Cons` or `Nil`) and variable names which will be bound to the different fields of the data instance.  
+
+For example, we can create a function to determine a `ConsList`’s length using *pattern matching*; to not only create different definitions of the function for each of the possible instances of a `ConsList`, but also to destructure the non-empty `Cons`:
 
 ```haskell
 consLength :: ConsList -> Int
 consLength Nil = 0
 consLength (Cons _ rest) = 1 + consLength rest 
 ```
-Since we don’t care about the head value in this function, we match it with `_`, which effectively ignores it.
+
+Since we don’t care about the head value in this function, we match it with `_`, an unnamed variable, which effectively ignores it.  Note that another way to conditionally destructure with pattern matching is using a [case statement](/haskell1/conditional-code-constructs-cheatsheet).
 
 -----
  Note that such a definition for lists is made completely redundant by Haskell’s wonderful built-in lists, where [] is the empty list, and : is an infix cons operator.  We can pattern match the empty list or destructure (head:rest), e.g.:
+
 ```haskell
 length :: [a] -> Int
 length [] = 0
@@ -43,12 +54,14 @@ length (_:rest) = 1 + length rest
 ```
 -----
 
-Record Syntax
+### Record Syntax
 Consider the following simple record data type: 
 
-data Student = Student Int String Int
+```haskell
+data Student = Student Int String Int 
+```
 
-A Student has three fields, mysteriously typed Int, String and Int.  Let’s say my intention in creating the above data type was to store a student’s id, name and mark.  I would create a record like so:
+A `Student` has three fields, mysteriously typed `Int`, `String` and `Int`.  Let’s say my intention in creating the above data type was to store a student’s id, name and mark.  I would create a record like so:
 
 ```haskell
 > t = Student 123 "Tim" 95
@@ -148,6 +161,7 @@ A custom data type can be made an instance of Ord by implementing either `compar
 ![Numeric Typeclasses](/haskell2/numerictypeclasses.png)
 
 ## Creating custom instances of type classes
+
 If we have our own data types, how can we make standard operations like equality and inequality testing work with them?  Luckily, the most common type classes can easily be instanced automatically through the deriving keyword. example, if we want to define a `Suit` type for a card game.
 
 ```haskell
@@ -157,11 +171,17 @@ data Suit = Spade|Club|Diamond|Heart
 > Spade < Heart
 True
 ```
+
 The `Show` typeclass allows the data to be converted to strings with the `show` function (e.g. so that GHCi can display it).  The Enum typeclass allows enumeration, e.g.:
+
 ```haskell
 > [Spade .. Heart]
 [Spade,Club,Diamond,Heart]
+```
+
 We can also create custom instances of typeclasses by providing our own implementation of the necessary functions, e.g.:
+
+```haskell
 instance Show Suit where
  show Spade = "^"
  show Club = "&"

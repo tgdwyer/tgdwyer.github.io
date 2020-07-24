@@ -1,12 +1,13 @@
 ---
 layout: page
-title: "Introduction to Haskell"
+title: "Creating and Running Haskell Programs"
 permalink: /haskell1/
 ---
 
-
 ## Learning Outcomes
 
+- Use the GHCi REPL to test Haskell programs and expressions
+- Compare the syntax of Haskell programs to Functional-style code in JavaScript
 
 ## Introduction
 
@@ -77,12 +78,18 @@ The `print` function is equivalent to the PureScript `log $ show`.  Haskell also
 Another thing to note about Haskell at this stage is that its evaluation is lazy by default.  Laziness is of course possible in other languages (as we have seen in JavaScript), and there are many lazy data-structures defined and available for PureScript (and most other functional languages).
 
 However, lazy by default sets Haskell apart.  It has pros and cons, on the pro side:
-It can make certain operations more efficient, for example, we have already seen in JavaScript how it can make streaming of large data efficient
-It can enable infinite sequences to be defined and used efficiently (this is a significant semantic difference)
-It opens up possibilities for the compiler to be really quite smart about its optimisations.
+
+* It can make certain operations more efficient, for example, we have already seen in JavaScript how it can make streaming of large data efficient
+* It can enable infinite sequences to be defined and used efficiently (this is a significant semantic difference)
+* It opens up possibilities for the compiler to be really quite smart about its optimisations.
+
 But there are definitely cons:
-It can be hard to reason about run-time performance
-Mixing up strict and lazy evaluation (which can happen inadvertently) can lead to (for example) O(n^2) behaviour in what should be linear time processing.
+
+* It can be hard to reason about run-time performance
+* Mixing up strict and lazy evaluation (which can happen inadvertently) can lead to (for example) O(n<sup>2</sup>) behaviour in what should be linear time processing.
+
+--------
+### A Side Note on the Y Combinator
 
 By the way, since it’s lazy-by-default, it’s possible to transfer the version of the Y-combinator given in the previous section into haskell code almost as given in Lambda Calculus:
 
@@ -98,6 +105,7 @@ y :: (a -> a) -> a
 y = \f -> (\x -> f (unsafeCoerce x x)) (\x -> f (unsafeCoerce x x))
 main = putStrLn $ y ("circular reasoning works because " ++)
 ```
+------------
 
 ## Functional Programming in Haskell versus JavaScript
 
@@ -144,15 +152,15 @@ Haskell helps with a number of language features.  First, is pattern matching.  
 
 There are two declarations of the sort function above.  The first handles the base case of an empty list.  The second handles the general case, and pattern matching is again used to destructure the lead cons expression into the pivot and rest variables.  No explicit call to head and tail functions is required.
 
-The next big difference is the haskell style of function application - which has more in common with lambda calculus than JavaScript.  The expression f x is application of the function `f` to whatever `x` is.  This helps to cut down massively on bracket creep.  
+The next big difference is the haskell style of function application - which has more in common with lambda calculus than JavaScript.  The expression `f x` is application of the function `f` to whatever `x` is.  
 
-Another thing that helps with readability is infix operators.  For example, `++` is an infix binary operator for list concatenation. The `:` operator for cons is another.  There is also the aforementioned $ which gives us another trick for removing brackets, and finally, the < and >= operators.  Note, that infix operators can also be curried and left only partially applied as in `(<pivot)`.
+Another thing that helps with readability is infix operators.  For example, `++` is an infix binary operator for list concatenation. The `:` operator for cons is another.  There is also the aforementioned $ which gives us another trick for removing brackets, and finally, the `<` and `>=` operators.  Note, that infix operators can also be curried and left only partially applied as in `(<pivot)`.
 
 Next, we have the where which lets us create locally scoped variables within the function declaration without the need for the trick I used in the JavaScript version of using the parameters of anonymous functions as locally scoped variables.
 
-Finally, you’ll notice that the haskell version of sort appears to be missing a parameterisation of the order function.  Does this mean it is limited to number types?  In fact, no - from our use of < and >= the compiler has inferred that it is applicable to any ordered type.  More specifically, to any type in the type class Ord.
+Finally, you’ll notice that the haskell version of sort appears to be missing a parameterisation of the order function.  Does this mean it is limited to number types?  In fact, no - from our use of `<` and `>=` the compiler has inferred that it is applicable to any ordered type.  More specifically, to any type in the type class `Ord`.
 
-I deliberately avoided the type declaration for the above function because, (1) we haven’t really talked about types properly yet, and (2) because I wanted to show off how clever Haskell type inference is.  However, it is actually good practice to include the type signature.  If one were to load the above code, without type definition, into GHCI (the Haskell REPL), one could interrogate the type like so:
+I deliberately avoided the type declaration for the above function because, (1) we haven’t really talked about types properly yet, and (2) because I wanted to show off how clever Haskell type inference is.  However, it is actually good practice to include the type signature.  If one were to load the above code, without type definition, into GHCi (the Haskell REPL), one could interrogate the type like so:
 
 ```haskell
 > :t sort
@@ -191,11 +199,13 @@ sort (pivot:rest) = let
 
 Note that where is only available in function declarations, not inside expressions and therefore is not available in a lambda.  However, let, in is part of the expression, and therefore available inside a lambda function.  A silly example would be:  \i -> let f x = 2*x in f i, which could also be spread across lines, but be careful to get the correct indentation.
 
-## Conditional code constructs
+---------
+
+## Conditional Code Constructs Cheatsheet
 
 ### Pattern matching
 
-Provides alternative cases for function definitions matching different values or possible destructurings of the function arguments.  As per examples above and:
+Provides alternative cases for function definitions matching different values or possible destructurings of the function arguments ([more detail](/haskell2#pattern-matching)).  As per examples above and:
 ```haskell
 fibs 0 = 1
 fibs 1 = 1
@@ -229,3 +239,4 @@ fibs n = case n of
   1 -> 1
   otherwise -> fibs (n-1) + fibs (n-2)
 ```
+---------
