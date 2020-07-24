@@ -43,7 +43,7 @@ Note that the ship is rendered inside a transform group `<g>`.  We will be chang
 ## Rotating the ship
 To begin with we'll make it possible for the player to rotate the ship with the arrow keys.  First, by directly adding listeners to keyboard events.  Then, by using events via Observable streams.  Here's a preview of what it's going to look like ([or you can play with it in a live editor](https://stackblitz.com/edit/asteroids01)):
 
-[![Rotation animation](AsteroidsRotate.gif)](https://stackblitz.com/edit/asteroids01)
+[![Rotation animation](/asteroids/AsteroidsRotate.gif)](https://stackblitz.com/edit/asteroids01)
 
 There are basically just two states, as sketched in the following state machine:
 

@@ -68,12 +68,13 @@ console.log(w)
 
 You can limit the visibility of a variable to a specific part of a program by declaring it inside a block of code delineated by curly braces:
 
-![Observable MVC Architecture](console1.png)
+![Observable MVC Architecture](/javascript1/console1.png)
 
 The above console.log statement successfully output the value of x because it was inside the same scope (the same set of curly braces).  The subsequent error occurs because we tried to look at x outside the scope of its definition.  Variables declared outside of any scope are said to be “global” and will be visible to any code loaded on the same page and could clobber or be clobbered by other global definitions - so take care!
 
 Be especially carefully to always declare variables with either let or const keywords.  If you omit these keywords, a variable will be created at the global scope, like so:
-![Observable MVC Architecture](console2.png)
+
+![Observable MVC Architecture](/javascript1/console2.png)
 
 ---------------------
 We are going to start to use a few operators, that may be familiar from C or Java, some are JS specific.  

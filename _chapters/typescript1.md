@@ -479,7 +479,8 @@ studentVersion1.name = "Tom"
 ```
 
 Now we get the squiggly:
-![Compile Error Screenshot](readonly.png)
+
+![Compile Error Screenshot](/typescript1/readonly.png)
 
 ## Typing systems with different ‘degrees’ of strictness
 
