@@ -1,2 +1,3 @@
 # tgdwyer.github.io
-Programming Paradigms
+
+Jekyll source for [my notes on Programming Paradigms](Programming Paradigms)
