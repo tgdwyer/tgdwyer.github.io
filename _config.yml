@@ -50,5 +50,10 @@ collections:
       - typescript1.md
       - higherorderfunctions.md
       - lazyevaluation.md
+      - functionalreactiveprogramming.md
       - asteroids.md
       - lambdacalculus.md
+      - purescript.md
+      - haskell1.md
+      - haskell2.md
+

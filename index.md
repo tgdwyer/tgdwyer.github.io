@@ -71,3 +71,7 @@ A fully worked example of FRP using rx.js Observables to create an in-browser ve
 
 * Compare a lambda-calculus inspired Haskell-like language (PureScript) with the functional programming concepts explored earlier in JavaScript
 * Understand how tail call optimisation is applied in languages which support it
+
+## [Haskell 1](/haskell1)
+
+## [Haskell 2](/haskell2)

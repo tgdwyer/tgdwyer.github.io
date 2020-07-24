@@ -61,11 +61,11 @@ The von Neumann architecture was among the first to unify the concepts of data a
 
 The classic von Neumann model looks like so:
 
-![von Neumann Architecture](vonneumann.png)
+![von Neumann Architecture](/levelsofabstraction/vonneumann.png)
 
 At a high-level, standard modern computer architecture still fits within this model:
 
-![Modern Computer Architecture](computerarchiture.png)
+![Modern Computer Architecture](/levelsofabstraction/computerarchiture.png)
 
 Programs run on an x86 machine according to the Instruction Execution Cycle:
 
