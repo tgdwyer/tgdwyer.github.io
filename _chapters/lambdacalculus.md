@@ -38,7 +38,7 @@ We have already discussed combinators in JavaScript, now we can give them a more
 
 Some things to note about such a lambda expression:
 
-* It has no name, it is anonymous.  Note that anonymous functions in languages like JavaScript are also frequently called lambda expressions, or just lambdas.  Now you know why.
+* It has no name, it is anonymous.  Note that anonymous functions in languages like JavaScript and Python are also frequently called lambda expressions, or just lambdas.  Now you know why.
 * The names of variables bound to parameters in a lambda expression are only meaningful within the context of that expression.  Thus, `λx.x` is semantically equivalent (or *alpha* equivalent) to `λy.y` or any other possible renaming of the variable.
 * Lambda functions can have multiple parameters in the parameter list, e.g.: `λxy. x y`, but they are curried (e.g. a sequence of nested univariate functions) such that 
 
