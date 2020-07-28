@@ -18,7 +18,9 @@ The elements of JavaScript covered in [our introduction](/javascript1), specific
 * [Anonymous functions](/javascript1#anonymous-functions)
 * [Higher-order functions](/javascript1#higher-order-functions)
 
-are sufficient for us to explore a paradigm called *functional programming*.  In the functional programming paradigm the primary model of computation is through the evaluation of functions.  While JavaScript (and many---but not all, as we shall see---other languages inspired by the functional paradigm) do not enforce it, true functional programming mandates the functions be pure in the sense of not causing *side effects*.  
+are sufficient for us to explore a paradigm called *functional programming*.  In the functional programming paradigm the primary model of computation is through the evaluation of functions.  Functional Programming is highly inspired by the [Lambda Calculus](/lambdacalculus/), a theory which develops a model for computation based on application and evaluation of mathematical functions.
+
+While JavaScript (and many---but not all, as we shall see---other languages inspired by the functional paradigm) do not enforce it, true functional programming mandates the functions be pure in the sense of not causing *side effects*.  
 
 ## Side Effects
 
