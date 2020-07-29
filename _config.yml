@@ -21,6 +21,8 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://tgdwyer.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: immersivecola
 github_username:  tgdwyer
+# Google Analytics
+google_analytics: UA-159840333-1
 
 # Build settings
 markdown: kramdown
