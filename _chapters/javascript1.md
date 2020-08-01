@@ -284,7 +284,18 @@ console.log(myObj['aProperty'])
 
 Note that when we declare an object with the ```const``` keyword as above, it is only *weakly immutable*.  This means that we cannot reassign myObj to refer to a different object, however, we can change the properties inside myObj.  Thus, the myObj variable is constant/immutable, but the object created by the declaration is mutable.  So, after making the above const declaration, if we try the following reassignment of myObj we receive an error:
 
+```javascript
+myObj = {
+    aProperty: 0,
+    anotherProperty: "tim was here"
+}
+```
+
 But we can reassign properties on myObj:
+
+```javascript
+myObj.aProperty = 0
+```
 
 We can also quickly declare variables that take the values of properties of an object, through *destructuring* syntax:
 
