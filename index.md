@@ -83,3 +83,12 @@ A fully worked example of FRP using rx.js Observables to create an in-browser ve
 - Use the alternate [record syntax](/haskell2#record-syntax) to define data structures with named fields
 - Understand that Haskell [type classes](/haskell2#typeclasses) are similar to TypeScript interfaces in provide a definition for the set of functions that must be available for instances of those type classes and that typeclasses can extend upon one another to create rich hierarchies
 - Understand that the [Maybe](/haskell2#maybe) typeclass provides an elegant way to handle *partial functions*
+
+## [Refined Haskell](/haskell3)
+
+- Understand how [eta-conversion](/haskell3#eta-conversion), [operator sectioning](/haskell3#operator-sectioning) and [compose](/haskell3#compose), together provide the ability to transform code to achieve a composable [point free](/haskell3#point-free-code) form and use this technique to refactor code.
+- Understand that in Haskell the ability to map over container structures is generalised into the [Functor](/haskell3#functor) typeclass, such that any type that is an instance of Functor has the `fmap` or `(<$>)` operation.
+- Understand that the [Applicative Typeclass](/haskell3#applicative) extends Functor such that containers of functions may be applied (using the `(<*>)` operator) to containers of values.
+- Understand that [Foldable](/haskell3#foldable) generalises containers that may be folded (or reduced) into values
+- Understand that [Traversable](/haskell3#traversable) generalises containers over which we can traverse applying a function with an Applicative effect
+- Understand that [Monad](/haskell3#monad) extends Functor and Applicative to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
