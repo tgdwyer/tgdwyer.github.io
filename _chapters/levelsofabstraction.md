@@ -79,8 +79,6 @@ Registers are locations on the CPU with very low-latency access due to their phy
 
 ## Other Models of Computation
 
-Turing Machines are a conceptual model of computation based on a physical analogy of tapes being written to and read from as they feed through a machine.  The operations written on the tape determine the machine's operation.
+Turing Machines are a conceptual model of computation based on a physical analogy of tapes being written to and read from as they feed through a machine.  The operations written on the tape determine the machine's operation.  The von Neumann model of computation is has in common with Turing Machines that it follows an imperitive paradigm of sequential instruction execution, but it is a practical model upon which most modern computers base their architecture.
 
-The von Neumann model of computation is a very practical one, upon which most modern computers base their architecture.
-
-We will see there are other models of computation that are also useful.  In particular, we will look at the [Lambda Calculus](/lambdacalculus), which was roughly a contemporary of these other models but based on mathematical functions, their application and composition.  We will see that while imperative programming languages are roughly abstractions of machine architecture, functional programming languages provide an alternative abstraction built upon the rules of the lambda calculus.  They provide advantages 
+There are other models of computation that are also useful.  In particular, we will look at the [Lambda Calculus](/lambdacalculus), which was roughly a contemporary of these other models but based on mathematical functions, their application and composition.  We will see that while imperative programming languages are roughly abstractions of machine architecture, functional programming languages provide an alternative abstraction built upon the rules of the lambda calculus.  
