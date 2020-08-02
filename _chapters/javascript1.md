@@ -287,11 +287,13 @@ Note that when we declare an object with the ```const``` keyword as above, it is
 ```javascript
 myObj = {
     aProperty: 0,
-    anotherProperty: "tim was here"
+    anotherProperty: "tim wasn't here"
 }
 ```
 
-But we can reassign properties on myObj:
+> VM48:1 Uncaught TypeError: Assignment to constant variable.
+
+But the immutability due to `const` is *shallow* in the sense that while the `myObj` variable which references the object is immutable, the properties of the object are mutable, i.e. we can reassign properties on myObj with no error:
 
 ```javascript
 myObj.aProperty = 0
@@ -414,7 +416,7 @@ or to pass as a parameter into another function, for example, Array objects have
 
 ```javascript
 ['tim', 'sally', 'anne'].forEach(function(person) { 
-console.log('hello ' + person) 
+    console.log('hello ' + person)
 })
 ```
 
