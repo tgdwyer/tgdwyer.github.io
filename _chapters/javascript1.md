@@ -367,7 +367,7 @@ z
 
 > 3
 
-See below for further functions for working with arrays.
+Below, we see how [Anonymous Functions](/javascript1#anonymous-functions) can be applied to transform arrays, and a [cheatsheet summary](/javascript1#array-cheatsheet) for further functions for working with arrays.
 
 ## Dynamic Typing
 
@@ -450,6 +450,19 @@ Multiple ‘;’ separated statements including local variable declarations can 
 })
 ```
 
+Anonymous functions can have multiple parameters.  We see an example used with another nifty method on Array objects which allows us to `reduce` them to a single value.
+
+```javascript
+const anArrayOfNumbers = [5,8,3,1,7,6,2]
+anArrayOfNumbers.reduce((accumulator,x)=>accumulator+x,0)
+```
+> 32
+
+The `reduce` method applies a function to each of the elements in the array, in order to compute an aggregated value for the whole array.  The nature of the aggregate depends on the function you pass in.  Here we just sum the elements in the array.  The function we pass in has two parameters, the second is the array element (which we refer to here as `x`), the first parameter `accumulator` is either:
+
+* the second argument to reduce(which in our case is 0), if this is the first call to the function, 
+* or, for every other call, the result returned by the previous call to the function.
+
 ## Arrow Functions
 
 As mentioned above, ES6 introduced compact notation for anonymous functions:
@@ -483,7 +496,8 @@ const greeting = (greeting, person)=> {
 ```
 
 <div class="cheatsheet" markdown="1">
-## Array Cheatsheet: Pure Methods on Array
+## Array Cheatsheet
+### Pure Methods on Array
 
 Where `a` is an array with elements of type `U`, `U=>V` is the type of a function with input parameter type `U` and return type `V`
 (Note: these are not correct [TS annotations](/typescript1), but a [Haskelly](/haskell1) “shorthand”)
