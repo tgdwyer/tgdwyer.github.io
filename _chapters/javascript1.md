@@ -499,7 +499,7 @@ const greeting = (greeting, person)=> {
 
 ## Array Cheatsheet
 
-Where `a` is an array with elements of type `U`, `U=>V` is the type of a function with input parameter type `U` and return type `V`
+In the following, `a` is an array with elements of type `U`, `U=>V` is the type of a function with input parameter type `U` and return type `V`
 (Note: these are not correct [TS annotations](/typescript1), but a [Haskelly](/haskell1) “shorthand”)
 
 
