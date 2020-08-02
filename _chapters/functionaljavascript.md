@@ -160,7 +160,7 @@ a, n, finalAction: (result)=>void): void
 }
 ```
 
-Continuations are essential in asynchronous processing, because the function will return immediately after dispatching the job, e.g. to the JavaScript event loop:
+Continuations are essential in asynchronous processing, which abounds in web programming.  For example, when an HTTP request is dispatched by a client to a server, there is no knowing precisely when the response will be returned (it depends on the speed of the server, the network between client and server, and load on that network).  However, we can be sure that it will not be instant and certainly not before the line of code following the dispatch is executed by the interpreter.  Thus, continuation style call-back functions are typically passed through to functions which trigger such asynchronous behaviour, for those call-back functions to be invoked when the action is completed.  A simple example of an asynchronous function invocation is the built-in `setTimeout` function, which schedules an action to occur after a certain delay.  The `setTimeout` function itself returns immediately after dispatching the job, e.g. to the JavaScript event loop:
 
 ```javascript
 setTimeout(()=>console.log('done.'), 0);
