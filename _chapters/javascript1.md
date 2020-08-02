@@ -496,17 +496,21 @@ const greeting = (greeting, person)=> {
 ```
 
 <div class="cheatsheet" markdown="1">
+
 ## Array Cheatsheet
-### Pure Methods on Array
 
 Where `a` is an array with elements of type `U`, `U=>V` is the type of a function with input parameter type `U` and return type `V`
 (Note: these are not correct [TS annotations](/typescript1), but a [Haskelly](/haskell1) “shorthand”)
 
-```javascript
-// The following is impure if f has any effect
-a.forEach(f: U=> void): void  // apply the function f to each element of the array
 
-// Pure functions:
+
+```javascript
+a.forEach(f: U=> void): void  // apply the function f to each element of the array
+```
+Although it does not typically mutate `a`, `forEach` is impure if `f` has any side effect (which it most likely will because otherwise why would you bother!).
+
+### Pure Methods on Array
+```javascript
 a.slice(): U[]                // copy the whole array
 a.slice(start: number): U[]   // copy from the specified index to the end of the array
 a.slice(start: number,        // copy from start index up to 
