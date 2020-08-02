@@ -78,7 +78,9 @@ Be especially carefully to always declare variables with either let or const key
 
 ---------------------
 We are going to start to use a few operators, that may be familiar from C or Java, some are JS specific.  
-Here’s a cheat sheet:
+Here’s a cheatsheet:
+
+<div class="cheatsheet" markdown="1">
 
 ## JavaScript 101: Basic Operator Cheat Sheet
 
@@ -126,7 +128,7 @@ x += <expr>
 // also -=, *=, /=, |=, &=.
 ```
 
--------------------
+</div>
 
 ## Functions
 
@@ -480,13 +482,11 @@ const greeting = (greeting, person)=> {
 }
 ```
 
--------------------------------------
+<div class="cheatsheet" markdown="1">
+## Array Cheatsheet: Pure Methods on Array
 
-## Array Cheat Sheet: Pure Methods on Array
-
-Where a is an array with elements of type U:
-
-(Note: these are not correct TS annotations, but a Haskelly “shorthand”)
+Where `a` is an array with elements of type `U`, `U=>V` is the type of a function with input parameter type `U` and return type `V`
+(Note: these are not correct [TS annotations](/typescript1), but a [Haskelly](/haskell1) “shorthand”)
 
 ```javascript
 // The following is impure if f has any effect
@@ -511,7 +511,7 @@ a.reduce(f: (V, U)=> V, V): V // Uses f to combine elements of
 
 All of the above are pure in the sense that they do not mutate a, but return the result in a new object.
 
----------------------------
+</div>
 
 ## Closures
 

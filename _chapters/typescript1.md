@@ -43,7 +43,8 @@ i = 'hello!';
 
 > [TS compiler says] Type '"hello!"' is not assignable to type 'number'.
 
------------
+
+<div class="cheatsheet" markdown="1">
 
 ## Type Annotations Cheat Sheet
 
@@ -115,7 +116,7 @@ function curry<U,V,W>(f:(x:U,y:V)=>W): CurriedFunc<U,V,W> {
 }
 ```
 
------------------------
+</div>
 
 ## Why should we declare types?
 

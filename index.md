@@ -92,3 +92,5 @@ A fully worked example of FRP using rx.js Observables to create an in-browser ve
 - Understand that [Foldable](/haskell3#foldable) generalises containers that may be folded (or reduced) into values
 - Understand that [Traversable](/haskell3#traversable) generalises containers over which we can traverse applying a function with an Applicative effect
 - Understand that [Monad](/haskell3#monad) extends Functor and Applicative to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
+
+## [Parser Combinators](parsercombinators)

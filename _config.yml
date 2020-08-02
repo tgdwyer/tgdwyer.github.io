@@ -59,4 +59,5 @@ collections:
       - haskell1.md
       - haskell2.md
       - haskell3.md
+      - parsercombinators.md
 
