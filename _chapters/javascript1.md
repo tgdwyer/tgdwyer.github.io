@@ -453,9 +453,9 @@ Multiple ‘;’ separated statements including local variable declarations can 
 Anonymous functions can have multiple parameters.  We see an example used with another nifty method on Array objects which allows us to `reduce` them to a single value.
 
 ```javascript
-const anArrayOfNumbers = [5,8,3,1,7,6,2]
-anArrayOfNumbers.reduce((accumulator,x)=>accumulator+x,0)
+[5,8,3,1,7,6,2].reduce((accumulator,x)=>accumulator+x,0)
 ```
+
 > 32
 
 The `reduce` method applies a function to each of the elements in the array, in order to compute an aggregated value for the whole array.  The nature of the aggregate depends on the function you pass in.  Here we just sum the elements in the array.  The function we pass in has two parameters, the second is the array element (which we refer to here as `x`), the first parameter `accumulator` is either:
