@@ -188,7 +188,7 @@ We can loop with while:
 */
 function sumTo(n) {
    let sum = 0;
-   while (n) {
+   while (n) { // when n is 0 this evaluates to false ending the loop
        sum += n--;
    }
    return sum;
