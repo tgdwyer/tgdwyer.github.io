@@ -17,6 +17,7 @@ As a branch of Computer Science, the theory and practice of programming has grow
 An important distinction to make when considering different programming languages, is between syntax and semantics. The syntax of a programming language is the set of symbols and rules for combining them (the grammar) into a correctly structured program.  These rules are often arbitrary and chosen for historical reasons, ease of implementation or even aesthetics.  An example of a syntactic design choice is the use of indentation to denote block structure or symbols such as “BEGIN” and “END” or “{” and “}”.
 
 Example: functions in python and C that are syntactically different, but semantically identical:
+
 ```python
 # python code
 def sumTo(n):

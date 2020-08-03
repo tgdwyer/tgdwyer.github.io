@@ -325,12 +325,12 @@ function showX({x}) {
 }
 ```
 
-If can also initialise an object directly with variables.  Unless a new attribute name is specified, the variable names become attribute names, like so:
+You can also initialise an object's properties directly with variables.  Unless a new property name is specified, the variable names become property names, like so:
 
 ```javascript
 const x = 123, tempY = 456
-const point = {x /* variable name used as attribute name */, 
-               y:tempY /* value from variable but new attribute name */}
+const point = {x /* variable name used as property name */,
+               y:tempY /* value from variable but new property name */}
 point
 ```
 
