@@ -568,6 +568,7 @@ plus(1,2)
 ```
 > 3
 
+The `add` function above is a [Curried](/higherorderfunctions#curried-functions) version of the `plus` function.
 
 ## Prototype Class Mechanism
 
