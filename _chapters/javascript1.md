@@ -535,7 +535,7 @@ All of the above are pure in the sense that they do not mutate `a`, but return t
 
 ## Closures
 
-Functions can be nested inside other function definitions and can access variables from the enclosing scope.  A function and the set of variables it accesses from its enclosing scope is called a closure.  You can also have a function that creates and returns a closure that can be applied later.
+Functions can be nested inside other function definitions and can access variables from the enclosing scope.  A function and the set of variables it accesses from its enclosing scope is called a *closure*.  Variables from the enclosing scope that are accessed by the closure are said to be *captured* by the closure.  You can also have a function that creates and returns a closure that can be applied later.
 
 ```javascript
 function add(x) {
@@ -552,8 +552,22 @@ addNine(10)
 ```javascript
 addNine(1)
 ```
-
 > 10
+
+We can also call the add function with two arguments at once:
+```javascript
+add(1)(2) 
+```
+
+> 3
+
+Compare to a more traditional function of two parameters:
+```javascript
+function plus(x,y) { return x + y }
+plus(1,2)
+```
+> 3
+
 
 ## Prototype Class Mechanism
 
