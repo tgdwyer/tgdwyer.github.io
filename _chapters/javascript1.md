@@ -637,7 +637,7 @@ Some notes about this implementation of range:
 
 ## Exercises
 
-- Amend the range function above to handle negative values in from or to, and add some calculation so that the array is size `to-from` from the start while you are at it.
+- Amend the range function above to handle negative values in from or to, and add some calculation so that the array is size `to - from` from the start, eliminating the need for `filter`.
 - Hack a sum function onto the `Array.prototype` (you’ll need to use an old style anonymous function to access the array through `this`).
 - Why might you lose friends doing this kind of thing to built-in types?
 - We are going to be dealing with linked-list like data structures a lot in this course.  Implement a linked list using javascript objects as simply as you can, and create some functions for working with it, like length and map.
