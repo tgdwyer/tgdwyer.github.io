@@ -530,7 +530,7 @@ a.reduce(f: (V, U)=> V, V): V // Uses f to combine elements of
 
 All of the above are pure in the sense that they do not mutate `a`, but return the result in a new object.
 
-*Note: the function passed to `forEach` takes an optional second parameter (not shown above) which is the index of the element being visited.  While `map`, `filter` & `reduce` have a similar optional index parameter I suggest to avoid using it because it leads to hacky imperative style thinking about loops.*
+*Note: the function passed to `forEach` takes an optional second parameter (not shown above) which is the index of the element being visited (see [docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach)).  While `map`, `filter` & `reduce` have a similar optional index parameter I suggest to avoid using it because it leads to hacky imperative style thinking about loops.*
 
 </div>
 
