@@ -572,6 +572,8 @@ The `add` function above is a [Curried](/higherorderfunctions#curried-functions)
 
 ## Prototype Class Mechanism
 
+*Note: the following way to achieve class encapsulation is deprecated by ES6 syntax -- skip to [the next section](#ecmascript-6-class-syntax) to see the modern way to do it.*
+
 In JavaScript you can also create functions as members of objects:
 
 ```javascript
@@ -611,9 +613,11 @@ Note that above we use the old-style verbose JavaScript anonymous function synta
 It’s very tempting to use the prototype editing mechanism for evil.  For example, I’ve always wished that JS had a function to create arrays initialised over a range:
 
 ```javascript
-Array.prototype.range = (from, to)=>Array(to).fill()
-.map((_,i)=>i)
-.filter(v=> v >= from)
+Array.prototype.range = 
+  (from, to)=>Array(to)  // allocate space for an array of size `to`
+  .fill()                // populate the array (with `undefined`s)
+  .map((_,i)=>i)         // set each element of the array to its index
+  .filter(v=> v >= from) // filter out values below from
 
 [].range(3,9)
 ```
@@ -622,11 +626,16 @@ Array.prototype.range = (from, to)=>Array(to).fill()
 
 Of course, if you do something like this in your JS library, and it pollutes the global namespace, and one day EcmaScript 9 introduces an actual `range` function with slightly different semantics, and someone else goes to use the `[].range` function expecting the official semantics - well, you may lose a friend or two.
 
+Some notes about this implementation of range:
+- Although the `Array(n)` function allocates space for n elements, the result is still "empty" so `fill()` is necessary to actually create the entries.
+- The function passed to `map` is using an optional second argument which receives the index of the current element.  
+- The `_` is not special syntax, it's a valid variable name. I use `_` as a convention for variables that I must name but don't actually use.  This is imitating Haskell syntax.
+
 ---------------------
 
 ## Exercises
 
-- Amend the range function above to handle negative values in from or to
+- Amend the range function above to handle negative values in from or to, and add some calculation so that the array is size `to-from` from the start while you are at it.
 - Hack a sum function onto the `Array.prototype` (you’ll need to use an old style anonymous function to access the array through `this`).
 - Why might you lose friends doing this kind of thing to built-in types?
 - We are going to be dealing with linked-list like data structures a lot in this course.  Implement a linked list using javascript objects as simply as you can, and create some functions for working with it, like length and map.
