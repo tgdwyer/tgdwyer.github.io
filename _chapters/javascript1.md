@@ -530,6 +530,8 @@ a.reduce(f: (V, U)=> V, V): V // Uses f to combine elements of
 
 All of the above are pure in the sense that they do not mutate `a`, but return the result in a new object.
 
+*Note: the function passed to `forEach` takes an optional second parameter (not shown above) which is the index of the element being visited.  While `map`, `filter` & `reduce` have a similar optional index parameter I suggest to avoid using it because it leads to hacky imperative style thinking about loops.*
+
 </div>
 
 
@@ -628,8 +630,8 @@ Of course, if you do something like this in your JS library, and it pollutes the
 
 Some notes about this implementation of range:
 - Although the `Array(n)` function allocates space for n elements, the result is still "empty" so `fill()` is necessary to actually create the entries.
-- The function passed to `map` is using an optional second argument which receives the index of the current element.  
-- The `_` is not special syntax, it's a valid variable name. I use `_` as a convention for variables that I must name but don't actually use.  This is imitating Haskell syntax.
+- The function passed to `map` is using an optional second argument which receives the index of the current element.  *See note in the [Array Cheatsheat](#array-cheatsheet) suggesting not to use this*.
+- The `_` is not special syntax, it's a valid variable name. I use `_` as a convention for a parameter that I don't use.  This is imitating Haskell syntax.
 
 ---------------------
 
