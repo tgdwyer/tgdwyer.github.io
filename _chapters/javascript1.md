@@ -715,7 +715,7 @@ tims.forEach(t => t.sayHello())
 
 ## Polymorphism
 
-According to Cartelli and Wegner, "Polymorphic types are types whose operations are applicable to values of more than one type."  Thus, although `Person` and `LoudPerson` are different types, since `LoudPerson` is a sub-type of `Person`, they present a common `sayHello` method allowing operations like `forEach` to operate over an array of the base class.  In a traditional Object Oriented language like Java, the compiler enforces that objects must be instances of a common base class or interface to be treated as such.  This type of polymorphism is called subtyping polymorphism.
+According to Cartelli *et al.*, "Polymorphic types are types whose operations are applicable to values of more than one type."  Thus, although `Person` and `LoudPerson` are different types, since `LoudPerson` is a sub-type of `Person`, they present a common `sayHello` method allowing operations like `forEach` to operate over an array of the base class.  In a traditional Object Oriented language like Java, the compiler enforces that objects must be instances of a common base class or interface to be treated as such.  This type of polymorphism is called *subtyping polymorphism*.
 
 In JavaScript, with no compile-time typecheck, a kind of polymorphism is possible such that if two objects both present a similarly named method that is callable in the same way, of course there is nothing preventing you simply using that method on each object as if it is the same:
 
@@ -732,6 +732,7 @@ Informally, this type of polymorphism is called “Duck Typing” (i.e. "If it l
 
 Another type of polymorphism which is key to strongly typed functional programming languages (like Haskell), but also a feature of many modern OO languages is parametric polymorphism.  We will see this in action when we introduce TypeScript.
 
+*Reference: Cardelli, Luca, and Peter Wegner. "On understanding types, data abstraction, and polymorphism." ACM Computing Surveys (CSUR) 17.4 (1985): 471-523.*
 ## Dependency Injection
 
 It’s useful to compare the above style of polymorphism, to a functional approach to dependency injection:
