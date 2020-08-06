@@ -500,8 +500,8 @@ The `reduce` method applies a function to each of the elements in the array, in 
 
 ## Array Cheatsheet
 
-In the following, `a` is an array with elements of type `U`, `U=>V` is the type of a function with input parameter type `U` and return type `V`
-(Note: these are not correct [TS annotations](/typescript1), but a [Haskelly](/haskell1) “shorthand”)
+In the following, the annotations beginning with `:` after each parameter describe its type and again at the end of each function to describe its return type.  The array `a` has elements of type `U`, and `U=>V` is the type of a function with input parameter type `U` and return type `V`
+(Note: these are not correct [TS annotations](/typescript1), but an informal “shorthand”)
 
 
 
@@ -511,6 +511,7 @@ a.forEach(f: U=> void): void  // apply the function f to each element of the arr
 Although it does not typically mutate `a`, `forEach` is impure if `f` has any side effect (which it most likely will because otherwise why would you bother!).
 
 ### Pure Methods on Array
+
 ```javascript
 a.slice(): U[]                // copy the whole array
 a.slice(start: number): U[]   // copy from the specified index to the end of the array
@@ -554,9 +555,11 @@ addNine(10)
 ```javascript
 addNine(1)
 ```
+
 > 10
 
 We can also call the add function with two arguments at once:
+
 ```javascript
 add(1)(2) 
 ```
