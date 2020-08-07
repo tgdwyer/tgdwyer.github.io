@@ -237,9 +237,11 @@ It is closer to the *inductive definition* of sum than a series of steps for how
 - Therefore: this code has the property of *referential transparency*.
 - The code succinctly states the *loop invariant*.
 
-## Stack Overflow: a caveat of recursion
+## Stack Overflow and Tail Recursion
 
-Too many levels of recursion will cause a *stack overflow*.
+Each time a function is invoked, the interpreter (or ultimately the CPU) will allocate another chunk of memory to a special area of memory set aside for such use called the *stack*.  The stack is finite.  A recursive function that calls itself too many times will consume all the available stack memory.
+
+Therefore, too many levels of recursion will cause a *stack overflow*.
 
 ```javascript
 sumTo(1000000)
@@ -247,13 +249,42 @@ sumTo(1000000)
 
 > Uncaught RangeError: Maximum call stack size exceeded
 
+However, functional languages (like Haskell) rely on recursion because they have no other way to create loops without mutable variables - so they must have a way to make this scale to real-world computations.  When a recursive function is written in a special way, such that the recursive call is in *tail position*, compilers are able to transform the recursion into a `while` loop with constant memory use - this is called *tail call optimisation*.
+
+Let's see what a *tail recursive* version of the `sumTo` function looks like:
+
+```javascript
+function sumTo(n, sum = 0) {
+   return n ? sumTo(n-1, sum + n)
+            : sum;
+}
+```
+
+We have added a second parameter *sum* to store the computation as recursion proceeds.  Such parameters are called *accumulators*.  The `= 0` in the parameter definition provides a default value in case the caller does not specify an argument.  Thus, this new version can be called the same way as before:
+
+```javascript
+sumTo(10)
+```
+
+> 55
+
+The important change is that the recursive call (on the branch of execution that requires it) is now the very last operation to be executed before the function returns.  The computation (`sum + n`) occurs before the recursive call.  Therefore, no local state needs to be stored on the stack.
+
+Note: although it has been proposed for the EcmaScript standard, as of 2020, not all JavaScript engines support tail call optimisation (only WebKit AFAIK).  
+
+## Functions as parameters to other functions
+
 We can make functions more versatile by parameterising them with other functions:
 
 ```javascript
-function sumTo(n, f) {
+function sumTo(n, f = x => x) {
    return n ? f(n) + sumTo(n-1, f) : 0;
 }
+```
 
+Called without a second parameter sumTo
+
+```javascript
 function square(x) {
    return x * x;
 }
@@ -538,7 +569,13 @@ All of the above are pure in the sense that they do not mutate `a`, but return t
 
 ## Closures
 
-Functions can be nested inside other function definitions and can access variables from the enclosing scope.  A function and the set of variables it accesses from its enclosing scope is called a *closure*.  Variables from the enclosing scope that are accessed by the closure are said to be *captured* by the closure.  You can also have a function that creates and returns a closure that can be applied later.
+Functions can be nested inside other function definitions and can access variables from the enclosing scope.  
+
+**Definitions:** 
+- A function and the set of variables it accesses from its enclosing scope is called a *closure*.  
+- Variables from the enclosing scope that are accessed by the closure are said to be *captured* by the closure.  
+
+You can also have a function that creates and returns a closure that can be applied later:
 
 ```javascript
 function add(x) {
@@ -551,6 +588,8 @@ addNine(10)
 ```
 
 > 19
+
+In the above example, the parameter `x` of the `add` function is captured by the anonymous function that is returned, which forms a closure.  Thus, the binding of `x` to a value *persists* beyond the scope of the `add` function itself.  Effectively, we have used the `add` function to create a new function: `y=>y+9` - without actually writing the code ourselves.
 
 ```javascript
 addNine(1)
