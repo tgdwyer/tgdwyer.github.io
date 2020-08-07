@@ -622,7 +622,7 @@ plus(1,2)
 
 The `add` function above is a [Curried](/higherorderfunctions#curried-functions) version of the `plus` function.
 
-As another example, consider a curried wrapper for our `sumTo` from before:
+As another example, consider a curried wrapper for our `sumTo` from [before](/javascript1#functions-as-parameters-to-other-functions):
 
 ```javascript
  function sumOf(f) {
