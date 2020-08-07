@@ -762,8 +762,8 @@ According to Cartelli *et al.*, "Polymorphic types are types whose operations ar
 In JavaScript, with no compile-time typecheck, a kind of polymorphism is possible such that if two objects both present a similarly named method that is callable in the same way, of course there is nothing preventing you simply using that method on each object as if it is the same:
 
 ```javascript
-var a = {f: ()=>console.log("a")}
-var b = {f: ()=>console.log("b")}
+const a = {f: ()=>console.log("a")}
+const b = {f: ()=>console.log("b")}
 [a,b].forEach(o=>o.f())
 ```
 
