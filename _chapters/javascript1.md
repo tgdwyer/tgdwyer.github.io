@@ -282,7 +282,15 @@ function sumTo(n, f = x => x) {
 }
 ```
 
-Called without a second parameter sumTo
+Note that the new parameter `f` defaults to a simple function that directly returns its argument.  Thus, called without a second parameter sumTo has the same behavior as before:
+
+```javascript
+ sumTo(10)
+```
+
+> 55
+
+But, we can now specify a non-trivial function to be applied to the numbers before they are summed.  For example, a function to square a number:
 
 ```javascript
 function square(x) {
@@ -290,7 +298,7 @@ function square(x) {
 }
 ```
 
-So we can compute the sum of the first 10 squares:
+can be passed into `sumTo` to compute a sum of squares:
 
 ```javascript
 sumTo(10, square)
@@ -613,6 +621,26 @@ plus(1,2)
 > 3
 
 The `add` function above is a [Curried](/higherorderfunctions#curried-functions) version of the `plus` function.
+
+As another example, consider a curried use of our `sumTo` from before:
+
+```javascript
+ function sumOf(f) {
+     return n => sumTo(n, f)
+ }
+```
+
+Now, we can create custom functions that compute sums over arbitrary sequences:
+
+```javascript
+ const sumOfSquares = sumOf(square)
+ sumOfSquares(10)
+```
+> 385
+```javascript
+ sumOfSquares(20)
+```
+> 2870
 
 ## Prototype Class Mechanism
 
