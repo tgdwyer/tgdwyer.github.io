@@ -51,7 +51,7 @@ Pure functions are perhaps most easily illustrated with some examples and counte
 
 ```javascript
 function squares(a) {
-    let b = new Array(a.length);
+    const b = new Array(a.length);
     for (let i = 0; i < a.length; i++) {
         b[i] = a[i]**2;
     }
@@ -59,7 +59,9 @@ function squares(a) {
 }
 ```
 
-While the above function (viewed as a black box) is pure, its implementation is not very functional.  Specifically, the code around variable b does not have the property of referential transparency.  That is, because the value of b is reassigned during execution figuring out the state at a given line is impossible, without looking at its context. True functional languages enforce referential transparency through immutable variables (which sounds like a tautology).  That is, once a variable is bound to a value, it cannot be reassigned.  In JavaScript we can opt-in to immutable variables by declaring them const.
+While the above function (viewed as a black box) is pure, its implementation is not very functional.  Specifically, the code around variable b does not have the property of referential transparency.  That is, because the array referenced by `b` is mutated during execution, figuring out the state at a given line is impossible, without looking at its context.
+
+True pure functional languages (such as Haskell) enforce referential transparency through immutable variables (*note: yes, "immutable variable" sounds like a tautology - two words with opposite meanings put together*).  That is, once any variable in such a language is bound to a value, it cannot be reassigned.  In JavaScript we can opt-in to immutable variables by declaring them `const`.
  
 A more functional way to implement the squares function would be more like the examples we have seen previously:
 
