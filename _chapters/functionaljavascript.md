@@ -61,7 +61,7 @@ function squares(a) {
 
 While the above function (viewed as a black box) is pure, its implementation is not very functional.  Specifically, the code around variable b does not have the property of referential transparency.  That is, because the array referenced by `b` is mutated during execution, figuring out the state at a given line is impossible, without looking at its context.
 
-True pure functional languages (such as Haskell) enforce referential transparency through immutable variables (*note: yes, "immutable variable" sounds like a tautology - two words with opposite meanings put together*).  That is, once any variable in such a language is bound to a value, it cannot be reassigned.  In JavaScript we can opt-in to immutable variables by declaring them `const`.
+True pure functional languages (such as Haskell) enforce referential transparency through immutable variables (*note: yes, "immutable variable" sounds like an oxymoron - two words with opposite meanings put together*).  That is, once any variable in such a language is bound to a value, it cannot be reassigned.  In JavaScript we can opt-in to immutable variables by declaring them `const`.
  
 A more functional way to implement the squares function would be more like the examples we have seen previously:
 
