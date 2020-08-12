@@ -309,8 +309,8 @@ const studentsById = [
   {id: 125, name: "Cindy Wu"},
   ...
 ]
-
-console.log(binarySearch1(studentsById,"125").name)
+const numberIds = studentsById.map(s=>s.id);
+console.log(studentsById[binarySearch1(numberIds,125)].name)
 ```
 
 > Cindy Wu
@@ -335,14 +335,15 @@ const studentsByEmail = [
   ...
 ]
 
-console.log(binarySearch2(studentsByEmail,"harry@monash.edu").name)
+const stringIds = studentsByEmail.map(s=>s.id);
+console.log(studentsByEmail[binarySearch2(stringIds,'harry@monash.edu')].name)
 ```
 > Harry Smith
 
 Why is this better than raw JavaScript with no type checking, or simply using TypeScript's wildcard `any` type?  Well it ensures that we use the types *consistently*.
 For example:
 ```javascript
-binarySearch(studentsById,"harry@monash.edu")
+binarySearch(numberIds,"harry@monash.edu")
 ```
 > TYPE ERROR!
 
