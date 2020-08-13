@@ -480,7 +480,7 @@ Note that whatever value the expression on the right-hand side of the arrow eval
 
 > ["hello tim", "hello sally", "hello anne"]
 
-Multiple `;` separated statements including local variable declarations can be enclosed in brackets with arrow syntax, but then an explicit `return` statement is required to return a value:
+Multiple statements (either split across lines or separated with `;`s) including local variable declarations can be enclosed in brackets with arrow syntax, but then an explicit `return` statement is required to return a value:
 
 ```javascript
 ['tim', 'sally', 'anne'].map(person=> {
