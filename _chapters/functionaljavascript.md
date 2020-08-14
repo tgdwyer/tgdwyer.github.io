@@ -36,7 +36,7 @@ Examples of side-effects from inside a function:
 In languages without compilers that specifically guard against them, side effects can occur:
 
 * intentionally through sloppy coding practices, where a misguided programmer may think it's more convenient to have a function do multiple things at once;
-* unintentially, for example by accidently setting a global variable instead of a local one.
+* unintentionally, for example by accidently setting a global variable instead of a local one.
 
 We'll see more examples in actual code below.
 
@@ -250,7 +250,7 @@ const list123 = cons(1, cons(2, cons(3, null)));
 
 The data element, and the reference to the next node in the list are stored in the closure returned by the ```cons``` function.  Created like this, the only side-effect of growing the list is creation of new cons closures.  Mutation of more complex structures such as trees can be managed in a similarly ‘pure’ way, and surprisingly efficiently, as we will see later in this course. 
 
-So cons is a function that takes two parameters (```head``` and ```rest```), and returns a function that itself takes a function (selector) as argument.  The selector function is then applied to ```head``` and ```rest```.  What might the selector function be and how do we apply it to a list element?  Well we don’t exactly apply it ourselves, we give it to the closure returned by the ```cons``` function and it applies it for us.  There are the two selectors we need to work with the list:
+So ```cons``` is a function that takes two parameters (```head``` and ```rest```), and returns a function that itself takes a function (selector) as argument.  The selector function is then applied to ```head``` and ```rest```.  What might the selector function be and how do we apply it to a list element?  Well we don’t exactly apply it ourselves, we give it to the closure returned by the ```cons``` function and it applies it for us.  There are the two selectors we need to work with the list:
 
 ```javascript
 const
