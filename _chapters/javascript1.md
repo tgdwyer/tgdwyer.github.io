@@ -65,7 +65,7 @@ w = 2 // note that without a let or const keyword before it, this assignment an 
 ## JavaScript Types
 JavaScript has several "primitive types" (simple types that are not [Objects](#objects)).  These include:
 - `number`: any numeric value, integer or decimal
-- `string`: delineated like `"hello"` or `'hello'` or even \``hello`\`.  
+- `string`: delineated like `"hello"` or `'hello'` or even ``` `hello` ```.  
 - `boolean`: can be only `true` or `false`
 - `undefined`: is a special type with only one value which is `undefined`.
 
