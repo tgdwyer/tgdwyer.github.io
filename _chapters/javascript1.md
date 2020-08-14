@@ -30,51 +30,92 @@ The following introduction to JavaScript assumes a reasonable knowledge of progr
 We declare constant variables in JavaScript with the `const` keyword:
 
 ```javascript
-const z = 1;  // constant (immutable variable) at global scope
+const z = 1  // constant (immutable variable) at global scope
 ```
 
-You can try this in the debug console in a browser such as Chrome.  If we try to change the value of such a `const` variable, we get a run-time error:
-
+You can try this in the [debug console in a browser such as Chrome](https://developers.google.com/web/tools/chrome-devtools/console).  If we try to change the value of such a `const` variable, we get a run-time error:
 ```javascript
+const z = 1 
 z = 2
 ```
-
 > Uncaught TypeError: Assignment to constant variable.
 
 We define mutable variables in JavaScript with the `let` keyword:
 
 ```javascript
-let w = 1;
+let w = 1
 ```
+console replies with the value returned by the `let` statement, which is:
+> undefined
 
-You can verify in the debugger that you are able to change the value of `w`.
-
+but fear not, `w` was assigned the correct value which you can confirm by typing just `w` into the console:
 ```javascript
-console.log(w)
+w
 ```
-
 > 1
 
+Now if we assign a new value to w it succeeds:
 ```javascript
-w = 2
-console.log(w)
+w = 2 // note that without a let or const keyword before it, this assignment an expression which returns a value:
 ```
-
 > 2
 
 (Note: there is another legacy keyword for declaring variables in JavaScript `var` that has different scoping rules.  Don’t use it.)
+
+## JavaScript Types
+JavaScript has several "primitive types" (simple types that are not [Objects](#objects)).  These include:
+- `number`: any numeric value, integer or decimal
+- `string`: delineated like `"hello"` or `'hello'` or even \``hello`\`.  
+- `boolean`: can be only `true` or `false`
+- `undefined`: is a special type with only one value which is `undefined`.
+
+and a [couple of others](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) that we won't worry about here.
+
+JavaScript is *loosely typed* in the sense that a mutable variable can be assigned (and re-assigned) different values of different types.
+```javascript
+ let x 
+```
+> undefined
+
+```javascript
+x = 3
+```
+> 3
+```javascript
+x = 'hello'
+```
+> "hello"
 
 ## Variable scope
 
 You can limit the visibility of a variable to a specific part of a program by declaring it inside a block of code delineated by curly braces:
 
-![Observable MVC Architecture](/javascript1/console1.png)
+```javascript
+ {
+     let x = 1
+     console.log(x)
+ }
+```
+Console prints `1` from the `console.log`:
+> 1
+But if we try to get the value of `x`:
+```
+x
+```
+> Uncaught ReferenceError: x is not defined
 
 The above console.log statement successfully output the value of x because it was inside the same scope (the same set of curly braces).  The subsequent error occurs because we tried to look at x outside the scope of its definition.  Variables declared outside of any scope are said to be “global” and will be visible to any code loaded on the same page and could clobber or be clobbered by other global definitions - so take care!
 
-Be especially carefully to always declare variables with either `let` or `const` keywords.  If you omit these keywords, a variable will be created at the global scope, like so:
+Be especially carefully to always declare variables with either `let` or `const` keywords.  If you omit these keywords, a variable will be created at the global scope even though it is inside a `{ ... }` delimited scope, like so:
 
-![Observable MVC Architecture](/javascript1/console2.png)
+```javascript
+ {
+     x = 1
+ }
+
+ x
+```
+> 1
 
 ---------------------
 We are going to start to use a few operators, that may be familiar from C or Java, some are JS specific.  
@@ -157,7 +198,7 @@ myFunction(1,2)
 > hello world  
 > 4
 
-An if statement looks like so:
+An `if-else` statement looks like so:
 
 ```javascript
 /**
@@ -335,7 +376,7 @@ myObj = {
 
 > VM48:1 Uncaught TypeError: Assignment to constant variable.
 
-But the immutability due to `const` is *shallow* in the sense that while the `myObj` variable which references the object is immutable, the properties of the object are mutable, i.e. we can reassign properties on `myObj` with no error:
+But the immutability due to `const` is *weak* or *shallow* in the sense that while the `myObj` variable which references the object is immutable, the properties of the object are mutable, i.e. we can reassign properties on `myObj` with no error:
 
 ```javascript
 myObj.aProperty = 0
@@ -411,7 +452,7 @@ Below, we see how [Anonymous Functions](/javascript1#anonymous-functions) can be
 
 ## Dynamic Typing
 
-The members of `myObj` are implicitly typed as number and string respectively, and as we see in the `console.log`, conversion to string happens automatically.  JavaScript is interpreted by a JavaScript engine rather than compiled into a static executable format.  Originally, this had implications on execution speed, as interpreting the program line by line at run time could be slow.  Modern JavaScript engines, however, feature Just in Time (JIT) compilation and optimisation - and speed is becoming comparable to execution of C++ code that is compiled in advance to native machine code.  However, another implication remains.  It is not type checked by a compiler.  Thus, type errors cause run-time failures rather than being caught at compile time.  JavaScript is dynamically typed in that types are associated with values rather than variables.  That is, a variable that is initially bound to one type, can later be rebound to a different type, e.g.:
+The members of `myObj` are implicitly typed as `number` and `string` respectively, and as we see in the `console.log`, conversion to string happens automatically.  JavaScript is interpreted by a JavaScript engine rather than compiled into a static executable format.  Originally, this had implications on execution speed, as interpreting the program line by line at run time could be slow.  Modern JavaScript engines, however, feature Just in Time (JIT) compilation and optimisation - and speed can sometimes be comparable to execution of C++ code that is compiled in advance to native machine code.  However, another implication remains.  It is not type checked by a compiler.  Thus, type errors cause run-time failures rather than being caught at compile time.  JavaScript is dynamically typed in that types are associated with values rather than variables.  That is, a variable that is initially bound to one type, can later be rebound to a different type, e.g.:
 
 ```javascript
 let i = 123;    // a numeric literal has type number
