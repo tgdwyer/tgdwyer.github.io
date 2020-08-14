@@ -36,7 +36,7 @@ Examples of side-effects from inside a function:
 In languages without compilers that specifically guard against them, side effects can occur:
 
 * intentionally through sloppy coding practices, where a misguided programmer may think it's more convenient to have a function do multiple things at once;
-* unintentionally, for example by accidently setting a global variable instead of a local one.
+* unintentionally, for example by accidentally setting a global variable instead of a local one.
 
 We'll see more examples in actual code below.
 
