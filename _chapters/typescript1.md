@@ -57,7 +57,7 @@ Primitive types include ```number```, ```string```, ```boolean```.
 let x: number, s: string, b: boolean = false;
 x = "hello" // type error: x can only be assigned numbers!
 ```
-Note: the primitive types begin with a lower-case letter and are not to be mistaken for `Number`, `String` and `Boolean` which are not types at all but Object wrappers with some handy properties and methods. Don't try to use these Object wrappers in your type definitions.
+*Note:* the primitive types begin with a lower-case letter and are not to be mistaken for `Number`, `String` and `Boolean` which are not types at all but Object wrappers with some handy properties and methods. Don't try to use these Object wrappers in your type definitions.
 
 [Union types](#union-types) allow more than one option for the type of value that can be assigned to a variable:
 

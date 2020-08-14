@@ -72,18 +72,23 @@ JavaScript has several "primitive types" (simple types that are not [Objects](#o
 and a [couple of others](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) that we won't worry about here.
 
 JavaScript is *loosely typed* in the sense that a mutable variable can be assigned (and re-assigned) different values of different types.
+
 ```javascript
- let x 
+ let x
 ```
+
 > undefined
 
 ```javascript
 x = 3
 ```
+
 > 3
+
 ```javascript
 x = 'hello'
 ```
+
 > "hello"
 
 ## Variable scope
