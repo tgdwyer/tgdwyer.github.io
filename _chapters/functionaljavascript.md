@@ -274,7 +274,7 @@ const map = (f, list)=> !list ? null
 : cons(f(head(list)), map(f, rest(list)))
 ```
 
-In the above, we are using closures to store data.  It's just a trick to show the power of functions and to into the right state of mind for the Lambda Calculus - which provides a complete model of computation using only anonymous functions like those above.  In a real program I would expect you would use JavaScript's class and object facilities to create data structures.
+In the above, we are using closures to store data.  It's just a trick to show the power of functions and to put us into the right state of mind for the Lambda Calculus - which provides a complete model of computation using only anonymous functions like those above.  In a real program I would expect you would use JavaScript's class and object facilities to create data structures.
 
 ### Towards Lambda Calculus and Church Encoding
 
