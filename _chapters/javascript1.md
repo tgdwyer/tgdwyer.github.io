@@ -581,6 +581,51 @@ The `reduce` method applies a function to each of the elements in the array, in 
 * the second argument to `reduce` (which in our case is 0), if this is the first call to the function,
 * or, for every other call, the result returned by the previous call to the function.
 
+`reduce` is incredibly versatile and can be used to do much more than sum numbers.  For example, say we want to see whether all the elements of an array pass some test.
+
+```javascript
+const all = (test, array) => array.reduce(
+    (accumulator, x) => accumulator && test(x),
+    true)
+```
+Here the `accumulator` is a boolean with initial value `true`.  If an element of the array fails the test the `accumulator` becomes `false` and stays `false`, using the `&&` operator.
+
+```javascript
+all(x => x < 5, [1, 2, 3])
+all(x => x < 5, [1, 3, 5])
+```
+
+> true
+
+> false
+
+### Exercise
+
+* Can you write a function `any` that returns true if any of the tests pass?
+
+What if we wanted to see how many times each word appears in a list?
+
+```javascript
+const wordCount = (array) => array.reduce(
+    (accumulator, word) => {
+        if (accumulator[word]) {
+            accumulator[word] += 1
+        } else {
+            accumulator[word] = 1
+        }
+        return accumulator
+    },
+    {}
+)
+```
+Here the `accumulator` is an object which is initially empty.  For each word in the list the word count is either updated or created in the `accumulator` object.  Note however that this implementation is not *pure*, the aggregator function modifies `accumulator` in place before returning it.
+
+```javascript
+wordCount(['tim', 'sally', 'tim'])
+```
+
+> { tim: 2, sally: 1 }
+
 <div class="cheatsheet" markdown="1">
 
 ## Array Cheatsheet
