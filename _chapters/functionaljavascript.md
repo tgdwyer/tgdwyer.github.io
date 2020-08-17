@@ -239,7 +239,7 @@ Interfaces like the above in object-oriented languages are often called fluent i
 Pure functions may seem restrictive, but in fact pure function expressions and higher-order functions can be combined into powerful programs.  In fact, anything you can compute with an imperative program can be computed through function composition.  Side effects are required eventually, but they can be managed and the places they occur can be isolated.  Let’s do a little demonstration, although it might be a bit impractical, we’ll make a little list processing environment with just functions:
 
 ```javascript
-const cons = (head, rest)=> selector=> selector(head, rest);
+const cons = (_head, _rest)=> selector=> selector(_head, _rest);
 ```
 
 With just the above definition we can construct a list (the term cons dates back to LISP) with three elements, terminated with null, like so:
@@ -250,12 +250,25 @@ const list123 = cons(1, cons(2, cons(3, null)));
 
 The data element, and the reference to the next node in the list are stored in the closure returned by the ```cons``` function.  Created like this, the only side-effect of growing the list is creation of new cons closures.  Mutation of more complex structures such as trees can be managed in a similarly ‘pure’ way, and surprisingly efficiently, as we will see later in this course. 
 
-So ```cons``` is a function that takes two parameters (```head``` and ```rest```), and returns a function that itself takes a function (selector) as argument.  The selector function is then applied to ```head``` and ```rest```.  What might the selector function be and how do we apply it to a list element?  Well we don’t exactly apply it ourselves, we give it to the closure returned by the ```cons``` function and it applies it for us.  There are the two selectors we need to work with the list:
+So ```cons``` is a function that takes two parameters ```_head``` and ```_rest``` (the `_` prefix is just to differentiate them from the functions I create below), and returns a function that itself takes a function (selector) as argument.  The selector function is then applied to ```_head``` and ```_rest```.  
+
+The `selector` function that we pass to the list is our ticket to accessing its elements:  
+
+```javascript
+list123((_head, _rest)=> _head)
+```
+> 1
+```javascript
+list123((_,r)=>r)((h,_)=>h) // we can call the parameters whatever we like
+```
+> 2
+
+We can create accessor functions to operate on a given list:
 
 ```javascript
 const
-    head = list=> list((head, rest)=> head),
-    rest = list=> list((head, rest)=> rest);
+    head = list=> list((h,_)=>h),
+    rest = list=> list((_,r)=>r)
 ```
 
 Now, ```head``` gives us the first data element from the list, and rest gives us another list.  Now we can access things in the list like so:
