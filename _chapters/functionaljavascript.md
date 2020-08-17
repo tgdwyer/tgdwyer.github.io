@@ -36,7 +36,7 @@ Examples of side-effects from inside a function:
 In languages without compilers that specifically guard against them, side effects can occur:
 
 * intentionally through sloppy coding practices, where a misguided programmer may think it's more convenient to have a function do multiple things at once;
-* unintentially, for example by accidently setting a global variable instead of a local one.
+* unintentionally, for example by accidentally setting a global variable instead of a local one.
 
 We'll see more examples in actual code below.
 
@@ -132,7 +132,7 @@ e=>{
 })
 ```
 
-Note that callback functions passed as event handlers are a situation where the difference between the arrow syntax and regular anonymous function syntax really matters.  In the body of the arrow function above this will be bound to the context of the caller, which is probably what you want if you are coding a class for a reusable component.  
+Note that callback functions passed as event handlers are a situation where the difference between the arrow syntax and regular anonymous function syntax really matters.  In the body of the arrow function above `this` will be bound to the context of the caller, which is probably what you want if you are coding a class for a reusable component.  
 
 ### Continuations
 
@@ -190,7 +190,7 @@ function map<T,V>(f: (_:T)=>V, l: Iterable<T>): Iterable<V> { …
 // satisfy the predicate f
 
 function filter<T>(f: (t:T)=>boolean, l: Iterable<T>): Iterable<T> { …
-// create a new Iterable containing only the fist n elements of l
+// create a new Iterable containing only the first n elements of l
 
 function take<T>(n: number, l: Iterable<T>): Iterable<T> { ...
 ```
@@ -228,7 +228,7 @@ This is called “fluent” programming style.
 
 ## Fluent Interfaces (pure vs impure)
 
-Interfaces like the above in object-oriented languages are often called fluent interfaces.  One thing to be careful about fluent interfaces in JavaScript is that the methods may or may not be pure.  That is, the type system does not warn you whether the method mutates the object upon which it is invoked and simply returns this, or creates a new object, leaving the original object untouched.  We can see,  however, that List.map as defined above, creates a new list and is pure.
+Interfaces like the above in object-oriented languages are often called fluent interfaces.  One thing to be careful about fluent interfaces in JavaScript is that the methods may or may not be pure.  That is, the type system does not warn you whether the method mutates the object upon which it is invoked and simply returns `this`, or creates a new object, leaving the original object untouched.  We can see,  however, that List.map as defined above, creates a new list and is pure.
 
 ### Exercise
 
@@ -250,7 +250,7 @@ const list123 = cons(1, cons(2, cons(3, null)));
 
 The data element, and the reference to the next node in the list are stored in the closure returned by the ```cons``` function.  Created like this, the only side-effect of growing the list is creation of new cons closures.  Mutation of more complex structures such as trees can be managed in a similarly ‘pure’ way, and surprisingly efficiently, as we will see later in this course. 
 
-So cons is a function that takes two parameters (```head``` and ```rest```), and returns a function that itself takes a function (selector) as argument.  The selector function is then applied to ```head``` and ```rest```.  What might the selector function be and how do we apply it to a list element?  Well we don’t exactly apply it ourselves, we give it to the closure returned by the ```cons``` function and it applies it for us.  There are the two selectors we need to work with the list:
+So ```cons``` is a function that takes two parameters (```head``` and ```rest```), and returns a function that itself takes a function (selector) as argument.  The selector function is then applied to ```head``` and ```rest```.  What might the selector function be and how do we apply it to a list element?  Well we don’t exactly apply it ourselves, we give it to the closure returned by the ```cons``` function and it applies it for us.  There are the two selectors we need to work with the list:
 
 ```javascript
 const
@@ -274,7 +274,7 @@ const map = (f, list)=> !list ? null
 : cons(f(head(list)), map(f, rest(list)))
 ```
 
-In the above, we are using closures to store data.  It's just a trick to show the power of functions and to into the right state of mind for the Lambda Calculus - which provides a complete model of computation using only anonymous functions like those above.  In a real program I would expect you would use JavaScript's class and object facilities to create data structures.
+In the above, we are using closures to store data.  It's just a trick to show the power of functions and to put us into the right state of mind for the Lambda Calculus - which provides a complete model of computation using only anonymous functions like those above.  In a real program I would expect you would use JavaScript's class and object facilities to create data structures.
 
 ### Towards Lambda Calculus and Church Encoding
 
