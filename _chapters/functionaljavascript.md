@@ -178,47 +178,65 @@ console.log('job queued on the event loop...');
 
 ### Method Chaining
 
-*Chained functions* are a common pattern.  Assuming definitions for map, filter and take similar to:
+*Chained functions* are a common pattern.  
+Take a simple linked-list data structure as an example.  We'll hard code a list object to start off with:
 
 ```javascript
-// maps an Iterable (an interface like our IListNode with a way to get a value of 
-// the current node or iterate to the next element) containing elements of 
-// type T, to an Iterable with elements of type V 
-function map<T,V>(f: (_:T)=>V, l: Iterable<T>): Iterable<V> { …
+const l = {
+    data: 1,
+    next: {
+        data: 2,
+        next: {
+            data: 3,
+            next: null
+        }
+    }
+}
+```
 
-// create a new Iterable containing only the elements of l that 
-// satisfy the predicate f
+We can create simple functions similar to [those of Array](/javascript1#array-cheatsheet), which we can chain:
 
-function filter<T>(f: (t:T)=>boolean, l: Iterable<T>): Iterable<T> { …
-// create a new Iterable containing only the first n elements of l
-
-function take<T>(n: number, l: Iterable<T>): Iterable<T> { ...
+```javascript
+const
+  map = (f,l) => l ? ({data: f(l.data), next: map(f,l.next)}) : null
+, filter = (f,l) => !l ? null :
+                    (
+                        next => f(l.data) ? ({data: l.data, next}) 
+                                          : next
+                    ) (filter(f,l.next))
+                    // the above is just using IIFE to avoid creating
+                    // a local variable for filter(f,l.next)
+, take = (n,l) => l && n ? ({data: l.data, next: take(n-1,l.next)})
+                         : null
 ```
 
 We can chain calls to these functions like so:
 
 ```javascript
-take(3,
-   filter(x=>x%2===0,
-       map(x=>x+1, someIterable)
+take(2,
+   filter(x=> x%2 === 0,
+       map(x=> x+1, l)
    )
 )
 ```
+> { data: 2, next: { data: 4, next: null }}
 
 But in the function call chain above you have to read them inside-out to understand the flow.  Also, keeping track of how many brackets to close gets a bit annoying.  Thus, you will often see class definitions that allow for method chaining, by providing methods that return an instance of the class itself, or another chainable class.
 
 ```javascript
-class List<T> {
-   map<V>(f: (item: T) => V): List<V> {
+class List {
+   constructor(private head) {}
+   map(f) {
        return new List(map(f, this.head));
    }
 ...
 ```
 
+
 Then the same flow as above is possible without the nesting and can be read left-to-right, top-to-bottom:
 
 ```javascript
-someIterable
+new List(l)
    .map(x=>x+1)
    .filter(x=>x%2===0)
    .take(3)
