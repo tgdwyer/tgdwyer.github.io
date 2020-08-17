@@ -16,7 +16,7 @@ The elements of JavaScript covered in [our introduction](/javascript1), specific
 
 * [Binding functions to variables](/javascript1#functions-are-objects)
 * [Anonymous functions](/javascript1#anonymous-functions)
-* [Higher-order functions](/higher-order-functions)
+* [Higher-order functions](/higherorderfunctions)
 
 are sufficient for us to explore a paradigm called *functional programming*.  In the functional programming paradigm the primary model of computation is through the evaluation of functions.  Functional Programming is highly inspired by the [Lambda Calculus](/lambdacalculus/), a theory which develops a model for computation based on application and evaluation of mathematical functions.
 
