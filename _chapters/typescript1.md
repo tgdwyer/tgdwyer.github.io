@@ -408,9 +408,7 @@ first("hello")(3) // good now!
 ```
 
 So type checking helps us to create functions correctly, but also to use them correctly.
-The first commented out line would be in error because the order the returned function passes parameters into f does not match the declaration of f.
-The second error occurs when we try to pass the parameters in the wrong order.
-
+You begin to appreciate type checking more and more as your programs grow larger and the error messages appear further from their definitions.  However, the most important thing is that these errors are being caught at *compile time* rather than at *run time*, when it might be too late!
 
 ## Optional Properties
 Look again at the ```next``` property of ```IListNode```:
