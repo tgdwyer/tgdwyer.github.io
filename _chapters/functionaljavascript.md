@@ -50,7 +50,7 @@ A *pure function*:
 
 In the context of functional programming, *referential transparency* is:
 
-* the property of being able to substitute an expression that evaluates to some value, with that value, without affecting any other part of the program.
+* the property of being able to substitute an expression that evaluates to some value, with that value, without affecting the behaviour of the program.
 
 A real life example where this might be useful would be when a cached result for a given input already exists and can be returned without further computation.  Imagine a pure function which computes PI to a specified number of decimal points precision.  It takes an argument `n`, the number of decimal points, and returns the computed value.  We could modify the function to instantly return a precomputed value for PI from a lookup table if `n` is less than `10`.  This substitution is trivial and is guaranteed not to break our program, because its effects are strictly locally contained.
 
