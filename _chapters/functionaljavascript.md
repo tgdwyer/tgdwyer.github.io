@@ -227,12 +227,13 @@ We can create simple functions similar to [those of Array](/javascript1#array-ch
 const
   map = (f,l) => l ? ({data: f(l.data), next: map(f,l.next)}) : null
 , filter = (f,l) => !l ? null :
-                    (
-                        next => f(l.data) ? ({data: l.data, next}) 
-                                          : next
+                    (next =>
+                        f(l.data) ? ({data: l.data, next}) 
+                                  : next
                     ) (filter(f,l.next))
-                    // the above is just using IIFE to avoid creating
-                    // a local variable for filter(f,l.next)
+                    // the above is using an IIFE such that
+                    // the function parameter `next` is used 
+                    // like a local variable for filter(f,l.next)
 , take = (n,l) => l && n ? ({data: l.data, next: take(n-1,l.next)})
                          : null
 ```
@@ -259,7 +260,6 @@ class List {
 ...
 ```
 
-
 Then the same flow as above is possible without the nesting and can be read left-to-right, top-to-bottom:
 
 ```javascript
@@ -274,10 +274,6 @@ This is called “fluent” programming style.
 ## Fluent Interfaces (pure vs impure)
 
 Interfaces like the above in object-oriented languages are often called fluent interfaces.  One thing to be careful about fluent interfaces in JavaScript is that the methods may or may not be pure.  That is, the type system does not warn you whether the method mutates the object upon which it is invoked and simply returns `this`, or creates a new object, leaving the original object untouched.  We can see,  however, that List.map as defined above, creates a new list and is pure.
-
-### Exercise
-
-* If ```someIterable``` above were declared const, would it protect you against mutations in ```someIterable``` due to impure methods?
 
 ## Computation with Pure Functions
 
