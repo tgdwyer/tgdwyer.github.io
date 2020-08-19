@@ -249,7 +249,9 @@ take(2,
 ```
 > { data: 2, next: { data: 4, next: null }}
 
-But in the function call chain above you have to read them inside-out to understand the flow.  Also, keeping track of how many brackets to close gets a bit annoying.  Thus, you will often see class definitions that allow for method chaining, by providing methods that return an instance of the class itself, or another chainable class.
+## Fluent Interfaces (pure vs impure)
+
+In the chained function calls above you have to read them inside-out to understand the flow.  Also, keeping track of how many brackets to close gets a bit annoying.  Thus, in object oriented languages you will often see class definitions that allow for method chaining, by providing methods that return an instance of the class itself, or another chainable class.
 
 ```javascript
 class List {
@@ -266,14 +268,13 @@ Then the same flow as above is possible without the nesting and can be read left
 new List(l)
    .map(x=>x+1)
    .filter(x=>x%2===0)
-   .take(3)
+   .take(2)
 ```
 
-This is called “fluent” programming style.
+This is called *fluent* programming style.
+Interfaces in object-oriented languages that chain a sequence of method calls (as above) are often called *fluent interfaces*.  One thing to be careful about fluent interfaces in languages that do not enforce purity is that the methods may or may not be pure.  
 
-## Fluent Interfaces (pure vs impure)
-
-Interfaces like the above in object-oriented languages are often called fluent interfaces.  One thing to be careful about fluent interfaces in JavaScript is that the methods may or may not be pure.  That is, the type system does not warn you whether the method mutates the object upon which it is invoked and simply returns `this`, or creates a new object, leaving the original object untouched.  We can see,  however, that List.map as defined above, creates a new list and is pure.
+That is, the type system does not warn you whether the method mutates the object upon which it is invoked and simply returns `this`, or creates a new object, leaving the original object untouched.  We can see,  however, that List.map as defined above, creates a new list and is pure.
 
 ## Computation with Pure Functions
 
