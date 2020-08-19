@@ -27,6 +27,7 @@ title: "Notes on Programming Paradigms"
 ## [Functional JavaScript](/functionaljavascript)
 
 * Create programs in JavaScript in a functional style
+* Understand the definitions of [Function Purity and Referential Transparency](/functionaljavascript#function-purity-and-referential-transparency)
 * Explain the role of pure functional programming style in managing side effects
 * See how pure functions can be used to [model sophisticated computation](/functionaljavascript#computation-with-pure-functions)
 
