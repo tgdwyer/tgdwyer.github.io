@@ -396,7 +396,6 @@ function prefix(s: string, n: number) {
 const first = curry(prefix)
 
 first(3)("hello") // Error!
-```
 
 >Error: Argument of type 'number' is not assignable to parameter of type 'string'.  
 >Error: Argument of type 'string' is not assignable to parameter of type 'number'.
