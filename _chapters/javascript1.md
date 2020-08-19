@@ -279,7 +279,7 @@ We consider this recursive loop a more “declarative” coding style than the i
 It is closer to the *inductive definition* of sum than a series of steps for how to compute it.
 
 - No *mutable* variables used
-- Each expression in this code is *“pure”*: it has no *effects* outside the expression.
+- Each expression in this code is *“pure”*: it has no *effects* outside the expression.  Thus, you could replace each element of code with something else that produces the same result for a given input (such as a simple look up of a precomputed cache) and it would work the same.
 - Therefore: this code has the property of *referential transparency*.
 - The code succinctly states the *loop invariant*.
 

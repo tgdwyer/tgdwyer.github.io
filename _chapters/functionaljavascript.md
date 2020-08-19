@@ -47,37 +47,37 @@ A *pure function*:
 * has no *side effects*: i.e. it has no effects other than to create a return value;
 * always produces the same result for the same input.
 
-Pure functions are perhaps most easily illustrated with some examples and counterexamples. The following function has no effect outside its return result and is therefore pure:
+In the context of functional programming, *referential transparency* is:
+
+* the property of being able to substitute an expression that evaluates to some value, with that value, without affecting any other part of the program.
+
+A real life example where this might be useful would be when a cached result for a given input already exists and can be returned without further computation.  Imagine a pure function which computes PI to a specified number of decimal points precision.  It takes an argument `n`, the number of decimal points, and returns the computed value.  We could modify the function to instantly return a precomputed value for PI from a lookup table if `n` is less than `10`.  This substitution is trivial and is guaranteed not to break our program, because its effects are strictly locally contained.
+
+Pure functions and referential transparency are perhaps most easily illustrated with some examples and counterexamples. The following function modifies `a` in place and so is impure:
 
 ```javascript
-function squares(a) {
-    const b = new Array(a.length);
-    for (let i = 0; i < a.length; i++) {
-        b[i] = a[i]**2;
-    }
-    return b;
-}
+   function squares(a) {
+       let i = 0
+       while (i < a.length) {
+*         a[i] = a[i] * a[i++];
+       }
+   }
 ```
 
-While the above function (viewed as a black box) is pure, its implementation is not very functional.  Specifically, the code around variable b does not have the property of referential transparency.  That is, because the array referenced by `b` is mutated during execution, figuring out the state at a given line is impossible, without looking at its context.
+Furthermore, the very imperative style computation at the line marked with `*` is not pure.
+It has two effects: incrementing `i` and mutating `b`.
+You could not simply replace the expression with the value computed by the expression and have the program work in the same way.
+This piece of code does not have the property of *referential transparency*.
 
 True pure functional languages (such as Haskell) enforce referential transparency through immutable variables (*note: yes, "immutable variable" sounds like an oxymoron - two words with opposite meanings put together*).  That is, once any variable in such a language is bound to a value, it cannot be reassigned.  In JavaScript we can opt-in to immutable variables by declaring them `const`.
  
-A more functional way to implement the squares function would be more like the examples we have seen previously:
+A more functional way to implement the `squares` function would be more like the examples we have seen previously:
 
 ```javascript
 const squares = a=> a.map(x=> x**2)
 ```
 
-By contrast, the following is considered impure because it modifies the memory referred to by a in-place:
-
-```javascript
-function squares(a) {
-    for (let i = 0; i < a.length; i++) {
-        a[i] = a[i]**2;
-    }
-}
-```
+The above function is pure.  It has no side effects changing values of variables, memory or the world, outside of its own scope.  You could replace the computation of the result with a different calculation returning the same result for a given input and the program would be unchanged.  It is *referentially transparent*.
 
 An impure function typical of something you may see in OO code:
 
