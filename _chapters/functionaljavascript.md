@@ -55,7 +55,7 @@ In the context of functional programming, *referential transparency* is:
 A real life example where this might be useful would be when a cached result for a given input already exists and can be returned without further computation.  Imagine a pure function which computes PI to a specified number of decimal points precision.  It takes an argument `n`, the number of decimal points, and returns the computed value.  We could modify the function to instantly return a precomputed value for PI from a lookup table if `n` is less than `10`.  This substitution is trivial and is guaranteed not to break our program, because its effects are strictly locally contained.
 
 Pure functions and referential transparency are perhaps most easily illustrated with some examples and counterexamples. 
-Consider the following:
+Consider the following *impure* function:
 
 ```javascript
    function squares(a) {
