@@ -30,9 +30,9 @@ Side effects of a function are changes to state outside of the result explicitly
 Examples of side-effects from inside a function:
 
 * changing the value of a variable declared outside the function scope
-  - mutating global state in this way can cause difficult to diagnose bugs: for example, an effective debugging strategy is dividing the program up into little pieces which can easily be proven correct or unit tested - sources of side-effects deep inside functions are a hidden form of coupling making such a strategy very difficult.
+  - mutating global state in this way can cause difficulty to diagnose bugs: for example, an effective debugging strategy is dividing the program up into little pieces which can easily be proven correct or unit tested - sources of side-effects deep inside functions are a hidden form of coupling making such a strategy very difficult.
 * printing to the console changing the state of the world in such a way can also be dangerous
-  - for example, filling a disk with log messages is a good way to crash the whole computer!.
+  - for example, filling a disk with log messages is a good way to crash the whole computer!
 
 In languages without compilers that specifically guard against them, side effects can occur:
 
