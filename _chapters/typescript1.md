@@ -17,7 +17,7 @@ permalink: /typescript1/
 
 As the Web 2.0 revolution hit in 2000s web apps built on JavaScript grew increasingly complex and today, applications like GoogleDocs are as intricate as anything built over the decades in C++.  In the 90s I for one (though I don’t think I was alone) thought that this would be impossible in a dynamically typed language.  It is just too easy to make simple mistakes (as simple as typos) that won’t be caught until run time.  It’s likely only been made possible due to increased rigour in testing.  That is, instead of relying on a compiler to catch mistakes, you rely on a comprehensive suite of tests that evaluate running code before it goes live.
 
-Part of the appeal of JavaScript is that the source code being the artefact that runs directly in a production environment gives an immediacy and comprehensibility to software deployment.  However, in recent years more and more tools have been developed that introduce a build-chain into the web development stack.  Examples include: minifiers, which compact and obfuscate JavaScript code before it is deployed; bundlers, which merge different JavaScript files and libraries into a single file to (again) simplify deployment; and also, new languages that compile to JavaScript, which seek to fix older versions of the JavaScript language’s shortcomings and compatibility issues in different browsers.  Examples of the latter include CoffeeScript, Clojure and (more recently) PureScript (which we will visit later in this unit).  Right now, however, we will take a closer look at another language in this family called TypeScript.  See here for some tutorials and deeper documentation.
+Part of the appeal of JavaScript is that the source code being the artefact that runs directly in a production environment gives an immediacy and comprehensibility to software deployment.  However, in recent years more and more tools have been developed that introduce a build-chain into the web development stack.  Examples include: minifiers, which compact and obfuscate JavaScript code before it is deployed; bundlers, which merge different JavaScript files and libraries into a single file to (again) simplify deployment; and also, new languages that compile to JavaScript, which seek to fix older versions of the JavaScript language’s shortcomings and compatibility issues in different browsers.  Examples of the latter include CoffeeScript, ClojureScript and (more recently) PureScript (which we will visit later in this unit).  Right now, however, we will take a closer look at another language in this family called TypeScript.  See [the official TypeScript documenation](https://www.typescriptlang.org/docs/) for some tutorials and deeper reference.
 
 TypeScript is interesting because it forms a relatively minimal augmentation, or superset, of EcmaScript syntax that simply adds type annotations.  For the most part, the compilation process simply performs validation on the declared types and strips away the type annotations rendering just the legal JavaScript ready for deployment.  This lightweight compilation into a language with a similar level of abstraction to the source is known also known as transpiling (as opposed to C++ or Java where the object code is much closer to the machine execution model).
 
@@ -43,7 +43,8 @@ i = 'hello!';
 
 > [TS compiler says] Type '"hello!"' is not assignable to type 'number'.
 
------------
+
+<div class="cheatsheet" markdown="1">
 
 ## Type Annotations Cheat Sheet
 
@@ -56,6 +57,7 @@ Primitive types include ```number```, ```string```, ```boolean```.
 let x: number, s: string, b: boolean = false;
 x = "hello" // type error: x can only be assigned numbers!
 ```
+*Note:* the primitive types begin with a lower-case letter and are not to be mistaken for `Number`, `String` and `Boolean` which are not types at all but Object wrappers with some handy properties and methods. Don't try to use these Object wrappers in your type definitions.
 
 [Union types](#union-types) allow more than one option for the type of value that can be assigned to a variable:
 
@@ -115,7 +117,7 @@ function curry<U,V,W>(f:(x:U,y:V)=>W): CurriedFunc<U,V,W> {
 }
 ```
 
------------------------
+</div>
 
 ## Why should we declare types?
 
@@ -308,8 +310,8 @@ const studentsById = [
   {id: 125, name: "Cindy Wu"},
   ...
 ]
-
-console.log(binarySearch1(studentsById,"125").name)
+const numberIds = studentsById.map(s=>s.id);
+console.log(studentsById[binarySearch1(numberIds,125)].name)
 ```
 
 > Cindy Wu
@@ -334,14 +336,15 @@ const studentsByEmail = [
   ...
 ]
 
-console.log(binarySearch2(studentsByEmail,"harry@monash.edu").name)
+const stringIds = studentsByEmail.map(s=>s.id);
+console.log(studentsByEmail[binarySearch2(stringIds,'harry@monash.edu')].name)
 ```
 > Harry Smith
 
 Why is this better than raw JavaScript with no type checking, or simply using TypeScript's wildcard `any` type?  Well it ensures that we use the types *consistently*.
 For example:
 ```javascript
-binarySearch(studentsById,"harry@monash.edu")
+binarySearch(numberIds,"harry@monash.edu")
 ```
 > TYPE ERROR!
 

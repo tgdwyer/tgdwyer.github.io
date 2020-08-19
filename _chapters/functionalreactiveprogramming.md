@@ -150,7 +150,8 @@ key$.pipe(
 ).subscribe(console.log)
 ```
 
-----------
+
+<div class="cheatsheet" markdown="1">
 
 ## Observable Cheatsheet
 
@@ -220,7 +221,7 @@ scan<T, R>(accumulator: (acc: R, value: T) => R, seed?: R)
 merge<T, R>(...observables: Observable<T>[])
 ```
 
-----------------
+</div>
 
 ## A User Interface Example
 

@@ -199,7 +199,8 @@ sort (pivot:rest) = let
 
 Note that where is only available in function declarations, not inside expressions and therefore is not available in a lambda.  However, let, in is part of the expression, and therefore available inside a lambda function.  A silly example would be:  \i -> let f x = 2*x in f i, which could also be spread across lines, but be careful to get the correct indentation.
 
----------
+
+<div class="cheatsheet" markdown="1">
 
 ## Conditional Code Constructs Cheatsheet
 
@@ -239,4 +240,4 @@ fibs n = case n of
   1 -> 1
   otherwise -> fibs (n-1) + fibs (n-2)
 ```
----------
+</div>

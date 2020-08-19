@@ -17,7 +17,8 @@ title: "Notes on Programming Paradigms"
 - Understand and use basic JavaScript coding concepts and features
 - Understand the difference between [mutable and immutable (const) variables](/javascript1#declaring-variables)
 - Explain the relationship between javascript [functions](/javascript1#functions) and [objects](/javascript1#objects)
-- Understand function scope and the concept of a [closure](/javascript1#closures)
+- Understand that the scope of variables is limited to [delineated code blocks](/javascript1/variable-scope) and within [functions](/javascript1#functions)
+- Understand that a [closure](/javascript1#closures) captures variables referenced within its scope
 - Create and apply [anonymous functions](/javascript1#anonymous-functions) to fluent style code
 - Compare [arrow functions](/javascript1#arrow-functions) and regular function syntax
 - Explain JavaScript’s [prototype mechanism](/javascript1#prototype-class-mechanism) for creating classes from functions
@@ -27,6 +28,7 @@ title: "Notes on Programming Paradigms"
 ## [Functional JavaScript](/functionaljavascript)
 
 * Create programs in JavaScript in a functional style
+* Understand the definitions of [Function Purity and Referential Transparency](/functionaljavascript#function-purity-and-referential-transparency)
 * Explain the role of pure functional programming style in managing side effects
 * See how pure functions can be used to [model sophisticated computation](/functionaljavascript#computation-with-pure-functions)
 
@@ -92,3 +94,5 @@ A fully worked example of FRP using rx.js Observables to create an in-browser ve
 - Understand that [Foldable](/haskell3#foldable) generalises containers that may be folded (or reduced) into values
 - Understand that [Traversable](/haskell3#traversable) generalises containers over which we can traverse applying a function with an Applicative effect
 - Understand that [Monad](/haskell3#monad) extends Functor and Applicative to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
+
+## [Parser Combinators](parsercombinators)

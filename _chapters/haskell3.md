@@ -4,6 +4,7 @@ title: "Refined Haskell"
 permalink: /haskell3/
 ---
 
+In this chapter we see how the Haskell language features we introduced in previous chapters (from function application rules based on [Lambda Calculus](/lambdacalculus) to [Typeclasses](/haskell2#typeclasses)) lead to highly flexible and refactorable code and powerful abstractions.
 
 ## Learning Outcomes
 
@@ -13,6 +14,8 @@ permalink: /haskell3/
 - Understand that [Foldable](/haskell3#foldable) generalises containers that may be folded (or reduced) into values
 - Understand that [Traversable](/haskell3#traversable) generalises containers over which we can traverse applying a function with an Applicative effect
 - Understand that [Monad](/haskell3#monad) extends Functor and Applicative to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
+
+<div class="cheatsheet" markdown="1">
 
 ## Refactoring Cheatsheet
 
@@ -39,7 +42,7 @@ Has its own operator in haskell `(.)`, inspired by the mathematical function com
  (f ∘ g) (x) ≡ f (g(x)) -- math notation
  (f . g) x ≡ f (g x)    -- haskell
 ```
-
+</div>
 ## Point Free Code
 
 We have discussed point-free and tacit coding style earlier in these notes. In particular, eta-conversion works in Haskell the same as in lambda calculus and for curried JavaScript functions.  It is easy to do and usually declutters code of unnecessary arguments that help to distill their essence, e.g.:
@@ -342,8 +345,8 @@ GHCi> Card <$> [Spade ..] <*> [Two ..]
 [Card ^ Two,Card ^ Three,Card ^ Four,Card ^ Five,Card ^ Six,Card ^ Seven,Card ^ Eight,Card ^ Nine,Card ^ Ten,Card ^ Jack,Card ^ Queen,Card ^ King,Card ^ Ace,Card & Two,Card & Three,Card & Four,Card & Five,Card & Six,Card & Seven,Card & Eight,Card & Nine,Card & Ten,Card & Jack,Card & Queen,Card & King,Card & Ace,Card O Two,Card O Three,Card O Four,Card O Five,Card O Six,Card O Seven,Card O Eight,Card O Nine,Card O Ten,Card O Jack,Card O Queen,Card O King,Card O Ace,Card V Two,Card V Three,Card V Four,Card V Five,Card V Six,Card V Seven,Card V Eight,Card V Nine,Card V Ten,Card V Jack,Card V Queen,Card V King,Card V Ace] 
 ```
 
----------
 
+<div class="cheatsheet" markdown="1">
 ### Different Ways To Apply Functions Cheatsheet
 
 ```haskell
@@ -352,8 +355,7 @@ GHCi> Card <$> [Spade ..] <*> [Two ..]
  g <$> f x   -- apply function g to argument x which is inside Functor f
  f g <*> f x -- apply function g in Applicative context f to argument x which is also inside f
 ```
-
---------
+</div>
 
 Applicative is a “subclass” of Functor, meaning that an instance of Applicative can be ‘fmap’ed, but Applicatives also declare (at least) two additional functions, pure and `(<*>)` (pronounced ‘apply’ - but I like calling it [“TIE Fighter”](https://en.wikipedia.org/wiki/TIE_fighter)):
 

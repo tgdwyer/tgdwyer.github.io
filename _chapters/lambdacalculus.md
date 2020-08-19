@@ -70,7 +70,8 @@ The next rule arises from the observation that, for some lambda term `M` that do
 ```
 is just the same as M.  This last rule is called *eta conversion*.
 
-----
+
+<div class="cheatsheet" markdown="1">
 ## Lambda Calculus Cheatsheet
 
 Three operations can be applied to lambda expressions:
@@ -92,7 +93,7 @@ Three operations can be applied to lambda expressions:
 λx . M  x
 = M
 ```
-----
+</div>
 
 One thing to note about the lambda calculus is that it does not have any such thing as a global namespace.  All variables must be:
 

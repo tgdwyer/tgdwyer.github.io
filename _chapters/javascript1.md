@@ -6,14 +6,15 @@ permalink: /javascript1/
 ## Learning Outcomes
 
 - Understand and use basic JavaScript coding concepts and features
-- Understand the difference between [mutable and immutable (const) variables](#declaring-variables)
-- Explain the relationship between javascript [functions](#functions) and [objects](#objects)
-- Understand function scope and the concept of a [closure](#closures)
-- Create and apply [anonymous functions](#anonymous-functions) to fluent style code
-- Compare [arrow functions](#arrow-functions) and regular function syntax
-- Explain JavaScript’s [prototype mechanism](#prototype-class-mechanism) for creating classes from functions
-- Create [ES6 style classes](#ecmascript-6-class-syntax) with constructors and getters
-- Compare object oriented [polymorphism](#polymorphism) to [dependency injection](#dependency-injection) through functions
+- Understand the difference between [mutable and immutable (const) variables](/javascript1#declaring-variables)
+- Explain the relationship between javascript [functions](/javascript1#functions) and [objects](/javascript1#objects)
+- Understand that the scope of variables is limited to [delineated code blocks](/javascript1/variable-scope) and within [functions](/javascript1#functions)
+- Understand that a [closure](/javascript1#closures) captures variables referenced within its scope
+- Create and apply [anonymous functions](/javascript1#anonymous-functions) to fluent style code
+- Compare [arrow functions](/javascript1#arrow-functions) and regular function syntax
+- Explain JavaScript’s [prototype mechanism](/javascript1#prototype-class-mechanism) for creating classes from functions
+- Create [ES6 style classes](/javascript1#ecmascript-6-class-syntax) with constructors and getters
+- Compare object oriented [polymorphism](/javascript1#polymorphism) to [dependency injection](/javascript1#dependency-injection) through functions
 
 ## Introduction
 
@@ -27,58 +28,107 @@ The following introduction to JavaScript assumes a reasonable knowledge of progr
 
 ## Declaring Variables
 
-We declare constant variables in JavaScript with the const keyword:
+We declare constant variables in JavaScript with the `const` keyword:
 
 ```javascript
-const z = 1;  // constant (immutable variable) at global scope
+const z = 1  // constant (immutable variable) at global scope
 ```
 
-You can try this in the debug console in a browser such as Chrome.  If we try to change the value of such a const variable, we get a run-time error:
-
+You can try this in the [debug console in a browser such as Chrome](https://developers.google.com/web/tools/chrome-devtools/console).  If we try to change the value of such a `const` variable, we get a run-time error:
 ```javascript
+const z = 1 
 z = 2
 ```
-
 > Uncaught TypeError: Assignment to constant variable.
 
-We define mutable variables in JavaScript with the let keyword:
+We define mutable variables in JavaScript with the `let` keyword:
 
 ```javascript
-let w = 1;
+let w = 1
 ```
+console replies with the value returned by the `let` statement, which is:
+> undefined
 
-You can verify in the debugger that you are able to change the value of w.
-
+but fear not, `w` was assigned the correct value which you can confirm by typing just `w` into the console:
 ```javascript
-console.log(w)
+w
 ```
-
 > 1
 
+Now if we assign a new value to w it succeeds:
 ```javascript
-w = 2
-console.log(w)
+w = 2 // note that without a let or const keyword before it, this assignment an expression which returns a value:
 ```
-
 > 2
 
-(Note: there is another legacy keyword for declaring variables in JavaScript “var” that has different scoping rules.  Don’t use it.)
+(Note: there is another legacy keyword for declaring variables in JavaScript `var` that has different scoping rules.  Don’t use it.)
+
+## JavaScript Types
+JavaScript has several "primitive types" (simple types that are not [Objects](#objects)).  These include:
+- `number`: any numeric value, integer or decimal
+- `string`: delineated like `"hello"` or `'hello'` or even ``` `hello` ```.  
+- `boolean`: can be only `true` or `false`
+- `undefined`: is a special type with only one value which is `undefined`.
+
+and a [couple of others](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) that we won't worry about here.
+
+JavaScript is *loosely typed* in the sense that a mutable variable can be assigned (and re-assigned) different values of different types.
+
+```javascript
+ let x
+```
+
+> undefined
+
+```javascript
+x = 3
+```
+
+> 3
+
+```javascript
+x = 'hello'
+```
+
+> "hello"
 
 ## Variable scope
 
-You can limit the visibility of a variable to a specific part of a program by declaring it inside a block of code delineated by curly braces:
+A variable's *scope* is the region of the program where it is visible, i.e. it can be referenced.
+You can limit the scope of a variable by declaring it inside a block of code delineated by curly braces:
 
-![Observable MVC Architecture](/javascript1/console1.png)
+```javascript
+ {
+     let x = 1
+     console.log(x)
+ }
+```
+Console prints `1` from the `console.log`:
+> 1
+But if we try to get the value of `x`:
+```
+x
+```
+> Uncaught ReferenceError: x is not defined
 
 The above console.log statement successfully output the value of x because it was inside the same scope (the same set of curly braces).  The subsequent error occurs because we tried to look at x outside the scope of its definition.  Variables declared outside of any scope are said to be “global” and will be visible to any code loaded on the same page and could clobber or be clobbered by other global definitions - so take care!
 
-Be especially carefully to always declare variables with either let or const keywords.  If you omit these keywords, a variable will be created at the global scope, like so:
+Be especially carefully to always declare variables with either `let` or `const` keywords.  If you omit these keywords, a variable will be created at the global scope even though it is inside a `{ ... }` delimited scope, like so:
 
-![Observable MVC Architecture](/javascript1/console2.png)
+```javascript
+ {
+     x = 1
+ }
+
+ x
+```
+> 1
 
 ---------------------
 We are going to start to use a few operators, that may be familiar from C or Java, some are JS specific.  
-Here’s a cheat sheet:
+Here’s a cheatsheet:
+
+<div class="cheatsheet" markdown="1">
 
 ## JavaScript 101: Basic Operator Cheat Sheet
 
@@ -126,11 +176,11 @@ x += <expr>
 // also -=, *=, /=, |=, &=.
 ```
 
--------------------
+</div>
 
 ## Functions
 
-Functions are declared with the function keyword.  You can give the function a name followed by a tuple of zero or more parameters.  The scope of the function is marked by a matching pair of curly braces { … }.  You return the result with the return keyword.
+Functions are declared with the `function` keyword.  You can give the function a name followed by a tuple of zero or more parameters.  Variables declared within the function's body (marked by a matching pair of curly braces `{ … }`) are limited to the scope of that function body, but of course the parameters to the function are also in scope within the function body.  You return the result with the `return` keyword.
 
 ```javascript
 /**
@@ -155,7 +205,7 @@ myFunction(1,2)
 > hello world  
 > 4
 
-An if statement looks like so:
+An `if-else` statement looks like so:
 
 ```javascript
 /**
@@ -178,7 +228,7 @@ function maxVal(x, y) {
 }
 ```
 
-We can loop with while:
+We can loop with `while`:
 
 ```javascript
 /**
@@ -186,8 +236,9 @@ We can loop with while:
 */
 function sumTo(n) {
    let sum = 0;
-   while (n) {
-       sum += n--;
+   while (n) { // when n is 0 this evaluates to false ending the loop
+      // add n to sum then decrement n
+      sum += n--; // see operator cheatsheet above
    }
    return sum;
 }
@@ -196,7 +247,7 @@ sumTo(10)
 
 > 55
 
-Or for:
+Or `for`:
 
 ```javascript
 function sumTo(n) {
@@ -230,13 +281,15 @@ We consider this recursive loop a more “declarative” coding style than the i
 It is closer to the *inductive definition* of sum than a series of steps for how to compute it.
 
 - No *mutable* variables used
-- Each expression in this code is *“pure”*: it has no *effects* outside the expression.
+- Each expression in this code is *“pure”*: it has no *effects* outside the expression.  Thus, you could replace each element of code with something else that produces the same result for a given input (such as a simple look up of a precomputed cache) and it would work the same.
 - Therefore: this code has the property of *referential transparency*.
 - The code succinctly states the *loop invariant*.
 
-## Stack Overflow: a caveat of recursion
+## Stack Overflow and Tail Recursion
 
-Too many levels of recursion will cause a *stack overflow*.
+Each time a function is invoked, the interpreter (or ultimately the CPU) will allocate another chunk of memory to a special area of memory set aside for such use called the *stack*.  The stack is finite.  A recursive function that calls itself too many times will consume all the available stack memory.
+
+Therefore, too many levels of recursion will cause a *stack overflow*.
 
 ```javascript
 sumTo(1000000)
@@ -244,19 +297,56 @@ sumTo(1000000)
 
 > Uncaught RangeError: Maximum call stack size exceeded
 
+However, functional languages (like Haskell) rely on recursion because they have no other way to create loops without mutable variables - so they must have a way to make this scale to real-world computations.  When a recursive function is written in a special way, such that the recursive call is in *tail position*, compilers are able to transform the recursion into a `while` loop with constant memory use - this is called *tail call optimisation*.
+
+Let's see what a *tail recursive* version of the `sumTo` function looks like:
+
+```javascript
+function sumTo(n, sum = 0) {
+   return n ? sumTo(n-1, sum + n)
+            : sum;
+}
+```
+
+We have added a second parameter *sum* to store the computation as recursion proceeds.  Such parameters are called *accumulators*.  The `= 0` in the parameter definition provides a default value in case the caller does not specify an argument.  Thus, this new version can be called the same way as before:
+
+```javascript
+sumTo(10)
+```
+
+> 55
+
+The important change is that the recursive call (on the branch of execution that requires it) is now the very last operation to be executed before the function returns.  The computation (`sum + n`) occurs before the recursive call.  Therefore, no local state needs to be stored on the stack.
+
+Note: although it has been proposed for the EcmaScript standard, as of 2020, not all JavaScript engines support tail call optimisation (only WebKit AFAIK).  
+
+## Functions as parameters to other functions
+
 We can make functions more versatile by parameterising them with other functions:
 
 ```javascript
-function sumTo(n, f) {
+function sumTo(n, f = x => x) {
    return n ? f(n) + sumTo(n-1, f) : 0;
 }
+```
 
+Note that the new parameter `f` defaults to a simple function that directly returns its argument.  Thus, called without a second parameter sumTo has the same behavior as before:
+
+```javascript
+ sumTo(10)
+```
+
+> 55
+
+But, we can now specify a non-trivial function to be applied to the numbers before they are summed.  For example, a function to square a number:
+
+```javascript
 function square(x) {
    return x * x;
 }
 ```
 
-So we can compute the sum of the first 10 squares:
+can be passed into `sumTo` to compute a sum of squares:
 
 ```javascript
 sumTo(10, square)
@@ -282,9 +372,22 @@ console.log(myObj.aProperty)
 console.log(myObj['aProperty'])
 ```
 
-Note that when we declare an object with the ```const``` keyword as above, it is only *weakly immutable*.  This means that we cannot reassign myObj to refer to a different object, however, we can change the properties inside myObj.  Thus, the myObj variable is constant/immutable, but the object created by the declaration is mutable.  So, after making the above const declaration, if we try the following reassignment of myObj we receive an error:
+Note that when we declare an object with the `const` keyword as above, it is only *weakly immutable*.  This means that we cannot reassign `myObj` to refer to a different object, however, we can change the properties inside `myObj`.  Thus, the `myObj` variable is constant/immutable, but the object created by the declaration is mutable.  So, after making the above `const` declaration, if we try the following reassignment of `myObj` we receive an error:
 
-But we can reassign properties on myObj:
+```javascript
+myObj = {
+    aProperty: 0,
+    anotherProperty: "tim wasn't here"
+}
+```
+
+> VM48:1 Uncaught TypeError: Assignment to constant variable.
+
+But the immutability due to `const` is *weak* or *shallow* in the sense that while the `myObj` variable which references the object is immutable, the properties of the object are mutable, i.e. we can reassign properties on `myObj` with no error:
+
+```javascript
+myObj.aProperty = 0
+```
 
 We can also quickly declare variables that take the values of properties of an object, through *destructuring* syntax:
 
@@ -309,16 +412,16 @@ function showX({x}) {
 }
 ```
 
-If can also initialise an object directly with variables.  Unless a new attribute name is specified, the variable names become attribute names, like so:
+You can also initialise an object's properties directly with variables.  Unless a new property name is specified, the variable names become property names, like so:
 
 ```javascript
 const x = 123, tempY = 456
-const point = {x /* variable name used as attribute name */, 
-               y:tempY /* value from variable but new attribute name */}
+const point = {x /* variable name used as property name */,
+               y:tempY /* value from variable but new property name */}
 point
 ```
 
-{x: 123, y: 456}
+> {x: 123, y: 456}
 
 ## Arrays
 
@@ -352,18 +455,18 @@ z
 
 > 3
 
-See below for further functions for working with arrays.
+Below, we see how [Anonymous Functions](/javascript1#anonymous-functions) can be applied to transform arrays, and a [cheatsheet summary](/javascript1#array-cheatsheet) for further functions for working with arrays.
 
 ## Dynamic Typing
 
-The members of myObj are implicitly typed as number and string respectively, and as we see in the console.log, conversion to string happens automatically.  JavaScript is interpreted by a JavaScript engine rather than compiled into a static executable format.  Originally, this had implications on execution speed, as interpreting the program line by line at run time could be slow.  Modern JavaScript engines, however, feature Just in Time (JIT) compilation and optimisation - and speed is becoming comparable to execution of C++ code that is compiled in advance to native machine code.  However, another implication remains.  It is not type checked by a compiler.  Thus, type errors cause run-time failures rather than being caught at compile time.  JavaScript is dynamically typed in that types are associated with values rather than variables.  That is, a variable that is initially bound to one type, can later be rebound to a different type, e.g.:
+The members of `myObj` are implicitly typed as `number` and `string` respectively, and as we see in the `console.log`, conversion to string happens automatically.  JavaScript is interpreted by a JavaScript engine rather than compiled into a static executable format.  Originally, this had implications on execution speed, as interpreting the program line by line at run time could be slow.  Modern JavaScript engines, however, feature Just in Time (JIT) compilation and optimisation - and speed can sometimes be comparable to execution of C++ code that is compiled in advance to native machine code.  However, another implication remains.  It is not type checked by a compiler.  Thus, type errors cause run-time failures rather than being caught at compile time.  JavaScript is dynamically typed in that types are associated with values rather than variables.  That is, a variable that is initially bound to one type, can later be rebound to a different type, e.g.:
 
 ```javascript
 let i = 123;    // a numeric literal has type number
 i = 'a string'; // a string literal has type string, but no error here!
 ```
 
-The C compiler would spit the dummy when trying to reassign i with a value of a different type, but the JavaScript interpreter is quite happy to go along with your decision to change your mind about the type of i.
+The C compiler would spit the dummy when trying to reassign `i` with a value of a different type, but the JavaScript interpreter is quite happy to go along with your decision to change your mind about the type of `i`.
 
 ## Functions are Objects
 
@@ -387,11 +490,11 @@ hi('tim')
 
 > "hello tim"
 
-(Note: The original JavaScript syntax for declaring a variable used the ```var``` keyword.  However, the scoping of variables declared in this way was strange for people familiar with C and Java scoping rules, and caused much angst.  It has been fixed since ES6 with the ```let``` and ```const``` keywords, we prefer these to ```var```.)
+(Note: The original JavaScript syntax for declaring a variable used the `var` keyword.  However, the scoping of variables declared in this way was strange for people familiar with C and Java scoping rules, and caused much angst.  It has been fixed since ES6 with the `let` and `const` keywords, we prefer these to `var`.)
 
 ## Anonymous Functions
 
-The sayHello function is called a *named function*.  We can also create an anonymous function to be bound immediately to a variable:
+The `sayHello` function is called a *named function*.  We can also create an anonymous function to be bound immediately to a variable:
 
 ```javascript
 const hi = function(person) {
@@ -399,11 +502,11 @@ const hi = function(person) {
 }
 ```
 
-or to pass as a parameter into another function, for example, Array objects have a forEach member that expects a function as an argument, which is then applied to every member of the array:
+or to pass as a parameter into another function, for example, `Array` objects have a `forEach` member that expects a function as an argument, which is then applied to every member of the array:
 
 ```javascript
 ['tim', 'sally', 'anne'].forEach(function(person) { 
-console.log('hello ' + person) 
+    console.log('hello ' + person)
 })
 ```
 
@@ -425,7 +528,7 @@ Note that whatever value the expression on the right-hand side of the arrow eval
 
 > ["hello tim", "hello sally", "hello anne"]
 
-Multiple ‘;’ separated statements including local variable declarations can be enclosed in brackets with arrow syntax, but then an explicit return statement is required to return a value:
+Multiple statements (either split across lines or separated with `;`s) including local variable declarations can be enclosed in brackets with arrow syntax, but then an explicit `return` statement is required to return a value:
 
 ```javascript
 ['tim', 'sally', 'anne'].map(person=> {
@@ -435,7 +538,7 @@ Multiple ‘;’ separated statements including local variable declarations can 
 })
 ```
 
-## Arrow Functions
+### Arrow Functions
 
 As mentioned above, ES6 introduced compact notation for anonymous functions:
 
@@ -451,13 +554,13 @@ const greeting = function(person) {
 }
 ```
 
-You can also have functions with a list of arguments, just put the list in brackets as usual functions
+You can also have functions with a list of arguments, just put the list in brackets as for usual function definitions:
 
 ```javascript
 const greeting = (greeting, person)=> greeting + ' ' + person
 ```
 
-The body of the above functions are simple expressions.  If you need a more complex, multiline body (e.g. with local variables) you can do this but you need to surround the code block with curly braces ```{}```:
+The body of the above functions are simple expressions.  If you need a more complex, multiline body (e.g. with local variables) you can do this but you need to surround the code block with curly braces `{}`:
 
 ```javascript
 const greeting = (greeting, person)=> {
@@ -467,19 +570,81 @@ const greeting = (greeting, person)=> {
 }
 ```
 
--------------------------------------
-
-## Array Cheat Sheet: Pure Methods on Array
-
-Where a is an array with elements of type U:
-
-(Note: these are not correct TS annotations, but a Haskelly “shorthand”)
+We can use multi-parameter anonymous functions with another nifty method on `Array` objects which allows us to `reduce` them to a single value.
 
 ```javascript
-// The following is impure if f has any effect
-a.forEach(f: U=> void): void  // apply the function f to each element of the array
+[5,8,3,1,7,6,2].reduce((accumulator,x)=>accumulator+x,0)
+```
 
-// Pure functions:
+> 32
+
+The `reduce` method applies a function to each of the elements in the array, in order to compute an aggregated value for the whole array.  The nature of the aggregate depends on the function you pass in.  Here we just sum the elements in the array.  The function we pass in has two parameters, the second is the array element (which we refer to here as `x`), the first parameter `accumulator` is either:
+
+* the second argument to `reduce` (which in our case is 0), if this is the first call to the function,
+* or, for every other call, the result returned by the previous call to the function.
+
+`reduce` is incredibly versatile and can be used to do much more than sum numbers.  For example, say we want to see whether all the elements of an array pass some test.
+
+```javascript
+const all = (test, array) => array.reduce(
+    (accumulator, x) => accumulator && test(x),
+    true)
+```
+Here the `accumulator` is a boolean with initial value `true`.  If an element of the array fails the test the `accumulator` becomes `false` and stays `false`, using the `&&` operator.
+
+```javascript
+all(x => x < 5, [1, 2, 3])
+all(x => x < 5, [1, 3, 5])
+```
+
+> true
+
+> false
+
+### Exercise
+
+* Can you write a function `any` that returns true if any of the tests pass?
+
+What if we wanted to see how many times each word appears in a list?
+
+```javascript
+const wordCount = (array) => array.reduce(
+    (accumulator, word) => {
+        if (accumulator[word]) {
+            accumulator[word] += 1
+        } else {
+            accumulator[word] = 1
+        }
+        return accumulator
+    },
+    {}
+)
+```
+Here the `accumulator` is an object which is initially empty.  For each word in the list the word count is either updated or created in the `accumulator` object.  Note however that this implementation is not *pure*, the aggregator function modifies `accumulator` in place before returning it.
+
+```javascript
+wordCount(['tim', 'sally', 'tim'])
+```
+
+> { tim: 2, sally: 1 }
+
+<div class="cheatsheet" markdown="1">
+
+## Array Cheatsheet
+
+In the following, the annotations beginning with `:` after each parameter describe its type and again at the end of each function to describe its return type.  The array `a` has elements of type `U`, and `U=>V` is the type of a function with input parameter type `U` and return type `V`
+(Note: these are not correct [TS annotations](/typescript1), but an informal “shorthand”)
+
+
+
+```javascript
+a.forEach(f: U=> void): void  // apply the function f to each element of the array
+```
+Although it does not typically mutate `a`, `forEach` is impure if `f` has any side effect (which it most likely will because otherwise why would you bother!).
+
+### Pure Methods on Array
+
+```javascript
 a.slice(): U[]                // copy the whole array
 a.slice(start: number): U[]   // copy from the specified index to the end of the array
 a.slice(start: number,        // copy from start index up to 
@@ -496,13 +661,22 @@ a.reduce(f: (V, U)=> V, V): V // Uses f to combine elements of
                               // the array into a single result of type V
 ```
 
-All of the above are pure in the sense that they do not mutate a, but return the result in a new object.
+All of the above are pure in the sense that they do not mutate `a`, but return the result in a new object.
 
----------------------------
+*Note: the function passed to `forEach` takes an optional second parameter (not shown above) which is the index of the element being visited (see [docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach)).  While `map`, `filter` & `reduce` have a similar optional index parameter I suggest to avoid using it because it leads to hacky imperative style thinking about loops.*
+
+</div>
+
 
 ## Closures
 
-Functions can be nested inside other function definitions and can access variables from the enclosing scope.  A function and the set of variables it accesses from its enclosing scope is called a closure.  You can also have a function that creates and returns a closure that can be applied later.
+Functions can be nested inside other function definitions and can access variables from the enclosing scope.  
+
+**Definitions:** 
+- A function and the set of variables it accesses from its enclosing scope is called a *closure*.  
+- Variables from the enclosing scope that are accessed by the closure are said to be *captured* by the closure.  
+
+You can also have a function that creates and returns a closure that can be applied later:
 
 ```javascript
 function add(x) {
@@ -516,13 +690,54 @@ addNine(10)
 
 > 19
 
+In the above example, the parameter `x` of the `add` function is captured by the anonymous function that is returned, which forms a closure.  Thus, the binding of `x` to a value *persists* beyond the scope of the `add` function itself.  Effectively, we have used the `add` function to create a new function: `y=>y+9` - without actually writing the code ourselves.
+
 ```javascript
 addNine(1)
 ```
 
 > 10
 
+We can also call the add function with two arguments at once:
+
+```javascript
+add(1)(2) 
+```
+
+> 3
+
+Compare to a more traditional function of two parameters:
+```javascript
+function plus(x,y) { return x + y }
+plus(1,2)
+```
+> 3
+
+The `add` function above is a [Curried](/higherorderfunctions#curried-functions) version of the `plus` function.
+
+As another example, consider a curried wrapper for our `sumTo` from [before](/javascript1#functions-as-parameters-to-other-functions):
+
+```javascript
+ function sumOf(f) {
+     return n => sumTo(n, f)
+ }
+```
+
+Now, we can create custom functions that compute sums over arbitrary sequences:
+
+```javascript
+ const sumOfSquares = sumOf(square)
+ sumOfSquares(10)
+```
+> 385
+```javascript
+ sumOfSquares(20)
+```
+> 2870
+
 ## Prototype Class Mechanism
+
+*Note: the following way to achieve class encapsulation is deprecated by ES6 syntax -- skip to [the next section](#ecmascript-6-class-syntax) to see the modern way to do it.*
 
 In JavaScript you can also create functions as members of objects:
 
@@ -558,28 +773,35 @@ author.hello()
 
 > "hello tim"
 
-Note that above we use the old-style verbose JavaScript anonymous function syntax instead of the arrow form.  This is because there is a difference in the way the two different forms treat the this symbol.  In the arrow syntax, this refers to the enclosing execution context.  In the verbose syntax, this resolves to the object the method was called on.
+Note that above we use the old-style verbose JavaScript anonymous function syntax instead of the arrow form.  This is because there is a difference in the way the two different forms treat the `this` symbol.  In the arrow syntax, `this` refers to the enclosing execution context.  In the verbose syntax, `this` resolves to the object the method was called on.
 
 It’s very tempting to use the prototype editing mechanism for evil.  For example, I’ve always wished that JS had a function to create arrays initialised over a range:
 
 ```javascript
-Array.prototype.range = (from, to)=>Array(to).fill()
-.map((_,i)=>i)
-.filter(v=> v >= from)
+Array.prototype.range = 
+  (from, to)=>Array(to)  // allocate space for an array of size `to`
+  .fill()                // populate the array (with `undefined`s)
+  .map((_,i)=>i)         // set each element of the array to its index
+  .filter(v=> v >= from) // filter out values below from
 
 [].range(3,9)
 ```
 
 > [3,4,5,6,7,8]
 
-Of course, if you do something like this in your JS library, and it pollutes the global namespace, and one day EcmaScript 9 introduces an actual range function with slightly different semantics, and someone else goes to use the ```[].range``` function expecting the official semantics - well, you may lose a friend or two.
+Of course, if you do something like this in your JS library, and it pollutes the global namespace, and one day EcmaScript 9 introduces an actual `range` function with slightly different semantics, and someone else goes to use the `[].range` function expecting the official semantics - well, you may lose a friend or two.
+
+Some notes about this implementation of range:
+- Although the `Array(n)` function allocates space for n elements, the result is still "empty" so `fill()` is necessary to actually create the entries.
+- The function passed to `map` is using an optional second argument which receives the index of the current element.  *See note in the [Array Cheatsheat](#array-cheatsheet) suggesting not to use this*.
+- The `_` is not special syntax, it's a valid variable name. I use `_` as a convention for a parameter that I don't use.  This is imitating Haskell syntax.
 
 ---------------------
 
 ## Exercises
 
-- Amend the range function above to handle negative values in from or to
-- Hack a sum function onto the Array.prototype (you’ll need to use an old style anonymous function to access the array through this).
+- Amend the range function above to handle negative values in from or to, and add some calculation so that the array is size `to - from` from the start, eliminating the need for `filter`.
+- Hack a sum function onto the `Array.prototype` (you’ll need to use an old style anonymous function to access the array through `this`).
 - Why might you lose friends doing this kind of thing to built-in types?
 - We are going to be dealing with linked-list like data structures a lot in this course.  Implement a linked list using javascript objects as simply as you can, and create some functions for working with it, like length and map.
 
@@ -617,7 +839,7 @@ class Person {
 }
 ```
 
-There is also now syntax for “getter properties”: functions which can be invoked without (), i.e. to look more like properties:
+There is also now syntax for “getter properties”: functions which can be invoked without `()`, i.e. to look more like properties:
 
 ```javascript
 class Person {
@@ -656,13 +878,13 @@ tims.forEach(t => t.sayHello())
 
 ## Polymorphism
 
-According to Cartelli and Wegner, "Polymorphic types are types whose operations are applicable to values of more than one type."  Thus, although Person and LoudPerson are different types, since LoudPerson is a sub-type of Person, they present a common sayHello method allowing operations like forEach to operate over an array of the base class.  In a traditional Object Oriented language like Java, the compiler enforces that objects must be instances of a common base class or interface to be treated as such.  This type of polymorphism is called subtyping polymorphism.
+According to Cartelli *et al.*, "Polymorphic types are types whose operations are applicable to values of more than one type."  Thus, although `Person` and `LoudPerson` are different types, since `LoudPerson` is a sub-type of `Person`, they present a common `sayHello` method allowing operations like `forEach` to operate over an array of the base class.  In a traditional Object Oriented language like Java, the compiler enforces that objects must be instances of a common base class or interface to be treated as such.  This type of polymorphism is called *subtyping polymorphism*.
 
 In JavaScript, with no compile-time typecheck, a kind of polymorphism is possible such that if two objects both present a similarly named method that is callable in the same way, of course there is nothing preventing you simply using that method on each object as if it is the same:
 
 ```javascript
-var a = {f: ()=>console.log("a")}
-var b = {f: ()=>console.log("b")}
+const a = {f: ()=>console.log("a")}
+const b = {f: ()=>console.log("b")}
 [a,b].forEach(o=>o.f())
 ```
 
@@ -671,7 +893,9 @@ var b = {f: ()=>console.log("b")}
 
 Informally, this type of polymorphism is called “Duck Typing” (i.e. "If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck").
 
-Another type of polymorphism which is key to strongly typed functional programming languages (like Haskell), but also a feature of many modern OO languages is parametric polymorphism.  We will see this in action when we introduce TypeScript.
+Another type of polymorphism which is key to strongly typed functional programming languages (like Haskell), but also a feature of many modern OO languages is *parametric polymorphism*.  We will see this in action when we introduce [TypeScript generics](/typescript1/#generic-types).
+
+*Reference: Cardelli, Luca, and Peter Wegner. "On understanding types, data abstraction, and polymorphism." ACM Computing Surveys (CSUR) 17.4 (1985): 471-523.*
 
 ## Dependency Injection
 
@@ -701,6 +925,6 @@ tims.forEach(t => t.sayHello())
 > Hi, my name's Tim and I lecture Programming Paradigms!  
 > HI, MY NAME'S TIM AND I SHOUT ABOUT PROGRAMMING PARADIGMS!
 
-So the filter property defaults to the identity function (a function which simply returns its argument), but a user of the Person class can inject a dependency on another function from outside the class when they construct an instance.
+So the filter property defaults to the identity function (a function which simply returns its argument), but a user of the `Person` class can inject a dependency on another function from outside the class when they construct an instance.
 
 This is a “lighter-weight” style of code reuse or specialisation.

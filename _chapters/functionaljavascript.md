@@ -7,8 +7,9 @@ permalink: /functionaljavascript/
 ### Learning Outcomes
 
 * Create programs in JavaScript in a functional style
+* Understand the definitions of [Function Purity and Referential Transparency](/functionaljavascript#function-purity-and-referential-transparency)
 * Explain the role of pure functional programming style in managing side effects
-* See how pure functions can be used to [model sophisticated computation](#computation-with-pure-functions)
+* See how pure functions can be used to [model sophisticated computation](/functionaljavascript#computation-with-pure-functions)
 
 ## Introduction
 
@@ -16,7 +17,7 @@ The elements of JavaScript covered in [our introduction](/javascript1), specific
 
 * [Binding functions to variables](/javascript1#functions-are-objects)
 * [Anonymous functions](/javascript1#anonymous-functions)
-* [Higher-order functions](/javascript1#higher-order-functions)
+* [Higher-order functions](/higherorderfunctions)
 
 are sufficient for us to explore a paradigm called *functional programming*.  In the functional programming paradigm the primary model of computation is through the evaluation of functions.  Functional Programming is highly inspired by the [Lambda Calculus](/lambdacalculus/), a theory which develops a model for computation based on application and evaluation of mathematical functions.
 
@@ -36,45 +37,73 @@ Examples of side-effects from inside a function:
 In languages without compilers that specifically guard against them, side effects can occur:
 
 * intentionally through sloppy coding practices, where a misguided programmer may think it's more convenient to have a function do multiple things at once;
-* unintentially, for example by accidently setting a global variable instead of a local one.
+* unintentionally, for example by accidentally setting a global variable instead of a local one.
 
 We'll see more examples in actual code below.
 
-## Function Purity vs Side Effects
+## Function Purity and Referential Transparency
 
 A *pure function*:
 
 * has no *side effects*: i.e. it has no effects other than to create a return value;
 * always produces the same result for the same input.
 
-Pure functions are perhaps most easily illustrated with some examples and counterexamples. The following function has no effect outside its return result and is therefore pure:
+In the context of functional programming, *referential transparency* is:
+
+* the property of being able to substitute an expression that evaluates to some value, with that value, without affecting the behaviour of the program.
+
+A real life example where this might be useful would be when a cached result for a given input already exists and can be returned without further computation.  Imagine a pure function which computes PI to a specified number of decimal points precision.  It takes an argument `n`, the number of decimal points, and returns the computed value.  We could modify the function to instantly return a precomputed value for PI from a lookup table if `n` is less than `10`.  This substitution is trivial and is guaranteed not to break our program, because its effects are strictly locally contained.
+
+Pure functions and referential transparency are perhaps most easily illustrated with some examples and counterexamples. 
+Consider the following *impure* function:
+
+```javascript
+   function impureSquares(a) {
+       let i = 0
+       while (i < a.length) {
+*         a[i] = a[i] * a[i++];
+       }
+   }
+```
+
+Since the function modifies `a` in place we get a different outcome if we call it more than once.
+
+```javascript
+ const myArray=[1,2,3]
+ impureSquares(myArray)
+ // now myArray = [2,4,9]
+ impureSquares(myArray)
+ // now myArray = [4,16,81]
+```
+
+Furthermore, the very imperative style computation in `impureSquares` at the line marked with `*` is not pure.
+It has two effects: incrementing `i` and mutating `a`.
+You could not simply replace the expression with the value computed by the expression and have the program work in the same way.
+This piece of code does not have the property of *referential transparency*.
+
+True pure functional languages (such as Haskell) enforce referential transparency through immutable variables (*note: yes, "immutable variable" sounds like an oxymoron - two words with opposite meanings put together*).  That is, once any variable in such a language is bound to a value, it cannot be reassigned.  
+
+In JavaScript we can opt-in to immutable variables by declaring them `const`, but it is only a shallow immutability.  Thus, the variable `myArray` above, cannot be reassigned to reference a different array.  However, we can change the contents of the array as shown above.
+
+A more functional way to implement the `squares` function would be more like the examples we have seen previously:
 
 ```javascript
 function squares(a) {
-    let b = new Array(a.length);
-    for (let i = 0; i < a.length; i++) {
-        b[i] = a[i]**2;
-    }
-    return b;
+    return a.map(x=> x*x)
 }
 ```
 
-While the above function (viewed as a black box) is pure, its implementation is not very functional.  Specifically, the code around variable b does not have the property of referential transparency.  That is, because the value of b is reassigned during execution figuring out the state at a given line is impossible, without looking at its context. True functional languages enforce referential transparency through immutable variables (which sounds like a tautology).  That is, once a variable is bound to a value, it cannot be reassigned.  In JavaScript we can opt-in to immutable variables by declaring them const.
- 
-A more functional way to implement the squares function would be more like the examples we have seen previously:
+The above function is pure.  Its result is a new array containing the squares of the input array and the input array itself is unchanged.  It has no side effects changing values of variables, memory or the world, outside of its own scope.  You could replace the computation of the result with a different calculation returning the same result for a given input and the program would be unchanged.  It is *referentially transparent*.
 
 ```javascript
-const squares = a=> a.map(x=> x**2)
+const myArray = [1,2,3]
+const mySquares = squares(myArray)
+const myRaisedToTheFours = squares(mySquares)
 ```
 
-By contrast, the following is considered impure because it modifies the memory referred to by a in-place:
-
+We could make the following substitution in the last line with no unintended consequences:
 ```javascript
-function squares(a) {
-    for (let i = 0; i < a.length; i++) {
-        a[i] = a[i]**2;
-    }
-}
+ const myRaisedToTheFours = squares(squares(myArray))
 ```
 
 An impure function typical of something you may see in OO code:
@@ -130,7 +159,7 @@ e=>{
 })
 ```
 
-Note that callback functions passed as event handlers are a situation where the difference between the arrow syntax and regular anonymous function syntax really matters.  In the body of the arrow function above this will be bound to the context of the caller, which is probably what you want if you are coding a class for a reusable component.  
+Note that callback functions passed as event handlers are a situation where the difference between the arrow syntax and regular anonymous function syntax really matters.  In the body of the arrow function above `this` will be bound to the context of the caller, which is probably what you want if you are coding a class for a reusable component.  
 
 ### Continuations
 
@@ -160,7 +189,7 @@ a, n, finalAction: (result)=>void): void
 }
 ```
 
-Continuations are essential in asynchronous processing, because the function will return immediately after dispatching the job, e.g. to the JavaScript event loop:
+Continuations are essential in asynchronous processing, which abounds in web programming.  For example, when an HTTP request is dispatched by a client to a server, there is no knowing precisely when the response will be returned (it depends on the speed of the server, the network between client and server, and load on that network).  However, we can be sure that it will not be instant and certainly not before the line of code following the dispatch is executed by the interpreter.  Thus, continuation style call-back functions are typically passed through to functions which trigger such asynchronous behaviour, for those call-back functions to be invoked when the action is completed.  A simple example of an asynchronous function invocation is the built-in `setTimeout` function, which schedules an action to occur after a certain delay.  The `setTimeout` function itself returns immediately after dispatching the job, e.g. to the JavaScript event loop:
 
 ```javascript
 setTimeout(()=>console.log('done.'), 0);
@@ -176,38 +205,58 @@ console.log('job queued on the event loop...');
 
 ### Method Chaining
 
-*Chained functions* are a common pattern.  Assuming definitions for map, filter and take similar to:
+*Chained functions* are a common pattern.  
+Take a simple linked-list data structure as an example.  We'll hard code a list object to start off with:
 
 ```javascript
-// maps an Iterable (an interface like our IListNode with a way to get a value of 
-// the current node or iterate to the next element) containing elements of 
-// type T, to an Iterable with elements of type V 
-function map<T,V>(f: (_:T)=>V, l: Iterable<T>): Iterable<V> { …
+const l = {
+    data: 1,
+    next: {
+        data: 2,
+        next: {
+            data: 3,
+            next: null
+        }
+    }
+}
+```
 
-// create a new Iterable containing only the elements of l that 
-// satisfy the predicate f
+We can create simple functions similar to [those of Array](/javascript1#array-cheatsheet), which we can chain:
 
-function filter<T>(f: (t:T)=>boolean, l: Iterable<T>): Iterable<T> { …
-// create a new Iterable containing only the fist n elements of l
-
-function take<T>(n: number, l: Iterable<T>): Iterable<T> { ...
+```javascript
+const
+  map = (f,l) => l ? ({data: f(l.data), next: map(f,l.next)}) : null
+, filter = (f,l) => !l ? null :
+                    (next =>
+                        f(l.data) ? ({data: l.data, next}) 
+                                  : next
+                    ) (filter(f,l.next))
+                    // the above is using an IIFE such that
+                    // the function parameter `next` is used 
+                    // like a local variable for filter(f,l.next)
+, take = (n,l) => l && n ? ({data: l.data, next: take(n-1,l.next)})
+                         : null
 ```
 
 We can chain calls to these functions like so:
 
 ```javascript
-take(3,
-   filter(x=>x%2===0,
-       map(x=>x+1, someIterable)
+take(2,
+   filter(x=> x%2 === 0,
+       map(x=> x+1, l)
    )
 )
 ```
+> { data: 2, next: { data: 4, next: null }}
 
-But in the function call chain above you have to read them inside-out to understand the flow.  Also, keeping track of how many brackets to close gets a bit annoying.  Thus, you will often see class definitions that allow for method chaining, by providing methods that return an instance of the class itself, or another chainable class.
+## Fluent Interfaces (pure vs impure)
+
+In the chained function calls above you have to read them inside-out to understand the flow.  Also, keeping track of how many brackets to close gets a bit annoying.  Thus, in object oriented languages you will often see class definitions that allow for method chaining, by providing methods that return an instance of the class itself, or another chainable class.
 
 ```javascript
-class List<T> {
-   map<V>(f: (item: T) => V): List<V> {
+class List {
+   constructor(private head) {}
+   map(f) {
        return new List(map(f, this.head));
    }
 ...
@@ -216,28 +265,23 @@ class List<T> {
 Then the same flow as above is possible without the nesting and can be read left-to-right, top-to-bottom:
 
 ```javascript
-someIterable
+new List(l)
    .map(x=>x+1)
    .filter(x=>x%2===0)
-   .take(3)
+   .take(2)
 ```
 
-This is called “fluent” programming style.
+This is called *fluent* programming style.
+Interfaces in object-oriented languages that chain a sequence of method calls (as above) are often called *fluent interfaces*.  One thing to be careful about fluent interfaces in languages that do not enforce purity is that the methods may or may not be pure.  
 
-## Fluent Interfaces (pure vs impure)
-
-Interfaces like the above in object-oriented languages are often called fluent interfaces.  One thing to be careful about fluent interfaces in JavaScript is that the methods may or may not be pure.  That is, the type system does not warn you whether the method mutates the object upon which it is invoked and simply returns this, or creates a new object, leaving the original object untouched.  We can see,  however, that List.map as defined above, creates a new list and is pure.
-
-### Exercise
-
-* If ```someIterable``` above were declared const, would it protect you against mutations in ```someIterable``` due to impure methods?
+That is, the type system does not warn you whether the method mutates the object upon which it is invoked and simply returns `this`, or creates a new object, leaving the original object untouched.  We can see,  however, that List.map as defined above, creates a new list and is pure.
 
 ## Computation with Pure Functions
 
 Pure functions may seem restrictive, but in fact pure function expressions and higher-order functions can be combined into powerful programs.  In fact, anything you can compute with an imperative program can be computed through function composition.  Side effects are required eventually, but they can be managed and the places they occur can be isolated.  Let’s do a little demonstration, although it might be a bit impractical, we’ll make a little list processing environment with just functions:
 
 ```javascript
-const cons = (head, rest)=> selector=> selector(head, rest);
+const cons = (_head, _rest)=> selector=> selector(_head, _rest);
 ```
 
 With just the above definition we can construct a list (the term cons dates back to LISP) with three elements, terminated with null, like so:
@@ -248,12 +292,25 @@ const list123 = cons(1, cons(2, cons(3, null)));
 
 The data element, and the reference to the next node in the list are stored in the closure returned by the ```cons``` function.  Created like this, the only side-effect of growing the list is creation of new cons closures.  Mutation of more complex structures such as trees can be managed in a similarly ‘pure’ way, and surprisingly efficiently, as we will see later in this course. 
 
-So cons is a function that takes two parameters (```head``` and ```rest```), and returns a function that itself takes a function (selector) as argument.  The selector function is then applied to ```head``` and ```rest```.  What might the selector function be and how do we apply it to a list element?  Well we don’t exactly apply it ourselves, we give it to the closure returned by the ```cons``` function and it applies it for us.  There are the two selectors we need to work with the list:
+So ```cons``` is a function that takes two parameters ```_head``` and ```_rest``` (the `_` prefix is just to differentiate them from the functions I create below), and returns a function that itself takes a function (selector) as argument.  The selector function is then applied to ```_head``` and ```_rest```.  
+
+The `selector` function that we pass to the list is our ticket to accessing its elements:  
+
+```javascript
+list123((_head, _rest)=> _head)
+```
+> 1
+```javascript
+list123((_,r)=>r)((h,_)=>h) // we can call the parameters whatever we like
+```
+> 2
+
+We can create accessor functions to operate on a given list:
 
 ```javascript
 const
-    head = list=> list((head, rest)=> head),
-    rest = list=> list((head, rest)=> rest);
+    head = list=> list((h,_)=>h),
+    rest = list=> list((_,r)=>r)
 ```
 
 Now, ```head``` gives us the first data element from the list, and rest gives us another list.  Now we can access things in the list like so:
@@ -272,7 +329,7 @@ const map = (f, list)=> !list ? null
 : cons(f(head(list)), map(f, rest(list)))
 ```
 
-In the above, we are using closures to store data.  It's just a trick to show the power of functions and to into the right state of mind for the Lambda Calculus - which provides a complete model of computation using only anonymous functions like those above.  In a real program I would expect you would use JavaScript's class and object facilities to create data structures.
+In the above, we are using closures to store data.  It's just a trick to show the power of functions and to put us into the right state of mind for the Lambda Calculus - which provides a complete model of computation using only anonymous functions like those above.  In a real program I would expect you would use JavaScript's class and object facilities to create data structures.
 
 ### Towards Lambda Calculus and Church Encoding
 
