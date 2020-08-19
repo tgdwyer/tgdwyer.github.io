@@ -54,7 +54,8 @@ In the context of functional programming, *referential transparency* is:
 
 A real life example where this might be useful would be when a cached result for a given input already exists and can be returned without further computation.  Imagine a pure function which computes PI to a specified number of decimal points precision.  It takes an argument `n`, the number of decimal points, and returns the computed value.  We could modify the function to instantly return a precomputed value for PI from a lookup table if `n` is less than `10`.  This substitution is trivial and is guaranteed not to break our program, because its effects are strictly locally contained.
 
-Pure functions and referential transparency are perhaps most easily illustrated with some examples and counterexamples. The following function modifies `a` in place and so is impure:
+Pure functions and referential transparency are perhaps most easily illustrated with some examples and counterexamples. 
+Consider the following:
 
 ```javascript
    function squares(a) {
@@ -65,17 +66,27 @@ Pure functions and referential transparency are perhaps most easily illustrated 
    }
 ```
 
-Furthermore, the very imperative style computation at the line marked with `*` is not pure.
+Since the function modifies `a` in place we get a different outcome if we call it more than once.
+
+```javascript
+ const array=[1,2,3]
+ squares(array)
+ // now array = [2,4,9]
+ squares(array)
+ // now array = [4,16,81]
+```
+
+Furthermore, the very imperative style computation in `squares` at the line marked with `*` is not pure.
 It has two effects: incrementing `i` and mutating `a`.
 You could not simply replace the expression with the value computed by the expression and have the program work in the same way.
 This piece of code does not have the property of *referential transparency*.
 
 True pure functional languages (such as Haskell) enforce referential transparency through immutable variables (*note: yes, "immutable variable" sounds like an oxymoron - two words with opposite meanings put together*).  That is, once any variable in such a language is bound to a value, it cannot be reassigned.  In JavaScript we can opt-in to immutable variables by declaring them `const`.
- 
+
 A more functional way to implement the `squares` function would be more like the examples we have seen previously:
 
 ```javascript
-const squares = a=> a.map(x=> x**2)
+const squares = a=> a.map(x=> x*x)
 ```
 
 The above function is pure.  It has no side effects changing values of variables, memory or the world, outside of its own scope.  You could replace the computation of the result with a different calculation returning the same result for a given input and the program would be unchanged.  It is *referentially transparent*.
