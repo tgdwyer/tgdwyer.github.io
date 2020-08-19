@@ -69,11 +69,11 @@ Consider the following *impure* function:
 Since the function modifies `a` in place we get a different outcome if we call it more than once.
 
 ```javascript
- const array=[1,2,3]
- squares(array)
- // now array = [2,4,9]
- squares(array)
- // now array = [4,16,81]
+ const myArray=[1,2,3]
+ squares(myArray)
+ // now myArray = [2,4,9]
+ squares(myArray)
+ // now myArray = [4,16,81]
 ```
 
 Furthermore, the very imperative style computation in `squares` at the line marked with `*` is not pure.
@@ -81,7 +81,7 @@ It has two effects: incrementing `i` and mutating `a`.
 You could not simply replace the expression with the value computed by the expression and have the program work in the same way.
 This piece of code does not have the property of *referential transparency*.
 
-True pure functional languages (such as Haskell) enforce referential transparency through immutable variables (*note: yes, "immutable variable" sounds like an oxymoron - two words with opposite meanings put together*).  That is, once any variable in such a language is bound to a value, it cannot be reassigned.  In JavaScript we can opt-in to immutable variables by declaring them `const`.
+True pure functional languages (such as Haskell) enforce referential transparency through immutable variables (*note: yes, "immutable variable" sounds like an oxymoron - two words with opposite meanings put together*).  That is, once any variable in such a language is bound to a value, it cannot be reassigned.  In JavaScript we can opt-in to immutable variables by declaring them `const`, but it is only a shallow immutability.  Thus, the variable `myArray` above, cannot be reassigned to reference a different array.  However, we can change the contents of the array as shown above.
 
 A more functional way to implement the `squares` function would be more like the examples we have seen previously:
 
