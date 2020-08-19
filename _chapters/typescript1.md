@@ -516,7 +516,7 @@ value = 123;
 ```
 
 Or the source (r-value) of the assignment:
-```
+```javascript
 let value: number;
 value = "hello";
 //[ts] Type '"hello"' is not assignable to type 'number'.
