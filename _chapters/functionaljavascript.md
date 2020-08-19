@@ -86,10 +86,12 @@ True pure functional languages (such as Haskell) enforce referential transparenc
 A more functional way to implement the `squares` function would be more like the examples we have seen previously:
 
 ```javascript
-const squares = a=> a.map(x=> x*x)
+function squares(a) {
+    return a.map(x=> x*x)
+}
 ```
 
-The above function is pure.  It has no side effects changing values of variables, memory or the world, outside of its own scope.  You could replace the computation of the result with a different calculation returning the same result for a given input and the program would be unchanged.  It is *referentially transparent*.
+The above function is pure.  Its result is a new array containing the squares of the input array and the input array is unchanged.  It has no side effects changing values of variables, memory or the world, outside of its own scope.  You could replace the computation of the result with a different calculation returning the same result for a given input and the program would be unchanged.  It is *referentially transparent*.
 
 An impure function typical of something you may see in OO code:
 
