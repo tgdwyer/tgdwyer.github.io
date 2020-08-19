@@ -161,6 +161,43 @@ e=>{
 
 Note that callback functions passed as event handlers are a situation where the difference between the arrow syntax and regular anonymous function syntax really matters.  In the body of the arrow function above `this` will be bound to the context of the caller, which is probably what you want if you are coding a class for a reusable component.  
 
+Here's a situation where this makes a difference.  Recall that JavaScript functions are just objects.  Therefore, we can also assign properties to them.  We can do this from with the function itself using the `this` keyword:
+
+```javascript
+function Counter() {
+    this.count = 0;
+    setInterval(function increment() {
+        console.log(this.count++)
+    }, 500);
+}
+const ctr = new Counter();
+```
+
+But, if I run this program at a console, I get the following, each line emitted 500 milliseconds apart:
+
+> NaN  
+> NaN  
+> NaN  
+> ...  
+
+This occurs because the `this` inside the function passed to `setInterval` is referring to the first function enclosing its scope, i.e. the `increment` function.  Since `increment` has no count property, we are trying to apply `++` to `undefined` and the result is `NaN` (Not a Number).  
+
+Arrow functions have different scoping rules `this`, that is, they take the `this` of the enclosing scope, so in the following we get the expected behaviour:
+
+```javascript
+
+function Counter() {
+    this.count = 0;
+    setInterval(()=>console.log(this.count++), 500);
+}
+new Counter();
+```
+
+> 0  
+> 1
+> 2  
+> ...
+
 ### Continuations
 
 Continuations are functions which, instead of returning the result of a computation directly to the caller, pass the result on to another function, specified by the caller.  
