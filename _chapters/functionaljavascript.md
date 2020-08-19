@@ -40,7 +40,7 @@ In languages without compilers that specifically guard against them, side effect
 
 We'll see more examples in actual code below.
 
-## Function Purity vs Side Effects
+## Function Purity and Referential Transparency
 
 A *pure function*:
 
