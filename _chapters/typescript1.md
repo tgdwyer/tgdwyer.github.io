@@ -376,8 +376,17 @@ The following version of [`curry`](/higher-order-functions#curried-functions) us
 
 ```typescript
 function curry<U,V,W>(f:(x:U,y:V)=>W): (x:U)=>(y:V)=>W {
-  return x=>y=>f(x,y)
-  // return x=>y=>f(y,x) -- ERROR!
+  return x=>y=>f(y,x) // error!
+}
+```
+The TypeScript compiler underlines `y,x` and says:
+> Error: Argument of type 'V' is not assignable to parameter of type 'U'. 'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+
+So it's complaining that our use of a `y:V` into a parameter that should be a `U` and vice-versa for `x`.  We flip them back and we are good again... but TypeScript helps us make sure we use the function consistently too:
+
+```typescript
+function curry<U,V,W>(f:(x:U,y:V)=>W): (x:U)=>(y:V)=>W {
+  return x=>y=>f(x,y) // good now!
 }
 
 function prefix(s: string, n: number) {
@@ -386,7 +395,16 @@ function prefix(s: string, n: number) {
 
 const first = curry(prefix)
 
-first(hello)(3) // ERROR!
+first(3)("hello") // Error!
+```
+
+>Error: Argument of type 'number' is not assignable to parameter of type 'string'.  
+>Error: Argument of type 'string' is not assignable to parameter of type 'number'.
+
+So the error messages are similar to above, but now they list concrete types because the types for `U` and `V` have already been narrowed by the application of `curry` to `prefix`.
+
+```ts
+first("hello")(3) // good now!
 ```
 
 So type checking helps us to create functions correctly, but also to use them correctly.
