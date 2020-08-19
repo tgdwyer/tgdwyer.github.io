@@ -386,7 +386,7 @@ function prefix(s: string, n: number) {
 
 const first = curry(prefix)
 
-first(hello)(3) // ERROR!
+first("hello")(3) // ERROR!
 ```
 
 So type checking helps us to create functions correctly, but also to use them correctly.
