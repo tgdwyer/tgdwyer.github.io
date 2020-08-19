@@ -17,7 +17,8 @@ title: "Notes on Programming Paradigms"
 - Understand and use basic JavaScript coding concepts and features
 - Understand the difference between [mutable and immutable (const) variables](/javascript1#declaring-variables)
 - Explain the relationship between javascript [functions](/javascript1#functions) and [objects](/javascript1#objects)
-- Understand function scope and the concept of a [closure](/javascript1#closures)
+- Understand that the scope of is limited variables to [delineated code blocks](/javascript1/variable-scope) and within [functions](/javascript1#functions)
+- Understand that a [closure](/javascript1#closures) captures variables referenced within its scope
 - Create and apply [anonymous functions](/javascript1#anonymous-functions) to fluent style code
 - Compare [arrow functions](/javascript1#arrow-functions) and regular function syntax
 - Explain JavaScript’s [prototype mechanism](/javascript1#prototype-class-mechanism) for creating classes from functions

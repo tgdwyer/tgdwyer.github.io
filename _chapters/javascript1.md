@@ -6,14 +6,15 @@ permalink: /javascript1/
 ## Learning Outcomes
 
 - Understand and use basic JavaScript coding concepts and features
-- Understand the difference between [mutable and immutable (const) variables](#declaring-variables)
-- Explain the relationship between javascript [functions](#functions) and [objects](#objects)
-- Understand function scope and the concept of a [closure](#closures)
-- Create and apply [anonymous functions](#anonymous-functions) to fluent style code
-- Compare [arrow functions](#arrow-functions) and regular function syntax
-- Explain JavaScript’s [prototype mechanism](#prototype-class-mechanism) for creating classes from functions
-- Create [ES6 style classes](#ecmascript-6-class-syntax) with constructors and getters
-- Compare object oriented [polymorphism](#polymorphism) to [dependency injection](#dependency-injection) through functions
+- Understand the difference between [mutable and immutable (const) variables](/javascript1#declaring-variables)
+- Explain the relationship between javascript [functions](/javascript1#functions) and [objects](/javascript1#objects)
+- Understand that the scope of is limited variables to [delineated code blocks](/javascript1/variable-scope) and within [functions](/javascript1#functions)
+- Understand that a [closure](/javascript1#closures) captures variables referenced within its scope
+- Create and apply [anonymous functions](/javascript1#anonymous-functions) to fluent style code
+- Compare [arrow functions](/javascript1#arrow-functions) and regular function syntax
+- Explain JavaScript’s [prototype mechanism](/javascript1#prototype-class-mechanism) for creating classes from functions
+- Create [ES6 style classes](/javascript1#ecmascript-6-class-syntax) with constructors and getters
+- Compare object oriented [polymorphism](/javascript1#polymorphism) to [dependency injection](/javascript1#dependency-injection) through functions
 
 ## Introduction
 
@@ -93,7 +94,8 @@ x = 'hello'
 
 ## Variable scope
 
-You can limit the visibility of a variable to a specific part of a program by declaring it inside a block of code delineated by curly braces:
+A variable's *scope* is the region of the program where it is visible, i.e. it can be referenced.
+You can limit the scope of a variable by declaring it inside a block of code delineated by curly braces:
 
 ```javascript
  {
@@ -178,7 +180,7 @@ x += <expr>
 
 ## Functions
 
-Functions are declared with the `function` keyword.  You can give the function a name followed by a tuple of zero or more parameters.  The scope of the function is marked by a matching pair of curly braces `{ … }`.  You return the result with the `return` keyword.
+Functions are declared with the `function` keyword.  You can give the function a name followed by a tuple of zero or more parameters.  Variables declared within the function's body (marked by a matching pair of curly braces `{ … }`) are limited to the scope of that function body, but of course the parameters to the function are also in scope within the function body.  You return the result with the `return` keyword.
 
 ```javascript
 /**
