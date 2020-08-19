@@ -513,8 +513,10 @@ let value; // has implicit <any> type
 value = "hello";
 value = 123;
 // no error.
+```
 
-Or the source (r-value):
+Or the source (r-value) of the assignment:
+```
 let value: number;
 value = "hello";
 //[ts] Type '"hello"' is not assignable to type 'number'.
