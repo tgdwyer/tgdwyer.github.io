@@ -66,7 +66,7 @@ Pure functions and referential transparency are perhaps most easily illustrated 
 ```
 
 Furthermore, the very imperative style computation at the line marked with `*` is not pure.
-It has two effects: incrementing `i` and mutating `b`.
+It has two effects: incrementing `i` and mutating `a`.
 You could not simply replace the expression with the value computed by the expression and have the program work in the same way.
 This piece of code does not have the property of *referential transparency*.
 
