@@ -41,7 +41,7 @@ add9(1)
 They are called "higher-order" because they are functions which operate on other functions.
 Higher-order functions are a very powerful feature and central to the functional programming paradigm.  
 
-Being able to pass functions into other functions enables code customisability and reuse.  For example, a sort function which allows the caller to pass in a comparison function can easily be mode to sort in increasing or decreasing order, or to sort data elements on an arbitrary attribute.
+Being able to pass functions into other functions enables code customisability and reuse.  For example, a sort function which allows the caller to pass in a comparison function can easily be made to sort in increasing or decreasing order, or to sort data elements on an arbitrary attribute.
 
 Functions that can create new functions gives rise to all sorts of emergent power, such as the ability to customise, compose and combine functions in very useful ways.  We will see this later when we look at [function composition](/higherorderfunctions#composition) and [combinators](/higherorderfunctions#combinators).
 
