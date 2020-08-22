@@ -37,7 +37,6 @@ of(1,2,3,4)
 > 2  
 > 3  
 > 4  
-> 5
 
 So, there is a similarity to the [lazy sequence](lazyevaluation) where nothing happened until we started calling ```next```, but there is also a difference.
 You could think of our lazy sequences as being "pull-based" data structures, because we had to "pull" the values out one at a time by calling the ```next``` function as many times as we wanted elements of the list.  Observables are a bit different.  They are used to handle "streams" of things, such as asynchronous UI or communication events.  These things are asynchronous in the sense that we do not know when they will occur.  
@@ -71,7 +70,7 @@ range(1000)
 
 > 233168
 
-Scan is very much like the reduce function on Array in that it applies an accumulator function to the elements coming through the Observable, except instead of just outputting a single value (as ```reduce``` does), it emits a stream of the running accumulation (in the case the sum so far).  Thus, we use the ```last``` function to finally produce an observable with the final value.
+Scan is very much like the ```reduce``` function on Array in that it applies an accumulator function to the elements coming through the Observable, except instead of just outputting a single value (as ```reduce``` does), it emits a stream of the running accumulation (in this case, the sum so far).  Thus, we use the ```last``` function to finally produce an Observable with the final value.
 
 There are also functions for combining Observable streams.  For example, ```flatMap``` gives us a way to take, for every element of a stream, a whole other stream, but flattened (or projected) together with the parent stream.  The following enumerates all the row/column indices of cells in a spreadsheet:
 
@@ -114,7 +113,7 @@ columns.pipe(
 
 However, as we will see in later examples ```merge``` when applied to asynchronous streams will merge the elements in the order that they arrive in the stream.
 
-To see something more interesting we need some asynchronous streams.  For example, a stream of key- and mouse-down events from a web-page:
+To see something more interesting we need some asynchronous streams.  For example, a stream of key-down and mouse-down events from a web-page:
 
 ```javascript
 const
@@ -123,7 +122,7 @@ const
 ```
 It's a convention to end variable names refering to Observable streams with a ```$``` (I like to think it's short for "$tream"):
 
-The following lets us see in the console the keys be pressed as they come in, it will keep running for as long as the web page is open:
+The following lets us see in the console the keys pressed as they come in, it will keep running for as long as the web page is open:
 
 ```javascript
 key$.pipe(
