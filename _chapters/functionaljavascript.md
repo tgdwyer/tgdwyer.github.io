@@ -350,7 +350,7 @@ const
     rest = list=> list((_,r)=>r)
 ```
 
-Now, ```head``` gives us the first data element from the list, and rest gives us another list.  Now we can access things in the list like so:
+Now, ```head``` gives us the first data element from the list, and ```rest``` gives us another list.  Now we can access things in the list like so:
 
 ```javascript
 const one = head(list123), // ===1
