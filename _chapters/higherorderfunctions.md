@@ -169,7 +169,7 @@ Note that compose let us define roundFloat without any messing around with anony
 
 ## Exercise
 
-* Create a ```compose``` function in javascript that takes a variable number of functions as arguments and composes (chains) them.  Using the spread operator (...) to take a variable number of arguments as an array and the Array.prototype.reduce method, the function should be very small.  Note that you won’t be able to give this a satisfactory type in TypeScript until TypeScript supports [variadic kinds](https://github.com/Microsoft/TypeScript/issues/5453).
+* Create a ```compose``` function in javascript that takes a variable number of functions as arguments and composes (chains) them.  Using the spread operator (...) to take a variable number of arguments as an array and the Array.prototype.reduce method, the function should be very small.
 
 * Create a ```pipe``` function which composes its arguments in the opposite order to the ```compose``` function above.  That is, left-to-right.  Note that in [rx.js](https://www.learnrxjs.io/), such a ```pipe``` function is an important way to create chains of operations (over Observable streams).
 
