@@ -83,3 +83,33 @@ Registers are locations on the CPU with very low-latency access due to their phy
 Turing Machines are a conceptual model of computation based on a physical analogy of tapes being written to and read from as they feed through a machine.  The operations written on the tape determine the machine's operation.  The von Neumann model of computation is has in common with Turing Machines that it follows an imperitive paradigm of sequential instruction execution, but it is a practical model upon which most modern computers base their architecture.
 
 There are other models of computation that are also useful.  In particular, we will look at the [Lambda Calculus](/lambdacalculus), which was roughly a contemporary of these other models but based on mathematical functions, their application and composition.  We will see that while imperative programming languages are roughly abstractions of machine architecture, functional programming languages provide an alternative abstraction built upon the rules of the lambda calculus.  
+
+## Alternative Abstractions
+
+Humans think about programs in a different way to machines.
+Machines can read thousands or millions of instructions per second and execute them tirelessly and with precision.
+Humans need to understand programs at a higher level, and relate the elements of the program back to the semantics of the task and the ultimate goal.
+There is a clear and overwhelmingly agreed-upon need to create human-readable and writable languages which abstract away the details of the underlying computation into chunks that people can reason about.  However, there are many ways to create these abstractions.
+
+### Comparing the Dominant Programming Paradigms
+
+The following is a traditional view from the perspective of Functional Programming (FP) versus Object Oriented (OO) languages.  From the 1990s to... well it still is... Object Oriented programming has been arguably the dominant paradigm.  Programmers and system architects have found organising their programs and data into class hierarchies a natural way to model everything from simulations, to games, to business rules.  But this focus on creating rigid structures around data is a static view of the world which becomes messy when dealing with dynamic state.  Functional programming, however, focuses on functions as *transformations* of data.  These two alternatives, Object-Oriented versus Functional, have been described as [a Kindom of Nouns versus a Kingdom of Verbs](http://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html), respectively, where nouns are descriptions of data and verbs are functions.
+
+Historically these were seen as competing paradigms, leading to quite different languages such as C++ and Haskell.  However, modern languages like TypeScript, Scala, C++17, Java >8, Swift, Rust, etc, provide facilities for both paradigms for you to use (or abuse) as you please.
+
+Thus, these are no longer competing paradigms. Rather they are complementary, or at-least they can be depending on the skill of the programmer.  They provide programmers with a choice of abstractions to apply as necessary to better manage complexity and achieve robust, reusable, scalable and maintainable code.
+
+These notes focus on introducing programmers who are familiar with the OO paradigm to FP concepts via the ubiquitous multiparadigm language of JavaScript.  The following table functions as a summary but also an overview of the contents of these notes with links to relevant sections.
+
+
+|  | Functional | Object-Oriented |
+|--|------------|-----------------|
+| Unit of Composition  | [Functions](/javascript1/#functions)  |  [Objects](javascript1#objects) ([classes](/javascript1/#ecmascript-6-class-syntax)) |
+| Programming Style    | Declarative | Imperative |
+| Control Flow         |  [Functions, recursion](/javascript1/#functions) and [chaining](/functionaljavascript/#method-chaining) | [Loops and conditionals](/javascript1/) |
+|  [Polymorphism](Polymorphism)        | [Parametric](/typescript1/#generic-types) | [Sub-Typing](Polymorphism) |
+| Data and Behaviour   | Loosely coupled through [pure](/functionaljavascript/#function-purity-and-referential-transparency), [generic](/typescript1/#generic-types) functions | Tightly coupled in [classes with methods](/javascript1/#ecmascript-6-class-syntax) |
+| State Management     | Treats objects as immutable | Favours mutation of objects through instance methods |
+|  Thread Safety       | Pure functions easily used concurrently | Can be difficult to manage |
+|  Encapsulation       | Less essential | Needed to protect data integrity |
+| Model of Computation | [Lambda Calculus](/lambdacalculus/)  | Imperative (von Neumann)  |

@@ -9,8 +9,9 @@ title: "Notes on Programming Paradigms"
 ## [Levels of Abstraction](/levelsofabstraction) 
 
 - Understand the motivation for different programming paradigms: to abstract machine operation into human understandable and composable programs
-- Understand the difference between *syntax* the textual symbols and grammatical rules of a program, and *semantics* the meaning of what is computed
+- Understand the difference between *syntax*, the textual symbols and grammatical rules of a program, and *semantics*, the meaning of what is computed
 - Understand that there are different models of computation upon which different programming languages are based, including machine models such as Turing Machines and von Neumann architecture, and the Lambda Calculus based on mathematical functions.
+- Compare the dominant paradigms of [Functional and Objected-Oriented Programming](/levelsofabstraction/#alternative-abstractions) in terms of how they abstract data and behaviour.
 
 ## [Introduction to JavaScript](/javascript1)
 
