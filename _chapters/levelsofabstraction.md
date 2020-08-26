@@ -112,4 +112,4 @@ These notes focus on introducing programmers who are familiar with the OO paradi
 | State Management     | Treats objects as immutable | Favours mutation of objects through instance methods |
 |  Thread Safety       | Pure functions easily used concurrently | Can be difficult to manage |
 |  Encapsulation       | Less essential | Needed to protect data integrity |
-| Model of Computation | [Lambda Calculus](/lambdacalculus/)  | Imperative (von Neumann)  |
+| Model of Computation | [Lambda Calculus](/lambdacalculus/)  | Imperative (von Neumann/Turing)  |
