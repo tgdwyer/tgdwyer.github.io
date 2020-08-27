@@ -82,9 +82,9 @@ Now consider another version of the same function:
 ```javascript
 function cylinderVolume(pi: number) {
   return function(height: number) {
-	return function(radius: number) {
-  	  return pi * radius * radius * height;
-	}
+    return function(radius: number) {
+      return pi * radius * radius * height;
+    }
   }
 }
 ```
