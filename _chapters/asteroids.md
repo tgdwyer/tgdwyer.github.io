@@ -607,7 +607,7 @@ Our initial state is going to include several rocks drifting in random direction
 
 Our `tick` function is more or less the same as above, but it will apply one more transformation to the state that it returns, by applying the following function.  This function checks for collisions between the ship and rocks, and also between bullets and rocks. 
 
-```typescript```
+```typescript
   handleCollisions = (s:State) => {
     const
       bodiesCollided = (a:Body,b:Body) => a.pos.sub(b.pos).len() < a.radius + b.radius,
