@@ -200,10 +200,10 @@ function identity<T>(value: T): T {
 
 But it has some important applications:
 
-- In order to wrap a value in a function that can be passed to other functions expecting an accessor function as input.
-- For mocking in tests.
+- Higher-order functions which take a user specified function to apply in some context ([such as our sumTo from earlier](/javascript1/#functions-as-parameters-to-other-functions)) can be passed identity to restore the default behaviour.
 - For extracting data from encapsulated types (e.g. by passing identity into map).
-- For compositional use with other combinators, as below.
+- The above scenarios are also indicative of a useful way to test such higher-order functions, broadly: "does passing the identity operator really give us back what we started with?".
+- For composition with other combinators, as below.
 
 ### K-Combinator
 
