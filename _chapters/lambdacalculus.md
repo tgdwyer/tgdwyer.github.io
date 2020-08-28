@@ -15,6 +15,8 @@ The Lambda Calculus is a model of computation developed in the 1930s by the math
 
 The Lambda Calculus is also important to study as it is the basis of functional programming.  The operations we can apply to Lambda Calculus expressions to simplify (or reduce) them, or to prove equivalence, can also be applied to pure functions in a programming language that supports [higher-order functions](/higherorderfunctions).
 
+## Lambda Expressions
+
 Lambda Calculus expressions are written with a standard system of notation.  It is worth looking at this notation before studying haskell-like languages because it was the inspiration for Haskell syntax.  Here is a simple Lambda Abstraction of a function:
 ```
  λx. x
@@ -24,11 +26,6 @@ The `λ` simply denotes the start of a function expression, then follows a list 
 ```javascript
 x => x
 ```
-
-We have already discussed combinators in JavaScript, now we can give them a more formal definition: 
-
-> a combinator is a lambda expression (function) with no free variables.
-
 -------
 ### Exercise
 
@@ -36,9 +33,9 @@ We have already discussed combinators in JavaScript, now we can give them a more
 
 -------
 
-Some things to note about such a lambda expression:
+Some things to note about such lambda expressions:
 
-* It has no name, it is anonymous.  Note that anonymous functions in languages like JavaScript and Python are also frequently called lambda expressions, or just lambdas.  Now you know why.
+* A lambda expression has no name, it is anonymous.  Note that anonymous functions in languages like JavaScript and Python are also frequently called lambda expressions, or just lambdas.  Now you know why.
 * The names of variables bound to parameters in a lambda expression are only meaningful within the context of that expression.  Thus, `λx.x` is semantically equivalent (or *alpha* equivalent) to `λy.y` or any other possible renaming of the variable.
 * Lambda functions can have multiple parameters in the parameter list, e.g.: `λxy. x y`, but they are implicitly curried (e.g. a sequence of nested univariate functions).  Thus the following are all equivalent:
 
@@ -48,11 +45,25 @@ Some things to note about such a lambda expression:
 = λx. (λy. x y)
 ```
 
+## Combinators
+
+We have already discussed combinators in JavaScript, now we can give them a more formal definition: 
+
+- A **combinator** is a lambda expression (function) with no free variables.
+
+Thus, the expression `λx. x` is a combinator because the variable `x` is bound to the parameter.  The expression `λx. x y` is not a combinator, because `y` is not bound to any parameter, it is *free*.
+
+The [`K` combinator](/higherorderfunctions/#k-combinator) which we wrote as `x=>y=>x` in JavaScript, is written `λxy. x`.
+
+## Application
+
 What can we do with such a lambda expression?  Well we can *apply* it to another expression (The same way we can *apply* anonymous functions to an argument in JavaScript):
 
 ```
 (λx. x) y
 ```
+
+Note that while in JavaScript application of a function `(x=>x)` to an argument `y` requires brackets around the argument: `(x=>x)(y)`, in the Lambda Calculus application of some expression `f` to some other expression `x` in the lambda calculus is indicated simply `f x`.  Brackets are only required to delineate the start and end of an expression.  
 
 We can reduce this expression to a simpler form by a substitution, indicated by a bit of intermediate notation.  Two types of annotations are commonly seen, you can use either (or both!):
 
@@ -72,6 +83,9 @@ The next rule arises from the observation that, for some lambda term `M` that do
 ```
 is just the same as M.  This last rule is called *eta conversion*.
 
+Note that function application is left-associative.  This means that when a Lambda expression involves more than two terms, BETA reduction is applied left to right, i.e. 
+
+```(λz.z) (λa.a a)  (λz.z b) = ( (λz.z) (λa.a a) ) (λz.z b)```.
 
 <div class="cheatsheet" markdown="1">
 ## Lambda Calculus Cheatsheet
@@ -108,6 +122,8 @@ This makes the language and its evaluation very simple.  All we (or any hypothet
 ```
 (λz.z) (λa.a a) (λz.z b)
 ⇒
+((λz.z) (λa.a a)) (λz.z b)    => Function application is left-associative
+⇒
 (z [z:=λa.a a]) (λz.z b)      => BETA Reduction
 ⇒
 (λa.a a) (λz.z b)
@@ -124,8 +140,6 @@ z b [z:=b]                    => BETA Reduction
 ⇒
 b b
 ```
-
-Note that function application is left-associative.  This means that BETA reduction is applied left to right, i.e. `( (λz.z) (λa.a a) ) (λz.z b)`.
 
 And yet, this simple calculus is sufficient to perform computation.  We can model any of the familiar programming language constructs with lambda expressions.  For example, Booleans:
 
@@ -150,6 +164,8 @@ NOT = λx. IF x FALSE TRUE
 
 These restrictions also make it a bit difficult to see how lambda calculus can be a general model for useful computation.  For example, how can we have a loop?  How can we have recursion if a lambda expression does not have any way to refer to itself?
 
+### Divergent Lambda Expressions
+
 The first hint to how loops might be possible with lambda calculus is the observation that some expressions do not simplify when beta reduced.  For example:
 ```
 ( λx . x  x) ( λy. y y)
@@ -165,7 +181,7 @@ The answer is due to the American mathematician Haskell Curry and is called the 
 -------
 ### Exercise
 
-* Try using Beta reduction on the application of the Y combinator to another function (e.g. g).  A miracle occurs!
+* Try using Beta reduction on the application of the Y combinator to another function (e.g. `g`).  A miracle occurs!
 
 -------
 If we try to directly translate the above version of the Y-combinator into JavaScript we get the following:
@@ -192,9 +208,10 @@ And bad things happen.  Why?  JavaScript uses Eager or Strict Evaluation.  This 
 ( λx. FAC ( x x ) ) ( λx. FAC ( x x ) )
 FAC ( x x ) [ x := ( λx. FAC ( x x ) ) ] 
 FAC ( ( λx. FAC ( x x ) ) ( λx. FAC ( x x ) ) ) ) 
-FAC ( FAC ( x x ) [ x := ( λx. FAC ( x x ) ) ] )             => Beta reduction by similar steps to those above
-FAC ( FAC ( FAC ( x x ) [ x := ( λx. FAC ( x x ) ) ] ) )             => and again...
-FAC ( FAC ( FAC ( FAC ( x x ) [ x := ( λx. FAC ( x x ) ) ] ) ) )              => and again...
+FAC ( FAC ( x x ) [ x := ( λx. FAC ( x x ) ) ] )                  => Beta reduction by similar steps to those above
+FAC ( FAC ( FAC ( x x ) [ x := ( λx. FAC ( x x ) ) ] ) )          => and again...
+FAC ( FAC ( FAC ( FAC ( x x ) [ x := ( λx. FAC ( x x ) ) ] ) ) )  => and again...
+...
 etc...
 ```
 
@@ -203,6 +220,6 @@ It just goes on forever, expanding nested expressions of FAC without actually in
 -------
 ### Exercise
 
-* Write a version of the Y-Combinator in JavaScript such that Y(Fac)(6) successfully evaluates to 120.
+* Write a version of the Y-Combinator in JavaScript such that Y(FAC)(6) successfully evaluates to 720.
 
 -------------
