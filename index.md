@@ -47,13 +47,6 @@ title: "Notes on Programming Paradigms"
 - Understand how this *lazy* evaluation allows for the definition of *infinite sequences*
 - Code and use lazily evaluated infinite number sequences
 
-## [Higher Order Functions](/higherorderfunctions)
-
-- Understand that [Higher-Order Functions](/higherorderfunctions/#higher-order-functions) are those which take other functions as input parameters or which return functions
-- Understand that [curried functions](/higherorderfunctions/#curried-functions) support partial application and therefore creation of functions that are partially specified for reuse scenarios.
-- Understand that a [Combinator](/higherorderfunctions/#combinators) is a higher-order function that uses only function application and earlier defined combinators to define a result from its arguments
-- Use simple Combinator functions to manipulate and compose other functions
-
 ## [Functional Reactive Programming](/functionalreactiveprogramming)
 
 - Understand that the Functional Reactive Programming Observable construct is just another container of elements, but whose "push-based" architecture allows them to be used to capture asynchronous behaviour
@@ -64,6 +57,13 @@ title: "Notes on Programming Paradigms"
 ## [Observable Asteroids](/asteroids)
 
 A fully worked example of FRP using rx.js Observables to create an in-browser version of a classic arcade game.
+
+## [Combining Higher Order Functions](/higherorderfunctions)
+
+- Understand that [Higher-Order Functions](/higherorderfunctions/#higher-order-functions) are those which take other functions as input parameters or which return functions
+- Understand that [curried functions](/higherorderfunctions/#curried-functions) support partial application and therefore creation of functions that are partially specified for reuse scenarios.
+- Understand that a [Combinator](/higherorderfunctions/#combinators) is a higher-order function that uses only function application and earlier defined combinators to define a result from its arguments
+- Use simple Combinator functions to manipulate and compose other functions
 
 ## [Lambda Calculus](/lambdacalculus)
 
