@@ -43,8 +43,9 @@ title: "Notes on Programming Paradigms"
 
 ## [Higher Order Functions](/higherorderfunctions)
 
-- Understand that Higher-Order Functions are those which take other functions as input parameters or which return functions
-- Understand that a Combinator is a higher-order function that uses only function application and earlier defined combinators to define a result from its arguments
+- Understand that [Higher-Order Functions](/higherorderfunctions/#higher-order-functions) are those which take other functions as input parameters or which return functions
+- Understand that [curried functions](/higherorderfunctions/#curried-functions) support partial application and therefore creation of functions that are partially specified for reuse scenarios.
+- Understand that a [Combinator](/higherorderfunctions/#combinators) is a higher-order function that uses only function application and earlier defined combinators to define a result from its arguments
 - Use simple Combinator functions to manipulate and compose other functions
 
 ## [Lazy Evaluation](/lazyevaluation)
