@@ -215,11 +215,18 @@ FAC ( FAC ( FAC ( FAC ( x x ) [ x := ( λx. FAC ( x x ) ) ] ) ) )  => and again.
 etc...
 ```
 
-It just goes on forever, expanding nested expressions of FAC without actually invoking it and forcing evaluation of the expression involving n (FAC) that would otherwise cause it to terminate.  How do we restore the laziness necessary to make progress in this recursion? (hint: it involves wrapping some part of Y in another lambda.
+It just goes on forever, expanding nested expressions of `FAC` without actually invoking it and forcing evaluation of the expression involving n (`FAC`) that would otherwise cause it to terminate.  How do we restore the laziness necessary to make progress in this recursion? 
+
+(**Hint:** it involves wrapping some part of `Y` in another lambda)
+
+OK, if you already figured it out yourself then, great, you should probably go into combinatory-logic research.  For the rest of us though, here's a bigger hint:
+
+(**Bigger hint:** there's another famous combinator called `Z` which is basically `Y` adapted to work with strict evaluation: `Z=λf.(λx.f(λv.xxv))(λx.f(λv.xxv))`.  )
 
 -------
-### Exercise
+### Exercises
 
-* Write a version of the Y-Combinator in JavaScript such that Y(FAC)(6) successfully evaluates to 720.
+* Note the similarities between `Y` and `Z` and perform a similar set of Beta reductions on `Z FAC` to see how it forces FAC to be evaluated.
+* Write a version of the Z-Combinator in JavaScript such that `Z(FAC)(6)` successfully evaluates to `720`.
 
 -------------
