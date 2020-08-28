@@ -67,14 +67,14 @@ A fully worked example of FRP using rx.js Observables to create an in-browser ve
 
 ## [Lambda Calculus](/lambdacalculus)
 
-* Understand that the lambda calculus provides a complete model of computation
-* Relate the lambda calculus to functional programming
-* Apply conversion and reduction rules to simplify lambda expressions
+- Understand that the lambda calculus provides a complete model of computation
+- Relate the lambda calculus to functional programming
+- Apply conversion and reduction rules to simplify lambda expressions
 
 ## [From JavaScript to Haskell (via PureScript)](/purescript)
 
-* Compare a lambda-calculus inspired Haskell-like language (PureScript) with the functional programming concepts explored earlier in JavaScript
-* Understand how tail call optimisation is applied in languages which support it
+- Compare a lambda-calculus inspired Haskell-like language (PureScript) with the functional programming concepts explored earlier in JavaScript
+- Understand how tail call optimisation is applied in languages which support it
 
 ## [Creating and Running Haskell Programs](/haskell1)
 

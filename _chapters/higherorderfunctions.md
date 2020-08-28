@@ -373,7 +373,27 @@ But we'll leave trying it out as an exercise.
 Uncurried functions of two parameters can be called Binary functions.  Functions of only one parameter can therefore be called Unary functions.  Note that all of our curried functions are unary functions, which return other unary functions.
 We've seen situations now where curried functions are flexibly combined to be used in different situations.  
 
-Note that in JavaScript you sometimes see casual calls to binary functions but with only one parameter specified.  Inside the called function the unspecified parameter will simply be `undefined` which is fine if the case of that parameter being `undefined` is expected and handled.  Conversely, we also sometimes see additional parameters passed to unary functions 
+Note that in JavaScript you sometimes see casual calls to binary functions but with only one parameter specified.  Inside the called function the unspecified parameter will simply be `undefined` which is fine if the case of that parameter being `undefined` is handled in a way that does not cause an error or unexpected results, e.g.: 
+
+```javascript
+function binaryFunc(x,y) {console.log(`${x} ${y}`) }
+binaryFunc("Hello", "World")
+binaryFunc("Hello")
+```
+
+> Hello World  
+> Hello undefined
+
+Conversely, javascript allows additional parameters to be passed to unary functions which will then simply be unused, e.g.:
+
+```javascript
+function unaryFunc(x) { console.log(x) }
+unaryFunc("Hello")
+unaryFunc("Hello", "World")
+```
+> Hello  
+> Hello
+
 But, here’s an interesting example where mixing up unary and binary functions in JavaScript's very forgiving environment can go wrong.
 
 ```javascript

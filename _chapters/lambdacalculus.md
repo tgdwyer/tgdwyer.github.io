@@ -40,20 +40,22 @@ Some things to note about such a lambda expression:
 
 * It has no name, it is anonymous.  Note that anonymous functions in languages like JavaScript and Python are also frequently called lambda expressions, or just lambdas.  Now you know why.
 * The names of variables bound to parameters in a lambda expression are only meaningful within the context of that expression.  Thus, `λx.x` is semantically equivalent (or *alpha* equivalent) to `λy.y` or any other possible renaming of the variable.
-* Lambda functions can have multiple parameters in the parameter list, e.g.: `λxy. x y`, but they are curried (e.g. a sequence of nested univariate functions) such that 
+* Lambda functions can have multiple parameters in the parameter list, e.g.: `λxy. x y`, but they are implicitly curried (e.g. a sequence of nested univariate functions).  Thus the following are all equivalent:
 
 ```
-λxy. x y 
-= λx. λy. x y 
+λxy. x y
+= λx. λy. x y
 = λx. (λy. x y)
 ```
 
 What can we do with such a lambda expression?  Well we can *apply* it to another expression (The same way we can *apply* anonymous functions to an argument in JavaScript):
+
 ```
 (λx. x) y
 ```
 
 We can reduce this expression to a simpler form by a substitution, indicated by a bit of intermediate notation.  Two types of annotations are commonly seen, you can use either (or both!):
+
 ```
 (λx. x) y      [x:=y]    -- an annotation on the right showing the substitution that will be applied to the expression on the left
 (λx [x:=y].x)            -- an annotation inside the parameter list showing the substitution that will be performed inside the body (arguments have already been removed)
