@@ -41,18 +41,18 @@ title: "Notes on Programming Paradigms"
 - Compare and contrast strongly, dynamically and gradually typed languages.
 - Describe how compilers that support type inference assist us in writing type safe code.
 
+## [Lazy Evaluation](/lazyevaluation)
+
+- Understand how functions can be used to delay evaluation of code until the result is actually required
+- Understand how this *lazy* evaluation allows for the definition of *infinite sequences*
+- Code and use lazily evaluated infinite number sequences
+
 ## [Higher Order Functions](/higherorderfunctions)
 
 - Understand that [Higher-Order Functions](/higherorderfunctions/#higher-order-functions) are those which take other functions as input parameters or which return functions
 - Understand that [curried functions](/higherorderfunctions/#curried-functions) support partial application and therefore creation of functions that are partially specified for reuse scenarios.
 - Understand that a [Combinator](/higherorderfunctions/#combinators) is a higher-order function that uses only function application and earlier defined combinators to define a result from its arguments
 - Use simple Combinator functions to manipulate and compose other functions
-
-## [Lazy Evaluation](/lazyevaluation)
-
-- Understand how functions can be used to delay evaluation of code until the result is actually required
-- Understand how this *lazy* evaluation allows for the definition of *infinite sequences*
-- Code and use lazily evaluated infinite number sequences
 
 ## [Functional Reactive Programming](/functionalreactiveprogramming)
 
