@@ -176,7 +176,7 @@ Thus, the reduction would go on forever.  Such an expression is said to be diver
 
 The answer is due to the American mathematician Haskell Curry and is called the fixed-point or Y combinator:
 ```
- λf. ( x . f (x x) ) ( x. f (x x) )
+ λf. (  λx . f (x x) ) (  λx. f (x x) )
 ```
 -------
 ### Exercise
