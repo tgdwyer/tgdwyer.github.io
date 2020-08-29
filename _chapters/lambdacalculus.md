@@ -88,27 +88,33 @@ Note that function application is left-associative.  This means that when a Lamb
 ```(λz.z) (λa.a a)  (λz.z b) = ( (λz.z) (λa.a a) ) (λz.z b)```.
 
 <div class="cheatsheet" markdown="1">
+
 ## Lambda Calculus Cheatsheet
 
 Three operations can be applied to lambda expressions:
 
 **Alpha Equivalence** variables can be arbitrary renamed as long as the names remain consistent within the expression.
-```
+
+```lambda
 λxy.yx = λwv.vw
 ```
 
 **Beta Reduction** functions are applied to their arguments by substituting the text of the argument in the body of the function
-```
+
+```lambda
 (λx. x) y
-= (λx [x:=y]. x)
+= (λx [x:=y]. x)     - we indicate the substitution that is going to occur inside []
+= x [x:=y]           - an alternative way to show the substitution
 = y
 ```
 
 **Eta Conversion** functions that simply apply another expression to their argument can be substituted with the expression in their body.
-```
+
+```lambda
 λx . M  x
 = M
 ```
+
 </div>
 
 One thing to note about the lambda calculus is that it does not have any such thing as a global namespace.  All variables must be:
@@ -141,30 +147,56 @@ z b [z:=b]                    => BETA Reduction
 b b         => Beta normal form, cannot be reduced again.
 ```
 
-And yet, this simple calculus is sufficient to perform computation.  We can model any of the familiar programming language constructs with lambda expressions.  For example, Booleans:
+## Church Encodings
 
-```
+And yet, this simple calculus is sufficient to perform computation.  Alonzo Church demonstrated that we can model any of the familiar programming language constructs with lambda expressions.  For example, Booleans:
+
+```lambda
 TRUE = λxy.x
 FALSE = λxy.y
 ```
 
 Note that we are using the same trick here that we used with the head and rest functions for our cons list, i.e. returning either the first or second parameter to make a choice between two options.  Now we can make an IF expression:
 
-```
+```lambda
 IF = λbtf.b t f
 ```
 
 `IF TRUE` returns the expression passed in as `t` and `IF FALSE` returns the expression passed in as `f`.  Now we can make Boolean operators:
 
-```
+```lambda
 AND = λxy. IF x  y FALSE
 OR = λxy. IF x TRUE y 
 NOT = λx. IF x FALSE TRUE
 ```
 
-These restrictions also make it a bit difficult to see how lambda calculus can be a general model for useful computation.  For example, how can we have a loop?  How can we have recursion if a lambda expression does not have any way to refer to itself?
+And now we can evaluate logical expressions with beta reduction:
 
-### Divergent Lambda Expressions
+```lambda
+NOT TRUE
+= (λx. IF x FALSE TRUE) TRUE
+= IF TRUE FALSE TRUE
+= (λbtf.b t f) TRUE FALSE TRUE
+= b t f [b:=TRUE,t:=FALSE,f:=TRUE]
+= TRUE FALSE TRUE
+= (λxy.x) FALSE TRUE
+= x [x:=FALSE,y:=TRUE]
+= FALSE
+```
+
+---
+
+### Exercises
+
+* Try using beta reduction to compute some more logical expressions.  E.g. make an expression for XOR.
+* Our JavaScript `cons` lists were based on Church Encodings for linked lists.  Try writing the `cons`, `head` and `rest` functions as Lambda expressions.
+* Investigate [Church Numerals](https://en.wikipedia.org/wiki/Church_encoding) and try using lambda calculus to compute some basic math.
+
+---
+
+## Divergent Lambda Expressions
+
+Despite the above demonstration of evaluation of logical expressions, the restriction that lambda expressions are anonymous makes it a bit difficult to see how lambda calculus can be a general model for useful computation.  For example, how can we have a loop?  How can we have recursion if a lambda expression does not have any way to refer to itself?
 
 The first hint to how loops might be possible with lambda calculus is the observation that some expressions do not simplify when beta reduced.  For example:
 ```
@@ -207,7 +239,8 @@ Therefore, we need to wrap the recursive function in a lambda expression into wh
 It's a bit weird, let me just give you a JavaScript function which fits the bill:
 
 ```javascript
-// A function that recursively calculates 'n!'.
+// A function that recursively calculates 'n!'
+//  - but it needs to be reminded of its own name in the f parameter in order to call itself.
 const FAC = f => n => n>1 ? n * f(n-1) : 1
 ```
 Now we can make this function compute factorials like so:
