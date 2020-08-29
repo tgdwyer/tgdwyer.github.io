@@ -116,7 +116,7 @@ One thing to note about the lambda calculus is that it does not have any such th
 * Parameters from some enclosing lambda expression (note, below we start using labels to represent expressions - these are not variables, just placeholders for an expression that can be substituted for the label).
 * Immutable - there is no way to assign a new value to a variable from within a lambda expression.
 
-This makes the language and its evaluation very simple.  All we (or any hypothetical machine for evaluating lambda expressions) can do with a lambda is apply the three basic alpha, beta and eta reduction and conversion rules.  Here’s a fully worked example of applying the different rules to reduce an expression:
+This makes the language and its evaluation very simple.  All we (or any hypothetical machine for evaluating lambda expressions) can do with a lambda is apply the three basic alpha, beta and eta reduction and conversion rules.  Here’s a fully worked example of applying the different rules to reduce an expression until no more Beta reduction is possible, at which time we say it is in *beta normal form*:
 
 
 ```
@@ -138,7 +138,7 @@ z b [z:=(λz.z b)]             => BETA Reduction
 ⇒
 z b [z:=b]                    => BETA Reduction
 ⇒
-b b
+b b         => Beta normal form, cannot be reduced again.
 ```
 
 And yet, this simple calculus is sufficient to perform computation.  We can model any of the familiar programming language constructs with lambda expressions.  For example, Booleans:
@@ -176,52 +176,79 @@ Thus, the reduction would go on forever.  Such an expression is said to be diver
 
 The answer is due to the American mathematician Haskell Curry and is called the fixed-point or Y combinator:
 ```
- λf. (  λx . f (x x) ) (  λx. f (x x) )
+ Y = λf. ( λx . f (x x) ) ( λx. f (x x) )
 ```
--------
-### Exercise
 
-* Try using Beta reduction on the application of the Y combinator to another function (e.g. `g`).  A miracle occurs!
+When we apply `Y` to another function `g` we see an interesting divergence:
 
--------
-If we try to directly translate the above version of the Y-combinator into JavaScript we get the following:
+<pre class="code">
+Y g = (λf. ( λx . f (x x) ) ( λx. f (x x) ) ) g
+    = ( λx . f (x x) ) ( λx. f (x x) ) [f:=g]
+    = <b>( λx . g (x x) ) ( λx. g (x x) )</b>   <i>   -- a partial expansion of Y g, remember this...</i>
+    = g (x x) [ x:= λx. g (x x)]
+    = g ( <b>(λx. g (x x) (λx. g (x x) )</b> )     <i>-- bold part matches Y g above, so now...</i>
+    = g (Y g)
+<i>... more beta reduction as above
+... followed by substitution with Y g when we see the pattern above...</i>
+    = g (g (Y g))
+    = g (g (g (Y g)))
+<i>... etc</i>
+</pre>
+
+If we directly translate the above version of the Y-combinator into JavaScript we get the following:
 
 ```javascript
 const Y = f=> (x => f(x(x)))(x=> f(x(x))) // warning infinite recursion ahead!
 ```
 
-Which we can then try to apply as follows:
+Sow now `Y` is just a function which can be applied to another function, but what sort of function do pass into `Y`?  If we are to respect the rules of the Lambda calculus we cannot have a function that calls itself directly.  That is, because Lambda expressions have no name, they can't refer to themselves by name.
+
+Therefore, we need to wrap the recursive function in a lambda expression into which a reference to the recursive function itself can be passed as parameter.  We can then in the body of the function refer to the parameter function by name.
+It's a bit weird, let me just give you a JavaScript function which fits the bill:
 
 ```javascript
-// A simple function that recursively calculates 'n!'.
+// A function that recursively calculates 'n!'.
 const FAC = f => n => n>1 ? n * f(n-1) : 1
-const fac = Y(FAC)
-console.log(fac(6))
+```
+Now we can make this function compute factorials like so:
+```js
+FAC(FAC(FAC(FAC(FAC(FAC())))))(6)
+```
+> 720
+
+Because we gave FAC a stopping condition, we can call too many times and it will still terminate:
+```js
+FAC(FAC(FAC(FAC(FAC(FAC(FAC(FAC(FAC()))))))))(6)
+```
+> 720
+
+From the expansion of `Y g = g (g (g (...)))` it would seem that `Y(FAC)` would give us the recurrence we need. But will the JavaScript translation of the Y-combinator be able to generate this sequence of calls?  
+
+```js
+console.log(Y(FAC)(6))
 ```
 > stack overflow
 
-And bad things happen.  Why?  JavaScript uses Eager or Strict Evaluation.  This means expressions are evaluated immediately they are encountered by the interpreter.  Let’s try doing beta reduction on the y-combinator applied to the above FAC function in lambda calculus, assuming strict evaluation:
+Well we got a recurrence, but unfortunately the JavaScript engine's strict (or eager) evaluation means that we must completely evaluate Y(FAC) before we can ever apply the returned function to (6).  
+Therefore, we get an infinite loop - and actually it doesn't matter what function we pass in to Y, it will never actually be called and any stopping condition will never be checked.
 
-```
-( λf. (λx. f ( x x ) ) ( λx. f ( x x ) ) ) FAC
-( (λx. f ( x x ) ) ( λx. f ( x x ) ) ) [ f := FAC ]
-( λx. FAC ( x x ) ) ( λx. FAC ( x x ) )
-FAC ( x x ) [ x := ( λx. FAC ( x x ) ) ] 
-FAC ( ( λx. FAC ( x x ) ) ( λx. FAC ( x x ) ) ) ) 
-FAC ( FAC ( x x ) [ x := ( λx. FAC ( x x ) ) ] )                  => Beta reduction by similar steps to those above
-FAC ( FAC ( FAC ( x x ) [ x := ( λx. FAC ( x x ) ) ] ) )          => and again...
-FAC ( FAC ( FAC ( FAC ( x x ) [ x := ( λx. FAC ( x x ) ) ] ) ) )  => and again...
-...
-etc...
-```
-
-It just goes on forever, expanding nested expressions of `FAC` without actually invoking it and forcing evaluation of the expression involving n (`FAC`) that would otherwise cause it to terminate.  How do we restore the laziness necessary to make progress in this recursion? 
+It just goes on forever, expanding nested expressions of `FAC` without actually invoking it and forcing evaluation of the expression involving n (`FAC`) that would otherwise cause it to terminate.  How do we restore the laziness necessary to make progress in this recursion?
 
 (**Hint:** it involves wrapping some part of `Y` in another lambda)
 
-OK, if you already figured it out yourself then, great, you should probably go into combinatory-logic research.  For the rest of us though, here's a bigger hint:
+Did you get it?  If so, good for you!  If not, never mind, it is tricky and in fact was the subject of research papers at one time, so I'll give you a bigger hint.
 
-(**Bigger hint:** there's another famous combinator called `Z` which is basically `Y` adapted to work with strict evaluation: `Z=λf.(λx.f(λv.xxv))(λx.f(λv.xxv))`.  )
+**Bigger hint:** there's another famous combinator called `Z` which is basically `Y` adapted to work with strict evaluation:
+
+```js
+Z=λf.(λx.f(λv.xxv))(λx.f(λv.xxv))
+```
+
+## Conclusion
+
+If you want to dig deeper there is much [more written about Lambda Calculus encodings](https://www.seas.harvard.edu/courses/cs152/2015sp/lectures/lec07-encodings.pdf) of logical expressions, natural numbers, as well as the `Y` and `Z` combinators, and also [more about their implementation in JavaScript](https://blog.benestudio.co/fixed-point-combinators-in-javascript-c214c15ff2f6).  
+
+However, the above description should be enough to give you a working knowledge of how to apply the three operations to manipulate Lambda Calculus expressions, as well as an appreciation for how they can be used to reason about combinators in real-world functional style curried code.  The other important take away is that the Lambda Calculus is a turing-complete model of computation, with Church encodings demonstrating how beta-reduction can evaluate church-encoded logical and numerical expressions and the trick of the Y-combinator giving us a way to perform loops.
 
 -------
 ### Exercises
