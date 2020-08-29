@@ -27,9 +27,9 @@ The `λ` simply denotes the start of a function expression, then follows a list 
 x => x
 ```
 -------
-### Exercise
+#### Exercise
 
-* When we discussed combinators in JavaScript, we gave this function a name.  What was it? *[spoiler](/higherorderfunctions#identity-i-combinator)*
+When we discussed combinators in JavaScript, we gave this function a name.  What was it? *[spoiler](/higherorderfunctions#identity-i-combinator)*
 
 -------
 
@@ -156,7 +156,7 @@ TRUE = λxy.x    = K-combinator
 FALSE = λxy.y   = K I
 ```
 
-Note that we are making use of the K and I combinators here as we did for the head and rest functions for our [cons list(/higherorderfunctions/#k-combinator)], i.e. returning either the first or second parameter to make a choice between two options.  Now we can make an IF expression:
+Note that we are making use of the K and I combinators here as we did for the head and rest functions for our [cons list](/higherorderfunctions/#k-combinator), i.e. returning either the first or second parameter to make a choice between two options.  Now we can make an IF expression:
 
 ```lambda
 IF = λbtf.b t f
