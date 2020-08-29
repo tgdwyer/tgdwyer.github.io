@@ -152,11 +152,11 @@ b b         => Beta normal form, cannot be reduced again.
 And yet, this simple calculus is sufficient to perform computation.  Alonzo Church demonstrated that we can model any of the familiar programming language constructs with lambda expressions.  For example, Booleans:
 
 ```lambda
-TRUE = λxy.x
-FALSE = λxy.y
+TRUE = λxy.x    = K-combinator
+FALSE = λxy.y   = K I
 ```
 
-Note that we are using the same trick here that we used with the head and rest functions for our cons list, i.e. returning either the first or second parameter to make a choice between two options.  Now we can make an IF expression:
+Note that we are making use of the K and I combinators here as we did for the head and rest functions for our [cons list(/higherorderfunctions/#k-combinator)], i.e. returning either the first or second parameter to make a choice between two options.  Now we can make an IF expression:
 
 ```lambda
 IF = λbtf.b t f
@@ -174,13 +174,14 @@ And now we can evaluate logical expressions with beta reduction:
 
 ```lambda
 NOT TRUE
-= (λx. IF x FALSE TRUE) TRUE
+= (λx. IF x FALSE TRUE) TRUE       - expand NOT
+= IF x FALSE TRUE [x:=TRUE]        - beta reduction
 = IF TRUE FALSE TRUE
-= (λbtf.b t f) TRUE FALSE TRUE
-= b t f [b:=TRUE,t:=FALSE,f:=TRUE]
+= (λbtf.b t f) TRUE FALSE TRUE     - expand IF
+= b t f [b:=TRUE,t:=FALSE,f:=TRUE] - beta reduction
 = TRUE FALSE TRUE
-= (λxy.x) FALSE TRUE
-= x [x:=FALSE,y:=TRUE]
+= (λxy.x) FALSE TRUE               - expand TRUE
+= x [x:=FALSE]                     - beta reduction
 = FALSE
 ```
 
@@ -189,7 +190,7 @@ NOT TRUE
 ### Exercises
 
 * Try using beta reduction to compute some more logical expressions.  E.g. make an expression for XOR.
-* Our JavaScript `cons` lists were based on Church Encodings for linked lists.  Try writing the `cons`, `head` and `rest` functions as Lambda expressions.
+* Our JavaScript [cons list](/higherorderfunctions/#k-combinator) was based on the Church Encoding for linked lists.  Try writing the `cons`, `head` and `rest` functions as Lambda expressions.
 * Investigate [Church Numerals](https://en.wikipedia.org/wiki/Church_encoding) and try using lambda calculus to compute some basic math.
 
 ---
@@ -199,15 +200,18 @@ NOT TRUE
 Despite the above demonstration of evaluation of logical expressions, the restriction that lambda expressions are anonymous makes it a bit difficult to see how lambda calculus can be a general model for useful computation.  For example, how can we have a loop?  How can we have recursion if a lambda expression does not have any way to refer to itself?
 
 The first hint to how loops might be possible with lambda calculus is the observation that some expressions do not simplify when beta reduced.  For example:
+
+```lambda
+( λx . x  x) ( λy. y y)   - (1)
+x x [x:= y. y y]
+( λy . y  y) ( λy. y y)   - which is alpha equivalent to what we started with, so goto (1)
 ```
-( λx . x  x) ( λy. y y)
-x x [x:= y. y y] 
-( λy . y  y) ( λy. y y) - which is alpha equivalent to what we started with, so goto (1).
-```
+
 Thus, the reduction would go on forever.  Such an expression is said to be divergent.  However, if a lambda function is not able to refer to itself it is still not obvious how recursion is possible.
 
 The answer is due to the American mathematician Haskell Curry and is called the fixed-point or Y combinator:
-```
+
+```lambda
  Y = λf. ( λx . f (x x) ) ( λx. f (x x) )
 ```
 
@@ -215,10 +219,10 @@ When we apply `Y` to another function `g` we see an interesting divergence:
 
 <pre class="code">
 Y g = (λf. ( λx . f (x x) ) ( λx. f (x x) ) ) g
-    = ( λx . f (x x) ) ( λx. f (x x) ) [f:=g]
-    = <b>( λx . g (x x) ) ( λx. g (x x) )</b>   <i>   -- a partial expansion of Y g, remember this...</i>
-    = g (x x) [ x:= λx. g (x x)]
-    = g ( <b>(λx. g (x x) (λx. g (x x) )</b> )     <i>-- bold part matches Y g above, so now...</i>
+    = ( λx . f (x x) ) ( λx. f (x x) ) [f:=g]  <i>- beta reduction</i>
+    = <b>( λx . g (x x) ) ( λx. g (x x) )</b>         <i>- a partial expansion of Y g, remember this...</i>
+    = g (x x) [ x:= λx. g (x x)]               <i>- beta reduction</i>
+    = g ( <b>(λx. g (x x) (λx. g (x x) )</b> )        <i>- bold part matches Y g above, so now...</i>
     = g (Y g)
 <i>... more beta reduction as above
 ... followed by substitution with Y g when we see the pattern above...</i>
