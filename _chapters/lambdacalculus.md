@@ -231,8 +231,7 @@ console.log(Y(FAC)(6))
 
 Well we got a recurrence, but unfortunately the JavaScript engine's strict (or eager) evaluation means that we must completely evaluate Y(FAC) before we can ever apply the returned function to (6).  
 Therefore, we get an infinite loop - and actually it doesn't matter what function we pass in to Y, it will never actually be called and any stopping condition will never be checked.
-
-It just goes on forever, expanding nested expressions of `FAC` without actually invoking it and forcing evaluation of the expression involving n (`FAC`) that would otherwise cause it to terminate.  How do we restore the laziness necessary to make progress in this recursion?
+How do we restore the laziness necessary to make progress in this recursion?
 
 (**Hint:** it involves wrapping some part of `Y` in another lambda)
 
