@@ -201,7 +201,7 @@ If we directly translate the above version of the Y-combinator into JavaScript w
 const Y = f=> (x => f(x(x)))(x=> f(x(x))) // warning infinite recursion ahead!
 ```
 
-Sow now `Y` is just a function which can be applied to another function, but what sort of function do pass into `Y`?  If we are to respect the rules of the Lambda calculus we cannot have a function that calls itself directly.  That is, because Lambda expressions have no name, they can't refer to themselves by name.
+Sow now `Y` is just a function which can be applied to another function, but what sort of function do we pass into `Y`?  If we are to respect the rules of the Lambda calculus we cannot have a function that calls itself directly.  That is, because Lambda expressions have no name, they can't refer to themselves by name.
 
 Therefore, we need to wrap the recursive function in a lambda expression into which a reference to the recursive function itself can be passed as parameter.  We can then in the body of the function refer to the parameter function by name.
 It's a bit weird, let me just give you a JavaScript function which fits the bill:
@@ -239,20 +239,21 @@ Did you get it?  If so, good for you!  If not, never mind, it is tricky and in f
 
 **Bigger hint:** there's another famous combinator called `Z` which is basically `Y` adapted to work with strict evaluation:
 
-```js
+```lc
 Z=λf.(λx.f(λv.xxv))(λx.f(λv.xxv))
 ```
+
+-------
+
+### Exercises
+
+* Note the similarities between `Y` and `Z` and perform a similar set of Beta reductions on `Z FAC` to see how it forces FAC to be evaluated.
+* Write a version of the Z-Combinator in JavaScript such that `Z(FAC)(6)` successfully evaluates to `720`.
+
+-------
 
 ## Conclusion
 
 If you want to dig deeper there is much [more written about Lambda Calculus encodings](https://www.seas.harvard.edu/courses/cs152/2015sp/lectures/lec07-encodings.pdf) of logical expressions, natural numbers, as well as the `Y` and `Z` combinators, and also [more about their implementation in JavaScript](https://blog.benestudio.co/fixed-point-combinators-in-javascript-c214c15ff2f6).  
 
 However, the above description should be enough to give you a working knowledge of how to apply the three operations to manipulate Lambda Calculus expressions, as well as an appreciation for how they can be used to reason about combinators in real-world functional style curried code.  The other important take away is that the Lambda Calculus is a turing-complete model of computation, with Church encodings demonstrating how beta-reduction can evaluate church-encoded logical and numerical expressions and the trick of the Y-combinator giving us a way to perform loops.
-
--------
-### Exercises
-
-* Note the similarities between `Y` and `Z` and perform a similar set of Beta reductions on `Z FAC` to see how it forces FAC to be evaluated.
-* Write a version of the Z-Combinator in JavaScript such that `Z(FAC)(6)` successfully evaluates to `720`.
-
--------------
