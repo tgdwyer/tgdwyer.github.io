@@ -63,7 +63,7 @@ What can we do with such a lambda expression?  Well we can *apply* it to another
 (λx. x) y
 ```
 
-Note that while in JavaScript application of a function `(x=>x)` to an argument `y` requires brackets around the argument: `(x=>x)(y)`, in the Lambda Calculus application of some expression `f` to some other expression `x` in the lambda calculus is indicated simply `f x`.  Brackets are only required to delineate the start and end of an expression.  
+Note that while in JavaScript application of a function `(x=>x)` to an argument `y` requires brackets around the argument: `(x=>x)(y)`, in the Lambda Calculus application of some expression `f` to some other expression `x` is indicated simply `f x`.  Brackets are only required to delineate the start and end of an expression.  
 
 We can reduce this expression to a simpler form by a substitution, indicated by a bit of intermediate notation.  Two types of annotations are commonly seen, you can use either (or both!):
 
