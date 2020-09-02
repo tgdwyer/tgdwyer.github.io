@@ -301,15 +301,18 @@ We create an `initialState` using `CanvasSize` to start the spaceship at the cen
 ```typescript
   const initialState:State = {
       pos: new Vec(CanvasSize/2,CanvasSize/2), 
-      vel: Vec.Zero, 
-      acc: false, 
+      vel: Vec.Zero,
+      acc: Vec.Zero,
       angle:0,
       rotation:0,
       torque:0
   }
 ```
+
 # Reducing State
+
 We can encapsulate all the possible transformations of state in a function:
+
 ```typescript
   const reduceState = (s:State, e:Rotate|Thrust|Tick)=>
     e instanceof Rotate ? {...s,
