@@ -21,7 +21,7 @@ Lambda Calculus expressions are written with a standard system of notation.  It 
 ```
  λx. x
  ```
-The `λ` simply denotes the start of a function expression, then follows a list of parameters (in this case we have only a single parameter called `x`) terminated by “.”  Then follows the function body, an expression returned by the function when it is applied. The variable `x` is said to be *bound* to the parameter.  Variables that appear in the function body but not in the parameter list are said to be *free*.  The above lambda expression is equivalent to the JavaScript expression: 
+The `λ` (Greek letter Lambda) simply denotes the start of a function expression. Then follows a list of parameters (in this case we have only a single parameter called `x`) terminated by “.”  Then follows the function body, an expression returned by the function when it is applied. The variable `x` is said to be *bound* to the parameter.  Variables that appear in the function body but not in the parameter list are said to be *free*.  The above lambda expression is equivalent to the JavaScript expression: 
 
 ```javascript
 x => x
@@ -36,6 +36,7 @@ When we discussed combinators in JavaScript, we gave this function a name.  What
 Some things to note about such lambda expressions:
 
 * A lambda expression has no name, it is anonymous.  Note that anonymous functions in languages like JavaScript and Python are also frequently called lambda expressions, or just lambdas.  Now you know why.
+* The only values that Lambda Calculus variables can take on is other functions (i.e. lambda expressions).  It's lambdas all the way down!  However, to actually model and perform useful computations we say that certain expressions represent values.  See the discussion of [Church Encodings](#church-encodings), below, to see how this is done.
 * The names of variables bound to parameters in a lambda expression are only meaningful within the context of that expression.  Thus, `λx.x` is semantically equivalent (or *alpha* equivalent) to `λy.y` or any other possible renaming of the variable.
 * Lambda functions can have multiple parameters in the parameter list, e.g.: `λxy. x y`, but they are implicitly curried (e.g. a sequence of nested univariate functions).  Thus the following are all equivalent:
 
@@ -93,7 +94,7 @@ Note that function application is left-associative.  This means that when a Lamb
 
 Three operations can be applied to lambda expressions:
 
-**Alpha Equivalence** variables can be arbitrary renamed as long as the names remain consistent within the expression.
+**Alpha Equivalence** variables can be arbitrarily renamed as long as the names remain consistent within the scope of the expression.
 
 ```lambda
 λxy.yx = λwv.vw
