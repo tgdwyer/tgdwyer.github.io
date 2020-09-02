@@ -426,7 +426,7 @@ The first complication is generalising bodies that participate in the force mode
     objCount:number
   }>
 ```
-So the `ship` is a `Body`, and we will have collections of `Body` for both `bullets` and `rocks`.  What's this `exit` thing?  Well, when we remove something from the canvas, e.g. a bullet, we'll create a new state with a copy of the `bullets` array minus the removed bullet, and we'll place that removed bullet - together with other removed `Body`s to the `exit` array.  This notifies the `updateView` function that they can be removed.
+So the `ship` is a `Body`, and we will have collections of `Body` for both `bullets` and `rocks`.  What's this `exit` thing?  Well, when we remove something from the canvas, e.g. a bullet, we'll create a new state with a copy of the `bullets` array minus the removed bullet, and we'll add that removed bullet - together with any other removed `Body`s - to the `exit` array.  This notifies the `updateView` function that they can be removed.
 
 Note the `objCount`.  This counter is incremented every time we add a `Body` and gives us a way to create a unique id that can be used to match the `Body` against its corresponding view object.
 
