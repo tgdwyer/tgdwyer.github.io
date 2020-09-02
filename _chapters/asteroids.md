@@ -376,10 +376,10 @@ And here's our updated updateView function where we not only move the ship but a
       ship = document.getElementById("ship")!,
       show = (id:string,condition:boolean)=>((e:HTMLElement) => 
         condition ? e.classList.remove('hidden')
-                  : e.classList.add('hidden'))(document.getElementById(id)!),
-    show("leftThrust",  s.ship.torque<0);
-    show("rightThrust", s.ship.torque>0);
-    show("thruster",    s.ship.acc.len()>0);
+                  : e.classList.add('hidden'))(document.getElementById(id)!);
+    show("leftThrust",  s.torque<0);
+    show("rightThrust", s.torque>0);
+    show("thruster",    s.acc.len()>0); 
     ship.setAttribute('transform', `translate(${s.pos.x},${s.pos.y}) rotate(${s.angle})`);
   }
 ```
