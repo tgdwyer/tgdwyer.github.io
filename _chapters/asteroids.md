@@ -302,7 +302,7 @@ We create an `initialState` using `CanvasSize` to start the spaceship at the cen
   const initialState:State = {
       pos: new Vec(CanvasSize/2,CanvasSize/2), 
       vel: Vec.Zero, 
-      thrust: false, 
+      acc: false, 
       angle:0,
       rotation:0,
       torque:0
