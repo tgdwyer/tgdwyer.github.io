@@ -316,15 +316,16 @@ We can encapsulate all the possible transformations of state in a function:
 ```typescript
   const reduceState = (s:State, e:Rotate|Thrust|Tick)=>
     e instanceof Rotate ? {...s,
-      torque:e.direction
+      torque: e.direction
     } :
     e instanceof Thrust ? {...s,
-      thrust:e.on
+      acc:e.on ? Vec.unitVecInDirection(s.angle).scale(0.05)
+               : Vec.Zero
     } : {...s,
       rotation: s.rotation+s.torque,
-      angle:s.angle+s.rotation,
-      pos: torusWrap(s.pos.sub(s.vel)),
-      vel:s.thrust?s.vel.sub(Vec.unitVecInDirection(s.angle).scale(0.05)):s.vel
+      angle: s.angle+s.rotation,
+      pos: torusWrap(s.pos.add(s.vel)),
+      vel: s.vel.add(s.acc)
     };
 ```
 And finally we `merge` our different inputs and scan over `State`, and the final `subscribe` calls the `updateView`, once again, a self-contained function which does whatever is required to render the State.  We describe the updated `updateView` in the next section.
