@@ -12,11 +12,13 @@ permalink: /purescript/
 
 ## Introduction
 
-JavaScript is a multiparadigm language that due to its support for functions as objects, closures and, therefore, higher-order functions, is able to be used as in a functional programming style.  However, if you are really enamored with currying and combining higher-order functions, then it really makes a lot of sense to use a language that is actually designed for it.
+JavaScript is a multiparadigm language that—due to its support for functions as objects, closures and, therefore, higher-order functions—is able to be used in a functional programming style.  However, if you are really enamoured with currying and combining higher-order functions, then it really makes a lot of sense to use a language that is actually designed for it.
 
-There are a number of purpose-built Functional Programming languages.  Lisp (as we have already discussed) is the original, but there are many others.  Scheme is a Lisp derivative, as is (more recently) Clojure.  SML and its derivatives (e.g. OCAML, F#, etc) form another family of functional programming languages.  However, the strongest effort to build a language that holds to the principles of lambda-calculus inspired functional programming such as immutability (purity) is the Haskell family.  There are a number of efforts to bring haskell-like purity to web programming, inspired by the potential benefits the functional-style holds for managing complex state in asynchronous and distributed applications.  Firstly, it is possible to compile haskell code directly to JavaScript (using GHCJ) although the generated code is opaque and requires a runtime.  Another promising and increasingly popular haskell-inspired language for client-side web development is Elm, although this again requires a runtime.  Also, Elm is rather specialised for creating interactive web apps.
+There are a number of purpose-built Functional Programming languages.  Lisp (as we have already discussed) is the original, but there are many others.  [Scheme](https://www.scheme.com/tspl4/) is a Lisp derivative, as is (more recently) [Clojure](https://clojure.org/).  SML and its derivatives (e.g. [OCaml](https://ocaml.org/), [F#](https://fsharp.org/), etc.) form another family of functional programming languages.  However, the strongest effort to build a language that holds to the principles of lambda-calculus inspired functional programming such as immutability (purity) is the Haskell family.  
 
-The JavaScript targeting Haskell derivative we are going to look at now is PureScript.  The reason for this choice is that PureScript generates standalone and surprisingly readable JavaScript.  For a full introduction to the language, [the PureScript Book](https://leanpub.com/purescript/read), written by the language’s creator, is available for free.  However, in this unit we will only make a brief foray into PureScript as a segue from JavaScript to Haskell.  To avoid overwhelming ourselves with minor syntactic differences we will also endeavor to stick to a subset of PureScript that is syntactically the same as Haskell.
+There are a number of efforts to bring Haskell-like purity to web programming, inspired by the potential benefits the functional-style holds for managing complex state in asynchronous and distributed applications.  Firstly, it is possible to compile Haskell code directly to JavaScript (using [GHCJS](https://github.com/ghcjs/ghcjs)) although the generated code is opaque and requires a runtime.  Another promising and increasingly popular haskell-inspired language for client-side web development is [Elm](https://elm-lang.org/), although this again requires a runtime.  Also, Elm is rather specialised for creating interactive web apps.
+
+The JavaScript-targeting Haskell derivative we are going to look at now is [PureScript](https://www.purescript.org/).  The reason for this choice is that PureScript generates standalone and surprisingly readable JavaScript.  For a full introduction to the language, [the PureScript Book](https://leanpub.com/purescript/read), written by the language’s creator, is available for free.  However, in this unit we will only make a brief foray into PureScript as a segue from JavaScript to Haskell.  To avoid overwhelming ourselves with minor syntactic differences we will also endeavor to stick to a subset of PureScript that is syntactically the same as Haskell.
 
 ## Hello Functional Language!
 
@@ -29,37 +31,37 @@ fibs 1 = 1
 fibs n = fibs (n-1) + fibs (n-2)
 ```
 
-Woah!  A function for Fibonacci numbers that is about as minimal as you can get!  And the top line, which just declares the type of the function, is often optional - depending on whether the compiler can infer it from the context.  Having said that, it’s good practice to include a type declaration, especially for top-level functions.  This function takes an Int parameter, and returns an Int.  Note that the arrow shorthand for the function type definition is highly reminiscent of the JavaScript fat-arrow (`=>`) though skinnier.
+Woah!  A function for Fibonacci numbers that is about as minimal as you can get!  And the top line, which just declares the type of the function, is often optional - depending on whether the compiler can infer it from the context.  Having said that, it’s good practice to include a type declaration, especially for top-level functions (functions defined without indentation and therefore in-scope everywhere in the file).  This function takes an `Int` (integer) parameter, and returns an `Int`.  Note that the arrow shorthand for the function type definition is highly reminiscent of the JavaScript fat-arrow (`=>`) though skinnier.
 
-The next three lines define the actual logic of the function, which very simply gives a recursive definition for the nth Fibonacci number.  This definition uses a feature common to many functional programming languages: *pattern matching*.  That is, we define the `fibs` function three times, with the first two definitions handling the base cases.  It says, literally: “the 0th and 1st fibs are both 1”.  The last line defines the general case, that the remaining fibonacci numbers are each the sum of their two predecessors.  Note, this definition is not perfect.  Calling:
+The next three lines define the actual logic of the function, which very simply gives a recursive definition for the `n`th Fibonacci number.  This definition uses a feature common to many functional programming languages: *pattern matching*.  That is, we define the `fibs` function three times, with the first two definitions handling the base cases.  It says, literally: “the 0th and 1st fibs are both 1”.  The last line defines the general case, that the remaining fibonacci numbers are each the sum of their two predecessors.  Note, this definition is not perfect.  Calling:
 
 ```haskell
-fibs -1 
+fibs -1
 ```
 
-would be a bad idea.  Good practice would be to add some exceptions for incorrect input to our function.  In a perfect world we would have a compiler that would check types dependent on values (actually, languages that support dependent types exist, e.g. the Idris language is an interesting possible successor to Haskell in this space).
+would be a bad idea.  Good practice would be to add some exceptions for incorrect input to our function.  In a perfect world we would have a compiler that would check types dependent on values (actually, languages that support dependent types exist, e.g. the [Idris](https://www.idris-lang.org/) language is an interesting possible successor to Haskell in this space).
 
-One thing you will have noticed by now is that Haskell-like languages are light on syntax.  Especially use of brackets is minimal, and typically to be avoided when evaluation order can be inferred correctly by the compiler’s application of lambda-calculus inspired precedence rules for function and operator application.
+One thing you will have noticed by now is that Haskell-like languages are light on syntax.  Especially, use of brackets is minimal, and typically to be avoided when evaluation order can be inferred correctly by the compiler’s application of lambda-calculus inspired precedence rules for function and operator application.
 
-We can define a main function for our program, that maps the fibs function to a (“Nil”-terminated) linked-list of numbers and displays them to the console like so:
+We can define a `main` function for our program, that maps the fibs function to a (`Nil`-terminated) linked-list of numbers and displays them to the console like so:
 
 ```haskell
 main = log $ show $ map fibs $ 1..10
 ```
-
+ 
 and here’s the output when you run it from the command line:
 
->(1 : 2 : 3 : 5 : 8 : 13 : 21 : 34 : 55 : 89 : Nil)
+> (1 : 2 : 3 : 5 : 8 : 13 : 21 : 34 : 55 : 89 : Nil)
 
 I’m omitting the type declaration for main because the type for functions that have input-output side-effects is a little more complicated, differs from haskell - and the compiler doesn’t strictly need it yet anyway.
 
-The above definition for main is a chain of functions and the order of evaluation (and hence how you should read it) is right-to-left.  The $ symbol is actually shorthand for brackets around everything to the symbol’s right.  In other words, the above definition for main is equivalent to:
+The above definition for main is a chain of functions and the order of evaluation (and hence how you should read it) is right-to-left.  The `$` symbol is actually shorthand for brackets around everything to the symbol’s right.  In other words, the above definition for main is equivalent to:
 
 ```haskell
 main = log ( show ( map fibs ( 1..10 )))
 ```
 
-The `$` is not just magic syntax (a keyword) but is actually an operator defined in the PureScript Prelude like so:
+The `$` is not special syntax (i.e. it is not a keyword in the language definition).  Rather, it an operator defined in the PureScript Prelude like so:
 
 ```haskell
 infixr 0 apply as $
@@ -91,7 +93,8 @@ main = log $ show $ map fibs $ 1..10
 `map` is (equivalent to our old friend from our JavaScript exercises) a function that applies a function to stuff inside a… let’s call it a container for now… in this case our Container is a List.
 `1..10` uses the `..` (range) infix operator to create a List of Int between 1 and 10.
 
-Peeking under the hood
+## Peeking under the hood
+
 So all this may seem pretty foreign, but actually, since we’ve already covered many of the functional programming fundamentals in JavaScript, let’s take a look at the JavaScript code that the PureScript compiler generates for fibs and main and see if anything looks familiar.  Here’s fibs, exactly as it comes out of the compiler:
 
 ```javascript
@@ -145,7 +148,7 @@ fibs n = f n 0 1
     f i a b = f (i-1) b (a+b)
 ```
 
-In general, as we have seen with `$`, PureScript (and Haskell) have relatively few keywords, instead preferring functions and operators built with the language itself in the Prelude (the base library functions that are available by default).  The `where` keyword, however, is one of the exceptions.  It allows us to make some local definitions inside the context of another function.  Here we define `f` whose first parameter is an iteration counter, whose base case is `0`.  The key feature of `f` is that its recursive call is the very last thing to happen in the function body.  That is, it is in the tail position.
+In general, as we have seen with `$`, PureScript (and Haskell) have relatively few keywords, instead preferring functions and operators built with the language itself in the Prelude (the base library functions that are available by default).  The `where` keyword, however, is one of the exceptions.  It allows us to make some local definitions inside the scope of the function.  Here we define `f` whose first parameter is an iteration counter, whose base case is `0`.  The key feature of `f` is that its recursive call is the very last thing to happen in the function body.  That is, it is in the tail position.
 
 The other important aspect of PureScript that we are encountering for the first time in the above definition is that indentation is used to determine scope (as in python).
 
