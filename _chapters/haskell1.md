@@ -11,7 +11,9 @@ permalink: /haskell1/
 
 ## Introduction
 
-["Haskell Programming from First Principles” by Allen and Moronuki](http://haskellbook.com/) is a recent and excellent introduction to haskell that is quite compatible with the goals of this course.  The ebook is not too expensive, but unfortunately, it is independently published and hence not available from our library.  [”Learn you a Haskell” by Miran Lipovaca](http://learnyouahaskell.com/) is a freely available alternative that is also a useful introduction.
+This section is not your usual "First Introduction To Haskell" because it assumes you have arrived here having already studied some reasonably sophisticated functional programming concepts in JavaScript and [Lambda Calculus](/lambdacalculus).  Familiarity with higher-order and curried functions is assumed.
+
+If you would like a more gradual introduction ["Haskell Programming from First Principles” by Allen and Moronuki](http://haskellbook.com/) is a recent and excellent introduction to haskell that is quite compatible with the goals of this course.  The ebook is not too expensive, but unfortunately, it is independently published and hence not available from our library.  [”Learn you a Haskell” by Miran Lipovaca](http://learnyouahaskell.com/) is a freely available alternative that is also a useful introduction.  There are a few copies of [Programming Haskell by Hutton](https://monash.hosted.exlibrisgroup.com/permalink/f/31uhmh/catau21316253770001751) which is an excellent academic textbook, but it's expensive if you want to buy it.
 
 ## Starting with the GHCi REPL
 
@@ -30,24 +32,35 @@ Then load it into GHCi like so:
 ```haskell
 $ stack ghci fibs.hs  
 ```
-And now you can enter haskell expressions directly at the prompt:
+
+You'll get a prompt that looks like:
+
 ```haskell
-fibs 6
+Prelude>
+```
+Where the text left of the `>` tells you what libraries are loaded into the current scope.  "Prelude" is the default library which already includes everything we need for this chapter. 
+
+You can enter haskell expressions directly at the prompt:
+```haskell
+Prelude> fibs 6
 ```
 > 13  
+ 
+I'm going to stop showing the prompt now, but you can enter all of the following directly at the prompt and you will see similar results printed to those indicated below.
+
 Basic logic operators are similar to C/Java/etc: `==`, `&&`, `||`.  
 ```haskell
 fibs 6 == 13
 ```
 > True
 
-An exception is not-equals, which is `/=` (Haskell tends to prefer more "mathy" syntax whenever possible).
+An exception is "not-equal", whose operator is `/=` (Haskell tends to prefer more "mathy" syntax whenever possible).
 ```haskell
 fibs 6 /= 13
 ```
 > False
 
-If-then-else expressions return a result (like javascript ternary ? :)
+If-then-else expressions return a result (like javascript ternary `? :`)
 ```haskell
 if fibs 6 == 13 then "yes" else "no"
 ```
@@ -59,7 +72,21 @@ if fibs 6 == 13 && fibs 7 == 12 then "yes" else "no"
 >"no"
 
 GHCi also has a number of non-haskell commands you can enter from the prompt, they are prefixed by "`:`".
-You can reload your .hs file into ghci after an edit with `:r`.
+You can reload your .hs file into ghci after an edit with `:r`.  Type `:h` for help.
+
+You can declare local variables in the `repl`:
+
+```haskell
+x = 3
+y = 4
+x + y
+```
+
+> 7
+
+One of Haskell's distinguishing features from other languages is that it variables are strictly immutable (i.e. not variable at all really).  This is similar to variables declared with JavaScript's `const` keyword - but everything in Haskell is deeply immutable by default.
+
+However, in the GHCi REPL, you can redefine variables and haskell will not complain.
 
 ## Creating a Runnable Haskell Program
 
@@ -72,11 +99,61 @@ main = print $ map fibs [1..10]
 
 I’ve included the type signature for main although it’s not absolutely necessary (the compiler can usually infer the type of such functions automatically, as it did for our fibs function definition above), but it is good practice to define types for all top-level functions (functions that are not nested inside other functions) and also the `IO` type is interesting, and will be discussed at length later.  The main function takes no inputs (no need for `->` with something on the left) and it returns something in the `IO` monad.  Without getting into it too much, yet, monads are special types that can also wrap some other value.  In this case, the main function just does output, so there is no wrapped value and hence the `()` (called unit) indicates this.  You can think of it as being similar to the void type in C, Java or TypeScript.
 
-What this tells us is that the main function produces an IO side effect.  This mechanism is what allows Haskell to be a pure functional programming language while still allowing you to get useful stuff done.  Side effects can happen, but when they do occur they must be neatly bundled up and declared to the type system, in this case through the IO monad.  For functions without side-effects, we have strong, compiler checked guarantees that this is indeed so (that they are pure).
+What this tells us is that the main function produces an IO side effect.  This mechanism is what allows Haskell to be a pure functional programming language while still allowing you to get useful stuff done.  Side effects can happen, but when they do occur they must be neatly bundled up and declared to the type system, in this case through the `IO` monad.  For functions without side-effects, we have strong, compiler-checked guarantees that this is indeed so (that they are *pure*).
 
-By the way, once you are in the IO monad, you can’t easily get rid of it.  Any function that calls a function that returns an IO monad, must have IO as its return type.  Thus, effectful code is possible, but the type system ensures we are aware of it and can limit its taint.  The general strategy is to use pure functions wherever possible, and push the effectful code as high in your call hierarchy as possible.  Pure functions are much more easily reusable in different contexts.
+By the way, once you are in the `IO` monad, you can’t easily get rid of it.  Any function that calls a function that returns an `IO` monad, must have `IO` in its return type.  Thus, effectful code is possible, but the type system ensures we are aware of it and can limit its taint.  The general strategy is to use pure functions wherever possible, and push the effectful code as high in your call hierarchy as possible -- that is, limit the size and scope of impure code as much as possible.  Pure functions are much more easily reusable in different contexts.
 
-The `print` function is equivalent to the PureScript `log $ show`.  Haskell also defines show for many types in the Prelude, but print in this case invokes it for us.  The other difference here is that square brackets operators are defined in the prelude for linked lists.  In PureScript they were used for Arrays - which (in PureScript) don’t have the range operator (`..`) defined so I avoided them.
+The `print` function is equivalent to the PureScript `log $ show`.  That is, it uses any available `show` function for the type of value being printed to convert it to a string, and it then prints that string.  Haskell defines show for many types in the Prelude, but print in this case invokes it for us.  The other difference here is that square brackets operators are defined in the prelude for linked lists.  In PureScript they were used for Arrays - which (in PureScript) don’t have the range operator (`..`) defined so I avoided them.
+
+<div class="cheatsheet" markdown="1">
+
+## Basic List and Tuple Operator Cheatsheet
+
+```haskell
+[]           -- an empty list
+[1,2,3,4]    -- a simple lists of values
+[1..4]       -- ==[1,2,3,4] (..) is range operator
+1:[2,3,4]    -- ==[1,2,3,4], use `:` to "cons" an element to the start of a list
+1:2:3:[4]    -- ==[1,2,3,4], you can chain `:`
+[1,2]++[3,4] -- ==[1,2,3,4], i.e. (++) is concat
+
+-- You can use `:` to pattern match lists in function definitions.
+-- Not the enclosing `()` to delimit the pattern for the parameter.
+length [] = 0
+length (x:xs) = 1 + xs
+-- (although you don't need to define `length`, it's already loaded by the prelude)
+
+length [1,2,3]
+```
+
+> 3
+
+Tuples are fixed-length collections of values that may not necessarily be of the same type.  They are enclosed in `()` 
+```haskell
+t = (1,"hello") -- define variable t to a tuple of an Int and a String.
+fst t
+```
+
+> 1
+```
+snd t
+```
+> "hello"
+
+And you can destructure and pattern match tuples:
+```
+(a,b) = t
+a
+```
+> 1
+
+```
+b
+```
+> "hello"
+
+Note that we created tuples in JavaScript using `[]` -- actually they were fixed-length arrays, don't confuse them for Haskell lists.
+</div>
 
 Another thing to note about Haskell at this stage is that its evaluation is lazy by default.  Laziness is of course possible in other languages (as we have seen in JavaScript), and there are many lazy data-structures defined and available for PureScript (and most other functional languages).
 
@@ -167,27 +244,6 @@ sort (pivot:rest) = lesser ++ [pivot] ++ greater
 Haskell helps with a number of language features.  First, is pattern matching.  Pattern matching is like function overloading that you may be familiar with from languages like Java or C++ - where the compiler matches the version of the function to invoke for a given call be matching the type of the parameters to the type of the call - except in Haskell the compiler goes a bit deeper to inspect the values of the parameters.  
 
 There are two declarations of the sort function above.  The first handles the base case of an empty list.  The second handles the general case, and pattern matching is again used to destructure the lead cons expression into the pivot and rest variables.  No explicit call to head and tail functions is required.
-
-<div class="cheatsheet" markdown="1">
-
-## Basic List Operator Cheatsheet
-
-```haskell
-[]           -- an empty list
-[1,2,3]      -- a simple lists of values
-1:[2,3]      -- ==[1,2,3], use `:` to "cons" an element to the start of a list
-1:2:3:[]     -- ==[1,2,3], you can chain `:`
-[1,2]++[3,4] -- ==[1,2,3,4], i.e. (++) is concat
-
--- You can use `:` to pattern match lists in function definitions:
-length [] = 0
-length (x:xs) = 1 + xs
--- (although you don't need to define `length`, it's already loaded by the prelude)
-
-length [1,2,3]
-```
-> 3
-</div>
 
 The next big difference between our Haskell quicksort and our previous JavaScript definition is the Haskell style of function application - which has more in common with lambda calculus than JavaScript.  The expression `f x` is application of the function `f` to whatever `x` is.  
 
