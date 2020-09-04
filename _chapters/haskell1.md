@@ -94,13 +94,26 @@ But there are definitely cons:
 --------
 ### A Side Note on the Y Combinator
 
-By the way, since it’s lazy-by-default, it’s possible to transfer the version of the Y-combinator given in the previous section into haskell code almost as given in Lambda Calculus:
+The Haskell way of defining Lambda (anonymous) functions is heavily inspired by [Lambda Calculus](/lambdacalculus/), but also looks a bit reminiscent of the JavaScript arrow syntax:
+
+```haskell
+JavaScript
+x=>x
+
+Lambda Calculus
+λx. x
+
+Haskell
+\x -> x
+```
+
+Since it’s lazy-by-default, it’s possible to transfer the version of the [Y-combinator we explored in Lambda Calculus](/lambdacalculus/divergent-lambda-expressions) into haskell code almost as it appears in Lambda Calculus:
 
 ```haskell
 y = \f -> (\x -> f (x x)) (\x -> f (x x))
 ```
 
-However, to get it to type-check one has to force the compiler to do some unsafe type coercion.  The following (along with versions of the Y-Combinator that do type check in haskell) are from an excellent Stack Overflow post:
+However, to get it to type-check one has to either write some gnarly type definitions or force the compiler to do some unsafe type coercion.  The following (along with versions of the Y-Combinator that do type check in haskell) are from an excellent [Stack Overflow post](https://stackoverflow.com/questions/4273413/y-combinator-in-haskell):
 
 ```haskell
 import Unsafe.Coerce
@@ -155,7 +168,28 @@ Haskell helps with a number of language features.  First, is pattern matching.  
 
 There are two declarations of the sort function above.  The first handles the base case of an empty list.  The second handles the general case, and pattern matching is again used to destructure the lead cons expression into the pivot and rest variables.  No explicit call to head and tail functions is required.
 
-The next big difference is the haskell style of function application - which has more in common with lambda calculus than JavaScript.  The expression `f x` is application of the function `f` to whatever `x` is.  
+<div class="cheatsheet" markdown="1">
+
+## Lists Cheatsheet
+
+```haskell
+[]           -- an empty list
+[1,2,3]      -- a simple lists of values
+1:[2,3]      -- ==[1,2,3], use `:` to "cons" an element to the start of a list
+1:2:3:[]     -- ==[1,2,3], you can chain `:`
+[1,2]++[3,4] -- ==[1,2,3,4], i.e. (++) is concat
+
+-- You can use `:` to pattern match lists in function definitions:
+length [] = 0
+length (x:xs) = 1 + xs
+-- (although you don't need to define `length`, it's already loaded by the prelude)
+
+length [1,2,3]
+```
+> 3
+</div>
+
+The next big difference between our Haskell quicksort and our previous JavaScript definition is the Haskell style of function application - which has more in common with lambda calculus than JavaScript.  The expression `f x` is application of the function `f` to whatever `x` is.  
 
 Another thing that helps with readability is infix operators.  For example, `++` is an infix binary operator for list concatenation. The `:` operator for cons is another.  There is also the aforementioned $ which gives us another trick for removing brackets, and finally, the `<` and `>=` operators.  Note, that infix operators can also be curried and left only partially applied as in `(<pivot)`.
 
