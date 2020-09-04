@@ -14,9 +14,11 @@ permalink: /haskell1/
 ["Haskell Programming from First Principles” by Allen and Moronuki](http://haskellbook.com/) is a recent and excellent introduction to haskell that is quite compatible with the goals of this course.  The ebook is not too expensive, but unfortunately, it is independently published and hence not available from our library.  [”Learn you a Haskell” by Miran Lipovaca](http://learnyouahaskell.com/) is a freely available alternative that is also a useful introduction.
 
 ## Starting with the GHCi REPL
+
 A good way to get started with haskell is simply to experiment with the GHCi REPL (Read Eval Print Loop).  
 
 Start by making a file: `fibs.hs`
+
 ```haskell
 fibs 0 = 1                       -- two base cases,
 fibs 1 = 1                       -- resolved by pattern matching
@@ -24,6 +26,7 @@ fibs n = fibs (n-1) + fibs (n-2) -- recursive definition
 ```
 
 Then load it into GHCi like so:
+
 ```haskell
 $ stack ghci fibs.hs  
 ```
