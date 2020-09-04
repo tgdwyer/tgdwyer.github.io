@@ -80,6 +80,8 @@ A fully worked example of FRP using rx.js Observables to create an in-browser ve
 
 - Use the GHCi REPL to test Haskell programs and expressions
 - Compare the syntax of Haskell programs to Functional-style code in JavaScript
+- Create and use Haskell lists and tuples
+- Create Haskell functions using *pattern-matching*, *guards*, and local definitions using `where` and `let` clauses
 
 ## [Data and Type Classes](/haskell2)
 
