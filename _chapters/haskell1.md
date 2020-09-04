@@ -170,7 +170,7 @@ There are two declarations of the sort function above.  The first handles the ba
 
 <div class="cheatsheet" markdown="1">
 
-## Lists Cheatsheet
+## Basic List Operator Cheatsheet
 
 ```haskell
 []           -- an empty list
