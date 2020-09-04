@@ -11,9 +11,11 @@ permalink: /haskell1/
 
 ## Introduction
 
-This section is not your usual "First Introduction To Haskell" because it assumes you have arrived here having already studied some reasonably sophisticated functional programming concepts in JavaScript and [Lambda Calculus](/lambdacalculus).  Familiarity with higher-order and curried functions is assumed.
+This section is not your usual "First Introduction To Haskell" because it assumes you have arrived here having already studied some reasonably sophisticated functional programming concepts in JavaScript, basic parametric polymorphic types in [TypeScript](/typescript/), and [Lambda Calculus](/lambdacalculus).  Familiarity with [higher-order](/higherorderfunctions/) and [curried functions](/functionaljavascript/) is assumed.  
 
-If you would like a more gradual introduction ["Haskell Programming from First Principles” by Allen and Moronuki](http://haskellbook.com/) is a recent and excellent introduction to haskell that is quite compatible with the goals of this course.  The ebook is not too expensive, but unfortunately, it is independently published and hence not available from our library.  [”Learn you a Haskell” by Miran Lipovaca](http://learnyouahaskell.com/) is a freely available alternative that is also a useful introduction.  There are a few copies of [Programming Haskell by Hutton](https://monash.hosted.exlibrisgroup.com/permalink/f/31uhmh/catau21316253770001751) which is an excellent academic textbook, but it's expensive if you want to buy it.
+I try to summarise the syntax we use with "cheatsheets" throughout, but [the official CheatSheet](https://hackage.haskell.org/package/CheatSheet-1.10/src/CheatSheet.pdf) will be a useful reference.  The other reference every Haskell programmer needs is the official library docs on [Hackage](https://hackage.haskell.org/) which is searchable by the excellent [Hoogle](https://hoogle.haskell.org/) search engine, which lets you search by types as well as function keywords.
+
+If you would like a more gradual introduction, ["Haskell Programming from First Principles” by Allen and Moronuki](http://haskellbook.com/) is a recent and excellent introduction to Haskell that is quite compatible with the goals of this course.  The ebook is not too expensive, but unfortunately, it is independently published and hence not available from our library.  There are a few copies of [Programming Haskell by Hutton](https://monash.hosted.exlibrisgroup.com/permalink/f/31uhmh/catau21316253770001751) which is an excellent academic textbook, but it's expensive to buy.  [”Learn you a Haskell” by Miran Lipovaca](http://learnyouahaskell.com/) is a freely available alternative that is also a useful introduction.  
 
 ## Starting with the GHCi REPL
 
@@ -135,9 +137,11 @@ fst t
 ```
 
 > 1
+
 ```
 snd t
 ```
+
 > "hello"
 
 And you can destructure and pattern match tuples:
@@ -184,7 +188,7 @@ Haskell
 \x -> x
 ```
 
-Since it’s lazy-by-default, it’s possible to transfer the version of the [Y-combinator we explored in Lambda Calculus](/lambdacalculus/divergent-lambda-expressions) into haskell code almost as it appears in Lambda Calculus:
+Since it’s lazy-by-default, it’s possible to transfer the version of the [Y-combinator we explored in Lambda Calculus](/lambdacalculus/#divergent-lambda-expressions) into haskell code almost as it appears in Lambda Calculus:
 
 ```haskell
 y = \f -> (\x -> f (x x)) (\x -> f (x x))
@@ -238,10 +242,13 @@ sort [] = []
 sort (pivot:rest) = lesser ++ [pivot] ++ greater
   where
     lesser = sort $ filter (<pivot) rest
-    greater = sort $ filter (>=pivot) rest 
+    greater = sort $ filter (>=pivot) rest
 ```
 
-Haskell helps with a number of language features.  First, is pattern matching.  Pattern matching is like function overloading that you may be familiar with from languages like Java or C++ - where the compiler matches the version of the function to invoke for a given call be matching the type of the parameters to the type of the call - except in Haskell the compiler goes a bit deeper to inspect the values of the parameters.  
+An essential thing to know before trying to type in the above function is that Haskell delimits the scope of multi-line function definitions (and all multiline expressions) with indentation ([complete indentation rules reference here]([indentation](https://en.wikibooks.org/wiki/Haskell/Indentation))). The `where` keyword lets us create multiple function definitions that are visible within the scope of the parent function, but they must all be left-aligned with each other and to the right of the start of the line containing the `where` keyword.
+
+Haskell also helps with a number of other language features.  
+First, is pattern matching.  Pattern matching is like function overloading that you may be familiar with from languages like Java or C++ - where the compiler matches the version of the function to invoke for a given call be matching the type of the parameters to the type of the call - except in Haskell the compiler goes a bit deeper to inspect the values of the parameters.  
 
 There are two declarations of the sort function above.  The first handles the base case of an empty list.  The second handles the general case, and pattern matching is again used to destructure the lead cons expression into the pivot and rest variables.  No explicit call to head and tail functions is required.
 
@@ -290,7 +297,7 @@ sort (pivot:rest) = let
    partition comparison = sort . filter comparison 
 ```
 
-Note that where is only available in function declarations, not inside expressions and therefore is not available in a lambda.  However, let, in is part of the expression, and therefore available inside a lambda function.  A silly example would be:  \i -> let f x = 2*x in f i, which could also be spread across lines, but be careful to get the correct indentation.
+Note that where is only available in function declarations, not inside expressions and therefore is not available in a lambda.  However, let, in is part of the expression, and therefore available inside a lambda function.  A silly example would be:  `\i -> let f x = 2*x in f i`, which could also be spread across lines, but be careful to get the correct indentation.
 
 
 <div class="cheatsheet" markdown="1">
