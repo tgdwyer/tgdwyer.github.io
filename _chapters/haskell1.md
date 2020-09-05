@@ -269,7 +269,7 @@ sort (pivot:rest) = lesser ++ [pivot] ++ greater
 An essential thing to know before trying to type in the above function is that Haskell delimits the scope of multi-line function definitions (and all multiline expressions) with indentation ([complete indentation rules reference here]([indentation](https://en.wikibooks.org/wiki/Haskell/Indentation))). The `where` keyword lets us create multiple function definitions that are visible within the scope of the parent function, but they must all be left-aligned with each other and to the right of the start of the line containing the `where` keyword.
 
 Haskell also helps with a number of other language features.  
-First, is pattern matching.  Pattern matching is like function overloading that you may be familiar with from languages like Java or C++ - where the compiler matches the version of the function to invoke for a given call be matching the type of the parameters to the type of the call - except in Haskell the compiler goes a bit deeper to inspect the values of the parameters.  
+First, is pattern matching.  Pattern matching is like function overloading that you may be familiar with from languages like Java or C++ - where the compiler matches the version of the function to invoke for a given call by matching the type of the parameters to the type of the call - except in Haskell the compiler goes a bit deeper to inspect the values of the parameters.  
 
 There are two declarations of the sort function above.  The first handles the base case of an empty list.  The second handles the general case, and pattern matching is again used to destructure the lead cons expression into the pivot and rest variables.  No explicit call to head and tail functions is required.
 
@@ -277,7 +277,7 @@ The next big difference between our Haskell quicksort and our previous JavaScrip
 
 Another thing that helps with readability is infix operators.  For example, `++` is an infix binary operator for list concatenation. The `:` operator for cons is another.  There is also the aforementioned $ which gives us another trick for removing brackets, and finally, the `<` and `>=` operators.  Note, that infix operators can also be curried and left only partially applied as in `(<pivot)`.
 
-Next, we have the where which lets us create locally scoped variables within the function declaration without the need for the trick I used in the JavaScript version of using the parameters of anonymous functions as locally scoped variables.
+Next, we have the `where` which lets us create locally scoped variables within the function declaration without the need for the trick I used in the JavaScript version of using the parameters of anonymous functions as locally scoped variables.
 
 Finally, you’ll notice that the haskell version of sort appears to be missing a parameterisation of the order function.  Does this mean it is limited to number types?  In fact, no - from our use of `<` and `>=` the compiler has inferred that it is applicable to any ordered type.  More specifically, to any type in the type class `Ord`.
 
@@ -302,7 +302,7 @@ sort (pivot:rest) = below pivot rest ++ [pivot] ++ above pivot rest
    partition comparison = sort . filter comparison 
 ```
 
-This version makes a point about point-free style and how it can lead to not only compact code, but also code that can read almost like a natural language declarative definition of the algorithm.  Here, we use the . operator for function composition.  Although it looks like the comparison parameter could also go away here with eta conversion, actually the low precedence of the `.` operator means there is (effectively) implicit parentheses around filter comparison.
+This version makes a point about point-free style and how it can lead to not only compact code, but also code that can read almost like a natural language declarative definition of the algorithm.  Here, we use the `.` operator for function composition.  Although it looks like the comparison parameter could also go away here with eta conversion, actually the low precedence of the `.` operator means there is (effectively) implicit parentheses around filter comparison.
 
 Haskell has a number of features that allow us to express ourselves in different ways.  Above we used a where clause to give a post-hoc, locally-scoped declaration of the below and above functions.  Alternately, we could define them at the start of the function body with `let <variable declaration expression> in <body>`.  Or we can use let, in and where all together, like so:
 
