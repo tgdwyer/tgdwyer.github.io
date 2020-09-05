@@ -245,14 +245,14 @@ For example,
 
 ```javascript
 const
-  sort = order=>
+  sort = lessThan=>
     list=> !list ? null :
       (pivot=>rest=>
         (lesser=>greater=>
-          concat(sort(order)(lesser))
-                (cons(pivot)(sort(order)(greater)))
-        )(filter(a=> order(a)(pivot))(rest))
-         (filter(a=> !order(a)(pivot))(rest))
+          concat(sort(lessThan)(lesser))
+                (cons(pivot)(sort(lessThan)(greater)))
+        )(filter(a=> lessThan(a)(pivot))(rest))
+         (filter(a=> !lessThan(a)(pivot))(rest))
       )(head(list))(tail(list))
 ```
 
