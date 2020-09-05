@@ -126,7 +126,7 @@ The default Haskell lists are cons lists (linked lists defined with a `cons` fun
 -- You can use `:` to pattern match lists in function definitions.
 -- Not the enclosing `()` to delimit the pattern for the parameter.
 length [] = 0
-length (x:xs) = 1 + xs
+length (x:xs) = 1 + length xs
 -- (although you don't need to define `length`, it's already loaded by the prelude)
 
 length [1,2,3]
