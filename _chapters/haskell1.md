@@ -134,6 +134,19 @@ length [1,2,3]
 
 > 3
 
+Some other useful functions for dealing with lists:
+
+```haskell
+head [1,2,3] -- 1
+tail [1,2,3] -- [2,3]
+
+sum [1,2,3] -- 6 (but only applicable for lists of things that can be summed)
+minimum [1,2,3] -- 1 (but only for Ordinal types)
+maximum [1,2,3] -- 3
+
+map f [1,2,3] -- maps the function f over the elements of the list returning the result in another list
+```
+
 Tuples are fixed-length collections of values that may not necessarily be of the same type.  They are enclosed in `()` 
 ```haskell
 t = (1,"hello") -- define variable t to a tuple of an Int and a String.
