@@ -61,7 +61,7 @@ The above definition for `main` is a chain of functions and the order of evaluat
 main = log ( show ( map fibs ( 1..10 )))
 ```
 
-The `$` is not special syntax (i.e. it is not a keyword in the language definition).  Rather, it an operator defined in the PureScript Prelude like so:
+The `$` is not special syntax (i.e. it is not a keyword in the language definition).  Rather, it is an operator defined in the PureScript Prelude like so:
 
 ```haskell
 infixr 0 apply as $
