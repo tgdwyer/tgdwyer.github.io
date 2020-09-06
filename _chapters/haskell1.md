@@ -95,7 +95,7 @@ However, in the GHCi REPL, you can redefine variables and haskell will not compl
 
 ## Creating a Runnable Haskell Program
 
-Both the simplest and tail-recursive versions of our PureScript fibs code are also perfectly legal haskell code.  The main function will be a little different, however:
+Both the simplest and tail-recursive versions of our PureScript fibs code are also perfectly legal Haskell code.  The main function will be a little different, however:
 
 ```haskell
 main :: IO ()
