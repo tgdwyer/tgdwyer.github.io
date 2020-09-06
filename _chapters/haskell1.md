@@ -89,7 +89,7 @@ x + y
 
 > 7
 
-One of Haskell's distinguishing features from other languages is that it variables are strictly immutable (i.e. not variable at all really).  This is similar to variables declared with JavaScript's `const` keyword - but everything in Haskell is deeply immutable by default.
+One of Haskell's distinguishing features from other languages is that its variables are strictly immutable (i.e. not variable at all really).  This is similar to variables declared with JavaScript's `const` keyword - but everything in Haskell is deeply immutable by default.
 
 However, in the GHCi REPL, you can redefine variables and haskell will not complain.
 
