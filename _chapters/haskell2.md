@@ -99,7 +99,10 @@ data Student = Student { id::Integer, name::String, mark::Int }
 This creates a record type in every way the same as the above, but the accessor functions id, name and mark are created automatically.
 
 ## Typeclasses
-Haskell uses “type classes” as a way to associate functions with types.  A type class is like a promise that a certain type will have specific operations and functions available.  You can think of it as being similar to a TypeScript interface.  Despite the name however, it is not like a TypeScript class, since a type class is does not actually define the functions themselves.  The functions are defined in “instances” of the type class.  A good starting point for gaining familiarity with type classes is seeing how they are used in the standard Haskell prelude.  From GHCi we can ask for information about a specific typeclass with the :i command, for example, Num is a typeclass common to numeric types:
+Haskell uses “type classes” as a way to associate functions with types.  A type class is like a promise that a certain type will have specific operations and functions available.  You can think of it as being similar to a [TypeScript interface](/typescript1/interfaces).
+
+Despite the name however, it is not like an ES6/TypeScript class, since a Haskell type class does not actually give definitions for the functions themselves, only their type signatures.  
+The function bodies are defined in “instances” of the type class.  A good starting point for gaining familiarity with type classes is seeing how they are used in the standard Haskell prelude.  From GHCi we can ask for information about a specific typeclass with the `:i` command, for example, Num is a typeclass common to numeric types:
 
 ```haskell
 GHCi> :i Num
@@ -136,7 +139,7 @@ instance Eq Int
 ... 
 ```
 
-Note again that instances need implement only `==` or `/=` (not equal to), since each can be easily defined in terms of the other.  Still we are missing some obviously important operations, e.g., what about inequalities?  These are defined in the Ord type class:
+Note again that instances need implement only `==` or `/=` (not equal to), since each can be easily defined in terms of the other.  Still we are missing some obviously important operations, e.g., what about greater-than and less-than?  These are defined in the Ord type class:
 ```haskell
 > :i Ord
 class Eq a => Ord a where
@@ -156,13 +159,13 @@ The compare function returns an Ordering:
 data Ordering = LT | EQ | GT 
 ```
 
-A custom data type can be made an instance of Ord by implementing either `compare` or `<=`.  The definition `Eq a => Ord a `means that anything is an instance of `Ord` must also be an instance of `Eq`.   Thus, typeclasses can build upon each other into rich hierarchies:
+A custom data type can be made an instance of `Ord` by implementing either `compare` or `<=`.  The definition `Eq a => Ord a` means that anything that is an instance of `Ord` must also be an instance of `Eq`.   Thus, typeclasses can build upon each other into rich hierarchies:
 
 ![Numeric Typeclasses](/haskell2/numerictypeclasses.png)
 
 ## Creating custom instances of type classes
 
-If we have our own data types, how can we make standard operations like equality and inequality testing work with them?  Luckily, the most common type classes can easily be instanced automatically through the deriving keyword. example, if we want to define a `Suit` type for a card game.
+If we have our own data types, how can we make standard operations like equality and inequality testing work with them?  Luckily, the most common type classes can easily be instanced automatically through the `deriving` keyword. For example, if we want to define a `Suit` type for a card game we can automatically generate default instances of the functions (and operators) associated with `Eq`uality testing, `Ord`inal comparisons, `Enum`erating the different possible values of the type, and `Show`ing them (or converting them to string):
 
 ```haskell
 data Suit = Spade|Club|Diamond|Heart
@@ -172,7 +175,7 @@ data Suit = Spade|Club|Diamond|Heart
 True
 ```
 
-The `Show` typeclass allows the data to be converted to strings with the `show` function (e.g. so that GHCi can display it).  The Enum typeclass allows enumeration, e.g.:
+The `Show` typeclass allows the data to be converted to strings with the `show` function (e.g. so that GHCi can display it).  The `Enum` typeclass allows enumeration, e.g.:
 
 ```haskell
 > [Spade .. Heart]
@@ -183,28 +186,30 @@ We can also create custom instances of typeclasses by providing our own implemen
 
 ```haskell
 instance Show Suit where
- show Spade = "^"
- show Club = "&"
- show Diamond = "O"
- show Heart = "V"
-
-> [Spade .. Heart]
-[^,&,O,V] 
+ show Spade = "^"     -- OK, these characters are not
+ show Club = "&"      -- brilliant approximations of the
+ show Diamond = "O"   -- actual playing card symbols ♠ ♣ ♦ ♥
+ show Heart = "V"     -- but GHCi support for unicode 
+                      -- characters is a bit sketch
+[Spade .. Heart]
 ```
 
+> [^,&,O,V]
+
 ## Maybe
-Another important built-in type is Maybe:
+
+Another important built-in type is `Maybe`:
 
 ```haskell
 > :i Maybe
-data Maybe a = Nothing | Just a 
+data Maybe a = Nothing | Just a
 ```
 
-All the functions we have considered so far are assumed to be total.  That is, the function provides a mapping for every element in the input type to an element in the output type.  Maybe allows us to have a sensible return-type for partial functions.  Functions which do not have a mapping for every input:
+All the functions we have considered so far are assumed to be *total*.  That is, the function provides a mapping for every element in the input type to an element in the output type.  `Maybe` allows us to have a sensible return-type for *partial* functions, that is, functions which do not have a mapping for every input:
 
 ![Total and Partial Functions](/haskell2/partialfunctions.png)
 
-For example, the built-in lookup function can be used to search a list of key-value pairs, and fail gracefully by returning Nothing if there is no matching key.
+For example, the built-in lookup function can be used to search a list of key-value pairs, and fail gracefully by returning `Nothing` if there is no matching key.
 
 ```haskell
 phonebook :: [(String, String)]
@@ -217,10 +222,10 @@ lookup :: Eq a => a -> [(a, b)] -> Maybe b
 Just "01624 556442"
 
 > lookup "Tim" phonebook
-Nothing 
+Nothing
 ```
 
-We can use pattern matching to extract values from Maybe (when we have Just a value), or to perform some sensible default behaviour when we have Nothing. 
+We can use pattern matching to extract values from a `Maybe` (when we have `Just` a value), or to perform some sensible default behaviour when we have `Nothing`.
 ```haskell
 printNumber name = msg $ lookup name phonebook
 where
@@ -230,5 +235,5 @@ where
 *GHCi> printNumber "Fred"
 "01624 556442"
 *GHCi> printNumber "Tim"
-"Tim not found in database" 
+"Tim not found in database"
 ```
