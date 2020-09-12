@@ -272,19 +272,19 @@ Note that these laws are not enforced by the compiler when you create your own i
 
 The applicative introduces a new operator `<*>` (pronounced “apply”), which lets us apply functions inside a computational context.
 
-For example, a function inside a Maybe can be applied to a value in a Maybe.
+For example, a function inside a `Maybe` can be applied to a value in a `Maybe`.
 ```haskell
 GHCi> (Just (+3)) <*> (Just 2)
 Just 5 
 ```
 
-Or a list of functions [(+1),(+2)] ), to things inside a similar context (e.g. a list [1,2,3]).
+Or a list of functions `[(+1),(+2)]` ), to things inside a similar context (e.g. a list `[1,2,3]`).
 ```haskell
 > [(+1),(+2)] <*> [1,2,3]
 [2,3,4,3,4,5] 
 ```
 
-Note that lists definition of <*> produces the cartesian product of the two lists, that is, all the possible ways to apply the functions in the left list, to the values in the right list.  It is interesting to look at the source for the definition of Applicative for lists on Hackage:
+Note that lists definition of `<*>` produces the cartesian product of the two lists, that is, all the possible ways to apply the functions in the left list, to the values in the right list.  It is interesting to look at the source for the definition of `Applicative` for lists on Hackage:
 
 instance Applicative [] where
 ```haskell
@@ -292,7 +292,7 @@ pure x    = [x]
 fs <*> xs = [f x | f <- fs, x <- xs]  -- list comprehension 
 ```
 
-The definition of <*> for lists uses a list comprehension.  List comprehensions are a short-hand way to generate lists, using notation similar to mathematical set builder notation.  The set builder notation here would be:  f(x) |  ffs x  xs.  In English it means: “the set (Haskell list) of all functions in fs applied to all values in xs”. 
+The definition of `<*>` for lists uses a list comprehension.  List comprehensions are a short-hand way to generate lists, using notation similar to mathematical set builder notation.  The set builder notation here would be:  `f(x) |  ffs x  xs`.  In English it means: “the set (Haskell list) of all functions in `fs` applied to all values in `xs”`. 
 
 
 A common use-case for Applicative is applying a binary (two-parameter) function over two Applicative values, e.g.:
@@ -357,7 +357,7 @@ GHCi> Card <$> [Spade ..] <*> [Two ..]
 ```
 </div>
 
-Applicative is a “subclass” of Functor, meaning that an instance of Applicative can be ‘fmap’ed, but Applicatives also declare (at least) two additional functions, pure and `(<*>)` (pronounced ‘apply’ - but I like calling it [“TIE Fighter”](https://en.wikipedia.org/wiki/TIE_fighter)):
+Applicative is a “subclass” of Functor, meaning that an instance of Applicative can be ‘`fmap`’ed, but Applicatives also declare (at least) two additional functions, `pure` and `(<*>)` (pronounced ‘apply’ - but I like calling it [“TIE Fighter”](https://en.wikipedia.org/wiki/TIE_fighter)):
 
 ```haskell
 GHCi> :i Applicative
@@ -370,12 +370,12 @@ class Functor f => Applicative (f :: * -> *) where
 As for `Functor`, many Base Haskell types are also `Applicative`, e.g. `[]`, `Maybe`, `IO` and `(->)`.
 
 ## Foldable
-Recall the “reduce” function that is a member of JavaScript’s Array type, and which we implemented ourselves for linked and cons lists, was a way to generalise loops over enumerable types.
-In Haskell, this is concept is once again generalised with a typeclass called Foldable - the class of things which can be “folded” over to produce a single value.  The obvious Foldable instance is list.  Although in JavaScript reduce always associates elements from left to right, haskell offers two functions foldl, which folds left to right) and foldr (which folds right to left):
+Recall the “`reduce`” function that is a member of JavaScript’s `Array` type, and which we implemented ourselves for linked and cons lists, was a way to generalise loops over enumerable types.
+In Haskell, this concept is once again generalised with a typeclass called `Foldable` - the class of things which can be “folded” over to produce a single value.  The obvious `Foldable` instance is list.  Although in JavaScript `reduce` always associates elements from left to right, haskell offers two functions `foldl` (which folds left-to-right) and `foldr` (which folds right-to-left):
 
 ```haskell
 GHCi> :t foldl
-foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b 
+foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
 
 GHCi> :t foldr
 foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b
@@ -393,6 +393,7 @@ Actually, this is a classic example where point-free coding style makes this exp
 ![Left Fold](/haskell3/leftfold.png)
 
 In the fold above, we provide the `(+)` function to tell `foldl`|`r` how to aggregate elements of the list.  There is also a typeclass for things that are “automatically aggregatable” or “concatenatable” called `Monoid` which declares a general concatenation function for Monoid called `mconcat`.  One instance of Monoid is `Sum`, since there is an instance of `Sum` for `Num`:
+
 ```haskell
 GHCi> :i Monoid
 …
@@ -400,23 +401,28 @@ instance Num a => Monoid (Sum a)
 …
 GHCi> import Data.Monoid
 Data.Monoid> mconcat $ Sum <$> [5,8,3,1,7,6,2]
-Sum {getSum = 32} 
 ```
+
+> Sum {getSum = 32}
 
 So a sum is a data type with an accessor function getSum that we can use to get back the value:
+
 ```haskell
 GHCi Data.Monoid> getSum $ mconcat $ Sum <$> [5,8,3,1,7,6,2]
-32 
 ```
 
-We make a data type aggregatable by instancing Monoid and providing definitions for the functions mappend and mempty.  For Sum these will be (+) and 0 respectively.
-Lists are also themselves Monoidal, with mappend defined as an alias for list concatenation (++), and mempty as [].  Thus, we can:
+> 32
+
+We make a data type aggregatable by instancing `Monoid` and providing definitions for the functions mappend and mempty.  For `Sum` these will be `(+)` and `0` respectively.
+Lists are also themselves Monoidal, with mappend defined as an alias for list concatenation `(++)`, and mempty as `[]`.  Thus, we can:
+
 ```haskell
 GHCi Data.Monoid> mconcat [[1,2],[3,4],[5,6]]
 [1,2,3,4,5,6] 
 ```
 
-Which has a simple alias “concat” defined in the Prelude:
+Which has a simple alias `concat` defined in the Prelude:
+
 ```haskell
 GHCi> concat [[1,2],[3,4],[5,6]]
 [1,2,3,4,5,6]
@@ -439,12 +445,16 @@ Which we could use to map over a list of numbers without throwing divide-by-zero
 ```haskell
 GHCi> map (safeMod 3) [1,2,0,2]
 [Just 0,Just 1,Nothing,Just 1]
-But what if 0s in the list really are indicative of disaster so that we should bail rather than proceeding?  The traverse function of the Traversable type-class gives us this capability:
+```
+
+But what if `0`s in the list really are indicative of disaster so that we should bail rather than proceeding?  The `traverse` function of the `Traversable` type-class gives us this capability:
+
+```haskell
 GHCi> traverse (safeMod 3) [1,2,0,2]
 Nothing 
 ```
 
-Traverse applies a function with an Applicative return value (or Applicative effect) to the contents of a Traversable thing.
+Traverse applies a function with an `Applicative` return value (or Applicative effect) to the contents of a `Traversable` thing.
 ```haskell
 GHCi> :t traverse
 traverse
@@ -476,9 +486,10 @@ GHCi> :t traverse print [1,2,3]
 traverse print [1,2,3] :: IO [()] 
 ```
 
-There is no easy way to get rid of this IO return type - which protects you from creating `IO` effects unintentionally.
+There is no easy way to get rid of this `IO` return type - which protects you from creating `IO` effects unintentionally.
 
 A related function defined in `Traversable` is `sequenceA` allows us to convert directly from Traversables of Applicatives, to Applicatives of Traversables:
+
 ```haskell
 > :t sequenceA
 sequenceA :: (Applicative f, Traversable t) => t (f a) -> f (t a)
@@ -490,6 +501,7 @@ Just [0,1,1]
 ```
 
 ## Monad
+
 As always, we can interrogate ghci to get a basic synopsis of the Monad typeclass:
 
 ```haskell
@@ -520,6 +532,7 @@ Things to notice:
 * lots of built-in types are already monads
 
 There also exists a flipped version of bind:
+
 ```haskell
 (=<<) = flip (>>=) 
 ```
