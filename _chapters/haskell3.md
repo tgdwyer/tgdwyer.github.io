@@ -286,13 +286,13 @@ Or a list of functions `[(+1),(+2)]` ), to things inside a similar context (e.g.
 
 Note that lists definition of `<*>` produces the cartesian product of the two lists, that is, all the possible ways to apply the functions in the left list, to the values in the right list.  It is interesting to look at the source for the definition of `Applicative` for lists on Hackage:
 
-instance Applicative [] where
 ```haskell
-pure x    = [x]
-fs <*> xs = [f x | f <- fs, x <- xs]  -- list comprehension 
+instance Applicative [] where
+  pure x    = [x]
+  fs <*> xs = [f x | f <- fs, x <- xs]  -- list comprehension 
 ```
 
-The definition of `<*>` for lists uses a list comprehension.  List comprehensions are a short-hand way to generate lists, using notation similar to mathematical set builder notation.  The set builder notation here would be:  `f(x) |  ffs x  xs`.  In English it means: “the set (Haskell list) of all functions in `fs` applied to all values in `xs”`. 
+The definition of `<*>` for lists uses a list comprehension.  List comprehensions are a short-hand way to generate lists, using notation similar to mathematical ["set builder notation"](https://en.wikipedia.org/wiki/Set-builder_notation).  The set builder notation here would be:  `{f(x) |  f ∈ fs ∧ x ∈ xs}`.  In English it means: “the set (Haskell list) of all functions in `fs` applied to all values in `xs”`. 
 
 
 A common use-case for Applicative is applying a binary (two-parameter) function over two Applicative values, e.g.:
@@ -334,19 +334,25 @@ data Card = Card Suit Rank
 ```
 
 We can make one card using the Card constructor:
+
 ```haskell
 GHCi> Card Spade Ace
 Card ^ Ace 
 ```
 
-Or, since both Suit and Rank derive Enum, we can enumerate the full lists of Suits and Ranks, and then lift the Card operator over both lists to create a whole deck:
+Or, since both `Suit` and `Rank` derive `Enum`, we can enumerate the full lists of `Suit`s and `Rank`s, and then lift the `Card` operator over both lists to create a whole deck:
+
 ```haskell
 GHCi> Card <$> [Spade ..] <*> [Two ..]
 [Card ^ Two,Card ^ Three,Card ^ Four,Card ^ Five,Card ^ Six,Card ^ Seven,Card ^ Eight,Card ^ Nine,Card ^ Ten,Card ^ Jack,Card ^ Queen,Card ^ King,Card ^ Ace,Card & Two,Card & Three,Card & Four,Card & Five,Card & Six,Card & Seven,Card & Eight,Card & Nine,Card & Ten,Card & Jack,Card & Queen,Card & King,Card & Ace,Card O Two,Card O Three,Card O Four,Card O Five,Card O Six,Card O Seven,Card O Eight,Card O Nine,Card O Ten,Card O Jack,Card O Queen,Card O King,Card O Ace,Card V Two,Card V Three,Card V Four,Card V Five,Card V Six,Card V Seven,Card V Eight,Card V Nine,Card V Ten,Card V Jack,Card V Queen,Card V King,Card V Ace] 
 ```
 
+#### Exercise
+* Create instances of `Show` for `Rank` and `Card` such that a deck of cards displays much more succinctly, e.g.: `[^2,^3,^4,^5,^6,^7,^8,^9,^10,^J,^Q,^K,^A,&2,&3,&4,&5,&6,&7,&8,&9,&10,&J,&Q,&K,&A,O2,O3,O4,O5,O6,O7,O8,O9,O10,OJ,OQ,OK,OA,V2,V3,V4,V5,V6,V7,V8,V9,V10,VJ,VQ,VK,VA]`
+* Try and make the definition of `show` for Rank a one-liner using `zip` and `lookup`.
 
 <div class="cheatsheet" markdown="1">
+
 ### Different Ways To Apply Functions Cheatsheet
 
 ```haskell
@@ -638,13 +644,13 @@ do
 ```
 
 ### Join
-A function called “join” from `Control.Monad` also distills the essence of `Monad` nicely.  Its type and definition in terms of bind is:
+A function called “`join`” from `Control.Monad` also distills the essence of `Monad` nicely.  Its type and definition in terms of bind is:
 ```haskell
 join :: Monad m => m (m a) -> m a
 join = (>>=id)
 ```
 
-We can apply join to “flatten” the nested IO contexts from the earlier fmap example:
+We can apply join to “flatten” the nested `IO` contexts from the earlier `fmap` example:
 ```haskell
 GHCi>:t join $ greet <$> getLine :: IO () 
 ```
