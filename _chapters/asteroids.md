@@ -664,7 +664,7 @@ Finally, we need to update `updateView` function.  First, we need to update the 
 where we've created a little helper function `attr` to bulk set properties on an `Element`:
 ```typescript
   const
-    attr = (e:Element,o:any) =>
+    attr = (e:Element,o:Object) =>
       { for(const k in o) e.setAttribute(k,String(o[k])) },
 ```
 The other thing happening at game over, is the call to `subscription.unsubscribe`.  This `subscription` is the object returned by the subscribe call on our main Observable:
