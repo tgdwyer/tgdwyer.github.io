@@ -432,13 +432,20 @@ totalMark :: Student -> Int
 totalMark s = exam s + nonExam s
 ```
 
-Here's the point-free equivalent, taking advantage of the fact that `exam` and `nonExam`, both being functions of the same input type `Student`, are both in the same Applicative context:
+Here's the point-free version, taking advantage of the fact that `exam` and `nonExam`, both being functions of the same input type `Student`, are both in the same Applicative context:
 
 ```haskell
 totalMark = (+) <$> exam <*> nonExam
 ```
 
+Or equivalently:
+
+```haskell
+totalMark = (+) . exam <*> nonExam
+```
+
 ### Exercise
+
 - derive the implementations of `pure` and `<*>` for `Maybe` and for functions `((->)r)`.
 
 (hint, if you get stuck there are spoilers in the source from GHC.Base that I linked above)
