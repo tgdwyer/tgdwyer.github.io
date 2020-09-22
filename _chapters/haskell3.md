@@ -36,11 +36,11 @@ Remember haskell binary operators are just infix curried functions of two parame
        ≡ ((+) x) y  -- making function application precedence explicit
        ≡ (x+) y     -- binary operators can also be partially applied
 ```
-And the goal of such operator sectioning is to get the right-most parameter of the function on it's own at the right-hand side of the body expression such that we can apply Eta conversion, thus:
+Such operator sectioning allows us to get the right-most parameter of the function on it's own at the right-hand side of the body expression such that we can apply Eta conversion, thus:
 ```haskell
 f x = 1 + x
 f x = (1+) x
-f = (+)
+f = (+)             -- Eta conversion
 ```
 
 ### Compose
@@ -53,9 +53,9 @@ Has its own operator in haskell `(.)`, inspired by the mathematical function com
 Again, this gives us another way to get the right-most parameter on it's own outside the body expression:
 ```haskell
 f x = sqrt (1 / x)
-f x = sqrt ((1/) x)
-f x = (sqrt . (1/)) x
-f = sqrt . (1/)
+f x = sqrt ((1/) x)     -- operator section
+f x = (sqrt . (1/)) x   -- by the definition of composition
+f = sqrt . (1/)         -- eta conversion
 ```
 
 </div>
@@ -380,8 +380,17 @@ Let's say we want to create a student for a given `id` but we need to look up th
 
 ```haskell
 lookupStudent :: Integer -> Maybe Student
-lookupStudent sid = Student sid <*> lookup sid names <*> lookup sid marks
+lookupStudent sid = Student sid <$> lookup sid names <*> lookup sid marks
 ```
+
+What if `sid` is also the result of some computation that may fail, and is therefore itself wrapped in a `Maybe` context?  Then we will need to apply the ternary `Student` constructor over three `Maybe`s:
+
+```haskell
+lookupStudent :: Maybe Integer -> Maybe Student
+lookupStudent sid = Student <$> sid <*> lookup sid names <*> lookup sid marks
+```
+
+So we can see `<*>` may be chained as many times as necessary to cover all the arguments.
 
 Lists are also instances of `Applicative`.  Given the following types:
 
@@ -490,7 +499,7 @@ Actually, this is a classic example where point-free coding style makes this exp
 
 ![Left Fold](/haskell3/leftfold.png)
 
-In the fold above, we provide the `(+)` function to tell `foldl`|`r` how to aggregate elements of the list.  There is also a typeclass for things that are “automatically aggregatable” or “concatenatable” called `Monoid` which declares a general concatenation function for Monoid called `mconcat`.  One instance of Monoid is `Sum`, since there is an instance of `Sum` for `Num`:
+In the fold above, we provide the `(+)` function to tell `foldl` how to aggregate elements of the list.  There is also a typeclass for things that are “automatically aggregatable” or “concatenatable” called `Monoid` which declares a general concatenation function for Monoid called `mconcat`.  One instance of Monoid is `Sum`, since there is an instance of `Sum` for `Num`:
 
 ```haskell
 GHCi> :i Monoid
@@ -571,7 +580,11 @@ The `print` function converts values to strings (using show if available from an
 ```haskell
 GHCi> :t print
 print :: Show a => a -> IO ()
-The () is like void in TypeScript - it’s a type with exactly one value (), and hence is called “Unit”.  There is no return value from print, only the IO effect, and hence the return type is IO (). IO is also an instance of Applicative.  This means we can use traverse to print out the contents of a list:
+```
+
+The `()` is like `void` in TypeScript - it’s a type with exactly one value `()`, and hence is called “Unit”.  There is no return value from `print`, only the `IO` effect, and hence the return type is `` ()`. `IO` is also an instance of `Applicative`.  This means we can use `traverse` to print out the contents of a list:
+
+```haskell
 GHCi> traverse print [1,2,3]
 1
 2
@@ -593,9 +606,13 @@ A related function defined in `Traversable` is `sequenceA` allows us to convert 
 sequenceA :: (Applicative f, Traversable t) => t (f a) -> f (t a)
 GHCi> sequenceA [Just 0,Just 1,Nothing,Just 1]
 Nothing
-Or on a “clean” list of Just values:
+```
+
+Or on a “clean” list of `Just` values:
+
+```haskell
 GHCi> sequenceA [Just 0,Just 1,Just 1]
-Just [0,1,1] 
+Just [0,1,1]
 ```
 
 ## Monad
