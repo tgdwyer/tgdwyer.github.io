@@ -11,7 +11,7 @@ We're also going to take some pains to make pure functional code (and lots of be
 
 ![MVC Architecture](GeneralMVC.png)
 
-If you're the kind of person who likes to work backwards, [you can jump straight to playing the final result](https://asteroids05.stackblitz.io/) and you can also [live edit its code](https://stackblitz.com/edit/asteroids05).
+If you're the kind of person who likes to work backwards, [you can jump straight to playing the final result](https://asteroids05.stackblitz.io/) and you can also [live edit its code](https://stackblitz.com/edit/asteroids05-uwzx2u?file=index.ts).
 
 We'll build it up in several steps.
  * First, we'll just [rotate the ship](#rotating-the-ship)
@@ -549,7 +549,7 @@ And we tack a bit on to `updateView` to draw and remove bullets:
 ## Collisions
 So far the game we have built allows you to hoon around in a space-ship blasting the void with fireballs which is kind of fun, but not very challenging.  The Asteroids game doesn't really become "Asteroids" until you actually have... asteroids.  Also, you should be able to break them up with your blaster and crashing into them should end the game.  Here's a preview:
 
-[![Spaceship flying](AsteroidsComplete.gif)](https://stackblitz.com/edit/asteroids05?file=index.ts)
+[![Spaceship flying](AsteroidsComplete.gif)](https://stackblitz.com/edit/asteroids05-uwzx2u?file=index.ts)
 
 Before we go forward, let's put all the magic numbers that are starting to permeate our code in one, immutable place:
 ```typescript
