@@ -233,6 +233,7 @@ Now, we'll create separate Observables for each of the key events.  There's a re
  * produce an Observable stream of a particular action type.
 
 It sounds like something we can model with a nice reusable function:
+
 ```typescript
   type Event = 'keydown' | 'keyup'
   type Key = 'ArrowLeft' | 'ArrowRight' | 'ArrowUp'
@@ -243,9 +244,11 @@ It sounds like something we can model with a nice reusable function:
         filter(({repeat})=>!repeat),
         map(result)),
 ```
+
 Now we have all the pieces to create a whole slew of input streams:
+
 ```typescript
-  const 
+  const
     startLeftRotate = observeKey('keydown','ArrowLeft',()=>new Rotate(-.1)),
     startRightRotate = observeKey('keydown','ArrowRight',()=>new Rotate(.1)),
     stopLeftRotate = observeKey('keyup','ArrowLeft',()=>new Rotate(0)),
