@@ -33,15 +33,31 @@ Remember haskell binary operators are just infix curried functions of two parame
 
 ```haskell
  x + y ≡ (+) x y
-       ≡ ((+) x) y
+       ≡ ((+) x) y  -- making function application precedence explicit
+       ≡ (x+) y     -- binary operators can also be partially applied
+```
+And the goal of such operator sectioning is to get the right-most parameter of the function on it's own at the right-hand side of the body expression such that we can apply Eta conversion, thus:
+```haskell
+f x = 1 + x
+f x = (1+) x
+f = (+)
 ```
 
 ### Compose
+
 Has its own operator in haskell `(.)`, inspired by the mathematical function composition symbol `∘`:
 ```haskell
  (f ∘ g) (x) ≡ f (g(x)) -- math notation
  (f . g) x ≡ f (g x)    -- haskell
 ```
+Again, this gives us another way to get the right-most parameter on it's own outside the body expression:
+```haskell
+f x = sqrt (1 / x)
+f x = sqrt ((1/) x)
+f x = (sqrt . (1/)) x
+f = sqrt . (1/)
+```
+
 </div>
 ## Point Free Code
 
