@@ -255,7 +255,9 @@ Now we have all the pieces to create a whole slew of input streams:
 ```
 
 # Vector Maths
-Since we're going to start worrying about the physics of our simulation, we're going to need some helper code. First, a handy dandy Vector class.  It's just standard vector maths, so hopefully self explanatory.  In the spirit of being pure and declarative I've made it immutable, and all the functions (except `len` which returns a number) return new instances of `Vec` rather than changing its data in place. 
+
+Since we're going to start worrying about the physics of our simulation, we're going to need some helper code. First, a handy dandy Vector class.  It's just standard vector maths, so hopefully self explanatory.  In the spirit of being pure and declarative I've made it immutable, and all the functions (except `len` which returns a number) return new instances of `Vec` rather than changing its data in place.
+
 ```typescript
 class Vec {
   constructor(public readonly x: number = 0, public readonly y: number = 0) {}
@@ -551,18 +553,18 @@ So far the game we have built allows you to hoon around in a space-ship blasting
 
 Before we go forward, let's put all the magic numbers that are starting to permeate our code in one, immutable place:
 ```typescript
-const 
-  Constants = new class {
-    readonly CanvasSize = 600;
-    readonly BulletExpirationTime = 1000;
-    readonly BulletRadius = 3;
-    readonly BulletVelocity = 2;
-    readonly StartRockRadius = 30;
-    readonly StartRocksCount = 5;
-    readonly RotationAcc = 0.1;
-    readonly ThrustAcc = 0.1;
-    readonly StartTime = 0;
-  }
+  const 
+    Constants = {
+      CanvasSize: 600,
+      BulletExpirationTime: 1000,
+      BulletRadius: 3,
+      BulletVelocity: 2,
+      StartRockRadius: 30,
+      StartRocksCount: 5,
+      RotationAcc: 0.1,
+      ThrustAcc: 0.1,
+      StartTime: 0
+    } as const
 ```
 
 # Initial State
@@ -612,37 +614,52 @@ Our initial state is going to include several rocks drifting in random direction
 Our `tick` function is more or less the same as above, but it will apply one more transformation to the state that it returns, by applying the following function.  This function checks for collisions between the ship and rocks, and also between bullets and rocks. 
 
 ```typescript
-  handleCollisions = (s:State) => {
-    const
-      bodiesCollided = (a:Body,b:Body) => a.pos.sub(b.pos).len() < a.radius + b.radius,
-      shipCollided = s.rocks.filter(r=>bodiesCollided(s.ship,r)).length > 0,
-      allBulletsAndRocks = flatMap(s.bullets,b=>s.rocks.map(r=>({bullet:b,rock:r}))),
-      collidedBulletsAndRocks = allBulletsAndRocks.filter(({bullet:b,rock:r})=>bodiesCollided(b,r)),
-      collidedBullets = collidedBulletsAndRocks.map(({bullet})=>bullet),
-      collidedRocks = collidedBulletsAndRocks.map(({rock})=>rock),
-      createChildRock = (r:Body,dir:number)=>
-        createCircle('rock')(0/*we assign the ids later*/)
-                  (s.time)(r.radius/2)
-                  (r.pos)(r.vel.ortho().scale(dir)),
-      spawnChildRocks = (r:Body)=>
-                            r.radius >= Constants.StartRockRadius/4 
-                            ? [createChildRock(r,1),createChildRock(r,-1)] : [],
-      newRocks = flatMap(collidedRocks, spawnChildRocks)
-        .map((r,i)=><Body>{...r, id: r.viewType + (s.objCount + i)})
-    return <State>{
-      ...s,
-      bullets: s.bullets.filter(b=>!collidedBullets.includes(b)),
-      rocks: s.rocks.filter(r=>!collidedRocks.includes(r)).concat(newRocks),
-      exit: s.exit.concat(collidedBullets,collidedRocks),
-      objCount: s.objCount + newRocks.length,
-      gameOver: shipCollided
-    }
-  };
+    // check a State for collisions:
+    //   bullets destroy rocks spawning smaller ones
+    //   ship colliding with rock ends game
+    handleCollisions = (s:State) => {
+      const
+        bodiesCollided = ([a,b]:[Body,Body]) => a.pos.sub(b.pos).len() < a.radius + b.radius,
+        shipCollided = s.rocks.filter(r=>bodiesCollided([s.ship,r])).length > 0,
+        allBulletsAndRocks = flatMap(s.bullets, b=> s.rocks.map(r=>([b,r]))),
+        collidedBulletsAndRocks = allBulletsAndRocks.filter(bodiesCollided),
+        collidedBullets = collidedBulletsAndRocks.map(([bullet,_])=>bullet),
+        collidedRocks = collidedBulletsAndRocks.map(([_,rock])=>rock),
+
+        // spawn two children for each collided rock above a certain size
+        child = (r:Body,dir:number)=>({
+          radius: r.radius/2,
+          pos:r.pos,
+          vel:r.vel.ortho().scale(dir)
+        }),
+        spawnChildren = (r:Body)=>
+                              r.radius >= Constants.StartRockRadius/4 
+                              ? [child(r,1), child(r,-1)] : [],
+        newRocks = flatMap(collidedRocks, spawnChildren)
+          .map((r,i)=>createCircle('rock')(s.objCount + i)(s.time)(r.radius)(r.pos)(r.vel)),
+
+        // search for a body by id in an array
+        elem = (a:ReadonlyArray<Body>) => (e:Body) => a.findIndex(b=>b.id === e.id) >= 0,
+        // array a except anything in b
+        except = (a:ReadonlyArray<Body>) => (b:Body[]) => a.filter(not(elem(b)))
+      
+      return <State>{
+        ...s,
+        bullets: except(s.bullets)(collidedBullets),
+        rocks: except(s.rocks)(collidedRocks).concat(newRocks),
+        exit: s.exit.concat(collidedBullets,collidedRocks),
+        objCount: s.objCount + newRocks.length,
+        gameOver: shipCollided
+      }
+    },
 ```
 
 # Final View
 
-Finally, we need to update `updateView` function.  First, we need to update the visuals for each of the rocks, but these are the same as bullets.  The second, slightly bigger, change, is simply to display the text "Game Over" on `s.gameover` true. 
+Finally, we need to update `updateView` function.  Again, the view update is the one place in our program where we allow imperative style, effectful code.  Called only from the subscribe at the very end of our Observable chain, and not mutating any state that is read anywhere else in the Observable, we ensure that is not the source of any but the simplest display bugs, which we can hopefully diagnose with local inspection of this one function.
+
+First, we need to update the visuals for each of the rocks, but these are the same as bullets.  The second, slightly bigger, change, is simply to display the text "Game Over" on `s.gameover` true.
+
 ```typescript
   function updateView(s: State) {
   ...
@@ -655,19 +672,27 @@ Finally, we need to update `updateView` function.  First, we need to update the 
     if(s.gameOver) {
       subscription.unsubscribe();
       const v = document.createElementNS(svg.namespaceURI, "text")!;
-      attr(v,{x:Constants.CanvasSize/6,y:Constants.CanvasSize/2,class:"gameover"});
+      attr(v,{
+        x: Constants.CanvasSize/6,
+        y: Constants.CanvasSize/2,
+        class: "gameover"
+      });
       v.textContent = "Game Over";
       svg.appendChild(v);
     }
   }
 ```
+
 where we've created a little helper function `attr` to bulk set properties on an `Element`:
+
 ```typescript
   const
-    attr = (e:Element,o:Object) =>
+    attr = (e:Element, o:Object) =>
       { for(const k in o) e.setAttribute(k,String(o[k])) },
 ```
+
 The other thing happening at game over, is the call to `subscription.unsubscribe`.  This `subscription` is the object returned by the subscribe call on our main Observable:
+
 ```typescript
   const subscription = interval(10).pipe(
     map(elapsed=>new Tick(elapsed)),
@@ -678,8 +703,9 @@ The other thing happening at game over, is the call to `subscription.unsubscribe
     scan(reduceState, initialState)
     ).subscribe(updateView);
 ```
-At this point we have more-or-less all the elements of a game.  The implementation above could be extended quite a lot.  For example, we could add score, multiple lives, perhaps some more physics.  But generally, these are just extensions to the framework above: manipulation and then display of additional state.
+
+At this point we have more-or-less all the elements of a game.  The implementation above could be extended quite a lot.  For example, we could add score, ability to restart the game, multiple lives, perhaps some more physics.  But generally, these are just extensions to the framework above: manipulation and then display of additional state.
 
 The key thing is that the observable has allowed us to keep well separated state management (model), its input and manipulation (control) and the visuals (view).  Further extensions are just additions within each of these elements - and doing so should not add greatly to the complexity.
 
-I invite you to click through on the animations above, to the live code editor where you can extend or refine the framework I've started. 
+I invite you to click through on the animations above, to the live code editor where you can extend or refine the framework I've started.

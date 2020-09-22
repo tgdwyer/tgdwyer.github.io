@@ -475,27 +475,43 @@ Which prevents reassigning ```studentVersion1``` to any other object, the ```con
 studentVersion1.name = "Tom"
 ```
 
-Typescript will not complain about the above assignment at all.
+The TypeScript compiler will not complain about the above assignment at all.
+However, TypeScript does give us the possibility to add an `as const` after creating an object to make it deeply immutable:
 
-However, we can declare immutable types using the ```Readonly``` construct:
+```typescript
+const studentVersion1 = {
+  name: "Tim",
+  assignmentMark: 20,
+  examMark: 15
+} as const
+```
+
+```javascript
+studentVersion1.name = "Tom"
+```
+
+> Cannot assign to 'name' because it is a read-only property.ts(2540)
+
+The above is a singleton immutable Object.  However, more generally, if we need multiple instances of a deeply immutable object, we can 
+declare immutable types using the ```Readonly``` construct:
 
 ```javascript
 type ImmutableStudent = Readonly<{
-name: string;
-assignmentMark: number;
-examMark: number;
+  name: string;
+  assignmentMark: number;
+  examMark: number;
 }>
 
 const studentVersion1:ImmutableStudent = {
-name: "Tim",
-assignmentMark: 20,
-examMark: 15
+  name: "Tim",
+  assignmentMark: 20,
+  examMark: 15
 }
 
 studentVersion1.name = "Tom"
 ```
 
-Now we get the squiggly:
+Again, we get the squiggly:
 
 ![Compile Error Screenshot](/typescript1/readonly.png)
 

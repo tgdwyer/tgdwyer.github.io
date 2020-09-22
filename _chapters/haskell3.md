@@ -272,9 +272,28 @@ Note that these laws are not enforced by the compiler when you create your own i
 
 The applicative introduces a new operator `<*>` (pronounced “apply”), which lets us apply functions inside a computational context.
 
-For example, a function inside a `Maybe` can be applied to a value in a `Maybe`.
+Applicative is a “subclass” of Functor, meaning that an instance of `Applicative` can be ‘`fmap`ed over, but Applicatives also declare (at least) two additional functions, `pure` and `(<*>)` (pronounced ‘apply’ - but I like calling it [“TIE Fighter”](https://en.wikipedia.org/wiki/TIE_fighter)):
+
 ```haskell
-GHCi> (Just (+3)) <*> (Just 2)
+GHCi> :i Applicative
+class Functor f => Applicative (f :: * -> *) where
+  pure :: a -> f a
+  (<*>) :: f (a -> b) -> f a -> f b 
+...
+```
+
+As for `Functor` all instances of the Applicative type-class must satisfy certain laws, which again, are not checked by the compiler.
+Applicative instances must comply with these laws to produce the expected behaviour.
+You can [read about the Applicative Laws](https://en.wikibooks.org/wiki/Haskell/Applicative_functors)
+if you are interested, but they are a little more subtle than the basic Functor laws above, and it is
+not essential to understand them to be able to use `<*>` in Haskell.
+
+As for `Functor`, many Base Haskell types are also `Applicative`, e.g. `[]`, `Maybe`, `IO` and `(->)`.
+
+For example, a function inside a `Maybe` can be applied to a value in a `Maybe`.
+
+```haskell
+GHCi> Just (+3) <*> Just 2
 Just 5 
 ```
 
@@ -284,7 +303,7 @@ Or a list of functions `[(+1),(+2)]` ), to things inside a similar context (e.g.
 [2,3,4,3,4,5] 
 ```
 
-Note that lists definition of `<*>` produces the cartesian product of the two lists, that is, all the possible ways to apply the functions in the left list, to the values in the right list.  It is interesting to look at the source for the definition of `Applicative` for lists on Hackage:
+Note that lists definition of `<*>` produces the cartesian product of the two lists, that is, all the possible ways to apply the functions in the left list, to the values in the right list.  It is interesting to look at [the source](https://hackage.haskell.org/package/base-4.14.0.0/docs/src/GHC.Base.html#Applicative) for the definition of `Applicative` for lists on Hackage:
 
 ```haskell
 instance Applicative [] where
@@ -296,12 +315,25 @@ The definition of `<*>` for lists uses a list comprehension.  List comprehension
 
 
 A common use-case for Applicative is applying a binary (two-parameter) function over two Applicative values, e.g.:
+
+```haskell
+> pure (+) <*> Just 3 <*> Just 2
+Just 5 
+```
+
+So:
+- `pure` puts the binary function into the applicative (i.e. `pure (+) :: Maybe (Num -> Num -> Num)`), 
+- then `<*>`ing this function inside over the first `Maybe` value `Just 3` achieves a partial application of the function inside the `Maybe`. This gives a unary function inside a `Maybe`: i.e. `Just (3+) :: Maybe (Num->Num)`. 
+- Finally, we `<*>` this function inside a `maybe` over the remaining `Maybe` value.
+
+This is where the name "applicative" comes from, i.e. `Applicative` is a type over which a non-unary function may be applied.  Note, that the following use of `fmap` is equivalent and a little bit more concise:
+
 ```haskell
 > (+) <$> Just 3 <*> Just 2
 Just 5 
 ```
 
-This is called “lifting” a function over Applicative.  Actually, it’s so common that Applicative also defines dedicated functions for lifting binary functions (in the GHC.Base module):
+This is also called “lifting” a function over an Applicative.  Actually, it’s so common that Applicative also defines dedicated functions for lifting binary functions (in the GHC.Base module):
 
 ```haskell
 > GHC.Base.liftA2 (+) (Just 3) (Just 2)
@@ -314,7 +346,28 @@ It’s also useful to lift binary data constructors over two Applicative values,
 Just (3, 2) 
 ```
 
-Or lifting a data constructor over lists:
+We can equally well apply functions with more than two arguments over the correct number of values inside Applicative contexts.
+Recall our student data type:
+
+```haskell
+data Student = Student { id::Integer, name::String, mark::Int } 
+```
+
+with a ternary constructor:
+
+```haskell
+Student::Integer -> String -> Int -> Student
+```
+
+Let's say we want to create a student for a given `id` but we need to look up the name and mark from tables, i.e. lists of key-value pairs: 
+`names::[(Integer,String)]` and `marks::[(Integer,Int)]`.  We'll use the function `lookup :: Eq a => a -> [(a, b)] -> Maybe b`, which will either succeed with `Just` the result, or fail to find the value for a given key, and return `Nothing`.
+
+```haskell
+lookupStudent :: Integer -> Maybe Student
+lookupStudent sid = Student sid <*> lookup sid names <*> lookup sid marks
+```
+
+Lists are also instances of `Applicative`.  Given the following types:
 
 ```haskell
 data Suit = Spade|Club|Diamond|Heart
@@ -348,6 +401,7 @@ GHCi> Card <$> [Spade ..] <*> [Two ..]
 ```
 
 #### Exercise
+
 * Create instances of `Show` for `Rank` and `Card` such that a deck of cards displays much more succinctly, e.g.: `[^2,^3,^4,^5,^6,^7,^8,^9,^10,^J,^Q,^K,^A,&2,&3,&4,&5,&6,&7,&8,&9,&10,&J,&Q,&K,&A,O2,O3,O4,O5,O6,O7,O8,O9,O10,OJ,OQ,OK,OA,V2,V3,V4,V5,V6,V7,V8,V9,V10,VJ,VQ,VK,VA]`
 * Try and make the definition of `show` for Rank a one-liner using `zip` and `lookup`.
 
@@ -363,19 +417,34 @@ GHCi> Card <$> [Spade ..] <*> [Two ..]
 ```
 </div>
 
-Applicative is a “subclass” of Functor, meaning that an instance of Applicative can be ‘`fmap`’ed, but Applicatives also declare (at least) two additional functions, `pure` and `(<*>)` (pronounced ‘apply’ - but I like calling it [“TIE Fighter”](https://en.wikipedia.org/wiki/TIE_fighter)):
+We saw that functions `(->)` are Functors, such that `(<$>)=(.)`.  There is also an instance of Applicative for functions of input type `r`.  We'll give the types of the essential functions for the instance:
 
 ```haskell
-GHCi> :i Applicative
-class Functor f => Applicative (f :: * -> *) where
-  pure :: a -> f a
-  (<*>) :: f (a -> b) -> f a -> f b 
-...
+instance Applicative ((->)r) where
+  pure :: a -> (r->a)
+  (<*>) :: (r -> (a -> b)) -> (r -> a) -> (r -> b)
 ```
 
-As for `Functor`, many Base Haskell types are also `Applicative`, e.g. `[]`, `Maybe`, `IO` and `(->)`.
+This is very convenient for creating pointfree implementations of functions which operate on their parameters more than once.  For example, imagine our `Student` type from above has additional fields with breakdowns of marks: e.g. `exam` and `nonExam`, requiring a function to compute the total mark:
+
+```haskell
+totalMark :: Student -> Int
+totalMark s = exam s + nonExam s
+```
+
+Here's the point-free equivalent, taking advantage of the fact that `exam` and `nonExam`, both being functions of the same input type `Student`, are both in the same Applicative context:
+
+```haskell
+totalMark = (+) <$> exam <*> nonExam
+```
+
+### Exercise
+- derive the implementations of `pure` and `<*>` for `Maybe` and for functions `((->)r)`.
+
+(hint, if you get stuck there are spoilers in the source from GHC.Base that I linked above)
 
 ## Foldable
+
 Recall the “`reduce`” function that is a member of JavaScript’s `Array` type, and which we implemented ourselves for linked and cons lists, was a way to generalise loops over enumerable types.
 In Haskell, this concept is once again generalised with a typeclass called `Foldable` - the class of things which can be “folded” over to produce a single value.  The obvious `Foldable` instance is list.  Although in JavaScript `reduce` always associates elements from left to right, haskell offers two functions `foldl` (which folds left-to-right) and `foldr` (which folds right-to-left):
 
@@ -656,9 +725,11 @@ GHCi>:t join $ greet <$> getLine :: IO ()
 ```
 
 Which will now execute as expected:
+
 ```haskell
 GHCi> join $ greet <$> getLine
 ```
+
 >Tim  
 >Nice to meet you Tim! 
 
