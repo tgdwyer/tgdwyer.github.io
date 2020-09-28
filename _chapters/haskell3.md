@@ -37,7 +37,7 @@ Such operator sectioning allows us to get the right-most parameter of the functi
 ```haskell
 f x = 1 + x
 f x = (1+) x
-f = (+)             -- Eta conversion
+f = (1+)             -- Eta conversion
 ```
 
 ### Compose
