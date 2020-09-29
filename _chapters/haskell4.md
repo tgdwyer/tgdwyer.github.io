@@ -340,14 +340,22 @@ main =
    \name -> greet name 
 ```
 
-Note that although <- looks like assignment to a variable named “name”, it actually expands to a parameter name for a lambda expression following the bind.  Thus, the way I read the following do expression is “take the value (a string in this case) out of the Monad context resulting from the function (readName) and assign to the symbol (name)”:
+Note that although `<-` looks like assignment to a variable `name`, it actually expands to a parameter name for a lambda expression following the bind.  Thus, the way I read the line with the `<-` in the following do expression:
+
 ```haskell
 do
   name <- readName
   greet name 
 ```
 
-You can also mix in actual variable assignments using let:
+is:
+
+*Take the value* (a `String` in this case) 
+*out of the Monad context resulting from the expression on the right-hand side of the `<-`* (i.e. `readName`) *and assign it to the symbol on the left-hand side* (i.e. `name`) *which remains in scope until the end of the `do` block:*
+
+
+
+You can also mix in variable assignments from pure expressions using let:
 
 ```haskell
 do
