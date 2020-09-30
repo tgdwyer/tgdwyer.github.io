@@ -155,7 +155,7 @@ Here’s the implementation of `map` for lists as it’s [defined in the GHC sta
 ```haskell
 map :: (a -> b) -> [a] -> [b]
 map _ []     = []
-map f (x:xs) = f x : map f xs 
+map f (x:xs) = f x : map f xs
 ```
 
 It’s easy to generalise this pattern to any data structure that holds one or more values: mapping a function over a data structure creates a new data structure whose elements are the result of applying the function to the elements of the original data structure.
@@ -163,9 +163,16 @@ It’s easy to generalise this pattern to any data structure that holds one or m
 In Haskell this pattern is captured in a type class called `Functor`, which defines a function called `fmap`.
 
 ```haskell
-class Functor (f :: * -> *) where
+Prelude> :i Functor
+type Functor :: (* -> *) -> Constraint
+class Functor f where
   fmap :: (a -> b) -> f a -> f b
+instance Functor [] -- naturally lists are an instance
+instance Functor Maybe -- but this may surprise!
+... -- and some other instances we'll talk about shortly
 ```
+
+The first line says that instances of the Functor typeclass must be over types that have the kind `(* -> *)`, that is, their constructors must be parameterised with a single type variable.  After this, the `class` definition specifies `fmap` as a function that will be available to any instance of Functor and that `f` is the type parameter for the constructor function, which again, takes one type parameter, e.g. `f a` as the input to `fmap`, which returns an `f b`.
 
 Naturally, lists have an instance:
 
@@ -244,9 +251,8 @@ In addition to lists and Maybes, a number of other built-in types have instances
 
 ```haskell
 GHCi> :i Functor
+...
 instance Functor (Either a) -- Defined in `Data.Either'
-instance Functor [] -- Defined in `GHC.Base'
-instance Functor Maybe -- Defined in `GHC.Base'
 instance Functor IO -- Defined in `GHC.Base'
 instance Functor ((->) r) -- Defined in `GHC.Base'
 instance Functor ((,) a) -- Defined in `GHC.Base' 

@@ -143,14 +143,14 @@ However, once you get used to reading types the type info for this class is pret
 `Traversable` extends both `Foldable` and `Functor`, in a typeclass for things that we can `traverse` a function with an `Applicative` effect over, e.g. here's a sneak peak of what this lets us do:
 
 ```haskell
-> traverse putStrLn ["tim","was","here"]
+ghci> traverse putStrLn ["tim","was","here"]
 tim
 was
 here
 [(),(),()]
 ```
 
-The first three lines are the strings printed to the terminal (the side effect).  The result `[(),(),()]` returned by `traverse` is discussed below.
+The first three lines are the strings printed to the terminal (the side effect).  The result reported by GHCi is a list `[(),(),()]` as discussed below.
 
 Here, as usual, is what GHCi `:i` tells us about the Traversable type class:
 
@@ -385,27 +385,28 @@ is:
 *Take the value* (a `String` in this case) 
 *out of the Monad context resulting from the expression on the right-hand side of the `<-`* (i.e. `readName`) *and assign it to the symbol on the left-hand side* (i.e. `name`) *which remains in scope until the end of the `do` block:*
 
-
-
 You can also mix in variable assignments from pure expressions using let:
 
 ```haskell
 do
   name <- readName
   let greeting = "Hello " ++ name
-  putStrLn greeting 
+  putStrLn greeting
 ```
 
 ### Join
+
 A function called “`join`” from `Control.Monad` also distills the essence of `Monad` nicely.  Its type and definition in terms of bind is:
+
 ```haskell
 join :: Monad m => m (m a) -> m a
 join = (>>=id)
 ```
 
 We can apply join to “flatten” the nested `IO` contexts from the earlier `fmap` example:
+
 ```haskell
-GHCi>:t join $ greet <$> getLine :: IO () 
+GHCi>:t join $ greet <$> getLine :: IO ()
 ```
 
 Which will now execute as expected:
@@ -415,5 +416,4 @@ GHCi> join $ greet <$> getLine
 ```
 
 >Tim  
->Nice to meet you Tim! 
-
+>Nice to meet you Tim!

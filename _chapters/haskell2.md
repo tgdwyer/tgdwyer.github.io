@@ -44,17 +44,41 @@ consLength (Cons _ rest) = 1 + consLength rest
 
 Since we don’t care about the head value in this function, we match it with `_`, an unnamed variable, which effectively ignores it.  Note that another way to conditionally destructure with pattern matching is using a [case statement](/haskell1/conditional-code-constructs-cheatsheet).
 
------
- Note that such a definition for lists is made completely redundant by Haskell’s wonderful built-in lists, where [] is the empty list, and : is an infix cons operator.  We can pattern match the empty list or destructure (head:rest), e.g.:
+Note that such a definition for lists is made completely redundant by Haskell’s wonderful built-in lists, where [] is the empty list, and : is an infix cons operator.  We can pattern match the empty list or destructure (head:rest), e.g.:
 
 ```haskell
-length :: [a] -> Int
-length [] = 0
-length (_:rest) = 1 + length rest 
+intListLength :: [Int] -> Int -- takes a list of Int as input and returns an Int
+intListLength [] = 0
+intListLength (_:rest) = 1 + intListLength rest 
 ```
------
 
-### Record Syntax
+## Type Parameters and Polymorphism
+
+Similar to typescript Haskell provides *parametric polymorphism*.  That is, the type definitions for functions and data structures (defined with `data` like the ConsList above) can have type parameters (AKA type variables).  For example, the definition `intListLength` above is defined to only work with lists with `Int` elements.  This seems a silly restriction because in this function we don't actually do anything with the elements themselves.  Below, we introduce the type parameter `a` so that the `length` function will able to work with lists of any type of elements.
+
+```haskell
+length :: [a] -> Int -- a is a type parameter
+length [] = 0
+length (_:rest) = 1 + length rest
+```
+
+The following visual summary shows pair data structures with accessor functions `fst` and `sec` defined using [Record Syntax](/haskell2/record-syntax) with varying degrees of type flexibility, and compared with the equivalent [typescript generic notation](/typescrip1/#generics):
+
+- Hard-coded for `Int` pairs only
+- with one type parameter (by convention called `a` in Haskell, and `T` in TypeScript)
+- with two type parameters such that the two elements may be different types
+
+![Polymorphism Summary](/haskell2/haskellpolymorphism.png)
+
+## Type Kinds
+
+GHCi allows you to use the `:kind` (or `:k`) command to interrogate the *Kind* of types.  The kind syntax indicates the *arity* or number of type parameters a type has.  Note that it is like the syntax for function types (with the `->`), which is natural because it relates to the kind of the constructor function for the type.  If the constructor takes no type parameters the kind is just `*`, (it returns a type), `*->*` if it takes one type parameter, `*->*->*` for two type parameters and so on.
+
+
+![Polymorphism Summary](/haskell2/haskellpolymorphism.png)
+
+## Record Syntax
+
 Consider the following simple record data type: 
 
 ```haskell
@@ -99,6 +123,7 @@ data Student = Student { id::Integer, name::String, mark::Int }
 This creates a record type in every way the same as the above, but the accessor functions id, name and mark are created automatically.
 
 ## Typeclasses
+
 Haskell uses “type classes” as a way to associate functions with types.  A type class is like a promise that a certain type will have specific operations and functions available.  You can think of it as being similar to a [TypeScript interface](/typescript1/interfaces).
 
 Despite the name however, it is not like an ES6/TypeScript class, since a Haskell type class does not actually give definitions for the functions themselves, only their type signatures.  
@@ -106,6 +131,7 @@ The function bodies are defined in “instances” of the type class.  A good st
 
 ```haskell
 GHCi> :i Num
+type Num :: * -> Constraint
 class Num a where
   (+) :: a -> a -> a
   (-) :: a -> a -> a
@@ -122,8 +148,9 @@ instance Num Int -- Defined in `GHC.Num'
 instance Num Float -- Defined in `GHC.Float'
 instance Num Double -- Defined in `GHC.Float' 
 ```
+The first line is the "type" of the typeclass.  Such "types of types" are referred to in haskell as the "kind" of the type.  `*->Constraint` is a simple kind saying that Nums are constructed with a single value (as opposed to a contructor function like the "ConsList" function we defined above which took a parameter) and the Num is a "constraint" over such values that specifies a set of functions that will be available for instances of Num.  We will see more complex kinds later in other type classes.
 
-This is telling us that for a type to be an instance of the `Num` typeclass, it must provide the operators `+`, `*` and the functions `abs`, `signum` and `fromInteger`, and either `(-)` or `negate`.  The last is an option because a default definition exists for each in terms of the other.  The last five lines (beginning with “`instance`”) tell us which types have been declared as instances of `Num` and hence have definitions of the necessary functions.  These are `Word`, `Integer`, `Int`, `Float` and `Double`.  Obviously this is a much more finely grained set of types than JavaScript’s universal “`number`” type.  This granularity allows the type system to guard against improper use of numbers that might result in loss in precision or division by zero.
+The next line (beginning `class`) tells us that for a type to be an instance of the `Num` typeclass, it must provide the operators `+`, `*` and the functions `abs`, `signum` and `fromInteger`, and either `(-)` or `negate`.  The last is an option because a default definition exists for each in terms of the other.  The last five lines (beginning with “`instance`”) tell us which types have been declared as instances of `Num` and hence have definitions of the necessary functions.  These are `Word`, `Integer`, `Int`, `Float` and `Double`.  Obviously this is a much more finely grained set of types than JavaScript’s universal “`number`” type.  This granularity allows the type system to guard against improper use of numbers that might result in loss in precision or division by zero.
 
 The main numeric type we will use in this course is `Int`, i.e. fixed-precision integers.
 

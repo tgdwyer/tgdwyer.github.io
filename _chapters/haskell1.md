@@ -285,10 +285,10 @@ I deliberately avoided the type declaration for the above function because, (1) 
 
 ```haskell
 > :t sort
-sort :: Ord t => [t] -> [t] 
+sort :: Ord t => [t] -> [t]
 ```
 
-Thus, the function sort has a generic type-parameter t which is constrained to be in the Ord type class.  It’s input parameter is a list of t, as is its return type.  This is also precisely the syntax that one would use to declare the type explicitly.  Usually, for all top-level functions in a Haskell file it is good practice to explicitly give the type declaration.  Although, it is not always necessary, it can avoid ambiguity in many situations, and secondly, once you get good at reading Haskell types, it becomes useful documentation.
+Thus, the function sort has a generic type-parameter `t` (we'll talk more about such [parametric polymorphism in haskell](/haskell2/#type-parameters-and-polymorphism) later) which is constrained to be in the `Ord` type class (anything that is orderable - we'll talk more about [type classes](/haskell2/#typeclasses) too).  It’s input parameter is a list of `t`, as is its return type.  This is also precisely the syntax that one would use to declare the type explicitly.  Usually, for all top-level functions in a Haskell file it is good practice to explicitly give the type declaration.  Although, it is not always necessary, it can avoid ambiguity in many situations, and secondly, once you get good at reading Haskell types, it becomes useful documentation.
 
 Here’s another refactoring of the quick-sort code.  This time with type declaration because I just said it was the right thing to do:
 
