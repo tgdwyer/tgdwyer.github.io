@@ -295,9 +295,10 @@ Applicative is a “subclass” of Functor, meaning that an instance of `Applica
 
 ```haskell
 GHCi> :i Applicative
-class Functor f => Applicative (f :: * -> *) where
+type Applicative :: (* -> *) -> Constraint
+class Functor f => Applicative f where
   pure :: a -> f a
-  (<*>) :: f (a -> b) -> f a -> f b 
+  (<*>) :: f (a -> b) -> f a -> f b
 ...
 ```
 
