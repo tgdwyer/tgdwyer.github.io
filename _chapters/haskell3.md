@@ -164,15 +164,14 @@ In Haskell this pattern is captured in a type class called `Functor`, which defi
 
 ```haskell
 Prelude> :i Functor
-type Functor :: (* -> *) -> Constraint
-class Functor f where
+class Functor (f :: * -> *) where
   fmap :: (a -> b) -> f a -> f b
 instance Functor [] -- naturally lists are an instance
 instance Functor Maybe -- but this may surprise!
 ... -- and some other instances we'll talk about shortly
 ```
 
-The first line says that instances of the Functor typeclass must be over types that have the [kind](/haskell2/type-kinds) `(* -> *)`, that is, their constructors must be parameterised with a single type variable.  After this, the `class` definition specifies `fmap` as a function that will be available to any instance of Functor and that `f` is the type parameter for the constructor function, which again, takes one type parameter, e.g. `f a` as the input to `fmap`, which returns an `f b`.
+The first line says that an instances of the Functor typeclass `f` must be over a type that has the [kind](/haskell2/type-kinds) `(* -> *)`, that is, their constructors must be parameterised with a single type variable.  After this, the `class` definition specifies `fmap` as a function that will be available to any instance of Functor and that `f` is the type parameter for the constructor function, which again, takes one type parameter, e.g. `f a` as the input to `fmap`, which returns an `f b`.
 
 Naturally, lists have an instance:
 
@@ -295,8 +294,7 @@ Applicative is a “subclass” of Functor, meaning that an instance of `Applica
 
 ```haskell
 GHCi> :i Applicative
-type Applicative :: (* -> *) -> Constraint
-class Functor f => Applicative f where
+class Functor f => Applicative (f :: * -> *) where
   pure :: a -> f a
   (<*>) :: f (a -> b) -> f a -> f b
 ...

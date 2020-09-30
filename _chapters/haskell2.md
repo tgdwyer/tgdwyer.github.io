@@ -131,8 +131,7 @@ The function bodies are defined in “instances” of the type class.  A good st
 
 ```haskell
 GHCi> :i Num
-type Num :: * -> Constraint
-class Num a where
+class Num a where   
   (+) :: a -> a -> a
   (-) :: a -> a -> a
   (*) :: a -> a -> a
@@ -148,16 +147,13 @@ instance Num Int -- Defined in `GHC.Num'
 instance Num Float -- Defined in `GHC.Float'
 instance Num Double -- Defined in `GHC.Float' 
 ```
-The first line is the "type" of the typeclass.  Such "types of types" are referred to in haskell as the "kind" of the type.  `*->Constraint` is a simple kind saying that Nums are constructed with a single value (as opposed to a contructor function like the "ConsList" function we defined above which took a parameter) and the Num is a "constraint" over such values that specifies a set of functions that will be available for instances of Num.  We will see more complex kinds later in other type classes.
-
-The next line (beginning `class`) tells us that for a type to be an instance of the `Num` typeclass, it must provide the operators `+`, `*` and the functions `abs`, `signum` and `fromInteger`, and either `(-)` or `negate`.  The last is an option because a default definition exists for each in terms of the other.  The last five lines (beginning with “`instance`”) tell us which types have been declared as instances of `Num` and hence have definitions of the necessary functions.  These are `Word`, `Integer`, `Int`, `Float` and `Double`.  Obviously this is a much more finely grained set of types than JavaScript’s universal “`number`” type.  This granularity allows the type system to guard against improper use of numbers that might result in loss in precision or division by zero.
+The first line (beginning `class`) tells us that for a type to be an instance of the `Num` typeclass, it must provide the operators `+`, `*` and the functions `abs`, `signum` and `fromInteger`, and either `(-)` or `negate`.  The last is an option because a default definition exists for each in terms of the other.  The last five lines (beginning with “`instance`”) tell us which types have been declared as instances of `Num` and hence have definitions of the necessary functions.  These are `Word`, `Integer`, `Int`, `Float` and `Double`.  Obviously this is a much more finely grained set of types than JavaScript’s universal “`number`” type.  This granularity allows the type system to guard against improper use of numbers that might result in loss in precision or division by zero.
 
 The main numeric type we will use in this course is `Int`, i.e. fixed-precision integers.
 
 Note some obvious operations we would likely need to perform on numbers that are missing from the `Num` typeclass.  For example, equality checking.  This is defined in a separate type class `Eq`, that is also instanced by concrete numeric types like `Int`:
 ```haskell
 > :i Eq
-type Eq :: * -> Constraint
 class Eq a where
   (==) :: a -> a -> Bool
   (/=) :: a -> a -> Bool
@@ -170,7 +166,6 @@ instance Eq Int
 Note again that instances need implement only `==` or `/=` (not equal to), since each can be easily defined in terms of the other.  Still we are missing some obviously important operations, e.g., what about greater-than and less-than?  These are defined in the Ord type class:
 ```haskell
 > :i Ord
-type Ord :: * -> Constraint
 class Eq a => Ord a where
   compare :: a -> a -> Ordering
   (<) :: a -> a -> Bool
