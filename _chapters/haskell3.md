@@ -353,6 +353,10 @@ This is also called “lifting” a function over an Applicative.  Actually, it�
 Just 5 
 ```
 
+Here's a little visual summary of Applicative and lifting:
+
+![Applicative Visual Summary](/haskell3/applicativepicture.png)
+
 It’s also useful to lift binary data constructors over two Applicative values, e.g. for tuples:
 ```haskell
 > (,) <$> Just 3 <*> Just 2
