@@ -106,3 +106,7 @@ A fully worked example of FRP using rx.js Observables to create an in-browser ve
 - Understand that [Monad](/haskell4#monad) extends Functor and Applicative to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
 
 ## [Parser Combinators](parsercombinators)
+
+- Understand that a parser is a program which extracts information from a structured text file
+- Apply what we have learned about Haskell typeclasses and other functional programming concepts to create solutions to real-world problems
+- In particular, we learn to use Parser combinators and see how they are put together
