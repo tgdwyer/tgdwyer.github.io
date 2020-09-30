@@ -138,21 +138,50 @@ instance Foldable ((,) a) -- Defined in `Data.Foldable'
 Note that I've reordered the list of functions to the order we want to discuss them, removed a few things we're not interested in at the moment and the comments are mine.
 However, once you get used to reading types the type info for this class is pretty self explanatory.
 
-
 ## Traversable
+
+`Traversable` extends both `Foldable` and `Functor`, in a typeclass for things that we can `traverse` a function with an `Applicative` effect over, e.g. here's a sneak peak of what this lets us do:
+
+```haskell
+> traverse putStrLn ["tim","was","here"]
+tim
+was
+here
+[(),(),()]
+```
+
+The first three lines are the strings printed to the terminal (the side effect).  The result `[(),(),()]` returned by `traverse` is discussed below.
+
+Here, as usual, is what GHCi `:i` tells us about the Traversable type class:
+
+```haskell
+ghci> :i Traversable
+type Traversable :: (* -> *) -> Constraint
+class (Functor t, Foldable t) => Traversable t where
+  traverse :: Applicative f => (a -> f b) -> t a -> f (t b)
+  sequenceA :: Applicative f => t (f a) -> f (t a)
+  ... -- some other functions
+  {-# MINIMAL traverse | sequenceA #-}
+        -- Defined in `Data.Traversable'
+instance Traversable [] -- Defined in `Data.Traversable'
+instance Traversable Maybe -- Defined in `Data.Traversable'
+instance Traversable (Either a) -- Defined in `Data.Traversable'
+instance Traversable ((,) a) -- Defined in `Data.Traversable'
+```
 
 The following map shows how all of these typeclasses are starting to come together to offer some real power:
 
 ![Traversable Typeclasses](/haskell4/traversabletypeclasses.png)
 
-Remember our safe modulo function:
+So what does the traverse function do?  By way of example, remember our safe modulo function this we used to experiment with [Functor](/haskell3/#functor):
 ```haskell
 safeMod :: Integral a => a-> a-> Maybe a
 safeMod _ 0 = Nothing
 safeMod numerator divisor = Just $ mod numerator divisor 
 ```
 
-Which we could use to map over a list of numbers without throwing divide-by-zero exceptions:
+It lets us map over a list of numbers without throwing divide-by-zero exceptions:
+
 ```haskell
 GHCi> map (safeMod 3) [1,2,0,2]
 [Just 0,Just 1,Nothing,Just 1]
@@ -165,7 +194,8 @@ GHCi> traverse (safeMod 3) [1,2,0,2]
 Nothing 
 ```
 
-Traverse applies a function with an `Applicative` return value (or Applicative effect) to the contents of a `Traversable` thing.
+Traverse applies a function with a result in an `Applicative` context (i.e. an Applicative effect) to the contents of a `Traversable` thing.
+
 ```haskell
 GHCi> :t traverse
 traverse
@@ -186,19 +216,20 @@ GHCi> :t print
 print :: Show a => a -> IO ()
 ```
 
-The `()` is like `void` in TypeScript - it’s a type with exactly one value `()`, and hence is called “Unit”.  There is no return value from `print`, only the `IO` effect, and hence the return type is `` ()`. `IO` is also an instance of `Applicative`.  This means we can use `traverse` to print out the contents of a list:
+The `()` is like `void` in TypeScript - it’s a type with exactly one value `()`, and hence is called “Unit”.  There is no return value from `print`, only the `IO` effect, and hence the return type is `()`.  `IO` is also an instance of `Applicative`.  This means we can use `traverse` to print out the contents of a list:
 
 ```haskell
 GHCi> traverse print [1,2,3]
 1
 2
 3
-[(),(),()] 
+[(),(),()]
 ```
+
 Where the return value is a list of the effects of each application of print, inside the `IO` Applicative.
 ```haskell
 GHCi> :t traverse print [1,2,3]
-traverse print [1,2,3] :: IO [()] 
+traverse print [1,2,3] :: IO [()]
 ```
 
 There is no easy way to get rid of this `IO` return type - which protects you from creating `IO` effects unintentionally.
@@ -208,15 +239,16 @@ A related function defined in `Traversable` is `sequenceA` allows us to convert 
 ```haskell
 > :t sequenceA
 sequenceA :: (Applicative f, Traversable t) => t (f a) -> f (t a)
+GHCi> sequenceA [Just 0,Just 1,Just 1]
+Just [0,1,1]
 GHCi> sequenceA [Just 0,Just 1,Nothing,Just 1]
 Nothing
 ```
 
-Or on a “clean” list of `Just` values:
+The default `sequenceA` [is defined](https://hackage.haskell.org/package/base-4.14.0.0/docs/src/Data.Traversable.html#sequenceA) very simply in terms of `traverse` (recall `id` is just `\x->x`):
 
 ```haskell
-GHCi> sequenceA [Just 0,Just 1,Just 1]
-Just [0,1,1]
+sequenceA = traverse id
 ```
 
 ## Monad

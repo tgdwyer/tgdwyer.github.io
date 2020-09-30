@@ -353,7 +353,7 @@ This is also called “lifting” a function over an Applicative.  Actually, it�
 Just 5 
 ```
 
-Here's a little visual summary of Applicative and lifting:
+Here's a little visual summary of Applicative and lifting (box metaphor inspired by [adit.io](http://www.adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html)):
 
 ![Applicative Visual Summary](/haskell3/applicativepicture.png)
 
