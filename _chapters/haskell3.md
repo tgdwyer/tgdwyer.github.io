@@ -172,7 +172,7 @@ instance Functor Maybe -- but this may surprise!
 ... -- and some other instances we'll talk about shortly
 ```
 
-The first line says that instances of the Functor typeclass must be over types that have the kind `(* -> *)`, that is, their constructors must be parameterised with a single type variable.  After this, the `class` definition specifies `fmap` as a function that will be available to any instance of Functor and that `f` is the type parameter for the constructor function, which again, takes one type parameter, e.g. `f a` as the input to `fmap`, which returns an `f b`.
+The first line says that instances of the Functor typeclass must be over types that have the [kind](/haskell2/type-kinds) `(* -> *)`, that is, their constructors must be parameterised with a single type variable.  After this, the `class` definition specifies `fmap` as a function that will be available to any instance of Functor and that `f` is the type parameter for the constructor function, which again, takes one type parameter, e.g. `f a` as the input to `fmap`, which returns an `f b`.
 
 Naturally, lists have an instance:
 

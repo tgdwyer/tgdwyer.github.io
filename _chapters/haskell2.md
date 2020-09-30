@@ -75,7 +75,7 @@ The following visual summary shows pair data structures with accessor functions 
 GHCi allows you to use the `:kind` (or `:k`) command to interrogate the *Kind* of types.  The kind syntax indicates the *arity* or number of type parameters a type has.  Note that it is like the syntax for function types (with the `->`), which is natural because it relates to the kind of the constructor function for the type.  If the constructor takes no type parameters the kind is just `*`, (it returns a type), `*->*` if it takes one type parameter, `*->*->*` for two type parameters and so on.
 
 
-![Polymorphism Summary](/haskell2/haskellpolymorphism.png)
+![Polymorphism Summary](/haskell2/kinds.png)
 
 ## Record Syntax
 
@@ -157,6 +157,7 @@ The main numeric type we will use in this course is `Int`, i.e. fixed-precision 
 Note some obvious operations we would likely need to perform on numbers that are missing from the `Num` typeclass.  For example, equality checking.  This is defined in a separate type class `Eq`, that is also instanced by concrete numeric types like `Int`:
 ```haskell
 > :i Eq
+type Eq :: * -> Constraint
 class Eq a where
   (==) :: a -> a -> Bool
   (/=) :: a -> a -> Bool
@@ -169,6 +170,7 @@ instance Eq Int
 Note again that instances need implement only `==` or `/=` (not equal to), since each can be easily defined in terms of the other.  Still we are missing some obviously important operations, e.g., what about greater-than and less-than?  These are defined in the Ord type class:
 ```haskell
 > :i Ord
+type Ord :: * -> Constraint
 class Eq a => Ord a where
   compare :: a -> a -> Ordering
   (<) :: a -> a -> Bool
