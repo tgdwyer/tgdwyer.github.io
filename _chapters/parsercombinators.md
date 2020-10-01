@@ -13,9 +13,44 @@ under construction...
 
 ## Introduction
 
-## Context-free Grammars
+In this section we will see how the various Haskell language features we have explored allow us to solve real-world problems.  In particular, we will develop a simple but powerful library for building *parsers* that is compositional through Functor, Applicative and Monadic interfaces.  Before this, though, we will learn the basics of parsing text, including a high-level understanding that parsers are *state-machines* which realise a *context-free grammar* over a textual language.
 
-## Backus Naur Form (BNF)
+In this chapter, a *parser* is simply a function which takes a string as input and produces some structure or computation as output.
+Parsing has a long history and *parser combinators* are a relatively recent approach made popular quite recently by modern functional programming techniques.  
+A *parser combinator* is a [higher-order function](/higherorderfunctions) that accepts parsers as input and combines them somehow into a new parser.
+
+More traditional approaches to parsing typically involve special purpose programs called *parser generators*, which take as input a grammar defined in a special language (usually some derivation of BNF as described below) and generate the partial program in the desired programming language which must then be completed by the programmer to parse such input.  Parser combinators have the advantage that they are entirely written in the one language.  Parser combinators written in Haskell take advantage of the expressiveness of the Haskell language such that the finished parser can look a lot like a BNF grammar definition, as we shall see.
+
+The parser combinator discussed here is based on one developed by Tony Morris and Mark Hibberd as part of their ["System F" Functional Programming Course](https://github.com/system-f/fp-course), which in turn is a simplified version of official Haskell parser combinators such as [parsec](https://hackage.haskell.org/package/parsec) by Daan Leijen.
+
+## Context-free Grammars and BNF
+
+Fundamental to analysis of human natural language but also to the design of programming languages is the idea of a *grammar*, or a set of rules for how elements of the language may be composed.  A context-free grammar (CFG) is one in which the set of rules for what is produced for a given input (*production rules*) completely cover the set of possible input symbols (i.e. there is no additional context required to parse the input).  Backus-Naur Form (or BNF) is a notation that has become standard for writing CFGs since the 1960s.  We will use BNF notation from now on.  There are two types of symbols in a CFG: *terminal* and *non-terminal*.  In BNF non-terminal symbols are `<nameInsideAngleBrackets>` and can be converted into a mixture of terminals and/or nonterminals by production rules:
+
+```
+<nonterminal> ::= a mixture of terminals, <nonterminal>s with alternative productions separated by |
+```
+
+Thus, *terminals* may only appear on the right-hand side of a production rule, *non-terminals* on either side.  In BNF each *non-terminal* symbol appears on the left-hand side of exactly one production rule, and there may be several possible alternatives for each *non-terminal* specified on the right-hand side.  These are separated by a "`|`" (in this regard they look a bit like the syntax for [algebraic data type definitions](https://tgdwyer.github.io/haskell2#algebraic-data-types)). 
+
+Here's an example BNF grammar for parsing Australian land-line phone numbers, which may optionally include a two-digit area code in brackets, and then two groups of four digits, with an arbitrary number of spaces separating each of these, e.g.:
+
+> (03) 9583 1762  
+> 9583 1762
+
+Here's the BNF grammar:
+
+```
+<digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+<areaCode> ::= "(" <digit> <digit> ")"
+<fourDigits> ::= <digit> <digit> <digit> <digit>
+<spaces> ::= " " <spaces> | ""
+<basicNumber> ::= <spaces> <fourDigits> <spaces> <fourDigits>
+<fullNumber> ::= <areaCode> <basicNumber>
+<phoneNumber> ::= <fullNumber> | <basicNumber>
+```
+
+So "0"-"9" and "(",")" are the full set of terminals.
 
 ## Parser Type
 
@@ -40,3 +75,4 @@ Then the `Parser` type has one field `parse` which is a function of type `Input 
 We'll come back to the `ParseError` type - which will be returned in the case of unexpected input, but we can see that a successful Parse is going to produce a `Result` which has two fields - more `Input` (the part of the input remaining after we took a bit off and parsed it), and an `a` - a type parameter that we may specify for concrete `Parser` instances.
 
 So this is pretty abstract.  It says nothing about how big of a piece of the `Input` string we are going to parse, or exactly what type `a` we are going to make out of it.
+
