@@ -52,7 +52,7 @@ Here's the BNF grammar:
 <spaces> ::= " " <spaces> | ""
 ```
 
-So "0"-"9" and "(",")" are the full set of terminals.
+So `"0"`-`"9"` and `"("`, `")"` are the full set of terminals.
 
 Now here's a sneak peak at a simple parser for such phone numbers.  It succeeds for any input string which satisfies the above grammar, returning a 10-digit string for the full number without spaces and assumes "03" for the area code for numbers with none specified (i.e. it assumes they are local to Victoria).  We can use it like so:
 
