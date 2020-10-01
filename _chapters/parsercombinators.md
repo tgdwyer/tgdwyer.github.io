@@ -43,13 +43,13 @@ Here's an example BNF grammar for parsing Australian land-line phone numbers, wh
 Here's the BNF grammar:
 
 ```
+<phoneNumber> ::= <fullNumber> | <basicNumber>
+<fullNumber> ::= <areaCode> <basicNumber>
+<basicNumber> ::= <spaces> <fourDigits> <spaces> <fourDigits>
+<fourDigits> ::= <digit> <digit> <digit> <digit>
+<areaCode> ::= "(" <digit> <digit> ")"
 <digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 <spaces> ::= " " <spaces> | ""
-<areaCode> ::= "(" <digit> <digit> ")"
-<fourDigits> ::= <digit> <digit> <digit> <digit>
-<basicNumber> ::= <spaces> <fourDigits> <spaces> <fourDigits>
-<fullNumber> ::= <areaCode> <basicNumber>
-<phoneNumber> ::= <fullNumber> | <basicNumber>
 ```
 
 So "0"-"9" and "(",")" are the full set of terminals.
@@ -70,9 +70,12 @@ Unexpected character: "-"
 We haven't bothered to show the types for each of the functions in the code below, as they are all `::Parser [Char]` - meaning a Parser that returns a string.  We'll explain all the types and functions used in due course.  For now, just notice how similar the code is to the BNF grammar definition:
 
 ```haskell
-areaCode = betweenCharTok '(' ')' (thisMany 2 digit)
+phoneNumber = fullNumber ||| ("03"++) <$> basicNumber
 
-fourDigits = thisMany 4 digit
+fullNumber = do
+   ac <- areaCode
+   n <- basicNumber
+   pure (ac ++ n)
 
 basicNumber = do
    spaces
@@ -81,12 +84,9 @@ basicNumber = do
    second <- fourDigits
    pure (first ++ second)
 
-fullNumber = do
-   ac <- areaCode
-   n <- basicNumber
-   return (ac ++ n)
+fourDigits = thisMany 4 digit
 
-phoneNumber = fullNumber ||| ("03"++) <$> basicNumber
+areaCode = betweenCharTok '(' ')' (thisMany 2 digit)
 ```
 
 ## Parser Type
@@ -111,5 +111,5 @@ Then the `Parser` type has one field `parse` which is a function of type `Input 
 
 We'll come back to the `ParseError` type - which will be returned in the case of unexpected input, but we can see that a successful Parse is going to produce a `Result` which has two fields - more `Input` (the part of the input remaining after we took a bit off and parsed it), and an `a` - a type parameter that we may specify for concrete `Parser` instances.
 
-So this is pretty abstract.  It says nothing about how big of a piece of the `Input` string we are going to parse, or exactly what type `a` we are going to make out of it.
+So this is pretty abstract.  It says nothing about what precise `Input` string we are going to parse, or what type `a` we are going to return as a result.
 
