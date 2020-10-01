@@ -42,15 +42,50 @@ Here's the BNF grammar:
 
 ```
 <digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+<spaces> ::= " " <spaces> | ""
 <areaCode> ::= "(" <digit> <digit> ")"
 <fourDigits> ::= <digit> <digit> <digit> <digit>
-<spaces> ::= " " <spaces> | ""
 <basicNumber> ::= <spaces> <fourDigits> <spaces> <fourDigits>
 <fullNumber> ::= <areaCode> <basicNumber>
 <phoneNumber> ::= <fullNumber> | <basicNumber>
 ```
 
 So "0"-"9" and "(",")" are the full set of terminals.
+
+Now here's a sneak peak at a simple parser for such phone numbers.  It succeeds for any input string which satisfies the above grammar, returning a 10-digit string for the full number without spaces and assumes "03" for the area code for numbers with none specified (i.e. it assumes they are local to Victoria).  We can use it like so:
+
+```haskell
+GHCi> parse phoneNumber "(02)9583 1762"
+Result >< "0295831762"
+
+GHCi> parse phoneNumber "9583  1762"
+Result >< "0395831762"
+
+GHCi> parse phoneNumber "9583-1762"
+Unexpected character: "-"
+```
+
+We haven't bothered to show the types for each of the functions in the code below, as they are all `::Parser [Char]` - meaning a Parser that returns a string.  We'll explain all the types and functions used in due course.  For now, just notice how similar the code is to the BNF grammar definition:
+
+```haskell
+areaCode = betweenCharTok '(' ')' (thisMany 2 digit)
+
+fourDigits = thisMany 4 digit
+
+basicNumber = do
+   spaces
+   first <- fourDigits
+   spaces
+   second <- fourDigits
+   pure (first ++ second)
+
+fullNumber = do
+   ac <- areaCode
+   n <- basicNumber
+   return (ac ++ n)
+
+phoneNumber = fullNumber ||| ("03"++) <$> basicNumber
+```
 
 ## Parser Type
 
