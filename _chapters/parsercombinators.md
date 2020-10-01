@@ -31,7 +31,9 @@ Fundamental to analysis of human natural language but also to the design of prog
 <nonterminal> ::= a mixture of terminals, <nonterminal>s with alternative productions separated by |
 ```
 
-Thus, *terminals* may only appear on the right-hand side of a production rule, *non-terminals* on either side.  In BNF each *non-terminal* symbol appears on the left-hand side of exactly one production rule, and there may be several possible alternatives for each *non-terminal* specified on the right-hand side.  These are separated by a "`|`" (in this regard they look a bit like the syntax for [algebraic data type definitions](https://tgdwyer.github.io/haskell2#algebraic-data-types)). 
+Thus, *terminals* may only appear on the right-hand side of a production rule, *non-terminals* on either side.  In BNF each *non-terminal* symbol appears on the left-hand side of exactly one production rule, and there may be several possible alternatives for each *non-terminal* specified on the right-hand side.  These are separated by a "`|`" (in this regard they look a bit like the syntax for [algebraic data type definitions](https://tgdwyer.github.io/haskell2#algebraic-data-types)).
+
+Note that production rules of the form above are for context-free grammars.  As a definition by counter-example, *context sensitive grammars* allow terminals and more than one non-terminal on the left hand side.
 
 Here's an example BNF grammar for parsing Australian land-line phone numbers, which may optionally include a two-digit area code in brackets, and then two groups of four digits, with an arbitrary number of spaces separating each of these, e.g.:
 
