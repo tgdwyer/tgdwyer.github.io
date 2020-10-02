@@ -25,7 +25,7 @@ As we will see shortly, the Haskell bind operator `>>=` can also be used to sequ
 getLine >>= \x -> putStrLn("hello "++x)
 ```
 
-However, it not only separates the two expressions, it is handling the IO type within which all such effectful code in Haskell must operate.  But as well as allowing us to chain operations, bind is defined to do different and useful things for different Monad instances, as we shall see.
+However, it not only separates the two expressions, it is safely handling the `IO` type within which all such effectful code in Haskell must operate.  But as well as allowing us to chain operations, bind is defined to do different and useful things for different Monad instances, as we shall see.
 
 ## The Monad Typeclass
 
