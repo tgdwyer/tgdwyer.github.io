@@ -301,11 +301,11 @@ So the bind function `(>>=)` (and equally its flipped version `(=<<)`) gives us 
 
 As an example we'll consider computation using the `Maybe` type, which we said is useful for partial functions, that is functions which are not sensibly defined over all of their inputs.  A good example of such a function is the [quadratic formula](https://en.wikipedia.org/wiki/Quadratic_formula), which for quadratic functions of the form:
 
-![quadratic function](/haskell4/quadratic.png)
+<image src="/haskell4/quadratic.png" width="25%"></image>
 
-Determines two roots as follows:
+determines two roots as follows:
 
-![quadratic roots](/haskell4/quadroots.png)
+<image src="/haskell4/quadroots.png" width="80%"></image>
 
 This may fail in two ways.  First, if *a* is 0, second if the expression that squareroot is applied to is negative (and we insist on only real-valued solutions).  Therefore, let's define a little library of math functions which encapsulate the possibility of failure in a `Maybe`:
 
@@ -314,8 +314,10 @@ safeDiv :: Float -> Float -> Maybe Float
 safeDiv _ 0 = Nothing
 safeDiv numerator denominator = Just $ numerator / denominator
 
-safeSquareroot :: Float -> Maybe Float
-safeSquareroot x = if x < 0 then Nothing else Just $ sqrt x
+safeSqrt :: Float -> Maybe Float
+safeSqrt x
+  | x < 0 = Nothing
+  | otherwise = Just $ sqrt x -- the built-in squareroot function
 ```
 
 Great!  Now we can use `case` and pattern matching to make a safe solver of quadratic equations:
@@ -323,7 +325,7 @@ Great!  Now we can use `case` and pattern matching to make a safe solver of quad
 ```haskell
 safeSolve :: Float -> Float -> Float -> Maybe (Float, Float)
 safeSolve a b c =
-    case safeSquareroot $ b*b - 4 * a * c of
+    case safeSqrt $ b*b - 4 * a * c of
         Just s ->
             let
             x1 = safeDiv (-b + s) (2*a)
@@ -356,12 +358,12 @@ The first argument it expects is a value in a context `m a`.  What if that we ap
 (Just x>>=) :: (Float -> Maybe b) -> Maybe b
 ```
 
-So GHCi is telling us that the next argument has to be a function that takes a `Float` as input, and gives back anything in a `Maybe`.  Our `safeSquareroot` definitely fits this description, as does `safeDiv` partially applied to a Float.  So, here's a `safeSolve` which uses `(>>=)` to remove the need for `case`s:
+So GHCi is telling us that the next argument has to be a function that takes a `Float` as input, and gives back anything in a `Maybe`.  Our `safeSqrt` definitely fits this description, as does `safeDiv` partially applied to a Float.  So, here's a `safeSolve` which uses `(>>=)` to remove the need for `case`s:
 
 ```haskell
 safeSolve :: Float -> Float -> Float -> Maybe (Float, Float)
 safeSolve a b c =
-    safeSquareroot (b*b - 4 * a * c) >>= \s ->
+    safeSqrt (b*b - 4 * a * c) >>= \s ->
     safeDiv (-b + s) (2*a) >>= \x1 ->
     safeDiv (-b - s) (2*a) >>= \x2 ->
     pure (x1,x2)
@@ -372,6 +374,18 @@ Just (-1.0,-2.0)
 Nothing
 ```
 
+Note that Haskell has a special notation for such multi-line use of bind, called "`do` notation".  The above code, in a `do` block looks like:
+
+```haskell
+safeSolve a b c = do
+    s <- safeSqrt (b*b - 4 * a * c)
+    x1 <- safeDiv (-b + s) (2*a)
+    x2 <- safeDiv (-b - s) (2*a)
+    pure (x1,x2)
+```
+
+So inside a `do`-block `y<-x` is completely equivalent to `x >>= \y -> ...`, where in both cases the variable `y` is in scope for the rest of the expression.  We'll see more [explanation and examples of `do` notation below](/haskell4/#do-notation).
+
 How is a `Nothing` result from either of our `safe` functions handled?  Well, the [Maybe instance of Monad](https://hackage.haskell.org/package/base-4.14.0.0/docs/src/GHC.Base.html#line-1005) defines bind like so:
 
 ```haskell
@@ -379,6 +393,8 @@ instance  Monad Maybe  where
     (Just x) >>= k      = k x
     Nothing  >>= _      = Nothing
 ```
+
+Meaning, that anything on the right-hand side of a `Nothing>>=` will be left unevaluated and `Nothing` returned.
 
 So that's one instance of `Monad`, let's look at some more...
 
@@ -409,7 +425,7 @@ GHCi> :t greet <$> getLine
 greet <$> getLine :: IO (IO ()) 
 ```
 
-The `IO` action we want (`greet`) is nested inside another `IO` action.  When it is run, only the outer `IO` action is actually executed. The inner `IO` computation (action) is not actually touched.
+The `IO` action we want (`greet`) is nested inside another `IO` action.  When it is run, only the outer `IO` action is actually executed. The inner `IO` computation (action) is not evaluated.
 To see an output we somehow need to flatten the `IO (IO ())` into just a single level: `IO ()`.
 `(>>=)` gives us this ability:
 
