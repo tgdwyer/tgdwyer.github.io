@@ -3,7 +3,7 @@ layout: page
 title: "Parser Combinators"
 permalink: /parsercombinators/
 ---
-under construction...
+***under construction...***
 
 ## Learning Outcomes
 
@@ -22,6 +22,8 @@ A *parser combinator* is a [higher-order function](/higherorderfunctions) that a
 More traditional approaches to parsing typically involve special purpose programs called *parser generators*, which take as input a grammar defined in a special language (usually some derivation of BNF as described below) and generate the partial program in the desired programming language which must then be completed by the programmer to parse such input.  Parser combinators have the advantage that they are entirely written in the one language.  Parser combinators written in Haskell take advantage of the expressiveness of the Haskell language such that the finished parser can look a lot like a BNF grammar definition, as we shall see.
 
 The parser combinator discussed here is based on one developed by Tony Morris and Mark Hibberd as part of their ["System F" Functional Programming Course](https://github.com/system-f/fp-course), which in turn is a simplified version of official Haskell parser combinators such as [parsec](https://hackage.haskell.org/package/parsec) by Daan Leijen.
+
+You can play with the example and the various parser bits and pieces in [this on-line playground](https://repl.it/@tgdwyer/DistortedMaroonDigits#main.hs).
 
 ## Context-free Grammars and BNF
 
@@ -113,9 +115,8 @@ We assume all `Input` is a `String`, i.e. Haskell's basic builtin `String` which
 Then the `Parser` type has one field `parse` which is a function of type `Input -> ParseResult a`.  So it parses strings and produces parse results, where a Parse result is:
 
 ```haskell
- data ParseResult a =
-    Error ParseError
-  | Result Input a
+ data ParseResult a = Error ParseError
+                    | Result Input a
   deriving Eq
 ```
 
@@ -123,3 +124,63 @@ We'll come back to the `ParseError` type - which will be returned in the case of
 
 So this is pretty abstract.  It says nothing about what precise `Input` string we are going to parse, or what type `a` we are going to return as a result.
 
+## Instances
+
+## Error Handling
+
+```haskell
+data ParseError = UnexpectedEof
+                | UnexpectedChar Char
+  deriving (Eq, Show)
+```
+
+## Parser Combinators
+
+The most atomic function for a parser of `String`, is to pull a single character off the input.  The only thing that could go wrong is to find our input is empty.
+
+```haskell
+character :: Parser Char
+character = P parseit
+  where parseit "" = Error UnexpectedEof
+        parseit (c:s) = Result s c
+```
+
+The following is how we will report an error when we encounter a character we didn't expect.  This is not the logic for recognising a character, that's already happened and failed and the unrecognised character is now the parameter.  This is just error reporting, and since we have to do it from within the context of a `Parser`, we create one using the `P` constructor.  Then we set up the one field common to any `Parser`, a function which returns a `ParseResult` -- no matter the input, hence `const`.  The rest creates the right type of `Error` for the given `Char`.
+
+```haskell
+unexpectedCharParser :: Char -> Parser a
+unexpectedCharParser = P . const . Error . UnexpectedChar
+```
+
+Now a parser that insists on a certain character being the next one on the input.  It's using the `Parser` instance of `Monad`'s bind function (implicitly in [a `do` block](/monad/#do-notation)) to sequence first the `character` `Parser`, then either return the correct character in the `Parser`, or the `Error` parser.
+
+```haskell
+is :: Char -> Parser Char
+is c = do
+  v <- character
+  let next = if v == c
+             then pure
+             else const $ unexpectedCharParser v
+  next c
+```
+
+And finally our `Parser` for trying to apply a first `Parser`, and then and alternate `Parser` if the first fails:
+
+```haskell
+(|||) :: Parser a -> Parser a -> Parser a
+p1 ||| p2 = P (\i -> let f (Error _) = parse p2 i
+                         f r = r
+                     in f $ parse p1 i)
+```
+
+## Nitty gritty
+
+```haskell
+spaces :: Parser ()
+spaces = (is ' ' >> spaces) ||| pure ()
+```
+
+```haskell
+digit :: Parser Char
+digit = is '0' ||| is '1' ||| is '2' ||| is '3' ||| is '4' ||| is '5' ||| is '6' ||| is '7' ||| is '8' ||| is '9'
+```
