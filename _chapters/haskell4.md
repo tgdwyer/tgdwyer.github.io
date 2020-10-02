@@ -518,3 +518,29 @@ GHCi> join $ greet <$> getLine
 
 >Tim  
 >Nice to meet you Tim!
+
+## List
+
+As with the [Applicative list instance](/haskell3/#applicative), the list implementation of bind [is defined](https://hackage.haskell.org/package/base-4.14.0.0/docs/src/GHC.Base.html#Monad) with comprehension syntax:
+
+```haskell
+instance Monad []  where
+    xs >>= f = [y | x <- xs, y <- f x]
+```
+
+Where `xs` is a list and `f` is a function which returns a list.  `f` is applied to each element of `xs` and the result concatenated.  Actually, list comprehensions are just syntactic sugar for the list monad `do` notation, for example, `[(i,j)|i<-['a'..'d'],j<-[1..4]]` is equivalent to:
+
+```haskell
+do
+  i <- ['a'..'d']
+  j <- [1..4]
+  pure (i,j)
+```
+
+> [('a',1),('b',1),('c',1),('d',1),('a',2),('b',2),('c',2),('d',2),('a',3),('b',3),('c',3),('d',3),('a',4),('b',4),('c',4),('d',4)]
+
+Which is itself syntactic sugar for:
+
+```haskell
+['a'..'d'] >>= \i -> [1..4] >>= \j -> pure (i,j)
+```
