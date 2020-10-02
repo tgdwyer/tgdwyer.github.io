@@ -70,7 +70,7 @@ Unexpected character: "-"
 We haven't bothered to show the types for each of the functions in the code below, as they are all `::Parser [Char]` - meaning a Parser that returns a string.  We'll explain all the types and functions used in due course.  For now, just notice how similar the code is to the BNF grammar definition:
 
 ```haskell
-phoneNumber = fullNumber ||| ("03"++) <$> basicNumber
+phoneNumber = fullNumber ||| (("03"++) <$> basicNumber)
 
 fullNumber = do
    ac <- areaCode
@@ -84,9 +84,19 @@ basicNumber = do
    second <- fourDigits
    pure (first ++ second)
 
-fourDigits = thisMany 4 digit
+fourDigits = do
+  a <- digit
+  b <- digit
+  c <- digit
+  d <- digit
+  pure [a,b,c,d]
 
-areaCode = betweenCharTok '(' ')' (thisMany 2 digit)
+areaCode = do
+  is '('
+  a <- digit
+  b <- digit
+  is ')'
+  pure [a,b]
 ```
 
 ## Parser Type
