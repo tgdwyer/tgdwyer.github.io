@@ -7,13 +7,13 @@ under construction...
 
 ## Learning Outcomes
 
-- Understand that a parser is a program which extracts information from a structured text file
+- Understand that a parser is a program which extracts information from structured text
 - Apply what we have learned about Haskell typeclasses and other functional programming concepts to create solutions to real-world problems
-- In particular, we learn to use Parser combinators and see how they are put together
+- In particular, we learn to use parser combinators and see how they are put together
 
 ## Introduction
 
-In this section we will see how the various Haskell language features we have explored allow us to solve real-world problems.  In particular, we will develop a simple but powerful library for building *parsers* that is compositional through Functor, Applicative and Monadic interfaces.  Before this, though, we will learn the basics of parsing text, including a high-level understanding that parsers are *state-machines* which realise a *context-free grammar* over a textual language.
+In this section we will see how the various Haskell language features we have explored allow us to solve real-world problems.  In particular, we will develop a simple but powerful library for building *parsers* that is compositional through [Functor](/haskell3/#functor), [Applicative](/haskell3/#applicative) and [Monad](/haskell4/#monad) interfaces.  Before this, though, we will learn the basics of parsing text, including a high-level understanding that parsers are *state-machines* which realise a *context-free grammar* over a textual language.
 
 In this chapter, a *parser* is simply a function which takes a string as input and produces some structure or computation as output.
 Parsing has a long history and *parser combinators* are a relatively recent approach made popular quite recently by modern functional programming techniques.  

@@ -294,8 +294,93 @@ Its type has a nice correspondence to the other operators we have already seen f
 (=<<) :: Monad m       => (a -> m b) -> m a -> m b
 (<*>) :: Applicative f => f (a -> b) -> f a -> f b
 (<$>) :: Functor f     =>   (a -> b) -> f a -> f b
-($)   ::                    (a -> b) -> a   -> b 
+($)   ::                    (a -> b) -> a   -> b
 ```
+
+So the bind function `(>>=)` (and equally its flipped version `(=<<)`) gives us another way to map functions over contexts, but why do we need another way?
+
+As an example we'll consider computation using the `Maybe` type, which we said is useful for partial functions, that is functions which are not sensibly defined over all of their inputs.  A good example of such a function is the [quadratic formula](https://en.wikipedia.org/wiki/Quadratic_formula), which for quadratic functions of the form:
+
+![quadratic function](/haskell4/quadratic.png)
+
+Determines two roots as follows:
+
+![quadratic roots](/haskell4/quadroots.png)
+
+This may fail in two ways.  First, if *a* is 0, second if the expression that squareroot is applied to is negative (and we insist on only real-valued solutions).  Therefore, let's define a little library of math functions which encapsulate the possibility of failure in a `Maybe`:
+
+```haskell
+safeDiv :: Float -> Float -> Maybe Float
+safeDiv _ 0 = Nothing
+safeDiv numerator denominator = Just $ numerator / denominator
+
+safeSquareroot :: Float -> Maybe Float
+safeSquareroot x = if x < 0 then Nothing else Just $ sqrt x
+```
+
+Great!  Now we can use `case` and pattern matching to make a safe solver of quadratic equations:
+
+```haskell
+safeSolve :: Float -> Float -> Float -> Maybe (Float, Float)
+safeSolve a b c =
+    case safeSquareroot $ b*b - 4 * a * c of
+        Just s ->
+            let
+            x1 = safeDiv (-b + s) (2*a)
+            x2 = safeDiv (-b - s) (2*a)
+            in case (x1,x2) of
+                (Just x1', Just x2') -> Just (x1',x2')
+                _ -> Nothing
+        Nothing -> Nothing
+
+> safeSolve 1 3 2
+Just (-1.0,-2.0)
+> safeSolve 1 1 2
+Nothing
+```
+
+Actually, not so great, we are having to unpack Maybes multiple times, leading to nested `case`s.  This is just two levels of nesting, what happens if we need to work in additional computations that can fail?
+
+The general problem is that we need to chain multiple functions of the form `Float -> Maybe Float`.  Let's look again at the type of bind:
+
+```haskell
+> :t (>>=)
+(>>=) :: Monad m => m a -> (a -> m b) -> m b
+```
+
+The first argument it expects is a value in a context `m a`.  What if that we apply it to a `Maybe Float`?
+
+```haskell
+> x = 1::Float
+> :t (Just x>>=)
+(Just x>>=) :: (Float -> Maybe b) -> Maybe b
+```
+
+So GHCi is telling us that the next argument has to be a function that takes a `Float` as input, and gives back anything in a `Maybe`.  Our `safeSquareroot` definitely fits this description, as does `safeDiv` partially applied to a Float.  So, here's a `safeSolve` which uses `(>>=)` to remove the need for `case`s:
+
+```haskell
+safeSolve :: Float -> Float -> Float -> Maybe (Float, Float)
+safeSolve a b c =
+    safeSquareroot (b*b - 4 * a * c) >>= \s ->
+    safeDiv (-b + s) (2*a) >>= \x1 ->
+    safeDiv (-b - s) (2*a) >>= \x2 ->
+    pure (x1,x2)
+
+> safeSolve 1 3 2
+Just (-1.0,-2.0)
+> safeSolve 1 1 2
+Nothing
+```
+
+How is a `Nothing` result from either of our `safe` functions handled?  Well, the [Maybe instance of Monad](https://hackage.haskell.org/package/base-4.14.0.0/docs/src/GHC.Base.html#line-1005) defines bind like so:
+
+```haskell
+instance  Monad Maybe  where
+    (Just x) >>= k      = k x
+    Nothing  >>= _      = Nothing
+```
+
+So that's one instance of `Monad`, let's look at some more...
 
 ### IO
 
