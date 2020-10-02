@@ -175,12 +175,87 @@ p1 ||| p2 = P (\i -> let f (Error _) = parse p2 i
 
 ## Nitty gritty
 
+The last two pieces of our Phone Numbers grammar we also implement fairly straightforwardly from the BNF.
+```
+<digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+<spaces> ::= " " <spaces> | ""
+```
+
+Here's a trivial adaptation of `digit`:
+```haskell
+digit :: Parser Char
+digit = is '0' ||| is '1' ||| is '2' ||| is '3' ||| is '4' ||| is '5' ||| is '6' ||| is '7' ||| is '8' ||| is '9'
+```
+
+Spaces is a bit more interesting because it's recursive, but still almost identical to the BNF:
+
 ```haskell
 spaces :: Parser ()
 spaces = (is ' ' >> spaces) ||| pure ()
 ```
 
+### Exercises
+
+- make a less repeatitive `digit` parser by creating a function `satisfy :: (Char -> Bool) -> Parser Char` which returns a parser that produces a character but fails if: the input is empty; or the character does not satisfy the given predicate. You can use the `isDigit` function from `Data.Char` as the predicate.
+
+- change the type of `spaces` to `Parser [Char]` and have it return the appropriately sized string of only spaces.
+
+## Creating a Parse Tree
+
+A BNF grammar for a simple calculator with three operations `*`, `+` and `-`, with `*` having higher precedence than `+` or `-`:
+```
+<expr> ::= <term> { <add> <term> }
+<term> ::= <number> { "*" <number> }
+<add> ::= "+" | "-"
+```
+
+
 ```haskell
-digit :: Parser Char
-digit = is '0' ||| is '1' ||| is '2' ||| is '3' ||| is '4' ||| is '5' ||| is '6' ||| is '7' ||| is '8' ||| is '9'
+data Expr = Plus Expr Expr
+          | Minus Expr Expr
+          | Times Expr Expr
+          | Number Integer
+deriving Show
+```
+
+```haskell
+add :: Parser (Expr -> Expr -> Expr)
+add = (op '+' >> pure Plus) ||| (op '-' >> pure Minus)
+
+times :: Parser (Expr -> Expr -> Expr) 
+times = op '*' >> pure Times
+
+expr :: Parser Expr 
+expr = chain term add 
+
+term :: Parser Expr 
+term = chain number times
+
+-- | Parse an expression of integers, +, -, *
+-- >>> parseCalc " 12 + 21* 3 "
+-- Result > < Plus (Number 12) (Times (Number 21) (Number 3))
+--
+-- >>> parseCalc " 6 *4 + 333- 8 *  24"
+-- Result >< Minus (Plus (Times (Number 6) (Number 4)) (Number 333)) (Times (Number 8) (Number 24))
+--
+parseCalc :: String -> ParseResult Expr
+parseCalc = parse expr 
+
+op :: Char -> Parser Char -- parse a single char operator
+op c = do
+   spaces
+   charTok c
+   pure c
+  
+number :: Parser Expr     -- parse a Number
+number = spaces >> Number <$> read <$> list1 digit
+
+chain :: Parser a -> Parser (a->a->a) -> Parser a -- chain p op parses 1 or more instances of p 
+chain p op = p >>= rest                           -- separated by op
+   where                                          -- (see chainl1 from Text.Parsec)
+   rest a = (do
+               f <- op
+               b <- p
+               rest (f a b)
+            ) ||| pure a
 ```
