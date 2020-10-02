@@ -12,20 +12,20 @@ permalink: /monad/
 
 As with Functor and Applicative the name Monad comes from Category Theory.  Although the names sound mathematical they are abstractions of relatively simply concepts.  A Functor allowed simple unary functions to be applied (mapped/`fmap`ed) over a context.  Applicative allowed us to apply a function in a context to value(s) in a context.  So too, Monad has a characteristic function called `bind`, which allows us to perform another type of function application over values in a context.
 
-The special thing about bind is that it allows us to chain functions which have an effect without creating additional layers of nesting inside effect contexts.  People often try to describe Monads in metaphors, which are not always helpful.  The essence of Monad really is bind and there is no getting around looking at it's type signature and seeing what it does in different instances, which we will get to shortly.  However, one analogy that resonated for me was the idea of bind as a ["programmable semicolon"](http://book.realworldhaskell.org/read/monads.html).  That is, imagine a language like JavaScript which uses semi-colons as a statement separator:
+The special thing about bind is that it allows us to chain functions which have an effect without creating additional layers of nesting inside effect contexts.  People often try to describe Monads in metaphors, which are not always helpful.  The essence of Monad really is bind and there is no getting around looking at it's type signature and seeing what it does in different instances, which we will get to shortly.  However, one analogy that resonated for me was the idea of bind as a ["programmable semicolon"](http://book.realworldhaskell.org/read/monads.html).  That is, imagine a language like JavaScript which uses semicolons (`;`) as a statement separator:
 
 ```javascript
 // some javascript you can try in a browser console:
 const x = prompt("Name?"); console.log("Hello "+x)
 ```
 
-As we will see shortly, the Haskell bind operator `>>=` can also be used to separate expressions with an IO effect:
+As we will see shortly, the Haskell bind operator `>>=` can also be used to sequence expressions with an IO effect:
 
 ```haskell
 getLine >>= \x -> putStrLn("hello "++x)
 ```
 
-Here it not only separating the two expressions, it is handling the IO type within which all such effectful code in Haskell must operate.  But as well as allowing us to chain operations, bind is defined to do different and useful things for different Monad instances, as we shall see.
+However, it not only separates the two expressions, it is handling the IO type within which all such effectful code in Haskell must operate.  But as well as allowing us to chain operations, bind is defined to do different and useful things for different Monad instances, as we shall see.
 
 ## The Monad Typeclass
 
