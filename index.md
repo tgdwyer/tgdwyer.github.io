@@ -105,7 +105,12 @@ A fully worked example of FRP using rx.js Observables to create an in-browser ve
 - Understand that [Traversable](/haskell4#traversable) generalises containers over which we can traverse applying a function with an Applicative effect
 - Understand that [Monad](/haskell4#monad) extends Functor and Applicative to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
 
-## [Parser Combinators](parsercombinators)
+## [Monad](/monad/)
+
+- Understand that Monad extends [Functor and Applicative](/haskell3/) to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
+- Understand the operation of bind in the `Maybe`, `IO` and List instances of Monad.
+
+## [Parser Combinators](/parsercombinators/)
 
 - Understand that a parser is a program which extracts information from a structured text file
 - Apply what we have learned about Haskell typeclasses and other functional programming concepts to create solutions to real-world problems
