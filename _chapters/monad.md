@@ -10,7 +10,7 @@ permalink: /monad/
 
 ## Introduction
 
-As with Functor and Applicative the name Monad comes from Category Theory.  Although the names sound mathematical they are abstractions of relatively simply concepts.  A Functor allowed simple unary functions to be applied (mapped/`fmap`ed) over a context.  Applicative allowed us to apply a function in a context to value(s) in a context.  So too, Monad has a characteristic function called `bind`, which allows us to perform another type of function application over values in a context.
+As with Functor and Applicative the name Monad comes from Category Theory.  Although the names sound mathematical they are abstractions of relatively simple concepts.  A Functor allowed unary functions to be applied (mapped/`fmap`ed) over a context.  Applicative allowed us to apply a function in a context to values in a context.  So too, Monad has a characteristic function called `bind`, which allows us to perform another type of function application over values in a context.
 
 The special thing about bind is that it allows us to chain functions which have an effect without creating additional layers of nesting inside effect contexts.  People often try to describe Monads in metaphors, which are not always helpful.  The essence of Monad really is bind and there is no getting around looking at it's type signature and seeing what it does in different instances, which we will get to shortly.  However, one analogy that resonated for me was the idea of bind as a ["programmable semicolon"](http://book.realworldhaskell.org/read/monads.html).  That is, imagine a language like JavaScript which uses semicolons (`;`) as a statement separator:
 
@@ -25,11 +25,11 @@ As we will see shortly, the Haskell bind operator `>>=` can also be used to sequ
 getLine >>= \x -> putStrLn("hello "++x)
 ```
 
-However, it not only separates the two expressions, it is safely handling the `IO` type within which all such effectful code in Haskell must operate.  But as well as allowing us to chain operations, bind is defined to do different and useful things for different Monad instances, as we shall see.
+However, it not only separates the two expressions, it is safely handling the `IO` type within which all code with IO side-effects in Haskell must operate.  But as well as allowing us to chain operations, bind is defined to do different and useful things for different Monad instances, as we shall see.
 
 ## The Monad Typeclass
 
-As always, we can interrogate ghci to get a basic synopsis of the Monad typeclass:
+As always, we can interrogate GHCi to get a basic synopsis of the Monad typeclass:
 
 ```haskell
 > :i Monad
@@ -53,7 +53,7 @@ instance Monoid a => Monad ((,) a) -- Defined in `GHC.Base'
 Things to notice:
 
 * `Monad` is a subclass of `Applicative` (and therefore also a `Functor`)
-* `return` = `pure`, from `Applicative`.  `return` exists for historical reasons and you can safely use only `pure` (PureScript has only `pure`).
+* `return` = `pure`, from [`Applicative`](/haskell3/#applicative). The `return` function exists for historical reasons and you can safely use only `pure` (PureScript has only `pure`).
 * the operator `(>>=)` (pronounced “bind”) is the minimal definition (the one function you must create--in addition to the functions also required for `Functor` and `Applicative`--to make a new `Monad` instance).
 * `>>` is special case of bind (described below)
 * lots of built-in types are already monads
@@ -64,7 +64,7 @@ There also exists a flipped version of bind:
 (=<<) = flip (>>=) 
 ```
 
-Its type has a nice correspondence to the other operators we have already seen for function application in various contexts:
+The type of the flipped bind `(=<<)` has a nice correspondence to the other operators we have already seen for function application in various contexts:
 
 ```haskell
 (=<<) :: Monad m       => (a -> m b) -> m a -> m b
@@ -75,7 +75,7 @@ Its type has a nice correspondence to the other operators we have already seen f
 
 So the bind function `(>>=)` (and equally its flipped version `(=<<)`) gives us another way to map functions over contexts, but why do we need another way?
 
-As an example we'll consider computation using the `Maybe` type, which we said is useful for partial functions, that is functions which are not sensibly defined over all of their inputs.  A good example of such a function is the [quadratic formula](https://en.wikipedia.org/wiki/Quadratic_formula), which for quadratic functions of the form:
+As an example we'll consider computation using the `Maybe` type, which we said is useful for [partial functions](/haskell2/#maybe), that is functions which are not sensibly defined over all of their inputs.  A more complex example of such a function than we have seen before is the [quadratic formula](https://en.wikipedia.org/wiki/Quadratic_formula), which for quadratic functions of the form:
 
 <image src="/haskell4/quadratic.png" width="25%"></image>
 
@@ -134,7 +134,7 @@ The first argument it expects is a value in a context `m a`.  What if that we ap
 (Just x>>=) :: (Float -> Maybe b) -> Maybe b
 ```
 
-So GHCi is telling us that the next argument has to be a function that takes a `Float` as input, and gives back anything in a `Maybe`.  Our `safeSqrt` definitely fits this description, as does `safeDiv` partially applied to a Float.  So, here's a `safeSolve` which uses `(>>=)` to remove the need for `case`s:
+So GHCi is telling us that the next argument has to be a function that takes a `Float` as input, and gives back anything in a `Maybe`.  Our `safeSqrt` definitely fits this description, as does `safeDiv` partially applied to a `Float`.  So, here's a `safeSolve` which uses `(>>=)` to remove the need for `case`s:
 
 ```haskell
 safeSolve :: Float -> Float -> Float -> Maybe (Float, Float)
@@ -160,7 +160,7 @@ safeSolve a b c = do
     pure (x1,x2)
 ```
 
-So inside a `do`-block `y<-x` is completely equivalent to `x >>= \y -> ...`, where in both cases the variable `y` is in scope for the rest of the expression.  We'll see more [explanation and examples of `do` notation below](/haskell4/#do-notation).
+So inside a `do`-block `y<-x` is completely equivalent to `x >>= \y -> ...`, where in both cases the variable `y` is in scope for the rest of the expression.  We'll see more [explanation and examples of `do` notation below](/monad/#do-notation).
 
 How is a `Nothing` result from either of our `safe` functions handled?  Well, the [Maybe instance of Monad](https://hackage.haskell.org/package/base-4.14.0.0/docs/src/GHC.Base.html#line-1005) defines bind like so:
 
@@ -320,3 +320,20 @@ Which is itself syntactic sugar for:
 ```haskell
 ['a'..'d'] >>= \i -> [1..4] >>= \j -> pure (i,j)
 ```
+
+List comprehensions can also include conditional expressions which must evaluate to true for terms to be included in the list result.  For example, we can limit the above comprehension to only pairs with even `j`:
+
+```haskell
+[(i,j) | i<-['a'..'d'], j<-[1..4], j `mod` 2 == 0]
+```
+
+This desugars to `do`-block using the `guard` function from `Control.Monad` like so:
+
+```haskell
+do
+  i <- ['a'..'d']
+  j <- [1..4]
+  guard $ j `mod` 2 == 0
+  pure (i,j)
+```
+> [('a',2),('c',2),('e',2),('g',2),('a',4),('c',4),('e',4),('g',4)]
