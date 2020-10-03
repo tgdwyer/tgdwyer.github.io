@@ -433,7 +433,11 @@ GHCi> Card <$> [Spade ..] <*> [Two ..]
 
 #### Exercise
 
-* Create instances of `Show` for `Rank` and `Card` such that a deck of cards displays much more succinctly, e.g.: `[^2,^3,^4,^5,^6,^7,^8,^9,^10,^J,^Q,^K,^A,&2,&3,&4,&5,&6,&7,&8,&9,&10,&J,&Q,&K,&A,O2,O3,O4,O5,O6,O7,O8,O9,O10,OJ,OQ,OK,OA,V2,V3,V4,V5,V6,V7,V8,V9,V10,VJ,VQ,VK,VA]`
+* Create instances of `Show` for `Rank` and `Card` such that a deck of cards displays much more succinctly, e.g.: 
+```
+[^2,^3,^4,^5,^6,^7,^8,^9,^10,^J,^Q,^K,^A,&2,&3,&4,&5,&6,&7,&8,&9,&10,&J,&Q,&K,&A,O2,O3,O4,O5,O6,O7,O8,O9,O10,OJ,OQ,OK,OA,V2,V3,V4,V5,V6,V7,V8,V9,V10,VJ,VQ,VK,VA]
+```
+
 * Try and make the definition of `show` for Rank a one-liner using `zip` and `lookup`.
 
 <div class="cheatsheet" markdown="1">
