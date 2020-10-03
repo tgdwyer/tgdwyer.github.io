@@ -103,9 +103,8 @@ safeSolve :: Float -> Float -> Float -> Maybe (Float, Float)
 safeSolve a b c =
     case safeSqrt $ b*b - 4 * a * c of
         Just s ->
-            let
-            x1 = safeDiv (-b + s) (2*a)
-            x2 = safeDiv (-b - s) (2*a)
+            let x1 = safeDiv (-b + s) (2*a)
+                x2 = safeDiv (-b - s) (2*a)
             in case (x1,x2) of
                 (Just x1', Just x2') -> Just (x1',x2')
                 _ -> Nothing
@@ -327,13 +326,16 @@ List comprehensions can also include conditional expressions which must evaluate
 [(i,j) | i<-['a'..'d'], j<-[1..4], j `mod` 2 == 0]
 ```
 
-This desugars to `do`-block using the `guard` function from `Control.Monad` like so:
+This comprehension syntax desugars to a `do`-block using the `guard` function from `Control.Monad` like so:
 
 ```haskell
+import Control.Monad (guard)
+
 do
   i <- ['a'..'d']
   j <- [1..4]
   guard $ j `mod` 2 == 0
   pure (i,j)
 ```
+
 > [('a',2),('c',2),('e',2),('g',2),('a',4),('c',4),('e',4),('g',4)]
