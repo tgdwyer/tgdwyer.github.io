@@ -130,12 +130,13 @@ As we saw above a `ParseResult` may be either a successful `Result` or an `Error
 
 ```haskell
 data ParseError =
-    UnexpectedEof
-  | ExpectedEof Input
+    UnexpectedEof -- hit end of file when we expected more input
+  | ExpectedEof Input -- should have successfully parsed everything but there's more!
   | UnexpectedChar Char
   | UnexpectedString String
   deriving (Eq, Show)
 ```
+
 Naturally it needs to be `Show`able, but also `Eq`uality testable so that we can pattern match `ParseResult` to handle particular types of errors.
 
 ## Instances
