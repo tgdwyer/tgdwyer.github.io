@@ -329,7 +329,7 @@ instance Applicative [] where
   fs <*> xs = [f x | f <- fs, x <- xs]  -- list comprehension 
 ```
 
-The definition of `<*>` for lists uses a list comprehension.  List comprehensions are a short-hand way to generate lists, using notation similar to mathematical ["set builder notation"](https://en.wikipedia.org/wiki/Set-builder_notation).  The set builder notation here would be:  `{f(x) |  f ∈ fs ∧ x ∈ xs}`.  In English it means: “the set (Haskell list) of all functions in `fs` applied to all values in `xs”`. 
+The definition of `<*>` for lists uses a list comprehension.  List comprehensions are a short-hand way to generate lists, using notation similar to mathematical ["set builder notation"](https://en.wikipedia.org/wiki/Set-builder_notation).  The set builder notation here would be:  `{f(x) |  f ∈ fs ∧ x ∈ xs}`.  In English it means: “the set (Haskell list) of all functions in `fs` applied to all values in `xs`”. 
 
 
 A common use-case for Applicative is applying a binary (two-parameter) function over two Applicative values, e.g.:

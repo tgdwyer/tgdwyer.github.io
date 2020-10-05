@@ -99,11 +99,10 @@ A fully worked example of FRP using rx.js Observables to create an in-browser ve
 
 ## [Foldable and Traversible](/haskell4)
 
-- Understand that the "reduce" function we met for arrays and other data structures in JavaScript is referred to as ["folding"](/haskell4/#folds) in Haskell and there are two variants `foldl` and `foldr` for left and right folds respectively.
-- Understand that the [Monoid](/haskell4#monoid)
+- Understand that the "reduce" function we met for arrays and other data structures in JavaScript is referred to as ["folding"](/haskell4/#folds) in Haskell and there are two variants `foldl` and `foldr` for left and right folds respectively
+- Understand that the [Monoid](/haskell4#monoid) typeclass for things that have a predefined rule for aggregation (concatenation), making containers of `Monoid` values trivial to `fold`
 - Understand that [Foldable](/haskell4#foldable) generalises containers that may be folded (or reduced) into values
 - Understand that [Traversable](/haskell4#traversable) generalises containers over which we can traverse applying a function with an Applicative effect
-- Understand that [Monad](/haskell4#monad) extends Functor and Applicative to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
 
 ## [Monad](/monad/)
 
