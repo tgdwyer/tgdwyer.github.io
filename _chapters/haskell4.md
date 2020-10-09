@@ -261,16 +261,20 @@ safeMod numerator divisor = Just $ mod numerator divisor
 It lets us map over a list of numbers without throwing divide-by-zero exceptions:
 
 ```haskell
-GHCi> map (safeMod 3) [1,2,0,2]
+> map (safeMod 3) [1,2,0,2]
 [Just 0,Just 1,Nothing,Just 1]
 ```
 
-But what if `0`s in the list really are indicative of disaster so that we should bail rather than proceeding?  The `traverse` function of the `Traversable` type-class gives us this capability:
+But what if `0`s in the list really are indicative of disaster so that we should bail rather than proceeding?  The `traverse` function of the `Traversable` type-class gives us this kind of "all or nothing" capability:
 
 ```haskell
-GHCi> traverse (safeMod 3) [1,2,0,2]
-Nothing 
+> traverse (safeMod 3) [1,2,0,2]
+Nothing
+> traverse (safeMod 3) [1,2,2]
+Just [0,1,1]
 ```
+
+So `map`ping a function with an `Applicative` effect over the values in a list gives us back a list with each of those values wrapped in the effect.  However, `traverse`ing such a function over a list gives us back the list of unwrapped values, with the whole list wrapped in the effect.
 
 Traverse applies a function with a result in an `Applicative` context (i.e. an Applicative effect) to the contents of a `Traversable` thing.
 
@@ -304,13 +308,14 @@ GHCi> traverse print [1,2,3]
 [(),(),()]
 ```
 
-Where the return value is a list of the effects of each application of print, inside the `IO` Applicative.
+Here `1,2,3` are printed to the console each on their own line (which is `print`s IO effect), and `[(),(),()]` is the return value reported by GHCi - a list of Unit.
+
 ```haskell
 GHCi> :t traverse print [1,2,3]
 traverse print [1,2,3] :: IO [()]
 ```
 
-There is no easy way to get rid of this `IO` return type - which protects you from creating `IO` effects unintentionally.
+When we ran this at the REPL, GHCi consumed the `IO` effect (because it runs all commands inside the [`IO Monad`](/monad/)).  However, inside a pure function there is no easy way to get rid of this `IO` return type - which protects you from creating `IO` effects unintentionally.
 
 A related function defined in `Traversable` is `sequenceA` allows us to convert directly from Traversables of Applicatives, to Applicatives of Traversables:
 
@@ -329,3 +334,28 @@ The default `sequenceA` [is defined](https://hackage.haskell.org/package/base-4.
 sequenceA = traverse id
 ```
 
+A bit more fun with `sequenceA`, a list of functions:
+
+```haskell
+> :t [(+3),(*2),(+6)]
+[(+3),(*2),(+6)] :: Num a => [a -> a]
+```
+
+is also a list of `Applicative`, because function `(->)r` is an instance of `Applicative`.  Therefore, we can apply `sequenceA` to a list of functions to make a single function that applies every function in the list to a given value and return a list of the results:
+
+```haskell
+> :t sequenceA [(+3),(*2),(+6)]
+sequenceA [(+3),(*2),(+6)] :: Num a => a -> [a]
+> sequenceA [(+3),(*2),(+6)] 2
+[5,4,8]
+```
+
+And of course, we can sequence a `Tree` of `Maybe`s into a `Maybe Tree`:
+
+```haskell
+> treeOfMaybes = Just <$> tree -- a tree of Maybes
+> treeOfMaybes
+Node (Node (Leaf (Just 1)) (Just 2) (Leaf (Just 3))) (Just 4) (Node (Leaf (Just 5)) (Just 6) (Leaf (Just 7)))
+> sequenceA treeOfMaybes
+Just (Node (Node (Leaf 1) 2 (Leaf 3)) 4 (Node (Leaf 5) 6 (Leaf 7)))
+```
