@@ -62,9 +62,6 @@ In the example fold above, we provide the `(+)` function to tell `foldl` how to 
 
 ```haskell
 GHCi> :i Monoid
-
-:i Monoid
-type Monoid :: * -> Constraint
 class Semigroup a => Monoid a where
   mempty :: a
   mappend :: a -> a -> a
@@ -103,6 +100,29 @@ Which has a simple alias `concat` defined in the Prelude:
 ```haskell
 GHCi> concat [[1,2],[3,4],[5,6]]
 [1,2,3,4,5,6]
+```
+
+There is also an operator for `mappend` called `(<>)`, such the following are equivalent:
+
+```haskell
+Data.Monoid> mappend (Sum 1) (Sum 2)
+Sum {getSum = 3}
+
+Data.Monoid> (Sum 1) <> (Sum 2)
+Sum {getSum = 3}
+```
+
+And for lists (and `String`) we have:
+
+```haskell
+> mappend [1,2] [3,4]
+[1,2,3,4]
+
+> [1,2] <> [3,4]
+[1,2,3,4]
+
+> [1,2] ++ [3,4]
+[1,2,3,4]
 ```
 
 ## Foldable
