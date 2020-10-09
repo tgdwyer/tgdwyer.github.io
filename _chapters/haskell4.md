@@ -17,7 +17,7 @@ In this chapter we will meet some more typeclasses that abstract common coding p
 
 Recall the “`reduce`” function that is a member of JavaScript’s `Array` type, and which we implemented ourselves for linked and cons lists, was a way to generalise loops over enumerable types.
 In Haskell, this concept is once again generalised with a typeclass called `Foldable` - the class of things which can be “folded” over to produce a single value.  
-We will come back to [the `Foldable` typeclass](#foldable), but first let's look at the obvious `Foldable` instance.  
+We will come back to [the `Foldable` typeclass](#foldable), but first let's limit our conversation to the familiar `Foldable` instance, basic lists.  
 Although in JavaScript `reduce` always associates elements from left to right, Haskell's `Foldable` typeclass offers both `foldl` (which folds left-to-right) and `foldr` (which folds right-to-left):
 
 ```haskell
@@ -28,7 +28,7 @@ GHCi> :t foldr
 foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b
 ```
 
-Here’s how we right-fold over a list to sum its elements:
+In the following the examples the `Foldable t` instance is a list. Here’s how we right-fold over a list to sum its elements:
 
 ![Left Fold](/haskell4/rightfold.png)
 
@@ -131,9 +131,8 @@ So now we've already been introduced to `foldl` and `foldr` for lists, and we've
 As always, your best friend for exploring a new typeclass in Haskell is GHCi's `:i` command:
 
 ```haskell
-Prelude> :i Foldable
-type Foldable :: (* -> *) -> Constraint     
-class Foldable t where
+Prelude
+class Foldable (t :: * -> *) where
   foldr :: (a -> b -> b) -> b -> t a -> b -- as described previously, but notice foldr and foldl
   foldl :: (b -> a -> b) -> b -> t a -> b -- are for any Foldable t, not only lists
   length :: t a -> Int -- number of items stored in the Foldable
@@ -155,7 +154,63 @@ instance Foldable ((,) a) -- Defined in `Data.Foldable'
 ```
 
 Note that I've reordered the list of functions to the order we want to discuss them, removed a few things we're not interested in at the moment and the comments are mine.
-However, once you get used to reading types the type info for this class is pretty self explanatory.
+However, once you get used to reading types the `:info` for this class is pretty self explanatory.  Most of these functions are also familiar from their use with lists.  The surprise (OK not really) is that lots of other things can be `Foldable` as well.
+
+```haskell
+> foldr (-) 1 (Just 3)
+2
+> foldl (-) 1 (Just 3)
+-2
+> foldr (+) 1 (Nothing)
+1
+> length (Just 3)
+1
+> length Nothing
+0
+-- etc
+```
+
+If we import the Data.Foldable namespace we also get `fold` and `foldMap`, which we can use with `Monoid` types which know how to aggregate themselves (with `mappend`):
+
+```haskell
+Prelude> import Data.Foldable
+
+Prelude Data.Foldable> fold [[1,2],[3,4]] -- since lists are also Monoids
+[1,2,3,4]
+```
+
+The fun really starts though now that we can make new `Foldable` things:
+
+```haskell
+data Tree a = Empty
+            | Leaf a
+            | Node (Tree a) a (Tree a)
+  deriving (Show)
+
+tree = Node (Node (Leaf 1) 2 (Leaf 3)) 4 (Node (Leaf 5) 6 (Leaf 7))
+```
+
+<image src="/haskell4/tree.png"></image>
+
+We make this type of binary tree an instance of foldable by implementing either of the minimum defining functions, `foldmap` or `foldr`:
+
+```haskell
+instance Foldable Tree where
+   foldMap :: Monoid m => (a -> m) -> Tree a -> m
+   foldMap _ Empty = mempty
+   foldMap f (Leaf x) = f x
+   foldMap f (Node l x r) = foldMap f l <> f x <> foldMap f r
+
+> length tree
+7
+> foldr (:) [] tree
+[1,2,3,4,5,6,7]
+
+> getSum $ foldMap Sum tree
+28
+> foldMap (:[]) tree
+[1,2,3,4,5,6,7]
+```
 
 ## Traversable
 
