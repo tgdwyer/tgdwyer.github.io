@@ -212,6 +212,10 @@ instance Foldable Tree where
 [1,2,3,4,5,6,7]
 ```
 
+**Exercise**
+
+- Make an instance of `Foldable` for `Tree` in terms of `foldr` instead of `foldMap`.
+
 ## Traversable
 
 `Traversable` extends both `Foldable` and `Functor`, in a typeclass for things that we can `traverse` a function with an `Applicative` effect over, e.g. here's a sneak peak of what this lets us do:
