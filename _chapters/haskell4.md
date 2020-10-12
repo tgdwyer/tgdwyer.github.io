@@ -21,10 +21,10 @@ We will come back to [the `Foldable` typeclass](#foldable), but first let's limi
 Although in JavaScript `reduce` always associates elements from left to right, Haskell's `Foldable` typeclass offers both `foldl` (which folds left-to-right) and `foldr` (which folds right-to-left):
 
 ```haskell
-GHCi> :t foldl
+Prelude> :t foldl
 foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b
 
-GHCi> :t foldr
+Prelude> :t foldr
 foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b
 ```
 
@@ -35,7 +35,7 @@ In the following the examples the `Foldable t` instance is a list. Here’s how 
 While the lambda above makes it explicit which parameter is the accumulator and which is the list element, this is a classic example where point-free coding style makes this expression very succinct:
 
 ```haskell
-GHCi> foldr (+) 0 [5,8,3,1,7,6,2]
+Prelude> foldr (+) 0 [5,8,3,1,7,6,2]
 ```
 
 > 32
@@ -61,7 +61,7 @@ Note that since the `(+)` operator is commutative (`a+b=b+a`), it `foldr` and `f
 In the example fold above, we provide the `(+)` function to tell `foldl` how to aggregate elements of the list.  There is also a typeclass for things that are “automatically aggregatable” or “concatenatable” called `Monoid` which declares a general function for `mappend` combining two `Monoid`s into one, a `mempty` value such that any Monoid `mappend`ed with `mempty` is itself, and a concatenation function for lists of `Monoid` called `mconcat`.  
 
 ```haskell
-GHCi> :i Monoid
+Prelude> :i Monoid
 class Semigroup a => Monoid a where
   mempty :: a
   mappend :: a -> a -> a
@@ -73,7 +73,7 @@ class Semigroup a => Monoid a where
 In the `Data.Monoid` library there are some interesting instances of Monoid. For example `Sum` is an instance of Monoid which wraps a `Num`, such that lists of `Sum` can be `mconcat`ed:
 
 ```haskell
-GHCi> import Data.Monoid
+Prelude> import Data.Monoid
 Data.Monoid> mconcat $ Sum <$> [5,8,3,1,7,6,2]
 ```
 
@@ -82,7 +82,7 @@ Data.Monoid> mconcat $ Sum <$> [5,8,3,1,7,6,2]
 So a sum is a data type with an accessor function getSum that we can use to get back the value:
 
 ```haskell
-GHCi Data.Monoid> getSum $ mconcat $ Sum <$> [5,8,3,1,7,6,2]
+Prelude Data.Monoid> getSum $ mconcat $ Sum <$> [5,8,3,1,7,6,2]
 ```
 
 > 32
@@ -91,14 +91,14 @@ We make a data type aggregatable by instancing `Monoid` and providing definition
 Lists are also themselves Monoidal, with `mappend` defined as an alias for list concatenation `(++)`, and mempty as `[]`.  Thus, we can:
 
 ```haskell
-GHCi Data.Monoid> mconcat [[1,2],[3,4],[5,6]]
+Prelude Data.Monoid> mconcat [[1,2],[3,4],[5,6]]
 [1,2,3,4,5,6]
 ```
 
 Which has a simple alias `concat` defined in the Prelude:
 
 ```haskell
-GHCi> concat [[1,2],[3,4],[5,6]]
+Prelude> concat [[1,2],[3,4],[5,6]]
 [1,2,3,4,5,6]
 ```
 
@@ -157,15 +157,15 @@ Note that I've reordered the list of functions to the order we want to discuss t
 However, once you get used to reading types the `:info` for this class is pretty self explanatory.  Most of these functions are also familiar from their use with lists.  The surprise (OK not really) is that lots of other things can be `Foldable` as well.
 
 ```haskell
-> foldr (-) 1 (Just 3)
+Prelude> foldr (-) 1 (Just 3)
 2
-> foldl (-) 1 (Just 3)
+Prelude> foldl (-) 1 (Just 3)
 -2
-> foldr (+) 1 (Nothing)
+Prelude> foldr (+) 1 (Nothing)
 1
-> length (Just 3)
+Prelude> length (Just 3)
 1
-> length Nothing
+Prelude> length Nothing
 0
 -- etc
 ```
@@ -236,7 +236,7 @@ Since list is an instance of Monoid, `foldMap` will concatenate these singleton 
 `Traversable` extends both `Foldable` and `Functor`, in a typeclass for things that we can `traverse` a function with an `Applicative` effect over, e.g. here's a sneak peak of what this lets us do:
 
 ```haskell
-ghci> traverse putStrLn ["tim","was","here"]
+Prelude> traverse putStrLn ["tim","was","here"]
 tim
 was
 here
@@ -248,7 +248,7 @@ The first three lines are the strings printed to the terminal (the side effect).
 Here, as usual, is what GHCi `:i` tells us about the Traversable type class:
 
 ```haskell
-ghci> :i Traversable
+Prelude> :i Traversable
 class (Functor t, Foldable t) => Traversable (t :: * -> *) where
   traverse :: Applicative f => (a -> f b) -> t a -> f (t b)
   sequenceA :: Applicative f => t (f a) -> f (t a)
@@ -293,7 +293,7 @@ So `map`ping a function with an `Applicative` effect over the values in a list g
 Traverse applies a function with a result in an `Applicative` context (i.e. an Applicative effect) to the contents of a `Traversable` thing.
 
 ```haskell
-GHCi> :t traverse
+Prelude> :t traverse
 traverse
   :: (Applicative f, Traversable t) => (a -> f b) -> t a -> f (t b) 
 ```
@@ -308,14 +308,14 @@ What are some other functions with Applicative effects?  Lots! E.g.:
 The `print` function converts values to strings (using show if available from an instance of `Show`) and sends them to standard-out.  The `print` function wraps this effect (there is an effect on the state of the console) in an `IO` computational context:
 
 ```haskell
-GHCi> :t print
+Prelude> :t print
 print :: Show a => a -> IO ()
 ```
 
 The `()` is like `void` in TypeScript - it’s a type with exactly one value `()`, and hence is called “Unit”.  There is no return value from `print`, only the `IO` effect, and hence the return type is `()`.  `IO` is also an instance of `Applicative`.  This means we can use `traverse` to print out the contents of a list:
 
 ```haskell
-GHCi> traverse print [1,2,3]
+Prelude> traverse print [1,2,3]
 1
 2
 3
@@ -325,7 +325,7 @@ GHCi> traverse print [1,2,3]
 Here `1,2,3` are printed to the console each on their own line (which is `print`s IO effect), and `[(),(),()]` is the return value reported by GHCi - a list of Unit.
 
 ```haskell
-GHCi> :t traverse print [1,2,3]
+Prelude> :t traverse print [1,2,3]
 traverse print [1,2,3] :: IO [()]
 ```
 
@@ -336,9 +336,9 @@ A related function defined in `Traversable` is `sequenceA` allows us to convert 
 ```haskell
 > :t sequenceA
 sequenceA :: (Applicative f, Traversable t) => t (f a) -> f (t a)
-GHCi> sequenceA [Just 0,Just 1,Just 1]
+Prelude> sequenceA [Just 0,Just 1,Just 1]
 Just [0,1,1]
-GHCi> sequenceA [Just 0,Just 1,Nothing,Just 1]
+Prelude> sequenceA [Just 0,Just 1,Nothing,Just 1]
 Nothing
 ```
 
@@ -383,7 +383,7 @@ instance Traversable Tree where
 So now we can traverse a function with an `Applicative` effect over the tree:
 
 ```haskell
-ghci> traverse print tree
+Prelude> traverse print tree
 1
 2
 3
