@@ -131,7 +131,7 @@ So now we've already been introduced to `foldl` and `foldr` for lists, and we've
 As always, your best friend for exploring a new typeclass in Haskell is GHCi's `:i` command:
 
 ```haskell
-Prelude
+Prelude> :i Foldable
 class Foldable (t :: * -> *) where
   foldr :: (a -> b -> b) -> b -> t a -> b -- as described previously, but notice foldr and foldl
   foldl :: (b -> a -> b) -> b -> t a -> b -- are for any Foldable t, not only lists
