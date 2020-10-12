@@ -365,6 +365,35 @@ sequenceA [(+3),(*2),(+6)] :: Num a => a -> [a]
 [5,4,8]
 ```
 
+To create our own instance of `Traversable` we need to implement `fmap` to make it a `Functor` and then either `foldMap` or `foldr` to make it `Foldable` and finally, either `traverse` or `sequenceA`.  So for our `Tree` type above, which we already made `Foldable` we add:
+
+```haskell
+instance Functor Tree where
+   fmap :: (a -> b) -> Tree a -> Tree b
+   fmap _ Empty = Empty
+   fmap f (Leaf x) = Leaf $ f x
+   fmap f (Node l v r) = Node (fmap f l) (f v) (fmap f r)
+
+instance Traversable Tree where
+   traverse :: Applicative f => (a -> f b) -> Tree a -> f (Tree b)
+   traverse _ Empty = pure Empty
+   traverse f (Leaf a) = Leaf <$> f a
+   traverse f (Node l x r) = Node <$> traverse f l <*> f x <*> traverse f r
+```
+
+So now we can traverse a function with an `Applicative` effect over the tree:
+
+```haskell
+ghci> traverse print tree
+1
+2
+3
+4
+5
+6
+7
+```
+
 And of course, we can sequence a `Tree` of `Maybe`s into a `Maybe Tree`:
 
 ```haskell
