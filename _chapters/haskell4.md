@@ -213,10 +213,10 @@ We can use `foldMap` to map the values stored in the tree to an instance of `Mon
 28
 ```
 
-Or we can compute the same conversion to a list as the above `foldr`, by first mapping the values into singleton lists, e.g.:
+Or we can compute the same conversion to a list as the above `foldr`, by providing `foldMap` with a function places the values into singleton lists, e.g.:
 
 ```haskell
-> (:[]) 1 -- i.e. the function (:[]) conses the argument with an empty list, creating a singleton.
+> (:[]) 1 -- cons 1 with an empty list, same as 1:[]
 [1]
 ```
 
