@@ -249,8 +249,7 @@ Here, as usual, is what GHCi `:i` tells us about the Traversable type class:
 
 ```haskell
 ghci> :i Traversable
-type Traversable :: (* -> *) -> Constraint
-class (Functor t, Foldable t) => Traversable t where
+class (Functor t, Foldable t) => Traversable (t :: * -> *) where
   traverse :: Applicative f => (a -> f b) -> t a -> f (t b)
   sequenceA :: Applicative f => t (f a) -> f (t a)
   ... -- some other functions
