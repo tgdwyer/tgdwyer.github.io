@@ -192,7 +192,7 @@ tree = Node (Node (Leaf 1) 2 (Leaf 3)) 4 (Node (Leaf 5) 6 (Leaf 7))
 
 <image src="/haskell4/tree.png"></image>
 
-We make this type of binary tree an instance of foldable by implementing either of the minimum defining functions, `foldmap` or `foldr`:
+We make this type of binary tree an instance of foldable by implementing either of the minimum defining functions, `foldMap` or `foldr`:
 
 ```haskell
 instance Foldable Tree where
@@ -205,9 +205,24 @@ instance Foldable Tree where
 7
 > foldr (:) [] tree
 [1,2,3,4,5,6,7]
+```
 
+We can use `foldMap` to map the values stored in the tree to an instance of `Monoid` and then concatenate these `Monoid`s.  For example, we could map and concatenate them as a `Sum`:
+```haskell
 > getSum $ foldMap Sum tree
 28
+```
+
+Or we can compute the same conversion to a list as the above `foldr`, by first mapping the values into singleton lists, e.g.:
+
+```haskell
+> (:[]) 1 -- i.e. the function (:[]) conses the argument with an empty list, creating a singleton.
+[1]
+```
+
+Since list is an instance of Monoid, `foldMap` will concatenate these singleton lists together:
+
+```haskell
 > foldMap (:[]) tree
 [1,2,3,4,5,6,7]
 ```
