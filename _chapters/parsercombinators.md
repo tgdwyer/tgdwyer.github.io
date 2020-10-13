@@ -307,14 +307,14 @@ Here's some ASCII art to make the tree structure of the `ParseResult Expr` more 
 
 ```
 Minus 
- ├─(Plus 
- | ├─(Times 
- | | └─(Number 6) 
- | | └─(Number 4) ) 
- | └─(Number 3) ) 
- └─(Times 
-   ├─(Number 8) 
-   └─(Number 2) )
+ ├──Plus 
+ |   ├──Times 
+ |   |   ├──Number 6 
+ |   |   └──Number 4 
+ |   └──Number 3 
+ └──Times 
+     ├──Number 8 
+     └──Number 2
 ```
 
 **Exercises**
