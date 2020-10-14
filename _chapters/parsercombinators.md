@@ -306,14 +306,14 @@ Result >< Minus (Plus (Times (Number 6) (Number 4)) (Number 3)) (Times (Number 8
 Here's some ASCII art to make the tree structure of the `ParseResult Expr` more clear:
 
 ```
-Minus 
- ├──Plus 
- |   ├──Times 
- |   |   ├──Number 6 
- |   |   └──Number 4 
- |   └──Number 3 
- └──Times 
-     ├──Number 8 
+Minus
+ ├──Plus
+ |   ├──Times
+ |   |   ├──Number 6
+ |   |   └──Number 4
+ |   └──Number 3
+ └──Times
+     ├──Number 8
      └──Number 2
 ```
 
