@@ -282,7 +282,8 @@ join = (>>=id)
 We can apply join to “flatten” the nested `IO` contexts from the earlier `fmap` example:
 
 ```haskell
-GHCi>:t join $ greet <$> getLine :: IO ()
+GHCi> :t join $ greet <$> getLine
+join $ greet <$> getLine :: IO ()
 ```
 
 Which will now execute as expected:
