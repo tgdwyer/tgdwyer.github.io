@@ -196,7 +196,7 @@ When you run it from either GHCi or an executable compiled with ghc, it will pau
 This is because the type of the expression is:
 
 ```haskell
-GHCi> :t greet <$> readName
+> :t greet <$> readName
 greet <$> readName :: IO (IO ())
 ```
 
@@ -205,10 +205,10 @@ To see an output we somehow need to flatten the `IO (IO ())` into just a single 
 `(>>=)` gives us this ability:
 
 ```haskell
-GHCi> :t readName >>= greet
+> :t readName >>= greet
 readName >>= greet :: IO ()
 
-GHCi> readName >>= greet
+> readName >>= greet
 ```
 
 >Tim  
@@ -217,10 +217,10 @@ GHCi> readName >>= greet
 The special case of bind `(>>)` allows us to chain actions without passing through a value:
 
 ```haskell
-GHCi> :t (>>)
+> :t (>>)
 (>>) :: Monad m => m a -> m b -> m b
 
-GHCi> sayHi >> readName >>= greet
+> sayHi >> readName >>= greet
 ```
 > Hi, what's your name?  
 > Tim  
@@ -282,14 +282,14 @@ join = (>>=id)
 We can apply join to “flatten” the nested `IO` contexts from the earlier `fmap` example:
 
 ```haskell
-GHCi> :t join $ greet <$> readName
+> :t join $ greet <$> readName
 join $ greet <$> readName :: IO ()
 ```
 
 Which will now execute as expected:
 
 ```haskell
-GHCi> join $ greet <$> readName
+> join $ greet <$> readName
 ```
 
 >Tim  
