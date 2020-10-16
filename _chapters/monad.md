@@ -184,7 +184,7 @@ sayHi = putStrLn "Hi, what's your name?"
 readName :: IO String
 readName = getLine
 greet :: String -> IO ()
-greet name = putStrLn ("Nice to meet you, " ++ name ++ ".") 
+greet name = putStrLn ("Nice to meet you " ++ name ++ "!")
 ```
 
 The following typechecks:
