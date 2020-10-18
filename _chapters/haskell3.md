@@ -299,7 +299,7 @@ data Tree a = Empty
 
 Note that `Leaf` is a bit redundant as we could also encode nodes with no children as `Node Empty value Empty` - but that's kind of ugly and makes showing our trees more verbose.  Also, having both `Leaf` and `Empty` provides a nice parallel to `Maybe`.
 
-And here's an example tree:
+Here's an example tree:
 
 ```haskell
 tree = Node (Node (Leaf 1) 2 (Leaf 3)) 4 (Node (Leaf 5) 6 (Leaf 7))
