@@ -288,7 +288,7 @@ The law of ***composition***
 
 Note that these laws are not enforced by the compiler when you create your own instances of `Functor`.  You’ll need to test them for yourself.  Following these laws guarantees that general code (e.g. algorithms) using `fmap` will also work for your own instances of `Functor`.
 
-Let's make a custom instance of `Functor` for a simple binary tree type and check that the laws hold.  Here's a tree datatype:
+Let's make a custom instance of `Functor` for a simple binary tree type and check that the laws hold.  Here's a simple binary tree datatype:
 
 ```haskell
 data Tree a = Empty
@@ -296,6 +296,8 @@ data Tree a = Empty
             | Node (Tree a) a (Tree a)
   deriving (Show)
 ```
+
+Note that `Leaf` is a bit redundant as we could also encode nodes with no children as `Node Empty value Empty` - but that's kind of ugly and makes showing our trees more verbose.  Also, having both `Leaf` and `Empty` provides a nice parallel to `Maybe`.
 
 And here's an example tree:
 
