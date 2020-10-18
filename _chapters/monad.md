@@ -184,20 +184,20 @@ sayHi = putStrLn "Hi, what's your name?"
 readName :: IO String
 readName = getLine
 greet :: String -> IO ()
-greet name = putStrLn ("Nice to meet you, " ++ name ++ ".") 
+greet name = putStrLn ("Nice to meet you " ++ name ++ "!")
 ```
 
 The following typechecks:
 ```haskell
-main = greet <$> getLine 
+main = greet <$> readName
 ```
 
 When you run it from either GHCi or an executable compiled with ghc, it will pause and wait for input, but you will not see the subsequent greeting.
 This is because the type of the expression is:
 
 ```haskell
-GHCi> :t greet <$> getLine
-greet <$> getLine :: IO (IO ()) 
+> :t greet <$> readName
+greet <$> readName :: IO (IO ())
 ```
 
 The `IO` action we want (`greet`) is nested inside another `IO` action.  When it is run, only the outer `IO` action is actually executed. The inner `IO` computation (action) is not evaluated.
@@ -205,10 +205,10 @@ To see an output we somehow need to flatten the `IO (IO ())` into just a single 
 `(>>=)` gives us this ability:
 
 ```haskell
-GHCi> :t getLine >>= greet
-getLine >>= greet :: IO ()
+> :t readName >>= greet
+readName >>= greet :: IO ()
 
-GHCi> getLine >>= greet
+> readName >>= greet
 ```
 
 >Tim  
@@ -217,10 +217,10 @@ GHCi> getLine >>= greet
 The special case of bind `(>>)` allows us to chain actions without passing through a value:
 
 ```haskell
-GHCi> :t (>>)
+> :t (>>)
 (>>) :: Monad m => m a -> m b -> m b
 
-GHCi> sayHi >> getLine >>= greet
+> sayHi >> readName >>= greet
 ```
 > Hi, what's your name?  
 > Tim  
@@ -282,13 +282,14 @@ join = (>>=id)
 We can apply join to “flatten” the nested `IO` contexts from the earlier `fmap` example:
 
 ```haskell
-GHCi>:t join $ greet <$> getLine :: IO ()
+> :t join $ greet <$> readName
+join $ greet <$> readName :: IO ()
 ```
 
 Which will now execute as expected:
 
 ```haskell
-GHCi> join $ greet <$> getLine
+> join $ greet <$> readName
 ```
 
 >Tim  
@@ -338,4 +339,4 @@ do
   pure (i,j)
 ```
 
-> [('a',2),('c',2),('e',2),('g',2),('a',4),('c',4),('e',4),('g',4)]
+> [('a',2),('a',4),('b',2),('b',4),('c',2),('c',4),('d',2),('d',4)]
