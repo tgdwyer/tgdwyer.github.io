@@ -275,7 +275,9 @@ GHCi> (f<$>g) 3
 ```
 
 ### Functor Laws
+
 We can formalise the definition of Functor with two laws:
+
 The law of ***identity*** 
 
 ∀ x: (id <$> x) ≡ x 
@@ -285,6 +287,54 @@ The law of ***composition***
 ∀ f, g, x: (f ∘ g <$> x) ≡ (f <$> (g <$> x)) 
 
 Note that these laws are not enforced by the compiler when you create your own instances of `Functor`.  You’ll need to test them for yourself.  Following these laws guarantees that general code (e.g. algorithms) using `fmap` will also work for your own instances of `Functor`.
+
+Let's make a custom instance of `Functor` for a simple binary tree type and check that the laws hold.  Here's a tree datatype:
+
+```haskell
+data Tree a = Empty
+            | Leaf a
+            | Node (Tree a) a (Tree a)
+  deriving (Show)
+```
+
+And here's an example tree:
+
+```haskell
+tree = Node (Node (Leaf 1) 2 (Leaf 3)) 4 (Node (Leaf 5) 6 (Leaf 7))
+```
+
+<image src="/haskell4/tree.png"></image>
+
+And here's the instance of `Functor` for `Tree` that defines `fmap`.  
+
+```haskell
+instance Functor Tree where
+   fmap :: (a -> b) -> Tree a -> Tree b
+   fmap _ Empty = Empty
+   fmap f (Leaf v) = Leaf $ f v
+   fmap f (Node l v r) = Node (fmap f l) (f v) (fmap f r)
+```
+
+Just as in the `Maybe` instance above, we use pattern matching to define a case for each possible constructor in the ADT.  The `Empty` and `Leaf` cases are very similar to `Maybe` `fmap` for `Nothing` and `Just` respectively, that is,
+for `Empty` we just return another `Empty`, for `Leaf` we return a new `Leaf` containing the application of `f` to the value `x` stored in the leaf.  The fun one is `Node`.  As for `Leaf`, `fmap f` of a `Node` returns a new `Node` whose own value is the result of applying `f` to the value stored in the input `Node`, but the left and right children of the new node will be the recursive application of `fmap f` to the children of the input node.
+
+Now we'll demonstrate (but not prove) that the two laws hold at least for our example tree:
+
+Law of Identity:
+
+```haskell
+> id <$> tree
+Node (Node (Leaf 1) 2 (Leaf 3)) 4 (Node (Leaf 5) 6 (Leaf 7))
+```
+
+Law of Composition:
+
+```haskell
+> (+1) <$> (*2) <$> tree
+Node (Node (Leaf 3) 5 (Leaf 7)) 9 (Node (Leaf 11) 13 (Leaf 15))
+> (+1).(*2) <$> tree
+Node (Node (Leaf 3) 5 (Leaf 7)) 9 (Node (Leaf 11) 13 (Leaf 15))
+```
 
 ## Applicative
 
