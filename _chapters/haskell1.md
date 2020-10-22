@@ -302,7 +302,7 @@ sort (pivot:rest) = below pivot rest ++ [pivot] ++ above pivot rest
    partition comparison = sort . filter comparison 
 ```
 
-The defintion of the `partition` function in this version uses the `.` operator for [function composition](tgdwyer.github.io/higherorderfunctions/#composition).  That is `partition comparison` is the composition of `sort` and `filter composition`.  
+The defintion of the `partition` function in this version uses the `.` operator for [function composition](tgdwyer.github.io/higherorderfunctions/#composition).  That is `partition comparison` is the composition of `sort` and `filter comparison`.  
 
 Creating partition in this way means that we don't have to thread through the list parameter, it becomes implicit.  We will discuss such [point-free style](tgdwyer.github.io/haskell3/#point-free-code) again - but the point here is that it makes the code not only more compact, but also means that it reads almost like a natural language declarative definition of the algorithm.  
 
