@@ -302,7 +302,7 @@ sort (pivot:rest) = below pivot rest ++ [pivot] ++ above pivot rest
    partition comparison = sort . filter comparison 
 ```
 
-This version makes a point about point-free style and how it can lead to not only compact code, but also code that can read almost like a natural language declarative definition of the algorithm.  Here, we use the `.` operator for function composition.  Although it looks like the comparison parameter could also go away here with eta conversion, actually the low precedence of the `.` operator means there is (effectively) implicit parentheses around filter comparison.
+This version makes a point about [point-free style](http://localhost:4000/haskell3/#point-free-code) and how it can lead to not only compact code, but also code that can read almost like a natural language declarative definition of the algorithm.  Here, we use the `.` operator for function composition.  Although it looks like the comparison parameter could also go away here with eta conversion, actually the low precedence of the `.` operator means there is (effectively) implicit parentheses around filter comparison.
 
 Haskell has a number of features that allow us to express ourselves in different ways.  Above we used a where clause to give a post-hoc, locally-scoped declaration of the below and above functions.  Alternately, we could define them at the start of the function body with `let <variable declaration expression> in <body>`.  Or we can use let, in and where all together, like so:
 
