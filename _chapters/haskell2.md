@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Data and Type Classes"
+title: "Data Types and Type Classes"
 permalink: /haskell2/
 ---
 

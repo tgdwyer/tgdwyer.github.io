@@ -84,7 +84,7 @@ A fully worked example of FRP using rx.js Observables to create an in-browser ve
 - Create and use Haskell lists and tuples
 - Create Haskell functions using *pattern-matching*, *guards*, and local definitions using `where` and `let` clauses
 
-## [Data and Type Classes](/haskell2)
+## [Data Types and Type Classes](/haskell2)
 
 - Define data structures using Haskell's [Algebraic Data Types](/haskell2#algebraic-data-types) and use [pattern matching](/haskell2#pattern-matching) to define functions that handle each of the possible instances
 - Use the alternate [record syntax](/haskell2#record-syntax) to define data structures with named fields
