@@ -88,8 +88,8 @@ A fully worked example of FRP using rx.js Observables to create an in-browser ve
 
 - Define data structures using Haskell's [Algebraic Data Types](/haskell2#algebraic-data-types) and use [pattern matching](/haskell2#pattern-matching) to define functions that handle each of the possible instances
 - Use the alternate [record syntax](/haskell2#record-syntax) to define data structures with named fields
-- Understand that Haskell [type classes](/haskell2#typeclasses) are similar to TypeScript interfaces in provide a definition for the set of functions that must be available for instances of those type classes and that typeclasses can extend upon one another to create rich hierarchies
-- Understand that the [Maybe](/haskell2#maybe) typeclass provides an elegant way to handle *partial functions*
+- Understand that Haskell [type classes](/haskell2#typeclasses) are similar to TypeScript interfaces in providing a definition for the set of functions that must be available for instances of those type classes and that typeclasses can extend upon one another to create rich hierarchies
+- Understand that the [Maybe](/haskell2#maybe) type provides an elegant way to handle *partial functions*
 
 ## [Functor and Applicative](/haskell3)
 

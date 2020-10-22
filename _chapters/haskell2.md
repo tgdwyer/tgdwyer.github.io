@@ -9,8 +9,8 @@ permalink: /haskell2/
 
 - Define data structures using Haskell's [Algebraic Data Types](/haskell2#algebraic-data-types) and use [pattern matching](/haskell2#pattern-matching) to define functions that handle each of the possible instances
 - Use the alternate [record syntax](/haskell2#record-syntax) to define data structures with named fields
-- Understand that Haskell [type classes](/haskell2#typeclasses) are similar to TypeScript interfaces in provide a definition for the set of functions that must be available for instances of those type classes and that typeclasses can extend upon one another to create rich hierarchies
-- Understand that the [Maybe](/haskell2#maybe) typeclass provides an elegant way to handle *partial functions*
+- Understand that Haskell [type classes](/haskell2#typeclasses) are similar to TypeScript interfaces in providing a definition for the set of functions that must be available for instances of those type classes and that typeclasses can extend upon one another to create rich hierarchies
+- Understand that the [Maybe](/haskell2#maybe) type provides an elegant way to handle *partial functions*.
 
 ## Algebraic Data Types
 
@@ -72,10 +72,22 @@ The following visual summary shows pair data structures with accessor functions 
 
 ## Type Kinds
 
-GHCi allows you to use the `:kind` (or `:k`) command to interrogate the *Kind* of types.  The kind syntax indicates the *arity* or number of type parameters a type has.  Note that it is like the syntax for function types (with the `->`), which is natural because it relates to the kind of the constructor function for the type.  If the constructor takes no type parameters the kind is just `*`, (it returns a type), `*->*` if it takes one type parameter, `*->*->*` for two type parameters and so on.
-
+GHCi allows you to use the `:kind` (or `:k`) command to interrogate the *Kind* of types - think of it as "meta information" about types and their type parameters.  The kind syntax indicates the *arity* or number of type parameters a type has.  Note that it is like the syntax for function types (with the `->`), you can think of it as information about what is required in terms of type parameters to instantiate the type.  If the constructor takes no type parameters the kind is just `*`, (it returns a type), `*->*` if it takes one type parameter, `*->*->*` for two type parameters and so on.
 
 ![Polymorphism Summary](/haskell2/kinds.png)
+
+Another sort of "kind" are for [type classes](#typeclasses) which we will introduce more properly in a moment.
+For example, the "kind" for the `Ord` type class (the class of things that are Orderable and which we came across in [our simple  implementation of quicksort](http://localhost:4000/haskell1#functional-programming-in-haskell-versus-javascript)) is:
+```haskell
+> :k Ord
+Ord :: * -> Constraint
+```
+This tells us that `Ord` takes one type parameter (for example it could be an `Int` or other numeric type, or something more complex like the `Student` type below), and returns a `Constraint` rather than an actual type.  Such a constraint is used to narrow the set of types to which a function may be applied, just as we saw `Ord` being used as the type constraint for `sort`:
+
+```haskell
+> :t sort
+sort :: Ord t => [t] -> [t]
+```
 
 ## Record Syntax
 
