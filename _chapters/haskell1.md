@@ -302,20 +302,22 @@ sort (pivot:rest) = below pivot rest ++ [pivot] ++ above pivot rest
    partition comparison = sort . filter comparison
 ```
 
-The `list` parameter for `below` and `above` has been eta-reduced away just as we were able to [eta-reduce lambda calculus expressions](/lambdacalculus/#lambda-calculus-cheatsheet).  The definition of the `partition` function in this version uses the `.` operator for [function composition](/higherorderfunctions/#composition).  That is `partition comparison` is the composition of `sort` and `filter comparison` and again the `list` parameter is eta-reduced away.  
+The `list` parameter for `below` and `above` has been eta-reduced away just as we were able to [eta-reduce lambda calculus expressions](/lambdacalculus/#lambda-calculus-cheatsheet).  The definition of the `partition` function in this version uses the `.` operator for [function composition](/higherorderfunctions/#composition).  That is, `partition comparison` is the composition of `sort` and `filter comparison` and again the `list` parameter is eta-reduced away.  
 
-We will discuss such [point-free style](/haskell3/#point-free-code) again - but the point here is that it makes the code not only more compact, but also means that it reads almost like a natural language declarative definition of the algorithm.  That is, you can read:
+Although it looks like the comparison parameter could also go away here with eta conversion, actually the low precedence of the `.` operator means there is (effectively) implicit parentheses around filter comparison.  We will see how to [more agressively refactor code to be point-free later](/haskell3/#point-free-code).
+
+The idea of refactoring our code into the above form was to demonstrate the freedom that Haskell gives us to express logic
+in a way that makes sense to us.  This version reads almost like a natural language declarative definition of the algorithm.  That is, you can read:
 
 ```haskell
-below pivot rest ++ [pivot] ++ above pivot rest
+sort (pivot:rest) = below pivot rest ++ [pivot] ++ above pivot rest
 ```
 
 as:
+> the sort of a list where we take the first element as the 'pivot' and everything after the list as 'rest' is
 > everything that is below pivot in rest,  
 > concatenated with a list containing just the pivot,  
 > concatenated with everything that is above pivot in rest.
-
-Although it looks like the comparison parameter could also go away here with eta conversion, actually the low precedence of the `.` operator means there is (effectively) implicit parentheses around filter comparison.  We will see how to [more agressively refactor code to be point-free later](/haskell3/#point-free-code).
 
 Haskell has a number of features that allow us to express ourselves in different ways.  Above we used a `where` clause to give a post-hoc, locally-scoped declaration of the below and above functions.  Alternately, we could define them at the start of the function body with `let <variable declaration expression> in <body>`.  Or we can use `let`, `in` and `where` all together, like so:
 
