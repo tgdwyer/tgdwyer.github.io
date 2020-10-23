@@ -1,8 +1,8 @@
----
+<!-- ---
 layout: page
 title: "FIT2102 Assignment 2: Gin Rummy"
 permalink: /assignment2_2020/
----
+--- -->
 
  - **Due Date**: November 6^th^, 23:55
  - **Weighting**: 30% of your final mark for the unit
