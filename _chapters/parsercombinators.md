@@ -260,6 +260,71 @@ spaces = (is ' ' >> spaces) ||| pure ()
 
 - change the type of `spaces` to `Parser [Char]` and have it return the appropriately sized string of only spaces.
 
+## A Parser that produces an ADT
+
+The return type of the phone number parser above was `[Char]` (equivalent to `String`).  A more typical use case for a parser though is to generate some data structure that we can then process in other ways.  In Haskell, this usually means a parser which returns an [Abstract Data Type (ADT)]().  Here is a very simple example.
+
+Let's imagine we need to parse records from a vets office.  It treats only three types of animals.  As always, lets start with the BNF:
+
+```
+<Animal> :== "cat" | "dog" | "camel"
+```
+
+So our simple grammar consists of three terminals, each of which is a straight forward string *token* (a constant string that makes up a primitive word in our language).  To parse such a token, we'll need a parser which succeeds if it finds the specified string next in its input.  We'll use our `is` parser from above (which simply confirms a given character is next in its input).  The type of is was `Char -> Parser Char`.  Since `Parser` is an instance of `Applicative`, we can simply `traverse` is across the given `String` (list of `Char`) to produce another `String` in the `Parser` applicative context.
+
+```haskell
+string :: String -> Parser String
+string = traverse is
+```
+
+Now let's define an ADT for animals:
+
+```haskell
+data Animal = Cat | Dog | Camel
+  deriving Show
+```
+
+A parser for "cat" is rather simple.  If we find the string `"cat"` we produce a `Cat`
+```haskell
+cat :: Parser Animal
+cat = string "cat" >> pure Cat
+```
+Let's test it:
+```haskell
+> parse cat "cat"
+Result >< Cat
+```
+
+Ditto dogs and camels:
+
+```haskell
+dog, camel :: Parser Animal
+dog = string "dog" >> pure Cat
+camel = string "camel" >> pure Cat
+```
+
+And now a parser for our full grammar:
+
+```haskell
+animal :: Parser Animal
+animal = cat ||| dog ||| camel
+```
+Some tests:
+```haskell
+> parse animal "cat"
+Result >< Cat
+> parse animal "dog"
+Result >< Dog
+> parse animal "camel"
+Result >< Camel
+```
+What's really cool about this is that obviously the strings "cat" and "camel" overlap at the start.  Our alternative parser `(|||)` effectively backtracks when the `cat` parser fails before eventually succeeding with the `camel` parser.  In an imperative style program this kind of logic would result in much messier code.
+
+### Exercises
+
+- Modify the grammar and the ADT to have some extra data fields for each of the animal types, e.g. `humpCount`, `remainingLives`, `barkstyle`, etc.
+- Extend your parser to produce these records.
+
 ## Creating a Parse Tree
 
 Programs are usually parsed into a tree structure called an *Abstract Syntax Tree* (AST), more generally known as a *parse tree*.  Further processing ultimately into an object file in the appropriate format (whether it's some sort of machine code directly executable on the machine architecture or some sort of intermediate format - e.g. Java bytecode) then essentially boils down to traversal of this tree to evaluate the statements and expressions there in the appropriate order.
