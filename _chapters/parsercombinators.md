@@ -322,6 +322,8 @@ What's really cool about this is that obviously the strings "cat" and "camel" ov
 
 **Exercises**
 
+- Write some messy imperative-style JavaScript (no higher-order functions allowed) to parse cat, dog or camel and construct a different class instance for each.
+- Now add "dolphin" to the grammar, and use a stopwatch to time yourself extending your messy imperative code.  I bet it takes longer than extending the `animal` parser combinator.
 - Modify the grammar and the ADT to have some extra data fields for each of the animal types, e.g. `humpCount`, `remainingLives`, `barkstyle`, etc.
 - Make a parser `stringTok` which uses the `string` parser to parse a given string, but ignores any `spaces` before or after the token.
 - Extend your parser to produce these records.
