@@ -270,7 +270,7 @@ Let's imagine we need to parse records from a vets office.  It treats only three
 <Animal> :== "cat" | "dog" | "camel"
 ```
 
-So our simple grammar consists of three terminals, each of which is a straight forward string *token* (a constant string that makes up a primitive word in our language).  To parse such a token, we'll need a parser which succeeds if it finds the specified string next in its input.  We'll use our `is` parser from above (which simply confirms a given character is next in its input).  The type of is was `Char -> Parser Char`.  Since `Parser` is an instance of `Applicative`, we can simply `traverse` is across the given `String` (list of `Char`) to produce another `String` in the `Parser` applicative context.
+So our simple grammar consists of three terminals, each of which is a straight forward string *token* (a constant string that makes up a primitive word in our language).  To parse such a token, we'll need a parser which succeeds if it finds the specified string next in its input.  We'll use our `is` parser from above (which simply confirms a given character is next in its input).  The type of is was `Char -> Parser Char`.  Since `Parser` is an instance of `Applicative`, we can simply `traverse` the `is` parser across the given `String` (list of `Char`) to produce another `String` in the `Parser` applicative context.
 
 ```haskell
 string :: String -> Parser String
