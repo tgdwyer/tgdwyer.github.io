@@ -260,9 +260,9 @@ spaces = (is ' ' >> spaces) ||| pure ()
 
 - change the type of `spaces` to `Parser [Char]` and have it return the appropriately sized string of only spaces.
 
-## A Parser that produces an ADT
+## A Parser that returns an ADT
 
-The return type of the phone number parser above was `[Char]` (equivalent to `String`).  A more typical use case for a parser though is to generate some data structure that we can then process in other ways.  In Haskell, this usually means a parser which returns an [Abstract Data Type (ADT)]().  Here is a very simple example.
+The return type of the phone number parser above was `[Char]` (equivalent to `String`).  A more typical use case for a parser though is to generate some data structure that we can then process in other ways.  In Haskell, this usually means a parser which returns an [Algebraic Data Type (ADT)](/haskell2/algebraic-data-types).  Here is a very simple example.
 
 Let's imagine we need to parse records from a vets office.  It treats only three types of animals.  As always, lets start with the BNF:
 
