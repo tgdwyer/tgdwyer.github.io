@@ -323,6 +323,7 @@ What's really cool about this is that obviously the strings "cat" and "camel" ov
 ### Exercises
 
 - Modify the grammar and the ADT to have some extra data fields for each of the animal types, e.g. `humpCount`, `remainingLives`, `barkstyle`, etc.
+- Make a parser `stringTok` which uses the `string` parser to parse a given string, but ignores any `spaces` before or after the token.
 - Extend your parser to produce these records.
 
 ## Creating a Parse Tree
