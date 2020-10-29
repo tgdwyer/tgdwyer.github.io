@@ -398,7 +398,7 @@ number = spaces >> Number . read . (:[]) <$> digit
 
 We keep things simple for now, make use of our existing `digit` parser, and limit our input to only single digit numbers.  
 The expression `Number . read . (:[])` is fmapped over the `Parser Char` returned by `digit`.  
-We use the Prelude function `read :: Read a => String -> a` to create the `Int` expected by `Number`.  Since `read` expects a string, we apply (:[]) to turn the `Char` into `[Char]`, i.e. a `String`.  
+We use the Prelude function `read :: Read a => String -> a` to create the `Int` expected by `Number`.  Since `read` expects a string, we apply `(:[])` to turn the `Char` into `[Char]`, i.e. a `String`.  
 
 Next, we'll need a parser for the various operators (`*`,`+` and `-`).  There's enough of them that we'll make it a general purpose `Parser Char` parameterised by the character we expect:
 
