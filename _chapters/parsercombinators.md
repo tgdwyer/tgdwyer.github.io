@@ -299,8 +299,8 @@ Ditto dogs and camels:
 
 ```haskell
 dog, camel :: Parser Animal
-dog = string "dog" >> pure Cat
-camel = string "camel" >> pure Cat
+dog = string "dog" >> pure Dog
+camel = string "camel" >> pure Camel
 ```
 
 And now a parser for our full grammar:
