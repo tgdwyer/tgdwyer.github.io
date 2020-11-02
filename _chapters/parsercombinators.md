@@ -455,3 +455,176 @@ chain p op = p >>= rest
 
 - Similar to `chain`, factor out the recursion of `spaces` into a function which returns a parser that continues producing a list of values from a given parser, i.e.
  `list :: Parser a -> Parser [a]`.
+
+## Parsing Rock-Paper-Scissors
+
+A common use-case for parsing is deserialising data stored as a string.
+Of course, there are general data interchange formats such as JSON and XML for which most languages have parsers available.  However, sometimes you want to store data in your own format for compactness or readability, and when you do, deserialising the data requires a custom parser
+(this example is contributed by [Arthur Maheo](https://arthur.maheo.net/)).
+
+We will explore a small game of Rock-Paper-Scissors using a memory.
+The play function will have the following type:
+
+``` haskell
+data RockPaperScissors = Rock | Paper | Scissors
+
+-- | Play a round of RPS given the result of the previous round.
+play
+  :: Maybe (RockPaperScissors, RockPaperScissors, String)
+  -- ^ Result of the previous round as: (your choice, opponent choice, your memory)
+  -> (RockPaperScissors, String) -- ^ (Choice, new memory)
+```
+
+We will build a simple player which will keep track of the opponent's previous choices and try to counter the most common one.
+
+### How to build a memory
+
+We will convert to string using a simple `Show` instance:
+
+``` haskell
+instance Show RockPaperScissors where
+  show :: RockPaperScissors -> String
+  show Rock = "R"
+  show Paper = "P"
+  show Scissors = "S"
+```
+
+(Note, we could also define a `Read` instance to deserialise such a simple type but we are going to define a `ParserCombinator` for interest and extensibility to much more complex scenarios).
+
+The straightforward way to create the memory is to just store a list of all the choices made by the opponent.
+So, for example, if the results from the previous three rounds were:
+``` haskell
+(Rock, Paper), (Rock, Scissors), (Paper, Scissors)
+```
+Then, a compact memory representation will be: `"PSS"`.
+ 
+*Note*: We only store single characters, so we do not need separators, but if you have more complex data, you will want separators.
+
+### Reading the memory
+
+Now, we want to define a `Parser RockPaperScissors` which will turn a string into a choice.
+First, we will define a parser for each of the three choices:
+
+``` haskell
+rock :: Parser RockPaperScissors
+rock = is 'R' >> pure Rock
+
+scissors :: Parser RockPaperScissors
+scissors = is 'S' >> pure Scissors
+
+paper :: Parser RockPaperScissors
+paper = is 'P' >> pure Paper
+```
+
+This will give:
+
+``` 
+>>> parse rock "R"
+Result >< R
+>>> parse rock "RR"
+Result >R< R
+>>> parse rock "P"
+Unexpected character: "P"
+```
+
+To combine those parsers, we will use the *option parser* `(|||)`.
+
+``` 
+choice :: Parser RockPaperScissors
+choice = rock ||| paper ||| scissors
+```
+
+And, to be able to read a list of choices, we need to use the `list` parser:
+
+``` 
+>>> parse choice "PSS"
+Result >SS< P
+>>> parse (list choice) "PSCS"
+Result >CS< [P,S]
+>>> parse (list choice) "PSS"
+Result >< [P,S,S]
+```
+
+### Playing the game
+
+Our decision function will take a list of `RockPaperScissors` and return the move that would win against most of them.
+One question remains: how do we get the memory *out* of the parser?
+The answer is: pattern-matching.
+
+``` haskell
+getMem :: ParseResult a -> a
+getMem (Result _ cs) = cs
+getMem (Error _) = error "You should not do that!"
+```
+
+Obviously, in a longer program you want to be handling this case better.
+
+*Hint*: If your parser returns a list of elements, the empty list `[]` is a good default case.
+
+### Putting it all together
+
+The first round, our player will just pick a choice at random and return an empty memory.
+
+``` haskell
+play Nothing = (Scissors, "") -- Chosen at random!
+```
+
+Now, we need to write a couple functions:
+
+1. `winAgainst` that determines which choice wins against a given one.
+2. `mostCommon` which finds the most common occurrence in a list.
+
+With that, we have a full `play` function:
+
+``` haskell
+play (Just (_, opponent, mem)) = (winning whole, concatMap convert whole)
+  where
+    -- Convert the memory to a list of different choices
+    as_choices = getMem . parse (list choice)
+    -- Get the whole set of moves -- all the prev. rounds + last one
+    whole = opponent: as_choices mem
+    winning = winAgainst . mostCommon
+```
+
+``` haskell
+>>> play Nothing
+(S,"")
+>>> play (Just (Scissors, Scissors, ""))
+(R,"S")
+>>> play (Just (Scissors, Scissors, "RRP"))
+(P,"SRRP")
+```
+
+*Note*: Here we can see the results directly because `RockPaperScissors` has an instance of `Show`.
+If you want to do the same with a datatype without `Show`, you would need to call `convert`.
+
+### Going further
+
+Now, this is a simplistic view of storing information.
+We are only concatenating characters because our data is so small.
+However, there are better ways to store that data.
+
+One issue with this approach is that we need to process the memory sequentially at each round.
+Instead, we could keep track of the number of occurrences of each choice.
+
+**Exercise**: Implement a memory for the following datatype.
+
+``` haskell
+data Played = Played {rocks, papers, scissors :: Int}
+
+-- | Store a @Played@ as a string in format: @nC@, with @n@ the number of
+-- occurrences and @C@ the choice.
+convert' :: Played -> String
+convert' Played{rocks, papers, scissors} = 
+  show rocks ++ "R" ++ show papers ++ "P" ++ show scissors ++ "S"
+```
+
+```
+>>> play Nothing
+(S,"0R0P0S")
+>>> play (Just (Scissors, Scissors, "0R0P0S"))
+(R,"0R0P1S")
+>>> play (Just (Scissors, Scissors, "2R1P0S"))
+(P,"2R1P1S")
+```
+
