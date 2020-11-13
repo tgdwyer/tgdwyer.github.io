@@ -1,10 +1,11 @@
-<!-- ---
+---
 layout: page
 title: "FIT2102 Assignment 2: Gin Rummy"
 permalink: /assignment2_2020/
---- -->
+---
+# FIT2102 Assignment 2: Gin Rummy
 
- - **Due Date**: November 6^th^, 23:55
+ - **Due Date**: November 8^th^, 23:55
  - **Weighting**: 30% of your final mark for the unit
  - **Uploader**: <https://fit2102.monash/uploader/>
  - **Overview**: Your goal is to implement a player for the game of Gin Rummy.
@@ -19,11 +20,6 @@ permalink: /assignment2_2020/
    the `submission/` folder of the code bundle. To submit you will zip up *just
    the contents of this `submission/` folder* into one file named
    `studentNo_name.zip`.
-
-## Changelog
-
- - **12/10**: Add missing aces to deck.
- - **12/10**: Pass a `Maybe Draw` to `actionFunc`.
 
 ## Gin Rummy
 
@@ -46,6 +42,11 @@ has a few key differences, namely (compared to the linked resources):
  - There is non *laying-off*, we only count the melds formed in your own hand.
  - You cannot discard the card you just drew.
  - There is no *Big Gin,* you always have to discard at the end of your turn.
+ - If no player takes an action before the stock runs out, the last player to
+   draw is considered to have Knocked.
+ - You cannot *call* (Gin or Knock) during the first turn.
+ - There is a maximum of 200 turns (100 actions / player) per round, this is to
+   avoid a case where neither player draws from the stock.
 
 In the variant of Gin Rummy we use, a round (also called "playing a hand")
 proceeds as follows:
@@ -119,22 +120,37 @@ functions. These functions are:
 A skeleton for the file can be found in `submission/Player.hs` in the
 code bundle.
 
-To keep the playing field level, and to allow us to evaluate your code we ask
+To keep the playing field level, and to allow us to evaluate your code, we ask
 you use only the libraries provided. In short, you cannot edit the `stack.yaml`
 and `package.yaml` or add functionality to the source code (in `src/`).
 
 You will need to submit a file called `studentNo_name.zip` which you will create
-by zipping the contents of the `submission/` directory. If you have any
-extension, you will need to include them in a directory titled `extensions/` in
-your zip file.
+by zipping the contents of the `submission/` directory. 
+
+If you have any extension, you will need to include them in a directory titled
+`extensions/` in your zip file. If your extension requires additional library,
+feel free to include your whole project -- except build files, e.g.
+`.stack-work/` -- in the `extensions/` folder.
 
 ### Choosing an action
 
 At the beginning of its turn, your player will need to decide whether to draw a
-card from the discard or the stock. This function will also receive extra
-information about the previous turn, unless it's the first one. You will know:
-the card on top of the discard; what action you opponent took, unless you're the
-first player; and, what was your last memory, if you played before.
+card from the discard or the stock. The first parameter of the function is the
+card on top of the discard. The last parameter is your player's current hand.
+
+This function will also receive extra information about the state of the game.
+This information is:
+
+- `(Score, Score)` the score as of last round as: *(your score, opponent
+  score)*. In the first round of a game, this will be `(0, 0)`.
+- `Maybe String` what was your last memory. In the first turn of the first
+  round, this will be `Nothing`. In subsequent turns, you will receive the
+  memory you returned from `playCard`; the game does not change your memory in
+  any way. In the first turn of each subsequent round, you will receive the last
+  memory you returned in the previous round. This will allow you to keep track
+  of parameters during a whole game.
+- `Maybe Draw` what action you opponent took if they played before you. If you
+  are the dealer, this will be `Nothing` in the first round.
 
 ``` haskell
 data Draw = Stock | Discard
@@ -144,18 +160,28 @@ data Draw = Stock | Discard
 -- This function is called at the beginning of a turn before the player has to
 -- form melds.
 type ActionFunc
-  = Card          -- ^ card on top of the discard pile
-  -> Maybe String -- ^ player's memory, on first player turn it will be Nothing
+  = Card            -- ^ card on top of the discard pile
+  -> (Score, Score) -- ^ scores of (player, opponent) as of last round
+  -> Maybe String
+  -- ^ player's memory, on first player turn in the first round it will be Nothing
   -> Maybe Draw -- ^ opponent's chosen action, on first game turn it will be Nothing
-  -> [Card]       -- ^ the player's hand
-  -> (Draw, String) -- ^ which pile did the player chose to draw from
+  -> [Card]     -- ^ the player's hand
+  -> (Draw, String) -- ^ which pile did the player chose to draw from and memory
 ```
 
 ### Managing the hand
 
 After having chosen where to draw a card from, your player will be called again
 with the drawn card. It will need to decide which card to discard and what to
-announce.
+announce. 
+
+The first argument, `Card`, is the card your player drew, it is not added to
+your hand directly. The last argument is your player's hand. Then, we have
+similar parameters to `pickCard`:
+
+- `(Score, Score)` the score as of the previous round as: *(your score, opponent
+  score)*.
+- `String` the memory you returned from `pickCard` (see above).
 
 ```haskell
 data Action = Action Act Card
@@ -166,16 +192,25 @@ data Act = Gin | Knock | Drop
 -- A player receives the card he decided to draw (from discard or stock), her
 -- hand and her memory. She then choses whether to Knock or Discard.
 type PlayFunc
-  = Card              -- ^ last picked card
+  = Card              -- ^ picked card
+  -> (Score, Score)   -- ^ scores of (player, opponent) as of last round
   -> String           -- ^ the player's memory
-  -> [Card]           -- ^ the player's hand
-  -> (Action, String) -- ^ the player's chosen card and new state
+  -> [Card]           -- ^ the player's hand (without new card)
+  -> (Action, String) -- ^ the player's chosen card and new memory
 ```
 
 ### Forming melds
 
 Finally, your player needs to be able to convert a hand of cards into melds to
 do the scoring. Your melds will be checked against the rules, obviously.
+
+This function also receives additional information about the game. Though this
+may not be strictly necessary,[^7] it makes the game more consistent. (For
+example, some might prefer storing their melds in memory.)
+
+One key difference is that you cannot modify your memory in this function. This
+is because `makeMeld` is called *after* a round finishes, thus we cannot form a
+`Play` with its return.
 
 ``` haskell
 data Meld =
@@ -190,9 +225,10 @@ data Meld =
 --
 -- Which melds to use for scoring.
 type MeldFunc
-  = String  -- ^ the player's memory
-  -> [Card] -- ^ cards in player's hand
-  -> [Meld] -- ^ elected melds
+  = (Score, Score) -- ^ scores of (player, opponent) as of last round
+  -> String        -- ^ the player's memory
+  -> [Card]        -- ^ cards in player's hand
+  -> [Meld]        -- ^ elected melds
 ```
 
 ### Managing the memory
@@ -206,6 +242,25 @@ Internally, your player should use a custom datatype to store information rather
 than a `String`. To enable conversion to and from your datatype, you will have
 to use a parser-combinator as presented in the course notes. The source code is
 included in `src/Parser/`.
+
+Another thing that can be considered as *memory* is the score. At each of your
+function calls, you will be given the score of the *last round* as: `(your
+score, opponent score)`. This can help you adjust your strategy. 
+
+Below is an example of different values `pickCard` can receive:
+
+| Game  | Round | Player | Score  | Memory in | Draw               | Memory out |
+|-------|-------|--------|--------|-----------|--------------------|------------|
+| First | First | A      | (0, 0) | Nothing   | Nothing            | "a"        |
+|       |       | B      | (0, 0) | Nothing   | Just Stock/Discard | "b"        |
+|       | Next  | A      | (0, 0) | Just "a"  | Just Stock/Discard | "a"        |
+|       |       | B      | (0, 0) | Just "b"  | Just Stock/Discard | "b"        |
+| Next  | First | B      | (n, m) | Just "b"  | Nothing            | "d"        |
+|       |       | A      | (m, n) | Just "a"  | Just Stock/Discard | "c"        |
+|       | Next  | B      | (n, m) | Just "d"  | Just Stock/Discard | "d"        |
+|       |       | A      | (m, n) | Just "c"  | Just Stock/Discard | "c"        |
+
+*Note*: Your memory cannot exceed 10,000 characters.
 
 ## Assessment
 
@@ -346,25 +401,53 @@ already HD-worthy, the extension will not grant you many marks.
 #### Using logs to build a player
 
 The game server (see below) will keep logs of your games against other players.
-Reports will be in the following format:
+Reports for each game will come in two files named:
 
-``` csv
-hand, playing, discard, picked, dropped
-C10;SQ;H10;HQ;DK;CJ;D3;D4;HJ,0,C7,S5,D9
-```
-
-The first column is the cards in the player's hand. The second whether it is
-*your turn* to play. The third, the card at the top of the discard. The fourth,
-which card was picked (if it is not the discard, then it came from the stock).
-And, the fifth is which card was discarded.
-
-Reports will be formatted as: `<timestamp>-<round no>.csv` and will not have the
-header.
+1. `<timestamp>.csv` the logs of the turns taken by each player, anonymised.
+2. `<timestamp>-score.csv` the score for each round of the game, along with the
+   action taken.
 
 You can write a Haskell program to data-mine these reports and tailor some parts
 of your player accordingly.
 
-##### Monte Carlo Tree Search 
+##### Turn file
+
+``` csv
+1,SA;CK;DK;S3;HJ;C9;S4;S5;SQ;D10,0,H5,SA,C3
+```
+
+Each file will be the record of *one game* -- so, multiple rounds. The file will
+come without a header but here are the columns:
+
+1. Round number. 
+2. Cards in the player's hand -- the format is `<first char of suit><rank>`
+   separated by ';'. *Note:* these are the cards *at the end of the turn,* so
+   they include the drawn card -- as opposed to what your function receives.
+3. Whether it is *your turn* to play -- '0' means your opponent's turn and '1'
+   your turn.
+4. The card at the top of the discard.
+5. Which card was picked -- if it is not the same as the discard, then it came
+   from the stock.
+6. And, which card was discarded.
+
+##### Score file
+
+``` csv
+1,0,12,Drop,0
+```
+
+Each file will record one round per row, formatted as:
+
+1. Round number.
+2. Your score.
+3. Opponent's score -- in the same fashion as during the game.
+4. Action taken.
+5. Whether the action was called by you ('1') or your opponent ('0').
+
+*Note*: if the action is "Drop," this means no player took an action before the
+stock ran out.
+
+#### Monte Carlo Tree Search 
 
 Monte Carlo Tree Search (MCTS) is the fusion between (tree) search algorithms
 such as minmax and using probabilities (Monte Carlo simulation) to determine the
@@ -474,3 +557,6 @@ you run the test suite before you upload your player.
 [^6]: This means a deck with four suits (clubs, diamonds, spades and hearts)
     with the following ranking: King, Queen, Jack, 10, 9, 8, 7, 6, 5, 4, 3, 2,
     Ace.
+
+[^7]: You can compute the optimal arrangement of melds given a hand, but this
+    may be [expensive](https://en.wikipedia.org/wiki/Subset_sum_problem).
