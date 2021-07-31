@@ -201,7 +201,7 @@ new Counter();
 ### Continuations
 
 Continuations are functions which, instead of returning the result of a computation directly to the caller, pass the result on to another function, specified by the caller.  
-We can rewrite basically any function to pass their result to a continuation function instead of returning the result directly.
+We can rewrite basically any function to pass their result to a user-specified continuation function instead of returning the result directly.  The parameter `done` in the ` continuationPlus` function below will be a function specified by the caller to do something with the result.
 
 ```javascript
 function simplePlus(a, b) {
