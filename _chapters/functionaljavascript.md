@@ -207,7 +207,7 @@ We can rewrite basically any function to pass their result to a continuation fun
 function simplePlus(a, b) {
    return a + b;
 }
-function continuationPlus(a, b, done=(result)=>{}) {
+function continuationPlus(a, b, done) {
    done(a+b);
 }
 ```
