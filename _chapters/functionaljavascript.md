@@ -207,7 +207,7 @@ We can rewrite basically any function to pass their result to a continuation fun
 function simplePlus(a, b) {
    return a + b;
 }
-function continuationPlus(a, b, done:(result)=>void) {
+function continuationPlus(a, b, don =(result)=>{}) {
    done(a+b);
 }
 ```
@@ -219,7 +219,7 @@ function tailRecFactorial(a, n) {
    return n<=1 ? a : tailRecFactorial(n*a, n-1);
 }
 function continuationFactorial(
-a, n, finalAction: (result)=>void): void 
+a, n, finalAction=(result)=>{}) 
 {
    if (n<=1) finalAction(a);
    else continuationFactorial(n*a, n-1, finalAction);
