@@ -479,7 +479,7 @@ The TypeScript compiler will not complain about the above assignment at all.
 However, TypeScript does give us the possibility to add an `as const` after creating an object to make it deeply immutable:
 
 ```typescript
-const studentVersion1 = {
+const studentVersion2 = {
   name: "Tim",
   assignmentMark: 20,
   examMark: 15
@@ -487,7 +487,7 @@ const studentVersion1 = {
 ```
 
 ```javascript
-studentVersion1.name = "Tom"
+studentVersion2.name = "Tom"
 ```
 
 > Cannot assign to 'name' because it is a read-only property.ts(2540)
@@ -502,13 +502,13 @@ type ImmutableStudent = Readonly<{
   examMark: number;
 }>
 
-const studentVersion1:ImmutableStudent = {
+const studentVersion3: ImmutableStudent = {
   name: "Tim",
   assignmentMark: 20,
   examMark: 15
 }
 
-studentVersion1.name = "Tom"
+studentVersion3.name = "Tom"
 ```
 
 Again, we get the squiggly:
