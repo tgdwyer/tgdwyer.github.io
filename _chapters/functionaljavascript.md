@@ -52,6 +52,26 @@ In the context of functional programming, *referential transparency* is:
 
 * the property of being able to substitute an expression that evaluates to some value, with that value, without affecting the behaviour of the program.
 
+### Trivial Example
+Imagine a simple function:
+
+```javascript
+const square = x=>x*x
+```
+
+And some code that uses it:
+
+```javascript
+const four = square(2)
+```
+The expression `square(2)` evaluates to `4`.  Can we replace the expression `square(2)` with the value `4` in the program above without changing the behaviour of the program?  YES!  So is the expression `square(2)` referentially transparent? YES!
+
+But what if the `square` function depends on some other data stored somewhere in memory and may return a different result if that data mutates? (an example might be using a global variable or reading an environment variable from IO or requiring user input).  What if `square` performs some other action instead of simply returning the result of a mathematical computation?  What if it sends a message to the console or mutates a global variable?  That is, what if it has side effects (is not a pure function)?  In that case is replacing `square(2)` with the value `4` still going to leave our program behaving the same way?  Possibly not!
+
+Put another way, if the `square` function is not pure&mdash;i.e. it produces side effects (meaning it has hidden output other than its return value) or it is affected by side effects from other code (meaning it has hidden inputs)&mdash;then the expression `square(2)` would not be referentially transparent.
+
+### Realistic Examples
+
 A real life example where this might be useful would be when a cached result for a given input already exists and can be returned without further computation.  Imagine a pure function which computes PI to a specified number of decimal points precision.  It takes an argument `n`, the number of decimal points, and returns the computed value.  We could modify the function to instantly return a precomputed value for PI from a lookup table if `n` is less than `10`.  This substitution is trivial and is guaranteed not to break our program, because its effects are strictly locally contained.
 
 Pure functions and referential transparency are perhaps most easily illustrated with some examples and counterexamples. 
@@ -130,9 +150,11 @@ This function is impure in three ways:
 Side effects are bad for transparency (knowing everything about what a function is going to do) and maintainability.  When state in your program is being changed from all over the place bugs become very difficult to track down.
 
 ## Functional Patterns
+
 Passing functions around, anonymous or not, is incredibly useful and pops up in many practical programming situations.
 
 ### Eliminating Loops
+
 Loops are the source of many bugs: fence-post errors, range errors, typos, incrementing the wrong counter, etc.
 
 A typical for loop has four distinct places where it’s easy to make errors that can cause critical problems:
