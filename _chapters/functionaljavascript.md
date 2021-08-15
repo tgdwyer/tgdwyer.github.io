@@ -261,7 +261,7 @@ console.log('job queued on the event loop...');
 > job queued on the event loop...  
 > done.
 
-### Method Chaining
+### Function and Method Chaining
 
 *Chained functions* are a common pattern.  
 Take a simple linked-list data structure as an example.  We'll hard code a list object to start off with:
@@ -363,7 +363,7 @@ list123((_,r)=>r)((h,_)=>h) // we can call the parameters whatever we like
 ```
 > 2
 
-We can create accessor functions to operate on a given list:
+We can create accessor functions to operate on a given list (by passing the list the appropriate selector function):
 
 ```javascript
 const
