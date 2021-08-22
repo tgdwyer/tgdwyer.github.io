@@ -124,10 +124,10 @@ The objects coming through the stream are of type `KeyboardEvent`, meaning they 
     filter(({key})=>key === 'ArrowLeft' || key === 'ArrowRight'),
     filter(({repeat})=>!repeat));
 ```
-To duplicate the behaviour of our event driven version we need to rotate every 10ms.  We can make a stream which fires every 10ms using `interval(10)`, which we can "graft" onto our `arrowKeys$` stream using `flatMap`.  We use `takeUntil` to terminate the interval on a `'keyup'`, filtered to ignore keys other than the one that initiated the `'keydown'`.  At the end of the `flatMap` `pipe` we use `map` to return `d`, the original keydown `KeyboardEvent` object.  Back at the top-level `pipe` on arrowKeys$ we inspect this `KeyboardEvent` object to see whether we need a left or right rotation (positive or negative angle).  Thus, `angle$` is just a stream of `-1` and `1`.
+To duplicate the behaviour of our event driven version we need to rotate every 10ms.  We can make a stream which fires every 10ms using `interval(10)`, which we can "graft" onto our `arrowKeys$` stream using `mergeMap`.  We use `takeUntil` to terminate the interval on a `'keyup'`, filtered to ignore keys other than the one that initiated the `'keydown'`.  At the end of the `mergeMap` `pipe` we use `map` to return `d`, the original keydown `KeyboardEvent` object.  Back at the top-level `pipe` on arrowKeys$ we inspect this `KeyboardEvent` object to see whether we need a left or right rotation (positive or negative angle).  Thus, `angle$` is just a stream of `-1` and `1`.
 ```typescript
   const angle$ = arrowKeys$.pipe(
-    flatMap(d=>interval(10).pipe(
+    mergeMap(d=>interval(10).pipe(
       takeUntil(fromEvent<KeyboardEvent>(document, 'keyup').pipe(
         filter(({key})=>key === d.key)
       )),
@@ -189,7 +189,7 @@ And now our main `pipe` (collapsed into one) ends with a `scan` which "transduce
     .pipe(
       filter(({code})=>code === 'ArrowLeft' || code === 'ArrowRight'),
       filter(({repeat})=>!repeat),
-      flatMap(d=>interval(10).pipe(
+      mergeMap(d=>interval(10).pipe(
         takeUntil(fromEvent<KeyboardEvent>(document, 'keyup').pipe(
           filter(({code})=>code === d.code)
         )),
@@ -633,14 +633,14 @@ Our `tick` function is more or less the same as above, but it will apply one mor
       const
         // Some array utility functions
         not = <T>(f:(x:T)=>boolean)=>(x:T)=>!f(x),
-        flatMap = <T, U>(
+        mergeMap = <T, U>(
           a: ReadonlyArray<T>,
           f: (a: T) => ReadonlyArray<U>
         ) => Array.prototype.concat(...a.map(f)),
 
         bodiesCollided = ([a,b]:[Body,Body]) => a.pos.sub(b.pos).len() < a.radius + b.radius,
         shipCollided = s.rocks.filter(r=>bodiesCollided([s.ship,r])).length > 0,
-        allBulletsAndRocks = flatMap(s.bullets, b=> s.rocks.map(r=>([b,r]))),
+        allBulletsAndRocks = mergeMap(s.bullets, b=> s.rocks.map(r=>([b,r]))),
         collidedBulletsAndRocks = allBulletsAndRocks.filter(bodiesCollided),
         collidedBullets = collidedBulletsAndRocks.map(([bullet,_])=>bullet),
         collidedRocks = collidedBulletsAndRocks.map(([_,rock])=>rock),
@@ -654,7 +654,7 @@ Our `tick` function is more or less the same as above, but it will apply one mor
         spawnChildren = (r:Body)=>
                               r.radius >= Constants.StartRockRadius/4 
                               ? [child(r,1), child(r,-1)] : [],
-        newRocks = flatMap(collidedRocks, spawnChildren)
+        newRocks = mergeMap(collidedRocks, spawnChildren)
           .map((r,i)=>createCircle('rock')(s.objCount + i)(s.time)(r.radius)(r.pos)(r.vel)),
 
         // search for a body by id in an array
