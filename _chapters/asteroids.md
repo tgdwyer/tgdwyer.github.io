@@ -530,6 +530,7 @@ And we tack a bit on to `updateView` to draw and remove bullets:
 ```typescript
   function updateView(s: State) {
 ...
+    const svg = document.getElementById("svgCanvas")!;
     s.bullets.forEach(b=>{
       const createBulletView = ()=>{
         const v = document.createElementNS(svg.namespaceURI, "ellipse")!;
@@ -541,12 +542,20 @@ And we tack a bit on to `updateView` to draw and remove bullets:
       const v = document.getElementById(b.id) || createBulletView();
       v.setAttribute("cx",String(b.pos.x))
       v.setAttribute("cy",String(b.pos.y))
+      v.setAttribute("rx", String(b.radius));
+      v.setAttribute("ry", String(b.radius));
     })
     s.exit.forEach(o=>{
       const v = document.getElementById(o.id);
       if(v) svg.removeChild(v)
     })
   }
+```
+Finally, we add a make a quick addition to the CSS so that the bullets are a different colour to the background:
+```css
+.bullet {
+  fill: red;
+}
 ```
 ## Collisions
 So far the game we have built allows you to hoon around in a space-ship blasting the void with fireballs which is kind of fun, but not very challenging.  The Asteroids game doesn't really become "Asteroids" until you actually have... asteroids.  Also, you should be able to break them up with your blaster and crashing into them should end the game.  Here's a preview:
