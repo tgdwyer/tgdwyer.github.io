@@ -426,7 +426,6 @@ The first complication is generalising bodies that participate in the force mode
     time:number,
     ship:Body,
     bullets:ReadonlyArray<Body>,
-    rocks:ReadonlyArray<Body>,
     exit:ReadonlyArray<Body>,
     objCount:number
   }>
