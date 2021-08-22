@@ -384,7 +384,7 @@ And here's our updated updateView function where we not only move the ship but a
                   : e.classList.add('hidden'))(document.getElementById(id)!);
     show("leftThrust",  s.torque<0);
     show("rightThrust", s.torque>0);
-    show("thruster",    s.acc.len()>0); 
+    show("forwardThrust",    s.acc.len()>0); 
     ship.setAttribute('transform', `translate(${s.pos.x},${s.pos.y}) rotate(${s.angle})`);
   }
 ```
