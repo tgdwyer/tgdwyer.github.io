@@ -629,8 +629,15 @@ Our `tick` function is more or less the same as above, but it will apply one mor
     // check a State for collisions:
     //   bullets destroy rocks spawning smaller ones
     //   ship colliding with rock ends game
-    handleCollisions = (s:State) => {
+    const handleCollisions = (s:State) => {
       const
+        // Some array utility functions
+        not = <T>(f:(x:T)=>boolean)=>(x:T)=>!f(x),
+        flatMap = <T, U>(
+          a: ReadonlyArray<T>,
+          f: (a: T) => ReadonlyArray<U>
+        ) => Array.prototype.concat(...a.map(f)),
+
         bodiesCollided = ([a,b]:[Body,Body]) => a.pos.sub(b.pos).len() < a.radius + b.radius,
         shipCollided = s.rocks.filter(r=>bodiesCollided([s.ship,r])).length > 0,
         allBulletsAndRocks = flatMap(s.bullets, b=> s.rocks.map(r=>([b,r]))),
