@@ -723,6 +723,19 @@ The other thing happening at game over, is the call to `subscription.unsubscribe
     ).subscribe(updateView);
 ```
 
+Finally, we need to make a couple more additions to the CSS to display the rocks and game over text:
+
+```CSS
+.rock {
+  fill: burlywood;
+}
+.gameover {
+  font-family: sans-serif;
+  font-size: 80px;
+  fill: red;
+}
+```
+
 At this point we have more-or-less all the elements of a game.  The implementation above could be extended quite a lot.  For example, we could add score, ability to restart the game, multiple lives, perhaps some more physics.  But generally, these are just extensions to the framework above: manipulation and then display of additional state.
 
 The key thing is that the observable has allowed us to keep well separated state management (model), its input and manipulation (control) and the visuals (view).  Further extensions are just additions within each of these elements - and doing so should not add greatly to the complexity.
