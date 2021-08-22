@@ -440,7 +440,7 @@ Now we define functions to create objects:
     const d = Vec.unitVecInDirection(s.ship.angle);
     return {
       id: `bullet${s.objCount}`,
-      pos:s.ship.pos.add(d.scale(20)),
+      pos:s.ship.pos.add(d.scale(s.ship.radius)),
       vel:s.ship.vel.add(d.scale(-2)),
       createTime:s.time,
       thrust:false,
