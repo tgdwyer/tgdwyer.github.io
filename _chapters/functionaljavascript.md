@@ -181,7 +181,7 @@ e=>{
 })
 ```
 
-Note that callback functions passed as event handlers are a situation where the difference between the arrow syntax and regular anonymous function syntax really matters.  In the body of the arrow function above, `this` will be bound to the context of the *caller*, which is probably what you want if you are coding a class for a reusable component.  For functions defined with the `function` keyword the object that `this` refers to will depend on the context of the *callee*, although the precise behaviour of `this` for functions defined with `function` [may vary with the particular JavaScript engine and the mode of execution](https://www.codementor.io/@dariogarciamoya/understanding--this--in-javascript-du1084lyn).  
+Note that callback functions passed as event handlers are a situation where the one semantic difference between the arrow syntax and regular anonymous function syntax really matters.  In the body of the arrow function above, `this` will be bound to the context of the *caller*, which is probably what you want if you are coding a class for a reusable component.  For functions defined with the `function` keyword the object that `this` refers to will depend on the context of the *callee*, although the precise behaviour of `this` for functions defined with `function` [may vary with the particular JavaScript engine and the mode of execution](https://www.codementor.io/@dariogarciamoya/understanding--this--in-javascript-du1084lyn).  
 
 Here's a situation where this makes a difference.  Recall that JavaScript functions are just objects.  Therefore, we can also assign properties to them.  We can do this from within the function itself using the `this` keyword:
 
