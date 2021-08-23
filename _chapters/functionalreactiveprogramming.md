@@ -99,9 +99,7 @@ columns.pipe(
 Another way to combine streams is ```merge```.  Streams that are generated with ```of``` and ```range``` have all their elements available immediately, so the result of a merge is not very interesting, just the elements of one followed by the elements of the other:
 
 ```javascript
-columns.pipe(
-  merge(rows)
-).subscribe(console.log)
+merge(columns,rows).subscribe(console.log)
 ```
 
 > A  
@@ -141,11 +139,8 @@ Once again this will keep producing the message for every mouse click for as lon
 
 The following achieves the same thing with a single subscription using ```merge```:
 ```javascript
-key$.pipe(
-  map(e=>e.key),
-  merge(mouse$.pipe(
-    map(_=>"Mouse Click!"))
-  )
+merge(key$.pipe(map(e=>e.key)),
+      mouse$.pipe(map(_=>"Mouse Click!"))
 ).subscribe(console.log)
 ```
 
