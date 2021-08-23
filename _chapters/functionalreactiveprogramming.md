@@ -170,7 +170,8 @@ fromEvent<T>(target: FromEventTarget<T>, eventName: string): Observable<T>
 // produces a stream of increasing numbers, emitted every 'period' milliseconds
 interval(period?: number): Observable<number>
 
-// merge multiple Observable streams.  The resulting stream will have elements of Union type.
+// create a new Observable stream from the merge of multiple Observable streams.  
+// The resulting stream will have elements of Union type.
 // i.e. the type of the elements will be the Union of the types of each of the merged streams
 merge<T, U...>(t: Observable<T>, u: Observable<U>, ...): Observable<T|U...>
 ```
