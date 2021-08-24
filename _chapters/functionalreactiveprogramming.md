@@ -169,11 +169,21 @@ fromEvent<T>(target: FromEventTarget<T>, eventName: string): Observable<T>
 
 // produces a stream of increasing numbers, emitted every 'period' milliseconds
 interval(period?: number): Observable<number>
+```
 
+### Combination
+
+Creating new Observable streams from existing streams
+
+```typescript
 // create a new Observable stream from the merge of multiple Observable streams.  
 // The resulting stream will have elements of Union type.
 // i.e. the type of the elements will be the Union of the types of each of the merged streams
+// Note: there is also an operator version.
 merge<T, U...>(t: Observable<T>, u: Observable<U>, ...): Observable<T|U...>
+
+// create n-ary tuples (arrays) of the elements at the head of each of the incoming streams 
+zip<T,U...>(t: Observable<T>, r: Observable<U>):Observable<[T,U,...]>
 ```
 
 ### Observable methods
@@ -194,7 +204,7 @@ subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: ()
 
 ### Operators
 
-Operators are passed to ```pipe```.  They all have return type an ```OperatorFunction``` which is used by ```pipe```.
+Operators are passed to ```pipe```.  They all return an ```OperatorFunction``` which is used by ```pipe```.
 
 ```typescript
 // transform the elements of the input stream using the `project' function
