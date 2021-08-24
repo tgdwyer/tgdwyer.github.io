@@ -79,34 +79,46 @@ range(1000)
 
 Scan is very much like the ```reduce``` function on Array in that it applies an accumulator function to the elements coming through the Observable, except instead of just outputting a single value (as ```reduce``` does), it emits a stream of the running accumulation (in this case, the sum so far).  Thus, we use the ```last``` function to finally produce an Observable with the final value.
 
-There are also functions for combining Observable streams.  For example, ```flatMap``` gives us a way to take, for every element of a stream, a whole other stream, but flattened (or projected) together with the parent stream.  The following enumerates all the row/column indices of cells in a spreadsheet:
+There are also functions for combining Observable streams.  The `zip` function provides a pretty straightforward way to pair the values from two streams into an array:
 
 ```javascript
 const
   columns = of('A','B','C'),
   rows = range(3);
 
-columns.pipe(
-  flatMap(column=>rows.pipe(
-    map(row=>[row,column])
-  ))
-).subscribe(([row,column])=>console.log(`Column: ${column}, Row: ${row}`))
+zip(columns,rows)
+  .subscribe(console.log)
 ```
 
-> Column: A, Row: 0  
-> Column: A, Row: 1  
-> Column: A, Row: 2  
-> Column: B, Row: 0  
-> Column: B, Row: 1  
-> Column: B, Row: 2  
-> Column: C, Row: 0  
-> Column: C, Row: 1  
-> Column: C, Row: 2  
+> ["A",0]  
+> ["B",1]  
+> ["C",2]
+
+If you like mathy vector speak, you can think of the above as an *inner product* of the two streams.  By contrast, the ```flatMap``` operator gives the *cartesian product* of two streams.  That is, it gives us a way to take, for every element of a stream, a whole other stream, but flattened (or projected) together with the parent stream.  The following enumerates all the row/column indices of cells in a spreadsheet:
+
+```javascript
+columns.pipe(
+  flatMap(column=>rows.pipe(
+    map(row=>[column,row])
+  ))
+).subscribe(console.log)
+```
+
+> ["A", 0]  
+> ["A", 1]  
+> ["A", 2]  
+> ["B", 0]  
+> ["B", 1]  
+> ["B", 2]  
+> ["C", 0]  
+> ["C", 1]  
+> ["C", 2]  
 
 Another way to combine streams is ```merge```.  Streams that are generated with ```of``` and ```range``` have all their elements available immediately, so the result of a merge is not very interesting, just the elements of one followed by the elements of the other:
 
 ```javascript
-merge(columns,rows).subscribe(console.log)
+merge(columns,rows)
+  .subscribe(console.log)
 ```
 
 > A  
@@ -116,16 +128,15 @@ merge(columns,rows).subscribe(console.log)
 > 1  
 > 2  
 
-However, as we will see in later examples ```merge``` when applied to asynchronous streams will merge the elements in the order that they arrive in the stream.
-
-To see something more interesting we need some asynchronous streams.  For example, a stream of key-down and mouse-down events from a web-page:
+However, ```merge``` when applied to asynchronous streams will merge the elements in the order that they arrive in the stream.  For example, a stream of key-down and mouse-down events from a web-page:
 
 ```javascript
 const
   key$ = fromEvent<KeyboardEvent>(document,"keydown"),
   mouse$ = fromEvent<MouseEvent>(document,"mousedown");
 ```
-It's a convention to end variable names refering to Observable streams with a ```$``` (I like to think it's short for "$tream"):
+
+It's a convention to end variable names refering to Observable streams with a ```$``` (I like to think it's short for "$tream", or implies a plurality of the things in the stream, or maybe it's just because [cash rules everything around me](https://www.youtube.com/watch?v=PBwAxmrE194)).
 
 The following lets us see in the console the keys pressed as they come in, it will keep running for as long as the web page is open:
 
