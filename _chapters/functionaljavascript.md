@@ -53,6 +53,7 @@ In the context of functional programming, *referential transparency* is:
 * the property of being able to substitute an expression that evaluates to some value, with that value, without affecting the behaviour of the program.
 
 ### Trivial Example
+
 Imagine a simple function:
 
 ```javascript
