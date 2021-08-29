@@ -19,14 +19,16 @@ The Lambda Calculus is also important to study as it is the basis of functional 
 
 Lambda Calculus expressions are written with a standard system of notation.  It is worth looking at this notation before studying haskell-like languages because it was the inspiration for Haskell syntax.  Here is a simple Lambda Abstraction of a function:
 ```
- λx. x
+ λx.x
  ```
-The `λ` (Greek letter Lambda) simply denotes the start of a function expression. Then follows a list of parameters (in this case we have only a single parameter called `x`) terminated by “.”  Then follows the function body, an expression returned by the function when it is applied. The variable `x` is said to be *bound* to the parameter.  Variables that appear in the function body but not in the parameter list are said to be *free*.  The above lambda expression is equivalent to the JavaScript expression: 
+The `λ` (Greek letter Lambda) simply denotes the start of a function expression. Then follows a list of parameters (in this case we have only a single parameter called `x`) terminated by `.`.  After the `.` is the function body, an expression returned by the function when it is applied. A variable like `x` that appears in the function body and also the parameter list is said to be *bound* to the parameter.  Variables that appear in the function body but not in the parameter list are said to be *free*.  The above lambda expression is equivalent to the JavaScript expression: 
 
 ```javascript
 x => x
 ```
+
 -------
+
 #### Exercise
 
 When we discussed combinators in JavaScript, we gave this function a name.  What was it? *[spoiler](/higherorderfunctions#identity-i-combinator)*
@@ -41,34 +43,34 @@ Some things to note about such lambda expressions:
 * Lambda functions can have multiple parameters in the parameter list, e.g.: `λxy. x y`, but they are implicitly curried (e.g. a sequence of nested univariate functions).  Thus the following are all equivalent:
 
 ```
-λxy. x y
-= λx. λy. x y
-= λx. (λy. x y)
+λxy.xy
+= λx.λy.xy
+= λx.(λy.xy)
 ```
 
 ## Combinators
 
-We have already discussed combinators in JavaScript, now we can give them a more formal definition: 
+We have already discussed combinators in JavaScript, now we can give them a more formal definition:
 
 - A **combinator** is a lambda expression (function) with no free variables.
 
-Thus, the expression `λx. x` is a combinator because the variable `x` is bound to the parameter.  The expression `λx. x y` is not a combinator, because `y` is not bound to any parameter, it is *free*.
+Thus, the expression `λx.x` is a combinator because the variable `x` is bound to the parameter.  The expression `λx.xy` is not a combinator, because `y` is not bound to any parameter, it is *free*.
 
-The [`K` combinator](/higherorderfunctions/#k-combinator) which we wrote as `x=>y=>x` in JavaScript, is written `λxy. x`.
+The [`K` combinator](/higherorderfunctions/#k-combinator) which we wrote as `x=>y=>x` in JavaScript, is written `λxy.x`.
 
 ## Application
 
-What can we do with such a lambda expression?  Well we can *apply* it to another expression (The same way we can *apply* anonymous functions to an argument in JavaScript):
+What can we do with such a lambda expression?  Well we can *apply* it to another expression (The same way we can *apply* anonymous functions to an argument in JavaScript).  Here, we apply the lambda `(λx.x)` to the variable `y`:
 
-```
-(λx. x) y
+```lambdacalculus
+(λx.x)y
 ```
 
-Note that while in JavaScript application of a function `(x=>x)` to an argument `y` requires brackets around the argument: `(x=>x)(y)`, in the Lambda Calculus application of some expression `f` to some other expression `x` is indicated simply `f x`.  Brackets are only required to delineate the start and end of an expression.  
+Note that while in JavaScript application of a function `(x=>x)` to an argument `y` requires brackets around the argument: `(x=>x)(y)`, in the Lambda Calculus application of some expression `f` to some other expression `x` is indicated simply `fx`.  Brackets are required to delineate the start and end of an expression, e.g. in `(λx.x)y`, the brackets make it clear that `y` is not part of the lambda `λx.x`, but rather the lambda is being applied to `y`.
 
 We can reduce this expression to a simpler form by a substitution, indicated by a bit of intermediate notation.  Two types of annotations are commonly seen, you can use either (or both!):
 
-```
+```lambdacalculus
 (λx. x) y      [x:=y]    -- an annotation on the right showing the substitution that will be applied to the expression on the left
 (λx [x:=y].x)            -- an annotation inside the parameter list showing the substitution that will be performed inside the body (arguments have already been removed)
 ```
@@ -80,11 +82,11 @@ This first reduction rule, substituting the arguments of a function application 
 
 The next rule arises from the observation that, for some lambda term `M` that does not involve `x`:
 ```
-λx . M  x
+λx.Mx
 ```
 is just the same as M.  This last rule is called *eta conversion*.
 
-Note that function application is left-associative.  This means that when a Lambda expression involves more than two terms, BETA reduction is applied left to right, i.e. 
+Function application is left-associative except where terms are grouped together by brackets.  This means that when a Lambda expression involves more than two terms, BETA reduction is applied left to right, i.e.,
 
 ```(λz.z) (λa.a a)  (λz.z b) = ( (λz.z) (λa.a a) ) (λz.z b)```.
 
@@ -94,13 +96,13 @@ Note that function application is left-associative.  This means that when a Lamb
 
 Three operations can be applied to lambda expressions:
 
-**Alpha Equivalence** variables can be arbitrarily renamed as long as the names remain consistent within the scope of the expression.
+**Alpha Equivalence**: variables can be arbitrarily renamed as long as the names remain consistent within the scope of the expression.
 
 ```lambda
 λxy.yx = λwv.vw
 ```
 
-**Beta Reduction** functions are applied to their arguments by substituting the text of the argument in the body of the function
+**Beta Reduction**: functions are applied to their arguments by substituting the text of the argument in the body of the function.
 
 ```lambda
 (λx. x) y
@@ -109,10 +111,10 @@ Three operations can be applied to lambda expressions:
 = y
 ```
 
-**Eta Conversion** functions that simply apply another expression to their argument can be substituted with the expression in their body.
+**Eta Conversion**: functions that simply apply another expression to their argument can be substituted with the expression in their body.
 
 ```lambda
-λx . M  x
+λx.Mx
 = M
 ```
 
@@ -124,7 +126,6 @@ One thing to note about the lambda calculus is that it does not have any such th
 * Immutable - there is no way to assign a new value to a variable from within a lambda expression.
 
 This makes the language and its evaluation very simple.  All we (or any hypothetical machine for evaluating lambda expressions) can do with a lambda is apply the three basic alpha, beta and eta reduction and conversion rules.  Here’s a fully worked example of applying the different rules to reduce an expression until no more Beta reduction is possible, at which time we say it is in *beta normal form*:
-
 
 ```
 (λz.z) (λa.a a) (λz.z b)
@@ -147,6 +148,7 @@ z b [z:=b]                    => BETA Reduction
 ⇒
 b b         => Beta normal form, cannot be reduced again.
 ```
+Note, sometimes I add extra spaces as above just to make things a little more readable - but it doesn't change the order of application, indicate a variable is not part of a lambda to its left (unless there is a bracket) or have any other special meaning.
 
 ## Church Encodings
 
