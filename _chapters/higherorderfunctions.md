@@ -269,7 +269,7 @@ Where `_=> r=> r  ≡  y=> i=> i` and therefore `tail ≡ l=>l(K(i))`.  QED!!!
 
 FYI it has been shown that simple combinators like K and I (at least one other is required) are sufficient to create languages as powerful as lambda calculus without the need for lambdas, e.g. see [SKI Combinator Calculus](https://en.wikipedia.org/wiki/SKI_combinator_calculus).
 
-In previous sections we have see a number of versions of functions which transform lists (or other containers) into new lists like `map`, `filter` and so on.  We have also introduced the reduce function as a way to compute a single value over a list.  If we realise that the value we produce from reduce can also be a list, we can actually use reduce to implement all of the other lists transformations.  Instead of returning a value from a reduce, we could apply a function which produces only side effects, thus, performing a `forEach`.  We'll use this as an example momentarily.
+In previous sections we have seen a number of versions of functions which transform lists (or other containers) into new lists like `map`, `filter` and so on.  We have also introduced the reduce function as a way to compute a single value over a list.  If we realise that the value we produce from reduce can also be a list, we can actually use reduce to implement all of the other lists transformations.  Instead of returning a value from a reduce, we could apply a function which produces only side effects, thus, performing a `forEach`.  We'll use this as an example momentarily.
 
 First, here's another implementation of `reduce` for the above formulation of cons lists - but we rename it `fold` (again, as our JavaScript becomes more and more Haskell like we are beginning to adopt Haskell terminology).
 
