@@ -124,10 +124,10 @@ The objects coming through the stream are of type `KeyboardEvent`, meaning they 
     filter(({key})=>key === 'ArrowLeft' || key === 'ArrowRight'),
     filter(({repeat})=>!repeat));
 ```
-To duplicate the behaviour of our event driven version we need to rotate every 10ms.  We can make a stream which fires every 10ms using `interval(10)`, which we can "graft" onto our `arrowKeys$` stream using `flatMap`.  We use `takeUntil` to terminate the interval on a `'keyup'`, filtered to ignore keys other than the one that initiated the `'keydown'`.  At the end of the `flatMap` `pipe` we use `map` to return `d`, the original keydown `KeyboardEvent` object.  Back at the top-level `pipe` on arrowKeys$ we inspect this `KeyboardEvent` object to see whether we need a left or right rotation (positive or negative angle).  Thus, `angle$` is just a stream of `-1` and `1`.
+To duplicate the behaviour of our event driven version we need to rotate every 10ms.  We can make a stream which fires every 10ms using `interval(10)`, which we can "graft" onto our `arrowKeys$` stream using `mergeMap`.  We use `takeUntil` to terminate the interval on a `'keyup'`, filtered to ignore keys other than the one that initiated the `'keydown'`.  At the end of the `mergeMap` `pipe` we use `map` to return `d`, the original keydown `KeyboardEvent` object.  Back at the top-level `pipe` on arrowKeys$ we inspect this `KeyboardEvent` object to see whether we need a left or right rotation (positive or negative angle).  Thus, `angle$` is just a stream of `-1` and `1`.
 ```typescript
   const angle$ = arrowKeys$.pipe(
-    flatMap(d=>interval(10).pipe(
+    mergeMap(d=>interval(10).pipe(
       takeUntil(fromEvent<KeyboardEvent>(document, 'keyup').pipe(
         filter(({key})=>key === d.key)
       )),
@@ -189,7 +189,7 @@ And now our main `pipe` (collapsed into one) ends with a `scan` which "transduce
     .pipe(
       filter(({code})=>code === 'ArrowLeft' || code === 'ArrowRight'),
       filter(({repeat})=>!repeat),
-      flatMap(d=>interval(10).pipe(
+      mergeMap(d=>interval(10).pipe(
         takeUntil(fromEvent<KeyboardEvent>(document, 'keyup').pipe(
           filter(({code})=>code === d.code)
         )),
@@ -389,7 +389,7 @@ And here's our updated updateView function where we not only move the ship but a
                   : e.classList.add('hidden'))(document.getElementById(id)!);
     show("leftThrust",  s.torque<0);
     show("rightThrust", s.torque>0);
-    show("thruster",    s.acc.len()>0); 
+    show("forwardThrust",    s.acc.len()>0); 
     ship.setAttribute('transform', `translate(${s.pos.x},${s.pos.y}) rotate(${s.angle})`);
   }
 ```
@@ -431,7 +431,6 @@ The first complication is generalising bodies that participate in the force mode
     time:number,
     ship:Body,
     bullets:ReadonlyArray<Body>,
-    rocks:ReadonlyArray<Body>,
     exit:ReadonlyArray<Body>,
     objCount:number
   }>
@@ -446,7 +445,7 @@ Now we define functions to create objects:
     const d = Vec.unitVecInDirection(s.ship.angle);
     return {
       id: `bullet${s.objCount}`,
-      pos:s.ship.pos.add(d.scale(20)),
+      pos:s.ship.pos.add(d.scale(s.ship.radius)),
       vel:s.ship.vel.add(d.scale(-2)),
       createTime:s.time,
       thrust:false,
@@ -536,6 +535,7 @@ And we tack a bit on to `updateView` to draw and remove bullets:
 ```typescript
   function updateView(s: State) {
 ...
+    const svg = document.getElementById("svgCanvas")!;
     s.bullets.forEach(b=>{
       const createBulletView = ()=>{
         const v = document.createElementNS(svg.namespaceURI, "ellipse")!;
@@ -547,12 +547,20 @@ And we tack a bit on to `updateView` to draw and remove bullets:
       const v = document.getElementById(b.id) || createBulletView();
       v.setAttribute("cx",String(b.pos.x))
       v.setAttribute("cy",String(b.pos.y))
+      v.setAttribute("rx", String(b.radius));
+      v.setAttribute("ry", String(b.radius));
     })
     s.exit.forEach(o=>{
       const v = document.getElementById(o.id);
       if(v) svg.removeChild(v)
     })
   }
+```
+Finally, we add a make a quick addition to the CSS so that the bullets are a different colour to the background:
+```css
+.bullet {
+  fill: red;
+}
 ```
 ## Collisions
 So far the game we have built allows you to hoon around in a space-ship blasting the void with fireballs which is kind of fun, but not very challenging.  The Asteroids game doesn't really become "Asteroids" until you actually have... asteroids.  Also, you should be able to break them up with your blaster and crashing into them should end the game.  Here's a preview:
@@ -586,12 +594,13 @@ We will need to store two new pieces of state: the collection of asteroids (`roc
 ```
 Since bullets and rocks are both just circular `Body`s with constant velocity, we can generalise what was previously the `createBullet` function to create either:
 ```typescript
+  type ViewType = 'ship' | 'rock' | 'bullet'
   const createCircle = (viewType: ViewType)=> (oid:number)=> (time:number)=> (radius:number)=> (pos:Vec)=> (vel:Vec)=>
     <Body>{
       createTime: time,
       pos:pos,
       vel:vel,
-      acc:Vec.Zero,
+      thrust: false,
       angle:0, rotation:0, torque:0,
       radius: radius,
       id: viewType+oid,
@@ -625,11 +634,18 @@ Our `tick` function is more or less the same as above, but it will apply one mor
     // check a State for collisions:
     //   bullets destroy rocks spawning smaller ones
     //   ship colliding with rock ends game
-    handleCollisions = (s:State) => {
+    const handleCollisions = (s:State) => {
       const
+        // Some array utility functions
+        not = <T>(f:(x:T)=>boolean)=>(x:T)=>!f(x),
+        mergeMap = <T, U>(
+          a: ReadonlyArray<T>,
+          f: (a: T) => ReadonlyArray<U>
+        ) => Array.prototype.concat(...a.map(f)),
+
         bodiesCollided = ([a,b]:[Body,Body]) => a.pos.sub(b.pos).len() < a.radius + b.radius,
         shipCollided = s.rocks.filter(r=>bodiesCollided([s.ship,r])).length > 0,
-        allBulletsAndRocks = flatMap(s.bullets, b=> s.rocks.map(r=>([b,r]))),
+        allBulletsAndRocks = mergeMap(s.bullets, b=> s.rocks.map(r=>([b,r]))),
         collidedBulletsAndRocks = allBulletsAndRocks.filter(bodiesCollided),
         collidedBullets = collidedBulletsAndRocks.map(([bullet,_])=>bullet),
         collidedRocks = collidedBulletsAndRocks.map(([_,rock])=>rock),
@@ -643,7 +659,7 @@ Our `tick` function is more or less the same as above, but it will apply one mor
         spawnChildren = (r:Body)=>
                               r.radius >= Constants.StartRockRadius/4 
                               ? [child(r,1), child(r,-1)] : [],
-        newRocks = flatMap(collidedRocks, spawnChildren)
+        newRocks = mergeMap(collidedRocks, spawnChildren)
           .map((r,i)=>createCircle('rock')(s.objCount + i)(s.time)(r.radius)(r.pos)(r.vel)),
 
         // search for a body by id in an array
@@ -710,6 +726,19 @@ The other thing happening at game over, is the call to `subscription.unsubscribe
     merge(shoot),
     scan(reduceState, initialState)
     ).subscribe(updateView);
+```
+
+Finally, we need to make a couple more additions to the CSS to display the rocks and game over text:
+
+```CSS
+.rock {
+  fill: burlywood;
+}
+.gameover {
+  font-family: sans-serif;
+  font-size: 80px;
+  fill: red;
+}
 ```
 
 At this point we have more-or-less all the elements of a game.  The implementation above could be extended quite a lot.  For example, we could add score, ability to restart the game, multiple lives, perhaps some more physics.  But generally, these are just extensions to the framework above: manipulation and then display of additional state.
