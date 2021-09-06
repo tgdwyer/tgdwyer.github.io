@@ -238,7 +238,7 @@ It sounds like something we can model with a nice reusable function:
   type Event = 'keydown' | 'keyup'
   type Key = 'ArrowLeft' | 'ArrowRight' | 'ArrowUp'
   const observeKey = <T>(eventName:string, k:Key, result:()=>T)=>
-    fromEvent<KeyboardEvent>(document,e)
+    fromEvent<KeyboardEvent>(document,eventName)
       .pipe(
         filter(({code})=>code === k),
         filter(({repeat})=>!repeat),
