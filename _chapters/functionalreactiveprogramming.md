@@ -23,7 +23,14 @@ We will explore FRP through an implementation of the [Observable](#observable-st
 
 ## Observable Streams
 
-We have seen a number of different ways of wrapping collections of things in containers: built-in JavaScript arrays, linked-list data structures, and also lazy sequences.  Now we'll see that Observable is just another type of container with some simple examples, before demonstrating that it also easily applies to asynchronous streams.  You can [also play with a live version of this code](https://stackblitz.com/edit/rxjs-introexamples?file=index.ts).
+We have seen a number of different ways of wrapping collections of things in containers: built-in JavaScript arrays, linked-list data structures, and also lazy sequences.  Now we'll see that Observable is just another type of container with some simple examples, before demonstrating that it also easily applies to asynchronous streams.  
+
+You can [also play with a live version of this code](https://stackblitz.com/edit/rxjs-introexamples?file=index.ts).  Note that the code in this live version begins with a pair of `import` statements, bringing the set of functions that we describe below into scope for this file from the `rxjs` libraries:
+
+```typescript
+import { of, range, fromEvent, merge } from 'rxjs'; 
+import { last,filter,scan,map,flatMap,take } from 'rxjs/operators';
+```
 
 Conceptually, the Observable data structure just wraps a collection of things in a container in a similar way to each of the above.
 The function ```of``` creates an Observable that will emit the specified elements in its parameter list in order.  Similar to the lazy sequences though, nothing actually happens until we initialise the stream.  We do this by "subscribing" to the Observable, passing in an "effectful" function that is applied to each of the elements in the stream.  For example, we could print the elements out with ```console.log```:
@@ -72,36 +79,47 @@ range(1000)
 
 Scan is very much like the ```reduce``` function on Array in that it applies an accumulator function to the elements coming through the Observable, except instead of just outputting a single value (as ```reduce``` does), it emits a stream of the running accumulation (in this case, the sum so far).  Thus, we use the ```last``` function to finally produce an Observable with the final value.
 
-There are also functions for combining Observable streams.  For example, ```mergeMap``` gives us a way to take, for every element of a stream, a whole other stream, but flattened (or projected) together with the parent stream.  The following enumerates all the row/column indices of cells in a spreadsheet:
+There are also functions for combining Observable streams.  The `zip` function provides a pretty straightforward way to pair the values from two streams into an array:
 
 ```javascript
 const
   columns = of('A','B','C'),
   rows = range(3);
 
+zip(columns,rows)
+  .subscribe(console.log)
+```
+
+> ["A",0]  
+> ["B",1]  
+> ["C",2]
+
+If you like mathy vector speak, you can think of the above as an *inner product* of the two streams.  
+By contrast, the ```mergeMap``` operator gives the *cartesian product* of two streams.  That is, it gives us a way to take, for every element of a stream, a whole other stream, but flattened (or projected) together with the parent stream.  The following enumerates all the row/column indices of cells in a spreadsheet:
+
+```javascript
 columns.pipe(
   mergeMap(column=>rows.pipe(
     map(row=>[row,column])
   ))
-).subscribe(([row,column])=>console.log(`Column: ${column}, Row: ${row}`))
+).subscribe(console.log)
 ```
 
-> Column: A, Row: 0  
-> Column: A, Row: 1  
-> Column: A, Row: 2  
-> Column: B, Row: 0  
-> Column: B, Row: 1  
-> Column: B, Row: 2  
-> Column: C, Row: 0  
-> Column: C, Row: 1  
-> Column: C, Row: 2  
+> ["A", 0]  
+> ["A", 1]  
+> ["A", 2]  
+> ["B", 0]  
+> ["B", 1]  
+> ["B", 2]  
+> ["C", 0]  
+> ["C", 1]  
+> ["C", 2]  
 
 Another way to combine streams is ```merge```.  Streams that are generated with ```of``` and ```range``` have all their elements available immediately, so the result of a merge is not very interesting, just the elements of one followed by the elements of the other:
 
 ```javascript
-columns.pipe(
-  merge(rows)
-).subscribe(console.log)
+merge(columns,rows)
+  .subscribe(console.log)
 ```
 
 > A  
@@ -111,16 +129,15 @@ columns.pipe(
 > 1  
 > 2  
 
-However, as we will see in later examples ```merge``` when applied to asynchronous streams will merge the elements in the order that they arrive in the stream.
-
-To see something more interesting we need some asynchronous streams.  For example, a stream of key-down and mouse-down events from a web-page:
+However, ```merge``` when applied to asynchronous streams will merge the elements in the order that they arrive in the stream.  For example, a stream of key-down and mouse-down events from a web-page:
 
 ```javascript
 const
   key$ = fromEvent<KeyboardEvent>(document,"keydown"),
   mouse$ = fromEvent<MouseEvent>(document,"mousedown");
 ```
-It's a convention to end variable names refering to Observable streams with a ```$``` (I like to think it's short for "$tream"):
+
+It's a convention to end variable names refering to Observable streams with a ```$``` (I like to think it's short for "$tream", or implies a plurality of the things in the stream, or maybe it's just because [cash rules everything around me](https://www.youtube.com/watch?v=PBwAxmrE194)).
 
 The following lets us see in the console the keys pressed as they come in, it will keep running for as long as the web page is open:
 
@@ -141,11 +158,8 @@ Once again this will keep producing the message for every mouse click for as lon
 
 The following achieves the same thing with a single subscription using ```merge```:
 ```javascript
-key$.pipe(
-  map(e=>e.key),
-  merge(mouse$.pipe(
-    map(_=>"Mouse Click!"))
-  )
+merge(key$.pipe(map(e=>e.key)),
+      mouse$.pipe(map(_=>"Mouse Click!"))
 ).subscribe(console.log)
 ```
 
@@ -176,6 +190,21 @@ fromEvent<T>(target: FromEventTarget<T>, eventName: string): Observable<T>
 interval(period?: number): Observable<number>
 ```
 
+### Combination
+
+Creating new Observable streams from existing streams
+
+```typescript
+// create a new Observable stream from the merge of multiple Observable streams.  
+// The resulting stream will have elements of Union type.
+// i.e. the type of the elements will be the Union of the types of each of the merged streams
+// Note: there is also an operator version.
+merge<T, U...>(t: Observable<T>, u: Observable<U>, ...): Observable<T|U...>
+
+// create n-ary tuples (arrays) of the elements at the head of each of the incoming streams 
+zip<T,U...>(t: Observable<T>, r: Observable<U>):Observable<[T,U,...]>
+```
+
 ### Observable methods
 
 Methods on the Observable object itself that may be chained.
@@ -194,7 +223,7 @@ subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: ()
 
 ### Operators
 
-Operators are passed to ```pipe```.  They all have return type an ```OperatorFunction``` which is used by ```pipe```.
+Operators are passed to ```pipe```.  They all return an ```OperatorFunction``` which is used by ```pipe```.
 
 ```typescript
 // transform the elements of the input stream using the `project' function
@@ -214,10 +243,6 @@ mergeMap<T, R>(project: (value: T) => Observable<R>)
 
 // accumulates values from the stream
 scan<T, R>(accumulator: (acc: R, value: T) => R, seed?: R)
-
-// merge multiple Observable streams.  Actually, the resulting stream will have elements of Union type.
-// i.e. the type of the elements will be the Union of the types of each of the merged streams
-merge<T, R>(...observables: Observable<T>[])
 ```
 
 </div>

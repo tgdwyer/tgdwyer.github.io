@@ -237,7 +237,7 @@ It sounds like something we can model with a nice reusable function:
 ```typescript
   type Event = 'keydown' | 'keyup'
   type Key = 'ArrowLeft' | 'ArrowRight' | 'ArrowUp'
-  const observeKey = <T>(eventName:Event, k:Key, result:()=>T)=>
+  const observeKey = <T>(eventName:string, k:Key, result:()=>T)=>
     fromEvent<KeyboardEvent>(document,eventName)
       .pipe(
         filter(({code})=>code === k),
@@ -333,6 +333,7 @@ We can encapsulate all the possible transformations of state in a function:
       vel: s.vel.add(s.acc)
     };
 ```
+
 And finally we `merge` our different inputs and scan over `State`, and the final `subscribe` calls the `updateView`, once again, a self-contained function which does whatever is required to render the State.  We describe the updated `updateView` in the next section.
 
 ```typescript
@@ -345,7 +346,11 @@ And finally we `merge` our different inputs and scan over `State`, and the final
       scan(reduceState, initialState))
     .subscribe(updateView);
 ```
+
+Note, there are two versions of `merge` in rxjs. One is a function which merges multiple Observables and returns a new Observable, it is imported from `'rxjs'`.  Here we are using the operator version of `merge` to merge additional Observables into the pipe, imported from `'rxjs/operators'`.
+
 # View
+
 Once again, the above completely decouples the view from state management.  But now we have a richer state, we have more stuff we can show in the view.  We'll start with a little CSS, not only to style elements, but also to hide or show flame from our boosters.
 ```css
 .ship {
