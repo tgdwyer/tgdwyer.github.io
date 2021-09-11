@@ -609,7 +609,7 @@ parse :: Parser a -> String -> Maybe (String, a)
 parse (Parser p) = p
 ```
 
-And here's little parser which asserts the next character on the stream is the one we are expecting:
+And here's a little parser which asserts the next character on the stream is the one we are expecting:
 
 ```haskell
 -- >>> parse (is '+') "+456"
