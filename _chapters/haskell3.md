@@ -664,7 +664,10 @@ Prelude> :t (*>)
 (*>) :: Applicative f => f a -> f b -> f b
 ```
 
-So the only difference between `*>` and `<*>` is that instead of a function inside the `Applicative` as its first parameter, the `*>` doesn't really care what's inside the first `Applicative`.  In the context of the `Parser` instance when we do things like `(is '+' *> int)`, we try the `is`.  If it succeeds then we carry on and run the `int`.  But if the `is` fails, execution is short circuited and we return `Nothing`.  There is also another version of the operator which works the other way:
+So compared to `<*>` which took a function inside the `Applicative` as its first parameter which is applied to the value inside the `Applicative` of its second parameter,
+the `*>` carries through the effect of the first `Applicative`, but doesn't do anything else with the value.  You can think of it as a simple chaining of effectful operations: "do the first effectful thing, then do the second effectful thing, but give back the result of the second thing only".
+
+In the context of the `Parser` instance when we do things like `(is '+' *> int)`, we try the `is`.  If it succeeds then we carry on and run the `int`.  But if the `is` fails, execution is short circuited and we return `Nothing`.  There is also a flipped version of the operator which works the other way:
 
  ```haskell
 Prelude> :t (<*)                        
