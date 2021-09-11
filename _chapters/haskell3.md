@@ -543,7 +543,7 @@ totalMark = (+) . exam <*> nonExam
 
 ## A simple Applicative Functor for Parsing
 
-As we will [discuss in more detail later](/parsercombinators), a parser is a program which takes some structured input in a format that we know the structure of) and does something with it.  When we say "structured input" we typically mean something like a string that follows strict rules about its syntax, like source code in a particular programming language, or a file format like JSON.  A parser for a given syntax is a program which you run over some input and if the input is valid, it will do something sensible with it (like give us back some data), or fail: preferrably in a way that we can handle gracefully.  
+As we will [discuss in more detail later](/parsercombinators), a parser is a program which takes some structured input and does something with it.  When we say "structured input" we typically mean something like a string that follows strict rules about its syntax, like source code in a particular programming language, or a file format like JSON.  A parser for a given syntax is a program which you run over some input and if the input is valid, it will do something sensible with it (like give us back some data), or fail: preferrably in a way that we can handle gracefully.  
 
 In Haskell, sophisticated parsers are often constructed from simple functions which try to read a certain element of the expected input and either succeed in consuming that input, returning a tuple containing the rest of the input string and the resultant data, or they fail producing nothing.  We've already seen one type which can be used to encode success or failure, namely `Maybe`.  Here's the most trivial parser function I can think of, it tries to take a character from the input stream and either succeeds or fails if it's given an empty string:
 
@@ -677,4 +677,4 @@ plus = (+) <$> int <* is '+'  <*> int
 
 ```
 
-Obviously there are lots of missing pieces in the above.  A real parser would need to give us more information in the case of failure, so a `Maybe` is not really a sufficiently rich type to package the result.  Also, a real language would need to be able to handle alternatives - e.g. `minus` or `plus`.  We will revisit all of the ideas with a more feature rich set of [parser combinators later](/parsercombinators).
+Obviously there are lots of missing pieces in the above.  A real parser would need to give us more information in the case of failure, so a `Maybe` is not really a sufficiently rich type to package the result.  Also, a real language would need to be able to handle alternatives - e.g. `minus` or `plus`, as well as expressions with an arbitrary number of terms.  We will revisit all of these topics with a more feature rich set of [parser combinators later](/parsercombinators).
