@@ -541,7 +541,7 @@ totalMark = (+) . exam <*> nonExam
 
 ------------
 
-## Example: a simple parser for cards
+## A simple Applicative Functor for Parsing
 
 As we will [discuss in more detail later](/parsercombinators), a parser is a program which takes some structured input in a format that we know the structure of) and does something with it.  When we say "structured input" we typically mean something like a string that follows strict rules about its syntax, like source code in a particular programming language, or a file format like JSON.  A parser for a given syntax is a program which you run over some input and if the input is valid, it will do something sensible with it (like give us back some data), or fail: preferrably in a way that we can handle gracefully.  
 
