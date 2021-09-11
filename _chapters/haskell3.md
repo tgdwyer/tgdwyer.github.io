@@ -540,3 +540,141 @@ totalMark = (+) . exam <*> nonExam
 (hint, if you get stuck there are spoilers in the source from GHC.Base that I linked above)
 
 ------------
+
+## Example: a simple parser for cards
+
+As we will [discuss in more detail later](/parsercombinators), a parser is a program which takes some structured input in a format that we know the structure of) and does something with it.  When we say "structured input" we typically mean something like a string that follows strict rules about its syntax, like source code in a particular programming language, or a file format like JSON.  A parser for a given syntax is a program which you run over some input and if the input is valid, it will do something sensible with it (like give us back some data), or fail: preferrably in a way that we can handle gracefully.  
+
+In Haskell, sophisticated parsers are often constructed from simple functions which try to read a certain element of the expected input and either succeed in consuming that input, returning a tuple containing the rest of the input string and the resultant data, or they fail producing nothing.  We've already seen one type which can be used to encode success or failure, namely `Maybe`.  Here's the most trivial parser function I can think of, it tries to take a character from the input stream and either succeeds or fails if it's given an empty string:
+
+```haskell
+parseChar :: String -> Maybe (String, Char)
+parseChar "" = Nothing
+parseChar (c:rest) = Just (rest, c)
+```
+
+And here's one to parse `Int`s off the input stream.  It uses the `reads` function from the Prelude:
+
+```haskell
+parseInt :: String -> Maybe (String, Int) 
+parseInt s = case reads s of     
+  [(x, rest)] -> Just (rest, x)
+  _           -> Nothing
+```
+
+So now we could combine these to try to build a little calculator language (OK, all it can do is add two integers, but you get the idea):
+
+```haskell
+parsePlus :: String -> Maybe (String, Int)
+parsePlus s =
+    case parseInt s of
+        Just (s', x) -> case parseChar s' of
+            Just (s'', '+') -> case parseInt s'' of
+                Just (s''',y) -> Just (s''',x+y)
+                Nothing -> Nothing
+            _ -> Nothing
+        Nothing -> Nothing
+
+-- >>> parsePlus "123+456"
+-- Just ("",579)
+```
+
+But that's not very elegant and Haskell is all about elegant simplicity.  So how can we use Haskell's typeclass system to make parsers that are more easily combined?  We've seen how things that are instances of the `Functor` and `Applicative` typeclasses can be combined - so lets make a type definition for parsers and then make it an instance of `Functor` and `Applicative`.  Here's a generic type for parsers:
+
+```haskell
+newtype Parser a = Parser (String -> Maybe (String, a))
+```
+
+We can now make concrete parsers for `Int` and `Char` using our previous functions:
+```haskell
+char :: Parser Char
+char = Parser parseChar
+int :: Parser Int
+int = Parser parseInt
+```
+
+And here's a generic function we can use to run these parsers:
+
+```haskell
+parse :: Parser a -> String -> Maybe (String, a)
+parse (Parser p) = p
+
+-- >>> parse int "123+456"
+-- Just ("+456",123)
+```
+
+And here's little parser which asserts the next character on the stream is the one we are expecting:
+
+```haskell
+-- >>> parse (is '+') "+456"
+-- Just ("456",'+')
+-- >>> parse (is '-') "+456"
+-- Nothing
+is :: Char -> Parser Char
+is c = Parser $ \i -> case parse char i of
+    Just (r1, x) -> if x == c then Just (r1, x) else Nothing
+    Nothing      -> Nothing
+```
+
+By making it an instance of `Functor` we will be able to map functions over the result of a parse.
+
+```haskell
+instance Functor Parser where
+    f <$> (Parser a) = Parser (((f <$>) <$>) <$> a)
+
+-- >>> parse ((*2) <$> int) "123+456"
+-- Just ("+456",246)
+```
+
+The whacky triple-nested application of `<$>` is simply because the `a` in our `Parser` type is nested inside a Tuple (`(,a)`), nested inside a `Maybe`, nested inside function (`->r`).
+
+Now the definition for the `Applicative` is going to stitch together all the messy bits of handling the both the `Just` and `Nothing` cases of the `Maybe`, so that users of the parsers don't have to:
+
+```haskell
+instance Applicative Parser where
+  pure a = Parser (\b -> Just (b, a))
+
+  (Parser f) <*> (Parser b) = Parser $ \i -> case f i of
+    Just (r1, p1) -> case b r1 of
+      Just (r2, p2) -> Just (r2, p1 p2)
+      Nothing       -> Nothing
+    Nothing -> Nothing
+```
+
+And now our calculator is magnificently simple:
+
+```haskell
+-- >>> parse plus "123+456"
+-- Just ("",579)
+
+plus :: Parser Int
+plus = (+) <$> int <*> (is '+' *> int)
+
+```
+
+Note that we make use of a different version of the applicative operator here: `*>`.
+
+```haskell
+Prelude> :t (*>)                        
+(*>) :: Applicative f => f a -> f b -> f b
+```
+
+So the only difference between `*>` and `<*>` is that instead of a function inside the `Applicative` as its first parameter, the `*>` doesn't really care what's inside the first `Applicative`.  In the context of the `Parser` instance when we do things like `(is '+' *> int)`, we try the `is`.  If it succeeds then we carry on and run the `int`.  But if the `is` fails, execution is short circuited and we return `Nothing`.  There is also another version of the operator which works the other way:
+
+ ```haskell
+Prelude> :t (<*)                        
+(<*) :: Applicative f => f a -> f b -> f a
+```
+
+So we could have just as easily implement the `plus` parser:
+
+```haskell
+-- >>> parse plus "123+456"
+-- Just ("",579)
+
+plus :: Parser Int
+plus = (+) <$> int <* is '+'  <*> int
+
+```
+
+Obviously there are lots of missing pieces in the above.  A real parser would need to give us more information in the case of failure, so a `Maybe` is not really a sufficiently rich type to package the result.  Also, a real language would need to be able to handle alternatives - e.g. `minus` or `plus`.  We will revisit all of the ideas with a more feature rich set of [parser combinators later](/parsercombinators).
