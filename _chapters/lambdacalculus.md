@@ -240,7 +240,7 @@ If we directly translate the above version of the Y-combinator into JavaScript w
 const Y = f=> (x => f(x(x)))(x=> f(x(x))) // warning infinite recursion ahead!
 ```
 
-Sow now `Y` is just a function which can be applied to another function, but what sort of function do we pass into `Y`?  If we are to respect the rules of the Lambda calculus we cannot have a function that calls itself directly.  That is, because Lambda expressions have no name, they can't refer to themselves by name.
+So now `Y` is just a function which can be applied to another function, but what sort of function do we pass into `Y`?  If we are to respect the rules of the Lambda calculus we cannot have a function that calls itself directly.  That is, because Lambda expressions have no name, they can't refer to themselves by name.
 
 Therefore, we need to wrap the recursive function in a lambda expression into which a reference to the recursive function itself can be passed as parameter.  We can then in the body of the function refer to the parameter function by name.
 It's a bit weird, let me just give you a JavaScript function which fits the bill:

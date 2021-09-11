@@ -42,7 +42,7 @@ consLength Nil = 0
 consLength (Cons _ rest) = 1 + consLength rest 
 ```
 
-Since we don’t care about the head value in this function, we match it with `_`, an unnamed variable, which effectively ignores it.  Note that another way to conditionally destructure with pattern matching is using a [case statement](/haskell1/conditional-code-constructs-cheatsheet).
+Since we don’t care about the head value in this function, we match it with `_`, an unnamed variable, which effectively ignores it.  Note that another way to conditionally destructure with pattern matching is using a [case statement](/haskell1#conditional-code-constructs-cheatsheet).
 
 Note that such a definition for lists is made completely redundant by Haskell’s wonderful built-in lists, where [] is the empty list, and : is an infix cons operator.  We can pattern match the empty list or destructure (head:rest), e.g.:
 
@@ -62,7 +62,7 @@ length [] = 0
 length (_:rest) = 1 + length rest
 ```
 
-The following visual summary shows pair data structures with accessor functions `fst` and `sec` defined using [Record Syntax](/haskell2/record-syntax) with varying degrees of type flexibility, and compared with the equivalent [typescript generic notation](/typescrip1/#generics):
+The following visual summary shows pair data structures with accessor functions `fst` and `sec` defined using [Record Syntax](/haskell2#record-syntax) with varying degrees of type flexibility, and compared with the equivalent [typescript generic notation](/typescript1#generic-types):
 
 - Hard-coded for `Int` pairs only
 - with one type parameter (by convention called `a` in Haskell, and `T` in TypeScript)
@@ -77,7 +77,7 @@ GHCi allows you to use the `:kind` (or `:k`) command to interrogate the *Kind* o
 ![Polymorphism Summary](/haskell2/kinds.png)
 
 Another sort of "kind" are for [type classes](#typeclasses) which we will introduce more properly in a moment.
-For example, the "kind" for the `Ord` type class (the class of things that are Orderable and which we came across in [our simple  implementation of quicksort](http://localhost:4000/haskell1#functional-programming-in-haskell-versus-javascript)) is:
+For example, the "kind" for the `Ord` type class (the class of things that are Orderable and which we came across in [our simple  implementation of quicksort](/haskell1#functional-programming-in-haskell-versus-javascript)) is:
 ```haskell
 > :k Ord
 Ord :: * -> Constraint
@@ -136,7 +136,7 @@ This creates a record type in every way the same as the above, but the accessor 
 
 ## Typeclasses
 
-Haskell uses “type classes” as a way to associate functions with types.  A type class is like a promise that a certain type will have specific operations and functions available.  You can think of it as being similar to a [TypeScript interface](/typescript1/interfaces).
+Haskell uses “type classes” as a way to associate functions with types.  A type class is like a promise that a certain type will have specific operations and functions available.  You can think of it as being similar to a [TypeScript interface](/typescript1#interfaces).
 
 Despite the name however, it is not like an ES6/TypeScript class, since a Haskell type class does not actually give definitions for the functions themselves, only their type signatures.  
 The function bodies are defined in “instances” of the type class.  A good starting point for gaining familiarity with type classes is seeing how they are used in the standard Haskell prelude.  From GHCi we can ask for information about a specific typeclass with the `:i` command, for example, Num is a typeclass common to numeric types:

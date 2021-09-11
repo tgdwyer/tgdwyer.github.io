@@ -94,12 +94,13 @@ zip(columns,rows)
 > ["B",1]  
 > ["C",2]
 
-If you like mathy vector speak, you can think of the above as an *inner product* of the two streams.  By contrast, the ```flatMap``` operator gives the *cartesian product* of two streams.  That is, it gives us a way to take, for every element of a stream, a whole other stream, but flattened (or projected) together with the parent stream.  The following enumerates all the row/column indices of cells in a spreadsheet:
+If you like mathy vector speak, you can think of the above as an *inner product* of the two streams.  
+By contrast, the ```mergeMap``` operator gives the *cartesian product* of two streams.  That is, it gives us a way to take, for every element of a stream, a whole other stream, but flattened (or projected) together with the parent stream.  The following enumerates all the row/column indices of cells in a spreadsheet:
 
 ```javascript
 columns.pipe(
-  flatMap(column=>rows.pipe(
-    map(row=>[column,row])
+  mergeMap(column=>rows.pipe(
+    map(row=>[row,column])
   ))
 ).subscribe(console.log)
 ```
@@ -237,8 +238,8 @@ take<T>(n: number)
 // take the last element
 last<T>()
 
-// AKA concatMap: produces an Observable<R> for every input stream element<T>
-flatMap<T, R>(project: (value: T) => Observable<R>)
+// AKA concatMap/flatMap: produces an Observable<R> for every input stream element<T>
+mergeMap<T, R>(project: (value: T) => Observable<R>)
 
 // accumulates values from the stream
 scan<T, R>(accumulator: (acc: R, value: T) => R, seed?: R)
@@ -321,7 +322,7 @@ We now rewrite precisely the same behaviour using Observable FRP:
         mouseDownXOffset: Number(rect.getAttribute('x')) - clientX,
         mouseDownYOffset: Number(rect.getAttribute('y')) - clientY
       })),
-      flatMap(({mouseDownXOffset, mouseDownYOffset}) =>
+      mergeMap(({mouseDownXOffset, mouseDownYOffset}) =>
         mousemove
           .pipe(
             takeUntil(mouseup),
@@ -335,12 +336,12 @@ We now rewrite precisely the same behaviour using Observable FRP:
    });
 ```
 
-The Observable’s mousedown, mousemove and mouseup are like streams which we can transform with familiar operators like map and takeUntil.   The flatMap operator “flattens” the inner  mousemove  Observable stream back to the top level, then subscribe will apply a final action before doing whatever cleanup is necessary for the stream.
+The Observable’s mousedown, mousemove and mouseup are like streams which we can transform with familiar operators like map and takeUntil.   The mergeMap operator “flattens” the inner  mousemove  Observable stream back to the top level, then subscribe will apply a final action before doing whatever cleanup is necessary for the stream.
 
 Compared to our state machine diagram above, we have:
 
 - modelled each of the possible transition triggers as streams;
-- the flow of data is from top to bottom, with the cycling branch introduced by the flatMap operation (which we will look into below);
+- the flow of data is from top to bottom, with the cycling branch introduced by the mergeMap operation (which we will look into below);
 - the only side effects (the movement of the rectangle) occur in the function passed to the subscribe;
 - the cleanup of subscriptions to the mousemove and mouseup events is handled automatically by the ```takeUntil``` function when it closes the streams.
 

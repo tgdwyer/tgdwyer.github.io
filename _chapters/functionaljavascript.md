@@ -48,7 +48,7 @@ A *pure function*:
 * has no *side effects*: i.e. it has no effects other than to create a return value;
 * always produces the same result for the same input.
 
-In the context of functional programming, *referential transparency* is:
+In the context of functional programming, [*referential transparency*](https://soundcloud.com/tim-dwyer-17038309/referentialtransparency-lessboringmix) is:
 
 * the property of being able to substitute an expression that evaluates to some value, with that value, without affecting the behaviour of the program.
 
