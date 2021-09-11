@@ -634,7 +634,7 @@ instance Functor Parser where
 
 The whacky triple-nested application of `<$>` is simply because the `a` in our `Parser` type is nested inside a Tuple (`(,a)`), nested inside a `Maybe`, nested inside function (`->r`).
 
-Now the definition for the `Applicative` is going to stitch together all the messy bits of handling the both the `Just` and `Nothing` cases of the `Maybe`, so that users of the parsers don't have to:
+Now the definition for the `Applicative` is going to stitch together all the messy bits of handling both the `Just` and `Nothing` cases of the `Maybe`, so that users of the parsers don't have to:
 
 ```haskell
 instance Applicative Parser where
