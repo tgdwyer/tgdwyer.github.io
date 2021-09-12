@@ -304,8 +304,16 @@ Here's an example tree:
 ```haskell
 tree = Node (Node (Leaf 1) 2 (Leaf 3)) 4 (Node (Leaf 5) 6 (Leaf 7))
 ```
-
-<image src="/haskell4/tree.png"></image>
+And here's a visualisation of the tree:
+```
+Node 4
+ ├──Node 2
+ |   ├──Leaf 1
+ |   └──Leaf 3
+ └──Node 6
+     ├──Leaf 5
+     └──Leaf 7
+```
 
 And here's the instance of `Functor` for `Tree` that defines `fmap`.  
 
