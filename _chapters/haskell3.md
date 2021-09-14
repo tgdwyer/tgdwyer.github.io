@@ -63,15 +63,15 @@ f = sqrt . (1/)         -- eta conversion
 We have discussed point-free and tacit coding style earlier in these notes. In particular, eta-conversion works in Haskell the same as in lambda calculus and for curried JavaScript functions.  It is easy to do and usually declutters code of unnecessary arguments that help to distill their essence, e.g.:
 
 ```haskell
-lessThanNum :: (Ord a, Num a) => a -> [a] -> [a]
-lessThanNum n aList = filter (<n) aList
+lessThan :: (Ord a) => a -> [a] -> [a]
+lessThan n aList = filter (<n) aList
 ```
 
 The following is more concise, and once you are used to reading haskell type definitions, just as self evident:
 
 ```haskell
-lessThanNum :: (Ord a, Num a) => a -> [a] -> [a]
-lessThanNum n = filter (<n)
+lessThan :: (Ord a) => a -> [a] -> [a]
+lessThan n = filter (<n)
 ```
 
 But the above still has an argument (a point), `n`.  Can we go further?
@@ -83,27 +83,27 @@ It is possible to be more aggressive in refactoring code to achieve point-free s
 (f . g) x = f (g x)
 ```
 
-To see how to use `(.)` in `lessThanNum` we need to refactor it to look like the right-hand side of the definition above, i.e. `f (g x)`.  For lessThanNum, this takes a couple of steps, because the order we pass arguments to `(<)` matters.  Partially applying infix operators like `(<n)` is called operator sectioning.  Placing `n` after `<` means that it is being passed as the second argument to the operator, which is inconvenient for eta-conversion.  Observe that `(<n)` is equivalent to `(n>)`, so the following is equivalent to the definition above:
+To see how to use `(.)` in `lessThan` we need to refactor it to look like the right-hand side of the definition above, i.e. `f (g x)`.  For `lessThan`, this takes a couple of steps, because the order we pass arguments to `(<)` matters.  Partially applying infix operators like `(<n)` is called operator sectioning.  Placing `n` after `<` means that it is being passed as the second argument to the operator, which is inconvenient for eta-conversion.  Observe that `(<n)` is equivalent to `(n>)`, so the following is equivalent to the definition above:
 
 ```haskell
-lessThanNum n = filter (n>)
+lessThan n = filter (n>)
 ```
 
 Now we can use the non-infix form of (>):
 ```haskell
-lessThanNum n = filter ((>) n)
+lessThan n = filter ((>) n)
 ```
 
 And we see from [our definition of compose](/haskell3#compose), that if we were to replace filter by `f`, `(>)` by `g`, and `n` by `x`, we would have exactly the definition of `(.)`.  Thus,
 
 ```haskell
-lessThanNum n = (filter . (>)) n
+lessThan n = (filter . (>)) n
 ```
 
 And now we can apply [eta-conversion](/haskell3#eta-conversion):
 
 ```haskell
-lessThanNum = filter . (>)
+lessThan = filter . (>)
 ```
 
 Between operator sectioning, the compose combinator `(.)`, and eta-conversion it is possible to write many functions in point-free form.  For example, the flip combinator:
