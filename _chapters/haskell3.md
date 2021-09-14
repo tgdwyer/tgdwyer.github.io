@@ -26,6 +26,7 @@ Exactly as per [Lambda Calculus](/lambdacalculus):
 ```
 
 ### Operator Sectioning
+
 Remember haskell binary operators are just infix curried functions of two parameters and that putting brackets around them makes them prefix instead of infix.
 
 ```haskell
@@ -56,19 +57,20 @@ f = sqrt . (1/)         -- eta conversion
 ```
 
 </div>
+
 ## Point Free Code
 
 We have discussed point-free and tacit coding style earlier in these notes. In particular, eta-conversion works in Haskell the same as in lambda calculus and for curried JavaScript functions.  It is easy to do and usually declutters code of unnecessary arguments that help to distill their essence, e.g.:
 
 ```haskell
-lessThanNum :: Num a => a -> [a] -> [a]
+lessThanNum :: (Ord a, Num a) => a -> [a] -> [a]
 lessThanNum n aList = filter (<n) aList
 ```
 
 The following is more concise, and once you are used to reading haskell type definitions, just as self evident:
 
 ```haskell
-lessThanNum :: Num a => a -> [a] -> [a]
+lessThanNum :: (Ord a, Num a) => a -> [a] -> [a]
 lessThanNum n = filter (<n)
 ```
 
