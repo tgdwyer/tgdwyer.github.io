@@ -643,17 +643,26 @@ instance Functor Parser where
 
 ```
 
-The whacky triple-nested application of `<$>` is simply because the `a` in our `Parser` type is nested inside a Tuple (`(,a)`), nested inside a `Maybe`, nested inside function (`->r`).
+The whacky triple-nested application of `<$>` is simply because the `a` in our `Parser` type is nested inside a Tuple (`(,a)`), nested inside a `Maybe`, nested inside function (`->r`).  So now we can map (or `fmap`, to be precise) a function over the value produced by a `Parser`.  For example:
 
-Now the definition for the `Applicative` is going to stitch together all the messy bits of handling both the `Just` and `Nothing` cases of the `Maybe`, so that users of the parsers don't have to:
+```haskell
+> parse ((+1)<$>int) "1bc"
+Just ("bc",2)
+```
+
+Another way to think of `(+1)<$>int` is that we are creating a new `Parser` which parses an `int` from the input stream and adds one to the value parsed (if it succeeds).
+
+Just as we have seen before, making our `Parser` an instance of `Applicative` is going to let us do nifty things like lifting a binary function over the results of two `Parser`s.  For example, instead of implementing all the messy logic of connecting two Parsers to make `plus` above, we'll be able to lift `(+)` over two `Parser`s.
+
+Now the definition for the `Applicative` is going to stitch together all the messy bits of handling both the `Just` and `Nothing` cases of the `Maybe` that we saw above in the definition of `plus`, abstracting it out so that people implementing parsers like `plus` won't have to:
 
 ```haskell
 instance Applicative Parser where
   pure a = Parser (\b -> Just (b, a))
 
-  (Parser f) <*> (Parser b) = Parser $ \i -> case f i of
-    Just (r1, p1) -> case b r1 of
-      Just (r2, p2) -> Just (r2, p1 p2)
+  (Parser f) <*> (Parser b) = Parser $ \i -> case f i of  -- note that this is just
+    Just (r1, p1) -> case b r1 of                         -- an abstraction of the
+      Just (r2, p2) -> Just (r2, p1 p2)                   -- logic we saw in `plus`
       Nothing       -> Nothing
     Nothing -> Nothing
 ```
@@ -695,4 +704,4 @@ plus = (+) <$> int <* is '+'  <*> int
 
 ```
 
-Obviously there are lots of missing pieces in the above.  A real parser would need to give us more information in the case of failure, so a `Maybe` is not really a sufficiently rich type to package the result.  Also, a real language would need to be able to handle alternatives - e.g. `minus` or `plus`, as well as expressions with an arbitrary number of terms.  We will revisit all of these topics with a more feature rich set of [parser combinators later](/parsercombinators).
+Obviously, the above is not a fully featured parsing system.  A real parser would need to give us more information in the case of failure, so a `Maybe` is not really a sufficiently rich type to package the result.  Also, a real language would need to be able to handle alternatives - e.g. `minus` or `plus`, as well as expressions with an arbitrary number of terms.  We will revisit all of these topics with a more feature rich set of [parser combinators later](/parsercombinators).
