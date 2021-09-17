@@ -677,7 +677,7 @@ plus = (+) <$> int <*> (is '+' *> int)
 
 ```
 
-Note that we make use of a different version of the applicative operator here: `*>`.
+Note that we make use of a different version of the applicative operator here: `*>`.  Note also that we didn't have to provide an implementation of `*>` - rather, the typeclass system picks up a default implementation of this operator (and a bunch of other functions too) from the base definition of `Applicative`.  These default implementations are able to make use of the `<*>` that we did provide for our instance of Applicative for Parser.
 
 ```haskell
 Prelude> :t (*>)                        
