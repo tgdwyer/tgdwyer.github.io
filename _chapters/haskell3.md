@@ -11,6 +11,7 @@ In this chapter we see how the Haskell language features we introduced in previo
 - Understand how [eta-conversion](/haskell3#eta-conversion), [operator sectioning](/haskell3#operator-sectioning) and [compose](/haskell3#compose), together provide the ability to transform code to achieve a composable [point free](/haskell3#point-free-code) form and use this technique to refactor code.
 - Understand that in Haskell the ability to map over container structures is generalised into the [Functor](/haskell3#functor) typeclass, such that any type that is an instance of Functor has the `fmap` or `(<$>)` operation.
 - Understand that the [Applicative Typeclass](/haskell3#applicative) extends Functor such that containers of functions may be applied (using the `(<*>)` operator) to containers of values.
+- Understand that Functor and Applicative allow powerful composable types through exploring a [simple applicative functor for parsing](/haskell3#a-simple-applicative-functor-for-parsing).
 
 <div class="cheatsheet" markdown="1">
 
