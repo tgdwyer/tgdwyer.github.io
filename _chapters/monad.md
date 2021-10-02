@@ -419,3 +419,47 @@ The `join` function passes one argument to a binary function twice which can be 
 >>> (join (+)) 3
 6
 ```
+
+## Looping with Monadic Effects
+
+There are also various functions in `Control.Monad` for looping functions over things that are `Foldable` and `Traversable`.
+
+First there's `mapM` which is precisely the same as `traverse`:
+
+```haskell
+doubleIfNotBig n = if n < 3 then Just (n+n) else Nothing
+>>> mapM doubleIfNotBig [1,2,3,4]
+Nothing
+>>> mapM doubleIfNotBig [1,2,1,2]
+Just [2,4,2,4]
+```
+
+Such monadic looping functions also have versions with a trailing `_` in their name, which throw away the actual results computed and just accumulate the effect (internally they use `>>` instead of `>>=`):
+```haskell
+>>> mapM_ doubleIfNotBig [1,2,1,2]
+Just ()
+```
+
+For folks who have been missing imperative for loops, there is a flipped version of `mapM_`, called `forM_`:
+
+```haskell
+>>> forM_ ["It","looks","like","JavaScript!"] putStrLn
+It
+looks
+like
+JavaScript!
+```
+
+And of course we can fold using functions with Monadic effects:
+
+```haskell
+small acc x
+  | x < 10 = Just (acc + x)
+  | otherwise = Nothing
+
+>>> foldM small 0 [1..9]
+Just 45
+
+>>> foldM small 0 [1..100]
+Nothing
+```
