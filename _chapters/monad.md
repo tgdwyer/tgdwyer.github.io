@@ -84,8 +84,9 @@ determines two roots as follows:
 <image src="/haskell4/quadroots.png" width="75%"></image>
 
 This may fail in two ways:
-1) if *a* is 0;
-2) if the expression that squareroot is applied to is negative (and we insist on only real-valued solutions). 
+ 
+  1. if *a* is 0;
+  2. if the expression that squareroot is applied to is negative (and we insist on only real-valued solutions). 
  
 Therefore, let's define a little library of math functions which encapsulate the possibility of failure in a `Maybe`:
 
