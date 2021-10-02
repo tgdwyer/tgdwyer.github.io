@@ -285,6 +285,14 @@ join :: Monad m => m (m a) -> m a
 join = (>>=id)
 ```
 
+We can use `join` to flatten nested `Maybe`s:
+```haskell
+>>> join (Just Nothing)
+Nothing
+>>> join (Just (Just 7))
+Just 7
+```
+
 We can apply join to “flatten” the nested `IO` contexts from the earlier `fmap` example:
 
 ```haskell
@@ -295,7 +303,7 @@ join $ greet <$> readName :: IO ()
 Which will now execute as expected:
 
 ```haskell
-> join $ greet <$> readName
+join $ greet <$> readName
 ```
 
 >Tim  
@@ -369,13 +377,26 @@ OK, that might seem a bit esoteric, but it lets us achieve some nifty things.
 
 For example, below we compute `(3*2) + 3`, but we did it by using the argument `3` 
 in two different functions without explicitly passing it to either!
-You can imagine a situation where you need to chain together a bunch of functions, but
-they all take a common parameter, e.g. a file name.
-
 ```haskell
 >>> ((+) =<< (*2)) 3
 9
 ```
+You can imagine a situation where you need to chain together a bunch of functions, but
+they all take a common parameter, e.g. a line break character.
+```haskell
+greet linebreak = "Dear Gentleperson,"++linebreak 
+body sofar linebreak = sofar ++ linebreak ++ "It has come to my attention that... " ++ linebreak
+signoff sofar linebreak = sofar ++ linebreak ++ "Your's truly," ++ linebreak ++ "Tim" ++ linebreak
+putStrLn $ (greet >>= body >>= signoff) "\r\n"
+```
+>Dear Gentleperson,  
+>
+>It has come to my attention that...  
+>
+>Your's truly,  
+>Tim
+
+
 In the next example we use the argument `3` in three different functions without passing it directly to any of them.
 Note the pattern is that the first function is unary (taking only the specified argument), and subsequent functions in the chain are binary, their first argument being the specified argument, and the second argument being the result of the previous function application.
 
