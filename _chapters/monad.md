@@ -56,7 +56,7 @@ Things to notice:
 * `Monad` is a subclass of `Applicative` (and therefore also a `Functor`)
 * `return` = `pure`, from [`Applicative`](/haskell3/#applicative). The `return` function exists for historical reasons and you can safely use only `pure` (PureScript has only `pure`).
 * the operator `(>>=)` (pronounced “bind”) is the minimal definition (the one function you must create--in addition to the functions also required for `Functor` and `Applicative`--to make a new `Monad` instance).
-* `>>` is special case of bind (described below)
+* `>>` is a special case of bind (described below)
 * lots of built-in types are already monads
 
 There also exists a flipped version of bind:
@@ -377,7 +377,7 @@ they all take a common parameter, e.g. a file name.
 9
 ```
 In the next example we use the argument `3` in three different functions without passing it directly to any of them.
-Note the pattern is that the first function is unary (taking only the specified argument), and subsequent functions in the chain are binary, their first argument being the specied argument, and the second argument being the result of the previous function application.
+Note the pattern is that the first function is unary (taking only the specified argument), and subsequent functions in the chain are binary, their first argument being the specified argument, and the second argument being the result of the previous function application.
 
 ```haskell
 >>> ((*) =<< (+) =<< (*2)) 3
