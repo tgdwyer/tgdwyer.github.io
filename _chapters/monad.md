@@ -367,7 +367,7 @@ original argument to `f`.
 OK, that might seem a bit esoteric, but it lets us achieve some nifty things.
 
 For example, below we compute `(3*2) + 3`, but we did it by using the argument `3` 
-to two different functions without explicitly passing it to either!
+in two different functions without explicitly passing it to either!
 You can imagine a situation where you need to chain together a bunch of functions, but
 they all take a common parameter, e.g. a file name.
 
