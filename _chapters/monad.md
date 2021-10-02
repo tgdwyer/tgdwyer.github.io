@@ -81,9 +81,13 @@ As an example we'll consider computation using the `Maybe` type, which we said i
 
 determines two roots as follows:
 
-<image src="/haskell4/quadroots.png" width="60%"></image>
+<image src="/haskell4/quadroots.png" width="75%"></image>
 
-This may fail in two ways.  First, if *a* is 0, second if the expression that squareroot is applied to is negative (and we insist on only real-valued solutions).  Therefore, let's define a little library of math functions which encapsulate the possibility of failure in a `Maybe`:
+This may fail in two ways:
+1) if *a* is 0;
+2) if the expression that squareroot is applied to is negative (and we insist on only real-valued solutions). 
+ 
+Therefore, let's define a little library of math functions which encapsulate the possibility of failure in a `Maybe`:
 
 ```haskell
 safeDiv :: Float -> Float -> Maybe Float
