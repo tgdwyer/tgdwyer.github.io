@@ -7,8 +7,8 @@ permalink: /monad/
 
 - Understand that Monad extends [Functor and Applicative](/haskell3/) to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
 - Understand the operation of the monadic bind and join functions in the `Maybe`, `IO`, List and Function instances of Monad.
-- Be able to refactor monadic binds using [`do` notation](/#do-notation).
-- [Loop with Monadic effects](/#looping-with-monadic-effects).
+- Be able to refactor monadic binds using [`do` notation](/monad/#do-notation).
+- [Loop with Monadic effects](/monad/#looping-with-monadic-effects).
 
 ## Introduction
 

@@ -108,7 +108,9 @@ A fully worked example of FRP using rx.js Observables to create an in-browser ve
 ## [Monad](/monad/)
 
 - Understand that Monad extends [Functor and Applicative](/haskell3/) to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
-- Understand the operation of bind in the `Maybe`, `IO` and List instances of Monad.
+- Understand the operation of the monadic bind and join functions in the `Maybe`, `IO`, List and Function instances of Monad.
+- Be able to refactor monadic binds using [`do` notation](/monad/#do-notation).
+- [Loop with Monadic effects](/monad/#looping-with-monadic-effects).
 
 ## [Parser Combinators](/parsercombinators/)
 
