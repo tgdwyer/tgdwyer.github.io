@@ -85,7 +85,7 @@ determines two roots as follows:
 
 This may fail in two ways:
  
-  1. if *a* is 0;
+  1. if *a* is 0 (divide by 0 is undefined);
   2. if the expression that squareroot is applied to is negative (and we insist on only real-valued solutions). 
  
 Therefore, let's define a little library of math functions which encapsulate the possibility of failure in a `Maybe`:
