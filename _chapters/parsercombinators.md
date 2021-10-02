@@ -12,7 +12,7 @@ permalink: /parsercombinators/
 
 ## Introduction
 
-In this section we will see how the various Haskell language features we have explored allow us to solve real-world problems.  In particular, we will develop a simple but powerful library for building *parsers* that is compositional through [Functor](/haskell3/#functor), [Applicative](/haskell3/#applicative) and [Monad](/haskell4/#monad) interfaces.  Before this, though, we will learn the basics of parsing text, including a high-level understanding that parsers are *state-machines* which realise a *context-free grammar* over a textual language.
+In this section we will see how the various Haskell language features we have explored allow us to solve real-world problems.  In particular, we will develop a simple but powerful library for building *parsers* that is compositional through [Functor](/haskell3/#functor), [Applicative](/haskell3/#applicative) and [Monad](/monad) interfaces.  Before this, though, we will learn the basics of parsing text, including a high-level understanding that parsers are *state-machines* which realise a *context-free grammar* over a textual language.
 
 Previously, [we glimpsed a very simplistic Applicative parser](/haskell3/#a-simple-applicative-functor-for-parsing).
 In this chapter, a *parser* is still simply a function which takes a string as input and produces some structure or computation as output, but now we extend the parser with monadic `bind` definitions, richer error handling and the ability to handle non-trivial grammars with alternative inputs.
