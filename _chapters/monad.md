@@ -6,7 +6,7 @@ permalink: /monad/
 ## Learning Outcomes
 
 - Understand that Monad extends [Functor and Applicative](/haskell3/) to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
-- Understand the operation of bind in the `Maybe`, `IO` and List instances of Monad.
+- Understand the operation of bind in the `Maybe`, `IO`, List and Function instances of Monad.
 
 ## Introduction
 
@@ -75,13 +75,13 @@ The type of the flipped bind `(=<<)` has a nice correspondence to the other oper
 
 So the bind function `(>>=)` (and equally its flipped version `(=<<)`) gives us another way to map functions over contexts, but why do we need another way?
 
-As an example we'll consider computation using the `Maybe` type, which we said is useful for [partial functions](/haskell2/#maybe), that is functions which are not sensibly defined over all of their inputs.  A more complex example of such a function than we have seen before is the [quadratic formula](https://en.wikipedia.org/wiki/Quadratic_formula), which for quadratic functions of the form:
+As an example we'll consider computation using the `Maybe` type, which we said is useful for [partial functions](/haskell2/#maybe), that is functions which are not sensibly defined over all of their inputs.  A more complex example of such a function than we have seen before is the [quadratic formula](https://en.wikipedia.org/wiki/Quadratic_formula) which, for quadratic functions of the form:
 
 <image src="/haskell4/quadratic.png" width="25%"></image>
 
 determines two roots as follows:
 
-<image src="/haskell4/quadroots.png" width="80%"></image>
+<image src="/haskell4/quadroots.png" width="60%"></image>
 
 This may fail in two ways.  First, if *a* is 0, second if the expression that squareroot is applied to is negative (and we insist on only real-valued solutions).  Therefore, let's define a little library of math functions which encapsulate the possibility of failure in a `Maybe`:
 
@@ -340,3 +340,55 @@ do
 ```
 
 > [('a',2),('a',4),('b',2),('b',4),('c',2),('c',4),('d',2),('d',4)]
+
+Our friend `join` in the list Monad is simply concatenation:
+```haskell
+>>> join [[1, 2, 3], [1, 2]]
+[1,2,3,1,2]
+```
+
+## Function
+
+We saw [previously that functions are instances of `Functor`](https://tgdwyer.github.io/haskell3/#functor), such that `fmap = (.)`.  We also saw that [functions are `Applicative`](https://tgdwyer.github.io/haskell3/#applicative) such that a binary function (such as `(+)`) can be lifted over multiple functions that need to be applied to the same argument, e.g.:
+```haskell
+totalMark :: Student -> Int
+totalMark = liftA2 (+) exam nonExam
+```
+So it shouldn't really be any surprise that functions of the same input type can also be composed with monadic bind.
+The right-to-left bind `(=<<)` takes a binary function `f` and a unary function `g` and
+creates a new unary function.
+The new function will apply `g` to its argument, then give the result as well as the
+original argument to `f`.
+OK, that might seem a bit esoteric, but it lets us achieve some nifty things.
+
+For example, below we compute `(3*2) + 3`, but we did it by using the argument `3` 
+to two different functions without explicitly passing it to either!
+You can imagine a situation where you need to chain together a bunch of functions, but
+they all take a common parameter, e.g. a file name.
+
+```haskell
+>>> ((+) =<< (*2)) 3
+9
+```
+In the next example we use the argument `3` in three different functions without passing it directly to any of them.
+Note the pattern is that the first function is unary (taking only the specified argument), and subsequent functions in the chain are binary, their first argument being the specied argument, and the second argument being the result of the previous function application.
+
+```haskell
+>>> ((*) =<< (+) =<< (*2)) 3
+27
+```
+
+We can use the flipped bind so it can be read left-to-right, if that's more your thing:
+```haskell
+>>> ((*2) >>= (+) >>= (*)) 3
+27
+```
+
+The `join` function passes one argument to a binary function twice which can be a useful trick:
+```haskell
+>>> (join (,)) 3
+(3,3)
+
+>>> (join (+)) 3
+6
+```
