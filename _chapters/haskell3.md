@@ -661,9 +661,9 @@ instance Functor Parser where
   f <$> (Parser a) = Parser (\x -> (f <$>) <$> a x )
 ```
 
-Let's try to remove the lambda function by applying the Point Free(/haskell3/#point-free-code) techniques to remove this lambda function. 
+Let's try to remove the lambda function by applying the [Point Free](/haskell3/#point-free-code) techniques to remove this lambda function. 
 
-First less add some brackets, to make the evaluation order more explicit.
+First, let's add some brackets, to make the evaluation order more explicit.
 ```haskell
 instance Functor Parser where
   f <$> (Parser a) = Parser (\x -> ((f <$>) <$>) (a x))
@@ -714,11 +714,11 @@ instance Applicative Parser where
     Nothing -> Nothing
 ```
 
-All that pure does, is it leaves the input unchanged and puts the given value on the right side of the tuple
+All that `pure` does, is to leave the input unchanged and put the given value on the right side of the tuple.
 
-The key insight to the applicative, is that first we use `f` the parser on the LHS of `<*>`. It then changes the input `i` to  `r1`, hence changing the input string. We then run the second parser `b` on the RHS of `<*>` on `r1` (the changed input). 
+The key insight for this applicative instance, is that we first use `f` (the parser on the LHS of `<*>`). This consumes input from `i` giving back the remaining input in `r1`. We then run the second parser `b` on the RHS of `<*>` on `r1` (the remaining input). 
 
-The key insight here is that this allows to really simply sequence parsers, as we can run the first one and then the second one. 
+The main take-away message is that `<*>` allows us to combine two parsers in sequence, that is, we can run the first one and then the second one. 
 
 Let's walk through a concrete example of this. 
 
@@ -728,7 +728,7 @@ Let's walk through a concrete example of this.
 Just ("b",('a',12345))
 ```
 
-As both `<$>` and `<*>` have the same precedence, firstly `(,) <$> char` will be evaluated, the result will be then applied to int
+As both `<$>` and `<*>` have the same precedence, firstly `(,) <$> char` will be evaluated, the result will be then applied to `int`.
 
 So how does `(,) char` work? Well, we parse a character, and then apply that character to the first item of the tuple, therefore:
 ```haskell
@@ -738,7 +738,7 @@ tupleCharParser :: Parser (b -> (Char, b))
 ```
 So for the applicative instance the LHS will be the `tupleCharParser` and the RHS will be `int`.
 
-So the first step in applicative parsing is to parse the input `i` using the LHS parser, in this case `tupleCharParser`
+The first step in applicative parsing is to parse the input `i` using the LHS parser, in this case `tupleCharParser`
 This will match the `Just (r1 p1)` case where it will be equal to `Just ("12345"b, ('a',))`. Therefore, `r1` is equal to the unparsed portion of the input `12345` and the result is a tuple partially applied `('a', )`.
 
 We then run the second parser `int` on the remaining input `"12345b"`. This will match the `Just (r2, p2)` case where it will be equal to `Just ("b", 12345)`, where `r2` is equal to the remaining input `"b"` and `p2` is equal to `"12345"`
