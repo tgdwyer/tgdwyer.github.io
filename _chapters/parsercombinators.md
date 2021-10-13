@@ -339,12 +339,12 @@ We will not implement a parser for a full programming language, but to at least 
 To start with, here is a BNF grammar for a simple calculator with three operations `*`, `+` and `-`, with `*` having higher precedence than `+` or `-`:
 
 ```
-<expr> ::= <term> { <add> <term> }
-<term> ::= <number> { "*" <number> }
-<add> ::= "+" | "-"
+<expr> ::= <term> | <expr> <addop> <term>
+<term> ::= <number> | <number> "*" <number>
+<addop> ::= "+" | "-"
 ```
 
-An expression `<expr>` consists of one or more `<term>`s that may be combined with an `<add>` (either addition or subtraction).  A `<term>` involves one or more numbers, multiplied together.
+An expression `<expr>` consists of one or more `<term>`s that may be combined with an `<addop>` (an addition operation, either `"+"` or `"-"`).  A `<term>` involves one or more numbers, multiplied together.
 
 The dependencies between the non-terminal expressions makes explicit the precedence of multiply operations needing to occur before add (and subtract).
 
