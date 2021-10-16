@@ -181,7 +181,7 @@ instance Applicative Parser where
   pure x = P (`Result` x)
 
   (<*>) :: Parser (a -> b) -> Parser a -> Parser b
-  (<*>) p q = p >>= (\f -> q >>= (pure . f))
+  (<*>) p q = p >>= (<$> q)
 ```
 
 The `Monad` instance's bind function `(>>=)` we have already seen in use in the example above, allowing us to sequence `Parser`s in `do`-blocks to build up the implementation of the `BNF` grammar.
