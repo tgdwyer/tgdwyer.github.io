@@ -475,4 +475,4 @@ With everything you've covered so far you should now be empowered to go out and 
 A slightly more advanced topic which you would soon encounter in the wild would be [Monad Transformers](https://en.wikibooks.org/wiki/Haskell/Monad_transformers), which let you work within multiple monadic contexts at once.  We'll leave these for future self exploration though.
 
 ------
-You can suggest edits for this page by [clicking here](https://github.com/tgdwyer/tgdwyer.github.io/edit/master/_chapters/monad.md) to open this file in GitHub, then clicking on the little "pen" button to go into edit mode, then follow the instructions to commit the change and create a pull request.
+You can suggest edits for this page by [clicking here](https://github.com/tgdwyer/tgdwyer.github.io/edit/master/_chapters/monad.md) to open this file in GitHub, then clicking on the little "pen" button to go into edit mode (you'll need to be signed in to GitHub), then follow the instructions to commit the change and create a pull request.
