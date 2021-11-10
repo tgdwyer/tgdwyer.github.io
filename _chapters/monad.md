@@ -423,9 +423,9 @@ The `join` function passes one argument to a binary function twice which can be 
 
 ## Looping with Monadic Effects
 
-There are also various functions in `Control.Monad` for looping functions over things that are `Foldable` and `Traversable`.
+There are also various functions in `Control.Monad` for looping functions with monadic effects (functions that return a result inside a Monad) over containers that are `Foldable` and `Traversable`.
 
-First there's `mapM` which is precisely the same as `traverse`:
+First there's `mapM` which is effectively the same as `traverse` (but requires the function to have a monadic effect, not just applicative):
 
 ```haskell
 doubleIfNotBig n = if n < 3 then Just (n+n) else Nothing
@@ -437,6 +437,8 @@ Just [2,4,2,4]
 
 Such monadic looping functions also have versions with a trailing `_` in their name, which throw away the actual results computed and just accumulate the effect (internally they use `>>` instead of `>>=`):
 ```haskell
+>>> mapM_ doubleIfNotBig [1,2,3,4]
+Nothing
 >>> mapM_ doubleIfNotBig [1,2,1,2]
 Just ()
 ```
@@ -471,3 +473,6 @@ Monads really round out Haskell, making it a very powerful language with elegant
 With everything you've covered so far you should now be empowered to go out and write real-world programs.  We'll see Monads at work again in the next chapter when we build more sophisticated [parser combinators](https://tgdwyer.github.io/parsercombinators/).
 
 A slightly more advanced topic which you would soon encounter in the wild would be [Monad Transformers](https://en.wikibooks.org/wiki/Haskell/Monad_transformers), which let you work within multiple monadic contexts at once.  We'll leave these for future self exploration though.
+
+------
+[Suggest edits for this page](https://github.com/tgdwyer/tgdwyer.github.io/edit/master/_chapters/monad.md)
