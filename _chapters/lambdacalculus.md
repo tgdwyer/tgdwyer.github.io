@@ -188,39 +188,6 @@ NOT TRUE
 = FALSE
 ```
 
-## Church Encodings for Lists
-
-Lets create a representation of a list in JavaScript. We will make use of closures to store our data.
-```javascript
-I = x=> x,
-K = x=> y => x,
-cons = x=> y=> f=> f(x)(y),
-head = l => l(K),
-tail = l => l(K(I)),
-nil = x => y => y
-```
-
-Therefore, we can create a list using:
-
-```javascript
-const list = cons(1)(cons(2)(nil)
-```
-
-This representation is quite simple to convert in to Lambda Calculus
-
-```lambda
-I = λx.x
-K = λxy.x
-CONS = λxyf.fxy
-HEAD = λl.lK
-TAIL = λl.l(KI)
-NIL = λxy.y
-```
-
-Another convenient thing to define is an 'isNil' function
-```lambda
-ISNIL = λl.l(λhtd.TRUE)FALSE
-```
 
 ## Church Encodings for Numbers
 We will represent a natural number n using a higher-order functions that maps any function f 'n' times
@@ -252,21 +219,80 @@ SUCC 2
 ```
 And we got down to three!! 
 
+
+## Church Encodings for Lists
+
+If we think back to the [cons list](/higherorderfunctions/#k-combinator) definition introduced previously
+```javascript
+const
+   K = x=> y=> x,
+   I = x=> x,
+   cons = x=> y=> f=> f(x)(y),
+   head = l=> l(K),
+   tail = l=> l(K(I)),
+   nil = x => y => y
+```
+
+The construction of a cons list will be as follows.
+
+```javascript
+const list = cons(1)(cons(2)(nil)
+```
+
+As this representation is only defined using anonymous functions, this representation is very simple to convert in to a Lambda Calculus equivalent. 
+
+```lambda
+K = λxy.x
+I = λx.x
+CONS = λxyf.fxy
+HEAD = λl.lK
+TAIL = λl.l(KI)
+NIL = λxy.y
+```
+
+Another convenient function to define is an 'isNil' function to check for an empty list.
+
+```lambda
+ISNIL = λl.l(λhtd.TRUE)FALSE
+```
+### Lets walk through an example of accessing the first element of a list defined using CONS.
+
+```lambda
+list = CONS 1 (CONS 2 NIL)
+```
+**Important**: We cannot actually use '1' and '2' here, but we will use this shorthand for simplicity. These will actually be represented as `λfx.fx` and `λfx.f(f x)` respectively.
+
+How do we get the first value of the list? We can use the previously defined HEAD function.
+
+So what we need to compute is `HEAD (list)`
+
+```lambda
+λl.lK (CONS 1 (CONS 2 NIL))
+⇒
+lK [l:=(CONS 1 (CONS 2 NIL))]
+⇒
+(CONS 1 (CONS 2 NIL)) K
+⇒ Expading the first CONS
+((λxyf.fxy) 1 (CONS 2 NIL)) K
+fxy [x:=1, y:=(CONS 2 NIL), f:=K]
+K 1 (CONS 2 NIL)
+⇒ Reducing K
+(λxy.x) 1 (CONS 2 NIL)
+x [x:=1, y:= CONS 2 NIL]
+1
+```
+
+We have managed to succesfully get the first item of our list! A similar process can be used to get the second item of the list.
+
 ### Exercises
 
 * Try using beta reduction to compute some more logical expressions.  E.g. make an expression for XOR.
-* Our JavaScript [cons list](/higherorderfunctions/#k-combinator) was based on the Church Encoding for linked lists.  Try writing the `cons`, `head` and `rest` functions as Lambda expressions.
-* Investigate [Church Numerals](https://en.wikipedia.org/wiki/Church_encoding) and try using lambda calculus to compute some basic math.
+* Try simplify the process of getting the second item of the Church Encoded list.
+* Investigate [Church Numerals](https://en.wikipedia.org/wiki/Church_encoding) further and try using lambda calculus to compute some basic math.
 
 ---
 
 ## Divergent Lambda Expressions
-
-
-
-
-
-
 
 Despite the above demonstration of evaluation of logical expressions, the restriction that lambda expressions are anonymous makes it a bit difficult to see how lambda calculus can be a general model for useful computation.  For example, how can we have a loop?  How can we have recursion if a lambda expression does not have any way to refer to itself?
 
@@ -351,61 +377,35 @@ Did you get it?  If so, good for you!  If not, never mind, it is tricky and in f
 Z=λf.(λx.f(λv.xxv))(λx.f(λv.xxv))
 ```
 
+## Working with Lists
 
+Let's think about another example, bringing it all together. How can we write a 'map' for a list of numbers. The list and numbers are both encoded with Church Enconding.
 
-Let's think about another example, bringing it all together. How can we write a 'map' for a list of numbers all encoded in Lambda Calculus. 
-First lets create a list of numbers
-
-list = CONS 1 (CONS 2 NIL)
-
-We cannot actually use '1' and '2' here, but we will use this shorthand for simplicity. These will actually be represented as 'λfx.fx' and 'λfx.f(f x)' respectively.
-
-How do we get a number out of the list?
-
-We can use our HEAD function.
-
-So what is the HEAD (list)
-
-What we need to compute is
-```lambda
-λl.lK (CONS 1 (CONS 2 NIL))
-⇒
-λl[l:=(CONS 1 (CONS 2 NIL))].lK
-⇒
-(CONS 1 (CONS 2 NIL)) K
-⇒ Expading the first CONS
-(λxyf.fxy 1 (CONS 2 NIL)) K
-(λx[x:=1]y[y:=(CONS 2 NIL)f[f:=K].fxy 1 (CONS 2 NIL)) K
-K 1 (CONS 2 NIL)
-⇒ Expading K
-(λxy.x) 1 (CONS 2 NIL)'
-(λx[x:=1]y[y:=CONS 2 NIL].x)
-1
-```
-
-So now lets try to use the Y combinator to create a map function. We need to apply the Y combinator to a different function to allow us to create this recursion
+We can use the Y combinator to create a recursive map function. We need to apply the Y combinator to a different function to allow us to create this recursion
 
 Here is the definition of map using javascript recursion. 
 ```javascript
 map = f=> l =>     !l ?     NULL : cons(f(head(l)))(map(f)(tail(l))),
 ```
+In lambda calculus, we cannot refer to 'map' by name so we use the first parameter of the function as a reference to the function. I will call this 'm' to represent the map function. 
 
-We cannot refer to 'map' by name so we need an extra parameter which will act as the refernce to the function. I will call this 'm' to represent the map function. We need to combine all of the things we have done previously!
+```lambda
+MAP = Y (λmfl. IF (ISNIL l) NIL (cons (f (HEAD l)) (m f (TAIL l))))
+```
+This is very similar to the definiton in JavaScript! But it is all done using pure Lambda Calculus. 
 
-MAP = Y (λmfl. IF (ISNIL l) NIL    (cons (f (HEAD l)) (m f (TAIL l))))
+We can now use this by using Lambda Calculus to compute things such as:
 
-This is very similar to the definiton in JavaScript! But it is all done using Lambda Calculus. Hopefully you can see the paralells to the Javascript code. 
-
-We can now use this by:
-
+```
 MAP SUCC (CONS 1 (CONS 2 NIL))
+```
+If you want to see an example of this in practice, refer to [here](https://stackblitz.com/edit/js-hhcdum?file=index.js): 
 
-If you want to see an example of this in practice, refer to here: https://stackblitz.com/edit/js-mk749y?file=index.js
+This code has a few slight changes to the one we derived
+- In JavaScript we need to use the Z-combinator.
+- The body of the Z combinator also needs to be lazy, therefore, an extra parameter was addded (shown below). As this parameter can be eta-reduced away, it does not change the function at all, it just makes the inner part lazy!
 
-The only change was, that in JavaScript we need to use the Z-combinator. The body of the Z combinator also needs to be lazy, therefore, an extra parameter was addded (shown below). As this parameter can be eta-reduced away, it does not change the function at all, it just makes the inner part lazy!
-
-MAP = Z (λmflx. IF (ISNIL l) NIL    (cons (f (HEAD l)) (m f (TAIL l)))x)
-
+MAP = Z (λmflx. IF (ISNIL l) NIL (cons (f (HEAD l)) (m f (TAIL l)))x)
 
 -------
 
@@ -413,6 +413,7 @@ MAP = Z (λmflx. IF (ISNIL l) NIL    (cons (f (HEAD l)) (m f (TAIL l)))x)
 
 * Note the similarities between `Y` and `Z` and perform a similar set of Beta reductions on `Z FAC` to see how it forces FAC to be evaluated.
 * Write a version of the Z-Combinator in JavaScript such that `Z(FAC)(6)` successfully evaluates to `720`.
+* Write filter and fold uisng the Z-Combinator based on the [StackBlitz demo](https://stackblitz.com/edit/js-hhcdum?file=index.js)
 
 -------
 
