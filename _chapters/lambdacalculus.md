@@ -71,8 +71,8 @@ Note that while in JavaScript application of a function `(x=>x)` to an argument 
 We can reduce this expression to a simpler form by a substitution, indicated by a bit of intermediate notation.  Two types of annotations are commonly seen, you can use either (or both!):
 
 ```lambdacalculus
-(λx. x) y      [x:=y]    -- an annotation on the right showing the substitution that will be applied to the expression on the left
-(λx [x:=y].x)            -- an annotation inside the parameter list showing the substitution that will be performed inside the body (arguments have already been removed)
+x [x:=y]         -- an annotation on the right of the lambda body showing the substitution that will be applied to the expression on the left
+(λx [x:=y].x)    -- an annotation inside the parameter list showing the substitution that will be performed inside the body (arguments have already been removed)
 ```
 Now we perform the substitution in the body of the expression and throw away the head, since all the bound variables are substituted, leaving only:
 ```
@@ -186,6 +186,29 @@ NOT TRUE
 = (λxy.x) FALSE TRUE               - expand TRUE
 = x [x:=FALSE]                     - beta reduction
 = FALSE
+```
+
+Alonzo Church also demonstrated an encoding for natural numbers:
+
+```lambda
+0 = λfx.x = K I
+1 = λfx.f x
+2 = λfx.f (f x)
+```
+
+In general a natural number `n` has two arguments `f` and `x`, and iterates `f` `n` times. The successor of a natural number `n` can also be computed:
+
+```lambda
+SUCC = λnfx.f (n f x)
+
+SUCC 2
+= (λnfx.f (n f x)) 2
+= (λfx.f (n f x)) [n:=2]
+= (λfx.f (2 f x))
+= (λfx.f ((λfx.f (f x)) f x))
+= (λfx.f ((f (f x)) [f:=f,x:=x]))
+= (λfx.f (f (f x)))
+= 3
 ```
 
 ---
