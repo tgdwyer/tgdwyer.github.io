@@ -47,20 +47,3 @@ plugins:
 collections:
   chapters:
     output: true
-    order:
-      - levelsofabstraction.md
-      - javascript1.md
-      - functionaljavascript.md
-      - typescript1.md
-      - higherorderfunctions.md
-      - lazyevaluation.md
-      - functionalreactiveprogramming.md
-      - asteroids.md
-      - lambdacalculus.md
-      - purescript.md
-      - haskell1.md
-      - haskell2.md
-      - haskell3.md
-      - parsercombinators.md
-      - assignment2_2020.md
-
