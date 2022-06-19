@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: chapter
 title: "Data Types and Type Classes"
 permalink: /haskell2/
 ---

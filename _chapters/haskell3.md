@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: chapter
 title: "Functor and Applicative"
 permalink: /haskell3/
 ---

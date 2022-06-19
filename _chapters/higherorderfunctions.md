@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: chapter
 title: "Higher Order Functions"
 permalink: /higherorderfunctions/
 ---

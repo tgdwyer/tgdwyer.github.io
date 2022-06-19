@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: chapter
 title: "Foldable and Traversible"
 permalink: /haskell4/
 ---

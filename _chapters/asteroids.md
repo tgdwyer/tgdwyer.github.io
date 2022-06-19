@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: chapter
 title: "FRP Asteroids"
 permalink: /asteroids/
 ---

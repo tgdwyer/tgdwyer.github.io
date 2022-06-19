@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: chapter
 title: "JavaScript Introduction"
 permalink: /javascript1/
 ---

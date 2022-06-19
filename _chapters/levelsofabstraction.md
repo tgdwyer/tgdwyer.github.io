@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: chapter
 title: "Levels of Abstraction"
 permalink: /levelsofabstraction/
 ---

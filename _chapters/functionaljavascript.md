@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: chapter
 title: "Functional Programming in JavaScript"
 permalink: /functionaljavascript/
 ---
