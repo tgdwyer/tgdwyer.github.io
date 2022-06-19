@@ -62,11 +62,11 @@ The von Neumann architecture was among the first to unify the concepts of data a
 
 The classic von Neumann model looks like so:
 
-![von Neumann Architecture](/levelsofabstraction/vonneumann.png)
+![von Neumann Architecture](/assets/images/chapterImages/levelsofabstraction/vonNeumann.png)
 
 At a high-level, standard modern computer architecture still fits within this model:
 
-![Modern Computer Architecture](/levelsofabstraction/computerarchiture.png)
+![Modern Computer Architecture](/assets/images/chapterImages/levelsofabstraction/computerArchiture.png)
 
 Programs run on an x86 machine according to the Instruction Execution Cycle:
 
@@ -112,11 +112,11 @@ These notes focus on introducing programmers who are familiar with the OO paradi
 
 |  | Functional | Object-Oriented |
 |--|------------|-----------------|
-| Unit of Composition  | [Functions](/javascript1/#functions)  |  [Objects](javascript1#objects) ([classes](/javascript1/#ecmascript-6-class-syntax)) |
+| Unit of Composition  | [Functions](/assets/images/chapterImages/javascript1/#functions)  |  [Objects](javascript1#objects) ([classes](/assets/images/chapterImages/javascript1/#ecmascript-6-class-syntax)) |
 | Programming Style    | Declarative | Imperative |
-| Control Flow         |  [Functions, recursion](/javascript1/#functions) and [chaining](/functionaljavascript/#method-chaining) | [Loops and conditionals](/javascript1/) |
-|  [Polymorphism](Polymorphism)        | [Parametric](/typescript1/#generic-types) | [Sub-Typing](Polymorphism) |
-| Data and Behaviour   | Loosely coupled through [pure](/functionaljavascript/#function-purity-and-referential-transparency), [generic](/typescript1/#generic-types) functions | Tightly coupled in [classes with methods](/javascript1/#ecmascript-6-class-syntax) |
+| Control Flow         |  [Functions, recursion](/assets/images/chapterImages/javascript1/#functions) and [chaining](/functionaljavascript/#method-chaining) | [Loops and conditionals](/assets/images/chapterImages/javascript1/) |
+|  [Polymorphism](Polymorphism)        | [Parametric](/assets/images/chapterImages/typescript1/#generic-types) | [Sub-Typing](Polymorphism) |
+| Data and Behaviour   | Loosely coupled through [pure](/functionaljavascript/#function-purity-and-referential-transparency), [generic](/assets/images/chapterImages/typescript1/#generic-types) functions | Tightly coupled in [classes with methods](/assets/images/chapterImages/javascript1/#ecmascript-6-class-syntax) |
 | State Management     | Treats objects as immutable | Favours mutation of objects through instance methods |
 |  Thread Safety       | Pure functions easily used concurrently | Can be difficult to manage |
 |  Encapsulation       | Less essential | Needed to protect data integrity |

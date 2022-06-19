@@ -263,7 +263,7 @@ Handling a single event in such a way is pretty straightforward.  Difficulties a
 
 A simple example that begins to show the problem is implementing a UI to allow a user to drag an object on (e.g.) an SVG canvas ([play with it here!](https://stackblitz.com/edit/frpmousedrag?file=index.ts)).  The state machine that models this is pretty simple:
 
-![Mouse drag state machine](mousedragstatemachine.png)
+![Mouse drag state machine](/assets/images/chapterImages/functionalreactiveprogramming/mouseDragStateMachine.png)
 
 There are only three transitions, each triggered by an event.  
 

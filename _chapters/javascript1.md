@@ -6,15 +6,15 @@ permalink: /javascript1/
 ## Learning Outcomes
 
 - Understand and use basic JavaScript coding concepts and features
-- Understand the difference between [mutable and immutable (const) variables](/javascript1#declaring-variables)
-- Explain the relationship between javascript [functions](/javascript1#functions) and [objects](/javascript1#objects)
-- Understand that the scope of variables is limited to [delineated code blocks](/javascript1/variable-scope) and within [functions](/javascript1#functions)
-- Understand that a [closure](/javascript1#closures) captures variables referenced within its scope
-- Create and apply [anonymous functions](/javascript1#anonymous-functions) to fluent style code
-- Compare [arrow functions](/javascript1#arrow-functions) and regular function syntax
-- Explain JavaScript’s [prototype mechanism](/javascript1#prototype-class-mechanism) for creating classes from functions
-- Create [ES6 style classes](/javascript1#ecmascript-6-class-syntax) with constructors and getters
-- Compare object oriented [polymorphism](/javascript1#polymorphism) to [dependency injection](/javascript1#dependency-injection) through functions
+- Understand the difference between [mutable and immutable (const) variables](/assets/images/chapterImages/javascript1#declaring-variables)
+- Explain the relationship between javascript [functions](/assets/images/chapterImages/javascript1#functions) and [objects](/assets/images/chapterImages/javascript1#objects)
+- Understand that the scope of variables is limited to [delineated code blocks](/assets/images/chapterImages/javascript1/variable-scope) and within [functions](/assets/images/chapterImages/javascript1#functions)
+- Understand that a [closure](/assets/images/chapterImages/javascript1#closures) captures variables referenced within its scope
+- Create and apply [anonymous functions](/assets/images/chapterImages/javascript1#anonymous-functions) to fluent style code
+- Compare [arrow functions](/assets/images/chapterImages/javascript1#arrow-functions) and regular function syntax
+- Explain JavaScript’s [prototype mechanism](/assets/images/chapterImages/javascript1#prototype-class-mechanism) for creating classes from functions
+- Create [ES6 style classes](/assets/images/chapterImages/javascript1#ecmascript-6-class-syntax) with constructors and getters
+- Compare object oriented [polymorphism](/assets/images/chapterImages/javascript1#polymorphism) to [dependency injection](/assets/images/chapterImages/javascript1#dependency-injection) through functions
 
 ## Introduction
 
@@ -455,7 +455,7 @@ z
 
 > 3
 
-Below, we see how [Anonymous Functions](/javascript1#anonymous-functions) can be applied to transform arrays, and a [cheatsheet summary](/javascript1#array-cheatsheet) for further functions for working with arrays.
+Below, we see how [Anonymous Functions](/assets/images/chapterImages/javascript1#anonymous-functions) can be applied to transform arrays, and a [cheatsheet summary](/assets/images/chapterImages/javascript1#array-cheatsheet) for further functions for working with arrays.
 
 ## Dynamic Typing
 
@@ -633,7 +633,7 @@ wordCount(['tim', 'sally', 'tim'])
 ## Array Cheatsheet
 
 In the following, the annotations beginning with `:` after each parameter describe its type and again at the end of each function to describe its return type.  The array `a` has elements of type `U`, and `U=>V` is the type of a function with input parameter type `U` and return type `V`
-(Note: these are not correct [TS annotations](/typescript1), but an informal “shorthand”)
+(Note: these are not correct [TS annotations](/assets/images/chapterImages/typescript1), but an informal “shorthand”)
 
 
 
@@ -715,7 +715,7 @@ plus(1,2)
 
 The `add` function above is a [Curried](/higherorderfunctions#curried-functions) version of the `plus` function.
 
-As another example, consider a curried wrapper for our `sumTo` from [before](/javascript1#functions-as-parameters-to-other-functions):
+As another example, consider a curried wrapper for our `sumTo` from [before](/assets/images/chapterImages/javascript1#functions-as-parameters-to-other-functions):
 
 ```javascript
  function sumOf(f) {
@@ -893,7 +893,7 @@ const b = {f: ()=>console.log("b")}
 
 Informally, this type of polymorphism is called “Duck Typing” (i.e. "If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck").
 
-Another type of polymorphism which is key to strongly typed functional programming languages (like Haskell), but also a feature of many modern OO languages is *parametric polymorphism*.  We will see this in action when we introduce [TypeScript generics](/typescript1/#generic-types).
+Another type of polymorphism which is key to strongly typed functional programming languages (like Haskell), but also a feature of many modern OO languages is *parametric polymorphism*.  We will see this in action when we introduce [TypeScript generics](/assets/images/chapterImages/typescript1/#generic-types).
 
 *Reference: Cardelli, Luca, and Peter Wegner. "On understanding types, data abstraction, and polymorphism." ACM Computing Surveys (CSUR) 17.4 (1985): 471-523.*
 

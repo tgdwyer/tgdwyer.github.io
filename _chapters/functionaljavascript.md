@@ -13,10 +13,10 @@ permalink: /functionaljavascript/
 
 ## Introduction
 
-The elements of JavaScript covered in [our introduction](/javascript1), specifically:
+The elements of JavaScript covered in [our introduction](/assets/images/chapterImages/javascript1), specifically:
 
-* [Binding functions to variables](/javascript1#functions-are-objects)
-* [Anonymous functions](/javascript1#anonymous-functions)
+* [Binding functions to variables](/assets/images/chapterImages/javascript1#functions-are-objects)
+* [Anonymous functions](/assets/images/chapterImages/javascript1#anonymous-functions)
 * [Higher-order functions](/higherorderfunctions)
 
 are sufficient for us to explore a paradigm called *functional programming*.  In the functional programming paradigm the primary model of computation is through the evaluation of functions.  Functional Programming is highly inspired by the [Lambda Calculus](/lambdacalculus/), a theory which develops a model for computation based on application and evaluation of mathematical functions.
@@ -280,7 +280,7 @@ const l = {
 }
 ```
 
-We can create simple functions similar to [those of Array](/javascript1#array-cheatsheet), which we can chain:
+We can create simple functions similar to [those of Array](/assets/images/chapterImages/javascript1#array-cheatsheet), which we can chain:
 
 ```javascript
 const
@@ -465,7 +465,7 @@ studentVersion1.name = "Tom"
 > studentVersion1  
 > {name: "Tom", assignmentMark: 20, examMark: 15}
 
-We will see later how the [TypeScript compiler](../typescript1) allows us to create deeply immutable objects that will trigger compile errors if we try to change their properties.
+We will see later how the [TypeScript compiler](../assets/images/chapterImages/typescript1) allows us to create deeply immutable objects that will trigger compile errors if we try to change their properties.
 
 You may wonder how pure functions can be efficient if the only way to mutate data structures is by returning a modified copy of the original.  There are two responses to such a question, one is: "purity helps us avoid errors in state management through wanton mutation effects - in modern programming correctness is often a bigger concern than efficiency", the other is "properly structured data permits log(n) time copy-updates, which should be good enough for most purposes".  We'll explore what is meant by the latter in later sections of these notes.
 

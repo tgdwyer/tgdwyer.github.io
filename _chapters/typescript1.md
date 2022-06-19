@@ -182,7 +182,7 @@ This would cause a run-time error in the browser:
 This is because headings is not an HTML Element but an HTMLCollection, with no method ```setAttribute```.  Note that if I try to debug it, the error will be reported from a line of code inside the definition of ```setLeftPadding```.  I don't know if the problem is in the function itself or in my call.
 
 The same call inside a typescript program would trigger a compile-time error.  In a fancy editor with compiler services like VSCode I'd know about it immediately because the call would get a red squiggly underline immediately after I type it, I can hover over the squiggly to get a detailed error message, and certainly, the generated broken JavaScript would never make it into production.
-![Compile Error Screenshot](setLeftPaddingTypeScript.png)
+![Compile Error Screenshot](/assets/images/chapterImages/typescript1/setLeftPaddingTypeScript.png)
 
 ## Union Types
 
@@ -513,7 +513,7 @@ studentVersion3.name = "Tom"
 
 Again, we get the squiggly:
 
-![Compile Error Screenshot](/typescript1/readonly.png)
+![Compile Error Screenshot](/assets/images/chapterImages/typescript1/readOnly.png)
 
 ## Typing systems with different ‘degrees’ of strictness
 

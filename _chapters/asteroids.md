@@ -9,7 +9,7 @@ Functional Reactive Programming (specifically the Observable/Observer pattern) a
 As an example we will build a little "Asteroids" game using FRP.  We're going to use [rxjs](https://rxjs-dev.firebaseapp.com/) as our Observable implementation, and we are going to render it in HTML using SVG.
 We're also going to take some pains to make pure functional code (and lots of beautiful curried lambda (arrow) functions). We'll use [typescript type annotations](https://www.typescriptlang.org/) to help us ensure that our data is indeed immutable and to guide us in plugging everything together without type errors into a nicely decoupled [Model-View-Controller (MVC) architecture](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller):
 
-![MVC Architecture](GeneralMVC.png)
+![MVC Architecture](/assets/images/chapterImages/asteroids/generalMVC.png)
 
 If you're the kind of person who likes to work backwards, [you can jump straight to playing the final result](https://asteroids05.stackblitz.io/) and you can also [live edit its code](https://stackblitz.com/edit/asteroids05?file=index.ts).
 
@@ -25,7 +25,7 @@ We'll build it up in several steps.
 
 Let's start by making the svg with a simple polygon for the ship.  It will look like this:
 
-<img width="100" src="ship.png"/>
+![Ship](/assets/images/chapterImages/asteroids/ship.png)
 
 And here's the snippet of html that creates the ship:
 ```html
@@ -43,11 +43,11 @@ Note that the ship is rendered inside a transform group `<g>`.  We will be chang
 ## Rotating the ship
 To begin with we'll make it possible for the player to rotate the ship with the arrow keys.  First, by directly adding listeners to keyboard events.  Then, by using events via Observable streams.  Here's a preview of what it's going to look like ([or you can play with it in a live editor](https://stackblitz.com/edit/asteroids01)):
 
-[![Rotation animation](/asteroids/AsteroidsRotate.gif)](https://stackblitz.com/edit/asteroids01)
+[![Rotation animation](/assets/images/chapterImages/asteroids/asteroidsRotate.gif)](https://stackblitz.com/edit/asteroids01)
 
 There are basically just two states, as sketched in the following state machine:
 
-<img width="300" src="TurnStateMachine.png"/>
+![Turn State Machine](/assets/images/chapterImages/asteroids/turnStateMachine.png)
 
 # Using Events Directly
 The first event we assign a function to is the window load event.  This function will not be invoked until the page is fully loaded, and therefore the SVG objects will be available.  Thus, our code begins:
@@ -208,7 +208,7 @@ We are going to need more inputs than just left and right arrow keys to pilot ou
 
 Here's a sneak preview of what this next stage will look like (click on the image to try it out in a live code editor):
 
-[![Spaceship flying](AsteroidsFly.gif)](https://stackblitz.com/edit/asteroids03?file=index.ts)
+[![Spaceship flying](/assets/images/chapterImages/asteroids/asteroidsFly.gif)](https://stackblitz.com/edit/asteroids03?file=index.ts)
 
 # Input Actions
 Let's start with adding "thrust" in response to up arrow.
@@ -399,7 +399,7 @@ Things get more complicated when we start adding more objects to the canvas that
 
 However, we now have all the pieces of our MVC architecture in place, all tied together with an observable stream:
 
-![Observable MVC Architecture](MVC.png)
+![Observable MVC Architecture](/assets/images/chapterImages/asteroids/MVC.png)
 
 So completing the game is just a matter of:
  * adding more input actions (e.g. `Shoot`)
@@ -409,7 +409,7 @@ So completing the game is just a matter of:
 
 We'll start with bullets that can be fired with the Space key, and which expire after a set period of time:
 
-[![Spaceship flying](AsteroidsShoot.gif)](https://stackblitz.com/edit/asteroids04?file=index.ts)
+[![Spaceship flying](/assets/images/chapterImages/asteroids/asteroidsShoot.gif)](https://stackblitz.com/edit/asteroids04?file=index.ts)
 
 However, the basic framework above is a good basis on which to extend.  
 
@@ -565,7 +565,7 @@ Finally, we add a make a quick addition to the CSS so that the bullets are a dif
 ## Collisions
 So far the game we have built allows you to hoon around in a space-ship blasting the void with fireballs which is kind of fun, but not very challenging.  The Asteroids game doesn't really become "Asteroids" until you actually have... asteroids.  Also, you should be able to break them up with your blaster and crashing into them should end the game.  Here's a preview:
 
-[![Spaceship flying](AsteroidsComplete.gif)](https://stackblitz.com/edit/asteroids05?file=index.ts)
+[![Spaceship flying](/assets/images/chapterImages/asteroids/asteroidsComplete.gif)](https://stackblitz.com/edit/asteroids05?file=index.ts)
 
 Before we go forward, let's put all the magic numbers that are starting to permeate our code in one, immutable place:
 ```typescript

@@ -16,11 +16,11 @@ permalink: /higherorderfunctions/
 
 The really exciting aspect of higher-order function support in languages like JavaScript is that it allows us to combine simple reusable functions in sophisticated ways.  We’ve already seen how functions like map, filter and reduce can be chained to flatten the control flow of data processing.  In this section we will look at some tricks that allow us to use functions that work with other functions in convenient ways.
 
-*A note about type annotations in this section.* If you are following the reading order given by the [index for these notes](/), then you have already read our [introduction to TypeScript](/typescript1/).  Therefore, below we frequently use TypeScript type annotions to be precise about the intended use of the functions.  However, as we start to rely more and more heavily on curried higher-order functions in this chapter, TypeScript type annotations start to become a bit cumbersome, and for the purposes of concisely representing use of combinators to create new functions, we abandon them entirely.  As an exercise, you may like to think about what the TypeScript annotations for some of these functions should be.  This is one of the reasons why we later in these notes move away from JavaScript and TypeScript entirely to instead focus on a real functional language, [Haskell](/haskell1/).
+*A note about type annotations in this section.* If you are following the reading order given by the [index for these notes](/), then you have already read our [introduction to TypeScript](/assets/images/chapterImages/typescript1/).  Therefore, below we frequently use TypeScript type annotions to be precise about the intended use of the functions.  However, as we start to rely more and more heavily on curried higher-order functions in this chapter, TypeScript type annotations start to become a bit cumbersome, and for the purposes of concisely representing use of combinators to create new functions, we abandon them entirely.  As an exercise, you may like to think about what the TypeScript annotations for some of these functions should be.  This is one of the reasons why we later in these notes move away from JavaScript and TypeScript entirely to instead focus on a real functional language, [Haskell](/haskell1/).
 
 ## Higher-Order Functions
 
-Functions that [take other functions as parameters](/javascript1#functions-as-parameters-to-other-functions) or which [return functions](/javascript1#closures) are called *higher-order functions*.
+Functions that [take other functions as parameters](/assets/images/chapterImages/javascript1#functions-as-parameters-to-other-functions) or which [return functions](/assets/images/chapterImages/javascript1#closures) are called *higher-order functions*.
 They are called "higher-order" because they are functions which operate on other functions.
 Higher-order functions are a very powerful feature and central to the functional programming paradigm.  
 
@@ -201,7 +201,7 @@ function identity<T>(value: T): T {
 
 But it has some important applications:
 
-- Higher-order functions which take a user specified function to apply in some context ([such as our sumTo from earlier](/javascript1/#functions-as-parameters-to-other-functions)) can be passed identity to restore the default behaviour.
+- Higher-order functions which take a user specified function to apply in some context ([such as our sumTo from earlier](/assets/images/chapterImages/javascript1/#functions-as-parameters-to-other-functions)) can be passed identity to restore the default behaviour.
 - For extracting data from encapsulated types (e.g. by passing identity into map).
 - The above scenarios are also indicative of a useful way to test such higher-order functions, broadly: "does passing the identity operator really give us back what we started with?".
 - For composition with other combinators, as below.

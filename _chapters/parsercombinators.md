@@ -12,9 +12,9 @@ permalink: /parsercombinators/
 
 ## Introduction
 
-In this section we will see how the various Haskell language features we have explored allow us to solve real-world problems.  In particular, we will develop a simple but powerful library for building *parsers* that is compositional through [Functor](/haskell3/#functor), [Applicative](/haskell3/#applicative) and [Monad](/monad) interfaces.  Before this, though, we will learn the basics of parsing text, including a high-level understanding that parsers are *state-machines* which realise a *context-free grammar* over a textual language.
+In this section we will see how the various Haskell language features we have explored allow us to solve real-world problems.  In particular, we will develop a simple but powerful library for building *parsers* that is compositional through [Functor](/assets/images/chapterImages/haskell3/#functor), [Applicative](/assets/images/chapterImages/haskell3/#applicative) and [Monad](/monad) interfaces.  Before this, though, we will learn the basics of parsing text, including a high-level understanding that parsers are *state-machines* which realise a *context-free grammar* over a textual language.
 
-Previously, [we glimpsed a very simplistic Applicative parser](/haskell3/#a-simple-applicative-functor-for-parsing).
+Previously, [we glimpsed a very simplistic Applicative parser](/assets/images/chapterImages/haskell3/#a-simple-applicative-functor-for-parsing).
 In this chapter, a *parser* is still simply a function which takes a string as input and produces some structure or computation as output, but now we extend the parser with monadic `bind` definitions, richer error handling and the ability to handle non-trivial grammars with alternative inputs.
 
 Parsing has a long history and *parser combinators* are a relatively recent approach made popular quite recently by modern functional programming techniques.  
@@ -34,7 +34,7 @@ Fundamental to analysis of human natural language but also to the design of prog
 <nonterminal> ::= a mixture of terminals and <nonterminal>s, alternatives separated by |
 ```
 
-Thus, *terminals* may only appear on the right-hand side of a production rule, *non-terminals* on either side.  In BNF each *non-terminal* symbol appears on the left-hand side of exactly one production rule, and there may be several possible alternatives for each *non-terminal* specified on the right-hand side.  These are separated by a "`|`" (in this regard they look a bit like the syntax for [algebraic data type definitions](/haskell2#algebraic-data-types)).
+Thus, *terminals* may only appear on the right-hand side of a production rule, *non-terminals* on either side.  In BNF each *non-terminal* symbol appears on the left-hand side of exactly one production rule, and there may be several possible alternatives for each *non-terminal* specified on the right-hand side.  These are separated by a "`|`" (in this regard they look a bit like the syntax for [algebraic data type definitions](/assets/images/chapterImages/haskell2#algebraic-data-types)).
 
 Note that production rules of the form above are for context-free grammars.  As a definition by counter-example, *context sensitive grammars* allow terminals and more than one non-terminal on the left hand side.
 
@@ -264,7 +264,7 @@ spaces = (is ' ' >> spaces) ||| pure ()
 
 ## A Parser that returns an ADT
 
-The return type of the phone number parser above was `[Char]` (equivalent to `String`).  A more typical use case for a parser though is to generate some data structure that we can then process in other ways.  In Haskell, this usually means a parser which returns an [Algebraic Data Type (ADT)](/haskell2#algebraic-data-types).  Here is a very simple example.
+The return type of the phone number parser above was `[Char]` (equivalent to `String`).  A more typical use case for a parser though is to generate some data structure that we can then process in other ways.  In Haskell, this usually means a parser which returns an [Algebraic Data Type (ADT)](/assets/images/chapterImages/haskell2#algebraic-data-types).  Here is a very simple example.
 
 Let's imagine we need to parse records from a vets office.  It treats only three types of animals.  As always, lets start with the BNF:
 

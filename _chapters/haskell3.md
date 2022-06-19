@@ -4,14 +4,14 @@ title: "Functor and Applicative"
 permalink: /haskell3/
 ---
 
-In this chapter we see how the Haskell language features we introduced in previous chapters (from function application rules based on [Lambda Calculus](/lambdacalculus) to [Typeclasses](/haskell2#typeclasses)) lead to highly flexible and refactorable code and powerful abstractions.
+In this chapter we see how the Haskell language features we introduced in previous chapters (from function application rules based on [Lambda Calculus](/lambdacalculus) to [Typeclasses](/assets/images/chapterImages/haskell2#typeclasses)) lead to highly flexible and refactorable code and powerful abstractions.
 
 ## Learning Outcomes
 
-- Understand how [eta-conversion](/haskell3#eta-conversion), [operator sectioning](/haskell3#operator-sectioning) and [compose](/haskell3#compose), together provide the ability to transform code to achieve a composable [point free](/haskell3#point-free-code) form and use this technique to refactor code.
-- Understand that in Haskell the ability to map over container structures is generalised into the [Functor](/haskell3#functor) typeclass, such that any type that is an instance of Functor has the `fmap` or `(<$>)` operation.
-- Understand that the [Applicative Typeclass](/haskell3#applicative) extends Functor such that containers of functions may be applied (using the `(<*>)` operator) to containers of values.
-- Understand that Functor and Applicative allow powerful composable types through exploring a [simple applicative functor for parsing](/haskell3#a-simple-applicative-functor-for-parsing).
+- Understand how [eta-conversion](/assets/images/chapterImages/haskell3#eta-conversion), [operator sectioning](/assets/images/chapterImages/haskell3#operator-sectioning) and [compose](/assets/images/chapterImages/haskell3#compose), together provide the ability to transform code to achieve a composable [point free](/assets/images/chapterImages/haskell3#point-free-code) form and use this technique to refactor code.
+- Understand that in Haskell the ability to map over container structures is generalised into the [Functor](/assets/images/chapterImages/haskell3#functor) typeclass, such that any type that is an instance of Functor has the `fmap` or `(<$>)` operation.
+- Understand that the [Applicative Typeclass](/assets/images/chapterImages/haskell3#applicative) extends Functor such that containers of functions may be applied (using the `(<*>)` operator) to containers of values.
+- Understand that Functor and Applicative allow powerful composable types through exploring a [simple applicative functor for parsing](/assets/images/chapterImages/haskell3#a-simple-applicative-functor-for-parsing).
 
 <div class="cheatsheet" markdown="1">
 
@@ -95,13 +95,13 @@ Now we can use the non-infix form of (>):
 lessThan n = filter ((>) n)
 ```
 
-And we see from [our definition of compose](/haskell3#compose), that if we were to replace filter by `f`, `(>)` by `g`, and `n` by `x`, we would have exactly the definition of `(.)`.  Thus,
+And we see from [our definition of compose](/assets/images/chapterImages/haskell3#compose), that if we were to replace filter by `f`, `(>)` by `g`, and `n` by `x`, we would have exactly the definition of `(.)`.  Thus,
 
 ```haskell
 lessThan n = (filter . (>)) n
 ```
 
-And now we can apply [eta-conversion](/haskell3#eta-conversion):
+And now we can apply [eta-conversion](/assets/images/chapterImages/haskell3#eta-conversion):
 
 ```haskell
 lessThan = filter . (>)
@@ -174,7 +174,7 @@ instance Functor Maybe -- but this may surprise!
 ... -- and some other instances we'll talk about shortly
 ```
 
-The first line says that an instances of the Functor typeclass `f` must be over a type that has the [kind](/haskell2#type-kinds) `(* -> *)`, that is, their constructors must be parameterised with a single type variable.  After this, the `class` definition specifies `fmap` as a function that will be available to any instance of Functor and that `f` is the type parameter for the constructor function, which again, takes one type parameter, e.g. `f a` as the input to `fmap`, which returns an `f b`.
+The first line says that an instances of the Functor typeclass `f` must be over a type that has the [kind](/assets/images/chapterImages/haskell2#type-kinds) `(* -> *)`, that is, their constructors must be parameterised with a single type variable.  After this, the `class` definition specifies `fmap` as a function that will be available to any instance of Functor and that `f` is the type parameter for the constructor function, which again, takes one type parameter, e.g. `f a` as the input to `fmap`, which returns an `f b`.
 
 Naturally, lists have an instance:
 
@@ -423,7 +423,7 @@ Just 5
 
 Here's a little visual summary of Applicative and lifting (box metaphor inspired by [adit.io](http://www.adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html)):
 
-![Applicative Visual Summary](/haskell3/applicativepicture.png)
+![Applicative Visual Summary](/assets/images/chapterImages/haskell3/applicativePicture.png)
 
 It’s also useful to lift binary data constructors over two Applicative values, e.g. for tuples:
 ```haskell
@@ -661,7 +661,7 @@ instance Functor Parser where
   f <$> (Parser a) = Parser (\x -> (f <$>) <$> a x )
 ```
 
-Let's try to remove the lambda function by applying the [Point Free](/haskell3/#point-free-code) techniques to remove this lambda function. 
+Let's try to remove the lambda function by applying the [Point Free](/assets/images/chapterImages/haskell3/#point-free-code) techniques to remove this lambda function. 
 
 First, let's add some brackets, to make the evaluation order more explicit.
 ```haskell
