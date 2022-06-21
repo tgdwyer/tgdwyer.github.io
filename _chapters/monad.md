@@ -5,10 +5,10 @@ permalink: /monad/
 ---
 ## Learning Outcomes
 
-- Understand that Monad extends [Functor and Applicative](/assets/images/chapterImages/haskell3/) to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
+- Understand that Monad extends [Functor and Applicative](/haskell3/) to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
 - Understand the operation of the monadic bind and join functions in the `Maybe`, `IO`, List and Function instances of Monad.
-- Be able to refactor monadic binds using [`do` notation](/monad/#do-notation).
-- [Loop with Monadic effects](/monad/#looping-with-monadic-effects).
+- Be able to refactor monadic binds using [`do` notation](#do-notation).
+- [Loop with Monadic effects](#looping-with-monadic-effects).
 
 ## Introduction
 
@@ -55,7 +55,7 @@ instance Monoid a => Monad ((,) a) -- Defined in `GHC.Base'
 Things to notice:
 
 * `Monad` is a subclass of `Applicative` (and therefore also a `Functor`)
-* `return` = `pure`, from [`Applicative`](/assets/images/chapterImages/haskell3/#applicative). The `return` function exists for historical reasons and you can safely use only `pure` (PureScript has only `pure`).
+* `return` = `pure`, from [`Applicative`](/haskell3/#applicative). The `return` function exists for historical reasons and you can safely use only `pure` (PureScript has only `pure`).
 * the operator `(>>=)` (pronounced “bind”) is the minimal definition (the one function you must create--in addition to the functions also required for `Functor` and `Applicative`--to make a new `Monad` instance).
 * `>>` is a special case of bind (described below)
 * lots of built-in types are already monads
@@ -77,7 +77,7 @@ The type of the flipped bind `(=<<)` has a nice correspondence to the other oper
 
 So the bind function `(>>=)` (and equally its flipped version `(=<<)`) gives us another way to map functions over contexts, but why do we need another way?
 
-As an example we'll consider computation using the `Maybe` type, which we said is useful for [partial functions](/assets/images/chapterImages/haskell2/#maybe), that is functions which are not sensibly defined over all of their inputs.  A more complex example of such a function than we have seen before is the [quadratic formula](https://en.wikipedia.org/wiki/Quadratic_formula) which, for quadratic functions of the form:
+As an example we'll consider computation using the `Maybe` type, which we said is useful for [partial functions](/haskell2/#maybe), that is functions which are not sensibly defined over all of their inputs.  A more complex example of such a function than we have seen before is the [quadratic formula](https://en.wikipedia.org/wiki/Quadratic_formula) which, for quadratic functions of the form:
 
 ![quadratic](/assets/images/chapterImages/haskell4/quadratic.png)
 
@@ -312,7 +312,7 @@ join $ greet <$> readName
 
 ## List
 
-As with the [Applicative list instance](/assets/images/chapterImages/haskell3/#applicative), the list implementation of bind [is defined](https://hackage.haskell.org/package/base-4.14.0.0/docs/src/GHC.Base.html#Monad) with comprehension syntax:
+As with the [Applicative list instance](/haskell3/#applicative), the list implementation of bind [is defined](https://hackage.haskell.org/package/base-4.14.0.0/docs/src/GHC.Base.html#Monad) with comprehension syntax:
 
 ```haskell
 instance Monad []  where

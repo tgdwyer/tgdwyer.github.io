@@ -8,10 +8,10 @@ In this chapter we will meet some more typeclasses that abstract common coding p
 
 ## Learning Outcomes
 
-- Understand that the "reduce" function we met for arrays and other data structures in JavaScript is referred to as ["folding"](/assets/images/chapterImages/haskell4/#folds) in Haskell and there are two variants `foldl` and `foldr` for left and right folds respectively.
-- Understand that the [Monoid](/assets/images/chapterImages/haskell4#monoid) typeclass for things that have a predefined rule for aggregation (concatenation), making containers of `Monoid` values trivial to `fold`
-- Understand that [Foldable](/assets/images/chapterImages/haskell4#foldable) generalises containers that may be folded (or reduced) into values
-- Understand that [Traversable](/assets/images/chapterImages/haskell4#traversable) generalises containers over which we can traverse applying a function with an Applicative effect
+- Understand that the "reduce" function we met for arrays and other data structures in JavaScript is referred to as ["folding"](/haskell4/#folds) in Haskell and there are two variants `foldl` and `foldr` for left and right folds respectively.
+- Understand that the [Monoid](#monoid) typeclass for things that have a predefined rule for aggregation (concatenation), making containers of `Monoid` values trivial to `fold`
+- Understand that [Foldable](#foldable) generalises containers that may be folded (or reduced) into values
+- Understand that [Traversable](#traversable) generalises containers over which we can traverse applying a function with an Applicative effect
 
 ## Folds
 
@@ -265,7 +265,7 @@ The following map shows how all of these typeclasses are starting to come togeth
 
 ![Traversable Typeclasses](/assets/images/chapterImages/haskell4/traversableTypeClasses.png)
 
-So what does the traverse function do?  By way of example, remember our safe modulo function this we used to experiment with [Functor](/assets/images/chapterImages/haskell3/#functor):
+So what does the traverse function do?  By way of example, remember our safe modulo function this we used to experiment with [Functor](/haskell3/#functor):
 ```haskell
 safeMod :: Integral a => a-> a-> Maybe a
 safeMod _ 0 = Nothing

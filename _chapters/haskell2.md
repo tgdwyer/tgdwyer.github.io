@@ -7,10 +7,10 @@ permalink: /haskell2/
 
 ## Learning Outcomes
 
-- Define data structures using Haskell's [Algebraic Data Types](/assets/images/chapterImages/haskell2#algebraic-data-types) and use [pattern matching](/assets/images/chapterImages/haskell2#pattern-matching) to define functions that handle each of the possible instances
-- Use the alternate [record syntax](/assets/images/chapterImages/haskell2#record-syntax) to define data structures with named fields
-- Understand that Haskell [type classes](/assets/images/chapterImages/haskell2#typeclasses) are similar to TypeScript interfaces in providing a definition for the set of functions that must be available for instances of those type classes and that typeclasses can extend upon one another to create rich hierarchies
-- Understand that the [Maybe](/assets/images/chapterImages/haskell2#maybe) type provides an elegant way to handle *partial functions*.
+- Define data structures using Haskell's [Algebraic Data Types](#algebraic-data-types) and use [pattern matching](#pattern-matching) to define functions that handle each of the possible instances
+- Use the alternate [record syntax](#record-syntax) to define data structures with named fields
+- Understand that Haskell [type classes](#typeclasses) are similar to TypeScript interfaces in providing a definition for the set of functions that must be available for instances of those type classes and that typeclasses can extend upon one another to create rich hierarchies
+- Understand that the [Maybe](#maybe) type provides an elegant way to handle *partial functions*.
 
 ## Algebraic Data Types
 
@@ -62,7 +62,7 @@ length [] = 0
 length (_:rest) = 1 + length rest
 ```
 
-The following visual summary shows pair data structures with accessor functions `fst` and `sec` defined using [Record Syntax](/assets/images/chapterImages/haskell2#record-syntax) with varying degrees of type flexibility, and compared with the equivalent [typescript generic notation](/assets/images/chapterImages/typescript1#generic-types):
+The following visual summary shows pair data structures with accessor functions `fst` and `sec` defined using [Record Syntax](#record-syntax) with varying degrees of type flexibility, and compared with the equivalent [typescript generic notation](/typescript1#generic-types):
 
 - Hard-coded for `Int` pairs only
 - with one type parameter (by convention called `a` in Haskell, and `T` in TypeScript)
@@ -136,7 +136,7 @@ This creates a record type in every way the same as the above, but the accessor 
 
 ## Typeclasses
 
-Haskell uses “type classes” as a way to associate functions with types.  A type class is like a promise that a certain type will have specific operations and functions available.  You can think of it as being similar to a [TypeScript interface](/assets/images/chapterImages/typescript1#interfaces).
+Haskell uses “type classes” as a way to associate functions with types.  A type class is like a promise that a certain type will have specific operations and functions available.  You can think of it as being similar to a [TypeScript interface](/typescript1#interfaces).
 
 Despite the name however, it is not like an ES6/TypeScript class, since a Haskell type class does not actually give definitions for the functions themselves, only their type signatures.  
 The function bodies are defined in “instances” of the type class.  A good starting point for gaining familiarity with type classes is seeing how they are used in the standard Haskell prelude.  From GHCi we can ask for information about a specific typeclass with the `:i` command, for example, Num is a typeclass common to numeric types:

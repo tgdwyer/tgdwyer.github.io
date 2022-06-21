@@ -288,7 +288,7 @@ I deliberately avoided the type declaration for the above function because, (1) 
 sort :: Ord t => [t] -> [t]
 ```
 
-Thus, the function sort has a generic type-parameter `t` (we'll talk more about such [parametric polymorphism in haskell](/assets/images/chapterImages/haskell2/#type-parameters-and-polymorphism) later) which is constrained to be in the `Ord` type class (anything that is orderable - we'll talk more about [type classes](/assets/images/chapterImages/haskell2/#typeclasses) too).  It’s input parameter is a list of `t`, as is its return type.  This is also precisely the syntax that one would use to declare the type explicitly.  Usually, for all top-level functions in a Haskell file it is good practice to explicitly give the type declaration.  Although, it is not always necessary, it can avoid ambiguity in many situations, and secondly, once you get good at reading Haskell types, it becomes useful documentation.
+Thus, the function sort has a generic type-parameter `t` (we'll talk more about such [parametric polymorphism in haskell](/haskell2/#type-parameters-and-polymorphism) later) which is constrained to be in the `Ord` type class (anything that is orderable - we'll talk more about [type classes](/haskell2/#typeclasses) too).  It’s input parameter is a list of `t`, as is its return type.  This is also precisely the syntax that one would use to declare the type explicitly.  Usually, for all top-level functions in a Haskell file it is good practice to explicitly give the type declaration.  Although, it is not always necessary, it can avoid ambiguity in many situations, and secondly, once you get good at reading Haskell types, it becomes useful documentation.
 
 Here’s another refactoring of the quick-sort code.  This time with type declaration because I just said it was the right thing to do:
 
@@ -304,7 +304,7 @@ sort (pivot:rest) = below pivot rest ++ [pivot] ++ above pivot rest
 
 The `list` parameter for `below` and `above` has been eta-reduced away just as we were able to [eta-reduce lambda calculus expressions](/lambdacalculus/#lambda-calculus-cheatsheet).  The definition of the `partition` function in this version uses the `.` operator for [function composition](/higherorderfunctions/#composition).  That is, `partition comparison` is the composition of `sort` and `filter comparison` and again the `list` parameter is eta-reduced away.  
 
-Although it looks like the comparison parameter could also go away here with eta conversion, actually the low precedence of the `.` operator means there is (effectively) implicit parentheses around filter comparison.  We will see how to [more agressively refactor code to be point-free later](/assets/images/chapterImages/haskell3/#point-free-code).
+Although it looks like the comparison parameter could also go away here with eta conversion, actually the low precedence of the `.` operator means there is (effectively) implicit parentheses around filter comparison.  We will see how to [more agressively refactor code to be point-free later](/haskell3/#point-free-code).
 
 The idea of refactoring our code into the above form was to demonstrate the freedom that Haskell gives us to express logic
 in a way that makes sense to us.  This version reads almost like a natural language declarative definition of the algorithm.  That is, you can read:
@@ -342,7 +342,7 @@ Note that where is only available in function declarations, not inside expressio
 
 ### Pattern matching
 
-Provides alternative cases for function definitions matching different values or possible destructurings of the function arguments ([more detail](/assets/images/chapterImages/haskell2#pattern-matching)).  As per examples above and:
+Provides alternative cases for function definitions matching different values or possible destructurings of the function arguments ([more detail](/haskell2#pattern-matching)).  As per examples above and:
 ```haskell
 fibs 0 = 1
 fibs 1 = 1
