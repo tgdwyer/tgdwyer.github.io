@@ -1,7 +1,6 @@
 ---
 layout: chapter
 title: "TypeScript Introduction"
-permalink: /typescript1/
 ---
 
 

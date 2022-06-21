@@ -1,12 +1,12 @@
 - title: Levels of Abstraction
-  url: /levelsofabstraction/
+  url: /levelsofabstraction
   description: |
     - Understand the motivation for different programming paradigms: to abstract machine operation into human understandable and composable programs
     - Understand the difference between *syntax*, the textual symbols and grammatical rules of a program, and *semantics*, the meaning of what is computed
     - Understand that there are different models of computation upon which different programming languages are based, including machine models such as Turing Machines and von Neumann architecture, and the Lambda Calculus based on mathematical functions.
     - Compare the dominant paradigms of [Functional and Objected-Oriented Programming](/levelsofabstraction/#alternative-abstractions) in terms of how they abstract data and behaviour.
 - title: JavaScript Introduction
-  url: /javascript1/
+  url: /javascript1
   description: |
     - Understand and use basic JavaScript coding concepts and features
     - Understand the difference between [mutable and immutable (const) variables](/javascript1#declaring-variables)
@@ -19,14 +19,14 @@
     - Create [ES6 style classes](/javascript1#ecmascript-6-class-syntax) with constructors and getters
     - Compare object oriented [polymorphism](/javascript1#polymorphism) to [dependency injection](/javascript1#dependency-injection) through functions
 - title: Functional Programming in JavaScript
-  url: /functionaljavascript/
+  url: /functionaljavascript
   description: |
     - Create programs in JavaScript in a functional style
     - Understand the definitions of [Function Purity and Referential Transparency](/functionaljavascript#function-purity-and-referential-transparency)
     - Explain the role of pure functional programming style in managing side effects
     - See how pure functions can be used to [model sophisticated computation](/functionaljavascript#computation-with-pure-functions)
 - title: TypeScript Introduction
-  url: /typescript1/
+  url: /typescript1
   description: |
     - Create programs in TypeScript using types to ensure correctness at compile time.
     - Explain how TypeScript features like Interfaces, Union Types and Optional Properties allow us to model types in common JavaScript coding patterns with precision.
@@ -34,42 +34,42 @@
     - Compare and contrast strongly, dynamically and gradually typed languages.
     - Describe how compilers that support type inference assist us in writing type safe code.
 - title: Lazy Evaluation
-  url: /lazyevaluation/
+  url: /lazyevaluation
   description: |
     - Understand how functions can be used to delay evaluation of code until the result is actually required
     - Understand how this *lazy* evaluation allows for the definition of *infinite sequences*
     - Code and use lazily evaluated infinite number sequences
 - title: Functional Reactive Programming
-  url: /functionalreactiveprogramming/
+  url: /functionalreactiveprogramming
   description: |
     - Understand that the Functional Reactive Programming Observable construct is just another container of elements, but whose "push-based" architecture allows them to be used to capture asynchronous behaviour
     - Understand that Observables provide the benefits of functional programming: composability, reusability.
     - See that Observables structure complex stateful programs in a more linear and understandable way that maps more easily to the underlying state machine.
     - Use Observables to create simple UI programs in-place of asynchronous event handling.
 - title: FRP Asteroids
-  url: /asteroids/
+  url: /asteroids
   description: |
     A fully worked example of FRP using rx.js Observables to create an in-browser version of a classic arcade game.
 - title: Higher Order Functions
-  url: /higherorderfunctions/
+  url: /higherorderfunctions
   description: |
     - Understand that [Higher-Order Functions](/higherorderfunctions/#higher-order-functions) are those which take other functions as input parameters or which return functions
     - Understand that [curried functions](/higherorderfunctions/#curried-functions) support partial application and therefore creation of functions that are partially specified for reuse scenarios.
     - Understand that a [Combinator](/higherorderfunctions/#combinators) is a higher-order function that uses only function application and earlier defined combinators to define a result from its arguments
     - Use simple Combinator functions to manipulate and compose other functions
 - title: Lambda Calculus
-  url: /lambdacalculus/
+  url: /lambdacalculus
   description: |
     - Understand that the lambda calculus provides a complete model of computation
     - Relate the lambda calculus to functional programming
     - Apply conversion and reduction rules to simplify lambda expressions
 - title: From JavaScript to Haskell (via PureScript)
-  url: /purescript/
+  url: /purescript
   description: |
     - Compare a lambda-calculus inspired Haskell-like language (PureScript) with the functional programming concepts explored earlier in JavaScript
     - Understand how tail call optimisation is applied in languages which support it
 - title: Creating and Running Haskell Programs
-  url: /haskell1/
+  url: /haskell1
   description: |
     - Use the GHCi REPL to test Haskell programs and expressions
     - Compare the syntax of Haskell programs to Functional-style code in JavaScript
@@ -77,35 +77,35 @@
     - Create and use Haskell lists and tuples
     - Create Haskell functions using *pattern-matching*, *guards*, and local definitions using `where` and `let` clauses
 - title: Data Types and Type Classes
-  url: /haskell2/
+  url: /haskell2
   description: |
     - Define data structures using Haskell's [Algebraic Data Types](/haskell2#algebraic-data-types) and use [pattern matching](/haskell2#pattern-matching) to define functions that handle each of the possible instances
     - Use the alternate [record syntax](/haskell2#record-syntax) to define data structures with named fields
     - Understand that Haskell [type classes](/haskell2#typeclasses) are similar to TypeScript interfaces in providing a definition for the set of functions that must be available for instances of those type classes and that typeclasses can extend upon one another to create rich hierarchies
     - Understand that the [Maybe](/haskell2#maybe) type provides an elegant way to handle *partial functions*
 - title: Functor and Applicative
-  url: /haskell3/
+  url: /haskell3
   description: |
     - Understand how [eta-conversion](/haskell3#eta-conversion), [operator sectioning](/haskell3#operator-sectioning) and [compose](/haskell3#compose), together provide the ability to transform code to achieve a composable [point free](/haskell3#point-free-code) form and use this technique to refactor code.
     - Understand that in Haskell the ability to map over container structures is generalised into the [Functor](/haskell3#functor) typeclass, such that any type that is an instance of Functor has the `fmap` or `(<$>)` operation.
     - Understand that the [Applicative Typeclass](/haskell3#applicative) extends Functor such that containers of functions may be applied (using the `(<*>)` operator) to containers of values.
     - Understand that Functor and Applicative allow powerful composable types through exploring a [simple applicative functor for parsing](/haskell3#a-simple-applicative-functor-for-parsing).
 - title: Foldable and Traversible
-  url: /haskell4/
+  url: /haskell4
   description: |
     - Understand that the "reduce" function we met for arrays and other data structures in JavaScript is referred to as ["folding"](/haskell4/#folds) in Haskell and there are two variants `foldl` and `foldr` for left and right folds respectively
     - Understand that the [Monoid](/haskell4#monoid) typeclass for things that have a predefined rule for aggregation (concatenation), making containers of `Monoid` values trivial to `fold`
     - Understand that [Foldable](/haskell4#foldable) generalises containers that may be folded (or reduced) into values
     - Understand that [Traversable](/haskell4#traversable) generalises containers over which we can traverse applying a function with an Applicative effect
 - title: Monad
-  url: /monad/
+  url: /monad
   description: |
     - Understand that Monad extends [Functor and Applicative](/haskell3/) to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
     - Understand the operation of the monadic bind and join functions in the `Maybe`, `IO`, List and Function instances of Monad.
     - Be able to refactor monadic binds using [`do` notation](/monad/#do-notation).
     - [Loop with Monadic effects](/monad/#looping-with-monadic-effects).
 - title: Parser Combinators
-  url: /parsercombinators/
+  url: /parsercombinators
   description: |
     - Understand that a parser is a program which extracts information from a structured text file
     - Apply what we have learned about Haskell typeclasses and other functional programming concepts to create solutions to real-world problems

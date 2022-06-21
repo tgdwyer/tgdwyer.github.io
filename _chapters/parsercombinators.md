@@ -1,7 +1,6 @@
 ---
 layout: chapter
 title: "Parser Combinators"
-permalink: /parsercombinators/
 ---
 
 ## Learning Outcomes

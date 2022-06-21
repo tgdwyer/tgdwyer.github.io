@@ -1,7 +1,6 @@
 ---
 layout: chapter
 title: "FRP Asteroids"
-permalink: /asteroids/
 ---
 ## Introduction
 Functional Reactive Programming (specifically the Observable/Observer pattern) allows us to capture asynchronous actions like user interface events in streams.  These allow us to "linearise" the flow of control, avoid deeply nested loops, and process the stream with pure, referentially transparent functions.

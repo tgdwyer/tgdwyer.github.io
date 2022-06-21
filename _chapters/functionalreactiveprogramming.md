@@ -1,7 +1,6 @@
 ---
 layout: chapter
 title: "Functional Reactive Programming"
-permalink: /functionalreactiveprogramming/
 ---
 
 

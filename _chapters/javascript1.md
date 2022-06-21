@@ -1,7 +1,6 @@
 ---
 layout: chapter
 title: "JavaScript Introduction"
-permalink: /javascript1/
 ---
 ## Learning Outcomes
 

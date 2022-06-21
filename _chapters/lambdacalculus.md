@@ -1,7 +1,6 @@
 ---
 layout: chapter
 title: "Lambda Calculus"
-permalink: /lambdacalculus/
 ---
 ## Learning Outcomes
 

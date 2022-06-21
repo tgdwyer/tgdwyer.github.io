@@ -47,3 +47,4 @@ plugins:
 collections:
   chapters:
     output: true
+    permalink: /:name

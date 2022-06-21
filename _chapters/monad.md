@@ -1,7 +1,6 @@
 ---
 layout: chapter
 title: "Monad"
-permalink: /monad/
 ---
 ## Learning Outcomes
 

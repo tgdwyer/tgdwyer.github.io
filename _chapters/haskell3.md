@@ -1,7 +1,6 @@
 ---
 layout: chapter
 title: "Functor and Applicative"
-permalink: /haskell3/
 ---
 
 In this chapter we see how the Haskell language features we introduced in previous chapters (from function application rules based on [Lambda Calculus](/lambdacalculus) to [Typeclasses](/haskell2#typeclasses)) lead to highly flexible and refactorable code and powerful abstractions.

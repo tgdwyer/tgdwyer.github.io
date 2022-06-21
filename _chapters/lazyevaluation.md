@@ -1,7 +1,6 @@
 ---
 layout: chapter
 title: "Lazy Evaluation"
-permalink: /lazyevaluation/
 ---
 
 

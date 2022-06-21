@@ -1,7 +1,6 @@
 ---
 layout: chapter
 title: "Foldable and Traversible"
-permalink: /haskell4/
 ---
 
 In this chapter we will meet some more typeclasses that abstract common coding patterns for dealing with data.

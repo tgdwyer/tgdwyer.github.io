@@ -1,7 +1,6 @@
 ---
 layout: chapter
 title: "Functional Programming in JavaScript"
-permalink: /functionaljavascript/
 ---
 
 ### Learning Outcomes

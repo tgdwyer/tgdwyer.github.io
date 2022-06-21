@@ -1,7 +1,6 @@
 ---
 layout: chapter
 title: "Levels of Abstraction"
-permalink: /levelsofabstraction/
 ---
 
 ## Learning Outcomes

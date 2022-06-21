@@ -1,7 +1,6 @@
 ---
 layout: chapter
 title: "Creating and Running Haskell Programs"
-permalink: /haskell1/
 ---
 
 ## Learning Outcomes
