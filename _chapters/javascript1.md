@@ -20,7 +20,7 @@ permalink: /javascript1/
 
 In the late 90s the mood was right for a language that was small and simple and with executable files small enough to be distributed over the web.  Originally Java was meant to be that language but, while it quickly gained traction as a language for building general purpose applications and server-side middleware, it never really took off in the browser.  Something even simpler, and better integrated with the Document Object Model (DOM) of HTML pages was required to add basic interaction to web pages.
 
-Brendan Eich was hired by Netscape in 1995 to integrate a Scheme interpreter into their browser for this purpose.  No messy deployment of Java bytecode bundles - the browser would have been able to run Scheme scripts embedded directly into web pages.  This would have been awesome.  Unfortunately, for reasons that were largely political and marketing related, it was felt that something more superficially resembling Java was required.  Thus, Eich created a prototype scripting language in 2 weeks that eventually became JavaScript.  As we will see, it is syntactically familiar for Java developers.  Under the hood, however, it follows quite a different paradigm.
+Brendan Eich was hired by Netscape in 1995 to integrate a Scheme interpreter into their browser for this purpose.  No messy deployment of Java bytecode bundles -- the browser would have been able to run Scheme scripts embedded directly into web pages.  This would have been awesome.  Unfortunately, for reasons that were largely political and marketing related, it was felt that something more superficially resembling Java was required.  Thus, Eich created a prototype scripting language in 2 weeks that eventually became JavaScript.  As we will see, it is syntactically familiar for Java developers.  Under the hood, however, it follows quite a different paradigm.
 
 The fact it was initially rushed to market, the fact that browser makers seemingly had difficulty early on making standards-compliant implementations, and a couple of regrettable decisions at first regarding things like scoping semantics, meant that JavaScript developed something of a bad name.  It’s also possible that there was some inherent snobbiness amongst computer science types that, since JavaScript was not a compiled language, it must inevitably lead to armageddon.  Somehow, however, it survived and began the “web 2.0” phenomenon of what we now refer to as rich, client-side “web apps”.  It has also matured and, with the EcmaScript 6 (ES6) and up versions, has actually become quite an elegant little multi paradigm language.
 
@@ -104,16 +104,19 @@ You can limit the scope of a variable by declaring it inside a block of code del
  }
 ```
 Console prints `1` from the `console.log`:
+
 > 1
+
 But if we try to get the value of `x`:
 ```
 x
 ```
+
 > Uncaught ReferenceError: x is not defined
 
-The above console.log statement successfully output the value of x because it was inside the same scope (the same set of curly braces).  The subsequent error occurs because we tried to look at x outside the scope of its definition.  Variables declared outside of any scope are said to be “global” and will be visible to any code loaded on the same page and could clobber or be clobbered by other global definitions - so take care!
+The above console.log statement successfully output the value of x because it was inside the same scope (the same set of curly braces).  The subsequent error occurs because we tried to look at x outside the scope of its definition.  Variables declared outside of any scope are said to be “global” and will be visible to any code loaded on the same page and could clobber or be clobbered by other global definitions -- so take care!
 
-Be especially carefully to always declare variables with either `let` or `const` keywords.  If you omit these keywords, a variable will be created at the global scope even though it is inside a `{ ... }` delimited scope, like so:
+Be especially careful to always declare variables with either `let` or `const` keywords.  If you omit these keywords, a variable will be created at the global scope even though it is inside a `{ ... }` delimited scope, like so:
 
 ```javascript
  {
@@ -125,7 +128,7 @@ Be especially carefully to always declare variables with either `let` or `const`
 > 1
 
 ---------------------
-We are going to start to use a few operators, that may be familiar from C or Java, some are JS specific.  
+We are going to start to use a few operators that may be familiar from C or Java, some are JS specific.  
 Here’s a cheatsheet:
 
 <div class="cheatsheet" markdown="1">
@@ -185,12 +188,12 @@ Functions are declared with the `function` keyword.  You can give the function a
 ```javascript
 /**
 * define a function called "myFunction" with two parameters, x and y
-* which does some silly math, prints the value and returns the result
+* which does some silly math, prints something and returns the result
 */
 function myFunction(x, y) {
   let t = x + y; // t is mutable
   t += z;  // += adds the result of the expression on the right to the value of t
-  const result = t // semi colons are not essential (but can help to catch errors)
+  const result = t // semicolons are not essential (but can help to catch errors)
   console.log("hello world") // prints to the console
   return result; // returns the result to the caller
 }
@@ -297,7 +300,7 @@ sumTo(1000000)
 
 > Uncaught RangeError: Maximum call stack size exceeded
 
-However, functional languages (like Haskell) rely on recursion because they have no other way to create loops without mutable variables - so they must have a way to make this scale to real-world computations.  When a recursive function is written in a special way, such that the recursive call is in *tail position*, compilers are able to transform the recursion into a `while` loop with constant memory use - this is called *tail call optimisation*.
+However, functional languages (like Haskell) rely on recursion because they have no other way to create loops without mutable variables -- so they must have a way to make this scale to real-world computations.  When a recursive function is written in a special way, such that the recursive call is in *tail position*, compilers are able to transform the recursion into a `while` loop with constant memory use -- this is called *tail call optimisation*.
 
 Let's see what a *tail recursive* version of the `sumTo` function looks like:
 
@@ -425,7 +428,7 @@ point
 
 ## Arrays
 
-JavaScript has python-like syntax for array objects:
+JavaScript has Python-like syntax for array objects:
 
 ```javascript
 const a = [1,2,3]
@@ -459,7 +462,7 @@ Below, we see how [Anonymous Functions](/javascript1#anonymous-functions) can be
 
 ## Dynamic Typing
 
-The members of `myObj` are implicitly typed as `number` and `string` respectively, and as we see in the `console.log`, conversion to string happens automatically.  JavaScript is interpreted by a JavaScript engine rather than compiled into a static executable format.  Originally, this had implications on execution speed, as interpreting the program line by line at run time could be slow.  Modern JavaScript engines, however, feature Just in Time (JIT) compilation and optimisation - and speed can sometimes be comparable to execution of C++ code that is compiled in advance to native machine code.  However, another implication remains.  It is not type checked by a compiler.  Thus, type errors cause run-time failures rather than being caught at compile time.  JavaScript is dynamically typed in that types are associated with values rather than variables.  That is, a variable that is initially bound to one type, can later be rebound to a different type, e.g.:
+The members of `myObj` are implicitly typed as `number` and `string` respectively, and as we see in the `console.log`, conversion to string happens automatically.  JavaScript is interpreted by a JavaScript engine rather than compiled into a static executable format.  Originally, this had implications on execution speed, as interpreting the program line by line at run time could be slow.  Modern JavaScript engines, however, feature Just in Time (JIT) compilation and optimisation -- and speed can sometimes be comparable to execution of C++ code that is compiled in advance to native machine code.  However, another implication remains.  JavaScript is not type checked by a compiler.  Thus, type errors cause run-time failures rather than being caught at compile time.  JavaScript is dynamically typed in that types are associated with values rather than variables.  That is, a variable that is initially bound to one type, can later be rebound to a different type, e.g.:
 
 ```javascript
 let i = 123;    // a numeric literal has type number
@@ -470,7 +473,7 @@ The C compiler would spit the dummy when trying to reassign `i` with a value of 
 
 ## Functions are Objects
 
-The nifty thing about JavaScript - one Scheme’ish thing that presumably survived from Eich’s original plan - is that functions are also just objects.  That is, given the following function:
+The nifty thing about JavaScript -- one Scheme’ish thing that presumably survived from Eich’s original plan -- is that functions are also just objects.  That is, given the following function:
 
 ```javascript
 function sayHello(person) {
@@ -490,7 +493,7 @@ hi('tim')
 
 > "hello tim"
 
-(Note: The original JavaScript syntax for declaring a variable used the `var` keyword.  However, the scoping of variables declared in this way was strange for people familiar with C and Java scoping rules, and caused much angst.  It has been fixed since ES6 with the `let` and `const` keywords, we prefer these to `var`.)
+(Note: The original JavaScript syntax for declaring a variable used the `var` keyword.  However, the scoping of variables declared in this way was strange for people familiar with C and Java scoping rules, and caused much angst.  It has been fixed since ES6 with the `let` and `const` keywords; we prefer these to `var`.)
 
 ## Anonymous Functions
 
@@ -502,7 +505,7 @@ const hi = function(person) {
 }
 ```
 
-or to pass as a parameter into another function, for example, `Array` objects have a `forEach` member that expects a function as an argument, which is then applied to every member of the array:
+or to pass as a parameter into another function. For example, `Array` objects have a `forEach` member that expects a function as an argument, which is then applied to every member of the array:
 
 ```javascript
 ['tim', 'sally', 'anne'].forEach(function(person) { 
@@ -578,7 +581,7 @@ We can use multi-parameter anonymous functions with another nifty method on `Arr
 
 > 32
 
-The `reduce` method applies a function to each of the elements in the array, in order to compute an aggregated value for the whole array.  The nature of the aggregate depends on the function you pass in.  Here we just sum the elements in the array.  The function we pass in has two parameters, the second is the array element (which we refer to here as `x`), the first parameter `accumulator` is either:
+The `reduce` method applies a function to each of the elements in the array in order to compute an aggregated value for the whole array.  The nature of the aggregate depends on the function you pass in.  Here we just sum the elements in the array.  The function we pass in has two parameters, the second is the array element (which we refer to here as `x`), the first parameter `accumulator` is either:
 
 * the second argument to `reduce` (which in our case is 0), if this is the first call to the function,
 * or, for every other call, the result returned by the previous call to the function.
@@ -620,7 +623,7 @@ const wordCount = (array) => array.reduce(
     {}
 )
 ```
-Here the `accumulator` is an object which is initially empty.  For each word in the list the word count is either updated or created in the `accumulator` object.  Note however that this implementation is not *pure*, the aggregator function modifies `accumulator` in place before returning it.
+Here the `accumulator` is an object which is initially empty.  For each word in the list the word count is either updated or created in the `accumulator` object.  Note however that this implementation is not *pure*; the aggregator function modifies `accumulator` in place before returning it.
 
 ```javascript
 wordCount(['tim', 'sally', 'tim'])
@@ -632,7 +635,7 @@ wordCount(['tim', 'sally', 'tim'])
 
 ## Array Cheatsheet
 
-In the following, the annotations beginning with `:` after each parameter describe its type and again at the end of each function to describe its return type.  The array `a` has elements of type `U`, and `U=>V` is the type of a function with input parameter type `U` and return type `V`
+In the following, the annotations beginning with `:` describe the type of each parameter and the return type of the function.  The array `a` has elements of type `U`, and `U=>V` is the type of a function with input parameter type `U` and return type `V`
 (Note: these are not correct [TS annotations](/typescript1), but an informal “shorthand”)
 
 
@@ -690,7 +693,7 @@ addNine(10)
 
 > 19
 
-In the above example, the parameter `x` of the `add` function is captured by the anonymous function that is returned, which forms a closure.  Thus, the binding of `x` to a value *persists* beyond the scope of the `add` function itself.  Effectively, we have used the `add` function to create a new function: `y=>y+9` - without actually writing the code ourselves.
+In the above example, the parameter `x` of the `add` function is captured by the anonymous function that is returned, which forms a closure.  Thus, the binding of `x` to a value *persists* beyond the scope of the `add` function itself.  Effectively, we have used the `add` function to create a new function: `y=>y+9` -- without actually writing the code ourselves.
 
 ```javascript
 addNine(1)
@@ -789,7 +792,7 @@ Array.prototype.range =
 
 > [3,4,5,6,7,8]
 
-Of course, if you do something like this in your JS library, and it pollutes the global namespace, and one day EcmaScript 9 introduces an actual `range` function with slightly different semantics, and someone else goes to use the `[].range` function expecting the official semantics - well, you may lose a friend or two.
+Of course, if you do something like this in your JS library, and it pollutes the global namespace, and one day EcmaScript 9 introduces an actual `range` function with slightly different semantics, and someone else goes to use the `[].range` function expecting the official semantics -- well, you may lose a friend or two.
 
 Some notes about this implementation of range:
 - Although the `Array(n)` function allocates space for n elements, the result is still "empty" so `fill()` is necessary to actually create the entries.
@@ -803,7 +806,7 @@ Some notes about this implementation of range:
 - Amend the range function above to handle negative values in from or to, and add some calculation so that the array is size `to - from` from the start, eliminating the need for `filter`.
 - Hack a sum function onto the `Array.prototype` (you’ll need to use an old style anonymous function to access the array through `this`).
 - Why might you lose friends doing this kind of thing to built-in types?
-- We are going to be dealing with linked-list like data structures a lot in this course.  Implement a linked list using javascript objects as simply as you can, and create some functions for working with it, like length and map.
+- We are going to be dealing with linked-list like data structures a lot in this course.  Implement a linked list using JavaScript objects as simply as you can, and create some functions for working with it, like length and map.
 
 ---------------------
 
@@ -899,7 +902,7 @@ Another type of polymorphism which is key to strongly typed functional programmi
 
 ## Dependency Injection
 
-It’s useful to compare the above style of polymorphism, to a functional approach to dependency injection:
+It’s useful to compare the above style of polymorphism to a functional approach to dependency injection:
 
 ```javascript
 class Person {
