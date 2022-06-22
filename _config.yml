@@ -17,8 +17,6 @@ title: Tim's code stuff
 email: tgdwyer@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Examples and tutorials for various programming paradigms.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://tgdwyer.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: immersivecola
 github_username:  tgdwyer
 # Google Analytics
