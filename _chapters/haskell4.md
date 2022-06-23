@@ -1,7 +1,6 @@
 ---
-layout: page
+layout: chapter
 title: "Foldable and Traversible"
-permalink: /haskell4/
 ---
 
 In this chapter we will meet some more typeclasses that abstract common coding patterns for dealing with data.
@@ -9,9 +8,9 @@ In this chapter we will meet some more typeclasses that abstract common coding p
 ## Learning Outcomes
 
 - Understand that the "reduce" function we met for arrays and other data structures in JavaScript is referred to as ["folding"](/haskell4/#folds) in Haskell and there are two variants `foldl` and `foldr` for left and right folds respectively.
-- Understand that the [Monoid](/haskell4#monoid) typeclass for things that have a predefined rule for aggregation (concatenation), making containers of `Monoid` values trivial to `fold`
-- Understand that [Foldable](/haskell4#foldable) generalises containers that may be folded (or reduced) into values
-- Understand that [Traversable](/haskell4#traversable) generalises containers over which we can traverse applying a function with an Applicative effect
+- Understand that the [Monoid](#monoid) typeclass for things that have a predefined rule for aggregation (concatenation), making containers of `Monoid` values trivial to `fold`
+- Understand that [Foldable](#foldable) generalises containers that may be folded (or reduced) into values
+- Understand that [Traversable](#traversable) generalises containers over which we can traverse applying a function with an Applicative effect
 
 ## Folds
 
@@ -30,7 +29,7 @@ foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b
 
 In the following the examples the `Foldable t` instance is a list. Here’s how we right-fold over a list to sum its elements:
 
-![Left Fold](/haskell4/rightfold.png)
+![Left Fold](/assets/images/chapterImages/haskell4/rightFold.png)
 
 While the lambda above makes it explicit which parameter is the accumulator and which is the list element, this is a classic example where point-free coding style makes this expression very succinct:
 
@@ -42,7 +41,7 @@ Prelude> foldr (+) 0 [5,8,3,1,7,6,2]
 
 Here’s a left fold with a picture of the fold:
 
-![Left Fold](/haskell4/leftfold.png)
+![Left Fold](/assets/images/chapterImages/haskell4/leftFold.png)
 
 Note that since the `(+)` operator is commutative (`a+b=b+a`), it `foldr` and `foldl` return the same result.  For functions that are not commutative, however, this is not necessarily the case.
 
@@ -190,7 +189,7 @@ data Tree a = Empty
 tree = Node (Node (Leaf 1) 2 (Leaf 3)) 4 (Node (Leaf 5) 6 (Leaf 7))
 ```
 
-<image src="/haskell4/tree.png"></image>
+![Tree](/assets/images/chapterImages/haskell4/tree.png)
 
 We make this type of binary tree an instance of foldable by implementing either of the minimum defining functions, `foldMap` or `foldr`:
 
@@ -263,7 +262,7 @@ instance Traversable ((,) a) -- Defined in `Data.Traversable'
 
 The following map shows how all of these typeclasses are starting to come together to offer some real power:
 
-![Traversable Typeclasses](/haskell4/traversabletypeclasses.png)
+![Traversable Typeclasses](/assets/images/chapterImages/haskell4/traversableTypeClasses.png)
 
 So what does the traverse function do?  By way of example, remember our safe modulo function this we used to experiment with [Functor](/haskell3/#functor):
 ```haskell

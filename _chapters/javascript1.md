@@ -1,20 +1,19 @@
 ---
-layout: page
+layout: chapter
 title: "JavaScript Introduction"
-permalink: /javascript1/
 ---
 ## Learning Outcomes
 
 - Understand and use basic JavaScript coding concepts and features
-- Understand the difference between [mutable and immutable (const) variables](/javascript1#declaring-variables)
-- Explain the relationship between javascript [functions](/javascript1#functions) and [objects](/javascript1#objects)
-- Understand that the scope of variables is limited to [delineated code blocks](/javascript1/variable-scope) and within [functions](/javascript1#functions)
-- Understand that a [closure](/javascript1#closures) captures variables referenced within its scope
-- Create and apply [anonymous functions](/javascript1#anonymous-functions) to fluent style code
-- Compare [arrow functions](/javascript1#arrow-functions) and regular function syntax
-- Explain JavaScript’s [prototype mechanism](/javascript1#prototype-class-mechanism) for creating classes from functions
-- Create [ES6 style classes](/javascript1#ecmascript-6-class-syntax) with constructors and getters
-- Compare object oriented [polymorphism](/javascript1#polymorphism) to [dependency injection](/javascript1#dependency-injection) through functions
+- Understand the difference between [mutable and immutable (const) variables](#declaring-variables)
+- Explain the relationship between javascript [functions](#functions) and [objects](#objects)
+- Understand that the scope of variables is limited to [delineated code blocks](/javascript1/variable-scope) and within [functions](#functions)
+- Understand that a [closure](#closures) captures variables referenced within its scope
+- Create and apply [anonymous functions](#anonymous-functions) to fluent style code
+- Compare [arrow functions](#arrow-functions) and regular function syntax
+- Explain JavaScript’s [prototype mechanism](#prototype-class-mechanism) for creating classes from functions
+- Create [ES6 style classes](#ecmascript-6-class-syntax) with constructors and getters
+- Compare object oriented [polymorphism](#polymorphism) to [dependency injection](#dependency-injection) through functions
 
 ## Introduction
 
@@ -458,7 +457,7 @@ z
 
 > 3
 
-Below, we see how [Anonymous Functions](/javascript1#anonymous-functions) can be applied to transform arrays, and a [cheatsheet summary](/javascript1#array-cheatsheet) for further functions for working with arrays.
+Below, we see how [Anonymous Functions](#anonymous-functions) can be applied to transform arrays, and a [cheatsheet summary](#array-cheatsheet) for further functions for working with arrays.
 
 ## Dynamic Typing
 
@@ -718,7 +717,7 @@ plus(1,2)
 
 The `add` function above is a [Curried](/higherorderfunctions#curried-functions) version of the `plus` function.
 
-As another example, consider a curried wrapper for our `sumTo` from [before](/javascript1#functions-as-parameters-to-other-functions):
+As another example, consider a curried wrapper for our `sumTo` from [before](#functions-as-parameters-to-other-functions):
 
 ```javascript
  function sumOf(f) {

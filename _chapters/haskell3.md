@@ -1,17 +1,16 @@
 ---
-layout: page
+layout: chapter
 title: "Functor and Applicative"
-permalink: /haskell3/
 ---
 
 In this chapter we see how the Haskell language features we introduced in previous chapters (from function application rules based on [Lambda Calculus](/lambdacalculus) to [Typeclasses](/haskell2#typeclasses)) lead to highly flexible and refactorable code and powerful abstractions.
 
 ## Learning Outcomes
 
-- Understand how [eta-conversion](/haskell3#eta-conversion), [operator sectioning](/haskell3#operator-sectioning) and [compose](/haskell3#compose), together provide the ability to transform code to achieve a composable [point free](/haskell3#point-free-code) form and use this technique to refactor code.
-- Understand that in Haskell the ability to map over container structures is generalised into the [Functor](/haskell3#functor) typeclass, such that any type that is an instance of Functor has the `fmap` or `(<$>)` operation.
-- Understand that the [Applicative Typeclass](/haskell3#applicative) extends Functor such that containers of functions may be applied (using the `(<*>)` operator) to containers of values.
-- Understand that Functor and Applicative allow powerful composable types through exploring a [simple applicative functor for parsing](/haskell3#a-simple-applicative-functor-for-parsing).
+- Understand how [eta-conversion](#eta-conversion), [operator sectioning](#operator-sectioning) and [compose](#compose), together provide the ability to transform code to achieve a composable [point free](#point-free-code) form and use this technique to refactor code.
+- Understand that in Haskell the ability to map over container structures is generalised into the [Functor](#functor) typeclass, such that any type that is an instance of Functor has the `fmap` or `(<$>)` operation.
+- Understand that the [Applicative Typeclass](#applicative) extends Functor such that containers of functions may be applied (using the `(<*>)` operator) to containers of values.
+- Understand that Functor and Applicative allow powerful composable types through exploring a [simple applicative functor for parsing](#a-simple-applicative-functor-for-parsing).
 
 <div class="cheatsheet" markdown="1">
 
@@ -95,13 +94,13 @@ Now we can use the non-infix form of (>):
 lessThan n = filter ((>) n)
 ```
 
-And we see from [our definition of compose](/haskell3#compose), that if we were to replace filter by `f`, `(>)` by `g`, and `n` by `x`, we would have exactly the definition of `(.)`.  Thus,
+And we see from [our definition of compose](#compose), that if we were to replace filter by `f`, `(>)` by `g`, and `n` by `x`, we would have exactly the definition of `(.)`.  Thus,
 
 ```haskell
 lessThan n = (filter . (>)) n
 ```
 
-And now we can apply [eta-conversion](/haskell3#eta-conversion):
+And now we can apply [eta-conversion](#eta-conversion):
 
 ```haskell
 lessThan = filter . (>)
@@ -423,7 +422,7 @@ Just 5
 
 Here's a little visual summary of Applicative and lifting (box metaphor inspired by [adit.io](http://www.adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html)):
 
-![Applicative Visual Summary](/haskell3/applicativepicture.png)
+![Applicative Visual Summary](/assets/images/chapterImages/haskell3/applicativePicture.png)
 
 It’s also useful to lift binary data constructors over two Applicative values, e.g. for tuples:
 ```haskell

@@ -1,3 +1,26 @@
 .cheatsheet {
     background-color: #e8e8e8;
   }
+
+.post-header {
+  &, h1 {
+    margin-bottom: 0;
+  }
+}
+
+#pagination {
+  width: 100%;
+  display: flex;
+
+  a {
+    flex: 50%;
+
+    &#left {
+
+    }
+
+    &#right {
+      text-align: right;
+    }
+  }
+}

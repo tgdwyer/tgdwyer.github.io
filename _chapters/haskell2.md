@@ -1,16 +1,15 @@
 ---
-layout: page
+layout: chapter
 title: "Data Types and Type Classes"
-permalink: /haskell2/
 ---
 
 
 ## Learning Outcomes
 
-- Define data structures using Haskell's [Algebraic Data Types](/haskell2#algebraic-data-types) and use [pattern matching](/haskell2#pattern-matching) to define functions that handle each of the possible instances
-- Use the alternate [record syntax](/haskell2#record-syntax) to define data structures with named fields
-- Understand that Haskell [type classes](/haskell2#typeclasses) are similar to TypeScript interfaces in providing a definition for the set of functions that must be available for instances of those type classes and that typeclasses can extend upon one another to create rich hierarchies
-- Understand that the [Maybe](/haskell2#maybe) type provides an elegant way to handle *partial functions*.
+- Define data structures using Haskell's [Algebraic Data Types](#algebraic-data-types) and use [pattern matching](#pattern-matching) to define functions that handle each of the possible instances
+- Use the alternate [record syntax](#record-syntax) to define data structures with named fields
+- Understand that Haskell [type classes](#typeclasses) are similar to TypeScript interfaces in providing a definition for the set of functions that must be available for instances of those type classes and that typeclasses can extend upon one another to create rich hierarchies
+- Understand that the [Maybe](#maybe) type provides an elegant way to handle *partial functions*.
 
 ## Algebraic Data Types
 
@@ -62,19 +61,19 @@ length [] = 0
 length (_:rest) = 1 + length rest
 ```
 
-The following visual summary shows pair data structures with accessor functions `fst` and `sec` defined using [Record Syntax](/haskell2#record-syntax) with varying degrees of type flexibility, and compared with the equivalent [typescript generic notation](/typescript1#generic-types):
+The following visual summary shows pair data structures with accessor functions `fst` and `sec` defined using [Record Syntax](#record-syntax) with varying degrees of type flexibility, and compared with the equivalent [typescript generic notation](/typescript1#generic-types):
 
 - Hard-coded for `Int` pairs only
 - with one type parameter (by convention called `a` in Haskell, and `T` in TypeScript)
 - with two type parameters such that the two elements may be different types
 
-![Polymorphism Summary](/haskell2/haskellpolymorphism.png)
+![Polymorphism Summary](/assets/images/chapterImages/haskell2/haskellPolymorphism.png)
 
 ## Type Kinds
 
 GHCi allows you to use the `:kind` (or `:k`) command to interrogate the *Kind* of types - think of it as "meta information" about types and their type parameters.  The kind syntax indicates the *arity* or number of type parameters a type has.  Note that it is like the syntax for function types (with the `->`), you can think of it as information about what is required in terms of type parameters to instantiate the type.  If the constructor takes no type parameters the kind is just `*`, (it returns a type), `*->*` if it takes one type parameter, `*->*->*` for two type parameters and so on.
 
-![Polymorphism Summary](/haskell2/kinds.png)
+![Polymorphism Summary](/assets/images/chapterImages/haskell2/kinds.png)
 
 Another sort of "kind" are for [type classes](#typeclasses) which we will introduce more properly in a moment.
 For example, the "kind" for the `Ord` type class (the class of things that are Orderable and which we came across in [our simple  implementation of quicksort](/haskell1#functional-programming-in-haskell-versus-javascript)) is:
@@ -197,7 +196,7 @@ data Ordering = LT | EQ | GT
 
 A custom data type can be made an instance of `Ord` by implementing either `compare` or `<=`.  The definition `Eq a => Ord a` means that anything that is an instance of `Ord` must also be an instance of `Eq`.   Thus, typeclasses can build upon each other into rich hierarchies:
 
-![Numeric Typeclasses](/haskell2/numerictypeclasses.png)
+![Numeric Typeclasses](/assets/images/chapterImages/haskell2/numericTypeClasses.png)
 
 ## Creating custom instances of type classes
 
@@ -243,7 +242,7 @@ data Maybe a = Nothing | Just a
 
 All the functions we have considered so far are assumed to be *total*.  That is, the function provides a mapping for every element in the input type to an element in the output type.  `Maybe` allows us to have a sensible return-type for *partial* functions, that is, functions which do not have a mapping for every input:
 
-![Total and Partial Functions](/haskell2/partialfunctions.png)
+![Total and Partial Functions](/assets/images/chapterImages/haskell2/partialFunctions.png)
 
 For example, the built-in lookup function can be used to search a list of key-value pairs, and fail gracefully by returning `Nothing` if there is no matching key.
 

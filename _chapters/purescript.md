@@ -1,7 +1,6 @@
 ---
-layout: page
+layout: chapter
 title: "From JavaScript to Haskell (via PureScript)"
-permalink: /purescript/
 ---
 
 

@@ -1,0 +1,8 @@
+---
+layout: home
+title: "Notes on Programming Paradigms"
+---
+{% for chapter in site.data.chapters %}
+    <h2><a href="{{ chapter.url | relative_url }}">{{ chapter.title }}</a></h2>
+    {{ chapter.description | markdownify }}
+{% endfor %}

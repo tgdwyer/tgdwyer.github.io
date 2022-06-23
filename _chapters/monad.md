@@ -1,14 +1,13 @@
 ---
-layout: page
+layout: chapter
 title: "Monad"
-permalink: /monad/
 ---
 ## Learning Outcomes
 
 - Understand that Monad extends [Functor and Applicative](/haskell3/) to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
 - Understand the operation of the monadic bind and join functions in the `Maybe`, `IO`, List and Function instances of Monad.
-- Be able to refactor monadic binds using [`do` notation](/monad/#do-notation).
-- [Loop with Monadic effects](/monad/#looping-with-monadic-effects).
+- Be able to refactor monadic binds using [`do` notation](#do-notation).
+- [Loop with Monadic effects](#looping-with-monadic-effects).
 
 ## Introduction
 
@@ -79,11 +78,11 @@ So the bind function `(>>=)` (and equally its flipped version `(=<<)`) gives us 
 
 As an example we'll consider computation using the `Maybe` type, which we said is useful for [partial functions](/haskell2/#maybe), that is functions which are not sensibly defined over all of their inputs.  A more complex example of such a function than we have seen before is the [quadratic formula](https://en.wikipedia.org/wiki/Quadratic_formula) which, for quadratic functions of the form:
 
-<image src="/haskell4/quadratic.png" width="25%"></image>
+![quadratic](/assets/images/chapterImages/haskell4/quadratic.png)
 
 determines two roots as follows:
 
-<image src="/haskell4/quadroots.png" width="75%"></image>
+![quadroots](/assets/images/chapterImages/haskell4/quadroots.png)
 
 This may fail in two ways:
  

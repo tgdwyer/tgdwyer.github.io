@@ -17,8 +17,6 @@ title: Tim's code stuff
 email: tgdwyer@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Examples and tutorials for various programming paradigms.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://tgdwyer.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: immersivecola
 github_username:  tgdwyer
 # Google Analytics
@@ -27,8 +25,10 @@ google_analytics: UA-159840333-1
 # Build settings
 markdown: kramdown
 theme: minima
-# plugins:
-#   - jekyll-feed
+
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
@@ -45,20 +45,4 @@ theme: minima
 collections:
   chapters:
     output: true
-    order:
-      - levelsofabstraction.md
-      - javascript1.md
-      - functionaljavascript.md
-      - typescript1.md
-      - higherorderfunctions.md
-      - lazyevaluation.md
-      - functionalreactiveprogramming.md
-      - asteroids.md
-      - lambdacalculus.md
-      - purescript.md
-      - haskell1.md
-      - haskell2.md
-      - haskell3.md
-      - parsercombinators.md
-      - assignment2_2020.md
-
+    permalink: /:name

@@ -1,7 +1,6 @@
 ---
-layout: page
+layout: chapter
 title: "FIT2102 Assignment 2: Gin Rummy"
-permalink: /assignment2_2020/
 ---
 # FIT2102 Assignment 2: Gin Rummy
 

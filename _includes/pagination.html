@@ -1,0 +1,22 @@
+{% for chapter in site.collections %}
+  {% if chapter.url == page.url %}
+    {{ forloop.index }}
+  {% endif %}
+{% endfor %}
+
+<div id="pagination">
+  {% for chapter in site.data.chapters %}
+    {% if chapter.url == page.url %}
+      {% unless forloop.first %}
+        {% assign prev_index = forloop.index | minus: 2 %}
+        {% assign previous_chapter = site.data.chapters[prev_index] %}
+        <a id="left" href="{{ previous_chapter.url | relative_url }}">&lt; {{ previous_chapter.title }}</a>
+      {% endunless %}
+      {% unless forloop.last %}
+        {% assign next_index = forloop.index %}
+        {% assign next_chapter = site.data.chapters[next_index] %}
+        <a id="right" href="{{ next_chapter.url | relative_url }}">{{ next_chapter.title }} &gt;</a>
+      {% endunless %}
+    {% endif %}
+  {% endfor %}
+</div>
