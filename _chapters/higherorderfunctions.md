@@ -46,7 +46,7 @@ add9(1)
 >12  
 >10
 
-Functions that can create new functions gives rise to all sorts of emergent power, such as the ability to customise, compose and combine functions in very useful ways.  We will see this later when we look at [function composition](/higherorderfunctions#composition) and [combinators](/higherorderfunctions#combinators).
+Functions that can create new functions give rise to all sorts of emergent power, such as the ability to customise, compose and combine functions in very useful ways.  We will see this later when we look at [function composition](/higherorderfunctions#composition) and [combinators](/higherorderfunctions#combinators).
 
 ## Curried Functions
 
@@ -123,7 +123,7 @@ const circleArea = cylVol(1)
 ```
 
 Such functions are called *curried functions* and they are named after a mathematician named Haskell Curry.  This gives you a hint as to what functions look like in the Haskell programming language and its variants.
-We can also create a function to make curried versions of conventional multiparameter javascript functions:
+We can also create a function to make curried versions of conventional multiparameter JavaScript functions:
 
 ```typescript
 function curry2<T,U,V>(f: (x:T,y:U)): V {
