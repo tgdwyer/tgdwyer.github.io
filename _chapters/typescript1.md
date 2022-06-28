@@ -251,7 +251,7 @@ Other parts of my program might work with richer interfaces for the student data
 
 ## Generic Types
 
-Sometimes when we do marking we get lists of students indexed by their Student Number (a `number`).  Sometimes its by email address (a `string`).  You can see the concept of student numbers probably predates the existence of student emails (yes, universities often predate the internet!).
+Sometimes when we do marking we get lists of students indexed by their Student Number (a `number`).  Sometimes it's by email address (a `string`).  You can see the concept of student numbers probably predates the existence of student emails (yes, universities often predate the internet!).
 What if one day our systems will use yet another identifier?  We can future proof a program that works with lists of students by deferring the decision of the particular type of the id:
 
 ```typescript
@@ -443,7 +443,7 @@ const list = new ListNode(1, new ListNode(2, new ListNode(3)));
 - Add methods to your ```List<T>``` class for:
 
 ```typescript
-forEach(f: (_:T)=> void): List<T>
+forEach(f: (_:T)=> void): void
 filter(f: (_:T)=> boolean): List<T>
 map<V>(f: (_:T)=> V): List<V>
 reduce(f: (accumulator:V, t:T)=> V, initialValue: V): V
