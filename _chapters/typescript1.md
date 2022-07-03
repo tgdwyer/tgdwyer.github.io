@@ -18,7 +18,7 @@ As the Web 2.0 revolution hit in 2000s web apps built on JavaScript grew increas
 
 Part of the appeal of JavaScript is that the source code being the artefact that runs directly in a production environment gives an immediacy and comprehensibility to software deployment.  However, in recent years more and more tools have been developed that introduce a build-chain into the web development stack.  Examples include: minifiers, which compact and obfuscate JavaScript code before it is deployed; bundlers, which merge different JavaScript files and libraries into a single file to (again) simplify deployment; and also, new languages that compile to JavaScript, which seek to fix older versions of the JavaScript language’s shortcomings and compatibility issues in different browsers.  Examples of the latter include CoffeeScript, ClojureScript and (more recently) PureScript (which we will visit later in this unit).  Right now, however, we will take a closer look at another language in this family called TypeScript.  See [the official TypeScript documenation](https://www.typescriptlang.org/docs/) for some tutorials and deeper reference.
 
-TypeScript is interesting because it forms a relatively minimal augmentation, or superset, of EcmaScript syntax that simply adds type annotations.  For the most part, the compilation process simply performs validation on the declared types and strips away the type annotations rendering just the legal JavaScript ready for deployment.  This lightweight compilation into a language with a similar level of abstraction to the source is known also known as transpiling (as opposed to C++ or Java where the object code is much closer to the machine execution model).
+TypeScript is interesting because it forms a relatively minimal augmentation, or superset, of ECMAScript syntax that simply adds type annotations.  For the most part, the compilation process simply performs validation on the declared types and strips away the type annotations rendering just the legal JavaScript ready for deployment.  This lightweight compilation into a language with a similar level of abstraction to the source is known also known as transpiling (as opposed to C++ or Java where the object code is much closer to the machine execution model).
 
 The following is intended as a minimally sufficient intro to TypeScript features such that we can type some fairly rich data structures and higher-order functions.
 An excellent free resource for learning the TypeScript language in depth is the [TypeScript Deep-dive book](https://basarat.gitbooks.io/typescript/content/docs/getting-started.html).  
@@ -40,16 +40,16 @@ let i = 123;
 i = 'hello!';
 ```
 
-> [TS compiler says] Type '"hello!"' is not assignable to type 'number'.
+> [TS compiler says] Type 'string' is not assignable to type 'number'.
 
 
 <div class="cheatsheet" markdown="1">
 
 ## Type Annotations Cheat Sheet
 
-(Each of these features is described in more detail in subsequent sections - this is just a summary and roadmap)
+(Each of these features is described in more detail in subsequent sections -- this is just a summary and roadmap)
 
-Type annotation begins with ```:``` and goes after the variable name, but before any assignment. 
+A type annotation begins with ```:``` and goes after the variable name, but before any assignment. 
 Primitive types include ```number```, ```string```, ```boolean```.
 
 ```typescript
@@ -166,7 +166,7 @@ setLeftPadding(headings[0],100)
 
 > Argument of type '100' is not assignable to parameter of type 'string'.ts(2345)
 
-In JavaScript, the interpreter would silently convert the number to a string and set ```padding-left:100``` - which wouldn't actually cause the element to be indented because CSS expects ```px``` (short for pixel) at the end of the value.
+In JavaScript, the interpreter would silently convert the number to a string and set ```padding-left:100``` -- which wouldn't actually cause the element to be indented because CSS expects ```px``` (short for pixel) at the end of the value.
 
 Potentially worse, I might forget to add the index after headings:
 
@@ -180,12 +180,12 @@ This would cause a run-time error in the browser:
 
 This is because headings is not an HTML Element but an HTMLCollection, with no method ```setAttribute```.  Note that if I try to debug it, the error will be reported from a line of code inside the definition of ```setLeftPadding```.  I don't know if the problem is in the function itself or in my call.
 
-The same call inside a typescript program would trigger a compile-time error.  In a fancy editor with compiler services like VSCode I'd know about it immediately because the call would get a red squiggly underline immediately after I type it, I can hover over the squiggly to get a detailed error message, and certainly, the generated broken JavaScript would never make it into production.
+The same call inside a TypeScript program would trigger a compile-time error.  In a fancy editor with compiler services like VSCode I'd know about it immediately because the call would get a red squiggly underline immediately after I type it, I can hover over the squiggly to get a detailed error message, and certainly, the generated broken JavaScript would never make it into production.
 ![Compile Error Screenshot](/assets/images/chapterImages/typescript1/setLeftPaddingTypeScript.png)
 
 ## Union Types
 
-Above we see how typescript prevents a variable from being assigned values of different types.
+Above we see how TypeScript prevents a variable from being assigned values of different types.
 However, it is a fairly common practice in JavaScript to implicitly create overloaded functions by accepting arguments of different types and resolving them at run-time.  
 
 The following will append the "px" after the value if a number is passed in, or simply use the given string (assuming the user added their own "px") otherwise.
@@ -199,7 +199,7 @@ function setLeftPadding(elem, value) {
 }
 ```
 
-So this function accepts either a string or a number for the ```value``` parameter - but to find that out we need to dig into the code.  The "Union Type" facility in typescript allows us to specify the multiple options directly in the function definition, with a list of types separated by "```|```":
+So this function accepts either a string or a number for the ```value``` parameter -- but to find that out we need to dig into the code.  The "Union Type" facility in typescript allows us to specify the multiple options directly in the function definition, with a list of types separated by "```|```":
 
 ```typescript
 function setLeftPadding(elem: Element, value: string | number) {...
@@ -222,7 +222,7 @@ The TypeScript typechecker also knows about typeof expressions (as used above) a
 
 ## Interfaces
 
-In typescript I can declare an ```interface``` which defines the set of properties and their types, that I expect to be available for certain objects.
+In TypeScript I can declare an ```interface``` which defines the set of properties and their types, that I expect to be available for certain objects.
 
 For example, when tallying scores at the end of semester, I will need to work with collections of students that have a name, assignment and exam marks.  There might even be some special cases which require mark adjustments, the details of which I don't particularly care about but that I will need to be able to access, e.g. through a function particular to that student.  The student objects would need to provide an interface that looks like this:
 
@@ -235,7 +235,7 @@ interface Student {
 }
 ```
 
-Note that this interface guarantees that there is a function returning a number called ```markAdjustment``` available on any object implementing the ```Student``` interface, but it says nothing about how the adjustment is calculated.  Software engineers like to talk about [Separation of Concerns (SoC)](https://en.wikipedia.org/wiki/Separation_of_concerns).  To me, the implementation of markAdjustment is Someone Else's Problem (SEP).
+Note that this interface guarantees that there is a function returning a number called ```markAdjustment``` available on any object implementing the ```Student``` interface, but it says nothing about how the adjustment is calculated.  Software engineers like to talk about [Separation of Concerns (SoC)](https://en.wikipedia.org/wiki/Separation_of_concerns).  To me, the implementation of `markAdjustment` is Someone Else's Problem (SEP).
 
 Now I can define functions which work with students, for example to calculate the average score for the class:
 
@@ -251,7 +251,7 @@ Other parts of my program might work with richer interfaces for the student data
 
 ## Generic Types
 
-Sometimes when we do marking we get lists of students indexed by their Student Number (a `number`).  Sometimes its by email address (a `string`).  You can see the concept of student numbers probably predates the existence of student emails (yes, universities often predate the internet!).
+Sometimes when we do marking we get lists of students indexed by their Student Number (a `number`).  Sometimes it's by email address (a `string`).  You can see the concept of student numbers probably predates the existence of student emails (yes, universities often predate the internet!).
 What if one day our systems will use yet another identifier?  We can future proof a program that works with lists of students by deferring the decision of the particular type of the id:
 
 ```typescript
@@ -538,4 +538,4 @@ value = <any>"hello"
 // no error.
 ```
 
-While leaving off type annotations and forcing types with any may be convenient, for example, to quickly port legacy JavaScript into a TypeScript program, generally speaking it is good practice to use types wherever possible, and can actually be enforced with the ```--noImplicitAny``` compiler flag.  The compiler’s type checker is a sophisticated constraint satisfaction system and the correctness checks it applies are usually worth the extra effort - especially in modern compilers like TypeScript where type inference does most of the work for you.
+While leaving off type annotations and forcing types with any may be convenient, for example, to quickly port legacy JavaScript into a TypeScript program, generally speaking it is good practice to use types wherever possible, and can actually be enforced with the ```--noImplicitAny``` compiler flag.  The compiler’s type checker is a sophisticated constraint satisfaction system and the correctness checks it applies are usually worth the extra effort -- especially in modern compilers like TypeScript where type inference does most of the work for you.
