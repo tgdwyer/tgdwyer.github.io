@@ -295,10 +295,10 @@ We can add type parameters to interfaces, ES6 classes, type aliases, and also fu
 ```javascript
 function binarySearch1(arr:number[], key:number): number {
     function bs(start:number, end:number): number {
-        if(start > end) return -1;
+        if(start >= end) return -1;
         const mid = Math.floor((start + end) / 2);
         if(key > arr[mid]) return bs(mid + 1, end);
-        if(key < arr[mid]) return bs(start, mid - 1);
+        if(key < arr[mid]) return bs(start, mid);
         return mid;
     }
     return bs(0,arr.length);
@@ -320,10 +320,10 @@ If we parameterise the type of elements in the array, we can search on sorted ar
 ```javascript
 function binarySearch2<T>(arr:T[], key:T): number {
     function bs(start:number, end:number): number {
-        if(start > end) return -1;
+        if(start >= end) return -1;
         const mid = Math.floor((start + end) / 2);
         if(key > arr[mid]) return bs(mid + 1, end);
-        if(key < arr[mid]) return bs(start, mid - 1);
+        if(key < arr[mid]) return bs(start, mid);
         return mid;
     }
     return bs(0,arr.length);
@@ -353,11 +353,11 @@ We can add a function to use for comparison, so now we can use it with students 
 ```javascript
 function binarySearch3<T>(arr:T[], key:T, compare: (a:T,b:T)=>number): number {
     function bs(start:number, end:number): number {
-        if(start > end) return -1;
+        if(start >= end) return -1;
         const mid = Math.floor((start + end) / 2),
               comp = compare(key,arr[mid]);
         if(comp>0) return bs(mid + 1, end);
-        if(comp<0) return bs(start, mid - 1);
+        if(comp<0) return bs(start, mid);
         return mid;
     }
     return bs(0,arr.length);
