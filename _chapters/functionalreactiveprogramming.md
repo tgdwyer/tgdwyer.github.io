@@ -6,7 +6,7 @@ title: "Functional Reactive Programming"
 
 ## Learning Outcomes
 
-- Understand that the Functional Reactive Programming Observable construct is just another container of elements, but whose "push-based" architecture allows them to be used to capture asynchronous behaviour
+- Understand that the Observable construct of Functional Reactive Programming is just another container of elements, but whose "push-based" architecture allows them to be used to capture asynchronous behaviour
 - Understand that Observables provide the benefits of functional programming: composability, reusability.
 - See that Observables structure complex stateful programs in a more linear and understandable way that maps more easily to the underlying state machine.
 - Use Observables to create simple UI programs in-place of asynchronous event handling.
@@ -18,7 +18,7 @@ Functional Reactive Programming describes an approach to modelling complex, asyn
 - Applications of functions to elements of containers to transform to a new container (e.g. map, filter, reduce etc. over arrays).
 - Use of function composition and higher-order functions to define complex transformations from simple, reusable function elements.
 
-We will explore FRP through an implementation of the [Observable](#observable-streams) data structure in [the Reactive Extensions for Javascript (rx.js) library](https://www.learnrxjs.io/).  We will then see it applied in application to a straight-forward [browser-based user interface problem](#a-user-interface-example).
+We will explore FRP through an implementation of the [Observable](#observable-streams) data structure in [the Reactive Extensions for JavaScript (rx.js) library](https://www.learnrxjs.io/).  We will then see it applied in application to a straight-forward [browser-based user interface problem](#a-user-interface-example).
 
 ## Observable Streams
 
@@ -258,7 +258,7 @@ Under the hood, most of these systems work on an event model, a kind of single-t
 
 In JavaScript the first event loop you are likely to encounter is the browser’s.  Every object in the DOM (Document Object Model - the tree data structure behind every webpage) has events that can be subscribed to, by passing in a callback function which implements the desired action.  We saw a basic click handler earlier.
 
-Handling a single event in such a way is pretty straightforward.  Difficulties arise when events have to be nested to handle a (potentially-bifurcating) sequence of possible events.
+Handling a single event in such a way is pretty straightforward.  Difficulties arise when events have to be nested to handle a (potentially bifurcating) sequence of possible events.
 
 A simple example that begins to show the problem is implementing a UI to allow a user to drag an object on (e.g.) an SVG canvas ([play with it here!](https://stackblitz.com/edit/frpmousedrag?file=index.ts)).  The state machine that models this is pretty simple:
 
@@ -270,7 +270,7 @@ There are only three transitions, each triggered by an event.
 
 The typical way to add interaction in web-pages and other UIs has historically been creating the Event Listeners.  In software engineering terms it's typically referred to as the [Observer Pattern](https://en.wikipedia.org/wiki/Observer_pattern) (not to be confused with the "Observable" FRP abstraction we have been discussing).
 
-Here’s an event-driven code fragment that provides such dragging for some SVG element ```draggableRect```, that is a child of an SVG canvas element referred to by the variable ```svg```:
+Here’s an event-driven code fragment that provides such dragging for some SVG element ```draggableRect``` that is a child of an SVG canvas element referred to by the variable ```svg```:
 
 ```typescript
 const svg = document.getElementById("svgCanvas")!;
@@ -291,7 +291,7 @@ rect.addEventListener('mousedown',e => {
 })
 ```
 
-We add 'event listeners' to the html elements, which invoke the specified functions when the event fires.  There are some awkward dependencies.  The ```moveListener``` function needs access to the mouse coordinates from the mousedown event, the done function which ends the drag on a ```mouseup``` event needs a reference to the ```moveListener``` function.
+We add 'event listeners' to the HTML elements, which invoke the specified functions when the event fires.  There are some awkward dependencies.  The ```moveListener``` function needs access to the mouse coordinates from the mousedown event, the done function which ends the drag on a ```mouseup``` event needs a reference to the ```moveListener``` function.
 
 It’s all a bit amorphous:
 
@@ -337,9 +337,9 @@ We now rewrite precisely the same behaviour using Observable FRP:
 
 The Observable’s mousedown, mousemove and mouseup are like streams which we can transform with familiar operators like map and takeUntil.   The mergeMap operator “flattens” the inner  mousemove  Observable stream back to the top level, then subscribe will apply a final action before doing whatever cleanup is necessary for the stream.
 
-Compared to our state machine diagram above, we have:
+Compared to our state machine diagram above,
 
-- modelled each of the possible transition triggers as streams;
+- we have modelled each of the possible transition triggers as streams;
 - the flow of data is from top to bottom, with the cycling branch introduced by the mergeMap operation (which we will look into below);
 - the only side effects (the movement of the rectangle) occur in the function passed to the subscribe;
 - the cleanup of subscriptions to the mousemove and mouseup events is handled automatically by the ```takeUntil``` function when it closes the streams.

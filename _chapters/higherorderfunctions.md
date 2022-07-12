@@ -63,7 +63,7 @@ add9(1)
 ```
 >10  
 
-Here's a practical example of a curried function, let’s say we want a function for computing the volume of cylinders, parameterised by the approximation for π that we plan to use:
+Here's a practical example of a curried function. Let’s say we want a function for computing the volume of cylinders, parameterised by the approximation for π that we plan to use:
 
 ```javascript
 function cylinderVolume(pi: number, height: number, radius: number): number {
@@ -110,7 +110,7 @@ cylVol(4)(2)
 What if we want to compute volumes for a whole batch of cylinders of fixed height of varying radii?  
 
 ```javascript
-const radii = [1.2,3.1,4.5, … ],
+const radii = [1.2,3.1,4.5, ... ],
       makeHeight5Cylinder = cylVol(5),
       cylinders = radii.map(makeHeight5Cylinder);
 ```
@@ -138,7 +138,7 @@ add(3)(4)
 ```
 > 7
 
-We can also create curried versions of functions with more than two variables - but the TypeScript syntax for functions with arbitrary numbers of arguments gets a bit scary (one of the many reasons we will shortly [switch to Haskell](/haskell1/) for our exploration of more advanced functional programming topics).
+We can also create curried versions of functions with more than two variables -- but the TypeScript syntax for functions with arbitrary numbers of arguments gets a bit scary (one of the many reasons we will shortly [switch to Haskell](/haskell1/) for our exploration of more advanced functional programming topics).
 
 ```javascript
 // Don't try to understand this - this is just to show you why Haskell is better for strictly-typed FP
@@ -177,11 +177,11 @@ grades.map(roundFloat)
 
 > [80, 100, 90, 99]
 
-Note that compose let us define roundFloat without any messing around with anonymous functions and explicit wiring-up of return values to parameters.  We call this *tacit* or *point-free* style programming.
+Note that `compose` let us define `roundFloat` without any messing around with anonymous functions and explicit wiring-up of return values to parameters.  We call this *tacit* or *point-free* style programming.
 
 ## Exercise
 
-* Create a ```compose``` function in javascript that takes a variable number of functions as arguments and composes (chains) them.  Using the spread operator (...) to take a variable number of arguments as an array and the Array.prototype.reduce method, the function should be very small.
+* Create a ```compose``` function in JavaScript that takes a variable number of functions as arguments and composes (chains) them.  Using the spread operator (`...`) to take a variable number of arguments as an array and the `Array.prototype.reduce` method, the function should be very small.
 
 * Create a ```pipe``` function which composes its arguments in the opposite order to the ```compose``` function above.  That is, left-to-right.  Note that in [rx.js](https://www.learnrxjs.io/), such a ```pipe``` function is an important way to create chains of operations (over Observable streams).
 
@@ -200,9 +200,9 @@ function identity<T>(value: T): T {
 
 But it has some important applications:
 
-- Higher-order functions which take a user specified function to apply in some context ([such as our sumTo from earlier](/javascript1/#functions-as-parameters-to-other-functions)) can be passed identity to restore the default behaviour.
-- For extracting data from encapsulated types (e.g. by passing identity into map).
-- The above scenarios are also indicative of a useful way to test such higher-order functions, broadly: "does passing the identity operator really give us back what we started with?".
+- Higher-order functions which take a user specified function to apply in some context ([such as our sumTo from earlier](/javascript1/#functions-as-parameters-to-other-functions)) can be passed `identity` to restore the default behaviour.
+- For extracting data from encapsulated types (e.g. by passing `identity` into map).
+- The above scenarios are also indicative of a useful way to test such higher-order functions, broadly: "does passing the `identity` operator really give us back what we started with?".
 - For composition with other combinators, as below.
 
 ### K-Combinator
@@ -213,7 +213,7 @@ The curried K-Combinator looks like:
 const K = x=> y=> x
 ```
 
-So it is a function that ignores its second argument and returns its first argument directly.  Note the similarity to the `head` function of our [cons list](/functionaljavascript#computation-with-pure-functions).  In fact, we can derive curried version so both the `head` and `rest` functions used earlier from K and I combinators:
+So it is a function that ignores its second argument and returns its first argument directly.  Note the similarity to the `head` function of our [cons list](/functionaljavascript#computation-with-pure-functions).  In fact, we can derive curried versions of both the `head` and `rest` functions used earlier from `K` and `I` combinators (renaming `rest` to `tail`; see below):
 
 ```javascript
 const
@@ -233,7 +233,7 @@ forEach(console.log)(l)
 > 2  
 > 3
 
-The definition of `head` is by straight-forward, like-for-like substitution of K into a curried version of our previous definition for `head`.  Note, the following is not code, just statements of equivalence (≡):
+The definition of `head` is by straightforward, like-for-like substitution of `K` into a curried version of our previous definition for `head`.  Note, the following is not code, just statements of equivalence (≡):
 
 ```
 head ≡ l=>l((h,_)=>h) -- previous uncurried definition of head
@@ -249,7 +249,7 @@ K  ≡  x=> y=> x  ≡  h=> _=> h
 
 In the context of the [Lambda Calculus](/lambdacalculus), we will see that such a renaming is called *Alpha Conversion*.
 
-We are gradually changing our terminology to be more haskell-like, so we have named the curried version of `rest` to `tail`.  The new definition of `tail`, compared to our previous definition of `rest`, is derived as follows:
+We are gradually changing our terminology to be more Haskell-like, so we have named the curried version of `rest` to `tail`.  The new definition of `tail`, compared to our previous definition of `rest`, is derived as follows:
 
 ```
 K(I)  ≡  K(i=> i)             -- expand I := i=> i

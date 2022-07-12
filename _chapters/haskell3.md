@@ -713,9 +713,9 @@ instance Applicative Parser where
     Nothing -> Nothing
 ```
 
-All that `pure` does, is to leave the input unchanged and put the given value on the right side of the tuple.
+All that `pure` does is to leave the input unchanged and put the given value on the right side of the tuple.
 
-The key insight for this applicative instance, is that we first use `f` (the parser on the LHS of `<*>`). This consumes input from `i` giving back the remaining input in `r1`. We then run the second parser `b` on the RHS of `<*>` on `r1` (the remaining input). 
+The key insight for this applicative instance is that we first use `f` (the parser on the LHS of `<*>`). This consumes input from `i` giving back the remaining input in `r1`. We then run the second parser `b` on the RHS of `<*>` on `r1` (the remaining input). 
 
 The main take-away message is that `<*>` allows us to combine two parsers in sequence, that is, we can run the first one and then the second one. 
 
