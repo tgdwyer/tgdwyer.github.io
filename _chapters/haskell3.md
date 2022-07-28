@@ -596,7 +596,7 @@ parsePlus s =
         Nothing -> Nothing
 ```
 
-But that's not very elegant and Haskell is all about elegant simplicity.  So how can we use Haskell's typeclass system to make parsers that are more easily combined?  We've seen how things that are instances of the `Functor` and `Applicative` typeclasses can be combined - so lets make a type definition for parsers and then make it an instance of `Functor` and `Applicative`.  Here's a generic type for parsers:
+But that's not very elegant and Haskell is all about elegant simplicity.  So how can we use Haskell's typeclass system to make parsers that are more easily combined?  We've seen how things that are instances of the `Functor` and `Applicative` typeclasses can be combined -- so let's make a type definition for parsers and then make it an instance of `Functor` and `Applicative`.  Here's a generic type for parsers:
 
 ```haskell
 newtype Parser a = Parser (String -> Maybe (String, a))
@@ -632,13 +632,13 @@ is c = Parser $ \i -> case parse char i of
     Nothing      -> Nothing
 ```
 
-By making it an instance of `Functor` we will be able to map functions over the result of a parse.
+By making `Parser` an instance of `Functor` we will be able to map functions over the result of a parse.
 
-What the `Functor` instance of a parser should do, is apply the parser and apply a function to the result of the parse.
+What the `Functor` instance of a parser should do is apply the parser and apply a function to the result of the parse.
 
 ```haskell
 instance Functor Parser where
-  f <$> (Parser a) = Parser (\x -> case a x of 
+  fmap f (Parser a) = Parser (\x -> case a x of 
       Just (rest, result) -> Just (rest, f result)
       Nothing -> Nothing)
 ```
@@ -649,7 +649,7 @@ However, what we are doing is applying a function to the second item of a tuple 
 
 ```haskell
 instance Functor Parser where
-  f <$> (Parser a) = Parser (\x -> case a x of 
+  fmap f (Parser a) = Parser (\x -> case a x of 
       Just (rest, result) -> Just (f <$> (rest, result))
       Nothing -> Nothing)
 ```
@@ -657,7 +657,7 @@ Carefully examining this, what we are doing is applying `(f <$>)` if the result 
 
 ```haskell
 instance Functor Parser where
-  f <$> (Parser a) = Parser (\x -> (f <$>) <$> a x )
+  fmap f (Parser a) = Parser (\x -> (f <$>) <$> a x )
 ```
 
 Let's try to remove the lambda function by applying the [Point Free](/haskell3/#point-free-code) techniques to remove this lambda function. 
@@ -665,19 +665,19 @@ Let's try to remove the lambda function by applying the [Point Free](/haskell3/#
 First, let's add some brackets, to make the evaluation order more explicit.
 ```haskell
 instance Functor Parser where
-  f <$> (Parser a) = Parser (\x -> ((f <$>) <$>) (a x))
+  fmap f (Parser a) = Parser (\x -> ((f <$>) <$>) (a x))
 ```
 This is now in the form  `(f . g) x)` where `f` is equal to `((f <$>) <$>)` and g is equal to `a`. Therefore:
 
 ```haskell
 instance Functor Parser where
-  f <$> (Parser a) = Parser (\x -> (((f <$>) <$>) . a) x)
+  fmap f (Parser a) = Parser (\x -> (((f <$>) <$>) . a) x)
 ```
 
 And, if we eta-reduce:
 ```haskell
 instance Functor Parser where
-  f <$> (Parser a) = Parser (((f <$>) <$>) . a)
+  fmap f (Parser a) = Parser (((f <$>) <$>) . a)
 ```
 
 The last thing we notice is that the `Functor` instance for functions is defined as compose. Therefore, we have finally reached the end of our journey and can re-write this as follows.
@@ -685,7 +685,7 @@ The last thing we notice is that the `Functor` instance for functions is defined
 -- >>> parse ((*2) <$> int) "123+456"
 -- Just ("+456",246)
 instance Functor Parser where
-  f <$> (Parser a) = Parser (((f <$>) <$>) <$> a)
+  fmap f (Parser a) = Parser (((f <$>) <$>) <$> a)
 ```
 
 The whacky triple-nested application of `<$>` comes about because the `a` in our `Parser` type is nested inside a Tuple (`(,a)`), nested inside a `Maybe`, nested inside function (`->r`).  So now we can map (or `fmap`, to be precise) a function over the value produced by a `Parser`.  For example:
@@ -713,9 +713,9 @@ instance Applicative Parser where
     Nothing -> Nothing
 ```
 
-All that `pure` does, is to leave the input unchanged and put the given value on the right side of the tuple.
+All that `pure` does is to leave the input unchanged and put the given value on the right side of the tuple.
 
-The key insight for this applicative instance, is that we first use `f` (the parser on the LHS of `<*>`). This consumes input from `i` giving back the remaining input in `r1`. We then run the second parser `b` on the RHS of `<*>` on `r1` (the remaining input). 
+The key insight for this applicative instance is that we first use `f` (the parser on the LHS of `<*>`). This consumes input from `i` giving back the remaining input in `r1`. We then run the second parser `b` on the RHS of `<*>` on `r1` (the remaining input). 
 
 The main take-away message is that `<*>` allows us to combine two parsers in sequence, that is, we can run the first one and then the second one. 
 

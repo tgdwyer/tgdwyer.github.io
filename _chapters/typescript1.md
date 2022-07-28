@@ -458,7 +458,7 @@ list.filter(x=>x%2===0).reduce((x,y)=>x+y,0)
 
 ## Using the compiler to ensure immutability
 
-We saw [earlier](../functionaljavascript), that while an object reference can be declared const:
+We saw [earlier](../functionaljavascript) that while an object reference can be declared const:
 
 ```javascript
 const studentVersion1 = {
@@ -468,7 +468,7 @@ const studentVersion1 = {
 }
 ```
 
-Which prevents reassigning ```studentVersion1``` to any other object, the ```const``` declaration does not prevent properties of the object from being changed:
+which prevents reassigning ```studentVersion1``` to any other object, the ```const``` declaration does not prevent properties of the object from being changed:
 
 ```javascript
 studentVersion1.name = "Tom"
