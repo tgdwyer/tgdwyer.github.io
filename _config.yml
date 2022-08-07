@@ -45,4 +45,4 @@ plugins:
 collections:
   chapters:
     output: true
-    permalink: /:name
+    permalink: /:name/
