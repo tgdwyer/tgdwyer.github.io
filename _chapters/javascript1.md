@@ -709,7 +709,7 @@ add(1)(2)
 
 > 3
 
-Functions like `add`: a function of which operates on multiple parameters, but which splits the parameters across multiple nested single parameter functions is said to be [Curried](/higherorderfunctions#curried-functions).  Compare to a traditional function of two parameters:
+Functions like `add`, which operate on multiple parameters but which split the parameters across multiple nested single parameter functions, are said to be [Curried](/higherorderfunctions#curried-functions).  Compare to a traditional function of two parameters:
 ```javascript
 function plus(x,y) { return x + y }
 plus(1,2)
