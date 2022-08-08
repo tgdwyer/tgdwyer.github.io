@@ -709,14 +709,25 @@ add(1)(2)
 
 > 3
 
-Compare to a more traditional function of two parameters:
+Functions like `add`: a function of which operates on multiple parameters, but which splits the parameters across multiple nested single parameter functions is said to be [Curried](/higherorderfunctions#curried-functions).  Compare to a traditional function of two parameters:
 ```javascript
 function plus(x,y) { return x + y }
 plus(1,2)
 ```
 > 3
 
-The `add` function above is a [Curried](/higherorderfunctions#curried-functions) version of the `plus` function.
+The `add` function above is a curried version of the `plus` function.  We will discuss curried functions more when we more formally introduce [higher-order functions in a later chapter](/higherorderfunctions).
+
+Note that functions that are curried can be written in either arrow syntax or using the `function` keyword or a mix, as above.  The following versions of `add` are completely equivalent to the one above:
+```javascript
+function add(x) {
+  return function(y) {
+    return x+y
+  }
+}
+
+const add = x=>y=>x+y
+```
 
 As another example, consider a curried wrapper for our `sumTo` from [before](#functions-as-parameters-to-other-functions):
 
