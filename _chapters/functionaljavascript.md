@@ -91,9 +91,9 @@ Since the function modifies `a` in place we get a different outcome if we call i
 ```javascript
  const myArray=[1,2,3]
  impureSquares(myArray)
- // now myArray = [2,4,9]
+ // now myArray = [1,4,9]
  impureSquares(myArray)
- // now myArray = [4,16,81]
+ // now myArray = [1,16,81]
 ```
 
 Furthermore, the very imperative style computation in `impureSquares` at the line marked with `*` is not pure.
