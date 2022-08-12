@@ -446,7 +446,7 @@ const list = new ListNode(1, new ListNode(2, new ListNode(3)));
 forEach(f: (_:T)=> void): List<T>
 filter(f: (_:T)=> boolean): List<T>
 map<V>(f: (_:T)=> V): List<V>
-reduce(f: (accumulator:V, t:T)=> V, initialValue: V): V
+reduce<V>(f: (accumulator:V, t:T)=> V, initialValue: V): V
 ```
 
 Note that each of these functions returns a list, so that we can chain the operations, e.g.:
