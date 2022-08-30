@@ -99,7 +99,7 @@ By contrast, the ```mergeMap``` operator gives the *cartesian product* of two st
 ```javascript
 columns.pipe(
   mergeMap(column=>rows.pipe(
-    map(row=>[row,column])
+    map(row=>[column, row])
   ))
 ).subscribe(console.log)
 ```
