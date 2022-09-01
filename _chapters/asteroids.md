@@ -236,7 +236,7 @@ It sounds like something we can model with a nice reusable function:
 ```typescript
   type Event = 'keydown' | 'keyup'
   type Key = 'ArrowLeft' | 'ArrowRight' | 'ArrowUp'
-  const observeKey = <T>(eventName:string, k:Key, result:()=>T)=>
+  const observeKey = <T>(eventName:Event, k:Key, result:()=>T)=>
     fromEvent<KeyboardEvent>(document,eventName)
       .pipe(
         filter(({code})=>code === k),
