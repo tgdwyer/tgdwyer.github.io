@@ -709,9 +709,11 @@ where we've created a little helper function `attr` to bulk set properties on an
 
 ```typescript
   const
-    attr = (e:Element, o:Object) =>
+    attr = (e:Element, o:{ [key:string]: Object }) =>
       { for(const k in o) e.setAttribute(k,String(o[k])) },
 ```
+
+_Note that we need to specify the types of values inside `o`, otherwise, we will get an implicit any error._
 
 The other thing happening at game over, is the call to `subscription.unsubscribe`.  This `subscription` is the object returned by the subscribe call on our main Observable:
 
