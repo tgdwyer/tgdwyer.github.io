@@ -13,13 +13,13 @@ title: "Data Types and Type Classes"
 
 ## Algebraic Data Types
 
-We can declare custom types for data in Haskell using the data keyword.  Consider the following declaration of our familiar cons list:
+We can declare custom types for data in Haskell using the `data` keyword.  Consider the following declaration of our familiar cons list:
 
 ```haskell
 data ConsList = Nil | Cons Int ConsList 
 ```
 
-The `|` operator looks rather like the union type operator in TypeScript, and indeed it serves a similar purpose.  Here, a `ConsList` is defined as being a composite type, composed of either Null or a Cons of an Int value and another `ConsList`.  This is called an “algebraic data type” because `|` is like an “or”, or algebraic “sum” operation for combining elements of the type while separating them with a space is akin to “and” or a “product” operation.  
+The `|` operator looks rather like the union type operator in TypeScript, and indeed it serves a similar purpose.  Here, a `ConsList` is defined as being a composite type, composed of either `Nil` or a `Cons` of an `Int` value and another `ConsList`.  This is called an “algebraic data type” because `|` is like an “or”, or algebraic “sum” operation for combining elements of the type while separating them with a space is akin to “and” or a “product” operation.  
 
 Note that neither `Nil` or `Cons` are built in.  They are simply labels for constructor functions for the different versions of a `ConsList` node.  You could equally well call them `EndOfList` and `MakeList` or anything else that’s meaningful to you. `Nil` is a function with no parameters, `Cons` is a function with two parameters.  `Int` is a built-in primitive type for limited-precision integers.
 
@@ -31,7 +31,7 @@ l = Cons 1 $ Cons 2 $ Cons 3 Nil
 
 ## Pattern Matching
 
-In Haskell, we can define multiple versions of a function to handle the instances of an algebraic data types.  This is done by providing a *pattern* in the variable list of the function definition, in the form of an expression beginning with the constructor of the data instance (e.g. `Cons` or `Nil`) and variable names which will be bound to the different fields of the data instance.  
+In Haskell, we can define multiple versions of a function to handle the instances of an algebraic data types.  This is done by providing a *pattern* in the parameter list of the function definition, in the form of an expression beginning with the constructor of the data instance (e.g. `Cons` or `Nil`) and variable names which will be bound to the different fields of the data instance.  
 
 For example, we can create a function to determine a `ConsList`’s length using *pattern matching*; to not only create different definitions of the function for each of the possible instances of a `ConsList`, but also to destructure the non-empty `Cons`:
 
@@ -43,7 +43,7 @@ consLength (Cons _ rest) = 1 + consLength rest
 
 Since we don’t care about the head value in this function, we match it with `_`, an unnamed variable, which effectively ignores it.  Note that another way to conditionally destructure with pattern matching is using a [case statement](/haskell1#conditional-code-constructs-cheatsheet).
 
-Note that such a definition for lists is made completely redundant by Haskell’s wonderful built-in lists, where [] is the empty list, and : is an infix cons operator.  We can pattern match the empty list or destructure (head:rest), e.g.:
+Note that such a definition for lists is made completely redundant by Haskell’s wonderful built-in lists, where `[]` is the empty list, and `:` is an infix cons operator.  We can pattern match the empty list or destructure `(head:rest)`, e.g.:
 
 ```haskell
 intListLength :: [Int] -> Int -- takes a list of Int as input and returns an Int
@@ -53,7 +53,7 @@ intListLength (_:rest) = 1 + intListLength rest
 
 ## Type Parameters and Polymorphism
 
-Similar to typescript Haskell provides *parametric polymorphism*.  That is, the type definitions for functions and data structures (defined with `data` like the ConsList above) can have type parameters (AKA type variables).  For example, the definition `intListLength` above is defined to only work with lists with `Int` elements.  This seems a silly restriction because in this function we don't actually do anything with the elements themselves.  Below, we introduce the type parameter `a` so that the `length` function will able to work with lists of any type of elements.
+Similar to TypeScript Haskell provides *parametric polymorphism*.  That is, the type definitions for functions and data structures (defined with `data` like the `ConsList` above) can have type parameters (AKA type variables).  For example, the definition `intListLength` above is defined to only work with lists with `Int` elements.  This seems a silly restriction because in this function we don't actually do anything with the elements themselves.  Below, we introduce the type parameter `a` so that the `length` function will able to work with lists of any type of elements.
 
 ```haskell
 length :: [a] -> Int -- a is a type parameter
@@ -71,7 +71,7 @@ The following visual summary shows pair data structures with accessor functions 
 
 ## Type Kinds
 
-GHCi allows you to use the `:kind` (or `:k`) command to interrogate the *Kind* of types - think of it as "meta information" about types and their type parameters.  The kind syntax indicates the *arity* or number of type parameters a type has.  Note that it is like the syntax for function types (with the `->`), you can think of it as information about what is required in terms of type parameters to instantiate the type.  If the constructor takes no type parameters the kind is just `*`, (it returns a type), `*->*` if it takes one type parameter, `*->*->*` for two type parameters and so on.
+GHCi allows you to use the `:kind` (or `:k`) command to interrogate the *Kind* of types -- think of it as "meta information" about types and their type parameters.  The kind syntax indicates the *arity* or number of type parameters a type has.  Note that it is like the syntax for function types (with the `->`), you can think of it as information about what is required in terms of type parameters to instantiate the type.  If the constructor takes no type parameters the kind is just `*`, (it returns a type), `*->*` if it takes one type parameter, `*->*->*` for two type parameters and so on.
 
 ![Polymorphism Summary](/assets/images/chapterImages/haskell2/kinds.png)
 
@@ -131,14 +131,14 @@ It’s starting to look a bit like annoying boilerplate code.  Luckily, Haskell 
 data Student = Student { id::Integer, name::String, mark::Int } 
 ```
 
-This creates a record type in every way the same as the above, but the accessor functions id, name and mark are created automatically.
+This creates a record type in every way the same as the above, but the accessor functions `id`, `name` and `mark` are created automatically.
 
 ## Typeclasses
 
 Haskell uses “type classes” as a way to associate functions with types.  A type class is like a promise that a certain type will have specific operations and functions available.  You can think of it as being similar to a [TypeScript interface](/typescript1#interfaces).
 
 Despite the name however, it is not like an ES6/TypeScript class, since a Haskell type class does not actually give definitions for the functions themselves, only their type signatures.  
-The function bodies are defined in “instances” of the type class.  A good starting point for gaining familiarity with type classes is seeing how they are used in the standard Haskell prelude.  From GHCi we can ask for information about a specific typeclass with the `:i` command, for example, Num is a typeclass common to numeric types:
+The function bodies are defined in “instances” of the type class.  A good starting point for gaining familiarity with type classes is seeing how they are used in the standard Haskell prelude.  From GHCi we can ask for information about a specific typeclass with the `:i` command, for example, `Num` is a typeclass common to numeric types:
 
 ```haskell
 GHCi> :i Num
@@ -174,7 +174,7 @@ instance Eq Int
 ... 
 ```
 
-Note again that instances need implement only `==` or `/=` (not equal to), since each can be easily defined in terms of the other.  Still we are missing some obviously important operations, e.g., what about greater-than and less-than?  These are defined in the Ord type class:
+Note again that instances need implement only `==` or `/=` (not equal to), since each can be easily defined in terms of the other.  Still we are missing some obviously important operations, e.g., what about greater-than and less-than?  These are defined in the `Ord` type class:
 ```haskell
 > :i Ord
 class Eq a => Ord a where
@@ -189,7 +189,7 @@ class Eq a => Ord a where
 ```
 
 ```haskell
-The compare function returns an Ordering:
+-- The compare function returns an Ordering:
 > :i Ordering
 data Ordering = LT | EQ | GT 
 ```
@@ -226,10 +226,9 @@ instance Show Suit where
  show Diamond = "O"   -- actual playing card symbols ♠ ♣ ♦ ♥
  show Heart = "V"     -- but GHCi support for unicode 
                       -- characters is a bit sketch
-[Spade .. Heart]
+> [Spade .. Heart]
+[^,&,O,V]
 ```
-
-> [^,&,O,V]
 
 ## Maybe
 
@@ -244,7 +243,7 @@ All the functions we have considered so far are assumed to be *total*.  That is,
 
 ![Total and Partial Functions](/assets/images/chapterImages/haskell2/partialFunctions.png)
 
-For example, the built-in lookup function can be used to search a list of key-value pairs, and fail gracefully by returning `Nothing` if there is no matching key.
+For example, the built-in function `lookup` can be used to search a list of key-value pairs, and fail gracefully by returning `Nothing` if there is no matching key.
 
 ```haskell
 phonebook :: [(String, String)]
