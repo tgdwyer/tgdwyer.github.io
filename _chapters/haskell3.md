@@ -46,9 +46,9 @@ f = (1+)             -- Eta conversion
 Has its own operator in haskell `(.)`, inspired by the mathematical function composition symbol `∘`:
 ```haskell
  (f ∘ g) (x) ≡ f (g(x)) -- math notation
- (f . g) x ≡ f (g x)    -- haskell
+ (f . g) x ≡ f (g x)    -- Haskell
 ```
-Again, this gives us another way to get the right-most parameter on it's own outside the body expression:
+Again, this gives us another way to get the right-most parameter on its own outside the body expression:
 ```haskell
 f x = sqrt (1 / x)
 f x = sqrt ((1/) x)     -- operator section
@@ -58,9 +58,9 @@ f = sqrt . (1/)         -- eta conversion
 
 </div>
 
-## Point Free Code
+## Point-Free Code
 
-We have discussed point-free and tacit coding style earlier in these notes. In particular, eta-conversion works in Haskell the same as in lambda calculus and for curried JavaScript functions.  It is easy to do and usually declutters code of unnecessary arguments that help to distill their essence, e.g.:
+We have discussed point-free and tacit coding style earlier in these notes. In particular, eta-conversion works in Haskell the same as in lambda calculus and for curried JavaScript functions.  It is easy to do and usually declutters code of unnecessary arguments, e.g.:
 
 ```haskell
 lessThan :: (Ord a) => a -> [a] -> [a]
@@ -115,7 +115,7 @@ flip f a b = f b a
 
 can also be useful in reversing the arguments of a function or operator in order to get them into a position such that they can be eta-reduced.
   
-In code written by experienced haskellers it is very common to see functions reduced to point-free form.  Does it make it for more readable code?  To experienced haskellers, many times yes.  To novices, perhaps not.  When to do it is a matter of preference.  Experienced haskellers tend to prefer it, they will argue that it reduces functions like the example one above “to their essence”, removing the “unnecessary plumbing” of explicitly named variables.   Whether you like it or not, it is worth being familiar with the tricks above, because you will undoubtedly see them used in practice.  The other place where point free style is very useful is when you would otherwise need to use a lambda function.
+In code written by experienced haskellers it is very common to see functions reduced to point-free form.  Does it make code more readable?  To experienced haskellers, many times yes.  To novices, perhaps not.  When to do it is a matter of preference.  Experienced haskellers tend to prefer it, they will argue that it reduces functions like the example one above “to their essence”, removing the “unnecessary plumbing” of explicitly named variables.   Whether you like it or not, it is worth being familiar with the tricks above, because you will undoubtedly see them used in practice.  The other place where point-free style is very useful is when you would otherwise need to use a lambda function.
 
 Some more (and deeper) discussion is available on the Haskell Wiki.
 
@@ -127,7 +127,7 @@ Some more (and deeper) discussion is available on the Haskell Wiki.
 f a b c = (a+b)*c
 ```
 
-(This is clearly an extreme example but is a useful - and easily verified - practice of operator sectioning, composition and eta-conversion.)
+(This is clearly an extreme example but is a useful -- and easily verified -- practice of operator sectioning, composition and eta-conversion.)
 
 ## Functor
 
@@ -138,7 +138,7 @@ console> [1,2,3].map(x=>x+1)
 [2,3,4]
 ```
 
-Now in haskell:
+Now in Haskell:
 
 ```haskell
 GHCi> map (\i->i+1) [1,2,3]
@@ -166,8 +166,10 @@ In Haskell this pattern is captured in a type class called `Functor`, which defi
 
 ```haskell
 Prelude> :i Functor
-class Functor (f :: * -> *) where
+type Functor :: (* -> *) -> Constraint
+class Functor f where
   fmap :: (a -> b) -> f a -> f b
+...
 instance Functor [] -- naturally lists are an instance
 instance Functor Maybe -- but this may surprise!
 ... -- and some other instances we'll talk about shortly
@@ -198,13 +200,13 @@ instance  Functor Maybe  where
     fmap f (Just a)      = Just (f a)
 ```
 
-So we can `fmap` a function over a Maybe without having to unpackage it:
+So we can `fmap` a function over a Maybe without having to unpack it:
 ```haskell
 GHCi> fmap (+1) (Just 6)
 Just 7 
 ```
 
-This is such a common operation that there is an operator alias for fmap: <$>
+This is such a common operation that there is an operator alias for fmap: `<$>`
 ```haskell
 GHCi> (+1) <$> (Just 6)
 Just 7 
@@ -216,7 +218,7 @@ GHCi> (+1) <$> [1,2,3]
 [2,3,4] 
 ```
 
-Lists of Maybes frequently arise.  For example, the “mod” operation on integers (e.g. mod 3 2 == 1) will throw an error if you pass 0 as the divisor:
+Lists of `Maybe`s frequently arise.  For example, the `mod` operation on integers (e.g. `mod 3 2 == 1`) will throw an error if you pass 0 as the divisor:
 ```haskell
 > mod 3 0
 *** Exception: divide by zero 
@@ -229,13 +231,13 @@ safeMod _ 0 = Nothing
 safeMod numerator divisor = Just $ mod numerator divisor 
 ```
 
-This makes it safe to apply safeMod to an arbitrary list of Integral values:
+This makes it safe to apply `safeMod` to an arbitrary list of `Integral` values:
 ```haskell
 > map (safeMod 3) [1,2,0,4]
 [Just 0,Just 1,Nothing,Just 3] 
 ```
 
-But how do we keep working with such a list of Maybes?  We can map an fmap over the list:
+But how do we keep working with such a list of `Maybe`s?  We can map an `fmap` over the list:
 
 ```haskell
 GHCi> map ((+1) <$>) [Just 0,Just 1,Nothing,Just 3]
@@ -248,7 +250,7 @@ GHCi> ((+1) <$>) <$> [Just 0,Just 1,Nothing,Just 3]
 [Just 1,Just 2,Nothing,Just 4] 
 ```
 
-In addition to lists and Maybes, a number of other built-in types have instances of Functor:
+In addition to lists and `Maybe`s, a number of other built-in types have instances of `Functor`:
 
 ```haskell
 GHCi> :i Functor
@@ -265,7 +267,7 @@ instance Functor ((->) r) where
     fmap = (.) 
 ```
 
-So the composition of functions `f` and `g`: `f . g`, is equivalent to ‘mapping’ `f` over `g`, e.g.  `f <$> g`.  
+So the composition of functions `f` and `g`, `f . g`, is equivalent to ‘mapping’ `f` over `g`, e.g.  `f <$> g`.  
 
 ```haskell
 GHCi> f = (+1)
@@ -299,7 +301,7 @@ data Tree a = Empty
   deriving (Show)
 ```
 
-Note that `Leaf` is a bit redundant as we could also encode nodes with no children as `Node Empty value Empty` - but that's kind of ugly and makes showing our trees more verbose.  Also, having both `Leaf` and `Empty` provides a nice parallel to `Maybe`.
+Note that `Leaf` is a bit redundant as we could also encode nodes with no children as `Node Empty value Empty` -- but that's kind of ugly and makes showing our trees more verbose.  Also, having both `Leaf` and `Empty` provides a nice parallel to `Maybe`.
 
 Here's an example tree defined:
 
@@ -350,9 +352,9 @@ Node (Node (Leaf 3) 5 (Leaf 7)) 9 (Node (Leaf 11) 13 (Leaf 15))
 
 ## Applicative
 
-The applicative introduces a new operator `<*>` (pronounced “apply”), which lets us apply functions inside a computational context.
+The typeclass `Applicative` introduces a new operator `<*>` (pronounced “apply”), which lets us apply functions inside a computational context.
 
-Applicative is a “subclass” of Functor, meaning that an instance of `Applicative` can be ‘`fmap`ed over, but Applicatives also declare (at least) two additional functions, `pure` and `(<*>)` (pronounced ‘apply’ - but I like calling it [“TIE Fighter”](https://en.wikipedia.org/wiki/TIE_fighter)):
+Applicative is a “subclass” of `Functor`, meaning that an instance of `Applicative` can be `fmap`ed over, but Applicatives also declare (at least) two additional functions, `pure` and `(<*>)` (pronounced ‘apply’ -- but I like calling it [“TIE Fighter”](https://en.wikipedia.org/wiki/TIE_fighter)):
 
 ```haskell
 GHCi> :i Applicative
@@ -362,7 +364,7 @@ class Functor f => Applicative (f :: * -> *) where
 ...
 ```
 
-As for `Functor` all instances of the Applicative type-class must satisfy certain laws, which again, are not checked by the compiler.
+As for `Functor` all instances of the Applicative type-class must satisfy certain laws, which again are not checked by the compiler.
 Applicative instances must comply with these laws to produce the expected behaviour.
 You can [read about the Applicative Laws](https://en.wikibooks.org/wiki/Haskell/Applicative_functors)
 if you are interested, but they are a little more subtle than the basic Functor laws above, and it is
@@ -377,13 +379,13 @@ GHCi> Just (+3) <*> Just 2
 Just 5 
 ```
 
-Or a list of functions `[(+1),(+2)]` ), to things inside a similar context (e.g. a list `[1,2,3]`).
+Or a list of functions `[(+1),(+2)]` to things inside a similar context (e.g. a list `[1,2,3]`).
 ```haskell
 > [(+1),(+2)] <*> [1,2,3]
 [2,3,4,3,4,5] 
 ```
 
-Note that lists definition of `<*>` produces the cartesian product of the two lists, that is, all the possible ways to apply the functions in the left list, to the values in the right list.  It is interesting to look at [the source](https://hackage.haskell.org/package/base-4.14.0.0/docs/src/GHC.Base.html#Applicative) for the definition of `Applicative` for lists on Hackage:
+Note that lists definition of `<*>` produces the cartesian product of the two lists, that is, all the possible ways to apply the functions in the left list to the values in the right list.  It is interesting to look at [the source](https://hackage.haskell.org/package/base-4.14.0.0/docs/src/GHC.Base.html#Applicative) for the definition of `Applicative` for lists on Hackage:
 
 ```haskell
 instance Applicative [] where
