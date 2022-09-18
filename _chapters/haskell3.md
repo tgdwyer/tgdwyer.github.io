@@ -385,7 +385,7 @@ Or a list of functions `[(+1),(+2)]` to things inside a similar context (e.g. a 
 [2,3,4,3,4,5] 
 ```
 
-Note that lists definition of `<*>` produces the cartesian product of the two lists, that is, all the possible ways to apply the functions in the left list to the values in the right list.  It is interesting to look at [the source](https://hackage.haskell.org/package/base-4.14.0.0/docs/src/GHC.Base.html#Applicative) for the definition of `Applicative` for lists on Hackage:
+Note that lists definition of `<*>` produces the Cartesian product of the two lists, that is, all the possible ways to apply the functions in the left list to the values in the right list.  It is interesting to look at [the source](https://hackage.haskell.org/package/base-4.14.0.0/docs/src/GHC.Base.html#Applicative) for the definition of `Applicative` for lists on Hackage:
 
 ```haskell
 instance Applicative [] where
@@ -406,9 +406,9 @@ Just 5
 So:
 - `pure` puts the binary function into the applicative (i.e. `pure (+) :: Maybe (Num -> Num -> Num)`), 
 - then `<*>`ing this function inside over the first `Maybe` value `Just 3` achieves a partial application of the function inside the `Maybe`. This gives a unary function inside a `Maybe`: i.e. `Just (3+) :: Maybe (Num->Num)`. 
-- Finally, we `<*>` this function inside a `maybe` over the remaining `Maybe` value.
+- Finally, we `<*>` this function inside a `Maybe` over the remaining `Maybe` value.
 
-This is where the name "applicative" comes from, i.e. `Applicative` is a type over which a non-unary function may be applied.  Note, that the following use of `fmap` is equivalent and a little bit more concise:
+This is where the name "applicative" comes from, i.e. `Applicative` is a type over which a non-unary function may be applied.  Note, that the following use of `<$>` (infix `fmap`) is equivalent and a little bit more concise:
 
 ```haskell
 > (+) <$> Just 3 <*> Just 2
@@ -453,6 +453,8 @@ lookupStudent :: Integer -> Maybe Student
 lookupStudent sid = Student sid <$> lookup sid names <*> lookup sid marks
 ```
 
+<!-- The following example doesn't typecheck. Commented it out for now.
+
 What if `sid` is also the result of some computation that may fail, and is therefore itself wrapped in a `Maybe` context?  Then we will need to apply the ternary `Student` constructor over three `Maybe`s:
 
 ```haskell
@@ -461,6 +463,7 @@ lookupStudent sid = Student <$> sid <*> lookup sid names <*> lookup sid marks
 ```
 
 So we can see `<*>` may be chained as many times as necessary to cover all the arguments.
+-->
 
 Lists are also instances of `Applicative`.  Given the following types:
 
@@ -502,7 +505,7 @@ GHCi> Card <$> [Spade ..] <*> [Two ..]
 [^2,^3,^4,^5,^6,^7,^8,^9,^10,^J,^Q,^K,^A,&2,&3,&4,&5,&6,&7,&8,&9,&10,&J,&Q,&K,&A,O2,O3,O4,O5,O6,O7,O8,O9,O10,OJ,OQ,OK,OA,V2,V3,V4,V5,V6,V7,V8,V9,V10,VJ,VQ,VK,VA]
 ```
 
-* Try and make the definition of `show` for Rank a one-liner using `zip` and `lookup`.
+* Try and make the definition of `show` for `Rank` a one-liner using `zip` and `lookup`.
 
 <div class="cheatsheet" markdown="1">
 
@@ -524,7 +527,7 @@ instance Applicative ((->)r) where
   (<*>) :: (r -> (a -> b)) -> (r -> a) -> (r -> b)
 ```
 
-This is very convenient for creating pointfree implementations of functions which operate on their parameters more than once.  For example, imagine our `Student` type from above has additional fields with breakdowns of marks: e.g. `exam` and `nonExam`, requiring a function to compute the total mark:
+This is very convenient for creating point-free implementations of functions which operate on their parameters more than once.  For example, imagine our `Student` type from above has additional fields with breakdowns of marks: e.g. `exam` and `nonExam`, requiring a function to compute the total mark:
 
 ```haskell
 totalMark :: Student -> Int
@@ -557,7 +560,7 @@ totalMark = (+) . exam <*> nonExam
 
 As we will [discuss in more detail later](/parsercombinators), a parser is a program which takes some structured input and does something with it.  When we say "structured input" we typically mean something like a string that follows strict rules about its syntax, like source code in a particular programming language, or a file format like JSON.  A parser for a given syntax is a program which you run over some input and if the input is valid, it will do something sensible with it (like give us back some data), or fail: preferrably in a way that we can handle gracefully.  
 
-In Haskell, sophisticated parsers are often constructed from simple functions which try to read a certain element of the expected input and either succeed in consuming that input, returning a tuple containing the rest of the input string and the resultant data, or they fail producing nothing.  We've already seen one type which can be used to encode success or failure, namely `Maybe`.  Here's the most trivial parser function I can think of, it tries to take a character from the input stream and either succeeds or fails if it's given an empty string:
+In Haskell, sophisticated parsers are often constructed from simple functions which try to read a certain element of the expected input and either succeed in consuming that input, returning a tuple containing the rest of the input string and the resultant data, or they fail producing nothing.  We've already seen one type which can be used to encode success or failure, namely `Maybe`.  Here's the most trivial parser function I can think of. It tries to take a character from the input stream and either succeeds consuming it or fails if it's given an empty string:
 
 ```haskell
 -- >>> parseChar "abc"
@@ -594,7 +597,7 @@ parsePlus s =
             Just (s'', '+') -> case parseInt s'' of
                 Just (s''',y) -> Just (s''',x+y)
                 Nothing -> Nothing
-            _ -> Nothing
+            Nothing -> Nothing
         Nothing -> Nothing
 ```
 
@@ -647,7 +650,7 @@ instance Functor Parser where
 
 That solution should not be too hard. We apply the parser and if it passes (equates to a `Just`) we call the function `f` on the `result`.
 
-However, what we are doing is applying a function to the second item of a tuple - that is exactly what the `Functor` instance of a tuple does! So we can rewrite that like this
+However, what we are doing is applying a function to the second item of a tuple -- that is exactly what the `Functor` instance of a tuple does! So we can rewrite that like this
 
 ```haskell
 instance Functor Parser where
@@ -662,7 +665,7 @@ instance Functor Parser where
   fmap f (Parser a) = Parser (\x -> (f <$>) <$> a x )
 ```
 
-Let's try to remove the lambda function by applying the [Point Free](/haskell3/#point-free-code) techniques to remove this lambda function. 
+Let's try to remove the lambda function by applying the [point-free](/haskell3/#point-free-code) techniques to remove this lambda function. 
 
 First, let's add some brackets, to make the evaluation order more explicit.
 ```haskell
@@ -731,7 +734,7 @@ Just ("b",('a',12345))
 
 As both `<$>` and `<*>` have the same precedence, firstly `(,) <$> char` will be evaluated, the result will be then applied to `int`.
 
-So how does `(,) char` work? Well, we parse a character, and then apply that character to the first item of the tuple, therefore:
+So how does `(,) <$> char` work? Well, we parse a character and then make that character the first item of a tuple, therefore:
 ```haskell
 > tupleCharParser = (,) <$> char
 > :t tupleCharParser
@@ -740,7 +743,7 @@ tupleCharParser :: Parser (b -> (Char, b))
 So for the applicative instance the LHS will be the `tupleCharParser` and the RHS will be `int`.
 
 The first step in applicative parsing is to parse the input `i` using the LHS parser, in this case `tupleCharParser`
-This will match the `Just (r1 p1)` case where it will be equal to `Just ("12345"b, ('a',))`. Therefore, `r1` is equal to the unparsed portion of the input `12345` and the result is a tuple partially applied `('a', )`.
+This will match the `Just (r1, p1)` case where it will be equal to `Just ("12345b", ('a',))`. Therefore, `r1` is equal to the unparsed portion of the input `12345b` and the result is a tuple partially applied `('a', )`.
 
 We then run the second parser `int` on the remaining input `"12345b"`. This will match the `Just (r2, p2)` case where it will be equal to `Just ("b", 12345)`, where `r2` is equal to the remaining input `"b"` and `p2` is equal to `"12345"`
 
