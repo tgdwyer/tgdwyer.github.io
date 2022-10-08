@@ -60,7 +60,7 @@ w = 2 // note that without a let or const keyword before it, this assignment an 
 ```
 > 2
 
-(Note: there is another legacy keyword for declaring variables in JavaScript `var` that has different scoping rules.  Don’t use it.)
+(Note: The original JavaScript syntax for declaring a variable used the `var` keyword.  However, the scoping of variables declared in this way was strange for people familiar with C and Java scoping rules, and caused much angst.  It has been fixed since ES6 with the `let` and `const` keywords; we prefer these to `var`.)
 
 ## JavaScript Types
 JavaScript has several "primitive types" (simple types that are not [Objects](#objects)).  These include:
@@ -196,6 +196,8 @@ function myFunction(x, y) {
   console.log("hello world") // prints to the console
   return result; // returns the result to the caller
 }
+
+const z = 1; // z is immutable and definied in the global scope
 ```
 
 You invoke (or 'call', or 'apply') a function like so:
@@ -320,7 +322,7 @@ sumTo(10)
 
 The important change is that the recursive call (on the branch of execution that requires it) is now the very last operation to be executed before the function returns.  The computation (`sum + n`) occurs before the recursive call.  Therefore, no local state needs to be stored on the stack.
 
-Note: although it has been proposed for the EcmaScript standard, as of 2020, not all JavaScript engines support tail call optimisation (only WebKit AFAIK).  
+Note: although it has been proposed for the EcmaScript standard, as of 2022, not all JavaScript engines support tail call optimisation (only WebKit AFAIK).  
 
 ## Functions as parameters to other functions
 
@@ -492,7 +494,6 @@ hi('tim')
 
 > "hello tim"
 
-(Note: The original JavaScript syntax for declaring a variable used the `var` keyword.  However, the scoping of variables declared in this way was strange for people familiar with C and Java scoping rules, and caused much angst.  It has been fixed since ES6 with the `let` and `const` keywords; we prefer these to `var`.)
 
 ## Anonymous Functions
 
@@ -562,7 +563,7 @@ You can also have functions with a list of arguments, just put the list in brack
 const greeting = (greeting, person)=> greeting + ' ' + person
 ```
 
-The body of the above functions are simple expressions.  If you need a more complex, multiline body (e.g. with local variables) you can do this but you need to surround the code block with curly braces `{}`:
+The body of the above functions are simple expressions.  If you need a more complex, multiline body (e.g. with local variables) you can do this but you need to surround the code block with curly braces `{}` and use an explicit `return` statement:
 
 ```javascript
 const greeting = (greeting, person)=> {
@@ -708,14 +709,25 @@ add(1)(2)
 
 > 3
 
-Compare to a more traditional function of two parameters:
+Functions like `add`, which operate on multiple parameters but which split the parameters across multiple nested single parameter functions, are said to be [Curried](/higherorderfunctions#curried-functions).  Compare to a traditional function of two parameters:
 ```javascript
 function plus(x,y) { return x + y }
 plus(1,2)
 ```
 > 3
 
-The `add` function above is a [Curried](/higherorderfunctions#curried-functions) version of the `plus` function.
+The `add` function above is a curried version of the `plus` function.  We will discuss curried functions more when we more formally introduce [higher-order functions in a later chapter](/higherorderfunctions).
+
+Note that functions that are curried can be written in either arrow syntax or using the `function` keyword or a mix, as above.  The following versions of `add` are completely equivalent to the one above:
+```javascript
+function add(x) {
+  return function(y) {
+    return x+y
+  }
+}
+
+const add = x=>y=>x+y
+```
 
 As another example, consider a curried wrapper for our `sumTo` from [before](#functions-as-parameters-to-other-functions):
 

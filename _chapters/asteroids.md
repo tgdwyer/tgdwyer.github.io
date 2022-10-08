@@ -143,9 +143,9 @@ Finally, we `subscribe` to the `angle$` stream to perform our effectful code, up
 }
 ```
 Arguably, the Observable code has many advantages over the event handling code:
- * the streams created by `fromEvent` and `interval` automatically clean up the underlying events and interval handles when the streams complete.
- * the 'stream' abstraction provided by observable gives us an intuitive way to think about asynchronous behaviour and chain transformations of the stream together through `pipe`s.
- * We didn't see it so much here, but the various observable streams we created are composable, in the sense that adding new pipes (or potentially multiple `subscribe`s) to them allow us to reuse and plug them together in powerful ways.
+ * The streams created by `fromEvent` and `interval` automatically clean up the underlying events and interval handles when the streams complete.
+ * The 'stream' abstraction provided by observable gives us an intuitive way to think about asynchronous behaviour and chain transformations of the stream together through `pipe`s.
+ * We didn't see it so much here, but the various observable streams we created are composable, in the sense that adding new pipes (or potentially multiple `subscribe`s) to them allows us to reuse and plug them together in powerful ways.
 
 ### Pure Observable Streams
 
@@ -199,7 +199,7 @@ And now our main `pipe` (collapsed into one) ends with a `scan` which "transduce
     .subscribe(updateView)
 }
 ```
-The code above is a bit longer than what we started with, but it's starting to lay a more extensible framework for a more complete game.  And it has some nice architectural properties, in particular we've completely decoupled our view code from our state management.  We could swap out SVG for a completely different UI by replacing the updateView function.
+The code above is a bit longer than what we started with, but it's starting to lay a more extensible framework for a more complete game.  And it has some nice architectural properties, in particular we've completely decoupled our view code from our state management.  We could swap out SVG for a completely different UI by replacing the `updateView` function.
 
 ## Adding Physics and Handling More Inputs
 Classic Asteroids is more of a space flight simulator in a weird toroidal topology than the 'static' rotation that we've provided above.  We will make our spaceship a freely floating body in space, with directional and rotational velocity.
@@ -236,7 +236,7 @@ It sounds like something we can model with a nice reusable function:
 ```typescript
   type Event = 'keydown' | 'keyup'
   type Key = 'ArrowLeft' | 'ArrowRight' | 'ArrowUp'
-  const observeKey = <T>(eventName:string, k:Key, result:()=>T)=>
+  const observeKey = <T>(eventName:Event, k:Key, result:()=>T)=>
     fromEvent<KeyboardEvent>(document,eventName)
       .pipe(
         filter(({code})=>code === k),
@@ -278,9 +278,11 @@ class Vec {
   static Zero = new Vec();
 }
 ```
+
 To implement the toroidal topology of space, we'll need to know the canvas size. 
-For now, we'll hard code it in a constant `CanvasSize`.  Alternately, we could query it from the svg element, or we could set the SVG size - maybe later.
+For now, we'll hard code it in a constant `CanvasSize`.  Alternately, we could query it from the svg element, or we could set the SVG size -- maybe later.
 The torus wrapping function will use the `CanvasSize` to determine the bounds and simply teleport any `Vec` which goes out of bounds to the opposite side.
+
 ```typescript
 const 
   CanvasSize = 200,
@@ -339,8 +341,7 @@ And finally we `merge` our different inputs and scan over `State`, and the final
   interval(10)
     .pipe(
       map(elapsed=>new Tick(elapsed)),
-      merge(
-        startLeftRotate,startRightRotate,stopLeftRotate,stopRightRotate),
+      merge(startLeftRotate,startRightRotate,stopLeftRotate,stopRightRotate),
       merge(startThrust,stopThrust),
       scan(reduceState, initialState))
     .subscribe(updateView);
@@ -394,7 +395,7 @@ And here's our updated updateView function where we not only move the ship but a
 ```
 
 ## Additional Objects
-Things get more complicated when we start adding more objects to the canvas that all participate in the physics simulation.  Furthermore, objects like asteroids and bullets will need to be added and removed from the canvas dynamically - unlike the ship whose visual is currently defined in the `svg` and never leaves.  
+Things get more complicated when we start adding more objects to the canvas that all participate in the physics simulation.  Furthermore, objects like asteroids and bullets will need to be added and removed from the canvas dynamically -- unlike the ship whose visual is currently defined in the `svg` and never leaves.  
 
 However, we now have all the pieces of our MVC architecture in place, all tied together with an observable stream:
 
@@ -409,8 +410,6 @@ So completing the game is just a matter of:
 We'll start with bullets that can be fired with the Space key, and which expire after a set period of time:
 
 [![Spaceship flying](/assets/images/chapterImages/asteroids/asteroidsShoot.gif)](https://stackblitz.com/edit/asteroids04?file=index.ts)
-
-However, the basic framework above is a good basis on which to extend.  
 
 # Per-object State
 The first complication is generalising bodies that participate in the force model with their own type `Body`, separate from the `State`:
@@ -434,7 +433,7 @@ The first complication is generalising bodies that participate in the force mode
     objCount:number
   }>
 ```
-So the `ship` is a `Body`, and we will have collections of `Body` for both `bullets` and `rocks`.  What's this `exit` thing?  Well, when we remove something from the canvas, e.g. a bullet, we'll create a new state with a copy of the `bullets` array minus the removed bullet, and we'll add that removed bullet - together with any other removed `Body`s - to the `exit` array.  This notifies the `updateView` function that they can be removed.
+So the `ship` is a `Body`, and we will have collections of `Body` for both `bullets` and `rocks`.  What's this `exit` thing?  Well, when we remove something from the canvas, e.g. a bullet, we'll create a new state with a copy of the `bullets` array minus the removed bullet, and we'll add that removed bullet -- together with any other removed `Body`s -- to the `exit` array.  This notifies the `updateView` function that they can be removed.
 
 Note the `objCount`.  This counter is incremented every time we add a `Body` and gives us a way to create a unique id that can be used to match the `Body` against its corresponding view object.
 
@@ -555,7 +554,7 @@ And we tack a bit on to `updateView` to draw and remove bullets:
     })
   }
 ```
-Finally, we add a make a quick addition to the CSS so that the bullets are a different colour to the background:
+Finally, we make a quick addition to the CSS so that the bullets are a different colour to the background:
 ```css
 .bullet {
   fill: red;
@@ -679,7 +678,7 @@ Our `tick` function is more or less the same as above, but it will apply one mor
 
 # Final View
 
-Finally, we need to update `updateView` function.  Again, the view update is the one place in our program where we allow imperative style, effectful code.  Called only from the subscribe at the very end of our Observable chain, and not mutating any state that is read anywhere else in the Observable, we ensure that is not the source of any but the simplest display bugs, which we can hopefully diagnose with local inspection of this one function.
+Finally, we need to update the `updateView` function.  Again, the view update is the one place in our program where we allow imperative style, effectful code.  Called only from the subscribe at the very end of our Observable chain, and not mutating any state that is read anywhere else in the Observable, we ensure that is not the source of any but the simplest display bugs, which we can hopefully diagnose with local inspection of this one function.
 
 First, we need to update the visuals for each of the rocks, but these are the same as bullets.  The second, slightly bigger, change, is simply to display the text "Game Over" on `s.gameover` true.
 
@@ -710,17 +709,18 @@ where we've created a little helper function `attr` to bulk set properties on an
 
 ```typescript
   const
-    attr = (e:Element, o:Object) =>
+    attr = (e:Element, o:{ [key:string]: Object }) =>
       { for(const k in o) e.setAttribute(k,String(o[k])) },
 ```
+
+_Note that we need to specify the types of values inside `o`, otherwise, we will get an implicit any error._
 
 The other thing happening at game over, is the call to `subscription.unsubscribe`.  This `subscription` is the object returned by the subscribe call on our main Observable:
 
 ```typescript
   const subscription = interval(10).pipe(
     map(elapsed=>new Tick(elapsed)),
-    merge(
-      startLeftRotate,startRightRotate,stopLeftRotate,stopRightRotate),
+    merge(startLeftRotate,startRightRotate,stopLeftRotate,stopRightRotate),
     merge(startThrust,stopThrust),
     merge(shoot),
     scan(reduceState, initialState)
@@ -742,6 +742,6 @@ Finally, we need to make a couple more additions to the CSS to display the rocks
 
 At this point we have more-or-less all the elements of a game.  The implementation above could be extended quite a lot.  For example, we could add score, ability to restart the game, multiple lives, perhaps some more physics.  But generally, these are just extensions to the framework above: manipulation and then display of additional state.
 
-The key thing is that the observable has allowed us to keep well separated state management (model), its input and manipulation (control) and the visuals (view).  Further extensions are just additions within each of these elements - and doing so should not add greatly to the complexity.
+The key thing is that the observable has allowed us to keep well separated state management (model), its input and manipulation (control) and the visuals (view).  Further extensions are just additions within each of these elements -- and doing so should not add greatly to the complexity.
 
 I invite you to click through on the animations above, to the live code editor where you can extend or refine the framework I've started.

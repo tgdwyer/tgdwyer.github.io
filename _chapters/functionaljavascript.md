@@ -91,9 +91,9 @@ Since the function modifies `a` in place we get a different outcome if we call i
 ```javascript
  const myArray=[1,2,3]
  impureSquares(myArray)
- // now myArray = [2,4,9]
+ // now myArray = [1,4,9]
  impureSquares(myArray)
- // now myArray = [4,16,81]
+ // now myArray = [1,16,81]
 ```
 
 Furthermore, the very imperative style computation in `impureSquares` at the line marked with `*` is not pure.
@@ -101,9 +101,9 @@ It has two effects: incrementing `i` and mutating `a`.
 You could not simply replace the expression with the value computed by the expression and have the program work in the same way.
 This piece of code does not have the property of *referential transparency*.
 
-True pure functional languages (such as Haskell) enforce referential transparency through immutable variables (*note: yes, "immutable variable" sounds like an oxymoron - two words with opposite meanings put together*).  That is, once any variable in such a language is bound to a value, it cannot be reassigned.  
+True pure functional languages (such as Haskell) enforce referential transparency through immutable variables (*note: yes, "immutable variable" sounds like an oxymoron -- two words with opposite meanings put together*).  That is, once any variable in such a language is bound to a value, it cannot be reassigned.  
 
-In JavaScript we can opt-in to immutable variables by declaring them `const`, but it is only a shallow immutability.  Thus, the variable `myArray` above, cannot be reassigned to reference a different array.  However, we can change the contents of the array as shown above.
+In JavaScript we can opt-in to immutable variables by declaring them `const`, but it is only a shallow immutability.  Thus, the variable `myArray` above cannot be reassigned to reference a different array.  However, we can change the contents of the array as shown above.
 
 A more functional way to implement the `squares` function would be more like the examples we have seen previously:
 
@@ -215,14 +215,14 @@ new Counter();
 ```
 
 > 0  
-> 1
+> 1  
 > 2  
 > ...
 
 ### Continuations
 
 Continuations are functions which, instead of returning the result of a computation directly to the caller, pass the result on to another function, specified by the caller.  
-We can rewrite basically any function to pass their result to a user-specified continuation function instead of returning the result directly.  The parameter `done` in the ` continuationPlus` function below will be a function specified by the caller to do something with the result.
+We can rewrite basically any function to pass their result to a user-specified continuation function instead of returning the result directly.  The parameter `done` in the `continuationPlus` function below will be a function specified by the caller to do something with the result.
 
 ```javascript
 function simplePlus(a, b) {
@@ -332,11 +332,11 @@ new List(l)
 This is called *fluent* programming style.
 Interfaces in object-oriented languages that chain a sequence of method calls (as above) are often called *fluent interfaces*.  One thing to be careful about fluent interfaces in languages that do not enforce purity is that the methods may or may not be pure.  
 
-That is, the type system does not warn you whether the method mutates the object upon which it is invoked and simply returns `this`, or creates a new object, leaving the original object untouched.  We can see,  however, that List.map as defined above, creates a new list and is pure.
+That is, the type system does not warn you whether the method mutates the object upon which it is invoked and simply returns `this`, or creates a new object, leaving the original object untouched.  We can see,  however, that `List.map` as defined above creates a new list and is pure.
 
 ## Computation with Pure Functions
 
-Pure functions may seem restrictive, but in fact pure function expressions and higher-order functions can be combined into powerful programs.  In fact, anything you can compute with an imperative program can be computed through function composition.  Side effects are required eventually, but they can be managed and the places they occur can be isolated.  Let’s do a little demonstration, although it might be a bit impractical, we’ll make a little list processing environment with just functions:
+Pure functions may seem restrictive, but in fact pure function expressions and higher-order functions can be combined into powerful programs.  In fact, anything you can compute with an imperative program can be computed through function composition.  Side effects are required eventually, but they can be managed and the places they occur can be isolated.  Let’s do a little demonstration; although it might be a bit impractical, we’ll make a little list processing environment with just functions:
 
 ```javascript
 const cons = (_head, _rest)=> selector=> selector(_head, _rest);
@@ -357,10 +357,13 @@ The `selector` function that we pass to the list is our ticket to accessing its 
 ```javascript
 list123((_head, _rest)=> _head)
 ```
+
 > 1
+
 ```javascript
 list123((_,r)=>r)((h,_)=>h) // we can call the parameters whatever we like
 ```
+
 > 2
 
 We can create accessor functions to operate on a given list (by passing the list the appropriate selector function):
@@ -377,7 +380,7 @@ Now, ```head``` gives us the first data element from the list, and ```rest``` gi
 const one = head(list123), // ===1
     list23 = rest(list123),
     two = head(list23), // ===2
-    … // and so on
+    ... // and so on
 ```
 
 Now, here’s the ubiquitous map function:
@@ -387,7 +390,7 @@ const map = (f, list)=> !list ? null
                               : cons(f(head(list)), map(f, rest(list)))
 ```
 
-In the above, we are using closures to store data.  It's just a trick to show the power of functions and to put us into the right state of mind for the Lambda Calculus - which provides a complete model of computation using only anonymous functions like those above.  In a real program I would expect you would use JavaScript's class and object facilities to create data structures.
+In the above, we are using closures to store data.  It's just a trick to show the power of functions and to put us into the right state of mind for the Lambda Calculus -- which provides a complete model of computation using only anonymous functions like those above.  In a real program I would expect you would use JavaScript's class and object facilities to create data structures.
 
 ### Towards Lambda Calculus and Church Encoding
 
@@ -402,6 +405,7 @@ These ideas, of computation through pure function expressions, are inspired by A
 - Implement a ```fromArray``` function to construct a ```cons``` list from an array
 - Implement a ```filter``` function, which takes a function and a cons list, and returns another cons list populated only with those elements of the list for which the function returns true
 - Implement a ```reduce``` function for these cons lists, similar to javascript’s ```Array.reduce```
+- Implement a ```reduceRight``` function for these cons lists, similar to javascript’s ```Array.reduceRight```
 - Implement a ```concat``` function that takes two lists as arguments and returns a new list of their concatenation.
 - How can we update just one element in this list without mutating any data and what is the run-time complexity of such an operation?
 
@@ -466,6 +470,6 @@ studentVersion1.name = "Tom"
 
 We will see later how the [TypeScript compiler](/typescript1) allows us to create deeply immutable objects that will trigger compile errors if we try to change their properties.
 
-You may wonder how pure functions can be efficient if the only way to mutate data structures is by returning a modified copy of the original.  There are two responses to such a question, one is: "purity helps us avoid errors in state management through wanton mutation effects - in modern programming correctness is often a bigger concern than efficiency", the other is "properly structured data permits log(n) time copy-updates, which should be good enough for most purposes".  We'll explore what is meant by the latter in later sections of these notes.
+You may wonder how pure functions can be efficient if the only way to mutate data structures is by returning a modified copy of the original.  There are two responses to such a question, one is: "purity helps us avoid errors in state management through wanton mutation effects -- in modern programming correctness is often a bigger concern than efficiency", the other is "properly structured data permits log(n) time copy-updates, which should be good enough for most purposes".  We'll explore what is meant by the latter in later sections of these notes.
 
 
