@@ -11,9 +11,9 @@ title: "Monad"
 
 ## Introduction
 
-As with Functor and Applicative the name Monad comes from Category Theory.  Although the names sound mathematical they are abstractions of relatively simple concepts.  A Functor allowed unary functions to be applied (mapped/`fmap`ed) over a context.  Applicative allowed us to apply a function in a context to values in a context.  So too, Monad has a characteristic function called `bind`, which allows us to perform another type of function application over values in a context.
+As with Functor and Applicative the name Monad comes from Category Theory.  Although the names sound mathematical they are abstractions of relatively simple concepts.  A Functor allowed unary functions to be applied (mapped/`fmap`ed) over a context.  Applicative allowed us to apply a function in a context to values in a context.  So too, Monad has a characteristic function called 'bind', which allows us to perform another type of function application over values in a context.
 
-The special thing about bind is that it allows us to chain functions which have an effect without creating additional layers of nesting inside effect contexts.  People often try to describe Monads in metaphors, which are not always helpful.  The essence of Monad really is bind and there is no getting around looking at it's type signature and seeing what it does in different instances, which we will get to shortly.  However, one analogy that resonated for me was the idea of bind as a ["programmable semicolon"](http://book.realworldhaskell.org/read/monads.html).  That is, imagine a language like JavaScript which uses semicolons (`;`) as a statement separator:
+The special thing about bind is that it allows us to chain functions which have an effect without creating additional layers of nesting inside effect contexts.  People often try to describe Monads in metaphors, which are not always helpful.  The essence of Monad really is bind and there is no getting around looking at its type signature and seeing what it does in different instances, which we will get to shortly.  However, one analogy that resonated for me was the idea of bind as a ["programmable semicolon"](http://book.realworldhaskell.org/read/monads.html).  That is, imagine a language like JavaScript which uses semicolons (`;`) as a statement separator:
 
 ```javascript
 // some javascript you can try in a browser console:
@@ -55,7 +55,7 @@ Things to notice:
 
 * `Monad` is a subclass of `Applicative` (and therefore also a `Functor`)
 * `return` = `pure`, from [`Applicative`](/haskell3/#applicative). The `return` function exists for historical reasons and you can safely use only `pure` (PureScript has only `pure`).
-* the operator `(>>=)` (pronounced “bind”) is the minimal definition (the one function you must create--in addition to the functions also required for `Functor` and `Applicative`--to make a new `Monad` instance).
+* the operator `(>>=)` (pronounced “bind”) is the minimal definition (the one function you must create -- in addition to the functions also required for `Functor` and `Applicative` -- to make a new `Monad` instance).
 * `>>` is a special case of bind (described below)
 * lots of built-in types are already monads
 
@@ -74,7 +74,7 @@ The type of the flipped bind `(=<<)` has a nice correspondence to the other oper
 ($)   ::                    (a -> b) -> a   -> b
 ```
 
-So the bind function `(>>=)` (and equally its flipped version `(=<<)`) gives us another way to map functions over contexts, but why do we need another way?
+So the bind function `(>>=)` (and equally its flipped version `(=<<)`) gives us another way to map functions over contexts -- but why do we need another way?
 
 As an example we'll consider computation using the `Maybe` type, which we said is useful for [partial functions](/haskell2/#maybe), that is functions which are not sensibly defined over all of their inputs.  A more complex example of such a function than we have seen before is the [quadratic formula](https://en.wikipedia.org/wiki/Quadratic_formula) which, for quadratic functions of the form:
 
@@ -87,7 +87,7 @@ determines two roots as follows:
 This may fail in two ways:
  
   1. if *a* is 0 (divide by 0 is undefined);
-  2. if the expression that squareroot is applied to is negative (and we insist on only real-valued solutions). 
+  2. if the expression that square root is applied to is negative (and we insist on only real-valued solutions). 
  
 Therefore, let's define a little library of math functions which encapsulate the possibility of failure in a `Maybe`:
 
@@ -99,7 +99,7 @@ safeDiv numerator denominator = Just $ numerator / denominator
 safeSqrt :: Float -> Maybe Float
 safeSqrt x
   | x < 0 = Nothing
-  | otherwise = Just $ sqrt x -- the built-in squareroot function
+  | otherwise = Just $ sqrt x -- the built-in square root function
 ```
 
 Great!  Now we can use `case` and pattern matching to make a safe solver of quadratic equations:
@@ -122,7 +122,7 @@ Just (-1.0,-2.0)
 Nothing
 ```
 
-Actually, not so great, we are having to unpack Maybes multiple times, leading to nested `case`s.  This is just two levels of nesting, what happens if we need to work in additional computations that can fail?
+Actually, not so great, we are having to unpack Maybes multiple times, leading to nested `case`s.  This is just two levels of nesting; what happens if we need to work in additional computations that can fail?
 
 The general problem is that we need to chain multiple functions of the form `Float -> Maybe Float`.  Let's look again at the type of bind:
 
@@ -155,7 +155,7 @@ Just (-1.0,-2.0)
 Nothing
 ```
 
-Note that Haskell has a special notation for such multi-line use of bind, called "`do` notation".  The above code, in a `do` block looks like:
+Note that Haskell has a special notation for such multi-line use of bind, called "`do` notation".  The above code in a `do` block looks like:
 
 ```haskell
 safeSolve a b c = do
@@ -175,13 +175,13 @@ instance  Monad Maybe  where
     Nothing  >>= _      = Nothing
 ```
 
-Meaning, that anything on the right-hand side of a `Nothing>>=` will be left unevaluated and `Nothing` returned.
+Meaning that anything on the right-hand side of a `Nothing>>=` will be left unevaluated and `Nothing` returned.
 
-So that's one instance of `Monad`, let's look at some more...
+So that's one instance of `Monad`; let's look at some more...
 
 ### IO
 
-The haskell type which captures Input/Output effects is called `IO`.  As we demonstrated with the `traverse` function, it is possible to perform `IO` actions using `fmap` `(<$>)` and applicative `(<*>)`, (for example printing to the console), the challenge is taking values out of an `IO` context and using them to create further `IO` effects.
+The Haskell type which captures Input/Output effects is called `IO`.  As we demonstrated with the `traverse` function, it is possible to perform `IO` actions using `fmap` (`<$>`) and applicative (`<*>`) -- for example printing to the console. The challenge is taking values out of an `IO` context and using them to create further `IO` effects.
 
 Here are some simple `IO` “actions”:
 ```haskell
