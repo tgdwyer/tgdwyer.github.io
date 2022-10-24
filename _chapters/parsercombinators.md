@@ -14,9 +14,9 @@ title: "Parser Combinators"
 In this section we will see how the various Haskell language features we have explored allow us to solve real-world problems.  In particular, we will develop a simple but powerful library for building *parsers* that is compositional through [Functor](/haskell3/#functor), [Applicative](/haskell3/#applicative) and [Monad](/monad) interfaces.  Before this, though, we will learn the basics of parsing text, including a high-level understanding that parsers are *state-machines* which realise a *context-free grammar* over a textual language.
 
 Previously, [we glimpsed a very simplistic Applicative parser](/haskell3/#a-simple-applicative-functor-for-parsing).
-In this chapter, a *parser* is still simply a function which takes a string as input and produces some structure or computation as output, but now we extend the parser with monadic `bind` definitions, richer error handling and the ability to handle non-trivial grammars with alternative inputs.
+In this chapter, a *parser* is still simply a function which takes a string as input and produces some structure or computation as output, but now we extend the parser with monadic 'bind' definitions, richer error handling and the ability to handle non-trivial grammars with alternative inputs.
 
-Parsing has a long history and *parser combinators* are a relatively recent approach made popular quite recently by modern functional programming techniques.  
+Parsing has a long history and *parser combinators* are a relatively recent approach made popular by modern functional programming techniques.  
 A *parser combinator* is a [higher-order function](/higherorderfunctions) that accepts parsers as input and combines them somehow into a new parser.
 
 More traditional approaches to parsing typically involve special purpose programs called *parser generators*, which take as input a grammar defined in a special language (usually some derivation of BNF as described below) and generate the partial program in the desired programming language which must then be completed by the programmer to parse such input.  Parser combinators have the advantage that they are entirely written in the one language.  Parser combinators written in Haskell take advantage of the expressiveness of the Haskell language such that the finished parser can look a lot like a BNF grammar definition, as we shall see.
@@ -54,7 +54,7 @@ Here's the BNF grammar:
 <spaces> ::= " " <spaces> | ""
 ```
 
-So `"0"`-`"9"` and `"("`, `")"`, `" "`  are the full set of terminals.
+So `"0"`-`"9"`, `"("`, `")"`, and `" "` are the full set of terminals.
 
 Now here's a sneak peak at a simple parser for such phone numbers.  It succeeds for any input string which satisfies the above grammar, returning a 10-digit string for the full number without spaces and assumes "03" for the area code for numbers with none specified (i.e. it assumes they are local to Victoria).  Our [`Parser` type](/parsercombinators/#parser-type) provides a function `parse` which we call like so:
 
@@ -103,7 +103,7 @@ areaCode = do
 
 ## Parser Type
 
-At essence, our parser is going to be summed up by a couple of types:
+In essence, our parser is going to be summed up by a couple of types:
 
 ```haskell
 type Input = String
@@ -120,7 +120,7 @@ Then the `Parser` type has one field `parse` which is a function of type `Input 
   deriving Eq
 ```
 
-We'll come back to the `ParseError` type - which will be returned in the case of unexpected input, but we can see that a successful Parse is going to produce a `Result` which has two fields - more `Input` (the part of the input remaining after we took a bit off and parsed it), and an `a` - a type parameter that we may specify for concrete `Parser` instances.
+We'll come back to the `ParseError` type - which will be returned in the case of unexpected input, but we can see that a successful Parse is going to produce a `Result` which has two fields -- more `Input` (the part of the input remaining after we took a bit off and parsed it), and an `a`, a type parameter that we may specify for concrete `Parser` instances.
 
 The `Parser` and the `ParseResult` types are pretty abstract.  They say nothing about what precise `Input` string we are going to parse, or what type `a` we are going to return in the result.  This is the strength of the parser, allowing us to build up sophisticated parsers for different input grammars through composition using [instances of Function, Applicative and Monad](/parsercombinators/#instances), and the `ParseResult` parameter `a` allows us to produce whatever we want from the parsers we create.
 
@@ -138,7 +138,8 @@ data ParseError =
   deriving (Eq, Show)
 ```
 
-Naturally it needs to be `Show`able, but also `Eq`uality testable so that we can pattern match `ParseResult` to handle particular types of errors.
+Naturally it needs to be `Show`able, and we'll throw in an `Eq` for good measure.
+<!-- was "but also `Eq`uality testable so that we can pattern match `ParseResult` to handle particular types of errors.". This may be misleading because pattern matching works even without Eq! -->
 
 ## Instances
 
@@ -154,7 +155,7 @@ instance Show a => Show (ParseResult a) where
     "Expected end of stream, but got >" ++ show i ++ "<"
 ```
 
-And `ParseResult` is also an instance of `Functor` so that we can map functions over the output of a successful parse - or nothing if the result is an `Error`:
+And `ParseResult` is also an instance of `Functor` so that we can map functions over the output of a successful parse -- or do nothing if the result is an `Error`:
 
 ```haskell
 instance Functor ParseResult where
@@ -170,7 +171,7 @@ instance Functor Parser where
   fmap f (P p) = P (fmap f . p)
 ```
 
-The applicative `pure` creates a Parser that always succeeds with the given input, and thus forms a basis for composition.  We saw it being used in the above example to return the results of a parse back into the `Parser` at the end of a `do`-block.  
+The applicative `pure` creates a `Parser` that always succeeds with the given input, and thus forms a basis for composition.  We saw it being used in the above example to return the results of a parse back into the `Parser` at the end of a `do` block.  
 
 The `(<*>)` allows us to map functions in the `Parser` over another `Parser`.  As with other `Applicative` instances, a common use case would be composition with a `Parser` that returns a data constructor as we will see in [the next example](/parsercombinators/#creating-a-parse-tree).
 
@@ -183,7 +184,7 @@ instance Applicative Parser where
   (<*>) p q = p >>= (<$> q)
 ```
 
-The `Monad` instance's bind function `(>>=)` we have already seen in use in the example above, allowing us to sequence `Parser`s in `do`-blocks to build up the implementation of the `BNF` grammar.
+The `Monad` instance's bind function `(>>=)` we have already seen in use in the example above, allowing us to sequence `Parser`s in `do`-blocks to build up the implementation of the BNF grammar.
 
 ```haskell
 instance Monad Parser where
@@ -196,7 +197,7 @@ instance Monad Parser where
 
 ## Parser Combinators
 
-The most atomic function for a parser of `String`, is to pull a single character off the input.  The only thing that could go wrong is to find our input is empty.
+The most atomic function for a parser of `String` is to pull a single character off the input.  The only thing that could go wrong is to find our input is empty.
 
 ```haskell
 character :: Parser Char
@@ -224,7 +225,7 @@ is c = do
   next c
 ```
 
-And finally our `Parser` for trying to apply a first `Parser`, and then and alternate `Parser` if the first fails.  This allows us to encode the alternatives in our BNF grammar rules.
+And finally our `Parser` for trying to apply a first `Parser`, and then an alternate `Parser` if the first fails.  This allows us to encode the alternatives in our BNF grammar rules.
 
 ```haskell
 (|||) :: Parser a -> Parser a -> Parser a
@@ -257,7 +258,7 @@ spaces = (is ' ' >> spaces) ||| pure ()
 
 ### Exercises
 
-- make a less repeatitive `digit` parser by creating a function `satisfy :: (Char -> Bool) -> Parser Char` which returns a parser that produces a character but fails if: the input is empty; or the character does not satisfy the given predicate. You can use the `isDigit` function from `Data.Char` as the predicate.
+- make a less repetitive `digit` parser by creating a function `satisfy :: (Char -> Bool) -> Parser Char` which returns a parser that produces a character but fails if the input is empty or the character does not satisfy the given predicate. You can use the `isDigit` function from `Data.Char` as the predicate.
 
 - change the type of `spaces` to `Parser [Char]` and have it return the appropriately sized string of only spaces.
 
@@ -271,7 +272,7 @@ Let's imagine we need to parse records from a vets office.  It treats only three
 <Animal> ::= "cat" | "dog" | "camel"
 ```
 
-So our simple grammar consists of three terminals, each of which is a straight forward string *token* (a constant string that makes up a primitive word in our language).  To parse such a token, we'll need a parser which succeeds if it finds the specified string next in its input.  We'll use our `is` parser from above (which simply confirms a given character is next in its input).  The type of is was `Char -> Parser Char`.  Since `Parser` is an instance of `Applicative`, we can simply `traverse` the `is` parser across the given `String` (list of `Char`) to produce another `String` in the `Parser` applicative context.
+So our simple grammar consists of three terminals, each of which is a straightforward string *token* (a constant string that makes up a primitive word in our language).  To parse such a token, we'll need a parser which succeeds if it finds the specified string next in its input.  We'll use our `is` parser from above (which simply confirms a given character is next in its input).  The type of is was `Char -> Parser Char`.  Since `Parser` is an instance of `Applicative`, we can simply `traverse` the `is` parser across the given `String` (list of `Char`) to produce another `String` in the `Parser` applicative context.
 
 ```haskell
 string :: String -> Parser String
@@ -325,13 +326,13 @@ What's really cool about this is that obviously the strings "cat" and "camel" ov
 
 - Write some messy imperative-style JavaScript (no higher-order functions allowed) to parse cat, dog or camel and construct a different class instance for each.
 - Now add "dolphin" to the grammar, and use a stopwatch to time yourself extending your messy imperative code.  I bet it takes longer than extending the `animal` parser combinator.
-- Modify the grammar and the ADT to have some extra data fields for each of the animal types, e.g. `humpCount`, `remainingLives`, `barkstyle`, etc.
 - Make a parser `stringTok` which uses the `string` parser to parse a given string, but ignores any `spaces` before or after the token.
+- Modify the grammar and the ADT to have some extra data fields for each of the animal types, e.g. `humpCount`, `remainingLives`, `barkstyle`, etc.
 - Extend your parser to produce these records.
 
 ## Creating a Parse Tree
 
-Programs are usually parsed into a tree structure called an *Abstract Syntax Tree* (AST), more generally known as a *parse tree*.  Further processing ultimately into an object file in the appropriate format (whether it's some sort of machine code directly executable on the machine architecture or some sort of intermediate format - e.g. Java bytecode) then essentially boils down to traversal of this tree to evaluate the statements and expressions there in the appropriate order.
+Programs are usually parsed into a tree structure called an *Abstract Syntax Tree* (AST), more generally known as a *parse tree*.  Further processing ultimately into an object file in the appropriate format (whether it's some sort of machine code directly executable on the machine architecture or some sort of intermediate format -- e.g. Java bytecode) then essentially boils down to traversal of this tree to evaluate the statements and expressions there in the appropriate order.
 
 We will not implement a parser for a full programming language, but to at least demonstrate what this concept looks like in Haskell we will create a simple parser for simple arithetic expressions.  The parser generates a tree structure capturing the order of operations, which we may then traverse to perform a calculation.
 
@@ -364,7 +365,6 @@ parseCalc :: String -> ParseResult Expr
 parseCalc = parse expr
 ```
 
-First difference to note from our `phoneNumber` is that instead of returning `::Parser [Char]`
 And an example use might look like:
 
 ```haskell
@@ -392,7 +392,7 @@ Minus
 - Make a function which performs the calculation specified in an `Expr` tree like the one above.
 
 Obviously we are going to need to parse numbers, so let's start with a simple parser which creates a `Number`.  
-Note that whereas our previous parser had type `phoneNumber :: Parser [Char]` - i.e. it produced strings, this, and most of the parsers below produce an `Expr`.
+Note that whereas our previous parser had type `phoneNumber :: Parser [Char]` -- i.e. it produced strings -- this, and most of the parsers below, produces an `Expr`.
 
 ```haskell
 number :: Parser Expr  
@@ -415,25 +415,25 @@ op c = do
 
 As before, `spaces` ignores any number of `' '` characters.
 
-Here's how we use `op` for `*`, note that it returns only the `Times` constructor.  Thus, our return type is an as-yet unapplied binary function (and we see now why `(<*>)` is going to be useful).
+Here's how we use `op` for `*`; note that it returns only the `Times` constructor.  Thus, our return type is an as-yet unapplied binary function (and we see now why `(<*>)` is going to be useful).
 
 ```haskell
 times :: Parser (Expr -> Expr -> Expr)
 times = op '*' >> pure Times
 ```
 
-And for `+` and `-` a straightforward implementation of the `<add>` non-terminal from our grammar:
+And for `+` and `-` a straightforward implementation of the `<addop>` non-terminal from our grammar:
 
 ```haskell
-add :: Parser (Expr -> Expr -> Expr)
-add = (op '+' >> pure Plus) ||| (op '-' >> pure Minus)
+addop :: Parser (Expr -> Expr -> Expr)
+addop = (op '+' >> pure Plus) ||| (op '-' >> pure Minus)
 ```
 
 And some more non-terminals:
 
 ```haskell
 expr :: Parser Expr
-expr = chain term add
+expr = chain term addop
 
 term :: Parser Expr
 term = chain number times
