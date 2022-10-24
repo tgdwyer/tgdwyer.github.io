@@ -15,7 +15,7 @@ In this chapter we will meet some more typeclasses that abstract common coding p
 ## Folds
 
 Recall the “`reduce`” function that is a member of JavaScript’s `Array` type, and which we implemented ourselves for linked and cons lists, was a way to generalise loops over enumerable types.
-In Haskell, this concept is once again generalised with a typeclass called `Foldable` - the class of things which can be “folded” over to produce a single value.  
+In Haskell, this concept is once again generalised with a typeclass called `Foldable` -- the class of things which can be “folded” over to produce a single value.  
 We will come back to [the `Foldable` typeclass](#foldable), but first let's limit our conversation to the familiar `Foldable` instance, basic lists.  
 Although in JavaScript `reduce` always associates elements from left to right, Haskell's `Foldable` typeclass offers both `foldl` (which folds left-to-right) and `foldr` (which folds right-to-left):
 
@@ -43,7 +43,7 @@ Here’s a left fold with a picture of the fold:
 
 ![Left Fold](/assets/images/chapterImages/haskell4/leftFold.png)
 
-Note that since the `(+)` operator is commutative (`a+b=b+a`), it `foldr` and `foldl` return the same result.  For functions that are not commutative, however, this is not necessarily the case.
+Note that since the `(+)` operator is associative -- a+(b+c) = (a+b)+c -- `foldr` and `foldl` return the same result.  For functions that are not associative, however, this is not necessarily the case.
 
 ---------
 
@@ -153,7 +153,7 @@ instance Foldable ((,) a) -- Defined in `Data.Foldable'
 ```
 
 Note that I've reordered the list of functions to the order we want to discuss them, removed a few things we're not interested in at the moment and the comments are mine.
-However, once you get used to reading types the `:info` for this class is pretty self explanatory.  Most of these functions are also familiar from their use with lists.  The surprise (OK not really) is that lots of other things can be `Foldable` as well.
+However, once you get used to reading types the `:info` for this class is pretty self explanatory.  Most of these functions are also familiar from their use with lists.  The surprise (OK, not really) is that lots of other things can be `Foldable` as well.
 
 ```haskell
 Prelude> foldr (-) 1 (Just 3)
@@ -212,7 +212,7 @@ We can use `foldMap` to map the values stored in the tree to an instance of `Mon
 28
 ```
 
-Or we can compute the same conversion to a list as the above `foldr`, by providing `foldMap` with a function places the values into singleton lists, e.g.:
+Or we can compute the same conversion to a list as the above `foldr`, by providing `foldMap` with a function that places the values into singleton lists, e.g.:
 
 ```haskell
 > (:[]) 1 -- cons 1 with an empty list, same as 1:[]
@@ -232,7 +232,7 @@ Since list is an instance of Monoid, `foldMap` will concatenate these singleton 
 
 ## Traversable
 
-`Traversable` extends both `Foldable` and `Functor`, in a typeclass for things that we can `traverse` a function with an `Applicative` effect over, e.g. here's a sneak peak of what this lets us do:
+`Traversable` extends both `Foldable` and `Functor`, in a typeclass for things that we can `traverse` a function with an `Applicative` effect over. Here's a sneak peak of what this lets us do:
 
 ```haskell
 Prelude> traverse putStrLn ["tim","was","here"]
@@ -311,7 +311,7 @@ Prelude> :t print
 print :: Show a => a -> IO ()
 ```
 
-The `()` is like `void` in TypeScript - it’s a type with exactly one value `()`, and hence is called “Unit”.  There is no return value from `print`, only the `IO` effect, and hence the return type is `()`.  `IO` is also an instance of `Applicative`.  This means we can use `traverse` to print out the contents of a list:
+The `()` is like `void` in TypeScript -- it’s a type with exactly one value `()`, and hence is called “Unit”.  There is no return value from `print`, only the `IO` effect, and hence the return type is `()`.  `IO` is also an instance of `Applicative`.  This means we can use `traverse` to print out the contents of a list:
 
 ```haskell
 Prelude> traverse print [1,2,3]
@@ -321,14 +321,14 @@ Prelude> traverse print [1,2,3]
 [(),(),()]
 ```
 
-Here `1,2,3` are printed to the console each on their own line (which is `print`s IO effect), and `[(),(),()]` is the return value reported by GHCi - a list of Unit.
+Here `1,2,3` are printed to the console each on their own line (which is `print`'s IO effect), and `[(),(),()]` is the return value reported by GHCi -- a list of Unit.
 
 ```haskell
 Prelude> :t traverse print [1,2,3]
 traverse print [1,2,3] :: IO [()]
 ```
 
-When we ran this at the REPL, GHCi consumed the `IO` effect (because it runs all commands inside the [`IO Monad`](/monad/)).  However, inside a pure function there is no easy way to get rid of this `IO` return type - which protects you from creating `IO` effects unintentionally.
+When we ran this at the REPL, GHCi consumed the `IO` effect (because it runs all commands inside the [`IO Monad`](/monad/)).  However, inside a pure function there is no easy way to get rid of this `IO` return type -- which protects you from creating `IO` effects unintentionally.
 
 A related function defined in `Traversable` is `sequenceA` allows us to convert directly from Traversables of Applicatives, to Applicatives of Traversables:
 
