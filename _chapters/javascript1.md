@@ -11,6 +11,7 @@ title: "JavaScript Introduction"
 - Understand that a [closure](#closures) captures variables referenced within its scope
 - Create and apply [anonymous functions](#anonymous-functions) to fluent style code
 - Compare [arrow functions](#arrow-functions) and regular function syntax
+- Understand how JavaScripts built-in [array](#arrays) type and its [associated methods](#array-cheatsheet) can be used with arrow-functions to process data
 - Explain JavaScript’s [prototype mechanism](#prototype-class-mechanism) for creating classes from functions
 - Create [ES6 style classes](#ecmascript-6-class-syntax) with constructors and getters
 - Compare object oriented [polymorphism](#polymorphism) to [dependency injection](#dependency-injection) through functions
