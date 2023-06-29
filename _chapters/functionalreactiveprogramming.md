@@ -28,7 +28,7 @@ You can [also play with a live version of this code](https://stackblitz.com/edit
 
 ```typescript
 import { of, range, fromEvent, zip, merge } from 'rxjs'; 
-import { last,filter,scan,map,take, mergeMap } from 'rxjs/operators';
+import { last,filter,scan,map,mergeMap,take,takeUntil } from 'rxjs/operators';
 ```
 
 Conceptually, the Observable data structure just wraps a collection of things in a container in a similar way to each of the above.
@@ -44,16 +44,18 @@ of(1,2,3,4)
 > 3  
 > 4  
 
-So, there is a similarity to the [lazy sequence](lazyevaluation) where nothing happened until we started calling ```next```, but there is also a difference.
-You could think of our lazy sequences as being "pull-based" data structures, because we had to "pull" the values out one at a time by calling the ```next``` function as many times as we wanted elements of the list.  Observables are a bit different.  They are used to handle "streams" of things, such as asynchronous UI or communication events.  These things are asynchronous in the sense that we do not know when they will occur.  
+The requirement to invoke `subscribe` before anything is produced by the Observable is conceptually similar to the [lazy sequence](lazyevaluation), where nothing happened until we started calling ```next```.  But there is also a difference.
+You could think of our lazy sequences as being "pull-based" data structures, because we had to "pull" the values out one at a time by calling the ```next``` function as many times as we wanted elements of the list.  Observables are a bit different.  They are used to handle "streams" of things, such as asynchronous UI (e.g. mouse clicks on an element of a web page) or communication events (e.g. responses from a web service).  These things are asynchronous in the sense that we do not know when they will occur.  
 
-Just as we have done to each of the above data structures (arrays and so on) in previous chapters, we can define a transform over an Observable to create a new Observable.  This transformation may have multiple steps the same way that we chained ```filter``` and ```map``` operations over arrays previously.  In rx.js's Observable implementation, however, they've gone a little bit more functional, by insisting that such operations are composed (rather than chained) inside a ```pipe```.  For example, here's the squares of even numbers in the range [0,10):
+Just as we have done for various data structures (arrays and so on) in previous chapters, we can define a transform over an Observable to create a new Observable.  This transformation may have multiple steps the same way that we chained ```filter``` and ```map``` operations over arrays previously.  In rx.js's Observable implementation, however, they've gone a little bit more functional, by insisting that such operations are composed (rather than chained) inside a ```pipe```.  For example, here's the squares of even numbers in the range [0,10):
 
 ```javascript
+const isEven = x=>x%2===0,
+      square = x=>x*x
 range(10)
   .pipe(
-    filter(x=>x%2===0),
-    map(x=>x*x))
+    filter(isEven),
+    map(square))
   .subscribe(console.log)
 ```
 
@@ -76,9 +78,9 @@ range(1000)
 
 > 233168
 
-Scan is very much like the ```reduce``` function on Array in that it applies an accumulator function to the elements coming through the Observable, except instead of just outputting a single value (as ```reduce``` does), it emits a stream of the running accumulation (in this case, the sum so far).  Thus, we use the ```last``` function to finally produce an Observable with the final value.
+Scan is very much like the ```reduce``` function on Array in that it applies an accumulator function to the elements coming through the Observable, except instead of just outputting a single value (as ```reduce``` does), it emits a stream of the running accumulation (in this case, the sum so far).  Thus, we use the ```last``` function to produce an Observable with just the final value.
 
-There are also functions for combining Observable streams.  The `zip` function provides a pretty straightforward way to pair the values from two streams into an array:
+There are also functions for combining Observable streams.  The `zip` function lets you pair the values from two streams into an array:
 
 ```javascript
 const
