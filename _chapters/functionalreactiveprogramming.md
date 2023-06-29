@@ -27,8 +27,8 @@ We have seen a number of different ways of wrapping collections of things in con
 You can [also play with a live version of this code](https://stackblitz.com/edit/rxjs-introexamples?file=index.ts).  Note that the code in this live version begins with a pair of `import` statements, bringing the set of functions that we describe below into scope for this file from the `rxjs` libraries:
 
 ```typescript
-import { of, range, fromEvent, merge } from 'rxjs'; 
-import { last,filter,scan,map,flatMap,take } from 'rxjs/operators';
+import { of, range, fromEvent, zip, merge } from 'rxjs'; 
+import { last,filter,scan,map,take, mergeMap } from 'rxjs/operators';
 ```
 
 Conceptually, the Observable data structure just wraps a collection of things in a container in a similar way to each of the above.
