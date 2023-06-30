@@ -339,10 +339,85 @@ We now rewrite precisely the same behaviour using Observable FRP:
 
 The Observable’s mousedown, mousemove and mouseup are like streams which we can transform with familiar operators like map and takeUntil.   The mergeMap operator “flattens” the inner  mousemove  Observable stream back to the top level, then subscribe will apply a final action before doing whatever cleanup is necessary for the stream.
 
-Compared to our state machine diagram above,
+Compared to our state machine diagram above:
 
 - we have modelled each of the possible transition triggers as streams;
-- the flow of data is from top to bottom, with the cycling branch introduced by the mergeMap operation (which we will look into below);
+- the flow of data is from top to bottom, with the cycling branch handled by the mergeMap operation;
 - the only side effects (the movement of the rectangle) occur in the function passed to the subscribe;
 - the cleanup of subscriptions to the mousemove and mouseup events is handled automatically by the ```takeUntil``` function when it closes the streams.
 
+However, there's still something not very elegant about this version.  In particular, we are reading the position of the rectangle directly from the DOM inside the `map` on the `mousedown` stream.
+
+We can remove this dependency, making our event stream a 'closed system', by introducing a `scan` operator on the stream to accumulate the state using a pure function.
+
+We'll introduce some types so that TypeScript can help us keep everything correct.  First, all the events we care about have a position on the SVG canvas associated with them, so we'll have a simple `Point` interface with `x` and `y` positions:
+```typescript
+interface Point { readonly x:number, readonly y:number }
+```
+Now we'll create classes implementing this `Point` interface with a constructor so that we can instantiate it for a given (DOM) `MouseEvent`.
+```typescript
+abstract class MousePosEvent implements Point { 
+  readonly x:number; readonly y:number;
+  constructor(e:MouseEvent) {
+    [this.x,this.y] = [e.clientX, e.clientY]
+  } 
+}
+class DownEvent extends MousePosEvent {}
+class DragEvent extends MousePosEvent {}
+```
+And finally, a type for the state that will be accumulated by the `scan` operator:
+```typescript
+type State = Readonly<{
+  rect:Point, // position of the dragged rectangle
+  downrect:Point, // position of the rectangle on mousedown
+  downpos:Point // position of the cursor on mousedown
+}>
+```
+Setup of the streams is as before:
+```typescript
+const svg = document.getElementById("svgCanvas")!,
+      rect = document.getElementById("draggableRect")!,
+      mousedown = fromEvent<MouseEvent>(rect,'mousedown'),
+      mousemove = fromEvent<MouseEvent>(svg,'mousemove'),
+      mouseup = fromEvent<MouseEvent>(svg,'mouseup');
+```
+But now we'll capture initial position of the rectangle outside one time only of the streams.
+```typescript
+const initRectPos:Point = {
+  x:Number(rect.getAttribute('x')),
+  y:Number(rect.getAttribute('y'))
+}
+```
+And now our stream pipe can manage all the necessary state with a pure function passed to a `scan`:
+```typescript
+mousedown
+  .pipe(
+    mergeMap(mouseDownEvent =>
+      mousemove.pipe(
+        takeUntil(mouseup),
+        map(mouseDragEvent=>new DragEvent(mouseDragEvent)),
+        startWith(new DownEvent(mouseDownEvent)))),
+    scan((a:State,e:MousePosEvent)=> 
+      e instanceof DownEvent
+      ? {...a,
+          downrect:a.rect,
+          downpos:{x:e.x,y:e.y} }
+      : {...a, /* DragEvent */
+          rect:{
+            x:e.x + a.downrect.x - a.downpos.x,
+            y:e.y + a.downrect.y - a.downpos.y} }
+    ,<State>{ rect:initRectPos })
+  )
+  .subscribe(function(a){
+    rect.setAttribute('x', String(a.rect.x))
+    rect.setAttribute('y', String(a.rect.y))
+  })
+```
+Note that inside the `mergeMap` we use the `startWith` operator to force a `DownEvent` onto the start of the flattened stream.  Then the body of the accumulator function passed to `scan` handles the logic of the cases of mouse down or drag.
+
+The advantage of this code is obviously not brevity; especially with the introduced type definitions it's longer than the previous implementations of the same logic.  Rather, the advantages of this pattern are:
+
+ * *maintainability*: we have separated setup code and state management code;
+ * *scalability*: we can extend this code pattern to handle more complicated state machines.
+
+As an example of *scalability* we will be using this same pattern to implement the logic of an asteroids arcade game in the [next chapter](asteroids).
