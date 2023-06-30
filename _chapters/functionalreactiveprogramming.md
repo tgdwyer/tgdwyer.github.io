@@ -293,17 +293,17 @@ rect.addEventListener('mousedown',e => {
 })
 ```
 
-We add 'event listeners' to the HTML elements, which invoke the specified functions when the event fires.  There are some awkward dependencies.  The ```moveListener``` function needs access to the mouse coordinates from the mousedown event, the done function which ends the drag on a ```mouseup``` event needs a reference to the ```moveListener``` function.
+We add 'event listeners' to the HTML elements, which invoke the specified functions when the event fires.  There are some awkward dependencies.  The ```moveListener``` function needs access to the mouse coordinates from the mousedown event, the `done` function which ends the drag on a ```mouseup``` event needs a reference to the ```moveListener``` function so that it can clean it up.
 
 It’s all a bit amorphous:
 
 - the flow of control is not very linear or clear;
 - we’re declaring callback functions inside of callback functions and the side effect of the program (that is, the change of state to the underlying web page by moving the rectangle) is hidden in the deepest nested part of the program;
-- we have to manually unsubscribe from events when we’re done with them (or potentially deal with weird behaviour when unwanted zombie events fire).
+- we have to manually unsubscribe from events when we’re done with them by calling `removeEventListener` (or potentially deal with weird behaviour when unwanted zombie events fire).
 
 The last issue is not unlike the kind of resource cleanup that [RAII](https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization) is meant to deal with.
 Generally speaking, nothing about this function resembles the state machine diagram.  
-The code sequencing has little sensible flow.
+The code sequencing has little sensible flow. The problem gets a lot worse in highly interactive web pages with lots of different possible interactions all requiring their own event handlers and cleanup code.
 
 ### The FRP Solution
 
