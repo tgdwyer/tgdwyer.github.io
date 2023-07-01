@@ -368,7 +368,7 @@ class MousePosEvent extends Point {
   constructor(e:MouseEvent) { super(e.clientX, e.clientY) } 
 }
 ```
-And two further subclasses so that we can dissambiguate `mousedown` and `mousedrag` events by using `instanceof`.
+And two further subclasses so that we can dissambiguate `mousedown` and `mousedrag` events, e.g. by `instanceof DownEvent` or `instanceof DragEvent`.
 ```typescript
 class DownEvent extends MousePosEvent {}
 class DragEvent extends MousePosEvent {}
