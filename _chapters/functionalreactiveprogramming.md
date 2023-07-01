@@ -385,7 +385,7 @@ const svg = document.getElementById("svgCanvas")!,
       mousemove = fromEvent<MouseEvent>(svg,'mousemove'),
       mouseup = fromEvent<MouseEvent>(svg,'mouseup');
 ```
-But now we'll capture initial position of the rectangle outside one time only of the streams.
+But now we'll capture initial position of the rectangle one time only  outside of the stream logic.
 ```typescript
 const initRect:Point = {
   x:Number(rect.getAttribute('x')),
