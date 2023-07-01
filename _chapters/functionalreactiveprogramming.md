@@ -385,16 +385,15 @@ const svg = document.getElementById("svgCanvas")!,
       mousemove = fromEvent<MouseEvent>(svg,'mousemove'),
       mouseup = fromEvent<MouseEvent>(svg,'mouseup');
 ```
-But now we'll capture initial position of the rectangle one time only in an immutable Point object outside of the stream logic.
-Now we will be able to implement the Observable stream logic with only pure functions and a strong guarantee that it is self-contained,
-with no dependency on the state of the outside world!
+But now we'll capture initial position of the rectangle one time only in an immutable `Point` object outside of the stream logic.
 ```typescript
 const initRect:Point = {
   x:Number(rect.getAttribute('x')),
   y:Number(rect.getAttribute('y'))
 }
 ```
-And now our stream pipe can manage all the necessary state with a pure function passed to a `scan`:
+Now we will be able to implement the Observable stream logic, using a function passed to `scan` to manage state.
+Since we use only pure functions we have a strong guarantee that the logic is self-contained, with no dependency on the state of the outside world!
 ```typescript
 mousedown
   .pipe(
