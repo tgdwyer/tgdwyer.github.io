@@ -244,6 +244,10 @@ mergeMap<T, R>(project: (value: T) => Observable<R>)
 
 // accumulates values from the stream
 scan<T, R>(accumulator: (acc: R, value: T) => R, seed?: R)
+
+// push an arbitrary object on to the start/end of the stream
+startWith<T>(o:T)
+endWith<T>(o:T)
 ```
 
 </div>
@@ -350,17 +354,18 @@ However, there's still something not very elegant about this version.  In partic
 
 We can remove this dependency, making our event stream a 'closed system', by introducing a `scan` operator on the stream to accumulate the state using a pure function.
 
-We'll introduce some types so that TypeScript can help us keep everything correct.  First, all the events we care about have a position on the SVG canvas associated with them, so we'll have a simple `Point` interface with `x` and `y` positions:
+We'll introduce some types to model the objects coming through the stream and so that TypeScript can help us keep everything correct.  First, all the events we care about have a position on the SVG canvas associated with them, so we'll have a simple `Point` interface with `x` and `y` positions and a couple of handy immutable vector math methods:
 ```typescript
-interface Point { readonly x:number, readonly y:number }
+class Point {
+   constructor(public readonly x:number, public readonly y:number){}
+   add(p:Point) { return new Point(this.x+p.x,this.y+p.y) }
+   sub(p:Point) { return new Point(this.x-p.x,this.y-p.y) }
+}
 ```
-Now we'll create classes implementing this `Point` interface with a constructor so that we can instantiate it for a given (DOM) `MouseEvent`.
+Now a subclass implementing of `Point` with a constructor so that we can instantiate it for a given (DOM) `MouseEvent`.
 ```typescript
-abstract class MousePosEvent implements Point { 
-  readonly x:number; readonly y:number;
-  constructor(e:MouseEvent) {
-    [this.x,this.y] = [e.clientX, e.clientY]
-  } 
+class MousePosEvent extends Point { 
+  constructor(e:MouseEvent) { super(e.clientX, e.clientY) } 
 }
 class DownEvent extends MousePosEvent {}
 class DragEvent extends MousePosEvent {}
@@ -368,9 +373,8 @@ class DragEvent extends MousePosEvent {}
 And finally, a type for the state that will be accumulated by the `scan` operator:
 ```typescript
 type State = Readonly<{
-  rect:Point, // position of the dragged rectangle
-  downrect:Point, // position of the rectangle on mousedown
-  downpos:Point // position of the cursor on mousedown
+  rect:Point, // the latest position of the rectangle
+  offset:Point // offset of the click position from the top-left of the rectangle
 }>
 ```
 Setup of the streams is as before:
@@ -383,7 +387,7 @@ const svg = document.getElementById("svgCanvas")!,
 ```
 But now we'll capture initial position of the rectangle outside one time only of the streams.
 ```typescript
-const initRectPos:Point = {
+const initRect:Point = {
   x:Number(rect.getAttribute('x')),
   y:Number(rect.getAttribute('y'))
 }
@@ -399,23 +403,17 @@ mousedown
         startWith(new DownEvent(mouseDownEvent)))),
     scan((a:State,e:MousePosEvent)=> 
       e instanceof DownEvent
-      ? {...a,
-          downrect:a.rect,
-          downpos:{x:e.x,y:e.y} }
-      : {...a, /* DragEvent */
-          rect:{
-            x:e.x + a.downrect.x - a.downpos.x,
-            y:e.y + a.downrect.y - a.downpos.y} }
-    ,<State>{ rect:initRectPos })
-  )
-  .subscribe(function(a){
-    rect.setAttribute('x', String(a.rect.x))
-    rect.setAttribute('y', String(a.rect.y))
-  })
+      ? {rect:a.rect,offset:a.rect.sub(e)}
+      : {rect:e.add(a.offset),offset:a.offset}
+    ,<State>{ rect:initRect }))
+ .subscribe(e => {
+   rect.setAttribute('x', String(e.rect.x))
+   rect.setAttribute('y', String(e.rect.y))
+ });
 ```
 Note that inside the `mergeMap` we use the `startWith` operator to force a `DownEvent` onto the start of the flattened stream.  Then the body of the accumulator function passed to `scan` handles the logic of the cases of mouse down or drag.
 
-The advantage of this code is obviously not brevity; especially with the introduced type definitions it's longer than the previous implementations of the same logic.  Rather, the advantages of this pattern are:
+The advantage of this code is not brevity; with the introduced type definitions it's longer than the previous implementations of the same logic.  Rather, the advantages of this pattern are:
 
  * *maintainability*: we have separated setup code and state management code;
  * *scalability*: we can extend this code pattern to handle more complicated state machines.
