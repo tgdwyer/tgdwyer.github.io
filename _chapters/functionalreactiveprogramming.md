@@ -426,4 +426,4 @@ The advantage of this code is not brevity; with the introduced type definitions 
  * *maintainability*: we have separated setup code and state management code;
  * *scalability*: we can extend this code pattern to handle more complicated state machines.
 
-As an example of *scalability* we will be using this same pattern to implement the logic of an asteroids arcade game in the [next chapter](asteroids).
+As an example of *scalability* we will be using this same pattern to implement the logic of an asteroids arcade game in the [next chapter](/asteroids).
