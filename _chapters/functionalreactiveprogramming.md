@@ -401,11 +401,11 @@ mousedown
         takeUntil(mouseup),
         map(mouseDragEvent=>new DragEvent(mouseDragEvent)),
         startWith(new DownEvent(mouseDownEvent)))),
-    scan((a:State,e:MousePosEvent)=> 
-      e instanceof DownEvent
-      ? {rect:a.rect,offset:a.rect.sub(e)}
-      : {rect:e.add(a.offset),offset:a.offset}
-    ,<State>{ rect:initRect }))
+    scan((a:State,e:MousePosEvent) => 
+        e instanceof DownEvent
+        ? {rect:a.rect,offset:a.rect.sub(e)}
+        : {rect:e.add(a.offset),offset:a.offset},
+      <State>{ rect:initRect }))
  .subscribe(e => {
    rect.setAttribute('x', String(e.rect.x))
    rect.setAttribute('y', String(e.rect.y))
