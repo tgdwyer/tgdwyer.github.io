@@ -385,7 +385,9 @@ const svg = document.getElementById("svgCanvas")!,
       mousemove = fromEvent<MouseEvent>(svg,'mousemove'),
       mouseup = fromEvent<MouseEvent>(svg,'mouseup');
 ```
-But now we'll capture initial position of the rectangle one time only  outside of the stream logic.
+But now we'll capture initial position of the rectangle one time only in an immutable Point object outside of the stream logic.
+Now we will be able to implement the Observable stream logic with only pure functions and a strong guarantee that it is self-contained,
+with no dependency on the state of the outside world!
 ```typescript
 const initRect:Point = {
   x:Number(rect.getAttribute('x')),
