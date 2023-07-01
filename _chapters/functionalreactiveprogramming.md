@@ -266,7 +266,11 @@ In JavaScript the first event loop you are likely to encounter is the browser’
 
 Handling a single event in such a way is pretty straightforward.  Difficulties arise when events have to be nested to handle a (potentially bifurcating) sequence of possible events.
 
-A simple example that begins to show the problem is implementing a UI to allow a user to drag an object on (e.g.) an SVG canvas ([play with it here!](https://stackblitz.com/edit/frpmousedrag?file=index.ts)).  The state machine that models this is pretty simple:
+A simple example that begins to show the problem is implementing a UI to allow a user to drag an object on (e.g.) an SVG canvas ([play with it here!](https://stackblitz.com/edit/frpmousedrag?file=index.ts)).  We illustrate the desired behaviour below.  When the user presses and holds the left mouse button we need to initiate dragging of the blue rectangle.  The rectangle should move with the mouse cursor such that the x and y offsets of the cursor position from the top-left corner of the rectangle remain constant.
+
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/mouseDragGeometry.png)
+
+The state machine that models this behaviour is pretty simple:
 
 ![Mouse drag state machine](/assets/images/chapterImages/functionalreactiveprogramming/mouseDragStateMachine.png)
 
