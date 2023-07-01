@@ -354,7 +354,7 @@ However, there's still something not very elegant about this version.  In partic
 
 We can remove this dependency, making our event stream a 'closed system', by introducing a `scan` operator on the stream to accumulate the state using a pure function.
 
-We'll introduce some types to model the objects coming through the stream and so that TypeScript can help us keep everything correct.  First, all the events we care about have a position on the SVG canvas associated with them, so we'll have a simple `Point` interface with `x` and `y` positions and a couple of handy immutable vector math methods:
+We'll introduce some types to model the objects coming through the stream and so that TypeScript can help us keep everything correct.  First, all the events we care about have a position on the SVG canvas associated with them, so we'll have a simple immutable `Point` interface with `x` and `y` positions and a couple of handy vector math methods (note that these create a new `Point` rather than mutating any existing state within the `Point`):
 ```typescript
 class Point {
    constructor(public readonly x:number, public readonly y:number){}
@@ -362,11 +362,14 @@ class Point {
    sub(p:Point) { return new Point(this.x-p.x,this.y-p.y) }
 }
 ```
-Now a subclass implementing of `Point` with a constructor so that we can instantiate it for a given (DOM) `MouseEvent`.
+Now a subclass of `Point` with a constructor letting us instantiate it for a given (DOM) `MouseEvent`:
 ```typescript
 class MousePosEvent extends Point { 
   constructor(e:MouseEvent) { super(e.clientX, e.clientY) } 
 }
+```
+And two further subclasses so that we can dissambiguate `mousedown` and `mousedrag` events by using `instanceof`.
+```typescript
 class DownEvent extends MousePosEvent {}
 class DragEvent extends MousePosEvent {}
 ```
