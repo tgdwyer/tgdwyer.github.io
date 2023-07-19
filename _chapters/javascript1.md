@@ -729,7 +729,7 @@ You can also have a function that creates and returns a closure that can be appl
 ```javascript
 function add(x) {
     return y => y+x; // we are going to return a function which includes
-                     // the variable x from it’s enclosing scope 
+                     // the variable x from its enclosing scope 
                      // - “a closure”
 }
 let addNine = add(9)
