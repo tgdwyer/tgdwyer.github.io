@@ -618,6 +618,8 @@ const greeting = (greeting, person)=> {
 }
 ```
 
+### Reduce
+
 We can use multi-parameter anonymous functions with another nifty method on `Array` objects which allows us to `reduce` them to a single value.
 
 ```javascript
