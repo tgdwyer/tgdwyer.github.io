@@ -100,10 +100,17 @@ interface Student {
 }
 ```
 
-We can declare interfaces readonly to make them [immutable](#using-the-compiler-to-ensure-immutability)
+We can use the `Readonly` type to make [immutable](#using-the-compiler-to-ensure-immutability) interfaces, either by passing an existing interface as the type parameter:
 
 ```typescript
-const student: Readonly<Student> = { name:"Tim", mark:51 }
+type ImmutableStudent = Readonly<Student>;
+```
+or all in one:
+```typescript
+type ImmutableStudent = Readonly<{
+  name: string
+  mark: number
+}>
 ```
 
 When type annotations get long and complex we can declare aliases for them using the ```type``` keyword:
