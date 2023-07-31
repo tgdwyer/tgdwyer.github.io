@@ -6,6 +6,7 @@ title: "JavaScript Introduction"
 
 - Understand and use basic JavaScript coding concepts and features
 - Understand the difference between [mutable and immutable (const) variables](#declaring-variables)
+- Understand the difference between code [expressions versus statements](#expressions-versus-statements)
 - Explain the relationship between javascript [functions](#functions) and [objects](#objects)
 - Understand that the scope of variables is limited to [delineated code blocks](/javascript1/variable-scope) and within [functions](#functions)
 - Understand that a [closure](#closures) captures variables referenced within its scope
@@ -34,10 +35,10 @@ We declare constant variables in JavaScript with the `const` keyword:
 const z = 1  // constant (immutable variable) at global scope
 ```
 
-You can try this in the [debug console in a browser such as Chrome](https://developers.google.com/web/tools/chrome-devtools/console).  If we try to change the value of such a `const` variable, we get a run-time error:
+You can try this in the [debug console in a browser such as Chrome](https://developers.google.com/web/tools/chrome-devtools/console). At the console, you enter JavaScript directly at the prompt (`>`). If we try to change the value of such a `const` variable, we get a run-time error:
 ```javascript
-const z = 1 
-z = 2
+> const z = 1 
+> z = 2
 ```
 > Uncaught TypeError: Assignment to constant variable.
 
@@ -46,22 +47,67 @@ We define mutable variables in JavaScript with the `let` keyword:
 ```javascript
 let w = 1
 ```
-console replies with the value returned by the `let` statement, which is:
-> undefined
-
-but fear not, `w` was assigned the correct value which you can confirm by typing just `w` into the console:
+The console replies with the value returned by the `let` statement (in Chrome console the result value is prefixed by `⋖`), as follows:
 ```javascript
-w
+⋖ undefined
 ```
-> 1
+But fear not, `w` was assigned the correct value which you can confirm by typing just `w` into the console:
+```javascript
+> w
+⋖ 1
+```
 
 Now if we assign a new value to w it succeeds:
 ```javascript
-w = 2 // note that without a let or const keyword before it, this assignment an expression which returns a value:
+> w = 2 // note that without a let or const keyword before it, this assignment an expression which returns a value:
+⋖ 2
 ```
-> 2
 
 (Note: The original JavaScript syntax for declaring a variable used the `var` keyword.  However, the scoping of variables declared in this way was strange for people familiar with C and Java scoping rules, and caused much angst.  It has been fixed since ES6 with the `let` and `const` keywords; we prefer these to `var`.)
+
+## Expressions versus Statements
+
+We refer to any JavaScript code which evaluates to a value as an *expression*.
+For example, the expression `1+1` evaluates to `2`.
+We can see in the Chrome console:
+
+```javascript
+> 1 + 1
+⋖ 2
+```
+
+By contrast a *statement* performs computation without returning a value. More precisely, statements evaluate to `undefined`. For example, a variable declaration is a statement:
+```javascript
+> const x = 1 + 1
+⋖ undefined
+```
+
+Statements have to have some side effect to be useful (in this case creating a variable in the current scope).  Code blocks defined with curly braces are also statements:
+```javascript
+> {
+    const x = 1+1
+    const y = 2
+    console.log(x+y)
+  }
+4
+⋖ undefined
+```
+Note that `4` is printed to the console by the `console.log` (a side effect of the statement), but the value returned by the code block is `undefined`.
+
+Unlike languages which use indentation to define code blocks and scopes (like Python and Haskell), JavaScript generally ignores multiple spaces, indentation and linebreaks.  So you can spread an expression across multiple lines and indent each line however you like:
+```javascript
+> 1 +
+    1 + 
+      1
+⋖ 3
+```
+You can also put multiple statements on one line by separating them with '`;`':
+```javascript
+> const x = 1+1; const y = 2; console.log(x+y)
+4
+⋖ undefined
+```
+Of course, you should not abuse the ability to layout code in different ways and make unreadable code.  Rather, it is good practice to be consistent with formatting, use indentation to highlight nested scopes and spread things out as necessary for readability.
 
 ## JavaScript Types
 JavaScript has several "primitive types" (simple types that are not [Objects](#objects)).  These include:
@@ -75,22 +121,20 @@ and a [couple of others](https://developer.mozilla.org/en-US/docs/Glossary/Primi
 JavaScript is *loosely typed* in the sense that a mutable variable can be assigned (and re-assigned) different values of different types.
 
 ```javascript
- let x
+> let x
+⋖ undefined
 ```
-
-> undefined
 
 ```javascript
-x = 3
+> x = 3
+⋖ 3
 ```
-
-> 3
 
 ```javascript
-x = 'hello'
+> x = 'hello'
+⋖ "hello"
 ```
 
-> "hello"
 
 ## Variable scope
 
@@ -573,6 +617,8 @@ const greeting = (greeting, person)=> {
     return msg
 }
 ```
+
+### Reduce
 
 We can use multi-parameter anonymous functions with another nifty method on `Array` objects which allows us to `reduce` them to a single value.
 
