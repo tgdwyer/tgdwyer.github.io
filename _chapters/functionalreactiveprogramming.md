@@ -377,11 +377,12 @@ And two further subclasses so that we can dissambiguate `mousedown` and `mousedr
 class DownEvent extends MousePosEvent {}
 class DragEvent extends MousePosEvent {}
 ```
-And finally, a type for the state that will be accumulated by the `scan` operator:
+And finally, a type for the state that will be accumulated by the `scan` operator. We are concerned with
+the position of the top-left corner of the rectangle, and (optionally, since it's only relevant during mouse-down dragging) the offset of the click position from the top-left of the rectangle:
 ```typescript
 type State = Readonly<{
-  rect:Point, // the latest position of the rectangle
-  offset:Point // offset of the click position from the top-left of the rectangle
+  pos:Point,
+  offset?:Point
 }>
 ```
 Setup of the streams is as before:
@@ -394,9 +395,10 @@ const svg = document.getElementById("svgCanvas")!,
 ```
 But now we'll capture initial position of the rectangle one time only in an immutable `Point` object outside of the stream logic.
 ```typescript
-const initRect:Point = {
-  x:Number(rect.getAttribute('x')),
-  y:Number(rect.getAttribute('y'))
+const initialState: State = { 
+  pos: new Point(
+    Number(rect.getAttribute('x')),
+    Number(rect.getAttribute('y')))
 }
 ```
 Now we will be able to implement the Observable stream logic, using a function passed to `scan` to manage state.
@@ -409,11 +411,12 @@ mousedown
         takeUntil(mouseup),
         map(mouseDragEvent=>new DragEvent(mouseDragEvent)),
         startWith(new DownEvent(mouseDownEvent)))),
-    scan((a:State,e:MousePosEvent) => 
+    scan(
+      (a: State, e: MousePosEvent) =>
         e instanceof DownEvent
-        ? {rect:a.rect,offset:a.rect.sub(e)}
-        : {rect:e.add(a.offset),offset:a.offset},
-      <State>{ rect:initRect }))
+          ? { pos: a.pos, offset: a.pos.sub(e) }
+          : { pos: e.add(a.offset), offset: a.offset },
+      initialState)
  .subscribe(e => {
    rect.setAttribute('x', String(e.rect.x))
    rect.setAttribute('y', String(e.rect.y))
