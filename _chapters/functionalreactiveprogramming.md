@@ -252,6 +252,13 @@ endWith<T>(o:T)
 
 </div>
 
+## Visualisation
+
+The [rx.js API documentation](https://rxjs.dev/api) features "bead" diagrams like the following which might help you conceptualise the transformations caused by operators being applied to observable streams.  Below, we see an input Observable stream of data (top) being transformed by a filter operator such that the output observable (bottom) has only numbers greater than 10.
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/filterbeaddiagram.png)
+
+There is also a [website "Rxjs visualise"](https://rxjs-visualize.explosionpills.com/) that lets you browse animations of observables running in real time.
+
 ## A User Interface Example
 
 Modern computer systems often have to deal with asynchronous processing.  Examples abound:
