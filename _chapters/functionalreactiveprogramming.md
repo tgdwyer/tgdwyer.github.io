@@ -259,15 +259,15 @@ through the chain, before being passed through to the subscribe call.
 
 Here, we see an input Observable stream of data (top) being transformed by a map call, which increase the value of the data by a factor of 10.
 
-![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/mapbeaddiagram.png)
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/mapmarblediagram.png)
 
   Below, we see an input Observable stream of data (top) being transformed by a filter operator such that the output observable (bottom) has only numbers greater than 10.
 
-![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/filterbeaddiagram.png)
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/filtermarblediagram.png)
 
 If you have an observable sequence emitting values over time, the scan operator would accumulate these values based on a given accumulation function and emit the intermediate accumulated values as they are computed. Here, we can see this visualized in a marible diagram, where, the bottom stream emits the updated value every time the source emits.
 
-![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/scanbeaddiagram.png)
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/scanmarblediagram.png)
 
 There is also a [website "Rxjs visualise"](https://rxjs-visualize.explosionpills.com/) that lets you browse animations of observables running in real time.
 
