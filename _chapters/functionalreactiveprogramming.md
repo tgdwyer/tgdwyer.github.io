@@ -255,7 +255,7 @@ endWith<T>(o:T)
 ## Visualisation
 
 The [rx.js API documentation](https://rxjs.dev/api) features "marble" diagrams like the following which might help you conceptualise the transformations caused by operators being applied to observable streams. The x-axis is shown which spans across time, left-to-right, each time an input is emitted, that data will be processed 
-through the chain, before being passed through to the subscribe call.  
+through the chain, before being passed through to the subscribe call.
 
 Here, we see an input Observable stream of data (top) being transformed by a map call, which increase the value of the data by a factor of 10.
 
