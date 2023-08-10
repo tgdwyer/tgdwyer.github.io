@@ -27,12 +27,12 @@ We have seen a number of different ways of wrapping collections of things in con
 You can [also play with a live version of this code](https://stackblitz.com/edit/rxjs-introexamples?file=index.ts).  Note that the code in this live version begins with a pair of `import` statements, bringing the set of functions that we describe below into scope for this file from the `rxjs` libraries:
 
 ```typescript
-import { of, range, fromEvent, merge } from 'rxjs'; 
-import { last,filter,scan,map,flatMap,take } from 'rxjs/operators';
+import { of, range, fromEvent, zip, merge } from 'rxjs'; 
+import { last,filter,scan,map,mergeMap,take,takeUntil } from 'rxjs/operators';
 ```
 
-Conceptually, the Observable data structure just wraps a collection of things in a container in a similar way to each of the above.
-The function ```of``` creates an Observable that will emit the specified elements in its parameter list in order.  Similar to the lazy sequences though, nothing actually happens until we initialise the stream.  We do this by "subscribing" to the Observable, passing in an "effectful" function that is applied to each of the elements in the stream.  For example, we could print the elements out with ```console.log```:
+Conceptually, the Observable data structure just wraps a collection of things in a container in a similar way to the data structures we have seen before.
+The function `of` creates an Observable that will emit the specified elements in its parameter list in order.  However, nothing actually happens until we initialise the stream.  We do this by "subscribing" to the Observable, passing in an "effectful" function that is applied to each of the elements in the stream.  For example, we could print the elements out with `console.log`:
 
 ```javascript
 of(1,2,3,4)
@@ -44,16 +44,18 @@ of(1,2,3,4)
 > 3  
 > 4  
 
-So, there is a similarity to the [lazy sequence](lazyevaluation) where nothing happened until we started calling ```next```, but there is also a difference.
-You could think of our lazy sequences as being "pull-based" data structures, because we had to "pull" the values out one at a time by calling the ```next``` function as many times as we wanted elements of the list.  Observables are a bit different.  They are used to handle "streams" of things, such as asynchronous UI or communication events.  These things are asynchronous in the sense that we do not know when they will occur.  
+The requirement to invoke `subscribe` before anything is produced by the Observable is conceptually similar to the [lazy sequence](lazyevaluation), where nothing happened until we started calling ```next```.  But there is also a difference.
+You could think of our lazy sequences as being "pull-based" data structures, because we had to "pull" the values out one at a time by calling the ```next``` function as many times as we wanted elements of the list.  Observables are a bit different.  They are used to handle "streams" of things, such as asynchronous UI (e.g. mouse clicks on an element of a web page) or communication events (e.g. responses from a web service).  These things are asynchronous in the sense that we do not know when they will occur.  
 
-Just as we have done to each of the above data structures (arrays and so on) in previous chapters, we can define a transform over an Observable to create a new Observable.  This transformation may have multiple steps the same way that we chained ```filter``` and ```map``` operations over arrays previously.  In rx.js's Observable implementation, however, they've gone a little bit more functional, by insisting that such operations are composed (rather than chained) inside a ```pipe```.  For example, here's the squares of even numbers in the range [0,10):
+Just as we have done for various data structures (arrays and so on) in previous chapters, we can define a transform over an Observable to create a new Observable.  This transformation may have multiple steps the same way that we chained ```filter``` and ```map``` operations over arrays previously.  In rx.js's Observable implementation, however, they've gone a little bit more functional, by insisting that such operations are composed (rather than chained) inside a ```pipe```.  For example, here's the squares of even numbers in the range [0,10):
 
 ```javascript
+const isEven = x=>x%2===0,
+      square = x=>x*x
 range(10)
   .pipe(
-    filter(x=>x%2===0),
-    map(x=>x*x))
+    filter(isEven),
+    map(square))
   .subscribe(console.log)
 ```
 
@@ -76,9 +78,9 @@ range(1000)
 
 > 233168
 
-Scan is very much like the ```reduce``` function on Array in that it applies an accumulator function to the elements coming through the Observable, except instead of just outputting a single value (as ```reduce``` does), it emits a stream of the running accumulation (in this case, the sum so far).  Thus, we use the ```last``` function to finally produce an Observable with the final value.
+Scan is very much like the ```reduce``` function on Array in that it applies an accumulator function to the elements coming through the Observable, except instead of just outputting a single value (as ```reduce``` does), it emits a stream of the running accumulation (in this case, the sum so far).  Thus, we use the ```last``` function to produce an Observable with just the final value.
 
-There are also functions for combining Observable streams.  The `zip` function provides a pretty straightforward way to pair the values from two streams into an array:
+There are also functions for combining Observable streams.  The `zip` function lets you pair the values from two streams into an array:
 
 ```javascript
 const
@@ -242,9 +244,20 @@ mergeMap<T, R>(project: (value: T) => Observable<R>)
 
 // accumulates values from the stream
 scan<T, R>(accumulator: (acc: R, value: T) => R, seed?: R)
+
+// push an arbitrary object on to the start/end of the stream
+startWith<T>(o:T)
+endWith<T>(o:T)
 ```
 
 </div>
+
+## Visualisation
+
+The [rx.js API documentation](https://rxjs.dev/api) features "bead" diagrams like the following which might help you conceptualise the transformations caused by operators being applied to observable streams.  Below, we see an input Observable stream of data (top) being transformed by a filter operator such that the output observable (bottom) has only numbers greater than 10.
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/filterbeaddiagram.png)
+
+There is also a [website "Rxjs visualise"](https://rxjs-visualize.explosionpills.com/) that lets you browse animations of observables running in real time.
 
 ## A User Interface Example
 
@@ -260,7 +273,11 @@ In JavaScript the first event loop you are likely to encounter is the browser’
 
 Handling a single event in such a way is pretty straightforward.  Difficulties arise when events have to be nested to handle a (potentially bifurcating) sequence of possible events.
 
-A simple example that begins to show the problem is implementing a UI to allow a user to drag an object on (e.g.) an SVG canvas ([play with it here!](https://stackblitz.com/edit/frpmousedrag?file=index.ts)).  The state machine that models this is pretty simple:
+A simple example that begins to show the problem is implementing a UI to allow a user to drag an object on (e.g.) an SVG canvas ([play with it here!](https://stackblitz.com/edit/frpmousedrag?file=index.ts)).  We illustrate the desired behaviour below.  When the user presses and holds the left mouse button we need to initiate dragging of the blue rectangle.  The rectangle should move with the mouse cursor such that the x and y offsets of the cursor position from the top-left corner of the rectangle remain constant.
+
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/mouseDragGeometry.png)
+
+The state machine that models this behaviour is pretty simple:
 
 ![Mouse drag state machine](/assets/images/chapterImages/functionalreactiveprogramming/mouseDragStateMachine.png)
 
@@ -268,7 +285,7 @@ There are only three transitions, each triggered by an event.
 
 ### Turning a State-Machine into Code with Event Listeners
 
-The typical way to add interaction in web-pages and other UIs has historically been creating the Event Listeners.  In software engineering terms it's typically referred to as the [Observer Pattern](https://en.wikipedia.org/wiki/Observer_pattern) (not to be confused with the "Observable" FRP abstraction we have been discussing).
+The typical way to add interaction to web-pages and other UIs has historically been by adding Event Listeners to the UI elements for which we want interactive behaviour.  In software engineering terms it's typically referred to as the [Observer Pattern](https://en.wikipedia.org/wiki/Observer_pattern) (not to be confused with the "Observable" FRP abstraction we have been discussing).
 
 Here’s an event-driven code fragment that provides such dragging for some SVG element ```draggableRect``` that is a child of an SVG canvas element referred to by the variable ```svg```:
 
@@ -291,17 +308,17 @@ rect.addEventListener('mousedown',e => {
 })
 ```
 
-We add 'event listeners' to the HTML elements, which invoke the specified functions when the event fires.  There are some awkward dependencies.  The ```moveListener``` function needs access to the mouse coordinates from the mousedown event, the done function which ends the drag on a ```mouseup``` event needs a reference to the ```moveListener``` function.
+We add 'event listeners' to the HTML elements, which invoke the specified functions when the event fires.  There are some awkward dependencies.  The ```moveListener``` function needs access to the mouse coordinates from the mousedown event, the `done` function which ends the drag on a ```mouseup``` event needs a reference to the ```moveListener``` function so that it can clean it up.
 
 It’s all a bit amorphous:
 
 - the flow of control is not very linear or clear;
 - we’re declaring callback functions inside of callback functions and the side effect of the program (that is, the change of state to the underlying web page by moving the rectangle) is hidden in the deepest nested part of the program;
-- we have to manually unsubscribe from events when we’re done with them (or potentially deal with weird behaviour when unwanted zombie events fire).
+- we have to manually unsubscribe from events when we’re done with them by calling `removeEventListener` (or potentially deal with weird behaviour when unwanted zombie events fire).
 
 The last issue is not unlike the kind of resource cleanup that [RAII](https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization) is meant to deal with.
 Generally speaking, nothing about this function resembles the state machine diagram.  
-The code sequencing has little sensible flow.
+The code sequencing has little sensible flow. The problem gets a lot worse in highly interactive web pages with lots of different possible interactions all requiring their own event handlers and cleanup code.
 
 ### The FRP Solution
 
@@ -337,10 +354,86 @@ We now rewrite precisely the same behaviour using Observable FRP:
 
 The Observable’s mousedown, mousemove and mouseup are like streams which we can transform with familiar operators like map and takeUntil.   The mergeMap operator “flattens” the inner  mousemove  Observable stream back to the top level, then subscribe will apply a final action before doing whatever cleanup is necessary for the stream.
 
-Compared to our state machine diagram above,
+Compared to our state machine diagram above:
 
 - we have modelled each of the possible transition triggers as streams;
-- the flow of data is from top to bottom, with the cycling branch introduced by the mergeMap operation (which we will look into below);
+- the flow of data is from top to bottom, with the cycling branch handled by the mergeMap operation;
 - the only side effects (the movement of the rectangle) occur in the function passed to the subscribe;
 - the cleanup of subscriptions to the mousemove and mouseup events is handled automatically by the ```takeUntil``` function when it closes the streams.
 
+However, there's still something not very elegant about this version.  In particular, we are reading the position of the rectangle directly from the DOM inside the `map` on the `mousedown` stream.
+
+We can remove this dependency, making our event stream a 'closed system', by introducing a `scan` operator on the stream to accumulate the state using a pure function.
+
+We'll introduce some types to model the objects coming through the stream and so that TypeScript can help us keep everything correct.  First, all the events we care about have a position on the SVG canvas associated with them, so we'll have a simple immutable `Point` interface with `x` and `y` positions and a couple of handy vector math methods (note that these create a new `Point` rather than mutating any existing state within the `Point`):
+```typescript
+class Point {
+   constructor(public readonly x:number, public readonly y:number){}
+   add(p:Point) { return new Point(this.x+p.x,this.y+p.y) }
+   sub(p:Point) { return new Point(this.x-p.x,this.y-p.y) }
+}
+```
+Now a subclass of `Point` with a constructor letting us instantiate it for a given (DOM) `MouseEvent`:
+```typescript
+class MousePosEvent extends Point { 
+  constructor(e:MouseEvent) { super(e.clientX, e.clientY) } 
+}
+```
+And two further subclasses so that we can dissambiguate `mousedown` and `mousedrag` events, e.g. by `instanceof DownEvent` or `instanceof DragEvent`.
+```typescript
+class DownEvent extends MousePosEvent {}
+class DragEvent extends MousePosEvent {}
+```
+And finally, a type for the state that will be accumulated by the `scan` operator. We are concerned with
+the position of the top-left corner of the rectangle, and (optionally, since it's only relevant during mouse-down dragging) the offset of the click position from the top-left of the rectangle:
+```typescript
+type State = Readonly<{
+  pos:Point,
+  offset?:Point
+}>
+```
+Setup of the streams is as before:
+```typescript
+const svg = document.getElementById("svgCanvas")!,
+      rect = document.getElementById("draggableRect")!,
+      mousedown = fromEvent<MouseEvent>(rect,'mousedown'),
+      mousemove = fromEvent<MouseEvent>(svg,'mousemove'),
+      mouseup = fromEvent<MouseEvent>(svg,'mouseup');
+```
+But now we'll capture initial position of the rectangle one time only in an immutable `Point` object outside of the stream logic.
+```typescript
+const initialState: State = { 
+  pos: new Point(
+    Number(rect.getAttribute('x')),
+    Number(rect.getAttribute('y')))
+}
+```
+Now we will be able to implement the Observable stream logic, using a function passed to `scan` to manage state.
+Since we use only pure functions we have a strong guarantee that the logic is self-contained, with no dependency on the state of the outside world!
+```typescript
+mousedown
+  .pipe(
+    mergeMap(mouseDownEvent =>
+      mousemove.pipe(
+        takeUntil(mouseup),
+        map(mouseDragEvent=>new DragEvent(mouseDragEvent)),
+        startWith(new DownEvent(mouseDownEvent)))),
+    scan(
+      (a: State, e: MousePosEvent) =>
+        e instanceof DownEvent
+          ? { pos: a.pos, offset: a.pos.sub(e) }
+          : { pos: e.add(a.offset), offset: a.offset },
+      initialState)
+ .subscribe(e => {
+   rect.setAttribute('x', String(e.rect.x))
+   rect.setAttribute('y', String(e.rect.y))
+ });
+```
+Note that inside the `mergeMap` we use the `startWith` operator to force a `DownEvent` onto the start of the flattened stream.  Then the body of the accumulator function passed to `scan` handles the logic of the cases of mouse down or drag.
+
+The advantage of this code is not brevity; with the introduced type definitions it's longer than the previous implementations of the same logic.  Rather, the advantages of this pattern are:
+
+ * *maintainability*: we have separated setup code and state management code;
+ * *scalability*: we can extend this code pattern to handle more complicated state machines.
+
+As an example of *scalability* we will be using this same pattern to implement the logic of an asteroids arcade game in the [next chapter](/asteroids).
