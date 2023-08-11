@@ -31,8 +31,8 @@ import { of, range, fromEvent, zip, merge } from 'rxjs';
 import { last,filter,scan,map,mergeMap,take,takeUntil } from 'rxjs/operators';
 ```
 
-Conceptually, the Observable data structure just wraps a collection of things in a container in a similar way to each of the above.
-The function ```of``` creates an Observable that will emit the specified elements in its parameter list in order.  Similar to the lazy sequences though, nothing actually happens until we initialise the stream.  We do this by "subscribing" to the Observable, passing in an "effectful" function that is applied to each of the elements in the stream.  For example, we could print the elements out with ```console.log```:
+Conceptually, the Observable data structure just wraps a collection of things in a container in a similar way to the data structures we have seen before.
+The function `of` creates an Observable that will emit the specified elements in its parameter list in order.  However, nothing actually happens until we initialise the stream.  We do this by "subscribing" to the Observable, passing in an "effectful" function that is applied to each of the elements in the stream.  For example, we could print the elements out with `console.log`:
 
 ```javascript
 of(1,2,3,4)
