@@ -106,7 +106,7 @@ We need to turn this back in to a stream. How can we do that, with the power of 
 ```typescript
 const shuffledShow = (numDecks : number) => range(0, numDecks).pipe(
   mergeMap(_ => deck), 
-  reduce(randomInsert, [])
+  reduce(randomInsert, []),
   mergeMap(from)
 )
 ```
