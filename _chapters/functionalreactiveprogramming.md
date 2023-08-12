@@ -20,6 +20,8 @@ Functional Reactive Programming describes an approach to modelling complex, asyn
 
 We will explore FRP through an implementation of the [Observable](#observable-streams) data structure in [the Reactive Extensions for JavaScript (rx.js) library](https://www.learnrxjs.io/).  We will then see it applied in application to a straight-forward [browser-based user interface problem](#a-user-interface-example).
 
+To support the code examples, the streams are visualized using [rxviz](https://rxviz.com/)
+
 ## Observable Streams
 
 We have seen a number of different ways of wrapping collections of things in containers: built-in JavaScript arrays, linked-list data structures, and also lazy sequences.  Now we'll see that Observable is just another type of container with some simple examples, before demonstrating that it also easily applies to asynchronous streams.  
@@ -163,10 +165,12 @@ key$.pipe(
   map(e=>e.key)
 ).subscribe(console.log)
 ```
+The yellow highlight signifies when the mouse is clicked!
+
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/keydown.gif)
 
 
-The following prints "Mouse Click!" on every mousedown:
+The following prints "!!" on every mousedown:
 ```javascript
 mouse$.pipe(
   map(_=>"!!")
