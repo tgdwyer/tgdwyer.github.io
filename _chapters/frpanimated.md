@@ -70,7 +70,7 @@ const deck = suits$.pipe(
 However, this is only one deck? How can we create multiple decks. We will create a range, which will create a fixed range of numbers, and for each of those we can create a deck. 
 
 ```typescript
-const decks = (numDecks : number) => range(numDecks).pipe(map(_ => deck))
+const decks = (numDecks : number) => range(0, numDecks).pipe(map(_ => deck))
 ```
 
 ![Deck Observable Visualized](/assets/images/chapterImages/frpanimated/mapDecks.gif)
