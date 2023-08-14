@@ -70,9 +70,9 @@ range(10)
 > 36  
 > 64
 
-![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even_1.gif)
-![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even_2.gif)
-![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even_3.gif)
+Range: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even_1.gif)
+Filter: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even_2.gif)
+Map: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even_3.gif)
 
 
 Now here's the solution to the first Project Euler problem, the sum of numbers divisible by 3 or 5 under 1000:
@@ -87,6 +87,15 @@ range(1000)
 ```
 
 > 233168
+
+
+We can see the values changes as they move further and further down the stream. The ```last``` animation is empty, since we only emit the *last* value, which will be off screen. 
+
+Range: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler_range.gif)
+Filter: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler_filter.gif)
+Scan: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler_scan.gif)
+Last: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler_last.gif)
+
 
 Scan is very much like the ```reduce``` function on Array in that it applies an accumulator function to the elements coming through the Observable, except instead of just outputting a single value (as ```reduce``` does), it emits a stream of the running accumulation (in this case, the sum so far).  Thus, we use the ```last``` function to produce an Observable with just the final value.
 
@@ -130,6 +139,27 @@ columns.pipe(
 > ["C", 2]  
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/mergeMap.gif)
+
+If we contrast ```mergeMap``` and ```map```, map will produce an Observable of Observables, while mergeMap, will produce a single stream with all of the values. Contrast the animation for ```map```, with the previous ```mergeMap``` animation.  ```map``` has four seperate branches, where each one represents its own branch. The output of the console, is an instance of the Observable class itself, which is not very useful! 
+
+```javascript
+columns.pipe(
+  map(column=>rows.pipe(
+    map(row=>[column, row])
+  ))
+).subscribe(console.log)
+```
+
+> Observable2  
+> Observable2  
+> Observable2  
+> Observable2  
+> Observable2  
+> Observable2  
+
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/mapmap.gif)
+
+
 
 Another way to combine streams is ```merge```.  Streams that are generated with ```of``` and ```range``` have all their elements available immediately, so the result of a merge is not very interesting, just the elements of one followed by the elements of the other:
 
