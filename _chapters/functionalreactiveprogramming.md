@@ -140,7 +140,7 @@ columns.pipe(
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/mergeMap.gif)
 
-If we contrast ```mergeMap``` and ```map```, map will produce an Observable of Observables, while mergeMap, will produce a single stream with all of the values. Contrast the animation for ```map```, with the previous ```mergeMap``` animation.  ```map``` has four seperate branches, where each one represents its own branch. The output of the console, is an instance of the Observable class itself, which is not very useful! 
+If we contrast ```mergeMap``` and ```map```, map will produce an Observable of Observables, while mergeMap, will produce a single stream with all of the values. Contrast the animation for ```map```, with the previous ```mergeMap``` animation.  ```map``` has three seperate branches, where each one represents its own observable stream. The output of the ```console.log```, is an instance of the Observable class itself, which is not very useful! 
 
 ```javascript
 columns.pipe(
