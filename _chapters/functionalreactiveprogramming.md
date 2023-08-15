@@ -193,6 +193,8 @@ key$.pipe(
 ).subscribe(console.log)
 ```
 
+The animation displays the stream as the user types in the best FIT unit in to the webpage
+
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/keydown.gif)
 
 
