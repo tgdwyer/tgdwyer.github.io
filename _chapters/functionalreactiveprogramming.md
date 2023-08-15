@@ -192,7 +192,6 @@ key$.pipe(
   map(e=>e.key)
 ).subscribe(console.log)
 ```
-The yellow highlight signifies when the mouse is clicked!
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/keydown.gif)
 
@@ -203,6 +202,7 @@ mouse$.pipe(
   map(_=>"!!")
 ).subscribe(console.log)
 ```
+The yellow highlight signifies when the mouse is clicked!
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/click.gif)
 
