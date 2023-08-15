@@ -150,12 +150,9 @@ columns.pipe(
 ).subscribe(console.log)
 ```
 
-> Observable2  
-> Observable2  
-> Observable2  
-> Observable2  
-> Observable2  
-> Observable2  
+> Observable  
+> Observable    
+> Observable   
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/mapmap.gif)
 
