@@ -125,8 +125,8 @@ Such functions are called *curried functions* and they are named after a mathema
 We can also create a function to make curried versions of conventional multiparameter JavaScript functions:
 
 ```typescript
-function curry2<T,U,V>(f: (x:T,y:U)): V {
-   return x=>y=>f(x,y)
+function curry2<T,U,V>(f: (x:T, y:U) => V): (x:T) => (y:U) => V {
+   return x => y => f(x,y);
 }
 ```
 
