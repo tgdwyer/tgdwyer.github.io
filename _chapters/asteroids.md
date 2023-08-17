@@ -219,14 +219,7 @@ Before we had just left and right rotations coming out of our stream.  Our new s
  * `Rotate` - a ship rotation triggered by left or right arrows keys
  * `Thrust` - fire the boosters! Using the up-arrow key
 
-Each of these actions has some data, we'll model them as simple classes (note that we need classes rather than anonymous interfaces here because the `instanceof` pattern-match used inside the `reduceState` function [below](#reducing-state) requires the presence of a constructor):
-```typescript
-class Tick { constructor(public readonly elapsed:number) {} }
-class Rotate { constructor(public readonly direction:number) {} }
-class Thrust { constructor(public readonly on:boolean) {} }
-```
-
-Now, we'll create separate Observables for each of the key events.  There's a repetitive pattern in creating each of these Observables, for a given:
+We'll create separate Observables for each of the key events.  There's a repetitive pattern in creating each of these Observables, for a given:
  * `Event` - keydown or keyup
  * `Key` - one of the arrows (for now)
  * produce an Observable stream of a particular action type.
@@ -317,22 +310,49 @@ We create an `initialState` using `CanvasSize` to start the spaceship at the cen
 
 # Reducing State
 
-We can encapsulate all the possible transformations of state in a function:
+Now we are ready to define the actions that are triggered by the key events.  Each action modifies state in some way.  Let's define a common type for actions with a single pure method that takes a previous state, and returns a new state after applying the action.
 
 ```typescript
-  const reduceState = (s:State, e:Rotate|Thrust|Tick)=>
-    e instanceof Rotate ? {...s,
-      torque: e.direction
-    } :
-    e instanceof Thrust ? {...s,
-      acc:e.on ? Vec.unitVecInDirection(s.angle).scale(0.05)
-               : Vec.Zero
-    } : {...s,
+interface Action {
+  apply(s: State): State;
+}
+```
+
+Now we define a class implementing `Action` for each of `Tick`, `Rotate`, and `Thrust`:
+
+```typescript
+class Tick implements Action { 
+  constructor(public readonly elapsed:number) {} 
+  apply(s:State):State {
+    return {...s,
       rotation: s.rotation+s.torque,
       angle: s.angle+s.rotation,
       pos: torusWrap(s.pos.add(s.vel)),
       vel: s.vel.add(s.acc)
-    };
+    }
+  }
+}
+class Rotate implements Action { 
+  constructor(public readonly direction:number) {} 
+  apply(s:State):State {
+    return {...s,
+      torque: e.direction
+    }
+  }
+}
+class Thrust implements Action { 
+  constructor(public readonly on:boolean) {} 
+  apply(s:State):State {
+      return {...s, 
+        acc:e.on ? Vec.unitVecInDirection(s.angle).scale(0.05)
+                 : Vec.Zero
+      }
+  }
+}
+```
+And now our function to reduce state is very simple, taking advantage of sub-type polymorphism to apply the correct update to `State`:
+```typescript
+reduceState = (s: State, action: Action) => action.apply(s);
 ```
 
 And finally we `merge` our different inputs and scan over `State`, and the final `subscribe` calls the `updateView`, once again, a self-contained function which does whatever is required to render the State.  We describe the updated `updateView` in the next section.
