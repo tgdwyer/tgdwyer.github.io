@@ -70,9 +70,10 @@ range(10)
 > 36  
 > 64
 
-Range: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even_1.gif)
-Filter: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even_2.gif)
-Map: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even_3.gif)
+
+The three animations represent the creation (```range```) and the two transformations (```filter``` and ```map```), respectively.
+
+Range: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even.gif)
 
 
 Now here's the solution to the first Project Euler problem, the sum of numbers divisible by 3 or 5 under 1000:
@@ -89,12 +90,10 @@ range(1000)
 > 233168
 
 
-We can see the values changes as they move further and further down the stream. The ```last``` animation is empty, since we only emit the *last* value, which will be off screen. 
+We can see the values changes as they move further and further down the stream. The four animations represent the creation (```range```) and the three transformations (```filter```, ```scan``` and ```last```), respectively. The ```last``` animation is empty, since we only emit the *last* value, which will be off screen. 
 
-Range: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler_range.gif)
-Filter: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler_filter.gif)
-Scan: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler_scan.gif)
-Last: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler_last.gif)
+Range: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler.gif)
+
 
 
 Scan is very much like the ```reduce``` function on Array in that it applies an accumulator function to the elements coming through the Observable, except instead of just outputting a single value (as ```reduce``` does), it emits a stream of the running accumulation (in this case, the sum so far).  Thus, we use the ```last``` function to produce an Observable with just the final value.
