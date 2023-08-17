@@ -92,7 +92,7 @@ range(1000)
 
 We can see the values changes as they move further and further down the stream. The four animations represent the creation (```range```) and the three transformations (```filter```, ```scan``` and ```last```), respectively. The ```last``` animation is empty, since we only emit the *last* value, which will be off screen. 
 
-Range: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler.gif)
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler.gif)
 
 
 
