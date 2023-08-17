@@ -20,6 +20,8 @@ Functional Reactive Programming describes an approach to modelling complex, asyn
 
 We will explore FRP through an implementation of the [Observable](#observable-streams) data structure in [the Reactive Extensions for JavaScript (rx.js) library](https://www.learnrxjs.io/).  We will then see it applied in application to a straight-forward [browser-based user interface problem](#a-user-interface-example).
 
+To support the code examples, the streams are visualized using [rxviz](https://rxviz.com/)
+
 ## Observable Streams
 
 We have seen a number of different ways of wrapping collections of things in containers: built-in JavaScript arrays, linked-list data structures, and also lazy sequences.  Now we'll see that Observable is just another type of container with some simple examples, before demonstrating that it also easily applies to asynchronous streams.  
@@ -44,6 +46,9 @@ of(1,2,3,4)
 > 3  
 > 4  
 
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/of1234.gif)
+
+
 The requirement to invoke `subscribe` before anything is produced by the Observable is conceptually similar to the [lazy sequence](lazyevaluation), where nothing happened until we started calling ```next```.  But there is also a difference.
 You could think of our lazy sequences as being "pull-based" data structures, because we had to "pull" the values out one at a time by calling the ```next``` function as many times as we wanted elements of the list.  Observables are a bit different.  They are used to handle "streams" of things, such as asynchronous UI (e.g. mouse clicks on an element of a web page) or communication events (e.g. responses from a web service).  These things are asynchronous in the sense that we do not know when they will occur.  
 
@@ -65,6 +70,11 @@ range(10)
 > 36  
 > 64
 
+Range: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even_1.gif)
+Filter: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even_2.gif)
+Map: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even_3.gif)
+
+
 Now here's the solution to the first Project Euler problem, the sum of numbers divisible by 3 or 5 under 1000:
 
 ```javascript
@@ -77,6 +87,15 @@ range(1000)
 ```
 
 > 233168
+
+
+We can see the values changes as they move further and further down the stream. The ```last``` animation is empty, since we only emit the *last* value, which will be off screen. 
+
+Range: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler_range.gif)
+Filter: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler_filter.gif)
+Scan: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler_scan.gif)
+Last: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler_last.gif)
+
 
 Scan is very much like the ```reduce``` function on Array in that it applies an accumulator function to the elements coming through the Observable, except instead of just outputting a single value (as ```reduce``` does), it emits a stream of the running accumulation (in this case, the sum so far).  Thus, we use the ```last``` function to produce an Observable with just the final value.
 
@@ -94,6 +113,9 @@ zip(columns,rows)
 > ["A",0]  
 > ["B",1]  
 > ["C",2]
+
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/zip1.gif)
+
 
 If you like mathy vector speak, you can think of the above as an *inner product* of the two streams.  
 By contrast, the ```mergeMap``` operator gives the *cartesian product* of two streams.  That is, it gives us a way to take, for every element of a stream, a whole other stream, but flattened (or projected) together with the parent stream.  The following enumerates all the row/column indices of cells in a spreadsheet:
@@ -116,6 +138,26 @@ columns.pipe(
 > ["C", 1]  
 > ["C", 2]  
 
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/mergeMap.gif)
+
+If we contrast ```mergeMap``` and ```map```, map will produce an Observable of Observables, while mergeMap, will produce a single stream with all of the values. Contrast the animation for ```map```, with the previous ```mergeMap``` animation.  ```map``` has three seperate branches, where each one represents its own observable stream. The output of the ```console.log```, is an instance of the Observable class itself, which is not very useful! 
+
+```javascript
+columns.pipe(
+  map(column=>rows.pipe(
+    map(row=>[column, row])
+  ))
+).subscribe(console.log)
+```
+
+> Observable  
+> Observable    
+> Observable   
+
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/mapmap.gif)
+
+
+
 Another way to combine streams is ```merge```.  Streams that are generated with ```of``` and ```range``` have all their elements available immediately, so the result of a merge is not very interesting, just the elements of one followed by the elements of the other:
 
 ```javascript
@@ -129,6 +171,9 @@ merge(columns,rows)
 > 0  
 > 1  
 > 2  
+
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/merge.gif)
+
 
 However, ```merge``` when applied to asynchronous streams will merge the elements in the order that they arrive in the stream.  For example, a stream of key-down and mouse-down events from a web-page:
 
@@ -148,21 +193,31 @@ key$.pipe(
 ).subscribe(console.log)
 ```
 
-The following prints "Mouse Click!" on every mousedown:
+The animation displays the stream as the user types in the best FIT unit in to the webpage
+
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/keydown.gif)
+
+
+The following prints "!!" on every mousedown:
 ```javascript
 mouse$.pipe(
-  map(_=>"Mouse Click!")
+  map(_=>"!!")
 ).subscribe(console.log)
 ```
+The yellow highlight signifies when the mouse is clicked!
+
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/click.gif)
+
 
 Once again this will keep producing the message for every mouse click for as long as the page is open.  Note that the subscribes do not "block", so the above two subscriptions will run in parallel.  That is, we will receive messages on the console for either key or mouse downs whenever they occur.
 
 The following achieves the same thing with a single subscription using ```merge```:
 ```javascript
 merge(key$.pipe(map(e=>e.key)),
-      mouse$.pipe(map(_=>"Mouse Click!"))
+      mouse$.pipe(map(_=>"!!"))
 ).subscribe(console.log)
 ```
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/keyboardclick.gif)
 
 
 <div class="cheatsheet" markdown="1">
