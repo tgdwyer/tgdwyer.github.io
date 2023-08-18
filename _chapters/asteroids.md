@@ -237,7 +237,7 @@ It sounds like something we can model with a nice reusable function:
         map(result)),
 ```
 
-Now we have all the pieces to create a whole slew of input streams (the definitions for `Rotate` and `Thrust` classes are [below]()):
+Now we have all the pieces to create a whole slew of input streams (the definitions for `Rotate` and `Thrust` classes are [below](#reducing-state)):
 
 ```typescript
   const
@@ -520,20 +520,23 @@ And now a function to move objects, same logic as before but now applicable to a
     vel:o.thrust?o.vel.sub(Vec.unitVecInDirection(o.angle).scale(0.05)):o.vel
   }
 ```
-And our tick action is a little more complicated now, complicated enough to warrant its own function:
+And our `Tick` action is a little more complicated now:
 ```typescript
-  const tick = (s:State,elapsed:number) => {
+class Tick implements Action { 
+  constructor(public readonly elapsed:number) {} 
+  apply(s:State):State {
     const not = <T>(f:(x:T)=>boolean)=>(x:T)=>!f(x),
-      expired = (b:Body)=>(elapsed - b.createTime) > 100,
+      expired = (b:Body)=>(this.elapsed - b.createTime) > 100,
       expiredBullets:Body[] = s.bullets.filter(expired),
       activeBullets = s.bullets.filter(not(expired));
     return <State>{...s, 
       ship:moveObj(s.ship), 
       bullets:activeBullets.map(moveObj), 
       exit:expiredBullets,
-      time:elapsed
+      time:this.elapsed
     }
   }
+}
 ```
 Note that bullets have a life time (presumably they are energy balls that fizzle into space after a certain time).  When a bullet expires it is sent to `exit`.
 
