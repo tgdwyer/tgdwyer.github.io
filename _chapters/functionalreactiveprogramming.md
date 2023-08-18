@@ -486,11 +486,11 @@ mousedown
    rect.setAttribute('y', String(e.rect.y))
  });
 ```
-Note that inside the `mergeMap` we use the `startWith` operator to force a `DownEvent` onto the start of the flattened stream.  Then the body of the accumulator function passed to `scan` handles the logic of the cases of mouse down or drag.
+Note that inside the `mergeMap` we use the `startWith` operator to force a `DownEvent` onto the start of the flattened stream.  Then the accumulator function passed to `scan` uses sub-type polymorphism to cause the correct behaviour for the different types of `MousePosEvent``.
 
 The advantage of this code is not brevity; with the introduced type definitions it's longer than the previous implementations of the same logic.  Rather, the advantages of this pattern are:
 
  * *maintainability*: we have separated setup code and state management code;
- * *scalability*: we can extend this code pattern to handle more complicated state machines.
+ * *scalability*: we can extend this code pattern to handle more complicated state machines. We can easily `merge` in more input streams, adding Event types to handle their `State` updates, and the only place we have to worry about effects visible to the outside world is in the function passed to `subscribe`.
 
 As an example of *scalability* we will be using this same pattern to implement the logic of an asteroids arcade game in the [next chapter](/asteroids).
