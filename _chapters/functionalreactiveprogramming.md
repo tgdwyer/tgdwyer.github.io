@@ -418,7 +418,7 @@ However, there's still something not very elegant about this version.  In partic
 
 ### A Pure FRP Solution
 
-We can remove this dependency, making our event stream a 'closed system', by introducing a `scan` operator on the stream to accumulate the state using a pure function. 
+We can remove this dependency on mutable state, making our event stream a pure 'closed system', by introducing a `scan` operator on the stream to accumulate the state using a pure function. 
 First, let's define a type for the state that will be accumulated by the `scan` operator. We are concerned with
 the position of the top-left corner of the rectangle, and (optionally, since it's only relevant during mouse-down dragging) the offset of the click position from the top-left of the rectangle:
 ```typescript
