@@ -388,7 +388,7 @@ We now rewrite precisely the same behaviour using Observable FRP:
   mousedown
     .pipe(
       map(({clientX, clientY}) => ({
-        mouseDownXOffset: Number(rect.getAttribute('x')) - clientX, // <-|
+        mouseDownXOffset: Number(rect.getAttribute('x')) - clientX, // <-\
         mouseDownYOffset: Number(rect.getAttribute('y')) - clientY  // <-|
       })),                                                          //   D
       mergeMap(({mouseDownXOffset, mouseDownYOffset}) =>            //   E
@@ -401,7 +401,7 @@ We now rewrite precisely the same behaviour using Observable FRP:
               })))))                                                //   C
    .subscribe(({x, y}) => {                                         //   Y
      rect.setAttribute('x', String(x))  // >-----------------------------|
-     rect.setAttribute('y', String(y))  // >-----------------------------|
+     rect.setAttribute('y', String(y))  // >-----------------------------/
    });
 ```
 
