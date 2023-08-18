@@ -388,20 +388,20 @@ We now rewrite precisely the same behaviour using Observable FRP:
   mousedown
     .pipe(
       map(({clientX, clientY}) => ({
-        mouseDownXOffset: Number(rect.getAttribute('x')) - clientX,
-        mouseDownYOffset: Number(rect.getAttribute('y')) - clientY
-      })),
-      mergeMap(({mouseDownXOffset, mouseDownYOffset}) =>
-        mousemove
-          .pipe(
-            takeUntil(mouseup),
-            map(({clientX, clientY}) => ({
-                x: clientX + mouseDownXOffset,
-                y: clientY + mouseDownYOffset
-              })))))
-   .subscribe(({x, y}) => {
-     rect.setAttribute('x', String(x))
-     rect.setAttribute('y', String(y))
+        mouseDownXOffset: Number(rect.getAttribute('x')) - clientX, // <-|
+        mouseDownYOffset: Number(rect.getAttribute('y')) - clientY  // <-|
+      })),                                                          //   D
+      mergeMap(({mouseDownXOffset, mouseDownYOffset}) =>            //   E
+        mousemove                                                   //   P
+          .pipe(                                                    //   E
+            takeUntil(mouseup),                                     //   N
+            map(({clientX, clientY}) => ({                          //   D
+                x: clientX + mouseDownXOffset,                      //   E
+                y: clientY + mouseDownYOffset                       //   N
+              })))))                                                //   C
+   .subscribe(({x, y}) => {                                         //   Y
+     rect.setAttribute('x', String(x))  // >-----------------------------|
+     rect.setAttribute('y', String(y))  // >-----------------------------|
    });
 ```
 
@@ -414,7 +414,7 @@ Compared to our state machine diagram above:
 - the only side effects (the movement of the rectangle) occur in the function passed to the subscribe;
 - the cleanup of subscriptions to the mousemove and mouseup events is handled automatically by the ```takeUntil``` function when it closes the streams.
 
-However, there's still something not very elegant about this version.  In particular, we are reading the position of the rectangle directly from the DOM inside the `map` on the `mousedown` stream.  This dependency on mutable state outside the function scope makes this solution impure.
+However, there is still something not very elegant about this version.  As indicated by my crude ASCII art in the comment above, there is a dendency in the function applied to the stream by the first `map`, on the DOM element being repositioned in the function applied by subscribe.  This dependency on mutable state outside the function scope makes this solution impure.
 
 ### A Pure FRP Solution
 
