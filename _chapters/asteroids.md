@@ -237,7 +237,7 @@ It sounds like something we can model with a nice reusable function:
         map(result)),
 ```
 
-Now we have all the pieces to create a whole slew of input streams:
+Now we have all the pieces to create a whole slew of input streams (the definitions for `Rotate` and `Thrust` classes are [below]()):
 
 ```typescript
   const
@@ -497,8 +497,18 @@ Now we define functions to create objects:
 # Shoot Action
 We'll add a new action type and observable for shooting with the space bar:
 ```typescript
-  class Shoot { constructor() {} }
-  const shoot = keyObservable('keydown','Space', ()=>new Shoot())
+class Shoot implements Action {
+    /**
+     * a new bullet is created and added to the bullets array
+     * @param s State
+     * @returns new State
+     */
+    apply = (s: State) => ({ ...s,
+      bullets: s.bullets.concat([createBullet(s)]),
+      objCount: s.objCount + 1
+    })
+}
+const shoot = keyObservable('keydown','Space', ()=>new Shoot())
 ```
 And now a function to move objects, same logic as before but now applicable to any `Body`:
 ```typescript
@@ -527,20 +537,6 @@ And our tick action is a little more complicated now, complicated enough to warr
 ```
 Note that bullets have a life time (presumably they are energy balls that fizzle into space after a certain time).  When a bullet expires it is sent to `exit`.
 
-Now adding bullets as they are fired to our state reducer:
-```typescript
-  const reduceState = (s:State, e:Rotate|Thrust|Tick|Shoot)=>
-    e instanceof Rotate ? {...s,
-      ship: {...s.ship,torque:e.direction}
-    } :
-    e instanceof Thrust ? {...s,
-      ship: {...s.ship, thrust:e.on}
-    } :
-    e instanceof Shoot ? {...s,
-      bullets: s.bullets.concat([createBullet(s)]),
-      objCount: s.objCount + 1
-    } : 
-    tick(s,e.elapsed);
 ```
 We merge the Shoot stream in as before:
 ```typescript
