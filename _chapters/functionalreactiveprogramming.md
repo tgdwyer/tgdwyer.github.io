@@ -416,9 +416,17 @@ Compared to our state machine diagram above:
 
 However, there's still something not very elegant about this version.  In particular, we are reading the position of the rectangle directly from the DOM inside the `map` on the `mousedown` stream.
 
-We can remove this dependency, making our event stream a 'closed system', by introducing a `scan` operator on the stream to accumulate the state using a pure function.
+We can remove this dependency, making our event stream a 'closed system', by introducing a `scan` operator on the stream to accumulate the state using a pure function. 
+First, let's define a type for the state that will be accumulated by the `scan` operator. We are concerned with
+the position of the top-left corner of the rectangle, and (optionally, since it's only relevant during mouse-down dragging) the offset of the click position from the top-left of the rectangle:
+```typescript
+type State = Readonly<{
+  pos:Point,
+  offset?:Point
+}>
+```
 
-We'll introduce some types to model the objects coming through the stream and so that TypeScript can help us keep everything correct.  First, all the events we care about have a position on the SVG canvas associated with them, so we'll have a simple immutable `Point` interface with `x` and `y` positions and a couple of handy vector math methods (note that these create a new `Point` rather than mutating any existing state within the `Point`):
+We'll introduce some types to model the objects coming through the stream and the effects they have when applied to a `State` object in the `scan`.  First, all the events we care about have a position on the SVG canvas associated with them, so we'll have a simple immutable `Point` interface with `x` and `y` positions and a couple of handy vector math methods (note that these create a new `Point` rather than mutating any existing state within the `Point`):
 ```typescript
 class Point {
    constructor(public readonly x:number, public readonly y:number){}
@@ -426,24 +434,21 @@ class Point {
    sub(p:Point) { return new Point(this.x-p.x,this.y-p.y) }
 }
 ```
-Now a subclass of `Point` with a constructor letting us instantiate it for a given (DOM) `MouseEvent`:
+Now we create a subclass of `Point` with a constructor letting us instantiate it for a given (DOM) `MouseEvent` and an `abstract` (placeholder) definition for a function to apply the correct update action to the `State`:
 ```typescript
-class MousePosEvent extends Point { 
+abstract class MousePosEvent extends Point { 
   constructor(e:MouseEvent) { super(e.clientX, e.clientY) } 
+  abstract apply(s:State):State;
 }
 ```
-And two further subclasses so that we can dissambiguate `mousedown` and `mousedrag` events, e.g. by `instanceof DownEvent` or `instanceof DragEvent`.
+And now two further subclasses with concrete definitions for `apply`.
 ```typescript
-class DownEvent extends MousePosEvent {}
-class DragEvent extends MousePosEvent {}
-```
-And finally, a type for the state that will be accumulated by the `scan` operator. We are concerned with
-the position of the top-left corner of the rectangle, and (optionally, since it's only relevant during mouse-down dragging) the offset of the click position from the top-left of the rectangle:
-```typescript
-type State = Readonly<{
-  pos:Point,
-  offset?:Point
-}>
+  class DownEvent extends MousePosEvent {
+    apply(s:State) { return { pos: s.pos, offset: s.pos.sub(this) }}
+  }
+  class DragEvent extends MousePosEvent {
+    apply(s:State) { return { pos: this.add(s.offset), offset: s.offset }}
+  }
 ```
 Setup of the streams is as before:
 ```typescript
@@ -473,10 +478,8 @@ mousedown
         startWith(new DownEvent(mouseDownEvent)))),
     scan(
       (a: State, e: MousePosEvent) =>
-        e instanceof DownEvent
-          ? { pos: a.pos, offset: a.pos.sub(e) }
-          : { pos: e.add(a.offset), offset: a.offset },
-      initialState)
+        scan((s: State, e: MousePosEvent) => e.apply(s),
+        initialState)
  .subscribe(e => {
    rect.setAttribute('x', String(e.rect.x))
    rect.setAttribute('y', String(e.rect.y))
