@@ -372,7 +372,7 @@ The last issue is not unlike the kind of resource cleanup that [RAII](https://en
 Generally speaking, nothing about this function resembles the state machine diagram.  
 The code sequencing has little sensible flow. The problem gets a lot worse in highly interactive web pages with lots of different possible interactions all requiring their own event handlers and cleanup code.
 
-### An Impure FRP Solution
+### Impure FRP Solution
 
 We now rewrite precisely the same behaviour using Observable FRP:
 
@@ -415,7 +415,7 @@ Compared to our state machine diagram above:
 
 However, there is still something not very elegant about this version.  As indicated by my crude ASCII art in the comment above, there is a dendency in the function applied to the stream by the first `map`, on the DOM element being repositioned in the function applied by subscribe.  This dependency on mutable state outside the function scope makes this solution impure.
 
-### A Pure FRP Solution
+### Pure FRP Solution
 
 We can remove this dependency on mutable state, making our event stream a pure 'closed system', by introducing a `scan` operator on the stream to accumulate the state using a pure function. 
 First, let's define a type for the state that will be accumulated by the `scan` operator. We are concerned with
