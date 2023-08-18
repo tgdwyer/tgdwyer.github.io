@@ -373,7 +373,7 @@ The last issue is not unlike the kind of resource cleanup that [RAII](https://en
 Generally speaking, nothing about this function resembles the state machine diagram.  
 The code sequencing has little sensible flow. The problem gets a lot worse in highly interactive web pages with lots of different possible interactions all requiring their own event handlers and cleanup code.
 
-### The FRP Solution
+### An Impure FRP Solution
 
 We now rewrite precisely the same behaviour using Observable FRP:
 
@@ -414,7 +414,9 @@ Compared to our state machine diagram above:
 - the only side effects (the movement of the rectangle) occur in the function passed to the subscribe;
 - the cleanup of subscriptions to the mousemove and mouseup events is handled automatically by the ```takeUntil``` function when it closes the streams.
 
-However, there's still something not very elegant about this version.  In particular, we are reading the position of the rectangle directly from the DOM inside the `map` on the `mousedown` stream.
+However, there's still something not very elegant about this version.  In particular, we are reading the position of the rectangle directly from the DOM inside the `map` on the `mousedown` stream.  This dependency on mutable state outside the function scope makes this solution impure.
+
+### A Pure FRP Solution
 
 We can remove this dependency, making our event stream a 'closed system', by introducing a `scan` operator on the stream to accumulate the state using a pure function. 
 First, let's define a type for the state that will be accumulated by the `scan` operator. We are concerned with
