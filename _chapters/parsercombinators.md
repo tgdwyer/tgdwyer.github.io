@@ -230,7 +230,7 @@ And finally we introduce the `Alternative` typeclass for our `Parser` for trying
 ```haskell
 instance Alternative Parser where
   empty :: Parser a
-  empty = Parser $ const Nothing
+  empty = Parser $ const (Error UnexpectedEof)
 
   p1 <|> p2 = P (\i -> let f (Error _) = parse p2 i
                          f r = r
