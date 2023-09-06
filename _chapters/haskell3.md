@@ -569,9 +569,9 @@ class Applicative f => Alternative (f :: * -> *) where
 
 `empty`: This function represents a computation with *no result or a failure*. It serves as the identity element. For different data types that are instances of Alternative, empty represents an empty container or a *failed computation*, depending on the context.
 
-`(<|>)`: The `<|> operator combines two computations, and it's used to express alternatives. It takes two computations of the same type and returns a computation that will produce a result from the first computation if it succeeds, or if it fails, it will produce a result from the second computation. This operator allows you to handle branching logic and alternative paths in your code.
+`(<|>)`: The `<|>` operator combines two computations, and it's used to express alternatives. It takes two computations of the same type and returns a computation that will produce a result from the first computation if it succeeds, or if it fails, it will produce a result from the second computation. This operator allows you to handle branching logic and alternative paths in your code.
 
-Like Functor and Applicative, instances of the Alternative typeclass must also adhere to specific laws, ensuring predictable behavior when working with alternatives. Common instances of the Alternative typeclass include Maybe and lists ([]). Alternatives are also very useful for *Parsers*, where we try to run first parser, if it fails, we run the second parser. 
+Like Functor and Applicative, instances of the Alternative typeclass must also adhere to specific laws, ensuring predictable behavior when working with alternatives. Common instances of the Alternative typeclass include Maybe and lists (`[]`). Alternatives are also very useful for *Parsers*, where we try to run first parser, if it fails, we run the second parser. 
 
 ```haskell
 > Just 2 <|> Just 5
