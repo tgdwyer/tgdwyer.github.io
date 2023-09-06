@@ -559,7 +559,7 @@ totalMark = (+) . exam <*> nonExam
 
 ## Alternative 
 
-The Alternative typeclass is another important typeclass in Haskell, which is closely related to the Applicative typeclass. It introduces a set of operators and functions that are particularly useful when dealing with computations that can fail or have multiple possible outcomes. Alternative is also considered a "subclass" of Applicative, and it provides additional capabilities beyond what Applicative offers. It introduces two main functions, empty and `<|>` (pronounced "alt" or "alternative")
+The Alternative typeclass is another important typeclass in Haskell, which is closely related to the Applicative typeclass. It introduces a set of operators and functions that are particularly useful when dealing with computations that can fail or have multiple possible outcomes. Alternative is also considered a "subclass" of Applicative, and it provides additional capabilities beyond what Applicative offers. It introduces two main functions, `empty` and `<|>` (pronounced "alt" or "alternative")
 
 ```haskell
 class Applicative f => Alternative (f :: * -> *) where
@@ -567,7 +567,7 @@ class Applicative f => Alternative (f :: * -> *) where
   (<|>) :: f a -> f a -> f a
 ```
 
-`empty`: This function represents a computation with *no result or a failure*. It serves as the identity element. For different data types that are instances of Alternative, empty represents an empty container or a *failed computation*, depending on the context.
+`empty`: This function represents a computation with *no result or a failure*. It serves as the identity element. For different data types that are instances of Alternative, `empty` represents an empty container or a *failed computation*, depending on the context.
 
 `(<|>)`: The `<|>` operator combines two computations, and it's used to express alternatives. It takes two computations of the same type and returns a computation that will produce a result from the first computation if it succeeds, or if it fails, it will produce a result from the second computation. This operator allows you to handle branching logic and alternative paths in your code.
 
