@@ -559,7 +559,7 @@ totalMark = (+) . exam <*> nonExam
 
 ## Alternative 
 
-The Alternative typeclass is another important typeclass in Haskell, which is closely related to the Applicative typeclass. It introduces a set of operators and functions that are particularly useful when dealing with computations that can fail or have multiple possible outcomes. Alternative is also considered a "subclass" of Applicative, and it provides additional capabilities beyond what Applicative offers. It introduces two main functions, empty and (<|>) (pronounced "alt" or "alternative")
+The Alternative typeclass is another important typeclass in Haskell, which is closely related to the Applicative typeclass. It introduces a set of operators and functions that are particularly useful when dealing with computations that can fail or have multiple possible outcomes. Alternative is also considered a "subclass" of Applicative, and it provides additional capabilities beyond what Applicative offers. It introduces two main functions, empty and `<|>` (pronounced "alt" or "alternative")
 
 ```haskell
 class Applicative f => Alternative (f :: * -> *) where
