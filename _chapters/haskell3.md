@@ -659,7 +659,7 @@ And here's a little parser which asserts the next character on the stream is the
 is :: Char -> Parser Char
 is c = Parser $
   \inputString -> case parse char inputString of
-    Just (rest, result) | c' == c -> Just (rest, result)
+    Just (rest, result) | result == c -> Just (rest, result)
     _ -> Nothing
 ```
 
