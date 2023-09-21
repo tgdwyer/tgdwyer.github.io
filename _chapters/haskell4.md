@@ -401,3 +401,15 @@ Node (Node (Leaf (Just 1)) (Just 2) (Leaf (Just 3))) (Just 4) (Node (Leaf (Just 
 > sequenceA treeOfMaybes
 Just (Node (Node (Leaf 1) 2 (Leaf 3)) 4 (Node (Leaf 5) 6 (Leaf 7)))
 ```
+
+----
+## Applying Functions Over Contexts
+
+Thus far we have seen a variety of functions for applying functions in and over different contexts.  It is useful to note the similarities between these, and recognise that they are all doing conceptually the same thing, i.e. function application.  The difference is the in the type of context.  The simplest function for applying functions is the ($) operator, with just a function (no context), applied directly to a value.  Then `fmap`, just a function, mapped over a Functor context/container.  Then Applicative (function also in the context).  Then, most recently `traverse`: the function produces a result in an Applicative context, applied (traversed) over some data structure, and the resulting data structure returned in an Applicative context.  Below, I line up all the types so that the similarities and differences are as clear as possible.  It's worth making sure at this stage that you can read such type signatures, as they really do summarise everything that we have discussed.
+
+```haskell
+($)      ::                                      (a -> b) -> a   -> b
+(<$>)    :: Functor f                      =>    (a -> b) -> f a -> f b
+(<*>)    :: Applicative f                  =>  f (a -> b) -> f a -> f b
+traverse :: (Traversable t, Applicative f) =>  (a -> f b) -> t a -> f (t b)
+```
