@@ -479,7 +479,7 @@ traverse :: (Traversable t, Applicative f) => (a -> f b) -> t a -> f (t b)
 ```
 
 `t` is a traversable data structure, which in our case is a `String` (since `String` is a list of characters).
-`a` is the element type of the traversable structure, which is `Char` (the individual characters in the Str`ing).
+`a` is the element type of the traversable structure, which is `Char` (the individual characters in the `String`).
 `f` is an applicative functor, which is the `Parser` type in our case.
 The function `(a -> f b)` is the parser for a single character. In our case, it's the `is` parser.
 
@@ -516,7 +516,8 @@ traverse f l = sequenceA (f <$> l)
 ---------
 ### Exercise
 
-* What would be the definition of sequenceA over a list?
+* What would be the definition of sequenceA over a list? (without using traverse)
+* Can you make the `Maybe` data type an instance of traversable?
 ----------
 
 ## Bringing it all together!
@@ -585,10 +586,11 @@ inputString = "3+5+2"
 
 parsedResult :: String -> Maybe (String, Tree Value)
 parsedResult = parse (stringTree sampleTree) 
+```
 
 The parsedResult will only succeed if the input string exactly matches the desired tree.
 
-To evaluate the parsed expression we can use foldMap and our Sum Monoid:
+To evaluate the parsed expression we can use foldMap and the Sum monoid:
 
 ```haskell
 evalTree :: Tree Value -> Int
