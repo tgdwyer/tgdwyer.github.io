@@ -728,7 +728,7 @@ The whacky triple-nested application of `<$>` comes about because the result typ
 Just ("bc",2)
 ```
 
-So `(+1)<$>int` creates a new `Parser` which parses an `int` from the input stream and adds one to the value parsed (if it succeeds).  Behind the scenes, using the implementation above, the `Parser`'s instance of Functor is effectively lifting over three additional layers of nested types, i.e.: 
+So `(+1)<$>int` creates a new `Parser` which parses an `int` from the input stream and adds one to the value parsed (if it succeeds).  Behind the scenes, using the implementation above, the `Parser`'s instance of Functor is effectively lifting over three additional layers of nested types to reach the `Int` value, i.e.: 
 
 ![Applicative Visual Summary](/assets/images/chapterImages/haskell3/parserfunctor.png)
 
