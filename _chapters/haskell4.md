@@ -1,6 +1,6 @@
 ---
 layout: chapter
-title: "Foldable and Traversible"
+title: "Foldable and Traversable"
 ---
 
 In this chapter we will meet some more typeclasses that abstract common coding patterns for dealing with data.
