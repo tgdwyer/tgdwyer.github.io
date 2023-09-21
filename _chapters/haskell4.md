@@ -226,9 +226,13 @@ Since list is an instance of Monoid, `foldMap` will concatenate these singleton 
 [1,2,3,4,5,6,7]
 ```
 
-**Exercise**
+----
+
+### Exercises
 
 - Make an instance of `Foldable` for `Tree` in terms of `foldr` instead of `foldMap`.
+
+----
 
 ## Traversable
 
@@ -514,10 +518,12 @@ traverse f l = sequenceA (f <$> l)
 ```
 
 ---------
-### Exercise
 
-* What would be the definition of sequenceA over a list? (without using traverse)
-* Can you make the `Maybe` data type an instance of traversable?
+### Exercises
+
+- What would be the definition of sequenceA over a list? (without using traverse)
+- Can you make the `Maybe` data type an instance of traversable?
+  
 ----------
 
 ## Bringing it all together!
