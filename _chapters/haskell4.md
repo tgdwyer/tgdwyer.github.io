@@ -413,3 +413,194 @@ Thus far we have seen a variety of functions for applying functions in and over 
 (<*>)    :: Applicative f                  =>  f (a -> b) -> f a -> f b
 traverse :: (Traversable t, Applicative f) =>  (a -> f b) -> t a -> f (t b)
 ```
+## Parsing a String Using Traversable?
+
+If we want to parse a given string exactly, such as parsing "hello" from the string "hello world"
+
+```haskell
+> parse (string "hello") "hello world"
+Just (" world", "hello")
+
+> parse (string "hello") "world, hello"
+Nothing
+```
+
+How would we do this? 
+
+What would need to do is go over the string, and check if each character  **is** the correct character. 
+If it is the correct character, we would cons it to our result and than parse the next character. 
+
+
+This can be written using a `foldr` to parse all the character and checking using the `is` parser.
+
+```haskell
+string l = foldr (\c acc -> liftA2 (:) (is c) acc) (pure "") l
+```
+
+Remembering `liftA2` is equivalent to `f <$> a <*> b` 
+
+Our `<*>` will allow for the seqeuencing of the applicative effect, so this will sequentially parse all characters, making sure they are correct.
+As soon, as one applicative parser fails, the result of the parsing will fail. 
+
+This could also be written as:
+
+```haskell
+string l = foldr cons (pure []) l
+  where
+    cons c acc = liftA2 (:) (is c) acc
+```
+
+But the title of this section was traverse?
+
+Well, lets consider how would we define a list as an instance of the traversable operator. The traverse function is defined exactly as follows
+
+```haskell
+instance Traversable [] where
+    traverse :: Applicative f => (a -> f b) -> [a] -> f [b]
+    traverse f = foldr cons (pure [])
+      where cons x ys = liftA2 (:) (f x) ys
+```
+
+This is almost exactly the definition of our string parser using `foldr` but the function `f` is exactly the `is` Parser.
+
+Therefore, we can write `string = traverse is`
+
+Let's break down how the string parser using traverse and is works in terms of types:
+
+```haskell
+string :: String -> Parser String
+string = traverse is
+```
+
+traverse is a higher-order function with the following type:
+
+```haskell
+traverse :: (Traversable t, Applicative f) => (a -> f b) -> t a -> f (t b)
+```
+
+`t` is a traversable data structure, which in our case is a `String` (since `String` is a list of characters).
+`a` is the element type of the traversable structure, which is `Char` (the individual characters in the `String`).
+`f` is an applicative functor, which is the `Parser` type in our case.
+The function `(a -> f b)` is the parser for a single character. In our case, it's the `is` parser.
+
+So, we will apply the `is` function to each element in the the traversable `t` (the list) and store collect the result in to a Parser [Char]
+
+Therefore, `traverse is` is of type `Parser String`, which is a parser that attempts to parse the entire String and returns it as a result.
+
+
+Can we also write this using `sequenceA`?
+
+```haskell
+string :: String -> Parser String
+string str = sequenceA (map is str)
+```
+
+Or in point-free form
+
+```haskell
+string :: String -> Parser String
+string = sequenceA . map is
+```
+
+`map is str` maps the is parser over each character in the input string `str`. This produces a list of parsers, where each parser checks if the corresponding character in the input matches the character in the target string.
+
+sequenceA is then used to turn the list of parsers into a single parser. This function applies each parser to the input string and collects the results. If all character parsers succeed, it returns a list of characters; otherwise, it returns Nothing.
+
+In fact an equivalent definition of traverse can be written using the sequenceA as follows:
+
+```haskell
+traverse :: (Traversable t, Applicative f) => (a -> f b) -> t a -> f (t b)
+traverse f l = sequenceA (f <$> l)
+```
+
+---------
+### Exercise
+
+* What would be the definition of sequenceA over a list? (without using traverse)
+* Can you make the `Maybe` data type an instance of traversable?
+----------
+
+## Bringing it all together!
+
+We can also parse a tree using a very similar idea as traversing over a list!
+
+Recall from earlier in this section:
+
+```haskell
+data Tree a = Empty
+            | Leaf a
+            | Node (Tree a) a (Tree a)
+  deriving (Show)
+
+instance Traversable Tree where
+  --  traverse :: Applicative f => (a -> f b) -> Tree a -> f (Tree b)
+   traverse _ Empty = pure Empty
+   traverse f (Leaf a) = Leaf <$> f a
+   traverse f (Node l x r) = Node <$> traverse f l <*> f x <*> traverse f r
+```
+
+We can write a similar definition for parsing an exact tree compared to parsing a string!
+
+We will consider a Value which is either an integer, or an operator which can combine integers. We will assume the only possible combination operator is `+` to avoid complexities with ordering expressions. 
+
+```haskell
+
+data Value = Value Int | BinaryPlus 
+  deriving (Show)
+```
+
+We can generalize the `is` parser to `satisfy`, which will run a given parser `p`, and make sure the result satisfies a boolean condition.
+
+```haskell
+satisfy :: Parser a -> (a -> Bool) -> Parser a
+satisfy p f = Parser $ \i -> case parse p i of 
+  Just (r, v) 
+      | f v -> Just (r, v)
+  _ -> Nothing
+```
+
+From this satisfy, we will use traverse to ensure our string *exactly* matches a wanted expression Tree.
+
+```haskell
+
+isValue :: Value -> Parser Value
+isValue (Value v) = Value <$> satisfy int (==v)
+isValue BinaryPlus = BinaryPlus <$ satisfy char (=='+')
+
+stringTree :: Tree Value -> Parser (Tree Value)
+stringTree = traverse isValue
+
+sampleTree :: Tree Value
+sampleTree =
+  Node
+    (Leaf $ Value 3)
+    BinaryPlus
+    (Node
+      (Leaf (Value 5))
+      BinaryPlus
+      (Leaf (Value 2)))
+
+
+inputString :: String
+inputString = "3+5+2"
+
+parsedResult :: String -> Maybe (String, Tree Value)
+parsedResult = parse (stringTree sampleTree) 
+```
+
+The parsedResult will only succeed if the input string exactly matches the desired tree.
+
+To evaluate the parsed expression we can use foldMap and the Sum monoid:
+
+```haskell
+evalTree :: Tree Value -> Int
+evalTree tree = getSum $ foldMap toSum tree
+  where
+    toSum :: Value -> Sum Int
+    toSum (Value v) = Sum v
+    toSum BinaryPlus = Sum 0 -- For BinaryPlus, we don't need to add anything to the sum
+
+evalResult :: Maybe (String, Int)
+evalResult = (evalTree <$>) <$> parsedResult
+-- >>> evalResult = Just ("", 10)
+```

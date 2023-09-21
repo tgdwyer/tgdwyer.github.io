@@ -256,7 +256,7 @@ K(I)  ≡  K(i=> i)             -- expand I := i=> i
       ≡  (x=> y=> x)(i=> i)   -- expand K := x=> y=> x
       ≡  y=> i=> i
 ```
-Where the last line above is the result of applying `x=>y=>x` to `i=>i`.  Thus, we substitute `x:=i=>i` in the body of the first function (the expansion of `K`).  When we explore the [Lambda Calculus](/lambdacalculus), we will see that this operation (simple evaluation of function application by substition of expressions) is called *Beta reduction*.
+Where the last line above is the result of applying `x=>y=>x` to `i=>i`.  Thus, we substitute `x:=i=>i` in the body of the first function (the expansion of `K`).  When we explore the [Lambda Calculus](/lambdacalculus), we will see that this operation (simple evaluation of function application by substitution of expressions) is called *Beta reduction*.
 
 Now we could derive `tail` from `rest` using our `curry2` function:
 ``` 

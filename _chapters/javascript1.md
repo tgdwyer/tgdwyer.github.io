@@ -242,7 +242,7 @@ function myFunction(x, y) {
   return result; // returns the result to the caller
 }
 
-const z = 1; // z is immutable and definied in the global scope
+const z = 1; // z is immutable and defined in the global scope
 ```
 
 You invoke (or 'call', or 'apply') a function like so:
