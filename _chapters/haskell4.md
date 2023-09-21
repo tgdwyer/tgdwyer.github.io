@@ -565,7 +565,7 @@ From this satisfy, we will use traverse to ensure our string *exactly* matches a
 
 isValue :: Value -> Parser Value
 isValue (Value v) = Value <$> satisfy int (==v)
-isValue (BinaryOperator c) = BinaryOperator <$> satisfy char (==c)
+isValue BinaryPlus = BinaryPlus <$ satisfy char (=='+')
 
 stringTree :: Tree Value -> Parser (Tree Value)
 stringTree = traverse isValue
