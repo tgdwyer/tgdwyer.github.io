@@ -415,7 +415,7 @@ traverse :: (Traversable t, Applicative f) =>  (a -> f b) -> t a -> f (t b)
 ```
 ## Parsing a String Using Traversable?
 
-If we want to parse a given string exactly, such as parsing "hello" from the string "hello world"
+What if we want to parse an exact match for a given string, for example, a token in a programming language like the word `function`.  Or, to look for a polite greeting at the start of an email before deciding whether to respond, such as "hello".
 
 ```haskell
 > parse (string "hello") "hello world"
@@ -425,19 +425,19 @@ Just (" world", "hello")
 Nothing
 ```
 
-How would we do this? 
+So the string "hello" is the prototype for the expected input.  How would we do this? 
 
-What would need to do is go over the string, and check if each character  **is** the correct character. 
+Our parser would have to process characters from the input stream and check if each successive character  **is** the one expected from the prototype. 
 If it is the correct character, we would cons it to our result and than parse the next character. 
 
 
-This can be written using a `foldr` to parse all the character and checking using the `is` parser.
+This can be written using a `foldr` to parse all the characters while checking with the `is` parser.
 
 ```haskell
 string l = foldr (\c acc -> liftA2 (:) (is c) acc) (pure "") l
 ```
 
-Remembering `liftA2` is equivalent to `f <$> a <*> b` 
+Remembering `liftA2` is equivalent to `f <$> a <*> b`.
 
 Our `<*>` will allow for the seqeuencing of the applicative effect, so this will sequentially parse all characters, making sure they are correct.
 As soon, as one applicative parser fails, the result of the parsing will fail. 
@@ -452,7 +452,7 @@ string l = foldr cons (pure []) l
 
 But the title of this section was traverse?
 
-Well, lets consider how would we define a list as an instance of the traversable operator. The traverse function is defined exactly as follows
+Well, lets consider how we would define a list as an instance of the traversable operator. The traverse function is defined [exactly](https://hackage.haskell.org/package/base-4.18.0.0/docs/src/Data.Traversable.html#traverse) as follows:
 
 ```haskell
 instance Traversable [] where
@@ -465,7 +465,7 @@ This is almost exactly the definition of our string parser using `foldr` but the
 
 Therefore, we can write `string = traverse is`
 
-Let's break down how the string parser using traverse and is works in terms of types:
+Let's break down how the `string` parser using `traverse` and is works in terms of types:
 
 ```haskell
 string :: String -> Parser String
@@ -483,7 +483,7 @@ traverse :: (Traversable t, Applicative f) => (a -> f b) -> t a -> f (t b)
 `f` is an applicative functor, which is the `Parser` type in our case.
 The function `(a -> f b)` is the parser for a single character. In our case, it's the `is` parser.
 
-So, we will apply the `is` function to each element in the the traversable `t` (the list) and store collect the result in to a Parser [Char]
+So, we will apply the `is` function to each element in the the traversable `t` (the list) and store collect the result in to a `Parser [Char]`.
 
 Therefore, `traverse is` is of type `Parser String`, which is a parser that attempts to parse the entire String and returns it as a result.
 
@@ -522,7 +522,7 @@ traverse f l = sequenceA (f <$> l)
 
 ## Bringing it all together!
 
-We can also parse a tree using a very similar idea as traversing over a list!
+We can also parse a tree by traversing a parser over it, the same way we parsed `string` by traversing a list of `Char`!
 
 Recall from earlier in this section:
 
