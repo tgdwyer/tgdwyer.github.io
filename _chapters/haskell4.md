@@ -330,7 +330,7 @@ traverse print [1,2,3] :: IO [()]
 
 When we ran this at the REPL, GHCi consumed the `IO` effect (because it runs all commands inside the [`IO Monad`](/monad/)).  However, inside a pure function there is no easy way to get rid of this `IO` return type -- which protects you from creating `IO` effects unintentionally.
 
-A related function defined in `Traversable` is `sequenceA` allows us to convert directly from Traversables of Applicatives, to Applicatives of Traversables:
+A related function defined in `Traversable` is `sequenceA` which allows us to convert directly from Traversables of Applicatives, to Applicatives of Traversables:
 
 ```haskell
 > :t sequenceA

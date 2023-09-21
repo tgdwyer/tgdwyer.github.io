@@ -34,7 +34,9 @@ Remember haskell binary operators are just infix curried functions of two parame
        ≡ ((+) x) y  -- making function application precedence explicit
        ≡ (x+) y     -- binary operators can also be partially applied
 ```
+
 Such operator sectioning allows us to get the right-most parameter of the function on it's own at the right-hand side of the body expression such that we can apply Eta conversion, thus:
+
 ```haskell
 f x = 1 + x
 f x = (1+) x
