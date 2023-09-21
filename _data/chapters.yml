@@ -90,7 +90,7 @@
     - Understand that in Haskell the ability to map over container structures is generalised into the [Functor](/haskell3#functor) typeclass, such that any type that is an instance of Functor has the `fmap` or `(<$>)` operation.
     - Understand that the [Applicative Typeclass](/haskell3#applicative) extends Functor such that containers of functions may be applied (using the `(<*>)` operator) to containers of values.
     - Understand that Functor and Applicative allow powerful composable types through exploring a [simple applicative functor for parsing](/haskell3#a-simple-applicative-functor-for-parsing).
-- title: Foldable and Traversible
+- title: Foldable and Traversable
   url: /haskell4/
   description: |
     - Understand that the "reduce" function we met for arrays and other data structures in JavaScript is referred to as ["folding"](/haskell4/#folds) in Haskell and there are two variants `foldl` and `foldr` for left and right folds respectively
