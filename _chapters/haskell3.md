@@ -639,7 +639,7 @@ is c = Parser $ \i -> case parse char i of
 
 By making `Parser` an instance of `Functor` we will be able to map functions over the result of a parse.
 
-What the `Functor` instance of a parser should do is apply the parser and apply a function to the result of the parse.
+What the `Functor` instance of a parser should do is apply the parser and apply a function to the result of the parse, returning the result still in the `Parser` context, i.e.:
 
 ```haskell
 instance Functor Parser where
@@ -658,7 +658,8 @@ instance Functor Parser where
       Just (rest, result) -> Just (f <$> (rest, result))
       Nothing -> Nothing)
 ```
-Carefully examining this, what we are doing is applying `(f <$>)` if the result is a `Just`, and ignoring if the result if `Nothing`. This is exactly what the Maybe instance of a `Functor` does! So we can make use of that!
+
+Note that we are applying `(f <$>)` if the result is a `Just`, and ignoring if the result if `Nothing`. This is exactly what the Maybe instance of a `Functor` does! So we can make use of that!
 
 ```haskell
 instance Functor Parser where
@@ -680,12 +681,14 @@ instance Functor Parser where
 ```
 
 And, if we eta-reduce:
+
 ```haskell
 instance Functor Parser where
   fmap f (Parser a) = Parser (((f <$>) <$>) . a)
 ```
 
 The last thing we notice is that the `Functor` instance for functions is defined as compose. Therefore, we have finally reached the end of our journey and can re-write this as follows.
+
 ```haskell
 -- >>> parse ((*2) <$> int) "123+456"
 -- Just ("+456",246)
@@ -700,7 +703,9 @@ The whacky triple-nested application of `<$>` comes about because the `a` in our
 Just ("bc",2)
 ```
 
-Another way to think of `(+1)<$>int` is that we are creating a new `Parser` which parses an `int` from the input stream and adds one to the value parsed (if it succeeds).
+So `(+1)<$>int` creates a new `Parser` which parses an `int` from the input stream and adds one to the value parsed (if it succeeds).  Behind the scenes, using the implementation above, the `Parser`'s instance of Functor is effectively lifting over three additional layers of nested types, i.e.: 
+
+![Applicative Visual Summary](/assets/images/chapterImages/haskell3/parserfunctor.png)
 
 Just as we have seen before, making our `Parser` an instance of `Applicative` is going to let us do nifty things like lifting a binary function over the results of two `Parser`s.  For example, instead of implementing all the messy logic of connecting two Parsers to make `plus` above, we'll be able to lift `(+)` over two `Parser`s.
 
