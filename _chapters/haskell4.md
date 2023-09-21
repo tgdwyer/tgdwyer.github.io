@@ -47,11 +47,11 @@ Note that since the `(+)` operator is associative -- a+(b+c) = (a+b)+c -- `foldr
 
 ---------
 
-### Exercise
+### Exercises
 
-* predict what the results of a left- and right-fold will be for `(-)` folded over `[1,2,3,4]` with initial value `0`.
-* what is the result of `foldr (:) []` applied to any list?
-* implement map using `foldr`
+- Predict what the results of a left- and right-fold will be for `(-)` folded over `[1,2,3,4]` with initial value `0`.
+- What is the result of `foldr (:) []` applied to any list?
+- Implement `map` using `foldr`.
 
 ---------
 
