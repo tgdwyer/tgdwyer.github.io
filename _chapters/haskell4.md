@@ -437,9 +437,9 @@ This can be written using a `foldr` to parse all the character and checking usin
 string l = foldr (\c acc -> liftA2 (:) (is c) acc) (pure "") l
 ```
 
-Remebring `liftA2` is equivalent to `f <$> a <*> b` 
+Remembering `liftA2` is equivalent to `f <$> a <*> b` 
 
-Our `<*>` will allow for the seqeuencing of the applicative effect, so this will sequenitally parse all characters, making sure they are correct.
+Our `<*>` will allow for the seqeuencing of the applicative effect, so this will sequentially parse all characters, making sure they are correct.
 As soon, as one applicative parser fails, the result of the parsing will fail. 
 
 This could also be written as:
@@ -519,7 +519,9 @@ traverse f l = sequenceA (f <$> l)
 * What would be the definition of sequenceA over a list?
 ----------
 
-We can also parse a tree using a very similar idea!
+## Bringing it all together!
+
+We can also parse a tree using a very similar idea as traversing over a list!
 
 Recall from earlier in this section:
 
@@ -536,7 +538,7 @@ instance Traversable Tree where
    traverse f (Node l x r) = Node <$> traverse f l <*> f x <*> traverse f r
 ```
 
-We can write a similar definition for parsing an exact tree. 
+We can write a similar definition for parsing an exact tree compared to parsing a string!
 
 We will consider a Value which is either an integer, or an operator which can combine integers. We will assume the only possible combination operator is `+` to avoid complexities with ordering expressions. 
 
@@ -586,7 +588,7 @@ parsedResult = parse (stringTree sampleTree)
 
 The parsedResult will only succeed if the input string exactly matches the desired tree.
 
-To evaluate the parsed expression we can use foldMap and our Sum moniod:
+To evaluate the parsed expression we can use foldMap and our Sum Monoid:
 
 ```haskell
 evalTree :: Tree Value -> Int

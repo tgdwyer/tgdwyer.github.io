@@ -303,7 +303,7 @@ sort (pivot:rest) = below pivot rest ++ [pivot] ++ above pivot rest
 
 The `list` parameter for `below` and `above` has been eta-reduced away just as we were able to [eta-reduce lambda calculus expressions](/lambdacalculus/#lambda-calculus-cheatsheet).  The definition of the `partition` function in this version uses the `.` operator for [function composition](/higherorderfunctions/#composition).  That is, `partition comparison` is the composition of `sort` and `filter comparison` and again the `list` parameter is eta-reduced away.  
 
-Although it looks like the comparison parameter could also go away here with eta conversion, actually the low precedence of the `.` operator means there is (effectively) implicit parentheses around filter comparison.  We will see how to [more agressively refactor code to be point-free later](/haskell3/#point-free-code).
+Although it looks like the comparison parameter could also go away here with eta conversion, actually the low precedence of the `.` operator means there is (effectively) implicit parentheses around filter comparison.  We will see how to [more aggressively refactor code to be point-free later](/haskell3/#point-free-code).
 
 The idea of refactoring our code into the above form was to demonstrate the freedom that Haskell gives us to express logic
 in a way that makes sense to us.  This version reads almost like a natural language declarative definition of the algorithm.  That is, you can read:
