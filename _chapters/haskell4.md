@@ -536,27 +536,67 @@ instance Traversable Tree where
    traverse f (Node l x r) = Node <$> traverse f l <*> f x <*> traverse f r
 ```
 
-We can write a similar definition for parsing an exact tree of characters:
+We can write a similar definition for parsing an exact tree. 
+
+We will consider a Value which is either an integer, or an operator which can combine integers. We will assume the only possible combination operator is `+` to avoid complexities with ordering expressions. 
 
 ```haskell
 
-stringTree :: Tree Char -> Parser (Tree Char)
-stringTree = traverse is
+data Value = Value Int | BinaryPlus 
+  deriving (Show)
+```
 
-sampleTree :: Tree Char
+We can generalize the `is` parser to `satisfy`, which will run a given parser `p`, and make sure the result satisfies a boolean condition.
+
+```haskell
+satisfy :: Parser a -> (a -> Bool) -> Parser a
+satisfy p f = Parser $ \i -> case parse p i of 
+  Just (r, v) 
+      | f v -> Just (r, v)
+  _ -> Nothing
+```
+
+From this satisfy, we will use traverse to ensure our string *exactly* matches a wanted expression Tree.
+
+```haskell
+
+isValue :: Value -> Parser Value
+isValue (Value v) = Value <$> satisfy int (==v)
+isValue (BinaryOperator c) = BinaryOperator <$> satisfy char (==c)
+
+stringTree :: Tree Value -> Parser (Tree Value)
+stringTree = traverse isValue
+
+sampleTree :: Tree Value
 sampleTree =
   Node
-    (Leaf 'A')
-    'B'
+    (Leaf $ Value 3)
+    BinaryPlus
     (Node
-      (Leaf 'C')
-      'D'
-      (Leaf 'E'))
+      (Leaf (Value 5))
+      BinaryPlus
+      (Leaf (Value 2)))
+
 
 inputString :: String
-inputString = "ABCDE"
+inputString = "3+5+2"
 
-parsedResult :: Maybe (String, Tree Char)
-parsedResult = parse (stringTree sampleTree) inputString
--- Just ("",Node (Leaf 'A') 'B' (Node (Leaf 'C') 'D' (Leaf 'E')))
+parsedResult :: String -> Maybe (String, Tree Value)
+parsedResult = parse (stringTree sampleTree) 
+
+The parsedResult will only succeed if the input string exactly matches the desired tree.
+
+To evaluate the parsed expression we can use foldMap and our Sum moniod:
+
+```haskell
+evalTree :: Tree Value -> Int
+evalTree tree = getSum $ foldMap toSum tree
+  where
+    toSum :: Value -> Sum Int
+    toSum (Value v) = Sum v
+    toSum BinaryPlus = Sum 0 -- For BinaryPlus, we don't need to add anything to the sum
+
+evalResult :: Maybe (String, Int)
+evalResult = (evalTree <$>) <$> parsedResult
+-- >>> evalResult = Just ("", 10)
 ```
