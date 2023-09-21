@@ -556,6 +556,31 @@ totalMark = (+) . exam <*> nonExam
 
 ------------
 
+
+## Alternative 
+
+The Alternative typeclass is another important typeclass in Haskell, which is closely related to the Applicative typeclass. It introduces a set of operators and functions that are particularly useful when dealing with computations that can fail or have multiple possible outcomes. Alternative is also considered a "subclass" of Applicative, and it provides additional capabilities beyond what Applicative offers. It introduces two main functions, `empty` and `<|>` (pronounced "alt" or "alternative")
+
+```haskell
+class Applicative f => Alternative (f :: * -> *) where
+  empty :: f a
+  (<|>) :: f a -> f a -> f a
+```
+
+`empty`: This function represents a computation with *no result or a failure*. It serves as the identity element. For different data types that are instances of Alternative, `empty` represents an empty container or a *failed computation*, depending on the context.
+
+`(<|>)`: The `<|>` operator combines two computations, and it's used to express alternatives. It takes two computations of the same type and returns a computation that will produce a result from the first computation if it succeeds, or if it fails, it will produce a result from the second computation. This operator allows you to handle branching logic and alternative paths in your code.
+
+Like Functor and Applicative, instances of the Alternative typeclass must also adhere to specific laws, ensuring predictable behavior when working with alternatives. Common instances of the Alternative typeclass include Maybe and lists (`[]`). Alternatives are also very useful for *Parsers*, where we try to run first parser, if it fails, we run the second parser. 
+
+```haskell
+> Just 2 <|> Just 5
+Just 2
+
+> Nothing <|> Just 5
+Just 5
+```
+
 ## A simple Applicative Functor for Parsing
 
 As we will [discuss in more detail later](/parsercombinators), a parser is a program which takes some structured input and does something with it.  When we say "structured input" we typically mean something like a string that follows strict rules about its syntax, like source code in a particular programming language, or a file format like JSON.  A parser for a given syntax is a program which you run over some input and if the input is valid, it will do something sensible with it (like give us back some data), or fail: preferrably in a way that we can handle gracefully.  
@@ -632,59 +657,59 @@ And here's a little parser which asserts the next character on the stream is the
 -- >>> parse (is '-') "+456"
 -- Nothing
 is :: Char -> Parser Char
-is c = Parser $ \i -> case parse char i of
-    Just (r1, x) -> if x == c then Just (r1, x) else Nothing
-    Nothing      -> Nothing
+is c = Parser $
+  \inputString -> case parse char inputString of
+    Just (rest, result) | result == c -> Just (rest, result)
+    _ -> Nothing
 ```
 
 By making `Parser` an instance of `Functor` we will be able to map functions over the result of a parse.
-
-What the `Functor` instance of a parser should do is apply the parser and apply a function to the result of the parse, returning the result still in the `Parser` context, i.e.:
+The `fmap` function for the `Functor` instance of `Parser` needs to apply the parser to an input string and apply the given function to the result of the parse, i.e.:
 
 ```haskell
 instance Functor Parser where
-  fmap f (Parser a) = Parser (\x -> case a x of 
+  fmap f (Parser p) = Parser $ 
+    \i -> case p i of 
       Just (rest, result) -> Just (rest, f result)
-      Nothing -> Nothing)
+      _ -> Nothing
 ```
 
-That solution should not be too hard. We apply the parser and if it passes (equates to a `Just`) we call the function `f` on the `result`.
+That definition should not be too difficult to understand. We apply the parser and if it succeeds (returns a `Just`) we apply the function `f` to the `result`.
 
-However, what we are doing is applying a function to the second item of a tuple -- that is exactly what the `Functor` instance of a tuple does! So we can rewrite that like this
+However, we can take advantage of the fact that the `Tuple` returned by the parse function is also an instance of `Functor` to make the definition more succinct.  That is, we are applying the function `f` to the second item of a tuple -- that is exactly what the `fmap` for the `Functor` instance of a `Tuple` does! So we can rewrite to use the `Tuple` `fmap`, or rather its alias `(<$>)`:
 
 ```haskell
 instance Functor Parser where
-  fmap f (Parser a) = Parser (\x -> case a x of 
+  fmap f (Parser p) = Parser $ 
+    \i -> case p i of 
       Just (rest, result) -> Just (f <$> (rest, result))
-      Nothing -> Nothing)
+      _ -> Nothing
 ```
-
-Note that we are applying `(f <$>)` if the result is a `Just`, and ignoring if the result if `Nothing`. This is exactly what the Maybe instance of a `Functor` does! So we can make use of that!
+Carefully examining this, what we are doing is applying `(f <$>)` if the result is a `Just`, or ignoring if the result is `Nothing`. This is exactly what the `Maybe` instance of `Functor` does, so we can `fmap` over the `Maybe` also:
 
 ```haskell
 instance Functor Parser where
-  fmap f (Parser a) = Parser (\x -> (f <$>) <$> a x )
+  fmap f (Parser p) = Parser (\i -> (f <$>) <$> p i )
 ```
 
-Let's try to remove the lambda function by applying the [point-free](/haskell3/#point-free-code) techniques to remove this lambda function. 
-
+Let's try rearrange to make it point [point-free](/haskell3/#point-free-code), eliminating the lambda:
 First, let's add some brackets, to make the evaluation order more explicit.
 ```haskell
 instance Functor Parser where
-  fmap f (Parser a) = Parser (\x -> ((f <$>) <$>) (a x))
+  fmap f (Parser p) = Parser (\i -> ((f <$>) <$>) (p i))
 ```
-This is now in the form  `(f . g) x)` where `f` is equal to `((f <$>) <$>)` and g is equal to `a`. Therefore:
+This is now in the form  `(f . g) i)` where `f` is equal to `((f <$>) <$>)` and g is equal to `p`. Therefore:
 
 ```haskell
 instance Functor Parser where
-  fmap f (Parser a) = Parser (\x -> (((f <$>) <$>) . a) x)
+  fmap f (Parser p) = Parser (\i -> (((f <$>) <$>) . p) i)
 ```
 
 And, if we eta-reduce:
 
 ```haskell
 instance Functor Parser where
-  fmap f (Parser a) = Parser (((f <$>) <$>) . a)
+  fmap f (Parser p) = Parser (((f <$>) <$>) . p)
 ```
 
 The last thing we notice is that the `Functor` instance for functions is defined as compose. Therefore, we have finally reached the end of our journey and can re-write this as follows.
@@ -693,10 +718,10 @@ The last thing we notice is that the `Functor` instance for functions is defined
 -- >>> parse ((*2) <$> int) "123+456"
 -- Just ("+456",246)
 instance Functor Parser where
-  fmap f (Parser a) = Parser (((f <$>) <$>) <$> a)
+  fmap f (Parser p) = Parser (((f <$>) <$>) <$> p)
 ```
 
-The whacky triple-nested application of `<$>` comes about because the `a` in our `Parser` type is nested inside a Tuple (`(,a)`), nested inside a `Maybe`, nested inside function (`->r`).  So now we can map (or `fmap`, to be precise) a function over the value produced by a `Parser`.  For example:
+The whacky triple-nested application of `<$>` comes about because the result type `a` in our `Parser` type is nested inside a Tuple (`(,a)`), nested inside a `Maybe`, nested inside function (`->r`).  So now we can map (or `fmap`, to be precise) a function over the value produced by a `Parser`.  For example:
 
 ```haskell
 > parse ((+1)<$>int) "1bc"
@@ -707,7 +732,7 @@ So `(+1)<$>int` creates a new `Parser` which parses an `int` from the input stre
 
 ![Applicative Visual Summary](/assets/images/chapterImages/haskell3/parserfunctor.png)
 
-Just as we have seen before, making our `Parser` an instance of `Applicative` is going to let us do nifty things like lifting a binary function over the results of two `Parser`s.  For example, instead of implementing all the messy logic of connecting two Parsers to make `plus` above, we'll be able to lift `(+)` over two `Parser`s.
+Just as we have seen before, making our `Parser` an instance of `Applicative` is going to let us do nifty things like lifting a binary function over the results of two `Parser`s.  Thus, instead of implementing all the messy logic of connecting two Parsers to make `plus` above, we'll be able to lift `(+)` over two `Parser`s.
 
 Now the definition for the `Applicative` is going to stitch together all the messy bits of handling both the `Just` and `Nothing` cases of the `Maybe` that we saw above in the definition of `plus`, abstracting it out so that people implementing parsers like `plus` won't have to:
 
@@ -716,24 +741,25 @@ Now the definition for the `Applicative` is going to stitch together all the mes
 instance Applicative Parser where
   pure a = Parser (\b -> Just (b, a))
 
-  (Parser f) <*> (Parser b) = Parser $ \i -> case f i of  -- note that this is just
-    Just (r1, p1) -> case b r1 of                         -- an abstraction of the
-      Just (r2, p2) -> Just (r2, p1 p2)                   -- logic we saw in `plus`
-      Nothing       -> Nothing
-    Nothing -> Nothing
+  (Parser f) <*> (Parser g) = Parser $ 
+    \i -> case f i of                                       -- note that this is just
+      Just (r1, p1) -> case g r1 of                         -- an abstraction of the
+        Just (r2, p2) -> Just (r2, p1 p2)                   -- logic we saw in `plus`
+        Nothing       -> Nothing
+      Nothing -> Nothing
 ```
 
-All that `pure` does is to leave the input unchanged and put the given value on the right side of the tuple.
+All that `pure` does is put the given value on the right side of the tuple.
 
-The key insight for this applicative instance is that we first use `f` (the parser on the LHS of `<*>`). This consumes input from `i` giving back the remaining input in `r1`. We then run the second parser `b` on the RHS of `<*>` on `r1` (the remaining input). 
+The key insight for this applicative instance is that we first use `f` (the parser on the LHS of `<*>`). This consumes input from `i` giving back the remaining input in `r1`. We then run the second parser `g` on the RHS of `<*>` on `r1` (the remaining input). 
 
 The main take-away message is that `<*>` allows us to combine two parsers in sequence, that is, we can run the first one and then the second one. 
 
 Let's walk through a concrete example of this. 
 
 ```haskell
-> add1Parser = (,) <$> char <*> int
-> parse add1Parser "a12345b"
+> charIntPairParser = (,) <$> char <*> int
+> parse charIntPairParser "a12345b"
 Just ("b",('a',12345))
 ```
 
@@ -741,13 +767,12 @@ As both `<$>` and `<*>` have the same precedence, firstly `(,) <$> char` will be
 
 So how does `(,) <$> char` work? Well, we parse a character and then make that character the first item of a tuple, therefore:
 ```haskell
-> tupleCharParser = (,) <$> char
-> :t tupleCharParser
-tupleCharParser :: Parser (b -> (Char, b))
+> charPairParser = (,) <$> char
+> :t charPairParser
+charPairParser :: Parser (b -> (Char, b))
 ```
-So for the applicative instance the LHS will be the `tupleCharParser` and the RHS will be `int`.
-
-The first step in applicative parsing is to parse the input `i` using the LHS parser, in this case `tupleCharParser`
+So for the applicative instance the LHS will be the `charPairParser` and the RHS will be `int`.
+That is, first step in applicative parsing is to parse the input `i` using the LHS parser, what we called here `charPairParser`.
 This will match the `Just (r1, p1)` case where it will be equal to `Just ("12345b", ('a',))`. Therefore, `r1` is equal to the unparsed portion of the input `12345b` and the result is a tuple partially applied `('a', )`.
 
 We then run the second parser `int` on the remaining input `"12345b"`. This will match the `Just (r2, p2)` case where it will be equal to `Just ("b", 12345)`, where `r2` is equal to the remaining input `"b"` and `p2` is equal to `"12345"`
@@ -765,7 +790,7 @@ plus = (+) <$> int <*> (is '+' *> int)
 
 ```
 
-Note that we make use of a different version of the applicative operator here: `*>`.  Note also that we didn't have to provide an implementation of `*>` - rather, the typeclass system picks up a default implementation of this operator (and a bunch of other functions too) from the base definition of `Applicative`.  These default implementations are able to make use of the `<*>` that we did provide for our instance of Applicative for Parser.
+Note that we make use of a different version of the applicative operator here: `*>`.  Note also that we didn't have to provide an implementation of `*>` - rather, the typeclass system picks up a default implementation of this operator (and a bunch of other functions too) from the base definition of `Applicative`.  These default implementations are able to make use of the `<*>` that we provided for our instance of `Applicative` for `Parser`.
 
 ```haskell
 Prelude> :t (*>)                        

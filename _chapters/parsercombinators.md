@@ -72,7 +72,7 @@ Unexpected character: "-"
 We haven't bothered to show the types for each of the functions in the code below, as they are all `::Parser [Char]` - meaning a Parser that returns a string.  We'll explain all the types and functions used in due course.  For now, just notice how similar the code is to the BNF grammar definition:
 
 ```haskell
-phoneNumber = fullNumber ||| (("03"++) <$> basicNumber)
+phoneNumber = fullNumber <|> (("03"++) <$> basicNumber)
 
 fullNumber = do
    ac <- areaCode
@@ -225,11 +225,14 @@ is c = do
   next c
 ```
 
-And finally our `Parser` for trying to apply a first `Parser`, and then an alternate `Parser` if the first fails.  This allows us to encode the alternatives in our BNF grammar rules.
+And finally we introduce the `Alternative` typeclass for our `Parser` for trying to apply a first `Parser`, and then an alternate `Parser` if the first fails.  This allows us to encode the alternatives in our BNF grammar rules.
 
 ```haskell
-(|||) :: Parser a -> Parser a -> Parser a
-p1 ||| p2 = P (\i -> let f (Error _) = parse p2 i
+instance Alternative Parser where
+  empty :: Parser a
+  empty = Parser $ const (Error UnexpectedEof)
+
+  p1 <|> p2 = P (\i -> let f (Error _) = parse p2 i
                          f r = r
                      in f $ parse p1 i)
 ```
@@ -246,14 +249,14 @@ The last two pieces of our Phone Numbers grammar we also implement fairly straig
 Here's a trivial adaptation of `digit`:
 ```haskell
 digit :: Parser Char
-digit = is '0' ||| is '1' ||| is '2' ||| is '3' ||| is '4' ||| is '5' ||| is '6' ||| is '7' ||| is '8' ||| is '9'
+digit = is '0' <|> is '1' <|> is '2' <|> is '3' <|> is '4' <|> is '5' <|> is '6' <|> is '7' <|> is '8' <|> is '9'
 ```
 
 Spaces is a bit more interesting because it's recursive, but still almost identical to the BNF:
 
 ```haskell
 spaces :: Parser ()
-spaces = (is ' ' >> spaces) ||| pure ()
+spaces = (is ' ' >> spaces) <|> pure ()
 ```
 
 ### Exercises
@@ -309,7 +312,7 @@ And now a parser for our full grammar:
 
 ```haskell
 animal :: Parser Animal
-animal = cat ||| dog ||| camel
+animal = cat <|> dog <|> camel
 ```
 Some tests:
 ```haskell
@@ -320,7 +323,7 @@ Result >< Dog
 > parse animal "camel"
 Result >< Camel
 ```
-What's really cool about this is that obviously the strings "cat" and "camel" overlap at the start.  Our alternative parser `(|||)` effectively backtracks when the `cat` parser fails before eventually succeeding with the `camel` parser.  In an imperative style program this kind of logic would result in much messier code.
+What's really cool about this is that obviously the strings "cat" and "camel" overlap at the start.  Our alternative parser `(<|>)` effectively backtracks when the `cat` parser fails before eventually succeeding with the `camel` parser.  In an imperative style program this kind of logic would result in much messier code.
 
 **Exercises**
 
@@ -426,7 +429,7 @@ And for `+` and `-` a straightforward implementation of the `<addop>` non-termin
 
 ```haskell
 addop :: Parser (Expr -> Expr -> Expr)
-addop = (op '+' >> pure Plus) ||| (op '-' >> pure Minus)
+addop = (op '+' >> pure Plus) <|> (op '-' >> pure Minus)
 ```
 
 And some more non-terminals:
@@ -439,7 +442,7 @@ term :: Parser Expr
 term = chain number times
 ```
 
-These use the `chain` function to handle repeated chains of operators (`*`, `-`, `+`) of unknown length.  We could make each of these functions recursive with a `|||` to provide an alternative for the base case end-of-chain (as we did for `spaces`, above), but we can factor the pattern out into a reusable function, like so:
+These use the `chain` function to handle repeated chains of operators (`*`, `-`, `+`) of unknown length.  We could make each of these functions recursive with a `<|>` to provide an alternative for the base case end-of-chain (as we did for `spaces`, above), but we can factor the pattern out into a reusable function, like so:
 
 ```haskell
 chain :: Parser a -> Parser (a->a->a) -> Parser a
@@ -449,7 +452,7 @@ chain p op = p >>= rest
                f <- op
                b <- p
                rest (f a b)
-            ) ||| pure a
+            ) <|> pure a
 ```
 
 **Exercises**
@@ -528,11 +531,11 @@ Result >R< R
 Unexpected character: "P"
 ```
 
-To combine those parsers, we will use the *option parser* `(|||)`.
+To combine those parsers, we will use the *option parser* `(<|>)`.
 
 ``` 
 choice :: Parser RockPaperScissors
-choice = rock ||| paper ||| scissors
+choice = rock <|> paper <|> scissors
 ```
 
 And, to be able to read a list of choices, we need to use the `list` parser:
