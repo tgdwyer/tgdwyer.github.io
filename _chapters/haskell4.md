@@ -189,7 +189,9 @@ data Tree a = Empty
 tree = Node (Node (Leaf 1) 2 (Leaf 3)) 4 (Node (Leaf 5) 6 (Leaf 7))
 ```
 
-![Tree](/assets/images/chapterImages/haskell4/tree.png)
+Which produces a tree with this structure:
+
+![Tree](/assets/images/chapterImages/haskell4/tree.drawio.png)
 
 We make this type of binary tree an instance of foldable by implementing either of the minimum defining functions, `foldMap` or `foldr`:
 
