@@ -337,7 +337,7 @@ What's really cool about this is that obviously the strings "cat" and "camel" ov
 
 Programs are usually parsed into a tree structure called an *Abstract Syntax Tree* (AST), more generally known as a *parse tree*.  Further processing ultimately into an object file in the appropriate format (whether it's some sort of machine code directly executable on the machine architecture or some sort of intermediate format -- e.g. Java bytecode) then essentially boils down to traversal of this tree to evaluate the statements and expressions there in the appropriate order.
 
-We will not implement a parser for a full programming language, but to at least demonstrate what this concept looks like in Haskell we will create a simple parser for simple arithetic expressions.  The parser generates a tree structure capturing the order of operations, which we may then traverse to perform a calculation.
+We will not implement a parser for a full programming language, but to at least demonstrate what this concept looks like in Haskell we will create a simple parser for simple arithmetic expressions.  The parser generates a tree structure capturing the order of operations, which we may then traverse to perform a calculation.
 
 To start with, here is a BNF grammar for a simple calculator with three operations `*`, `+` and `-`, with `*` having higher precedence than `+` or `-`:
 
@@ -448,12 +448,41 @@ These use the `chain` function to handle repeated chains of operators (`*`, `-`,
 chain :: Parser a -> Parser (a->a->a) -> Parser a
 chain p op = p >>= rest
    where
+   rest :: a -> Parser a
    rest a = (do
                f <- op
                b <- p
                rest (f a b)
             ) <|> pure a
 ```
+
+But, how does `chain` work?
+
+`p >>= rest`: The parser `p` is applied, and we pass this parsed value, to the function call `rest` 
+
+`rest a`: Within the rest function, the parser op is applied to parse an operator `f`, and the parser `p` is applied again to parse another value `b`. The result is then combined using the function `f` applied to both `a` and `b` to form a new value. The rest function is then called recursively, with this new value.
+
+Recursive calls: The recursive calls continue until there are no more operators `op` to parse, at which point the parser returns the last value `a`. This is achieved using the `pure a` expression. This makes the function *tail recursive*
+
+This gives us a way to parse expressions of the form "1+2+3+4+5" by parsing "1" initially, using `p` then repeatedly parsing something of the form "+2", where `op` would parse the '+' and the `p` would then parse the "2". These are combined using our `Plus` constructor to be of form `Plus 1 2`, this will then recessively apply the `p` and `op` parser over the rest of the string: "+3+4+5"   
+
+But, can we re-write this using a fold?
+
+```haskell
+chain :: Parser a -> Parser (a -> a -> a) -> Parser a
+chain p op = foldl applyOp <$> p <*> many (liftA2 (,) op p)
+  where
+    applyOp :: a -> (a->a->a, a) -> a
+    applyOp x (op, y) = op x y
+```
+
+`foldl applyOp <$> p`: This part uses the Functor instances to combine the parsed values and apply the operators in a left-associative manner. `foldl applyOp` is partially applied to `p`, creating a parser that parses an initial value (`p`) and then applies the left-associative chain of operators and values.
+
+
+`many ((,) <$> op <*> p)`: This part represents the repetition of pairs (op, p) using the many combinator. The tuple structure here just allows us to store the pairs of `op` and `p`. We use liftA2 to lift both parse results in to the tuple constructor. We run this many times, to parse many pairs of `op` and `p`, and create a list of tuples. As a result, it creates a parser that parses an operator (op) followed by a value (p) and repeats this zero or more times.
+
+
+`applyOp x (op, y)`: This function is used by `foldl` to combine the parsed values and operators. It takes an accumulated value `x`, an operator `op`, and a new value `y`, and applies the operator to the accumulated value and the new value.
 
 **Exercises**
 
