@@ -396,17 +396,17 @@ putStrLn $ (greet >>= body >>= signoff) "\r\n"
 
 
 In the next example we use the argument `3` in three different functions without passing it directly to any of them.
-Note the pattern is that the first function is unary (taking only the specified argument), and subsequent functions in the chain are binary, their first argument being the specified argument, and the second argument being the result of the previous function application.
+Note the pattern is that the right-most function is unary (taking only the specified argument), and subsequent functions in the chain are binary, their first argument being the result of the previous function application, and the second argument being the given `3`.
 
 ```haskell
->>> ((*) =<< (+) =<< (*2)) 3
-27
+>>> ((*) =<< (-) =<< (2*)) 3
+9
 ```
 
 We can use the flipped bind so it can be read left-to-right, if that's more your thing:
 ```haskell
->>> ((*2) >>= (+) >>= (*)) 3
-27
+>>> ((2*) >>= (-) >>= (*)) 3
+9
 ```
 
 The `join` function passes one argument to a binary function twice which can be a useful trick:
@@ -472,4 +472,4 @@ With everything you've covered so far you should now be empowered to go out and 
 A slightly more advanced topic which you would soon encounter in the wild would be [Monad Transformers](https://en.wikibooks.org/wiki/Haskell/Monad_transformers), which let you work within multiple monadic contexts at once.  We'll leave these for future self exploration though.
 
 ------
-You can suggest edits for this page by [clicking here](https://github.com/tgdwyer/tgdwyer.github.io/edit/master/_chapters/monad.md) to open this file in GitHub, then clicking on the little "pen" button to go into edit mode (you'll need to be signed in to GitHub), then follow the instructions to commit the change and create a pull request.
+You can suggest edits for this page by [clicking here](https://github.com/tgdwyer/tgdwyer.github.io/edit/master/_chapters/monad.md) to open this file in GitHub, when you are ready push the `commit` button and follow the instructions to create a pull request.
