@@ -334,7 +334,8 @@ const students = ['tim','sally','sam','cindy'],
 We have a function that lets us lookup the id for a student in a particular class:
 
 ```javascript
-const lookup = class=> name=> class[name]
+// 'class' is a reserved keyword in JavaScript
+const lookup = class_=> name=> class_[name]
 ```
 
 Now we can try to find an id for each student, first from ```class1``` but fall back to ```class2``` if it isn’t there:
