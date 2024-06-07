@@ -564,8 +564,7 @@ First lets consider `Maybe`. The type signature for `pure` is:
 pure :: a -> Maybe a
 ```
 
-The idea behind pure, is to take the value of type `a` and put it inside the context. So, we take the value `x` and 
-put it inside the `Just` constructor.
+The idea behind pure, is to take the value of type `a` and put it inside the context. So, we take the value `x` and put it inside the `Just` constructor.
 
 ```haskell
 pure :: a -> Maybe a

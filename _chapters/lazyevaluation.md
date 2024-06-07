@@ -85,7 +85,7 @@ n.next().next().value
 * Use your general purpose sequence generator to generate fibonacci numbers.
 
 ### Solutions
-[A live version](https://stackblitz.com/edit/typescript-45wfky?file=index.ts) of the solutions can be accessed. However, let's walk through it. Consider the definition of a `LazySequence`
+[A live version of the solutions can be accessed here](https://stackblitz.com/edit/typescript-45wfky?file=index.ts). However, let's walk through it. Consider the definition of a `LazySequence`
 
 ```typescript
 interface LazySequence<T> {
