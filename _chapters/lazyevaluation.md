@@ -45,7 +45,7 @@ interface LazySequence<T> {
 
 Now we can define infinite sequences:
 
-```javascript
+```typescript
 function naturalNumbers() {
    return function _next(v:number):LazySequence<number> {
        return {
@@ -83,3 +83,85 @@ n.next().next().value
 * Create ```map```, ```filter``` and ```reduce``` functions (similar to those defined on ```Array.prototype```) for such a sequence and use them along with ```take``` to create a solution for Project Euler Problem 1 (encountered earlier): sum of first n natural numbers not divisible by 3 or 5.
 * Make a general purpose infinite sequence initialisation function that creates infinite lazy sequences.  It will take as parameter a function to compute the next value from the current value.  In other words, it should be a “factory” for functions like ```naturalNumbers```.  Thus, if we call our function ```initSequence```, then ```initSequence(n=>n+1)``` will return a function equivalent to ```naturalNumbers```.
 * Use your general purpose sequence generator to generate fibonacci numbers.
+
+### Solutions
+[A live version](https://stackblitz.com/edit/typescript-45wfky?file=index.ts) of the solutions can be accessed. However, let's walk through it. Consider the definition of a `LazySequence`
+
+```typescript
+interface LazySequence<T> {
+   value: T;
+   next():LazySequence<T>;
+}
+```
+
+The take function creates a LazySequence of the first `n` elements by returning the current value and recursively calling itself with `n` decremented and the next element of the sequence until `n` reaches 0, at which point it returns `undefined` to signify the end.
+
+```typescript
+function take<T>(n: number, seq: LazySequence<T>): LazySequence<T> | undefined {
+  // Base case, when n is 0, we return undefined
+  if (n === 0) {
+    return undefined;
+  }
+  return {
+    value: seq.value, // Leave value unchanged
+    next: () => take(n - 1, seq.next() as LazySequence<T>)     // Decrement n, and recursively apply
+  };
+}
+```
+
+We can define the three map/filter/reduce functions with similar logic.
+
+```typescript
+function map<T, U>(seq: LazySequence<T> | undefined, f: (value: T) => U): LazySequence<U> | undefined {
+  if (!seq) {
+    return undefined; // If the sequence is undefined, return undefined
+  }
+  return {
+    value: f(seq.value), // Apply the function to the current value
+    next: () => map(seq.next(), f), // Recursively apply the function to the next elements
+  };
+}
+```
+
+```typescript
+function filter<T>(seq: LazySequence<T> | undefined, predicate: (value: T) => boolean): LazySequence<T> | undefined {
+  if (!seq) {
+    return undefined; // If the sequence is undefined, return undefined
+  }
+  if (predicate(seq.value)) {
+    return {
+      value: seq.value, // If the current value matches the predicate, include it
+      next: () => filter(seq.next(), predicate), // Recursively filter the next elements
+    };
+  } else {
+    return filter(seq.next(), predicate); // Skip the current value and filter the next elements
+  }
+}
+```
+
+```typescript
+function reduce<T, U>(seq: LazySequence<T> | undefined, f: (accumulator: U, value: T) => U, initialValue: U): U {
+  if (!seq) {
+    return initialValue; // If the sequence is undefined, return the initial value
+  }
+
+  // Recursively apply the accumulator function to the next elements and the current value
+  return reduce(seq.next(), f, f(initialValue, seq.value));
+}
+```
+
+Using this code, we can solve the [first euler problem](https://projecteuler.net/problem=1)
+
+```typescript
+function sumOfFirstNNaturalsNotDivisibleBy3Or5(n: number): number {
+  const naturals = naturalNumbers(); // Generate the natural numbers sequence
+  // Take the first n elements and filter out those divisible by 3 or 5
+  const filtered = filter(take(n - 1, naturals), (x) => x % 3 === 0 || x % 5 === 0);
+  // Sum the remaining elements using reduce
+  return reduce(filtered, (acc, x) => acc + x, 0);
+}
+console.log(sumOfFirstNNaturalsNotDivisibleBy3Or5(1000)); 
+```
+
+
+

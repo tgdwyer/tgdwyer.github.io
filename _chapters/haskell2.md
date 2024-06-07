@@ -11,7 +11,7 @@ title: "Data Types and Type Classes"
 - Understand that Haskell [type classes](#typeclasses) are similar to TypeScript interfaces in providing a definition for the set of functions that must be available for instances of those type classes and that typeclasses can extend upon one another to create rich hierarchies
 - Understand that the [Maybe](#maybe) type provides an elegant way to handle *partial functions*.
 
-## Algebraic Data Types
+## Algebraic Data Types (ADT)
 
 We can declare custom types for data in Haskell using the `data` keyword.  Consider the following declaration of our familiar cons list:
 

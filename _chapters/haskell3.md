@@ -556,7 +556,102 @@ totalMark = (+) . exam <*> nonExam
 
 (hint, if you get stuck there are spoilers in the source from GHC.Base that I linked above)
 
+#### Solutions
+
+First lets consider `Maybe`. The type signature for `pure` is:
+
+```haskell
+pure :: a -> Maybe a
+```
+
+The idea behind pure, is to take the value of type `a` and put it inside the context. So, we take the value `x` and 
+put it inside the `Just` constructor.
+
+```haskell
+pure :: a -> Maybe a
+pure x = Just x
+```
+
+A simple way to define this is to consider all possible options of the two parameters, and define the behaviour 
+by following the types
+
+```haskell
+(<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b
+```
+
+```haskell
+(<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b
+(<*>) (Just a) (Just b) = Just (a b) -- We can apply the function to the value, we have both!
+(<*>) Nothing (Just b) = Nothing -- Do not have the function, so all we can do is return Nothing
+(<*>) (Just a) Nothing = Nothing -- Do not have the value, so all we can do is return Nothing
+(<*>) Nothing Nothing = Nothing -- Do not have value or function, not much we can do here...
+```
+We observe that only one case returns a value, while all other cases, return `Nothing`, so we can simplify our code using pattern matching.
+
+```haskell
+(<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b
+(<*>) (Just a) (Just b) = Just (a b) -- We can apply the function to the value, we have both!
+(<*>) _ _ = Nothing -- All other cases, return Nothing
+```
+
+The type definitions for the function type `((->)r)` is a bit more nuanced. When we write `((->) r)`, we are partially applying the `->` type constructor. The `->` type constructor takes two type arguments: an argument type and a return type. By supplying only the first argument `r`, we get a type constructor that still needs one more type to become a complete type.
+
+For a bit of intuition around we can make a function in instance of the applicative instance, you can consider the context is an *environment r*. The `pure` function for the reader applicative takes a value and creates a function that ignores the environment and always returns that value. The `<*>` function for the function instance combines two functions that depend on the *same environment*.
+
+First, lets consider `pure`. 
+```haskell
+pure :: a -> (((->)r) a)
+```
+
+This may look confusing, but if you replace `((->)r)` with `Maybe`, you can see it is the same. Similar to converting prefix functions to infix, we can do the same thing with the type operation here, therefore, this is equivalent to:
+
+```haskell
+pure :: a -> (r -> a)
+```
+
+We can follow the types to write a definition for this:
+
+```haskell
+pure :: a -> (r -> a)
+pure a = \r -> a
+```
+
+We can also write this as:
+
+```haskell
+pure :: a -> (r -> a)
+pure a _ = -> a
+```
+
+The function pure helps you create a function that, no matter what the other input is, will always return this constant value.
+
 ------------
+
+Reminder the definition for applicative is:
+```haskell
+(<*>) :: (f (a -> b)) -> (f a) -> (f b)
+```
+
+For the function applicative, our `f` is `((->)r)`
+
+```haskell
+(<*>) :: (((->) r) (a -> b)) -> (((->) r) a) -> (((->) r) b)
+```
+
+Converting the type signature to use (->) infix rather than prefix
+
+```haskell
+(<*>) :: (r -> (a -> b)) -> (r -> a) -> (r -> b)
+```
+
+For the function body. Our function takes two arguments, and returns a function of type `r -> b`.
+
+We have to do some [Lego](https://miro.medium.com/v2/resize:fit:640/format:webp/1*JHP0yCvsO6BD4YxtJs-M1Q.jpeg) to fit the variables together to get out the correct type b. 
+
+```haskell
+(<*>) :: (r -> (a -> b)) -> (r -> a) -> (r -> b)
+(<*>) f g = \r -> (f r) (g r)
+```
 
 
 ## Alternative 
@@ -581,6 +676,29 @@ Just 2
 
 > Nothing <|> Just 5
 Just 5
+```
+
+### Exercise
+* One useful function, which will be coming up throughout the semester is `asum` with the type definition `asum :: Alternative f => [f a] -> f a`
+
+#### Solution
+
+A naive approach will be to use recursion (recursion is hard).
+
+```haskell
+asum :: Alternative f => [f a] -> f a
+asum [] = empty -- When we reach empty list, return the empty alternative
+asum (x:xs) = x <|> asum xs -- Otherwise recursively combine the first value and the rest of the list
+```
+
+However, you may recognize this pattern, of recursion to a base case, combining current value with an accumulated value. 
+
+This is a classic example of a *foldr*
+
+Therefore we can write `asum` simply as:
+```haskell
+asum :: Alternative f => [f a] -> f a
+asum = foldr (<|>) empty
 ```
 
 ## A simple Applicative Functor for Parsing
@@ -634,7 +752,8 @@ But that's not very elegant and Haskell is all about elegant simplicity.  So how
 newtype Parser a = Parser (String -> Maybe (String, a))
 ```
 
-We can now make concrete parsers for `Int` and `Char` using our previous functions:
+We can now make concrete parsers for `Int` and `Char` using our previous functions, which conveniently already had functions in the form `(String -> Maybe (String, a))`:
+
 ```haskell
 char :: Parser Char
 char = Parser parseChar
@@ -642,7 +761,7 @@ int :: Parser Int
 int = Parser parseInt
 ```
 
-And here's a generic function we can use to run these parsers:
+And here's a simple generic function we can use to run these parsers. All this does, is extract the inner function `p` from the `Parser` constructor 
 
 ```haskell
 -- >>> parse int "123+456"
@@ -651,7 +770,34 @@ parse :: Parser a -> String -> Maybe (String, a)
 parse (Parser p) = p
 ```
 
-And here's a little parser which asserts the next character on the stream is the one we are expecting:
+And a parser which asserts the next character on the stream is the one we are expecting:
+
+```haskell
+is :: Char -> Parser Char
+is c = Parser $
+  \inputString -> case parse char inputString of
+    Just (rest, result) | result == c -> Just (rest, result)
+    _ -> Nothing
+```
+
+### Aside: How do we get to that parser?
+
+The `is` function constructs a parser that succeeds and consumes a character from the input string if it matches the specified character c, otherwise it fails.
+```haskell
+-- >>> parse (is '+') "+456"
+-- Just ("456",'+')
+-- >>> parse (is '-') "+456"
+-- Nothing
+is :: Char -> Parser Char
+is c = Parser $ \inputString ->
+  case inputString of
+    [] -> Nothing
+    (x:xs) -> case x == c of
+      True  -> Just (xs, x)
+      False -> Nothing
+```
+
+However, this is quickly becoming very deeply nested, lets use our previous `char` parser to ensure correct behaviour for the empty string, rather than duplicating that logic. 
 
 ```haskell
 -- >>> parse (is '+') "+456"
@@ -661,11 +807,32 @@ And here's a little parser which asserts the next character on the stream is the
 is :: Char -> Parser Char
 is c = Parser $
   \inputString -> case parse char inputString of
-    Just (rest, result) | result == c -> Just (rest, result)
+    Just (rest, result)
+      | result == c -> Just (rest, result)
+      | otherwise = Nothing
     _ -> Nothing
 ```
 
-By making `Parser` an instance of `Functor` we will be able to map functions over the result of a parse.
+In this example, the `otherwise = Nothing` guard is not needed, as our `case` statement can handle that in the wildcard statement 
+
+```haskell
+is :: Char -> Parser Char
+is c = Parser $
+  \inputString -> case parse char inputString of
+    Just (rest, result) | result == c -> Just (rest, result)
+    _ -> Nothing
+```
+---
+
+By making `Parser` an instance of `Functor` we will be able to map functions over the result of a parse, this is very useful! For example, consider the `int` parser, which parses a string to an `integer`, and if we want to apply a function to the result, such as adding 1 `(+1)`, we can fmap this over the parser.
+
+```haskell
+add1 :: Parser Int
+add1 = (+1) <$> int
+```
+
+We can now use this to parse a string "12", and get the result 13. `parse add1 "12"` will result in `13`
+
 The `fmap` function for the `Functor` instance of `Parser` needs to apply the parser to an input string and apply the given function to the result of the parse, i.e.:
 
 ```haskell
@@ -676,7 +843,7 @@ instance Functor Parser where
       _ -> Nothing
 ```
 
-That definition should not be too difficult to understand. We apply the parser and if it succeeds (returns a `Just`) we apply the function `f` to the `result`.
+That definition may be difficult to understand, on first look, but we take apply the parser `p` and apply the function `f` to the result of the parsing, i.e., we apply the parser `p` and if it succeeds (returns a `Just`) we apply the function `f` to the `result`.
 
 However, we can take advantage of the fact that the `Tuple` returned by the parse function is also an instance of `Functor` to make the definition more succinct.  That is, we are applying the function `f` to the second item of a tuple -- that is exactly what the `fmap` for the `Functor` instance of a `Tuple` does! So we can rewrite to use the `Tuple` `fmap`, or rather its alias `(<$>)`:
 
@@ -820,3 +987,63 @@ plus = (+) <$> int <* is '+'  <*> int
 ```
 
 Obviously, the above is not a fully featured parsing system.  A real parser would need to give us more information in the case of failure, so a `Maybe` is not really a sufficiently rich type to package the result.  Also, a real language would need to be able to handle alternatives - e.g. `minus` or `plus`, as well as expressions with an arbitrary number of terms.  We will revisit all of these topics with a more feature rich set of [parser combinators later](/parsercombinators).
+
+
+### Left and Right Applicatives
+
+We briefly introduced both `(<*)` and `(*>)` but lets deep dive in to why these functions are so useful. The full type definitions are:
+
+```haskell
+(<*) :: Applicative f => f a -> f b -> f a
+(*>) :: Applicative f => f a -> f b -> f b
+```
+
+A more intuitive look at these would be:
+
+* `(<*)`: Executes two actions, but only returns the result of the first action.
+* `(*>)`: Executes two actions, but only returns the result of the second action.
+
+The key term here is *action*, we can consider the *action* of our parser as doing the *parsing*
+
+A definition of `(<*)` is
+
+```haskell
+(<*) :: Applicative f => f a -> f b -> f a
+(<*) fa fb = liftA2 (\a b -> a) fa fb
+```
+
+Where `liftA2 = f <$> a <*> b`
+
+Let's relate this to our parsing, and how this *executes* the two actions. We will consider the example of parsing something in the form of "123+", wanting to parse the number and ignore the "+". The execution order will be changed around a little bit, hoping to provide some intuition in to these functions. 
+
+So, we can use our "<*" to ignore the second action, i.e., `int <* (is '+')`.
+
+Plugging this in to liftA2 definition: 
+
+```haskell
+liftA2 (\a _ -> a) int (is '+')
+(\a b -> a) <$> int <*> (is '+') -- from the liftA2 definition
+((\a b -> a) <$> int) <*> (is '+') -- we will complete the functor operator first
+```
+
+Recall the definition of `Functor` for parsing:
+
+```haskell
+instance Functor Parser where
+  fmap f (Parser p) = Parser $ 
+    \i -> case p i of 
+      Just (rest, result) -> Just (rest, f result)
+      _ -> Nothing
+```
+
+So, in this scenario our function `f` is (\a b -> a) and our `(Parser p)` is the `int` parser. `i` is the input string "123+"
+
+Therefore, `(\a b -> a) <$> int` will result in `Just ("+", (\a b -> a) 123)`
+
+Now, we want need to consider the second half, which is 
+
+`Just ("+", (\a b -> a) 123)` being applied to `(is '+')`
+
+The applicative defintion says to apply the second parser `is '+'` to the remaning input, and apply the result to the function inside the RHS of the tuple.
+
+Therefore, after applying this parser, it will result in: `Just ("", (\a b -> a) 123 "+")`. Finally, we will apply the function call to ignore the second value, finally resulting in: `Just ("", 123)`. But the key point, is we still *executed* the `is '+'` but we ignored the value. That is the beauty of using our `<*` and `*>` to ignore results, while still *executing* actions

@@ -353,15 +353,41 @@ function fork(join, f, g) {
 }
 ```
 
-But we'll leave trying it out as an exercise.
-
-----
+The `fork` function is a higher-order combinator that combines two functions, `f` and `g`, and then merges their results using a `join` function.
 
 ### Fork-Join Exercise
 
 * Use the fork-join combinator to compute the average over a sequence of numeric values.
 
 * Add Type annotations to the above definition of the fork function. How many distinct type variables do you need?
+
+#### Solutions
+
+We can use the fork-join combinator by considering the sum and count of the sequence as the two branches (f and g), and then using a join function to divide the sum by the count to compute the average.
+
+```typescript
+
+const sum = arr => arr.reduce((acc, x) => acc + x, 0);
+const count = arr => arr.length;
+
+const average = (sum, count) => sum / count;
+
+// Create the average function using fork
+const computeAverage = fork(average, sum, count);
+
+const values = [1, 2, 3, 4, 5];
+console.log(computeAverage(values)); // Outputs: 3
+```
+
+```typescript
+function fork<T, U, V, R>(join: (a: U, b: V) => R, f: (value: T) => U, g: (value: T) => V): (value: T) => R {
+  return (value: T) => join(f(value), g(value));
+}
+```
+1. `T` for the type of the input value.
+2. `U` for the type of the result of function `f`.
+3. `V` for the type of the result of function `g`.
+4. `R` for the type of the result of the join function.
 
 ----
 
@@ -424,8 +450,34 @@ The point of this demonstration is that curried functions are a more principled 
 
 ## Exercises
 
-* From the docs for ```Array.map``` and ```parseInt```  can you figure out why the above is happening?
-* Write a function called unary that takes a binary function and a value to bind to its first argument, and returns a unary function.  What is its fully specified TypeScript type signature?
-* Flip - e.g. applied to ```map(Iterable,fn)``` to create ```mapApplyFn(Iterable)```. 
+1. From the docs for ```Array.map``` and ```parseInt```  can you figure out why the above is happening?
+2. Write a function called unary that takes a binary function and a value to bind to its first argument, and returns a unary function.  What is its fully specified TypeScript type signature?
+3. Flip - e.g. applied to ```map(Iterable,fn)``` to create ```mapApplyFn(Iterable)```. 
 
+### Solutions
+
+1. When `parseInt` is used as the callback for map, it is called with **three** arguments: currentValue, index, and array. parseInt expects the second argument to be the radix, but map provides the index of the current element as the second argument. This leads to incorrect parsing.
+
+2. 
+   ```typescript
+   function unary<T, U, V>(binaryFunc: (arg1: T, arg2: U) => V, boundValue: T): (arg2: U) => V {
+     return function(secondValue: U): V {
+       return binaryFunc(boundValue, secondValue);
+     };
+   }
+   ```
+   1. T: Type of the first argument of the binary function (the value to bind).
+   2. U: Type of the second argument of the binary function.
+   3. V: Return type of the binary function.
+3. 
+   ```typescript
+   function flip<T, U, V>(binaryFunc: (arg1: T, arg2: U) => V): (arg2: U, arg1: T) => V {
+     return function(arg2: U, arg1: T): V {
+       return binaryFunc(arg1, arg2);
+     };
+   }
+   ```
+   1. T: Type of the first argument of the original binary function.
+   2. U: Type of the second argument of the original binary function.
+   3. V: Return type of the original binary function.
 ---

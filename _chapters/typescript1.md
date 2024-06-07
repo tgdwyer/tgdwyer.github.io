@@ -18,7 +18,7 @@ As the Web 2.0 revolution hit in 2000s web apps built on JavaScript grew increas
 
 Part of the appeal of JavaScript is that being able to run the source code directly in a production environment gives an immediacy and attractive simplicity to software deployment.  However, in recent years more and more tools have been developed that introduce a build-chain into the web development stack.  Examples include: minifiers, which compact and obfuscate JavaScript code before it is deployed; bundlers, which merge different JavaScript files and libraries into a single file to (again) simplify deployment; and also, new languages that compile to JavaScript, which seek to fix the JavaScript language’s shortcomings and compatibility issues in different browsers (although modern ECMAScript has less of these issues).  Examples of languages that compile to JavaScript include CoffeeScript, ClojureScript and (more recently) PureScript (which we will visit later in this unit).  Right now, however, we will take a closer look at another language in this family called TypeScript.  See [the official TypeScript documentation](https://www.typescriptlang.org/docs/) for some tutorials and deeper reference.
 
-TypeScript is interesting because it forms a relatively minimal augmentation, or superset, of ECMAScript syntax that simply adds type annotations.  For the most part, the compilation process simply performs validation on the declared types and strips away the type annotations rendering just the legal JavaScript ready for deployment.  This lightweight compilation into a language with a similar level of abstraction to the source is also known as transpiling (as opposed to C++ or Java where the object code is much closer to the machine execution model).
+TypeScript is interesting because it forms a relatively minimal augmentation, or superset, of ECMAScript syntax that simply adds type annotations.  For the most part, the compilation process simply performs validation on the declared types and strips away the type annotations rendering just the legal JavaScript ready for deployment.  This lightweight compilation into a language with a similar level of abstraction to the source is also known as transpiling (as opposed to C++ or Java where the compiled code is much closer to the machine execution model).
 
 The following is intended as a minimally sufficient intro to TypeScript features such that we can type some fairly rich data structures and higher-order functions.
 An excellent free resource for learning the TypeScript language in depth is the [TypeScript Deep-dive book](https://basarat.gitbooks.io/typescript/content/docs/getting-started.html).  
@@ -227,6 +227,14 @@ function setLeftPadding(elem: Element, value: number | string | (()=>string)) {
 
 The TypeScript typechecker also knows about typeof expressions (as used above) and will also typecheck the different clauses of if statements that use them for consistency with the expected types.
 
+We can now use this function to indent our heading in various ways:
+
+```typescript
+setLeftPadding(headings,100); // This will be converted to 100px
+setLeftPadding(headings,"100px"); // This will be used directly
+setLeftPadding(headings, () => "100px"); // This will call the function which returns 100px
+```
+
 ## Interfaces
 
 In TypeScript I can declare an ```interface``` which defines the set of properties and their types, that I expect to be available for certain objects.
@@ -271,7 +279,26 @@ interface Student<T> {
 
 Here ```T``` is the *type parameter*, and the compiler will infer its type when it is used.  It could be `number`, or it could be a `string` (e.g. if it's an email), or it could be something else. 
 
-Type parameters can have more descriptive names if you like, but they must start with a capital.  The convention though is to use rather terse single letter parameter names in the same vicinity of the alphabet as T.  This habit comes from C++, where T used to stand for "Template", and the terseness stems from the fact that we don't really care about the details of what it is.  
+For example, we could define a student, using a `number` as the type parameter `T`
+
+```typescript
+const exampleStudent: Student<number> = {
+  id: 12345,
+  name: "John Doe",
+  ... // other properties
+}
+```
+We could also define a student, using a `string` as the type parameter `T`
+
+```typescript
+const exampleStudent: Student<string> = {
+  id: "jdoe0001@student.university.edu",
+  name: "John Doe",
+  ... // other properties
+}
+```
+
+Type parameters can have more descriptive names if you like, but they **must** start with a capital.  The convention though is to use rather terse single letter parameter names in the same vicinity of the alphabet as T.  This habit comes from C++, where T used to stand for "Template", and the terseness stems from the fact that we don't really care about the details of what it is.  
 
 As in function parameter lists, you can also have more than one type parameter:
 
@@ -284,7 +311,7 @@ interface Student<T,U> {
 }
 ```
 
-Formally, this is a kind of "parametric polymorphism".  The `T` and `U` here may be referred to as *type parameters* or *type variables*. We say that `id` has *generic type*.  
+Formally, this is a kind of "parametric polymorphism".  The `T` and `U` here may be referred to as *type parameters* or *type variables*. We say that the property `id` has *generic type*.  
 
 You see generic types definitions used a lot in algorithm and data structure libraries, to give a type---to be specified by the calling code---for the data stored in the data structures.  For example, the following interface might be the basis of a linked list element:
 
@@ -388,7 +415,7 @@ function curry<U,V,W>(f:(x:U,y:V)=>W): (x:U)=>(y:V)=>W {
 The TypeScript compiler underlines `y,x` and says:
 > Error: Argument of type 'V' is not assignable to parameter of type 'U'. 'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
 
-So it's complaining that our use of a `y:V` into a parameter that should be a `U` and vice-versa for `x`.  We flip them back and we are good again... but TypeScript helps us make sure we use the function consistently too:
+So it's complaining that our use of a `y:V` into a parameter that should be a `U` and vice-versa for `x`.  We flip them back and we are good again... but TypeScript helps us make sure we use the function consistently too
 
 ```typescript
 function curry<U,V,W>(f:(x:U,y:V)=>W): (x:U)=>(y:V)=>W {
@@ -461,6 +488,9 @@ Note that each of these functions returns a list, so that we can chain the opera
 ```typescript
 list.filter(x=>x%2===0).reduce((x,y)=>x+y,0)
 ```
+
+[Solutions to this exercise can be found here](https://stackblitz.com/edit/typescript-nszdpm?file=index.ts)
+
 -------------
 
 ## Using the compiler to ensure immutability
@@ -545,4 +575,4 @@ value = <any>"hello"
 // no error.
 ```
 
-While leaving off type annotations and forcing types with any may be convenient, for example, to quickly port legacy JavaScript into a TypeScript program, generally speaking it is good practice to use types wherever possible, and can actually be enforced with the ```--noImplicitAny``` compiler flag.  The compiler’s type checker is a sophisticated constraint satisfaction system and the correctness checks it applies are usually worth the extra effort -- especially in modern compilers like TypeScript where type inference does most of the work for you.
+While leaving off type annotations and forcing types with any may be convenient, for example, to quickly port legacy JavaScript into a TypeScript program, generally speaking it is good practice to use types wherever possible, and can actually be enforced with the ```--noImplicitAny``` compiler flag. This flag will be on by *default* in the applied classes.  The compiler’s type checker is a sophisticated constraint satisfaction system and the correctness checks it applies are usually worth the extra effort -- especially in modern compilers like TypeScript where type inference does most of the work for you.

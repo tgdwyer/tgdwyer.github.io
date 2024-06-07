@@ -171,6 +171,50 @@ for ([initialization]; [condition]; [final-expression])
 
 For many standard loops, however, the logic is the same every time and can easily be abstracted into a function.  Examples: Array.map, Array.reduce, Array.forEach, etc.  The logic of the loop body is specified with a function which can execute in its own scope, without the risk of breaking the loop logic.
 
+#### Examples
+
+1. Consider this loop to multiply each item in the `someArray` by two. Try to find the mistake in this code: 
+
+    ```javascript
+    const someArray = [1,2,3,4,5];
+    let newArray = [];
+    for (let i = 0; i <= someArray.length; i++) {
+        newArray.push_back(someArray[i] * 2);
+    }
+    ```
+
+    <p class="spoiler">The condition should be `<` not `<=`</p>
+
+    To avoid the likelihood of errors we can replace the `for` loop with the use of `.map`
+
+    We use the `map` function, since we want to apply a function to every element in the list
+
+    ```javascript
+    const someArray = [1,2,3,4,5];
+    const newArray = someArray.map(x => x * 2);
+    ``` 
+
+    We use an arrow function here to allow our function definition to be short and to the point! 
+
+2. Consider this function which aims to sum up a list.  Try to find the mistake in this code: 
+    ```javascript
+    const someArray = [1,2,3,4,5];
+    let result = 1;
+    for (let i = 0; i < someArray.length; i++) {
+        result *= i
+    }
+    ```
+    <p class="spoiler">We should multiply by `someArray[i]` not `i`</p>
+
+    Again, to avoid the likelihood of errors we can replace the `for` loop with the use of `.reduce`
+
+    We use the `reduce` function, since we want to reduce the list to a singular value
+
+    ```javascript
+    const someArray = [1,2,3,4,5];
+    const result = someArray.reduce((acc, el) => el * acc, 1);
+    ``` 
+
 ### Callbacks
 In JavaScript and HTML5 events trigger actions associated with all mouse clicks and other interactions with the page.  You subscribe to an event on a given HTML element as follows:
 ```javascript
@@ -233,12 +277,27 @@ function continuationPlus(a, b, done) {
 }
 ```
 
+An example of using this to log the result:
+
+```javascript
+continuationPlus(3, 5, console.log)
+```
+
+This will output "8" to the console.
+
 We can also rewrite tail-recursive functions to end with continuations, which specify some custom action to perform when the recursion is complete:
+
+Consider a tail recursive implementation of factorial
 
 ```javascript
 function tailRecFactorial(a, n) {
    return n<=1 ? a : tailRecFactorial(n*a, n-1);
 }
+```
+
+The function tailRecFactorial is tail recursive because the final operation in the function is the recursive call to itself, with no additional computation after this call. We can convert this function in to a continuation version, by adding an extra parameter `finalAction`
+
+```javascript
 function continuationFactorial(
 a, n, finalAction=(result)=>{}) 
 {
@@ -246,6 +305,9 @@ a, n, finalAction=(result)=>{})
    else continuationFactorial(n*a, n-1, finalAction);
 }
 ```
+
+The `continuationFactorial` function uses a continuation by passing a `finalAction` callback that gets called with the result a when the recursion reaches the base case `(n <= 1)`, allowing further actions to be specified and executed upon completion.
+
 
 Continuations are essential in asynchronous processing, which abounds in web programming.  For example, when an HTTP request is dispatched by a client to a server, there is no knowing precisely when the response will be returned (it depends on the speed of the server, the network between client and server, and load on that network).  However, we can be sure that it will not be instant and certainly not before the line of code following the dispatch is executed by the interpreter.  Thus, continuation style call-back functions are typically passed through to functions which trigger such asynchronous behaviour, for those call-back functions to be invoked when the action is completed.  A simple example of an asynchronous function invocation is the built-in `setTimeout` function, which schedules an action to occur after a certain delay.  The `setTimeout` function itself returns immediately after dispatching the job, e.g. to the JavaScript event loop:
 
@@ -307,6 +369,27 @@ take(2,
 ```
 > { data: 2, next: { data: 4, next: null }}
 
+#### Aside: Dive in to the definitions
+
+The definition of `map` (and friends) may look scary, but lets break it down. We will write it in a more verbose way for now:
+
+```javascript
+function map(func, list) {
+    if (list ==! null) {
+        return {
+            data: func(l.data),
+            next: map(f, l.next)
+        }
+    }
+    else {
+        return null
+    }
+}
+```
+The map function will recursively apply the given `func` to each element of the linked list `list`, constructing and returning a new linked list where each element is the result of applying `func` to the corresponding data element in the original list. 
+
+Try to expand and step through the `filter` and `take` and see if you can understand how they work.
+
 ## Fluent Interfaces (pure vs impure)
 
 In the chained function calls above you have to read them inside-out to understand the flow.  Also, keeping track of how many brackets to close gets a bit annoying.  Thus, in object oriented languages you will often see class definitions that allow for method chaining, by providing methods that return an instance of the class itself, or another chainable class.
@@ -336,7 +419,7 @@ That is, the type system does not warn you whether the method mutates the object
 
 ## Computation with Pure Functions
 
-Pure functions may seem restrictive, but in fact pure function expressions and higher-order functions can be combined into powerful programs.  In fact, anything you can compute with an imperative program can be computed through function composition.  Side effects are required eventually, but they can be managed and the places they occur can be isolated.  Let’s do a little demonstration; although it might be a bit impractical, we’ll make a little list processing environment with just functions:
+Pure functions may seem restrictive, but in fact pure function expressions and higher-order functions can be combined into powerful programs.  In fact, anything you can compute with an imperative program can be computed through function composition. Side effects are required eventually, but they can be managed and the places they occur can be isolated. Let’s do a little demonstration; although it might be a bit impractical, we’ll make a little list processing environment with just functions:
 
 ```javascript
 const cons = (_head, _rest)=> selector=> selector(_head, _rest);
