@@ -456,7 +456,7 @@ The point of this demonstration is that curried functions are a more principled 
 
 ### Solutions
 
-1. When `parseInt` is used as the callback for map, it is called with **three** arguments: currentValue, index, and array. parseInt expects the second argument to be the radix, but map provides the index of the current element as the second argument. This leads to incorrect parsing.
+1. When `parseInt` is used as the callback for `map`, it is called with **three** arguments: currentValue, index, and array. `parseInt` expects the second argument to be the radix, but `map` provides the index of the current element as the second argument. This leads to incorrect parsing.
 
 2. 
    ```typescript
