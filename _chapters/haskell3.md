@@ -564,7 +564,7 @@ First lets consider `Maybe`. The type signature for `pure` is:
 pure :: a -> Maybe a
 ```
 
-The idea behind pure, is to take the value of type `a` and put it inside the context. So, we take the value `x` and put it inside the `Just` constructor.
+The idea behind `pure` is to take the value of type `a` and put it inside the context. So, we take the value `x` and put it inside the `Just` constructor.
 
 ```haskell
 pure :: a -> Maybe a
@@ -622,7 +622,7 @@ pure :: a -> (r -> a)
 pure a _ = -> a
 ```
 
-The function pure helps you create a function that, no matter what the other input is, will always return this constant value.
+The function `pure` helps you create a function that, no matter what the other input is, will always return this constant value.
 
 ------------
 
@@ -637,15 +637,15 @@ For the function applicative, our `f` is `((->)r)`
 (<*>) :: (((->) r) (a -> b)) -> (((->) r) a) -> (((->) r) b)
 ```
 
-Converting the type signature to use (->) infix rather than prefix
+Converting the type signature to use `(->)` infix rather than prefix
 
 ```haskell
 (<*>) :: (r -> (a -> b)) -> (r -> a) -> (r -> b)
 ```
 
-For the function body. Our function takes two arguments, and returns a function of type `r -> b`.
+For the function body, our function takes two arguments and returns a function of type `r -> b`.
 
-We have to do some [Lego](https://miro.medium.com/v2/resize:fit:640/format:webp/1*JHP0yCvsO6BD4YxtJs-M1Q.jpeg) to fit the variables together to get out the correct type b. 
+We have to do some [Lego](https://miro.medium.com/v2/resize:fit:640/format:webp/1*JHP0yCvsO6BD4YxtJs-M1Q.jpeg) to fit the variables together to get out the correct type `b`.
 
 ```haskell
 (<*>) :: (r -> (a -> b)) -> (r -> a) -> (r -> b)

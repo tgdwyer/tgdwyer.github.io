@@ -196,7 +196,7 @@ For many standard loops, however, the logic is the same every time and can easil
 
     We use an arrow function here to allow our function definition to be short and to the point! 
 
-2. Consider this function which aims to sum up a list.  Try to find the mistake in this code: 
+2. Consider this code which aims to compute the product of a list. Try to find the mistake in this code:
     ```javascript
     const someArray = [1,2,3,4,5];
     let result = 1;
@@ -206,7 +206,7 @@ For many standard loops, however, the logic is the same every time and can easil
     ```
     <p class="spoiler">We should multiply by `someArray[i]` not `i`</p>
 
-    Again, to avoid the likelihood of errors we can replace the `for` loop with the use of `.reduce`
+    Again, to avoid the likelihood of errors, we can replace the `for` loop with the use of `.reduce`.
 
     We use the `reduce` function, since we want to reduce the list to a singular value
 
