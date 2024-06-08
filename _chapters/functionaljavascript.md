@@ -196,7 +196,7 @@ For many standard loops, however, the logic is the same every time and can easil
 
     We use an arrow function here to allow our function definition to be short and to the point! 
 
-2. Consider this function which aims to sum up a list.  Try to find the mistake in this code: 
+2. Consider this code which aims to compute the product of a list. Try to find the mistake in this code:
     ```javascript
     const someArray = [1,2,3,4,5];
     let result = 1;
