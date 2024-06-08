@@ -989,3 +989,9 @@ tims.forEach(t => t.sayHello())
 So the filter property defaults to the identity function (a function which simply returns its argument), but a user of the `Person` class can inject a dependency on another function from outside the class when they construct an instance.
 
 This is a “lighter-weight” style of code reuse or specialisation.
+
+
+<div class="glossary" markdown="1">
+
+
+</div>
