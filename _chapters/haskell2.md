@@ -29,6 +29,26 @@ Now we can create a small list like so:
 l = Cons 1 $ Cons 2 $ Cons 3 Nil  
 ```
 
+### Aside: data vs newtype
+
+We can construct a type `UserID` with one parameter, `Int`
+
+```haskell
+data UserID = UserID Int
+newtype UserID = UserID Int
+```
+
+These are almost identical, and we can use them both equivallentally, e.g., 
+
+```haskell
+student :: UserId
+student = UserId 1337
+```
+
+The `newtype` keyword is used to define a type that has **exactly** one constructor with **exactly** one field. It is primarily used for creating a distinct type from an existing type with *zero runtime* overhead. This can be useful for adding type safety to your code by creating new types that are distinct from their underlying types or giving types a greater semantic meaning, e.g., a UserId compared to an Int.
+
+The data keyword is used to define an algebraic data type (ADT). This allows for the creation of complex data structures that can have multiple constructors. Each constructor can take zero or more arguments, and these arguments can be of any type.
+
 ## Pattern Matching
 
 In Haskell, we can define multiple versions of a function to handle the instances of an algebraic data types.  This is done by providing a *pattern* in the parameter list of the function definition, in the form of an expression beginning with the constructor of the data instance (e.g. `Cons` or `Nil`) and variable names which will be bound to the different fields of the data instance.  
@@ -53,7 +73,7 @@ intListLength (_:rest) = 1 + intListLength rest
 
 ## Type Parameters and Polymorphism
 
-Similar to TypeScript Haskell provides *parametric polymorphism*.  That is, the type definitions for functions and data structures (defined with `data` like the `ConsList` above) can have type parameters (AKA type variables).  For example, the definition `intListLength` above is defined to only work with lists with `Int` elements.  This seems a silly restriction because in this function we don't actually do anything with the elements themselves.  Below, we introduce the type parameter `a` so that the `length` function will able to work with lists of any type of elements.
+Similar to TypeScript, Haskell provides *parametric polymorphism*.  That is, the type definitions for functions and data structures (defined with `data` like the `ConsList` above) can have type parameters (AKA type variables).  For example, the definition `intListLength` above is defined to only work with lists with `Int` elements.  This seems a silly restriction because in this function we don't actually do anything with the elements themselves.  Below, we introduce the type parameter `a` so that the `length` function will able to work with lists of any type of elements.
 
 ```haskell
 length :: [a] -> Int -- a is a type parameter
@@ -271,3 +291,15 @@ where
 *GHCi> printNumber "Tim"
 "Tim not found in database"
 ```
+
+We can also do this using a [case statement](/haskell1#conditional-code-constructs-cheatsheet) statement
+
+```haskell
+printNumber name = msg $ lookup name phonebook
+where
+   msg value = case value of
+    (Just number) -> print number
+    _             -> print $ name ++ " not found in database"
+````
+Here we use the wildcard `_` to match any other possible value, in this case, there is only one other value, `Nothing`
+
