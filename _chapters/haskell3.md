@@ -622,7 +622,7 @@ pure :: a -> (r -> a)
 pure a _ = -> a
 ```
 
-The function pure helps you create a function that, no matter what the other input is, will always return this constant value.
+The function `pure` helps you create a function that, no matter what the other input is, will always return this constant value.
 
 ------------
 
