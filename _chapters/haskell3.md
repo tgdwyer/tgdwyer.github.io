@@ -643,7 +643,7 @@ Converting the type signature to use `(->)` infix rather than prefix
 (<*>) :: (r -> (a -> b)) -> (r -> a) -> (r -> b)
 ```
 
-For the function body. Our function takes two arguments, and returns a function of type `r -> b`.
+For the function body, our function takes two arguments and returns a function of type `r -> b`.
 
 We have to do some [Lego](https://miro.medium.com/v2/resize:fit:640/format:webp/1*JHP0yCvsO6BD4YxtJs-M1Q.jpeg) to fit the variables together to get out the correct type `b`.
 
