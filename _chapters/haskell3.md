@@ -637,7 +637,7 @@ For the function applicative, our `f` is `((->)r)`
 (<*>) :: (((->) r) (a -> b)) -> (((->) r) a) -> (((->) r) b)
 ```
 
-Converting the type signature to use (->) infix rather than prefix
+Converting the type signature to use `(->)` infix rather than prefix
 
 ```haskell
 (<*>) :: (r -> (a -> b)) -> (r -> a) -> (r -> b)
