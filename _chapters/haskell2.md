@@ -11,7 +11,7 @@ title: "Data Types and Type Classes"
 - Understand that Haskell [type classes](#typeclasses) are similar to TypeScript interfaces in providing a definition for the set of functions that must be available for instances of those type classes and that typeclasses can extend upon one another to create rich hierarchies
 - Understand that the [Maybe](#maybe) type provides an elegant way to handle *partial functions*.
 
-## Algebraic Data Types (ADT)
+## Algebraic Data Types (ADTs)
 
 We can declare custom types for data in Haskell using the `data` keyword.  Consider the following declaration of our familiar cons list:
 
@@ -31,12 +31,11 @@ l = Cons 1 $ Cons 2 $ Cons 3 Nil
 
 ### Aside: data vs newtype
 
-We can construct a type `UserID` with one parameter, `Int`
+We can construct a type `UserId` with one parameter, `Int`
 
 ```haskell
-data UserID = UserID Int
-newtype UserID = UserID Int
-```
+data UserId = UserId Int
+newtype UserId = UserId Int
 
 These are almost identical, and we can use them both equivallentally, e.g., 
 
@@ -301,5 +300,5 @@ where
     (Just number) -> print number
     _             -> print $ name ++ " not found in database"
 ````
-Here we use the wildcard `_` to match any other possible value, in this case, there is only one other value, `Nothing`
+Here we use the wildcard `_` to match any other possible value, in this case, there is only one other value, `Nothing`.
 

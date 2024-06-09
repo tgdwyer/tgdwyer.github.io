@@ -678,7 +678,7 @@ Just 5
 ```
 
 ### Exercise
-* One useful function, which will be coming up throughout the semester is `asum` with the type definition `asum :: Alternative f => [f a] -> f a`
+* One useful function, which will be coming up throughout the semester is `asum` with the type definition `asum :: Alternative f => [f a] -> f a`.
 
 #### Solution
 
