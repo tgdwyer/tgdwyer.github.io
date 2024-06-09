@@ -31,12 +31,11 @@ l = Cons 1 $ Cons 2 $ Cons 3 Nil
 
 ### Aside: data vs newtype
 
-We can construct a type `UserID` with one parameter, `Int`
+We can construct a type `UserId` with one parameter, `Int`
 
 ```haskell
-data UserID = UserID Int
-newtype UserID = UserID Int
-```
+data UserId = UserId Int
+newtype UserId = UserId Int
 
 These are almost identical, and we can use them both equivallentally, e.g., 
 
