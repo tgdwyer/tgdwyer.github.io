@@ -556,3 +556,20 @@ We will see later how the [TypeScript compiler](/typescript1) allows us to creat
 You may wonder how pure functions can be efficient if the only way to mutate data structures is by returning a modified copy of the original.  There are two responses to such a question, one is: "purity helps us avoid errors in state management through wanton mutation effects -- in modern programming correctness is often a bigger concern than efficiency", the other is "properly structured data permits log(n) time copy-updates, which should be good enough for most purposes".  We'll explore what is meant by the latter in later sections of these notes.
 
 
+<div class="glossary" markdown="1">
+
+*Callback*: A function passed as an argument to another function, to be executed after some event or action has occurred.
+
+*Chained Functions*: A programming pattern where multiple function calls are made sequentially, with each function returning an object that allows the next function to be called.
+
+*Continuation:* A function that takes a result and performs some action with it, instead of returning the result directly. Used extensively in asynchronous programming.
+
+*Fluent Interface*: A method chaining pattern where a sequence of method calls is made on the same object, with each method returning the object itself or another chainable object.
+
+*Pure Function*: A function that always produces the same output for the same input and has no side effects.
+
+*Referential Transparency*: An expression that can be replaced with its value without changing the program's behavior, indicating no side effects and consistent results.
+
+*Side Effects*: Any state change that occurs outside of a function's local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+
+</div>

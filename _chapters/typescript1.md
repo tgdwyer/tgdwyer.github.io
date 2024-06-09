@@ -576,3 +576,22 @@ value = <any>"hello"
 ```
 
 While leaving off type annotations and forcing types with any may be convenient, for example, to quickly port legacy JavaScript into a TypeScript program, generally speaking it is good practice to use types wherever possible, and can actually be enforced with the ```--noImplicitAny``` compiler flag. This flag will be on by *default* in the applied classes.  The compiler’s type checker is a sophisticated constraint satisfaction system and the correctness checks it applies are usually worth the extra effort -- especially in modern compilers like TypeScript where type inference does most of the work for you.
+
+
+<div class="glossary" markdown="1">
+
+*Generic Types:* A way to create reusable and type-safe components, functions, or classes by parameterizing types. These types are specified when the function or class is used.
+
+*Immutable Object:* An object whose state cannot be modified after it is created. In TypeScript, immutability can be enforced using Readonly or as const.
+
+*Interface*: A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+
+*Transpiling*: A process where source code in one programming language is translated into another language with a similar level of abstraction, typically preserving the original code's structure and functionality.
+
+*Type Annotation*: A syntax in TypeScript where types are explicitly specified for variables, function parameters, and return types to ensure type safety and correctness.
+
+*Type Parameter*: A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+
+*Union Type*: A TypeScript construct that allows a variable to hold values of multiple specified types, separated by the `|` symbol.
+
+</div>

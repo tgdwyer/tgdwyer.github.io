@@ -993,5 +993,26 @@ This is a “lighter-weight” style of code reuse or specialisation.
 
 <div class="glossary" markdown="1">
 
+*Anonymous Function*: A function defined without a name, often used as an argument to other functions. Also known as lambda function.
+
+*Closure*: A function and the set of variables it accesses from its enclosing scope.
+
+*Currying*: The process of transforming a function that takes multiple arguments into a sequence of functions that each take a single argument.
+
+*Higher-Order Function*: A function that takes other functions as arguments or returns a function as its result.
+
+*Immutable Variable*: A variable declared with const whose value cannot be reassigned.
+
+*Mutable Variable*: A variable declared with let that can be reassigned to different values.
+
+*Parametric Polymorphism*: A type of polymorphism where functions or data types can be written generically so that they can handle values uniformly without depending on their type.
+
+*Weakly Immutable*: A property of const-declared objects in JavaScript, where the variable reference is immutable, but the object's properties can still be changed.
+
+*Pure Function*: A function that always produces the same output for the same input and has no side effects.
+
+*Referential Transparency*: An expression that can be replaced with its value without changing the program's behavior, indicating no side effects and consistent results.
+
+*Side Effects*: Any state change that occurs outside of a function's local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
 
 </div>

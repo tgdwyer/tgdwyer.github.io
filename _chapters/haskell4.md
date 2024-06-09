@@ -3,7 +3,7 @@ layout: chapter
 title: "Foldable and Traversable"
 ---
 
-In this chapter we will meet some more typeclasses that abstract common coding patterns for dealing with data.
+In this chapter we will meet some more typeclassesv 5 that abstract common coding patterns for dealing with data.
 
 ## Learning Outcomes
 
