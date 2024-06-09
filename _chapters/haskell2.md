@@ -300,5 +300,5 @@ where
     (Just number) -> print number
     _             -> print $ name ++ " not found in database"
 ````
-Here we use the wildcard `_` to match any other possible value, in this case, there is only one other value, `Nothing`
+Here we use the wildcard `_` to match any other possible value, in this case, there is only one other value, `Nothing`.
 
