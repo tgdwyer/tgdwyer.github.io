@@ -149,6 +149,66 @@ This function is impure in three ways:
 
 Side effects are bad for transparency (knowing everything about what a function is going to do) and maintainability.  When state in your program is being changed from all over the place bugs become very difficult to track down.
 
+### Exercises:
+Do the following functions have side effects?
+
+1.
+    ```javascript
+    let counter = 0;
+
+    function incrementCounter() {
+        counter++;
+    }
+    ```
+
+2.
+    ```javascript
+    function greet(name) {
+        return `Hello, ${name}!`;
+    }
+    ```
+    
+3.
+    ```javascript
+    function multiplyArray(numbers) {
+        for (let i = 0; i < numbers.length; i++) {
+            numbers[i] = numbers[i] * 2;
+        }
+        return numbers
+    }
+    ```
+4.
+    ```javascript
+    function logMessage(message) {
+        console.log(message);
+    }
+    ```
+5.
+    ```javascript
+    function doubleNumbers(numbers) {
+        return numbers.map(x => x * 2);
+    }
+    ```
+6.
+    ```javascript
+    function getRandomNumber() {
+        return Math.random();
+    }
+    ```
+
+#### Solutions
+1. Yes, it modifies the global variable counter.
+
+2. No, it simply returns a new string and does not modify any external state.
+
+3. Yes, it modifies the input array numbers in place.
+
+4. Yes, it writes to the console, which is an external action.
+
+5. No, it returns a new array without modifying the input array.
+
+6. Yes, it relies on and modifies a global seed for random number generation.
+
 ## Functional Patterns
 
 Passing functions around, anonymous or not, is incredibly useful and pops up in many practical programming situations.
