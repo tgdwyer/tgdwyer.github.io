@@ -15,7 +15,7 @@ title: "Higher Order Functions"
 
 The really exciting aspect of higher-order function support in languages like JavaScript is that it allows us to combine simple reusable functions in sophisticated ways.  We’ve already seen how functions like map, filter and reduce can be chained to flatten the control flow of data processing.  In this section we will look at some tricks that allow us to use functions that work with other functions in convenient ways.
 
-*A note about type annotations in this section.* If you are following the reading order given by the [index for these notes](/), then you have already read our [introduction to TypeScript](/typescript1/).  Therefore, below we frequently use TypeScript type annotions to be precise about the intended use of the functions.  However, as we start to rely more and more heavily on curried higher-order functions in this chapter, TypeScript type annotations start to become a bit cumbersome, and for the purposes of concisely representing use of combinators to create new functions, we abandon them entirely.  As an exercise, you may like to think about what the TypeScript annotations for some of these functions should be.  This is one of the reasons why we later in these notes move away from JavaScript and TypeScript entirely to instead focus on a real functional language, [Haskell](/haskell1/).
+*A note about type annotations in this section.* If you are following the reading order given by the [index for these notes](/), then you have already read our [introduction to TypeScript](/typescript1/).  Therefore, below we frequently use TypeScript type annotations to be precise about the intended use of the functions.  However, as we start to rely more and more heavily on curried higher-order functions in this chapter, TypeScript type annotations start to become a bit cumbersome, and for the purposes of concisely representing use of combinators to create new functions, we abandon them entirely.  As an exercise, you may like to think about what the TypeScript annotations for some of these functions should be.  This is one of the reasons why we later in these notes move away from JavaScript and TypeScript entirely to instead focus on a real functional language, [Haskell](/haskell1/).
 
 ## Higher-Order Functions
 
@@ -334,7 +334,8 @@ const students = ['tim','sally','sam','cindy'],
 We have a function that lets us lookup the id for a student in a particular class:
 
 ```javascript
-const lookup = class=> name=> class[name]
+// 'class' is a reserved keyword in JavaScript
+const lookup = class_=> name=> class_[name]
 ```
 
 Now we can try to find an id for each student, first from ```class1``` but fall back to ```class2``` if it isn’t there:

@@ -337,7 +337,7 @@ What's really cool about this is that obviously the strings "cat" and "camel" ov
 
 Programs are usually parsed into a tree structure called an *Abstract Syntax Tree* (AST), more generally known as a *parse tree*.  Further processing ultimately into an object file in the appropriate format (whether it's some sort of machine code directly executable on the machine architecture or some sort of intermediate format -- e.g. Java bytecode) then essentially boils down to traversal of this tree to evaluate the statements and expressions there in the appropriate order.
 
-We will not implement a parser for a full programming language, but to at least demonstrate what this concept looks like in Haskell we will create a simple parser for simple arithetic expressions.  The parser generates a tree structure capturing the order of operations, which we may then traverse to perform a calculation.
+We will not implement a parser for a full programming language, but to at least demonstrate what this concept looks like in Haskell we will create a simple parser for simple arithmetic expressions.  The parser generates a tree structure capturing the order of operations, which we may then traverse to perform a calculation.
 
 To start with, here is a BNF grammar for a simple calculator with three operations `*`, `+` and `-`, with `*` having higher precedence than `+` or `-`:
 
