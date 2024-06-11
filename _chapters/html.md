@@ -15,7 +15,7 @@ HTML is considered a declarative language because it focuses on describing the s
 
 ## Key Aspects of HTML's Declarative Nature:
 
-1. Descriptive Tags: HTML tags are descriptive elements that define the purpose and meaning of content. For example, \<p\> tags indicate a paragraph, \<h1\> to \<h6\> tags denote headings of varying levels, \<ul\> and \<ol\> represent unordered and ordered lists respectively. These tags describe the content they enclose rather than instructing how it should be displayed.
+1. Descriptive Tags: HTML tags are descriptive elements that define the purpose and meaning of content. For example, \<\p\> tags indicate a paragraph, \<\h1\> to \<\h6\> tags denote headings of varying levels, \<\ul\> and \<\ol\> represent unordered and ordered lists respectively. These tags describe the content they enclose rather than instructing how it should be displayed.
 
 2. Attribute-Based: HTML elements can have attributes that provide additional information or functionality. Attributes like class, id, src, href, etc., provide hooks for styling, scripting, or specifying behavior. However, these attributes do not dictate how elements are displayed; they simply provide metadata or instructions to browsers.
 
