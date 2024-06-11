@@ -33,6 +33,10 @@
     - Explain how Generics allow us to create type safe but general and reusable code.
     - Compare and contrast strongly, dynamically and gradually typed languages.
     - Describe how compilers that support type inference assist us in writing type safe code.
+- title: HTML Introduction
+  url: /HTML/
+  description: |
+    - Understand Basic HTML
 - title: Lazy Evaluation
   url: /lazyevaluation/
   description: |

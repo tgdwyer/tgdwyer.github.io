@@ -1,3 +1,7 @@
+---
+layout: chapter
+title: "HTML as a Declarative Language"
+---
 
 # HTML as a Declarative Language
 

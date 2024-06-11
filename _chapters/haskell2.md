@@ -302,3 +302,22 @@ where
 ````
 Here we use the wildcard `_` to match any other possible value, in this case, there is only one other value, `Nothing`.
 
+<div class="glossary" markdown="1">
+
+*Algebraic Data Types (ADTs)*: Custom data types in Haskell defined using the data keyword, allowing the combination of different types into one composite type using the | operator.
+
+*Record Syntax*: An alternate way to define data structures in Haskell with named fields, automatically creating accessor functions for those fields.
+
+*Type Classes*: A way in Haskell to associate functions with types, similar to TypeScript interfaces. They define a set of functions that must be available for instances of those type classes.
+
+*Constraint*: A restriction on type parameters in Haskell, specifying that a type must belong to a certain type class.
+
+*Type Kind*: Meta-information about types and their type parameters in Haskell, indicating the number of type parameters a type has and the type it returns.
+
+*Maybe*: A built-in type in Haskell used to represent optional values, allowing functions to return either Just a value or Nothing to handle cases where no value is available.
+
+*Total Functions*: Functions that provide a mapping for every element in the input type to an element in the output type.
+
+*Partial Functions*: Functions that do not have a mapping for every input, potentially failing for some inputs.
+
+</div>

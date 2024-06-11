@@ -482,3 +482,22 @@ The point of this demonstration is that curried functions are a more principled 
    2. U: Type of the second argument of the original binary function.
    3. V: Return type of the original binary function.
 ---
+
+
+<div class="glossary" markdown="1">
+
+*Combinator*: A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+
+*Function composition:* The process of combining two or more functions to produce a new function.
+
+*Point-free style*: A way of defining functions without mentioning their arguments.
+
+*Curried functions*: Functions that take multiple arguments one at a time and return a series of functions.
+
+*Partial application*: The process of fixing a number of arguments to a function, producing another function of smaller arity.
+
+*Identity function (I-combinator)*: A function that returns its argument unchanged.
+
+*K-combinator*: A combinator that takes two arguments and returns the first one.
+
+</div>

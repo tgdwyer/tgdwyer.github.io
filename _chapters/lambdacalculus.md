@@ -319,3 +319,22 @@ Z=λf.(λx.f(λv.xxv))(λx.f(λv.xxv))
 If you want to dig deeper there is much [more written about Lambda Calculus encodings](https://www.seas.harvard.edu/courses/cs152/2015sp/lectures/lec07-encodings.pdf) of logical expressions, natural numbers, as well as the `Y` and `Z` combinators, and also [more about their implementation in JavaScript](https://blog.benestudio.co/fixed-point-combinators-in-javascript-c214c15ff2f6).  
 
 However, the above description should be enough to give you a working knowledge of how to apply the three operations to manipulate Lambda Calculus expressions, as well as an appreciation for how they can be used to reason about combinators in real-world functional style curried code.  The other important take away is that the Lambda Calculus is a turing-complete model of computation, with Church encodings demonstrating how beta-reduction can evaluate church-encoded logical and numerical expressions and the trick of the Y-combinator giving us a way to perform loops.
+
+
+<div class="glossary" markdown="1">
+
+*Lambda Calculus*: Model of computation developed in the 1930s by Alonzo Church, providing a complete model of computation similar to Turing Machines.
+
+*Lambda expressions*: Functions written using the λ notation, e.g., λx.x, which are anonymous and can only take on other functions as values.
+
+*Alpha equivalence*: Renaming variables in lambda expressions as long as the names remain consistent within the scope.
+
+*Beta reduction*: Substituting the arguments of a function application into the function body.
+
+*Eta conversion*: Substituting functions that simply apply another expression to their argument with the expression in their body.
+
+*Combinator*: A lambda expression with no free variables.
+
+*Divergent lambda expressions*: Expressions that do not simplify when beta reduced, leading to infinite loops.
+
+</div>

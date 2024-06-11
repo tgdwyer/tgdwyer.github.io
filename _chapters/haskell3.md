@@ -1046,3 +1046,33 @@ Now, we want need to consider the second half, which is
 The applicative defintion says to apply the second parser `is '+'` to the remaning input, and apply the result to the function inside the RHS of the tuple.
 
 Therefore, after applying this parser, it will result in: `Just ("", (\a b -> a) 123 "+")`. Finally, we will apply the function call to ignore the second value, finally resulting in: `Just ("", 123)`. But the key point, is we still *executed* the `is '+'` but we ignored the value. That is the beauty of using our `<*` and `*>` to ignore results, while still *executing* actions
+
+
+<div class="glossary" markdown="1">
+
+*Eta Conversion*: A technique in Haskell and Lambda Calculus where a function f x is simplified to f, removing the explicit mention of the parameter when it is not needed.
+
+*Operator Sectioning*: The process of partially applying an infix operator in Haskell by specifying one of its arguments. For example, (+1) is a section of the addition operator with 1 as the second argument.
+
+*Compose Operator*: Represented as (.) in Haskell, it allows the composition of two functions, where the output of the second function is passed as the input to the first function.
+
+*Point-Free Code*: A style of defining functions without mentioning their arguments explicitly. This often involves the use of function composition and other combinators.
+
+*Functor*: A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the fmap function, which applies a function to every element in a structure.
+
+*Applicative*: A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (<*>).
+
+*Lifting*: The process of applying a function to arguments that are within a context, such as a Functor or Applicative.
+
+*Alternative*: A type class in Haskell that extends Applicative, introducing the empty and \<\|\> functions for representing computations that can fail or have multiple outcomes.
+
+*Parser*: A function or program that interprets structured input, often used to convert strings into data structures.
+
+*Parser Combinator*: A higher-order function that takes parsers as input and returns a new parser as output. Parser combinators are used to build complex parsers from simpler ones.
+
+</div>
+
+
+
+
+

@@ -188,3 +188,12 @@ var fibs = function (n) {
 Obviously, it’s a less direct translation than was generated for our previous version of `fibs`.  However, you can fairly easily understand it still.  Hint, the `tco_` prefix in many of the generated variable names stands for “Tail Call Optimisation” and the local function `f` is a curried function, as are all functions of more than one argument in PureScript.  The important thing is that the recursive call is gone, replaced by a while loop.
 
 We have seen all we need for now of PureScript.  It’s a small but nicely put together language.  It takes the best features of Haskell and reinterprets some of them quite cleverly to achieve relatively seamless interop with JavaScript.  However, it’s still a bit niche.  For the remainder of this unit [we’ll dive more deeply into Haskell](/haskell1/), which has a long history and is supported by a very large and active community across academia and industry.
+
+
+<div class="glossary" markdown="1">
+
+*Pattern Matching*: A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
+
+*Tail Call Optimisation*: A compiler feature that optimises tail-recursive functions to prevent additional stack frames from being created, effectively converting recursion into iteration.
+
+</div>

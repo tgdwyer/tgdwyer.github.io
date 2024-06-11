@@ -3,9 +3,16 @@ source "https://rubygems.org"
 # Update gems: bundle install
 # Run Jekyll: bundle exec jekyll serve
 
-group :jekyll_plugins do
-  gem "github-pages"
-end
+# group :jekyll_plugins do
+#   gem "github-pages"
+# end
+gem "minima"
+
+gem "jekyll", "~> 4.2.0"
+gem "jekyll-feed", "~> 0.12"
+gem "jekyll-sitemap", "~> 1.4"
+gem "jekyll-sass-converter", "~> 2.1"
+gem "nokogiri"
 
 gem "webrick"  # Local server
 

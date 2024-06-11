@@ -376,3 +376,25 @@ fibs n = case n of
   otherwise -> fibs (n-1) + fibs (n-2)
 ```
 </div>
+
+<div class="glossary" markdown="1">
+
+*GHCi REPL*: The interactive Read-Eval-Print Loop for GHC, the Glasgow Haskell Compiler, allowing users to test Haskell programs and expressions interactively.
+
+*Pattern Matching*: A mechanism in Haskell that checks a value against a pattern. It is used to simplify code by specifying different actions for different input patterns.
+
+*Guards*: A feature in Haskell used to test boolean expressions. They provide a way to conditionally execute code based on the results of boolean expressions.
+
+*Where Clauses*: A way to define local bindings in Haskell, allowing variables or functions to be used within a function body.
+
+*Let Clauses*: A way to bind variables or functions within an expression in Haskell, allowing for more localized definitions.
+
+*Hoogle*: A Haskell API search engine that allows users to search for functions by name or by type signature.
+
+*Prelude*: The default library loaded in Haskell that includes basic functions and operators.
+
+*Case Expressions*: A way to perform pattern matching in Haskell that allows for more complex conditional logic within expressions.
+
+*Type Class*: A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+
+</div>

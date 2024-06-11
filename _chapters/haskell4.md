@@ -3,7 +3,7 @@ layout: chapter
 title: "Foldable and Traversable"
 ---
 
-In this chapter we will meet some more typeclassesv 5 that abstract common coding patterns for dealing with data.
+In this chapter we will meet some more typeclasses that abstract common coding patterns for dealing with data.
 
 ## Learning Outcomes
 
@@ -680,3 +680,21 @@ evalResult :: Maybe (String, Int)
 evalResult = (evalTree <$>) <$> parsedResult
 -- >>> evalResult = Just ("", 10)
 ```
+
+<div class="glossary" markdown="1">
+
+*Folding:* The process of reducing a data structure to a single value by applying a function. Haskell provides two types of folds: foldl (left fold) and foldr (right fold).
+
+*foldl:* A left fold function that processes elements from left to right. Its type signature is foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b.
+
+*foldr:* A right fold function that processes elements from right to left. Its type signature is foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b.
+
+*Monoid*: A type class for types that have an associative binary operation (mappend) and an identity element (mempty). Instances of Monoid can be concatenated using mconcat.
+
+*Foldable*: A type class for data structures that can be folded (reduced) to a single value. It includes functions like foldr, foldl, length, null, elem, maximum, minimum, sum, product, and foldMap.
+
+*Traversable*: A type class for data structures that can be traversed, applying a function with an Applicative effect to each element. It extends both Foldable and Functor and includes functions like traverse and sequenceA.
+
+*Unit*: A type with exactly one value, (), used to indicate the absence of meaningful return value, similar to void in other languages.
+
+</div>
