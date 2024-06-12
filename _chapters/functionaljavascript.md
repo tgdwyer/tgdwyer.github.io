@@ -153,61 +153,62 @@ Side effects are bad for transparency (knowing everything about what a function 
 Do the following functions have side effects?
 
 1.
-    ```javascript
-    let counter = 0;
+```javascript
+let counter = 0;
 
-    function incrementCounter() {
-        counter++;
-    }
-    ```
+function incrementCounter() {
+    counter++;
+}
+```
 
 2.
-    ```javascript
-    function greet(name) {
-        return `Hello, ${name}!`;
-    }
-    ```
+```javascript
+function greet(name) {
+    return `Hello, ${name}!`;
+}
+```
     
 3.
-    ```javascript
-    function multiplyArray(numbers) {
-        for (let i = 0; i < numbers.length; i++) {
-            numbers[i] = numbers[i] * 2;
-        }
-        return numbers
+```javascript
+function multiplyArray(numbers) {
+    for (let i = 0; i < numbers.length; i++) {
+        numbers[i] = numbers[i] * 2;
     }
-    ```
+    return numbers
+}
+```
 4.
-    ```javascript
-    function logMessage(message) {
-        console.log(message);
-    }
-    ```
+```javascript
+function logMessage(message) {
+    console.log(message);
+}
+```
 5.
-    ```javascript
-    function doubleNumbers(numbers) {
-        return numbers.map(x => x * 2);
-    }
-    ```
+```javascript
+function doubleNumbers(numbers) {
+    return numbers.map(x => x * 2);
+}
+```
 6.
-    ```javascript
-    function getRandomNumber() {
-        return Math.random();
-    }
-    ```
+```javascript
+function getRandomNumber() {
+    return Math.random();
+}
+```
 
 #### Solutions
-1. Yes, it modifies the global variable counter.
 
-2. No, it simply returns a new string and does not modify any external state.
+1. <p class="spoiler">Yes, it modifies the global variable counter.</p>
 
-3. Yes, it modifies the input array numbers in place.
+2. <p class="spoiler">No, it simply returns a new string and does not modify any external state.</p>
 
-4. Yes, it writes to the console, which is an external action.
+3. <p class="spoiler">Yes, it modifies the input array numbers in place.</p>
 
-5. No, it returns a new array without modifying the input array.
+4. <p class="spoiler">Yes, it writes to the console, which is an external action.</p>
 
-6. Yes, it relies on and modifies a global seed for random number generation.
+5. <p class="spoiler">No, it returns a new array without modifying the input array.</p>
+
+6. <p class="spoiler">Yes, it relies on and modifies a global seed for random number generation.</p>
 
 ## Functional Patterns
 

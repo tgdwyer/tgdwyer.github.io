@@ -5,6 +5,12 @@ title: "HTML as a Declarative Language"
 
 # HTML as a Declarative Language
 
+
+## Learning Outcomes
+ - Understand what makes HTML a declarative language and how it describes the structure and content of a web page.
+ - Comprehend the separation of concerns by differentiating structure (HTML), presentation (CSS), and behavior (JavaScript).
+ - Understand how to include and define a basic SVG element within an HTML document.
+
 ## What is HTML?
 
 HTML, or HyperText Markup Language, is the standard markup language used to create and design web pages. It provides the structure and content of a web page by using a system of markup tags and attributes. HTML documents are interpreted by web browsers to render the content visually for users.
@@ -15,7 +21,7 @@ HTML is considered a declarative language because it focuses on describing the s
 
 ## Key Aspects of HTML's Declarative Nature:
 
-1. Descriptive Tags: HTML tags are descriptive elements that define the purpose and meaning of content. For example, \<\p\> tags indicate a paragraph, \<\h1\> to \<\h6\> tags denote headings of varying levels, \<\ul\> and \<\ol\> represent unordered and ordered lists respectively. These tags describe the content they enclose rather than instructing how it should be displayed.
+1. Descriptive Tags: HTML tags are descriptive elements that define the purpose and meaning of content. For example, `<p>` tags indicate a paragraph, `<h1>` to `<h6>` tags denote headings of varying levels, `<ul>` and `<ol>` represent unordered and ordered lists respectively. These tags describe the content they enclose rather than instructing how it should be displayed.
 
 2. Attribute-Based: HTML elements can have attributes that provide additional information or functionality. Attributes like class, id, src, href, etc., provide hooks for styling, scripting, or specifying behavior. However, these attributes do not dictate how elements are displayed; they simply provide metadata or instructions to browsers.
 
@@ -29,7 +35,6 @@ HTML is considered a declarative language because it focuses on describing the s
 First, create a new HTML file and define the basic structure of the document:
 
 ```html
-Copy code
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,7 +47,7 @@ Copy code
 </html>
 ```
 
-In this step, we've set up the basic HTML structure with a \<!DOCTYPE\> declaration, \<html\>, \<head\>, and \<body\> tags. We've also included meta tags for character encoding and viewport settings, as well as a title for the page.
+In this step, we've set up the basic HTML structure with a `<!DOCTYPE>` declaration, `<html>`, `<head>`, and `<body>` tags. We've also included meta tags for character encoding and viewport settings, as well as a title for the page.
 
 ### Step 2: Adding an SVG Element
 
@@ -59,7 +64,7 @@ Next, let's add an SVG element to the body of our HTML document. This SVG elemen
 We've added an SVG element with a width and height of 100 units each. This provides a canvas for our SVG graphics.
 
 ### Step 3: Adding a Rectangle to the SVG
-Now, let's add a rectangle (<rect>) element inside the SVG to represent the moving rectangle:
+Now, let's add a rectangle `<rect>` element inside the SVG to represent the moving rectangle:
 
 ```html
 <svg width="100" height="100">
@@ -86,7 +91,7 @@ We can integrate some javascript, by including a reference to a file, e.g., `scr
 
 Please note the addition of the `id` tag, this is **important** and it will be the name used in Javascript to refer to this rectangle. 
 
-This will be a recursive function, which will animate the rectangle at 60 FPS. We use setTimeout to call our recursive function at around 60 frames per second. 
+We want to create some code, which will animate the rectangle at 60 FPS. We use setTimeout to call our function at around 60 frames per second. 
 
 ```javascript
 // Define an animation function
@@ -119,11 +124,13 @@ const rectangle = document.getElementById('movingRect')
 animate(rectangle, 10, 50, null);
 ```
 
-## Exercises
+However, there are some serious issues with this code.
+- The rectangle attribute `x`, is a global variable, which the user of the webpage has access too!
+  - If this was a game, the user could easily change this themselves to whatever value they please.
+- If we wanted the duration to be very high, this could reach maximum recursion depth, which would cause the browser to crash
+- We do not seperate the state-management from where we cause the side-effects, which will increase difficulty when debugging. 
 
-- Modify Rectangle Properties: Experiment with changing the attributes of the rectangle such as width, height, fill color, and position. See how these changes affect the appearance of the rectangle on the screen.
-- Animate Different Shapes: Besides rectangles, try animating other SVG shapes such as circles, ellipses, or polygons. Explore how the animation function can be adapted to work with different types of shapes.
-- Create a Mini Game: Challenge yourself by creating a simple game using SVG shapes and animation. For example, you could create a game where the player controls a character (represented by a shape) to avoid obstacles (other shapes) moving across the screen.
+Luckily, [functional reactive programming](/functionalreactiveprogramming) will save us from most of these issues!
 
 
 

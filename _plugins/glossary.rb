@@ -7,6 +7,12 @@ module GlossaryData
   end
 end
 
+module ChaptersData
+  def chapters
+    self['chapters']
+  end
+end
+
 module Jekyll
   class GlossaryLinkGenerator < Generator
     safe true
@@ -16,12 +22,18 @@ module Jekyll
 
     def generate(site)
       site.data.extend(GlossaryData)
+      site.data.extend(ChaptersData)
+
+      @@titles = site.data.chapters.map { |chapter| chapter['url'].gsub(/^\/|\/$/, '') }
 
       site.data.glossary.each do |entry|
         term = entry['term'].downcase
         definition = entry['definition']
-        @@glossary_terms[term] = definition
-        @@glossary_terms[pluralize(term)] = definition
+        first_appeared = entry['first_appeared']
+
+        @@glossary_terms[term] = [definition, first_appeared]
+        @@glossary_terms[pluralize(term)] = [definition, first_appeared]
+
       end
 
       @@glossary_terms = @@glossary_terms.sort_by { |term, _| -term.length }.to_h
@@ -42,26 +54,30 @@ module Jekyll
 
     Jekyll::Hooks.register :documents, :post_render do |document|
       if document.output_ext == '.html'
-        @@compiled_glossary_terms ||= @@glossary_terms.map do |term, definition|
+        @@compiled_glossary_terms ||= @@glossary_terms.map do |term, (definition, first_appeared)|
           regex = Regexp.new(/(\b#{Regexp.escape(term)}\b)(?![^<]*<\/span>)/i)
-          [term, CGI.escapeHTML(definition), regex]
+          [term, CGI.escapeHTML(definition), first_appeared, regex]
         end
-        
-        document.output = replace_glossary_terms(document.output)
+
+        file_name = File.basename(document.relative_path, File.extname(document.relative_path))
+        document.output = replace_glossary_terms(document.output, file_name)
     
       end
     end
 
-    def self.replace_glossary_terms(content)
+    def self.replace_glossary_terms(content, file_name)
       doc = Nokogiri::HTML.fragment(content)
     
       doc.traverse do |node|
         if node.text?
           unless node.ancestors.any? { |ancestor| ancestor.name.match?(/^h[1-6]$/i) || ancestor.name == 'pre' || ancestor['class'] == 'glossary' || ancestor.name == 'code' || ancestor['class'] == 'glossary-term' || ancestor.name == 'title' }
             new_content = node.content
-            @@compiled_glossary_terms.each do |term, definition, regex|
-              new_content = new_content.gsub(regex) do |match|
-                "<span class='glossary-term' data-term='#{term}' data-definition='#{definition}'>#{match}</span>"
+            @@compiled_glossary_terms.each do |term, definition, first_appeared, regex|
+
+              if @@titles.include?(file_name) and @@titles.index(file_name) >= @@titles.index(first_appeared)
+                new_content = new_content.gsub(regex) do |match|
+                  "<span class='glossary-term' data-term='#{term}' data-definition='#{definition}'>#{match}</span>"
+                end
               end
             end
             node.replace(Nokogiri::HTML.fragment(new_content))

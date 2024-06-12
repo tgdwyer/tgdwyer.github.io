@@ -73,10 +73,9 @@ range(10)
 
 The three animations represent the creation (```range```) and the two transformations (```filter``` and ```map```), respectively.
 
-Range: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even.gif)
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even.gif)
 
-
-Now here's the solution to the first Project Euler problem, the sum of numbers divisible by 3 or 5 under 1000:
+To solve the first Project Euler problem using RxJS, we generate a sequence of numbers from 0 to 999 with `range(1000)`. We then use the `filter` operator to select numbers divisible by 3 or 5. The `scan` operator, akin to reduce, accumulates the sum of these filtered numbers over time, and the `last` operator emits only the final accumulated sum. Finally, we subscribe to the observable and log the result to the console. Here’s the complete code:
 
 ```javascript
 range(1000)
@@ -86,14 +85,13 @@ range(1000)
     last())
   .subscribe(console.log); 
 ```
+In the developer console, only one number will be printed:
 
 > 233168
-
 
 We can see the values changes as they move further and further down the stream. The four animations represent the creation (```range```) and the three transformations (```filter```, ```scan``` and ```last```), respectively. The ```last``` animation is empty, since we only emit the *last* value, which will be off screen. 
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler.gif)
-
 
 
 Scan is very much like the ```reduce``` function on Array in that it applies an accumulator function to the elements coming through the Observable, except instead of just outputting a single value (as ```reduce``` does), it emits a stream of the running accumulation (in this case, the sum so far).  Thus, we use the ```last``` function to produce an Observable with just the final value.
