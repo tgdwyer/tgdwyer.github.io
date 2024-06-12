@@ -192,6 +192,8 @@ We have seen all we need for now of PureScript.  It’s a small but nicely put t
 
 <div class="glossary" markdown="1">
 
+## Glossary
+
 *Pattern Matching*: A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
 
 *Tail Call Optimisation*: A compiler feature that optimises tail-recursive functions to prevent additional stack frames from being created, effectively converting recursion into iteration.

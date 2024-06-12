@@ -323,6 +323,8 @@ However, the above description should be enough to give you a working knowledge 
 
 <div class="glossary" markdown="1">
 
+## Glossary
+
 *Lambda Calculus*: Model of computation developed in the 1930s by Alonzo Church, providing a complete model of computation similar to Turing Machines.
 
 *Lambda expressions*: Functions written using the λ notation, e.g., λx.x, which are anonymous and can only take on other functions as values.

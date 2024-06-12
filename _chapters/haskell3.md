@@ -1050,6 +1050,8 @@ Therefore, after applying this parser, it will result in: `Just ("", (\a b -> a)
 
 <div class="glossary" markdown="1">
 
+## Glossary
+
 *Eta Conversion*: A technique in Haskell and Lambda Calculus where a function f x is simplified to f, removing the explicit mention of the parameter when it is not needed.
 
 *Operator Sectioning*: The process of partially applying an infix operator in Haskell by specifying one of its arguments. For example, (+1) is a section of the addition operator with 1 as the second argument.

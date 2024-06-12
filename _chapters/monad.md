@@ -473,6 +473,8 @@ A slightly more advanced topic which you would soon encounter in the wild would 
 
 <div class="glossary" markdown="1">
 
+## Glossary
+
 *Monad*: A type class in Haskell that represents computations as a series of steps. It provides the bind operation (>>=) to chain operations and the return (or pure) function to inject values into the monadic context.
 
 *Do Notation*: A syntactic sugar in Haskell for chaining monadic operations. It makes the code more readable by hiding the explicit use of bind (>>=).

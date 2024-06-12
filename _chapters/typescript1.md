@@ -580,6 +580,8 @@ While leaving off type annotations and forcing types with any may be convenient,
 
 <div class="glossary" markdown="1">
 
+## Glossary
+
 *Generic Types:* A way to create reusable and type-safe components, functions, or classes by parameterizing types. These types are specified when the function or class is used.
 
 *Immutable Object:* An object whose state cannot be modified after it is created. In TypeScript, immutability can be enforced using Readonly or as const.

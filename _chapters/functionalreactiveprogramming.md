@@ -495,6 +495,8 @@ As an example of *scalability* we will be using this same pattern to implement t
 
 <div class="glossary" markdown="1">
 
+## Glossary
+
 *Asynchronous*: Operations that occur independently of the main program flow, allowing the program to continue executing while waiting for the operation to complete.
 
 *Functional Reactive Programming (FRP)*: A programming paradigm that combines functional and reactive programming to handle asynchronous data streams and event-driven systems.

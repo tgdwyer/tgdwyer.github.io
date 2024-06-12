@@ -993,6 +993,8 @@ This is a “lighter-weight” style of code reuse or specialisation.
 
 <div class="glossary" markdown="1">
 
+## Glossary
+
 *Anonymous Function*: A function defined without a name, often used as an argument to other functions. Also known as lambda function.
 
 *Closure*: A function and the set of variables it accesses from its enclosing scope.
