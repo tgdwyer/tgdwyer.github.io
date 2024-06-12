@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'cgi'
 
 module GlossaryData
   def glossary
@@ -14,26 +15,22 @@ module Jekyll
     @@glossary_terms = {}
 
     def generate(site)
-      Jekyll.logger.info "GlossaryLinkGenerator:", "Starting..."
-
       site.data.extend(GlossaryData)
 
       site.data.glossary.each do |entry|
         term = entry['term'].downcase
         definition = entry['definition']
         @@glossary_terms[term] = definition
-        # Add plural forms
         @@glossary_terms[pluralize(term)] = definition
       end
 
-      # sort the list, to priorties longer definitions.
       @@glossary_terms = @@glossary_terms.sort_by { |term, _| -term.length }.to_h
 
-      Jekyll.logger.info "GlossaryLinkGenerator:", "Glossary terms loaded: #{@@glossary_terms.keys.join(', ')}"
     end
 
     def pluralize(term)
       # A simple pluralization method
+      # Developed by ChatGPT, since grammar is hard.
       if term.end_with?('y')
         term[0..-2] + 'ies'
       elsif term.end_with?('s')
@@ -45,31 +42,35 @@ module Jekyll
 
     Jekyll::Hooks.register :documents, :post_render do |document|
       if document.output_ext == '.html'
-        Jekyll.logger.info "GlossaryLinkGenerator:", "Processing document: #{document.relative_path}"
-
-        @@glossary_terms.each do |term, definition|
-          regex = /(\b#{Regexp.escape(term)}\b)/i
-          document.output = replace_glossary_terms(document.output, regex, term, definition)
+        @@compiled_glossary_terms ||= @@glossary_terms.map do |term, definition|
+          regex = Regexp.new(/(\b#{Regexp.escape(term)}\b)(?![^<]*<\/span>)/i)
+          [term, CGI.escapeHTML(definition), regex]
         end
+        
+        document.output = replace_glossary_terms(document.output)
+    
       end
     end
 
-    def self.replace_glossary_terms(content, regex, term, definition)
+    def self.replace_glossary_terms(content)
       doc = Nokogiri::HTML.fragment(content)
-
+    
       doc.traverse do |node|
         if node.text?
-          unless node.ancestors.any? { |ancestor| ancestor.name.match?(/^h[1-6]$/i) || ancestor.name == 'pre' || ancestor['class'] == 'glossary' || ancestor.name == 'code' || ancestor['class'] == "glossary-term" || ancestor.name == "title" }
-            new_content = node.content.gsub(regex) do |match|
-              Jekyll.logger.info "GlossaryLinkGenerator:", "Adding popup for term '#{match}'"
-              "<span class='glossary-term' data-term='#{term}' data-definition='#{definition}'>#{match}</span>"
+          unless node.ancestors.any? { |ancestor| ancestor.name.match?(/^h[1-6]$/i) || ancestor.name == 'pre' || ancestor['class'] == 'glossary' || ancestor.name == 'code' || ancestor['class'] == 'glossary-term' || ancestor.name == 'title' }
+            new_content = node.content
+            @@compiled_glossary_terms.each do |term, definition, regex|
+              new_content = new_content.gsub(regex) do |match|
+                "<span class='glossary-term' data-term='#{term}' data-definition='#{definition}'>#{match}</span>"
+              end
             end
             node.replace(Nokogiri::HTML.fragment(new_content))
-          end
+          end        
         end
       end
-
+    
       doc.to_html
     end
+    
   end
 end
