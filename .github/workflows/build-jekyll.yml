@@ -21,6 +21,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cache-
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Generate Glossary
+        run: python scripts/generate_glossary.py
+
       # Use GitHub Deploy Action to build and deploy to Github
       # For latest version: `jeffreytse/jekyll-deploy-action@master`
       - uses: jeffreytse/jekyll-deploy-action@v0.6.0
