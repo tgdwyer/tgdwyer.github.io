@@ -696,6 +696,8 @@ evalResult = (evalTree <$>) <$> parsedResult
 
 <div class="glossary" markdown="1">
 
+## Glossary
+
 *Folding:* The process of reducing a data structure to a single value by applying a function. Haskell provides two types of folds: foldl (left fold) and foldr (right fold).
 
 *foldl:* A left fold function that processes elements from left to right. Its type signature is foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b.

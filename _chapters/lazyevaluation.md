@@ -99,55 +99,64 @@ The take function creates a LazySequence of the first `n` elements by returning 
 
 ```typescript
 function take<T>(n: number, seq: LazySequence<T>): LazySequence<T> | undefined {
-  // Base case, when n is 0, we return undefined
-  if (n === 0) {
-    return undefined;
+  if (n) {
+    return {
+      value: seq.value,
+      next: () => take(n - 1, seq.next()),
+    } as LazySequence<T>;
   }
-  return {
-    value: seq.value, // Leave value unchanged
-    next: () => take(n - 1, seq.next() as LazySequence<T>)     // Decrement n, and recursively apply
-  };
+  return undefined;
 }
 ```
 
 We can define the three map/filter/reduce functions with similar logic.
 
 ```typescript
-function map<T, U>(seq: LazySequence<T> | undefined, f: (value: T) => U): LazySequence<U> | undefined {
+function map<T, U>(
+  f: (value: T) => U,
+  seq: LazySequence<T> | undefined
+): LazySequence<U> | undefined {
   if (!seq) {
     return undefined; // If the sequence is undefined, return undefined
   }
   return {
     value: f(seq.value), // Apply the function to the current value
-    next: () => map(seq.next(), f), // Recursively apply the function to the next elements
+    next: () => map(f, seq.next()), // Recursively apply the function to the next elements
   };
 }
+
 ```
 
 ```typescript
-function filter<T>(seq: LazySequence<T> | undefined, predicate: (value: T) => boolean): LazySequence<T> | undefined {
+function filter<T>(
+  predicate: (value: T) => boolean,
+  seq: LazySequence<T> | undefined
+): LazySequence<T> | undefined {
   if (!seq) {
     return undefined; // If the sequence is undefined, return undefined
   }
   if (predicate(seq.value)) {
     return {
       value: seq.value, // If the current value matches the predicate, include it
-      next: () => filter(seq.next(), predicate), // Recursively filter the next elements
+      next: () => filter(predicate, seq.next()), // Recursively filter the next elements
     };
   } else {
-    return filter(seq.next(), predicate); // Skip the current value and filter the next elements
+    return filter(predicate, seq.next()); // Skip the current value and filter the next elements
   }
 }
 ```
 
 ```typescript
-function reduce<T, U>(seq: LazySequence<T> | undefined, f: (accumulator: U, value: T) => U, initialValue: U): U {
+function reduce<T, U>(
+  f: (accumulator: U, value: T) => U,
+  seq: LazySequence<T> | undefined,
+  initialValue: U
+): U {
   if (!seq) {
     return initialValue; // If the sequence is undefined, return the initial value
   }
-
   // Recursively apply the accumulator function to the next elements and the current value
-  return reduce(seq.next(), f, f(initialValue, seq.value));
+  return reduce(f, seq.next(), f(initialValue, seq.value));
 }
 ```
 
@@ -157,14 +166,24 @@ Using this code, we can solve the [first euler problem](https://projecteuler.net
 function sumOfFirstNNaturalsNotDivisibleBy3Or5(n: number): number {
   const naturals = naturalNumbers(); // Generate the natural numbers sequence
   // Take the first n elements and filter out those divisible by 3 or 5
-  const filtered = filter(take(n - 1, naturals), (x) => x % 3 === 0 || x % 5 === 0);
+  const filtered = filter(
+    (x) => x % 3 === 0 || x % 5 === 0,
+    take(n - 1, naturals)
+  );
+
   // Sum the remaining elements using reduce
-  return reduce(filtered, (acc, x) => acc + x, 0);
+  return reduce((acc, x) => acc + x, filtered, 0);
 }
-console.log(sumOfFirstNNaturalsNotDivisibleBy3Or5(1000)); 
+
+// Example usage
+console.log(sumOfFirstNNaturalsNotDivisibleBy3Or5(1000));
 ```
 
+> 233168
+
 <div class="glossary" markdown="1">
+
+## Glossary
 
 *Eager Evaluation*: A strategy where expressions are evaluated immediately as they are bound to variables.
 

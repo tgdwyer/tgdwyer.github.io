@@ -670,6 +670,8 @@ convert' Played{rocks, papers, scissors} =
 
 <div class="glossary" markdown="1">
 
+## Glossary
+
 *Parser*: A program that processes a string of text to extract structured information from it. Parsers are used in interpreting programming languages, data formats, and other structured text formats.
 
 *Context-Free Grammar*: A type of formal grammar that is used to define the syntax of programming languages and data formats. CFGs consist of a set of production rules that define how terminals and non-terminals can be combined to produce strings in the language.

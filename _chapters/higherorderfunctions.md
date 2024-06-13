@@ -374,10 +374,9 @@ The `fork` function is a higher-order combinator that combines two functions, `f
 
 #### Solutions
 
-We can use the fork-join combinator by considering the sum and count of the sequence as the two branches (f and g), and then using a join function to divide the sum by the count to compute the average.
+We can use the fork-join combinator by considering the sum and count of the sequence as the two branches (`f` and `g`), and then using a join function to divide the sum by the count to compute the average.
 
 ```typescript
-
 const sum = arr => arr.reduce((acc, x) => acc + x, 0);
 const count = arr => arr.length;
 
@@ -387,8 +386,12 @@ const average = (sum, count) => sum / count;
 const computeAverage = fork(average, sum, count);
 
 const values = [1, 2, 3, 4, 5];
-console.log(computeAverage(values)); // Outputs: 3
+console.log(computeAverage(values));
 ```
+
+> 3
+
+We would need four distinct genertic types for this function
 
 ```typescript
 function fork<T, U, V, R>(join: (a: U, b: V) => R, f: (value: T) => U, g: (value: T) => V): (value: T) => R {
@@ -399,7 +402,7 @@ function fork<T, U, V, R>(join: (a: U, b: V) => R, f: (value: T) => U, g: (value
 1. `T` for the type of the input value.
 2. `U` for the type of the result of function `f`.
 3. `V` for the type of the result of function `g`.
-4. `R` for the type of the result of the join function.
+4. `R` for the type of the result of the `join` function.
 
 ----
 
@@ -471,35 +474,33 @@ The point of this demonstration is that curried functions are a more principled 
 
 1. When `parseInt` is used as the callback for `map`, it is called with **three** arguments: currentValue, index, and array. `parseInt` expects the second argument to be the radix, but `map` provides the index of the current element as the second argument. This leads to incorrect parsing.
 
-2.
+2. The unary function is defined as:
 
-   ```typescript
-   function unary<T, U, V>(binaryFunc: (arg1: T, arg2: U) => V, boundValue: T): (arg2: U) => V {
-     return function(secondValue: U): V {
-       return binaryFunc(boundValue, secondValue);
-     };
-   }
-   ```
+  ```typescript
+function unary<T, U, V>(binaryFunc: (arg1: T, arg2: U) => V, boundValue: T): (arg2: U) => V {
+      return function(secondValue: U): V {
+        return binaryFunc(boundValue, secondValue);
+    };
+  }
+  ```
 
-   1. T: Type of the first argument of the binary function (the value to bind).
-   2. U: Type of the second argument of the binary function.
-   3. V: Return type of the binary function.
+ 1. `T`: Type of the first argument of the binary function (the value to bind).
+ 2. `U`: Type of the second argument of the binary function.
+ 3. `V`: Return type of the binary function.
 
-   ```typescript
-   function flip<T, U, V>(binaryFunc: (arg1: T, arg2: U) => V): (arg2: U, arg1: T) => V {
-     return function(arg2: U, arg1: T): V {
-       return binaryFunc(arg1, arg2);
-     };
-   }
-   ```
-
-   1. T: Type of the first argument of the original binary function.
-   2. U: Type of the second argument of the original binary function.
-   3. V: Return type of the original binary function.
+```typescript
+function flip<T, U, V>(binaryFunc: (arg1: T, arg2: U) => V): (arg2: U, arg1: T) => V {
+  return function(arg2: U, arg1: T): V {
+    return binaryFunc(arg1, arg2);
+  };
+}
+```
 
 ----
 
 <div class="glossary" markdown="1">
+
+## Glossary
 
 *Combinator*: A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
 

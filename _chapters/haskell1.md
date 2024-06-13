@@ -402,6 +402,8 @@ fibs n = case n of
 
 <div class="glossary" markdown="1">
 
+## Glossary
+
 *GHCi REPL*: The interactive Read-Eval-Print Loop for GHC, the Glasgow Haskell Compiler, allowing users to test Haskell programs and expressions interactively.
 
 *Pattern Matching*: A mechanism in Haskell that checks a value against a pattern. It is used to simplify code by specifying different actions for different input patterns.
