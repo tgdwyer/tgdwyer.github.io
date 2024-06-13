@@ -28,6 +28,7 @@ We've seen many examples of functions which take functions as parameters, for ex
 ```javascript
 [1,2,3].map(x=>x*x)
 ```
+
 >[1,4,9]
 
 Being able to pass functions into other functions enables code customisability and reuse.  For example, a sort function which allows the caller to pass in a comparison function can easily be made to sort in increasing or decreasing order, or to sort data elements on an arbitrary attribute.
@@ -54,13 +55,16 @@ Higher-order functions which take a single parameter and return another function
 ```javascript
 add(3)(2)
 ```
+
 >5
 
 or call it once, leaving one parameter left unspecified, to create a reusable function, like `add9` above.
 Such use of a curried function with only a subset of its parameters is called *partial application*.  Partial application returns a function for which further parameters must be supplied before the body of the function can finally be evaluated, e.g.:
+
 ```js
 add9(1)
 ```
+
 >10  
 
 Here's a practical example of a curried function. Let’s say we want a function for computing the volume of cylinders, parameterised by the approximation for π that we plan to use:
@@ -136,6 +140,7 @@ Now, given a function like `plus = (x,y) => x + y`, we can create the curried ad
 const add = curry2(plus)
 add(3)(4)
 ```
+
 > 7
 
 We can also create curried versions of functions with more than two variables -- but the TypeScript syntax for functions with arbitrary numbers of arguments gets a bit scary (one of the many reasons we will shortly [switch to Haskell](/haskell1/) for our exploration of more advanced functional programming topics).
@@ -181,11 +186,12 @@ Note that `compose` let us define `roundFloat` without any messing around with a
 
 ## Exercise
 
-* Create a ```compose``` function in JavaScript that takes a variable number of functions as arguments and composes (chains) them.  Using the spread operator (`...`) to take a variable number of arguments as an array and the `Array.prototype.reduce` method, the function should be very small.
+- Create a ```compose``` function in JavaScript that takes a variable number of functions as arguments and composes (chains) them.  Using the spread operator (`...`) to take a variable number of arguments as an array and the `Array.prototype.reduce` method, the function should be very small.
 
-* Create a ```pipe``` function which composes its arguments in the opposite order to the ```compose``` function above.  That is, left-to-right.  Note that in [rx.js](https://www.learnrxjs.io/), such a ```pipe``` function is an important way to create chains of operations (over Observable streams).
+- Create a ```pipe``` function which composes its arguments in the opposite order to the ```compose``` function above.  That is, left-to-right.  Note that in [rx.js](https://www.learnrxjs.io/), such a ```pipe``` function is an important way to create chains of operations (over Observable streams).
 
 ## Combinators
+
 Combinators are higher-order functions which perform pure operations on their arguments to perform a result.  They may seem very basic, but as their name suggests, they provide useful building blocks for manipulating and composing functions to create new functions.  The [`compose`](#composition) function is a combinator.  Some more examples follow.
 
 ### Identity I-Combinator
@@ -235,7 +241,7 @@ forEach(console.log)(l)
 
 The definition of `head` is by straightforward, like-for-like substitution of `K` into a curried version of our previous definition for `head`.  Note, the following is not code, just statements of equivalence (≡):
 
-```
+```javascript
 head ≡ l=>l((h,_)=>h) -- previous uncurried definition of head
      ≡ l=>l(curry2((h,_)=>h))
      ≡ l=>l(h=>_=>h)
@@ -243,7 +249,7 @@ head ≡ l=>l((h,_)=>h) -- previous uncurried definition of head
 
 Where the expression in brackets above we notice is equivalent to `K`:
 
-```
+```javascript
 K  ≡  x=> y=> x  ≡  h=> _=> h
 ```
 
@@ -251,19 +257,22 @@ In the context of the [Lambda Calculus](/lambdacalculus), we will see that such 
 
 We are gradually changing our terminology to be more Haskell-like, so we have named the curried version of `rest` to `tail`.  The new definition of `tail`, compared to our previous definition of `rest`, is derived as follows:
 
-```
+```javascript
 K(I)  ≡  K(i=> i)             -- expand I := i=> i
       ≡  (x=> y=> x)(i=> i)   -- expand K := x=> y=> x
       ≡  y=> i=> i
 ```
+
 Where the last line above is the result of applying `x=>y=>x` to `i=>i`.  Thus, we substitute `x:=i=>i` in the body of the first function (the expansion of `K`).  When we explore the [Lambda Calculus](/lambdacalculus), we will see that this operation (simple evaluation of function application by substitution of expressions) is called *Beta reduction*.
 
 Now we could derive `tail` from `rest` using our `curry2` function:
-``` 
+
+```javascript
 rest ≡ l=>l((_,r)=>r)
 tail ≡ l=>l(curry2((_,r)=>r))
      ≡ l=>l(_=>r=>r)
 ```
+
 Where `_=> r=> r  ≡  y=> i=> i` and therefore `tail ≡ l=>l(K(i))`.  QED!!!
 
 FYI it has been shown that simple combinators like K and I (at least one other is required) are sufficient to create languages as powerful as lambda calculus without the need for lambdas, e.g. see [SKI Combinator Calculus](https://en.wikipedia.org/wiki/SKI_combinator_calculus).
@@ -277,9 +286,11 @@ const fold = f=> i=> l=> l ? fold(f)(f(i)(head(l)))(tail(l)) : i
 ```
 
 Now, for example, we can define `forEach` in terms of `fold`:
+
 ```javascript
 const forEach = f=>l=>fold(_=>v=>f(v))(null)(l)
 ```
+
 Now, the function `f` takes one parameter and we don't do anything with its return type (in TypeScript we could enforce the return type to be `void`).
 However, `fold` is expecting as its first argument a curried function of two parameters (the accumulator and the list element).  Since in `forEach` we are not actually accumulating a value, we can ignore the first parameter, hence we give `fold` the function `_=>v=>f(v)`, to apply `f` to each value `v` from the list.
 
@@ -292,7 +303,7 @@ const forEach = f=>l=>fold(_=>f)(null)(l)
 
 But check out these equivalences:
 
-```
+```javascript
 K(f)  ≡  (x=> y=> x)(f) -- expand K
       ≡  y=> f          -- apply the outer function to f, hence we substitute x:= f
       ≡  _=> f          -- rename y to _
@@ -306,12 +317,11 @@ Therefore, we can use our `K` combinator to entirely avoid defining any function
 const forEach = f=>l=>fold(K(f))(null)(l)
 ```
 
-
 ----
 
 ### Fold Exercise
 
-* Write `map` and `filter` for the above cons list definition in terms of `fold`
+- Write `map` and `filter` for the above cons list definition in terms of `fold`
 
 ----
 
@@ -358,9 +368,9 @@ The `fork` function is a higher-order combinator that combines two functions, `f
 
 ### Fork-Join Exercise
 
-* Use the fork-join combinator to compute the average over a sequence of numeric values.
+- Use the fork-join combinator to compute the average over a sequence of numeric values.
 
-* Add Type annotations to the above definition of the fork function. How many distinct type variables do you need?
+- Add Type annotations to the above definition of the fork function. How many distinct type variables do you need?
 
 #### Solutions
 
@@ -385,6 +395,7 @@ function fork<T, U, V, R>(join: (a: U, b: V) => R, f: (value: T) => U, g: (value
   return (value: T) => join(f(value), g(value));
 }
 ```
+
 1. `T` for the type of the input value.
 2. `U` for the type of the result of function `f`.
 3. `V` for the type of the result of function `g`.
@@ -399,7 +410,7 @@ function fork<T, U, V, R>(join: (a: U, b: V) => R, f: (value: T) => U, g: (value
 Uncurried functions of two parameters can be called Binary functions.  Functions of only one parameter can therefore be called Unary functions.  Note that all of our curried functions are unary functions, which return other unary functions.
 We've seen situations now where curried functions are flexibly combined to be used in different situations.  
 
-Note that in JavaScript you sometimes see casual calls to binary functions but with only one parameter specified.  Inside the called function the unspecified parameter will simply be `undefined` which is fine if the case of that parameter being `undefined` is handled in a way that does not cause an error or unexpected results, e.g.: 
+Note that in JavaScript you sometimes see casual calls to binary functions but with only one parameter specified.  Inside the called function the unspecified parameter will simply be `undefined` which is fine if the case of that parameter being `undefined` is handled in a way that does not cause an error or unexpected results, e.g.:
 
 ```javascript
 function binaryFunc(x,y) {console.log(`${x} ${y}`) }
@@ -417,6 +428,7 @@ function unaryFunc(x) { console.log(x) }
 unaryFunc("Hello")
 unaryFunc("Hello", "World")
 ```
+
 > Hello  
 > Hello
 
@@ -453,13 +465,14 @@ The point of this demonstration is that curried functions are a more principled 
 
 1. From the docs for ```Array.map``` and ```parseInt```  can you figure out why the above is happening?
 2. Write a function called unary that takes a binary function and a value to bind to its first argument, and returns a unary function.  What is its fully specified TypeScript type signature?
-3. Flip - e.g. applied to ```map(Iterable,fn)``` to create ```mapApplyFn(Iterable)```. 
+3. Flip - e.g. applied to ```map(Iterable,fn)``` to create ```mapApplyFn(Iterable)```.
 
 ### Solutions
 
 1. When `parseInt` is used as the callback for `map`, it is called with **three** arguments: currentValue, index, and array. `parseInt` expects the second argument to be the radix, but `map` provides the index of the current element as the second argument. This leads to incorrect parsing.
 
-2. 
+2.
+
    ```typescript
    function unary<T, U, V>(binaryFunc: (arg1: T, arg2: U) => V, boundValue: T): (arg2: U) => V {
      return function(secondValue: U): V {
@@ -467,10 +480,11 @@ The point of this demonstration is that curried functions are a more principled 
      };
    }
    ```
+
    1. T: Type of the first argument of the binary function (the value to bind).
    2. U: Type of the second argument of the binary function.
    3. V: Return type of the binary function.
-3. 
+
    ```typescript
    function flip<T, U, V>(binaryFunc: (arg1: T, arg2: U) => V): (arg2: U, arg1: T) => V {
      return function(arg2: U, arg1: T): V {
@@ -478,11 +492,12 @@ The point of this demonstration is that curried functions are a more principled 
      };
    }
    ```
+
    1. T: Type of the first argument of the original binary function.
    2. U: Type of the second argument of the original binary function.
    3. V: Return type of the original binary function.
----
 
+----
 
 <div class="glossary" markdown="1">
 

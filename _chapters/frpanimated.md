@@ -6,7 +6,7 @@ title: "Functional Reactive Programming"
 
 ## Introduction
 
-This page will support the workshop solutions with a worked example of how we can use the observables, filled with pretty animations 
+This page will support the workshop solutions with a worked example of how we can use the observables, filled with pretty animations
 
 ## Animation Generation
 
@@ -23,6 +23,7 @@ const addDelay =
 ```
 
 Consider, the definitions for ranks, suits and card, as per the workshop:
+
 ```typescript
 
 const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'] as const;
@@ -46,8 +47,7 @@ Using the webtool, we can visualize each of these streams.
 ![Rank Observable Visualized](/assets/images/chapterImages/frpanimated/rank.gif)
 ![Suit Observable Visualized](/assets/images/chapterImages/frpanimated/suit.gif)
 
-
-To create a card, for each suit, we can look through each rank, and create a string of suits and rank. 
+To create a card, for each suit, we can look through each rank, and create a string of suits and rank.
 
 ```typescript
 const deck = suits$.pipe(
@@ -67,7 +67,7 @@ const deck = suits$.pipe(
 
 ![Deck Observable Visualized](/assets/images/chapterImages/frpanimated/mergeMapDeck.gif)
 
-However, this is only one deck? How can we create multiple decks. We will create a range, which will create a fixed range of numbers, and for each of those we can create a deck. 
+However, this is only one deck? How can we create multiple decks. We will create a range, which will create a fixed range of numbers, and for each of those we can create a deck.
 
 ```typescript
 const decks = (numDecks : number) => range(0, numDecks).pipe(map(_ => deck))
@@ -82,7 +82,6 @@ const decks = (numDecks : number) => range(0, numDecks).pipe(mergeMap(_ => deck)
 ```
 
 ![Deck Observable Visualized](/assets/images/chapterImages/frpanimated/mergemapDecks.gif)
-
 
 All in order, oh no, let us shuffle them. Assuming we have these functions, which can insert an element in to a random position in an array. We will use the reduce, and the randomInsertion to shuffle them.
 

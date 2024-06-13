@@ -48,7 +48,6 @@ of(1,2,3,4)
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/of1234.gif)
 
-
 The requirement to invoke `subscribe` before anything is produced by the Observable is conceptually similar to the [lazy sequence](lazyevaluation), where nothing happened until we started calling ```next```.  But there is also a difference.
 You could think of our lazy sequences as being "pull-based" data structures, because we had to "pull" the values out one at a time by calling the ```next``` function as many times as we wanted elements of the list.  Observables are a bit different.  They are used to handle "streams" of things, such as asynchronous UI (e.g. mouse clicks on an element of a web page) or communication events (e.g. responses from a web service).  These things are asynchronous in the sense that we do not know when they will occur.  
 
@@ -70,7 +69,6 @@ range(10)
 > 36  
 > 64
 
-
 The three animations represent the creation (```range```) and the two transformations (```filter``` and ```map```), respectively.
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even.gif)
@@ -85,14 +83,14 @@ range(1000)
     last())
   .subscribe(console.log); 
 ```
+
 In the developer console, only one number will be printed:
 
 > 233168
 
-We can see the values changes as they move further and further down the stream. The four animations represent the creation (```range```) and the three transformations (```filter```, ```scan``` and ```last```), respectively. The ```last``` animation is empty, since we only emit the *last* value, which will be off screen. 
+We can see the values changes as they move further and further down the stream. The four animations represent the creation (```range```) and the three transformations (```filter```, ```scan``` and ```last```), respectively. The ```last``` animation is empty, since we only emit the *last* value, which will be off screen.
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler.gif)
-
 
 Scan is very much like the ```reduce``` function on Array in that it applies an accumulator function to the elements coming through the Observable, except instead of just outputting a single value (as ```reduce``` does), it emits a stream of the running accumulation (in this case, the sum so far).  Thus, we use the ```last``` function to produce an Observable with just the final value.
 
@@ -112,7 +110,6 @@ zip(columns,rows)
 > ["C",2]
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/zip1.gif)
-
 
 If you like mathy vector speak, you can think of the above as an *inner product* of the two streams.  
 By contrast, the ```mergeMap``` operator gives the *cartesian product* of two streams.  That is, it gives us a way to take, for every element of a stream, a whole other stream, but flattened (or projected) together with the parent stream.  The following enumerates all the row/column indices of cells in a spreadsheet:
@@ -137,7 +134,7 @@ columns.pipe(
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/mergeMap.gif)
 
-If we contrast ```mergeMap``` and ```map```, map will produce an Observable of Observables, while mergeMap, will produce a single stream with all of the values. Contrast the animation for ```map```, with the previous ```mergeMap``` animation.  ```map``` has three separate branches, where each one represents its own observable stream. The output of the ```console.log```, is an instance of the Observable class itself, which is not very useful! 
+If we contrast ```mergeMap``` and ```map```, map will produce an Observable of Observables, while mergeMap, will produce a single stream with all of the values. Contrast the animation for ```map```, with the previous ```mergeMap``` animation.  ```map``` has three separate branches, where each one represents its own observable stream. The output of the ```console.log```, is an instance of the Observable class itself, which is not very useful!
 
 ```javascript
 columns.pipe(
@@ -148,12 +145,10 @@ columns.pipe(
 ```
 
 > Observable  
-> Observable    
-> Observable   
+> Observable
+> Observable
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/mapmap.gif)
-
-
 
 Another way to combine streams is ```merge```.  Streams that are generated with ```of``` and ```range``` have all their elements available immediately, so the result of a merge is not very interesting, just the elements of one followed by the elements of the other:
 
@@ -170,7 +165,6 @@ merge(columns,rows)
 > 2  
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/merge.gif)
-
 
 However, ```merge``` when applied to asynchronous streams will merge the elements in the order that they arrive in the stream.  For example, a stream of key-down and mouse-down events from a web-page:
 
@@ -194,28 +188,29 @@ The animation displays the stream as the user types in the best FIT unit in to t
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/keydown.gif)
 
-
 The following prints "!!" on every mousedown:
+
 ```javascript
 mouse$.pipe(
   map(_=>"!!")
 ).subscribe(console.log)
 ```
+
 The yellow highlight signifies when the mouse is clicked!
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/click.gif)
 
-
 Once again this will keep producing the message for every mouse click for as long as the page is open.  Note that the subscribes do not "block", so the above two subscriptions will run in parallel.  That is, we will receive messages on the console for either key or mouse downs whenever they occur.
 
 The following achieves the same thing with a single subscription using ```merge```:
+
 ```javascript
 merge(key$.pipe(map(e=>e.key)),
       mouse$.pipe(map(_=>"!!"))
 ).subscribe(console.log)
 ```
-![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/keyboardclick.gif)
 
+![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/keyboardclick.gif)
 
 <div class="cheatsheet" markdown="1">
 
@@ -415,9 +410,10 @@ However, there is still something not very elegant about this version.  As indic
 
 ### Pure FRP Solution
 
-We can remove this dependency on mutable state, making our event stream a pure 'closed system', by introducing a `scan` operator on the stream to accumulate the state using a pure function. 
+We can remove this dependency on mutable state, making our event stream a pure 'closed system', by introducing a `scan` operator on the stream to accumulate the state using a pure function.
 First, let's define a type for the state that will be accumulated by the `scan` operator. We are concerned with
 the position of the top-left corner of the rectangle, and (optionally, since it's only relevant during mouse-down dragging) the offset of the click position from the top-left of the rectangle:
+
 ```typescript
 type State = Readonly<{
   pos:Point,
@@ -426,6 +422,7 @@ type State = Readonly<{
 ```
 
 We'll introduce some types to model the objects coming through the stream and the effects they have when applied to a `State` object in the `scan`.  First, all the events we care about have a position on the SVG canvas associated with them, so we'll have a simple immutable `Point` interface with `x` and `y` positions and a couple of handy vector math methods (note that these create a new `Point` rather than mutating any existing state within the `Point`):
+
 ```typescript
 class Point {
    constructor(public readonly x:number, public readonly y:number){}
@@ -433,14 +430,18 @@ class Point {
    sub(p:Point) { return new Point(this.x-p.x,this.y-p.y) }
 }
 ```
+
 Now we create a subclass of `Point` with a constructor letting us instantiate it for a given (DOM) `MouseEvent` and an `abstract` (placeholder) definition for a function to apply the correct update action to the `State`:
+
 ```typescript
 abstract class MousePosEvent extends Point { 
   constructor(e:MouseEvent) { super(e.clientX, e.clientY) } 
   abstract apply(s:State):State;
 }
 ```
+
 And now two further subclasses with concrete definitions for `apply`.
+
 ```typescript
   class DownEvent extends MousePosEvent {
     apply(s:State) { return { pos: s.pos, offset: s.pos.sub(this) }}
@@ -449,7 +450,9 @@ And now two further subclasses with concrete definitions for `apply`.
     apply(s:State) { return { pos: this.add(s.offset), offset: s.offset }}
   }
 ```
+
 Setup of the streams is as before:
+
 ```typescript
 const svg = document.getElementById("svgCanvas")!,
       rect = document.getElementById("draggableRect")!,
@@ -457,7 +460,9 @@ const svg = document.getElementById("svgCanvas")!,
       mousemove = fromEvent<MouseEvent>(svg,'mousemove'),
       mouseup = fromEvent<MouseEvent>(svg,'mouseup');
 ```
+
 But now we'll capture initial position of the rectangle one time only in an immutable `Point` object outside of the stream logic.
+
 ```typescript
 const initialState: State = { 
   pos: new Point(
@@ -465,8 +470,10 @@ const initialState: State = {
     Number(rect.getAttribute('y')))
 }
 ```
+
 Now we will be able to implement the Observable stream logic, using a function passed to `scan` to manage state.
 Since we use only pure functions we have a strong guarantee that the logic is self-contained, with no dependency on the state of the outside world!
+
 ```typescript
 mousedown
   .pipe(
@@ -483,15 +490,15 @@ mousedown
    rect.setAttribute('y', String(e.rect.y))
  });
 ```
+
 Note that inside the `mergeMap` we use the `startWith` operator to force a `DownEvent` onto the start of the flattened stream.  Then the accumulator function passed to `scan` uses sub-type polymorphism to cause the correct behaviour for the different types of `MousePosEvent``.
 
 The advantage of this code is not brevity; with the introduced type definitions it's longer than the previous implementations of the same logic.  Rather, the advantages of this pattern are:
 
- * *maintainability*: we have separated setup code and state management code;
- * *scalability*: we can extend this code pattern to handle more complicated state machines. We can easily `merge` in more input streams, adding Event types to handle their `State` updates, and the only place we have to worry about effects visible to the outside world is in the function passed to `subscribe`.
+- *maintainability*: we have separated setup code and state management code;
+- *scalability*: we can extend this code pattern to handle more complicated state machines. We can easily `merge` in more input streams, adding Event types to handle their `State` updates, and the only place we have to worry about effects visible to the outside world is in the function passed to `subscribe`.
 
 As an example of *scalability* we will be using this same pattern to implement the logic of an asteroids arcade game in the [next chapter](/asteroids).
-
 
 <div class="glossary" markdown="1">
 

@@ -29,7 +29,7 @@ You can play with the example and the various parser bits and pieces in [this on
 
 Fundamental to analysis of human natural language but also to the design of programming languages is the idea of a *grammar*, or a set of rules for how elements of the language may be composed.  A context-free grammar (CFG) is one in which the set of rules for what is produced for a given input (*production rules*) completely cover the set of possible input symbols (i.e. there is no additional context required to parse the input).  Backus-Naur Form (or BNF) is a notation that has become standard for writing CFGs since the 1960s.  We will use BNF notation from now on.  There are two types of symbols in a CFG: *terminal* and *non-terminal*.  In BNF non-terminal symbols are `<nameInsideAngleBrackets>` and can be converted into a mixture of terminals and/or nonterminals by production rules:
 
-```
+```haskell
 <nonterminal> ::= a mixture of terminals and <nonterminal>s, alternatives separated by |
 ```
 
@@ -44,7 +44,7 @@ Here's an example BNF grammar for parsing Australian land-line phone numbers, wh
 
 Here's the BNF grammar:
 
-```
+```haskell
 <phoneNumber> ::= <fullNumber> | <basicNumber>
 <fullNumber> ::= <areaCode> <basicNumber>
 <basicNumber> ::= <spaces> <fourDigits> <spaces> <fourDigits>
@@ -241,12 +241,13 @@ instance Alternative Parser where
 
 The last two pieces of our Phone Numbers grammar we also implement fairly straightforwardly from the BNF.  In a real parser combinator library you'd do it differently, as per our exercises below.
 
-```
+```haskell
 <digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 <spaces> ::= " " <spaces> | ""
 ```
 
 Here's a trivial adaptation of `digit`:
+
 ```haskell
 digit :: Parser Char
 digit = is '0' <|> is '1' <|> is '2' <|> is '3' <|> is '4' <|> is '5' <|> is '6' <|> is '7' <|> is '8' <|> is '9'
@@ -271,7 +272,7 @@ The return type of the phone number parser above was `[Char]` (equivalent to `St
 
 Let's imagine we need to parse records from a vets office.  It treats only three types of animals.  As always, lets start with the BNF:
 
-```
+```haskell
 <Animal> ::= "cat" | "dog" | "camel"
 ```
 
@@ -290,11 +291,14 @@ data Animal = Cat | Dog | Camel
 ```
 
 A parser for "cat" is rather simple.  If we find the string `"cat"` we produce a `Cat`
+
 ```haskell
 cat :: Parser Animal
 cat = string "cat" >> pure Cat
 ```
+
 Let's test it:
+
 ```haskell
 > parse cat "cat"
 Result >< Cat
@@ -314,7 +318,9 @@ And now a parser for our full grammar:
 animal :: Parser Animal
 animal = cat <|> dog <|> camel
 ```
+
 Some tests:
+
 ```haskell
 > parse animal "cat"
 Result >< Cat
@@ -323,9 +329,10 @@ Result >< Dog
 > parse animal "camel"
 Result >< Camel
 ```
+
 What's really cool about this is that obviously the strings "cat" and "camel" overlap at the start.  Our alternative parser `(<|>)` effectively backtracks when the `cat` parser fails before eventually succeeding with the `camel` parser.  In an imperative style program this kind of logic would result in much messier code.
 
-**Exercises**
+## Exercises
 
 - Write some messy imperative-style JavaScript (no higher-order functions allowed) to parse cat, dog or camel and construct a different class instance for each.
 - Now add "dolphin" to the grammar, and use a stopwatch to time yourself extending your messy imperative code.  I bet it takes longer than extending the `animal` parser combinator.
@@ -341,7 +348,7 @@ We will not implement a parser for a full programming language, but to at least 
 
 To start with, here is a BNF grammar for a simple calculator with three operations `*`, `+` and `-`, with `*` having higher precedence than `+` or `-`:
 
-```
+```lambdacalc
 <expr> ::= <term> | <expr> <addop> <term>
 <term> ::= <number> | <number> "*" <number>
 <addop> ::= "+" | "-"
@@ -377,7 +384,7 @@ Result >< Minus (Plus (Times (Number 6) (Number 4)) (Number 3)) (Times (Number 8
 
 Here's some ASCII art to make the tree structure of the `ParseResult Expr` more clear:
 
-```
+```lambdacalc
 Minus
  ├──Plus
  |   ├──Times
@@ -389,7 +396,7 @@ Minus
      └──Number 2
 ```
 
-**Exercises**
+### Exercises
 
 - make an instance of `show` for `Expr` which pretty prints such trees
 - Make a function which performs the calculation specified in an `Expr` tree like the one above.
@@ -458,13 +465,13 @@ chain p op = p >>= rest
 
 But, how does `chain` work?
 
-`p >>= rest`: The parser `p` is applied, and we pass this parsed value, to the function call `rest` 
+`p >>= rest`: The parser `p` is applied, and we pass this parsed value, to the function call `rest`
 
 `rest a`: Within the rest function, the parser op is applied to parse an operator `f`, and the parser `p` is applied again to parse another value `b`. The result is then combined using the function `f` applied to both `a` and `b` to form a new value. The rest function is then called recursively, with this new value.
 
 Recursive calls: The recursive calls continue until there are no more operators `op` to parse, at which point the parser returns the last value `a`. This is achieved using the `pure a` expression. This makes the function *tail recursive*
 
-This gives us a way to parse expressions of the form "1+2+3+4+5" by parsing "1" initially, using `p` then repeatedly parsing something of the form "+2", where `op` would parse the '+' and the `p` would then parse the "2". These are combined using our `Plus` constructor to be of form `Plus 1 2`, this will then recessively apply the `p` and `op` parser over the rest of the string: "+3+4+5"   
+This gives us a way to parse expressions of the form "1+2+3+4+5" by parsing "1" initially, using `p` then repeatedly parsing something of the form "+2", where `op` would parse the '+' and the `p` would then parse the "2". These are combined using our `Plus` constructor to be of form `Plus 1 2`, this will then recessively apply the `p` and `op` parser over the rest of the string: "+3+4+5"
 
 But, can we re-write this using a fold?
 
@@ -478,13 +485,11 @@ chain p op = foldl applyOp <$> p <*> many (liftA2 (,) op p)
 
 `foldl applyOp <$> p`: This part uses the Functor instances to combine the parsed values and apply the operators in a left-associative manner. `foldl applyOp` is partially applied to `p`, creating a parser that parses an initial value (`p`) and then applies the left-associative chain of operators and values.
 
-
 `many ((,) <$> op <*> p)`: This part represents the repetition of pairs (op, p) using the many combinator. The tuple structure here just allows us to store the pairs of `op` and `p`. We use liftA2 to lift both parse results in to the tuple constructor. We run this many times, to parse many pairs of `op` and `p`, and create a list of tuples. As a result, it creates a parser that parses an operator (op) followed by a value (p) and repeats this zero or more times.
-
 
 `applyOp x (op, y)`: This function is used by `foldl` to combine the parsed values and operators. It takes an accumulated value `x`, an operator `op`, and a new value `y`, and applies the operator to the accumulated value and the new value.
 
-**Exercises**
+### Exercises
 
 - Similar to `chain`, factor out the recursion of `spaces` into a function which returns a parser that continues producing a list of values from a given parser, i.e.
  `list :: Parser a -> Parser [a]`.
@@ -526,11 +531,13 @@ instance Show RockPaperScissors where
 
 The straightforward way to create the memory is to just store a list of all the choices made by the opponent.
 So, for example, if the results from the previous three rounds were:
+
 ``` haskell
 (Rock, Paper), (Rock, Scissors), (Paper, Scissors)
 ```
+
 Then, a compact memory representation will be: `"PSS"`.
- 
+
 *Note*: We only store single characters, so we do not need separators, but if you have more complex data, you will want separators.
 
 ### Reading the memory
@@ -551,7 +558,7 @@ paper = is 'P' >> pure Paper
 
 This will give:
 
-``` 
+```haskell
 >>> parse rock "R"
 Result >< R
 >>> parse rock "RR"
@@ -562,14 +569,14 @@ Unexpected character: "P"
 
 To combine those parsers, we will use the *option parser* `(<|>)`.
 
-``` 
+```haskell
 choice :: Parser RockPaperScissors
 choice = rock <|> paper <|> scissors
 ```
 
 And, to be able to read a list of choices, we need to use the `list` parser:
 
-``` 
+```haskell
 >>> parse choice "PSS"
 Result >SS< P
 >>> parse (list choice) "PSCS"
@@ -652,7 +659,7 @@ convert' Played{rocks, papers, scissors} =
   show rocks ++ "R" ++ show papers ++ "P" ++ show scissors ++ "S"
 ```
 
-```
+```haskell
 >>> play Nothing
 (S,"0R0P0S")
 >>> play (Just (Scissors, Scissors, "0R0P0S"))
@@ -660,6 +667,7 @@ convert' Played{rocks, papers, scissors} =
 >>> play (Just (Scissors, Scissors, "2R1P0S"))
 (P,"2R1P1S")
 ```
+
 <div class="glossary" markdown="1">
 
 *Parser*: A program that processes a string of text to extract structured information from it. Parsers are used in interpreting programming languages, data formats, and other structured text formats.

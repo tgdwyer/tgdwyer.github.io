@@ -42,20 +42,20 @@ i = 'hello!';
 
 > [TS compiler says] Type 'string' is not assignable to type 'number'.
 
-
 <div class="cheatsheet" markdown="1">
 
 ## Type Annotations Cheat Sheet
 
 (Each of these features is described in more detail in subsequent sections -- this is just a summary and roadmap)
 
-A type annotation begins with ```:``` and goes after the variable name, but before any assignment. 
+A type annotation begins with ```:``` and goes after the variable name, but before any assignment.
 Primitive types include ```number```, ```string```, ```boolean```.
 
 ```typescript
 let x: number, s: string, b: boolean = false;
 x = "hello" // type error: x can only be assigned numbers!
 ```
+
 *Note:* the primitive types begin with a lower-case letter and are not to be mistaken for `Number`, `String` and `Boolean` which are not types at all but Object wrappers with some handy properties and methods. Don't try to use these Object wrappers in your type definitions.
 
 [Union types](#union-types) allow more than one option for the type of value that can be assigned to a variable:
@@ -105,7 +105,9 @@ We can use the `Readonly` type to make [immutable](#using-the-compiler-to-ensure
 ```typescript
 type ImmutableStudent = Readonly<Student>;
 ```
+
 or all in one:
+
 ```typescript
 type ImmutableStudent = Readonly<{
   name: string
@@ -277,7 +279,7 @@ interface Student<T> {
 }
 ```
 
-Here ```T``` is the *type parameter*, and the compiler will infer its type when it is used.  It could be `number`, or it could be a `string` (e.g. if it's an email), or it could be something else. 
+Here ```T``` is the *type parameter*, and the compiler will infer its type when it is used.  It could be `number`, or it could be a `string` (e.g. if it's an email), or it could be something else.
 
 For example, we could define a student, using a `number` as the type parameter `T`
 
@@ -288,6 +290,7 @@ const exampleStudent: Student<number> = {
   ... // other properties
 }
 ```
+
 We could also define a student, using a `string` as the type parameter `T`
 
 ```typescript
@@ -372,13 +375,16 @@ const studentsByEmail = [
 const stringIds = studentsByEmail.map(s=>s.id);
 console.log(studentsByEmail[binarySearch2(stringIds,'harry@monash.edu')].name)
 ```
+
 > Harry Smith
 
 Why is this better than raw JavaScript with no type checking, or simply using TypeScript's wildcard `any` type?  Well it ensures that we use the types *consistently*.
 For example:
+
 ```javascript
 binarySearch(numberIds,"harry@monash.edu")
 ```
+
 > TYPE ERROR!
 
 The `binarySearch2` function above is usable with more types than `binarySearch1`, but it still requires that T does something sensible with `<` and `>`.  
@@ -412,6 +418,7 @@ function curry<U,V,W>(f:(x:U,y:V)=>W): (x:U)=>(y:V)=>W {
   return x=>y=>f(y,x) // error!
 }
 ```
+
 The TypeScript compiler underlines `y,x` and says:
 > Error: Argument of type 'V' is not assignable to parameter of type 'U'. 'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
 
@@ -430,10 +437,12 @@ const first = curry(prefix)
 
 first(3)("hello") // Error!
 ```
+
 >Error: Argument of type 'number' is not assignable to parameter of type 'string'.  
 >Error: Argument of type 'string' is not assignable to parameter of type 'number'.
 
 So the error messages are similar to above, but now they list concrete types because the types for `U` and `V` have already been narrowed by the application of `curry` to `prefix`.
+
 ```typescript
 first("hello")(3) // good now!
 ```
@@ -442,6 +451,7 @@ So type checking helps us to create functions correctly, but also to use them co
 You begin to appreciate type checking more and more as your programs grow larger and the error messages appear further from their definitions.  However, the most important thing is that these errors are being caught at *compile time* rather than at *run time*, when it might be too late!
 
 ## Optional Properties
+
 Look again at the ```next``` property of ```IListNode```:
 
 ```typescript
@@ -449,13 +459,17 @@ Look again at the ```next``` property of ```IListNode```:
 ```
 
 The ```?``` after the ```next``` property means that this property is optional.  Thus, if ```node``` is an instance of ```IListNode<T>```, we can test if it has any following nodes:
+
 ```javascript
 typeof node.next === 'undefined'
 ```
+
 or simply:
+
 ```javascript
 !node.next 
 ```
+
 In either case, if these expressions are ```true```, it would indicate the end of the list.
 
 A concrete implementation of a class for ```IListNode<T>``` can provide a constructor:
@@ -471,8 +485,11 @@ Then we can construct a list like so:
 ```javascript
 const list = new ListNode(1, new ListNode(2, new ListNode(3)));
 ```
+
 ------
+
 ## Exercises
+
 - Implement a class ```List<T>``` whose constructor takes an array parameter and creates a linked list of ListNode<T>.  
 - Add methods to your ```List<T>``` class for:
 
@@ -491,7 +508,7 @@ list.filter(x=>x%2===0).reduce((x,y)=>x+y,0)
 
 [Solutions to this exercise can be found here](https://stackblitz.com/edit/typescript-nszdpm?file=index.ts)
 
--------------
+------
 
 ## Using the compiler to ensure immutability
 
@@ -528,7 +545,7 @@ studentVersion2.name = "Tom"
 
 > Cannot assign to 'name' because it is a read-only property.ts(2540)
 
-The above is a singleton immutable Object.  However, more generally, if we need multiple instances of a deeply immutable object, we can 
+The above is a singleton immutable Object.  However, more generally, if we need multiple instances of a deeply immutable object, we can
 declare immutable types using the ```Readonly``` construct:
 
 ```javascript
@@ -567,6 +584,7 @@ value = 123;
 ```
 
 Or the source (r-value) of the assignment:
+
 ```javascript
 let value: number;
 value = "hello";
@@ -576,7 +594,6 @@ value = <any>"hello"
 ```
 
 While leaving off type annotations and forcing types with any may be convenient, for example, to quickly port legacy JavaScript into a TypeScript program, generally speaking it is good practice to use types wherever possible, and can actually be enforced with the ```--noImplicitAny``` compiler flag. This flag will be on by *default* in the applied classes.  The compiler’s type checker is a sophisticated constraint satisfaction system and the correctness checks it applies are usually worth the extra effort -- especially in modern compilers like TypeScript where type inference does most of the work for you.
-
 
 <div class="glossary" markdown="1">
 

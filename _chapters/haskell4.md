@@ -55,16 +55,20 @@ Note that since the `(+)` operator is associative -- a+(b+c) = (a+b)+c -- `foldr
 
 #### Solution
 
-1. The right fold processes the list from the right (end) to the left (beginning). The result of each application of the function is passed as the accumulator to the next application.
-    ```haskell
+<!-- markdownlint-disable MD029 -->
+1. The right fold processes the list from the right (end) to the left (beginning). The result of each application   of the function is passed as the accumulator to the next application.
+
+  ```haskell
     foldr (-) 0 [1,2,3,4]
    = 1 - (2 - (3 - (4 - 0)))
    = 1 - (2 - (3 - 4))
    = 1 - (2 - (-1))
    = 1 - 3
    = -2
-   ```
+  ```
+
   The left fold processes the list from the left (beginning) to the right (end). The result of each application of the function is passed as the accumulator to the next application.
+
   ```haskell
    foldl (-) 0 [1,2,3,4]
    = (((0 - 1) - 2) - 3) - 4
@@ -73,24 +77,29 @@ Note that since the `(+)` operator is associative -- a+(b+c) = (a+b)+c -- `foldr
    = -6 - 4
    = -10
   ```
+
 2. The function foldr `(:)` `[]` applied to any list essentially reconstructs the list
+
   ```haskell
   foldr (:) [] [1, 2, 3, 4]
    = 1 : (2 : (3 : (4 : [])))
-   ```
+  ```
+
 3. Taking intuition from the previous question, we know that `(:)` does not change the list, but reconstructs it, therefore, to implement `map`, we just apply the function `f` to the list as we go.
-```haskell
-map :: (a -> b) -> [a] -> [b]
-map f = foldr (\x acc -> f x : acc) []
-```
-Or, by making the lambda function point-free
-```haskell
-map :: (a -> b) -> [a] -> [b]
-map f = foldr ((:) . f) []
-```
 
+  ```haskell
+  map :: (a -> b) -> [a] -> [b]
+  map f = foldr (\x acc -> f x : acc) []
+  ```
+
+  Or, by making the lambda function point-free
+
+  ```haskell
+  map :: (a -> b) -> [a] -> [b]
+  map f = foldr ((:) . f) []
+  ```
+<!-- markdownlint-enable MD029 -->
 ---------
-
 
 ## Monoid
 
@@ -246,6 +255,7 @@ instance Foldable Tree where
 ```
 
 We can use `foldMap` to map the values stored in the tree to an instance of `Monoid` and then concatenate these `Monoid`s.  For example, we could map and concatenate them as a `Sum`:
+
 ```haskell
 > getSum $ foldMap Sum tree
 28
@@ -279,7 +289,7 @@ instance Foldable Tree where
     foldr f z (Node l x r) = foldr f (f x (foldr f z r)) l -- fold over right first, then over left
 ```
 
-----
+---------
 
 ## Traversable
 
@@ -316,6 +326,7 @@ The following map shows how all of these typeclasses are starting to come togeth
 ![Traversable Typeclasses](/assets/images/chapterImages/haskell4/traversableTypeClasses.png)
 
 So what does the traverse function do?  By way of example, remember our safe modulo function this we used to experiment with [Functor](/haskell3/#functor):
+
 ```haskell
 safeMod :: Integral a => a-> a-> Maybe a
 safeMod _ 0 = Nothing
@@ -453,7 +464,8 @@ Node (Node (Leaf (Just 1)) (Just 2) (Leaf (Just 3))) (Just 4) (Node (Leaf (Just 
 Just (Node (Node (Leaf 1) 2 (Leaf 3)) 4 (Node (Leaf 5) 6 (Leaf 7)))
 ```
 
-----
+---------
+
 ## Applying Functions Over Contexts
 
 Thus far we have seen a variety of functions for applying functions in and over different contexts.  It is useful to note the similarities between these, and recognise that they are all doing conceptually the same thing, i.e. function application.  The difference is the in the type of context.  The simplest function for applying functions is the ($) operator, with just a function (no context), applied directly to a value.  Then `fmap`, just a function, mapped over a Functor context/container.  Then Applicative (function also in the context).  Then, most recently `traverse`: the function produces a result in an Applicative context, applied (traversed) over some data structure, and the resulting data structure returned in an Applicative context.  Below, I line up all the types so that the similarities and differences are as clear as possible.  It's worth making sure at this stage that you can read such type signatures, as they really do summarise everything that we have discussed.
@@ -464,6 +476,7 @@ Thus far we have seen a variety of functions for applying functions in and over 
 (<*>)    :: Applicative f                  =>  f (a -> b) -> f a -> f b
 traverse :: (Traversable t, Applicative f) =>  (a -> f b) -> t a -> f (t b)
 ```
+
 ## Parsing a String Using Traversable?
 
 What if we want to parse an exact match for a given string, for example, a token in a programming language like the word `function`.  Or, to look for a polite greeting at the start of an email before deciding whether to respond, such as "hello".
@@ -476,10 +489,10 @@ Just (" world", "hello")
 Nothing
 ```
 
-So the string "hello" is the prototype for the expected input.  How would we do this? 
+So the string "hello" is the prototype for the expected input.  How would we do this?
 
-Our parser would have to process characters from the input stream and check if each successive character  **is** the one expected from the prototype. 
-If it is the correct character, we would cons it to our result and than parse the next character. 
+Our parser would have to process characters from the input stream and check if each successive character  **is** the one expected from the prototype.
+If it is the correct character, we would cons it to our result and than parse the next character.
 
 This can be written using a `foldr` to parse all the characters while checking with the `is` parser.
 
@@ -490,7 +503,7 @@ string l = foldr (\c acc -> liftA2 (:) (is c) acc) (pure "") l
 Remembering `liftA2` is equivalent to `f <$> a <*> b`.
 
 Our `<*>` will allow for the seqeuencing of the applicative effect, so this will sequentially parse all characters, making sure they are correct.
-As soon, as one applicative parser fails, the result of the parsing will fail. 
+As soon, as one applicative parser fails, the result of the parsing will fail.
 
 This could also be written as:
 
@@ -537,7 +550,6 @@ So, we will apply the `is` function to each element in the the traversable `t` (
 
 Therefore, `traverse is` is of type `Parser String`, which is a parser that attempts to parse the entire String and returns it as a result.
 
-
 Can we also write this using `sequenceA`?
 
 ```haskell
@@ -567,36 +579,37 @@ traverse f l = sequenceA (f <$> l)
 
 ### Exercises
 
-* What would be the definition of `sequenceA` over a list? (without using traverse)
-* Can you make the `Maybe` data type an instance of traversable?
+- What would be the definition of `sequenceA` over a list? (without using traverse)
+- Can you make the `Maybe` data type an instance of traversable?
 
 #### Solutions
 
+- `sequenceA` takes a list of applicative actions and returns an applicative action that returns a list of results. For lists, this means that `sequenceA` should combine a list of applicative actions into a single applicative action that returns a list of results.
 
-* `sequenceA` takes a list of applicative actions and returns an applicative action that returns a list of results. For lists, this means that `sequenceA` should combine a list of applicative actions into a single applicative action that returns a list of results. 
   ```haskell
   sequenceA :: (Applicative f) => [f a] -> f [a]
   sequenceA [] = pure []
   sequenceA (x:xs) = (:) <$> x <*> sequenceA xs
   ```
 
-* For `Maybe`, the definition of traverse function is `traverse :: (Applicative f) => (a -> f b) -> Maybe a -> f (Maybe b)`
+- For `Maybe`, the definition of traverse function is `traverse :: (Applicative f) => (a -> f b) -> Maybe a -> f (Maybe b)`
+
   ```haskell
   instance Traversable Maybe where
       traverse :: (Applicative f) => (a -> f b) -> Maybe a -> f (Maybe b)
       traverse _ Nothing = pure Nothing
       traverse f (Just x) = Just <$> f x
   ```
-  * If the input is `Nothing`, we return pure `Nothing`, which is an applicative action that produces `Nothing`.
-  * If the input is `Just x`, we apply `f` to `x` and then wrap the result with `Just`.
 
+  - If the input is `Nothing`, we return pure `Nothing`, which is an applicative action that produces `Nothing`.
+  - If the input is `Just x`, we apply `f` to `x` and then wrap the result with `Just`.
 
 - What would be the definition of sequenceA over a list? (without using traverse)
 - Can you make the `Maybe` data type an instance of traversable?
   
-----------
+---------
 
-## Bringing it all together!
+## Bringing it all together
 
 We can also parse a tree by traversing a parser over it, the same way we parsed `string` by traversing a list of `Char`!
 
@@ -617,7 +630,7 @@ instance Traversable Tree where
 
 We can write a similar definition for parsing an exact tree compared to parsing a string!
 
-We will consider a Value which is either an integer, or an operator which can combine integers. We will assume the only possible combination operator is `+` to avoid complexities with ordering expressions. 
+We will consider a Value which is either an integer, or an operator which can combine integers. We will assume the only possible combination operator is `+` to avoid complexities with ordering expressions.
 
 ```haskell
 

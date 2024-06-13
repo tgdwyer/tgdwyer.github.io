@@ -36,10 +36,12 @@ const z = 1  // constant (immutable variable) at global scope
 ```
 
 You can try this in the [debug console in a browser such as Chrome](https://developers.google.com/web/tools/chrome-devtools/console). At the console, you enter JavaScript directly at the prompt (`>`). If we try to change the value of such a `const` variable, we get a run-time error:
+
 ```javascript
 > const z = 1 
 > z = 2
 ```
+
 > Uncaught TypeError: Assignment to constant variable.
 
 We define mutable variables in JavaScript with the `let` keyword:
@@ -47,17 +49,22 @@ We define mutable variables in JavaScript with the `let` keyword:
 ```javascript
 let w = 1
 ```
+
 The console replies with the value returned by the `let` statement (in Chrome console the result value is prefixed by `⋖`), as follows:
+
 ```javascript
 ⋖ undefined
 ```
+
 But fear not, `w` was assigned the correct value which you can confirm by typing just `w` into the console:
+
 ```javascript
 > w
 ⋖ 1
 ```
 
 Now if we assign a new value to w it succeeds:
+
 ```javascript
 > w = 2 // note that without a let or const keyword before it, this assignment an expression which returns a value:
 ⋖ 2
@@ -77,12 +84,14 @@ We can see in the Chrome console:
 ```
 
 By contrast a *statement* performs computation without returning a value. More precisely, statements evaluate to `undefined`. For example, a variable declaration is a statement:
+
 ```javascript
 > const x = 1 + 1
 ⋖ undefined
 ```
 
 Statements have to have some side effect to be useful (in this case creating a variable in the current scope).  Code blocks defined with curly braces are also statements:
+
 ```javascript
 > {
     const x = 1+1
@@ -92,25 +101,32 @@ Statements have to have some side effect to be useful (in this case creating a v
 4
 ⋖ undefined
 ```
+
 Note that `4` is printed to the console by the `console.log` (a side effect of the statement), but the value returned by the code block is `undefined`.
 
 Unlike languages which use indentation to define code blocks and scopes (like Python and Haskell), JavaScript generally ignores multiple spaces, indentation and linebreaks.  So you can spread an expression across multiple lines and indent each line however you like:
+
 ```javascript
 > 1 +
     1 + 
       1
 ⋖ 3
 ```
+
 You can also put multiple statements on one line by separating them with '`;`':
+
 ```javascript
 > const x = 1+1; const y = 2; console.log(x+y)
 4
 ⋖ undefined
 ```
+
 Of course, you should not abuse the ability to layout code in different ways and make unreadable code.  Rather, it is good practice to be consistent with formatting, use indentation to highlight nested scopes and spread things out as necessary for readability.
 
 ## JavaScript Types
+
 JavaScript has several "primitive types" (simple types that are not [Objects](#objects)).  These include:
+
 - `number`: any numeric value, integer or decimal
 - `string`: delineated like `"hello"` or `'hello'` or even ``` `hello` ```.  
 - `boolean`: can be only `true` or `false`
@@ -135,7 +151,6 @@ JavaScript is *loosely typed* in the sense that a mutable variable can be assign
 ⋖ "hello"
 ```
 
-
 ## Variable scope
 
 A variable's *scope* is the region of the program where it is visible, i.e. it can be referenced.
@@ -147,12 +162,14 @@ You can limit the scope of a variable by declaring it inside a block of code del
      console.log(x)
  }
 ```
+
 Console prints `1` from the `console.log`:
 
 > 1
 
 But if we try to get the value of `x`:
-```
+
+```javascript
 x
 ```
 
@@ -169,6 +186,7 @@ Be especially careful to always declare variables with either `let` or `const` k
 
  x
 ```
+
 > 1
 
 ---------------------
@@ -539,7 +557,6 @@ hi('tim')
 
 > "hello tim"
 
-
 ## Anonymous Functions
 
 The `sayHello` function is called a *named function*.  We can also create an anonymous function to be bound immediately to a variable:
@@ -630,8 +647,8 @@ We can use multi-parameter anonymous functions with another nifty method on `Arr
 
 The `reduce` method applies a function to each of the elements in the array in order to compute an aggregated value for the whole array.  The nature of the aggregate depends on the function you pass in.  Here we just sum the elements in the array.  The function we pass in has two parameters, the second is the array element (which we refer to here as `x`), the first parameter `accumulator` is either:
 
-* the second argument to `reduce` (which in our case is 0), if this is the first call to the function,
-* or, for every other call, the result returned by the previous call to the function.
+- the second argument to `reduce` (which in our case is 0), if this is the first call to the function,
+- or, for every other call, the result returned by the previous call to the function.
 
 `reduce` is incredibly versatile and can be used to do much more than sum numbers.  For example, say we want to see whether all the elements of an array pass some test.
 
@@ -640,6 +657,7 @@ const all = (test, array) => array.reduce(
     (accumulator, x) => accumulator && test(x),
     true)
 ```
+
 Here the `accumulator` is a boolean with initial value `true`.  If an element of the array fails the test the `accumulator` becomes `false` and stays `false`, using the `&&` operator.
 
 ```javascript
@@ -653,7 +671,7 @@ all(x => x < 5, [1, 3, 5])
 
 ### Exercise
 
-* Can you write a function `any` that returns true if any of the tests pass?
+- Can you write a function `any` that returns true if any of the tests pass?
 
 What if we wanted to see how many times each word appears in a list?
 
@@ -670,6 +688,7 @@ const wordCount = (array) => array.reduce(
     {}
 )
 ```
+
 Here the `accumulator` is an object which is initially empty.  For each word in the list the word count is either updated or created in the `accumulator` object.  Note however that this implementation is not *pure*; the aggregator function modifies `accumulator` in place before returning it.
 
 ```javascript
@@ -685,11 +704,10 @@ wordCount(['tim', 'sally', 'tim'])
 In the following, the annotations beginning with `:` describe the type of each parameter and the return type of the function.  The array `a` has elements of type `U`, and `U=>V` is the type of a function with input parameter type `U` and return type `V`
 (Note: these are not correct [TS annotations](/typescript1), but an informal “shorthand”)
 
-
-
 ```javascript
 a.forEach(f: U=> void): void  // apply the function f to each element of the array
 ```
+
 Although it does not typically mutate `a`, `forEach` is impure if `f` has any side effect (which it most likely will because otherwise why would you bother!).
 
 ### Pure Methods on Array
@@ -717,12 +735,12 @@ All of the above are pure in the sense that they do not mutate `a`, but return t
 
 </div>
 
-
 ## Closures
 
 Functions can be nested inside other function definitions and can access variables from the enclosing scope.  
 
-**Definitions:** 
+**Definitions:**
+
 - A function and the set of variables it accesses from its enclosing scope is called a *closure*.  
 - Variables from the enclosing scope that are accessed by the closure are said to be *captured* by the closure.  
 
@@ -757,15 +775,18 @@ add(1)(2)
 > 3
 
 Functions like `add`, which operate on multiple parameters but which split the parameters across multiple nested single parameter functions, are said to be [Curried](/higherorderfunctions#curried-functions).  Compare to a traditional function of two parameters:
+
 ```javascript
 function plus(x,y) { return x + y }
 plus(1,2)
 ```
+
 > 3
 
 The `add` function above is a curried version of the `plus` function.  We will discuss curried functions more when we more formally introduce [higher-order functions in a later chapter](/higherorderfunctions).
 
 Note that functions that are curried can be written in either arrow syntax or using the `function` keyword or a mix, as above.  The following versions of `add` are completely equivalent to the one above:
+
 ```javascript
 function add(x) {
   return function(y) {
@@ -790,10 +811,13 @@ Now, we can create custom functions that compute sums over arbitrary sequences:
  const sumOfSquares = sumOf(square)
  sumOfSquares(10)
 ```
+
 > 385
+
 ```javascript
  sumOfSquares(20)
 ```
+
 > 2870
 
 ## Prototype Class Mechanism
@@ -853,6 +877,7 @@ Array.prototype.range =
 Of course, if you do something like this in your JS library, and it pollutes the global namespace, and one day EcmaScript 9 introduces an actual `range` function with slightly different semantics, and someone else goes to use the `[].range` function expecting the official semantics -- well, you may lose a friend or two.
 
 Some notes about this implementation of range:
+
 - Although the `Array(n)` function allocates space for n elements, the result is still "empty" so `fill()` is necessary to actually create the entries.
 - The function passed to `map` is using an optional second argument which receives the index of the current element.  *See note in the [Array Cheatsheat](#array-cheatsheet) suggesting not to use this*.
 - The `_` is not special syntax, it's a valid variable name. I use `_` as a convention for a parameter that I don't use.  This is imitating Haskell syntax.
@@ -989,7 +1014,6 @@ tims.forEach(t => t.sayHello())
 So the filter property defaults to the identity function (a function which simply returns its argument), but a user of the `Person` class can inject a dependency on another function from outside the class when they construct an instance.
 
 This is a “lighter-weight” style of code reuse or specialisation.
-
 
 <div class="glossary" markdown="1">
 

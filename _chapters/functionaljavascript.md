@@ -29,9 +29,9 @@ Side effects of a function are changes to state outside of the result explicitly
 Examples of side-effects from inside a function:
 
 * changing the value of a variable declared outside the function scope
-  - mutating global state in this way can cause difficult-to-diagnose bugs: for example, an effective debugging strategy is dividing the program up into little pieces which can easily be proven correct or unit tested - sources of side-effects deep inside functions are a hidden form of coupling making such a strategy very difficult.
+  * mutating global state in this way can cause difficult-to-diagnose bugs: for example, an effective debugging strategy is dividing the program up into little pieces which can easily be proven correct or unit tested - sources of side-effects deep inside functions are a hidden form of coupling making such a strategy very difficult.
 * printing to the console changing the state of the world in such a way can also be dangerous
-  - for example, filling a disk with log messages is a good way to crash the whole computer!
+  * for example, filling a disk with log messages is a good way to crash the whole computer!
 
 In languages without compilers that specifically guard against them, side effects can occur:
 
@@ -64,6 +64,7 @@ And some code that uses it:
 ```javascript
 const four = square(2)
 ```
+
 The expression `square(2)` evaluates to `4`.  Can we replace the expression `square(2)` with the value `4` in the program above without changing the behaviour of the program?  YES!  So is the expression `square(2)` referentially transparent? YES!
 
 But what if the `square` function depends on some other data stored somewhere in memory and may return a different result if that data mutates? (an example might be using a global variable or reading an environment variable from IO or requiring user input).  What if `square` performs some other action instead of simply returning the result of a mathematical computation?  What if it sends a message to the console or mutates a global variable?  That is, what if it has side effects (is not a pure function)?  In that case is replacing `square(2)` with the value `4` still going to leave our program behaving the same way?  Possibly not!
@@ -74,7 +75,7 @@ Put another way, if the `square` function is not pure&mdash;i.e. it produces sid
 
 A real life example where this might be useful would be when a cached result for a given input already exists and can be returned without further computation.  Imagine a pure function which computes PI to a specified number of decimal points precision.  It takes an argument `n`, the number of decimal points, and returns the computed value.  We could modify the function to instantly return a precomputed value for PI from a lookup table if `n` is less than `10`.  This substitution is trivial and is guaranteed not to break our program, because its effects are strictly locally contained.
 
-Pure functions and referential transparency are perhaps most easily illustrated with some examples and counterexamples. 
+Pure functions and referential transparency are perhaps most easily illustrated with some examples and counterexamples.
 Consider the following *impure* function:
 
 ```javascript
@@ -122,6 +123,7 @@ const myRaisedToTheFours = squares(mySquares)
 ```
 
 We could make the following substitution in the last line with no unintended consequences:
+
 ```javascript
  const myRaisedToTheFours = squares(squares(myArray))
 ```
@@ -149,52 +151,62 @@ This function is impure in three ways:
 
 Side effects are bad for transparency (knowing everything about what a function is going to do) and maintainability.  When state in your program is being changed from all over the place bugs become very difficult to track down.
 
-### Exercises:
+### Exercises
+
 Do the following functions have side effects?
 
-1.
-```javascript
-let counter = 0;
+1. Yes/No and why?
 
-function incrementCounter() {
-    counter++;
-}
-```
+    ```javascript
+    let counter = 0;
 
-2.
-```javascript
-function greet(name) {
-    return `Hello, ${name}!`;
-}
-```
-    
-3.
-```javascript
-function multiplyArray(numbers) {
-    for (let i = 0; i < numbers.length; i++) {
-        numbers[i] = numbers[i] * 2;
+    function incrementCounter() {
+        counter++;
     }
-    return numbers
-}
-```
-4.
-```javascript
-function logMessage(message) {
-    console.log(message);
-}
-```
-5.
-```javascript
-function doubleNumbers(numbers) {
-    return numbers.map(x => x * 2);
-}
-```
-6.
-```javascript
-function getRandomNumber() {
-    return Math.random();
-}
-```
+    ```
+
+2. Yes/No and why?
+
+   ```javascript
+   function greet(name) {
+       return `Hello, ${name}!`;
+   }
+   ```
+
+3. Yes/No and why?
+
+   ```javascript
+   function multiplyArray(numbers) {
+       for (let i = 0; i < numbers.length; i++) {
+           numbers[i] = numbers[i] * 2;
+       }
+       return numbers
+   }
+   ```
+
+4. Yes/No and why?
+
+   ```javascript
+   function logMessage(message) {
+       console.log(message);
+   }
+   ```
+
+5. Yes/No and why?
+
+   ```javascript
+   function doubleNumbers(numbers) {
+       return numbers.map(x => x * 2);
+   }
+   ```
+
+6. Yes/No and why?
+
+   ```javascript
+   function getRandomNumber() {
+       return Math.random();
+   }
+   ```
 
 #### Solutions
 
@@ -234,7 +246,7 @@ For many standard loops, however, the logic is the same every time and can easil
 
 #### Examples
 
-1. Consider this loop to multiply each item in the `someArray` by two. Try to find the mistake in this code: 
+1. Consider this loop to multiply each item in the `someArray` by two. Try to find the mistake in this code:
 
     ```javascript
     const someArray = [1,2,3,4,5];
@@ -253,11 +265,12 @@ For many standard loops, however, the logic is the same every time and can easil
     ```javascript
     const someArray = [1,2,3,4,5];
     const newArray = someArray.map(x => x * 2);
-    ``` 
+    ```
 
-    We use an arrow function here to allow our function definition to be short and to the point! 
+    We use an arrow function here to allow our function definition to be short and to the point!
 
 2. Consider this code which aims to compute the product of a list. Try to find the mistake in this code:
+
     ```javascript
     const someArray = [1,2,3,4,5];
     let result = 1;
@@ -265,6 +278,7 @@ For many standard loops, however, the logic is the same every time and can easil
         result *= i
     }
     ```
+
     <p class="spoiler">We should multiply by `someArray[i]` not `i`</p>
 
     Again, to avoid the likelihood of errors, we can replace the `for` loop with the use of `.reduce`.
@@ -274,10 +288,12 @@ For many standard loops, however, the logic is the same every time and can easil
     ```javascript
     const someArray = [1,2,3,4,5];
     const result = someArray.reduce((acc, el) => el * acc, 1);
-    ``` 
+    ```
 
 ### Callbacks
+
 In JavaScript and HTML5 events trigger actions associated with all mouse clicks and other interactions with the page.  You subscribe to an event on a given HTML element as follows:
+
 ```javascript
 element.addEventHandler('click', 
 e=>{
@@ -369,7 +385,6 @@ a, n, finalAction=(result)=>{})
 
 The `continuationFactorial` function uses a continuation by passing a `finalAction` callback that gets called with the result a when the recursion reaches the base case `(n <= 1)`, allowing further actions to be specified and executed upon completion.
 
-
 Continuations are essential in asynchronous processing, which abounds in web programming.  For example, when an HTTP request is dispatched by a client to a server, there is no knowing precisely when the response will be returned (it depends on the speed of the server, the network between client and server, and load on that network).  However, we can be sure that it will not be instant and certainly not before the line of code following the dispatch is executed by the interpreter.  Thus, continuation style call-back functions are typically passed through to functions which trigger such asynchronous behaviour, for those call-back functions to be invoked when the action is completed.  A simple example of an asynchronous function invocation is the built-in `setTimeout` function, which schedules an action to occur after a certain delay.  The `setTimeout` function itself returns immediately after dispatching the job, e.g. to the JavaScript event loop:
 
 ```javascript
@@ -428,6 +443,7 @@ take(2,
    )
 )
 ```
+
 > { data: 2, next: { data: 4, next: null }}
 
 #### Aside: Dive in to the definitions
@@ -447,7 +463,8 @@ function map(func, list) {
     }
 }
 ```
-The map function will recursively apply the given `func` to each element of the linked list `list`, constructing and returning a new linked list where each element is the result of applying `func` to the corresponding data element in the original list. 
+
+The map function will recursively apply the given `func` to each element of the linked list `list`, constructing and returning a new linked list where each element is the result of applying `func` to the corresponding data element in the original list.
 
 Try to expand and step through the `filter` and `take` and see if you can understand how they work.
 
@@ -492,7 +509,7 @@ With just the above definition we can construct a list (the term cons dates back
 const list123 = cons(1, cons(2, cons(3, null)));
 ```
 
-The data element, and the reference to the next node in the list are stored in the closure returned by the ```cons``` function.  Created like this, the only side-effect of growing the list is creation of new cons closures.  Mutation of more complex structures such as trees can be managed in a similarly ‘pure’ way, and surprisingly efficiently, as we will see later in this course. 
+The data element, and the reference to the next node in the list are stored in the closure returned by the ```cons``` function.  Created like this, the only side-effect of growing the list is creation of new cons closures.  Mutation of more complex structures such as trees can be managed in a similarly ‘pure’ way, and surprisingly efficiently, as we will see later in this course.
 
 So ```cons``` is a function that takes two parameters ```_head``` and ```_rest``` (the `_` prefix is just to differentiate them from the functions I create below), and returns a function that itself takes a function (selector) as argument.  The selector function is then applied to ```_head``` and ```_rest```.  
 
@@ -546,14 +563,14 @@ These ideas, of computation through pure function expressions, are inspired by A
 
 ## Exercises
 
-- Implement a ```fromArray``` function to construct a ```cons``` list from an array
-- Implement a ```filter``` function, which takes a function and a cons list, and returns another cons list populated only with those elements of the list for which the function returns true
-- Implement a ```reduce``` function for these cons lists, similar to javascript’s ```Array.reduce```
-- Implement a ```reduceRight``` function for these cons lists, similar to javascript’s ```Array.reduceRight```
-- Implement a ```concat``` function that takes two lists as arguments and returns a new list of their concatenation.
-- How can we update just one element in this list without mutating any data and what is the run-time complexity of such an operation?
+* Implement a ```fromArray``` function to construct a ```cons``` list from an array
+* Implement a ```filter``` function, which takes a function and a cons list, and returns another cons list populated only with those elements of the list for which the function returns true
+* Implement a ```reduce``` function for these cons lists, similar to javascript’s ```Array.reduce```
+* Implement a ```reduceRight``` function for these cons lists, similar to javascript’s ```Array.reduceRight```
+* Implement a ```concat``` function that takes two lists as arguments and returns a new list of their concatenation.
+* How can we update just one element in this list without mutating any data and what is the run-time complexity of such an operation?
 
--------------
+---------------
 
 ## Updating Data Structures With Pure Functions
 
@@ -615,7 +632,6 @@ studentVersion1.name = "Tom"
 We will see later how the [TypeScript compiler](/typescript1) allows us to create deeply immutable objects that will trigger compile errors if we try to change their properties.
 
 You may wonder how pure functions can be efficient if the only way to mutate data structures is by returning a modified copy of the original.  There are two responses to such a question, one is: "purity helps us avoid errors in state management through wanton mutation effects -- in modern programming correctness is often a bigger concern than efficiency", the other is "properly structured data permits log(n) time copy-updates, which should be good enough for most purposes".  We'll explore what is meant by the latter in later sections of these notes.
-
 
 <div class="glossary" markdown="1">
 

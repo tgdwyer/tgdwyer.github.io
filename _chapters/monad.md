@@ -53,11 +53,11 @@ instance Monoid a => Monad ((,) a) -- Defined in `GHC.Base'
 
 Things to notice:
 
-* `Monad` is a subclass of `Applicative` (and therefore also a `Functor`)
-* `return` = `pure`, from [`Applicative`](/haskell3/#applicative). The `return` function exists for historical reasons and you can safely use only `pure` (PureScript has only `pure`).
-* the operator `(>>=)` (pronounced “bind”) is the minimal definition (the one function you must create -- in addition to the functions also required for `Functor` and `Applicative` -- to make a new `Monad` instance).
-* `>>` is a special case of bind (described below)
-* lots of built-in types are already monads
+- `Monad` is a subclass of `Applicative` (and therefore also a `Functor`)
+- `return` = `pure`, from [`Applicative`](/haskell3/#applicative). The `return` function exists for historical reasons and you can safely use only `pure` (PureScript has only `pure`).
+- the operator `(>>=)` (pronounced “bind”) is the minimal definition (the one function you must create -- in addition to the functions also required for `Functor` and `Applicative` -- to make a new `Monad` instance).
+- `>>` is a special case of bind (described below)
+- lots of built-in types are already monads
 
 There also exists a flipped version of bind:
 
@@ -80,13 +80,11 @@ As an example we'll consider computation using the `Maybe` type, which we said i
 
 ![quadratic](/assets/images/chapterImages/monad/quadratic.drawio.png)
 
-
-
 This may fail in two ways:
- 
+
   1. if *a* is 0 (divide by 0 is undefined);
-  2. if the expression that square root is applied to is negative (and we insist on only real-valued solutions). 
- 
+  2. if the expression that square root is applied to is negative (and we insist on only real-valued solutions).
+
 Therefore, let's define a little library of math functions which encapsulate the possibility of failure in a `Maybe`:
 
 ```haskell
@@ -182,6 +180,7 @@ So that's one instance of `Monad`; let's look at some more...
 The Haskell type which captures Input/Output effects is called `IO`.  As we demonstrated with the `traverse` function, it is possible to perform `IO` actions using `fmap` (`<$>`) and applicative (`<*>`) -- for example printing to the console. The challenge is taking values out of an `IO` context and using them to create further `IO` effects.
 
 Here are some simple `IO` “actions”:
+
 ```haskell
 sayHi :: IO ()
 sayHi = putStrLn "Hi, what's your name?"
@@ -192,6 +191,7 @@ greet name = putStrLn ("Nice to meet you " ++ name ++ "!")
 ```
 
 The following typechecks:
+
 ```haskell
 main = greet <$> readName
 ```
@@ -226,10 +226,10 @@ The special case of bind `(>>)` allows us to chain actions without passing throu
 
 > sayHi >> readName >>= greet
 ```
+
 > Hi, what's your name?  
 > Tim  
 > Nice to meet you Tim!
-
 
 ### Do notation
 
@@ -262,7 +262,7 @@ do
 
 is:
 
-*Take the value* (a `String` in this case) 
+*Take the value* (a `String` in this case)
 *out of the Monad context resulting from the expression on the right-hand side of the `<-`* (i.e. `readName`) *and assign it to the symbol on the left-hand side* (i.e. `name`) *which remains in scope until the end of the `do` block:*
 
 You can also mix in variable assignments from pure expressions using let:
@@ -284,6 +284,7 @@ join = (>>=id)
 ```
 
 We can use `join` to flatten nested `Maybe`s:
+
 ```haskell
 >>> join (Just Nothing)
 Nothing
@@ -354,6 +355,7 @@ do
 > [('a',2),('a',4),('b',2),('b',4),('c',2),('c',4),('d',2),('d',4)]
 
 Our friend `join` in the list Monad is simply concatenation:
+
 ```haskell
 >>> join [[1, 2, 3], [1, 2]]
 [1,2,3,1,2]
@@ -362,10 +364,12 @@ Our friend `join` in the list Monad is simply concatenation:
 ## Function
 
 We saw [previously that functions are instances of `Functor`](https://tgdwyer.github.io/haskell3/#functor), such that `fmap = (.)`.  We also saw that [functions are `Applicative`](https://tgdwyer.github.io/haskell3/#applicative) such that a binary function (such as `(+)`) can be lifted over multiple functions that need to be applied to the same argument, e.g.:
+
 ```haskell
 totalMark :: Student -> Int
 totalMark = liftA2 (+) exam nonExam
 ```
+
 So it shouldn't really be any surprise that functions of the same input type can also be composed with monadic bind.
 The right-to-left bind `(=<<)` takes a binary function `f` and a unary function `g` and
 creates a new unary function.
@@ -373,27 +377,30 @@ The new function will apply `g` to its argument, then give the result as well as
 original argument to `f`.
 OK, that might seem a bit esoteric, but it lets us achieve some nifty things.
 
-For example, below we compute `(3*2) + 3`, but we did it by using the argument `3` 
+For example, below we compute `(3*2) + 3`, but we did it by using the argument `3`
 in two different functions without explicitly passing it to either!
+
 ```haskell
 >>> ((+) =<< (*2)) 3
 9
 ```
+
 You can imagine a situation where you need to chain together a bunch of functions, but
 they all take a common parameter, e.g. a line break character.
+
 ```haskell
 greet linebreak = "Dear Gentleperson,"++linebreak 
 body sofar linebreak = sofar ++ linebreak ++ "It has come to my attention that... " ++ linebreak
 signoff sofar linebreak = sofar ++ linebreak ++ "Your's truly," ++ linebreak ++ "Tim" ++ linebreak
 putStrLn $ (greet >>= body >>= signoff) "\r\n"
 ```
+
 >Dear Gentleperson,  
 >
 >It has come to my attention that...  
 >
 >Your's truly,  
 >Tim
-
 
 In the next example we use the argument `3` in three different functions without passing it directly to any of them.
 Note the pattern is that the right-most function is unary (taking only the specified argument), and subsequent functions in the chain are binary, their first argument being the result of the previous function application, and the second argument being the given `3`.
@@ -404,12 +411,14 @@ Note the pattern is that the right-most function is unary (taking only the speci
 ```
 
 We can use the flipped bind so it can be read left-to-right, if that's more your thing:
+
 ```haskell
 >>> ((2*) >>= (-) >>= (*)) 3
 9
 ```
 
 The `join` function passes one argument to a binary function twice which can be a useful trick:
+
 ```haskell
 >>> (join (,)) 3
 (3,3)
@@ -433,6 +442,7 @@ Just [2,4,2,4]
 ```
 
 Such monadic looping functions also have versions with a trailing `_` in their name, which throw away the actual results computed and just accumulate the effect (internally they use `>>` instead of `>>=`):
+
 ```haskell
 >>> mapM_ doubleIfNotBig [1,2,3,4]
 Nothing

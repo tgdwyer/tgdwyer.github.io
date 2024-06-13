@@ -96,10 +96,12 @@ GHCi allows you to use the `:kind` (or `:k`) command to interrogate the *Kind* o
 
 Another sort of "kind" are for [type classes](#typeclasses) which we will introduce more properly in a moment.
 For example, the "kind" for the `Ord` type class (the class of things that are Orderable and which we came across in [our simple  implementation of quicksort](/haskell1#functional-programming-in-haskell-versus-javascript)) is:
+
 ```haskell
 > :k Ord
 Ord :: * -> Constraint
 ```
+
 This tells us that `Ord` takes one type parameter (for example it could be an `Int` or other numeric type, or something more complex like the `Student` type below), and returns a `Constraint` rather than an actual type.  Such a constraint is used to narrow the set of types to which a function may be applied, just as we saw `Ord` being used as the type constraint for `sort`:
 
 ```haskell
@@ -109,7 +111,7 @@ sort :: Ord t => [t] -> [t]
 
 ## Record Syntax
 
-Consider the following simple record data type: 
+Consider the following simple record data type:
 
 ```haskell
 data Student = Student Int String Int 
@@ -177,11 +179,13 @@ instance Num Int -- Defined in `GHC.Num'
 instance Num Float -- Defined in `GHC.Float'
 instance Num Double -- Defined in `GHC.Float' 
 ```
+
 The first line (beginning `class`) tells us that for a type to be an instance of the `Num` typeclass, it must provide the operators `+`, `*` and the functions `abs`, `signum` and `fromInteger`, and either `(-)` or `negate`.  The last is an option because a default definition exists for each in terms of the other.  The last five lines (beginning with “`instance`”) tell us which types have been declared as instances of `Num` and hence have definitions of the necessary functions.  These are `Word`, `Integer`, `Int`, `Float` and `Double`.  Obviously this is a much more finely grained set of types than JavaScript’s universal “`number`” type.  This granularity allows the type system to guard against improper use of numbers that might result in loss in precision or division by zero.
 
 The main numeric type we will use in this course is `Int`, i.e. fixed-precision integers.
 
 Note some obvious operations we would likely need to perform on numbers that are missing from the `Num` typeclass.  For example, equality checking.  This is defined in a separate type class `Eq`, that is also instanced by concrete numeric types like `Int`:
+
 ```haskell
 > :i Eq
 class Eq a where
@@ -194,6 +198,7 @@ instance Eq Int
 ```
 
 Note again that instances need implement only `==` or `/=` (not equal to), since each can be easily defined in terms of the other.  Still we are missing some obviously important operations, e.g., what about greater-than and less-than?  These are defined in the `Ord` type class:
+
 ```haskell
 > :i Ord
 class Eq a => Ord a where
@@ -279,6 +284,7 @@ Nothing
 ```
 
 We can use pattern matching to extract values from a `Maybe` (when we have `Just` a value), or to perform some sensible default behaviour when we have `Nothing`.
+
 ```haskell
 printNumber name = msg $ lookup name phonebook
 where
@@ -300,6 +306,7 @@ where
     (Just number) -> print number
     _             -> print $ name ++ " not found in database"
 ````
+
 Here we use the wildcard `_` to match any other possible value, in this case, there is only one other value, `Nothing`.
 
 <div class="glossary" markdown="1">

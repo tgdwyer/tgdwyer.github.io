@@ -4,18 +4,18 @@ title: "FIT2102 Assignment 2: Gin Rummy"
 ---
 # FIT2102 Assignment 2: Gin Rummy
 
- - **Due Date**: November 8^th^, 23:55
- - **Weighting**: 30% of your final mark for the unit
- - **Uploader**: <https://fit2102.monash/uploader/>
- - **Overview**: Your goal is to implement a player for the game of Gin Rummy.
+- **Due Date**: November 8^th^, 23:55
+- **Weighting**: 30% of your final mark for the unit
+- **Uploader**: <https://fit2102.monash/uploader/>
+- **Overview**: Your goal is to implement a player for the game of Gin Rummy.
    Your player needs to be able to play a valid game; manage a "memory" string
    with a parser-combinator; and, leverage concepts from the course. You will
    also need to write a two-page-report describing your submission.
- - **Building and using the code**: The code bundle is packaged the same way as
+- **Building and using the code**: The code bundle is packaged the same way as
    tutorials. To compile the code, run: `stack build`. To execute the code,
    run: `stack exec staticgame`. If you want to play with more players, you will
    need to edit `staticgame/Main.hs`. You cannot edit the `stack` configuration.
- - **Submission**: Your player source code and your report in PDF format go in
+- **Submission**: Your player source code and your report in PDF format go in
    the `submission/` folder of the code bundle. To submit you will zip up *just
    the contents of this `submission/` folder* into one file named
    `studentNo_name.zip`.
@@ -36,15 +36,15 @@ You can find a longer explanation
 game](https://cardgames.io/ginrummy/). Do note, though, that the variant we use
 has a few key differences, namely (compared to the linked resources):
 
- - The non-dealer does not get to *take the up-card,* the game starts after
+- The non-dealer does not get to *take the up-card,* the game starts after
    dealing.
- - There is non *laying-off*, we only count the melds formed in your own hand.
- - You cannot discard the card you just drew.
- - There is no *Big Gin,* you always have to discard at the end of your turn.
- - If no player takes an action before the stock runs out, the last player to
+- There is non *laying-off*, we only count the melds formed in your own hand.
+- You cannot discard the card you just drew.
+- There is no *Big Gin,* you always have to discard at the end of your turn.
+- If no player takes an action before the stock runs out, the last player to
    draw is considered to have Knocked.
- - You cannot *call* (Gin or Knock) during the first turn.
- - There is a maximum of 200 turns (100 actions / player) per round, this is to
+- You cannot *call* (Gin or Knock) during the first turn.
+- There is a maximum of 200 turns (100 actions / player) per round, this is to
    avoid a case where neither player draws from the stock.
 
 In the variant of Gin Rummy we use, a round (also called "playing a hand")
@@ -58,7 +58,7 @@ proceeds as follows:
     card from the discard, or the (hidden) top card from the stock.
  5. To end their turn, players will have to discard a card from their hand and
     announce if they want to end the game.
-    
+
 At the end of their turn, players thus discard a card and have three choices:
 
  1. *Call Gin*, which means that they managed to fit all ten cards in their hand
@@ -67,17 +67,17 @@ At the end of their turn, players thus discard a card and have three choices:
     into melds, they believe to have a hand of lower value that their
     opponent's. You can only Knock if your deadwood's total value is less than 10.
  3. *Discard,* which means that they do not want to end the game.
- 
+
 ### Forming melds
 
 The core mechanic of Gin Rummy is to fit cards into melds -- think poker
 combinations. In our variant of Gin Rummy, we will use three types of melds:[^5]
 
-  - **Straight:** a combination of three to five cards of the same suit with
+- **Straight:** a combination of three to five cards of the same suit with
     consecutive numbers. For example: **A♠ 2♠ 3♠**.
-  - **Set:** a combination of three or four cards with the same rank in different
+- **Set:** a combination of three or four cards with the same rank in different
     suits. For example: **<span style="color: red">8♥ 8♦</span> 8♠**.
-  - **Deadwood:** any card which does not fit into a meld.
+- **Deadwood:** any card which does not fit into a meld.
   
 Now, the interesting part of Gin Rummy is that melds are not cumulative. This
 means that a hand of cards can form different melds. Consider the following
@@ -124,7 +124,7 @@ you use only the libraries provided. In short, you cannot edit the `stack.yaml`
 and `package.yaml` or add functionality to the source code (in `src/`).
 
 You will need to submit a file called `studentNo_name.zip` which you will create
-by zipping the contents of the `submission/` directory. 
+by zipping the contents of the `submission/` directory.
 
 If you have any extension, you will need to include them in a directory titled
 `extensions/` in your zip file. If your extension requires additional library,
@@ -172,7 +172,7 @@ type ActionFunc
 
 After having chosen where to draw a card from, your player will be called again
 with the drawn card. It will need to decide which card to discard and what to
-announce. 
+announce.
 
 The first argument, `Card`, is the card your player drew, it is not added to
 your hand directly. The last argument is your player's hand. Then, we have
@@ -244,7 +244,7 @@ included in `src/Parser/`.
 
 Another thing that can be considered as *memory* is the score. At each of your
 function calls, you will be given the score of the *last round* as: `(your
-score, opponent score)`. This can help you adjust your strategy. 
+score, opponent score)`. This can help you adjust your strategy.
 
 Below is an example of different values `pickCard` can receive:
 
@@ -293,7 +293,7 @@ You can think of this as a two-part marking scheme:
     keep your lines at a reasonable length (< 80 characters). That you provide
     comments above non-trivial functions. And, that you comment sections of your
     code whose function may not be clear.
-    
+
 Remember, the point of comments is to give a *manual* rather than describe the
 code. In the case of a function, you would explain how to use it rather than
 what are the parameters, return types, etc.
@@ -308,7 +308,7 @@ Handling complex data as strings is cumbersome. This means you will have to
 implement *serialisation* and *deserialisation*. This will be done using a
 *parser-combinator* -- of which you can see an explanation
 [here](https://tgdwyer.github.io/parsercombinators/). The source code is
-provided in `src/Parser/`. 
+provided in `src/Parser/`.
 
 You can use the `Show` instance to serialise your data structures. However, you
 must not use (or derive) the `Read` instance. We require you to use the
@@ -332,23 +332,23 @@ However, we will also upload a number of bots on the server. They will be
 identifiable by having ids below 10. Having a higher rank than them will award
 you marks:
 
- - *5%* for having a valid player, that is one which can play a game.
- - *5%* for having a continuing player, that is one which does not error
+- *5%* for having a valid player, that is one which can play a game.
+- *5%* for having a continuing player, that is one which does not error
    during the tournament -- e.g., timeouts.
- - *5%* for beating at least one of the bots.
- - *5%* for beating all of the bots.
+- *5%* for beating at least one of the bots.
+- *5%* for beating all of the bots.
 
 ## Marking rubric
 
- - **Pass:** The code compiles without warnings and your player has some
+- **Pass:** The code compiles without warnings and your player has some
    heuristic strategy (see Game AI below), you use some form of memory with
    parsing. The report supports the code.
- - **Credit:** You use the memory to store non-trivial information and have a
+- **Credit:** You use the memory to store non-trivial information and have a
    clear report outlining your efforts.
- - **Distinction:** The code is well structured and uses some advanced concepts
+- **Distinction:** The code is well structured and uses some advanced concepts
    from the course -- higher order functions, function composition, monadic
    operations, etc.
- - **High Distinction:** The code does not contain any excess parts, the memory
+- **High Distinction:** The code does not contain any excess parts, the memory
    is used to store curated data about the game, the player can defeat all
    training opponents, and the documentation supports the submission.
 
@@ -370,17 +370,17 @@ above is sufficient for an HD. On the contrary, a complex Monte Carlo player
 (see below) which has very bad code quality and makes no use of the memory may
 very well not get a passing grade.
 
- - **Naïve AI:** tries to play its best card given the current state of the
+- **Naïve AI:** tries to play its best card given the current state of the
    game, you can start by implementing one to make sure you respect the game's
    rules. However, this will not get a passing grade.
- - **Heuristic player:** has a procedure (heuristic) to determine the strength
+- **Heuristic player:** has a procedure (heuristic) to determine the strength
    of its hand versus its opponent's and saves additional information about the
    game being played to enhance its decision at each turn.
- - **MinMax:**[^4] tries to minimise the maximum loss of a player by building a
+- **MinMax:**[^4] tries to minimise the maximum loss of a player by building a
    tree of possible moves and playing against itself. This method was developed
    for two-player, zero-sum game with perfect information. In this context, you
    will have to take into account the uncertain nature of the game.
- - **Probabilistic player:** will make use of probabilities to determine which
+- **Probabilistic player:** will make use of probabilities to determine which
    cards have the highest chance of winning the game (i.e., appearing in the
    stock) or how good their opponent's hand is. It will make use of the memory
    to keep track of played cards and refine its calculations.
@@ -418,7 +418,7 @@ of your player accordingly.
 Each file will be the record of *one game* -- so, multiple rounds. The file will
 come without a header but here are the columns:
 
-1. Round number. 
+1. Round number.
 2. Cards in the player's hand -- the format is `<first char of suit><rank>`
    separated by ';'. *Note:* these are the cards *at the end of the turn,* so
    they include the drawn card -- as opposed to what your function receives.
@@ -446,23 +446,23 @@ Each file will record one round per row, formatted as:
 *Note*: if the action is "Drop," this means no player took an action before the
 stock ran out.
 
-#### Monte Carlo Tree Search 
+#### Monte Carlo Tree Search
 
 Monte Carlo Tree Search (MCTS) is the fusion between (tree) search algorithms
 such as minmax and using probabilities (Monte Carlo simulation) to determine the
 branching in the search tree. It makes use of a *simulation phase* to explore
 deeper. In this context, you can leverage the memory to save already explored
-branches, or weight, etc. 
+branches, or weight, etc.
 
 *Hint:* Building a MCTS player requires having access to a source of entropy for
 side-effect-free random number generation; you can use your hand as it comes
 from a shuffled deck.
-   
+
 #### Writing an extensive test suite
 
 Testing in functional languages is often done semi-automatically. This is
 because the test framework can leverage the type system to generate arbitrary
-inputs -- think fuzzing. 
+inputs -- think fuzzing.
 
 In the course material, we use [Doctest](https://github.com/sol/doctest#readme).
 You may have seen lines starting with `prop>`. These mean "properties" and what
@@ -498,28 +498,28 @@ Monash.  So be careful and report any collaboration with other students.
 We will run a server for the course at <https://fit2102.monash> with the
 following pages:
 
- - [The uploader](https://fit2102.monash/uploader/): after logging in,
+- [The uploader](https://fit2102.monash/uploader/): after logging in,
    this page will allow you to upload your code and compete in the
    tournament.
- - [The handout](https://fit2102.monash/resources/assignment.html):
+- [The handout](https://fit2102.monash/resources/assignment.html):
    this document.
- - [The ladder](https://fit2102.monash/ladder.php): this
+- [The ladder](https://fit2102.monash/ladder.php): this
    page will display the scores of the last tournament run.
-   
+
 One thing to note is that the server only accept submissions as whole files. If
 your code uses a multi-file structure, you will need to concatenate them into
 your `Player.hs` before uploading.
 
 Once you upload your player, you will see two links on the page:
 
- - `home.php`: shows your current ranking, last upload, and previous
+- `home.php`: shows your current ranking, last upload, and previous
    games played.
- - `status.php`: shows the status of your current upload. Furthermore, you can
+- `status.php`: shows the status of your current upload. Furthermore, you can
    inspect your games by clicking on their number.
 
 Before uploading your player, please check that the following runs:
 
-```
+```bash
 stack exec staticgame
 ```
 
@@ -537,19 +537,19 @@ you run the test suite before you upload your player.
 
 ### Summary of tournament submission rules
 
- - *Respect the rules:* your player must always play valid actions or it will be
+- *Respect the rules:* your player must always play valid actions or it will be
    eliminated.
- - *Be timely:* to give everyone a fair chance, your functions must all return
+- *Be timely:* to give everyone a fair chance, your functions must all return
    in under one second.
- - *Be safe:* your player must compile with all flags provided, including the
+- *Be safe:* your player must compile with all flags provided, including the
    `import safe`.
- - *Single file:* your code must be submitted on the server as a single file.
+- *Single file:* your code must be submitted on the server as a single file.
 
 [^2]: More info at
     [SafeHaskell](https://ghc.haskell.org/trac/ghc/wiki/SafeHaskell), but this
     should not hinder your work.
 
-[^4]: https://en.wikipedia.org/wiki/Minimax
+[^4]: <https://en.wikipedia.org/wiki/Minimax>
 
 [^5]: Examples taken from [Wikipedia](https://en.wikipedia.org/wiki/Gin_rummy).
 

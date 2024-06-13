@@ -19,7 +19,9 @@ In this chapter we see how the Haskell language features we introduced in previo
 The following equivalences make many refactorings possible in Haskell:
 
 ### Eta Conversion
+
 Exactly as per [Lambda Calculus](/lambdacalculus):
+
 ```haskell
  f x ≡ g x
  f   ≡ g
@@ -46,11 +48,14 @@ f = (1+)             -- Eta conversion
 ### Compose
 
 Has its own operator in haskell `(.)`, inspired by the mathematical function composition symbol `∘`:
+
 ```haskell
  (f ∘ g) (x) ≡ f (g(x)) -- math notation
  (f . g) x ≡ f (g x)    -- Haskell
 ```
+
 Again, this gives us another way to get the right-most parameter on its own outside the body expression:
+
 ```haskell
 f x = sqrt (1 / x)
 f x = sqrt ((1/) x)     -- operator section
@@ -92,6 +97,7 @@ lessThan n = filter (n>)
 ```
 
 Now we can use the non-infix form of (>):
+
 ```haskell
 lessThan n = filter ((>) n)
 ```
@@ -123,7 +129,7 @@ Some more (and deeper) discussion is available on the Haskell Wiki.
 
 ### Exercises
 
-* Refactor the following function to be point-free:
+- Refactor the following function to be point-free:
 
 ```haskell
 f a b c = (a+b)*c
@@ -203,30 +209,35 @@ instance  Functor Maybe  where
 ```
 
 So we can `fmap` a function over a Maybe without having to unpack it:
+
 ```haskell
 GHCi> fmap (+1) (Just 6)
 Just 7 
 ```
 
 This is such a common operation that there is an operator alias for fmap: `<$>`
+
 ```haskell
 GHCi> (+1) <$> (Just 6)
 Just 7 
 ```
 
 Which also works over lists:
+
 ```haskell
 GHCi> (+1) <$> [1,2,3]
 [2,3,4] 
 ```
 
 Lists of `Maybe`s frequently arise.  For example, the `mod` operation on integers (e.g. `mod 3 2 == 1`) will throw an error if you pass 0 as the divisor:
+
 ```haskell
 > mod 3 0
 *** Exception: divide by zero 
 ```
 
 We might define a safe modulo function:
+
 ```haskell
 safeMod :: Integral a => a-> a-> Maybe a
 safeMod _ 0 = Nothing
@@ -234,6 +245,7 @@ safeMod numerator divisor = Just $ mod numerator divisor
 ```
 
 This makes it safe to apply `safeMod` to an arbitrary list of `Integral` values:
+
 ```haskell
 > map (safeMod 3) [1,2,0,4]
 [Just 0,Just 1,Nothing,Just 3] 
@@ -247,6 +259,7 @@ GHCi> map ((+1) <$>) [Just 0,Just 1,Nothing,Just 3]
 ```
 
 Or equivalently:
+
 ```haskell
 GHCi> ((+1) <$>) <$> [Just 0,Just 1,Nothing,Just 3]
 [Just 1,Just 2,Nothing,Just 4] 
@@ -264,6 +277,7 @@ instance Functor ((,) a) -- Defined in `GHC.Base'
 ```
 
 The definition for functions `(->)` might surprise:
+
 ```haskell
 instance Functor ((->) r) where
     fmap = (.) 
@@ -284,13 +298,13 @@ GHCi> (f<$>g) 3
 
 We can formalise the definition of Functor with two laws:
 
-The law of ***identity*** 
+The law of ***identity***
 
-∀ x: (id <$> x) ≡ x 
+∀ x: (id <$> x) ≡ x
 
 The law of ***composition***
 
-∀ f, g, x: (f ∘ g <$> x) ≡ (f <$> (g <$> x)) 
+∀ f, g, x: (f ∘ g <$> x) ≡ (f <$> (g <$> x))
 
 Note that these laws are not enforced by the compiler when you create your own instances of `Functor`.  You’ll need to test them for yourself.  Following these laws guarantees that general code (e.g. algorithms) using `fmap` will also work for your own instances of `Functor`.
 
@@ -310,8 +324,10 @@ Here's an example tree defined:
 ```haskell
 tree = Node (Node (Leaf 1) 2 (Leaf 3)) 4 (Node (Leaf 5) 6 (Leaf 7))
 ```
+
 And here's a visualisation of the tree:
-```
+
+```pseudocode
 Node 4
  ├──Node 2
  |   ├──Leaf 1
@@ -382,6 +398,7 @@ Just 5
 ```
 
 Or a list of functions `[(+1),(+2)]` to things inside a similar context (e.g. a list `[1,2,3]`).
+
 ```haskell
 > [(+1),(+2)] <*> [1,2,3]
 [2,3,4,3,4,5] 
@@ -395,8 +412,7 @@ instance Applicative [] where
   fs <*> xs = [f x | f <- fs, x <- xs]  -- list comprehension 
 ```
 
-The definition of `<*>` for lists uses a list comprehension.  List comprehensions are a short-hand way to generate lists, using notation similar to mathematical ["set builder notation"](https://en.wikipedia.org/wiki/Set-builder_notation).  The set builder notation here would be:  `{f(x) |  f ∈ fs ∧ x ∈ xs}`.  In English it means: “the set (Haskell list) of all functions in `fs` applied to all values in `xs`”. 
-
+The definition of `<*>` for lists uses a list comprehension.  List comprehensions are a short-hand way to generate lists, using notation similar to mathematical ["set builder notation"](https://en.wikipedia.org/wiki/Set-builder_notation).  The set builder notation here would be:  `{f(x) |  f ∈ fs ∧ x ∈ xs}`.  In English it means: “the set (Haskell list) of all functions in `fs` applied to all values in `xs`”.
 
 A common use-case for Applicative is applying a binary (two-parameter) function over two Applicative values, e.g.:
 
@@ -406,8 +422,9 @@ Just 5
 ```
 
 So:
-- `pure` puts the binary function into the applicative (i.e. `pure (+) :: Maybe (Num -> Num -> Num)`), 
-- then `<*>`ing this function inside over the first `Maybe` value `Just 3` achieves a partial application of the function inside the `Maybe`. This gives a unary function inside a `Maybe`: i.e. `Just (3+) :: Maybe (Num->Num)`. 
+
+- `pure` puts the binary function into the applicative (i.e. `pure (+) :: Maybe (Num -> Num -> Num)`),
+- then `<*>`ing this function inside over the first `Maybe` value `Just 3` achieves a partial application of the function inside the `Maybe`. This gives a unary function inside a `Maybe`: i.e. `Just (3+) :: Maybe (Num->Num)`.
 - Finally, we `<*>` this function inside a `Maybe` over the remaining `Maybe` value.
 
 This is where the name "applicative" comes from, i.e. `Applicative` is a type over which a non-unary function may be applied.  Note, that the following use of `<$>` (infix `fmap`) is equivalent and a little bit more concise:
@@ -429,6 +446,7 @@ Here's a little visual summary of Applicative and lifting (box metaphor inspired
 ![Applicative Visual Summary](/assets/images/chapterImages/haskell3/applicativePicture.png)
 
 It’s also useful to lift binary data constructors over two Applicative values, e.g. for tuples:
+
 ```haskell
 > (,) <$> Just 3 <*> Just 2
 Just (3, 2) 
@@ -447,7 +465,7 @@ with a ternary constructor:
 Student::Integer -> String -> Int -> Student
 ```
 
-Let's say we want to create a student for a given `id` but we need to look up the name and mark from tables, i.e. lists of key-value pairs: 
+Let's say we want to create a student for a given `id` but we need to look up the name and mark from tables, i.e. lists of key-value pairs:
 `names::[(Integer,String)]` and `marks::[(Integer,Int)]`.  We'll use the function `lookup :: Eq a => a -> [(a, b)] -> Maybe b`, which will either succeed with `Just` the result, or fail to find the value for a given key, and return `Nothing`.
 
 ```haskell
@@ -474,7 +492,7 @@ data Suit = Spade|Club|Diamond|Heart
  deriving (Eq,Ord,Enum,Bounded)
 
 instance Show Suit where
- show Spade = "^"     -- ♠	 (closest I could come in ASCII was ^)
+ show Spade = "^"     -- ♠  (closest I could come in ASCII was ^)
  show Club = "&"      -- ♣
  show Diamond = "O"   -- ♦
  show Heart = "V"     -- ♥
@@ -500,14 +518,15 @@ GHCi> Card <$> [Spade ..] <*> [Two ..]
 [Card ^ Two,Card ^ Three,Card ^ Four,Card ^ Five,Card ^ Six,Card ^ Seven,Card ^ Eight,Card ^ Nine,Card ^ Ten,Card ^ Jack,Card ^ Queen,Card ^ King,Card ^ Ace,Card & Two,Card & Three,Card & Four,Card & Five,Card & Six,Card & Seven,Card & Eight,Card & Nine,Card & Ten,Card & Jack,Card & Queen,Card & King,Card & Ace,Card O Two,Card O Three,Card O Four,Card O Five,Card O Six,Card O Seven,Card O Eight,Card O Nine,Card O Ten,Card O Jack,Card O Queen,Card O King,Card O Ace,Card V Two,Card V Three,Card V Four,Card V Five,Card V Six,Card V Seven,Card V Eight,Card V Nine,Card V Ten,Card V Jack,Card V Queen,Card V King,Card V Ace] 
 ```
 
-#### Exercise
+### Exercise
 
-* Create instances of `Show` for `Rank` and `Card` such that a deck of cards displays much more succinctly, e.g.: 
-```
+- Create instances of `Show` for `Rank` and `Card` such that a deck of cards displays much more succinctly, e.g.:
+
+```haskell
 [^2,^3,^4,^5,^6,^7,^8,^9,^10,^J,^Q,^K,^A,&2,&3,&4,&5,&6,&7,&8,&9,&10,&J,&Q,&K,&A,O2,O3,O4,O5,O6,O7,O8,O9,O10,OJ,OQ,OK,OA,V2,V3,V4,V5,V6,V7,V8,V9,V10,VJ,VQ,VK,VA]
 ```
 
-* Try and make the definition of `show` for `Rank` a one-liner using `zip` and `lookup`.
+- Try and make the definition of `show` for `Rank` a one-liner using `zip` and `lookup`.
 
 <div class="cheatsheet" markdown="1">
 
@@ -519,6 +538,7 @@ GHCi> Card <$> [Spade ..] <*> [Two ..]
  g <$> f x   -- apply function g to argument x which is inside Functor f
  f g <*> f x -- apply function g in Applicative context f to argument x which is also inside f
 ```
+
 </div>
 
 We saw that functions `(->)` are Functors, such that `(<$>)=(.)`.  There is also an instance of Applicative for functions of input type `r`.  We'll give the types of the essential functions for the instance:
@@ -571,7 +591,7 @@ pure :: a -> Maybe a
 pure x = Just x
 ```
 
-A simple way to define this is to consider all possible options of the two parameters, and define the behaviour 
+A simple way to define this is to consider all possible options of the two parameters, and define the behaviour
 by following the types
 
 ```haskell
@@ -585,6 +605,7 @@ by following the types
 (<*>) (Just a) Nothing = Nothing -- Do not have the value, so all we can do is return Nothing
 (<*>) Nothing Nothing = Nothing -- Do not have value or function, not much we can do here...
 ```
+
 We observe that only one case returns a value, while all other cases, return `Nothing`, so we can simplify our code using pattern matching.
 
 ```haskell
@@ -597,7 +618,8 @@ The type definitions for the function type `((->)r)` is a bit more nuanced. When
 
 For a bit of intuition around we can make a function in instance of the applicative instance, you can consider the context is an *environment r*. The `pure` function for the reader applicative takes a value and creates a function that ignores the environment and always returns that value. The `<*>` function for the function instance combines two functions that depend on the *same environment*.
 
-First, lets consider `pure`. 
+First, lets consider `pure`.
+
 ```haskell
 pure :: a -> (((->)r) a)
 ```
@@ -624,9 +646,10 @@ pure a _ = -> a
 
 The function `pure` helps you create a function that, no matter what the other input is, will always return this constant value.
 
-------------
+---------
 
 Reminder the definition for applicative is:
+
 ```haskell
 (<*>) :: (f (a -> b)) -> (f a) -> (f b)
 ```
@@ -652,8 +675,7 @@ We have to do some [Lego](https://miro.medium.com/v2/resize:fit:640/format:webp/
 (<*>) f g = \r -> (f r) (g r)
 ```
 
-
-## Alternative 
+## Alternative
 
 The Alternative typeclass is another important typeclass in Haskell, which is closely related to the Applicative typeclass. It introduces a set of operators and functions that are particularly useful when dealing with computations that can fail or have multiple possible outcomes. Alternative is also considered a "subclass" of Applicative, and it provides additional capabilities beyond what Applicative offers. It introduces two main functions, `empty` and `<|>` (pronounced "alt" or "alternative")
 
@@ -667,7 +689,7 @@ class Applicative f => Alternative (f :: * -> *) where
 
 `(<|>)`: The `<|>` operator combines two computations, and it's used to express alternatives. It takes two computations of the same type and returns a computation that will produce a result from the first computation if it succeeds, or if it fails, it will produce a result from the second computation. This operator allows you to handle branching logic and alternative paths in your code.
 
-Like Functor and Applicative, instances of the Alternative typeclass must also adhere to specific laws, ensuring predictable behavior when working with alternatives. Common instances of the Alternative typeclass include Maybe and lists (`[]`). Alternatives are also very useful for *Parsers*, where we try to run first parser, if it fails, we run the second parser. 
+Like Functor and Applicative, instances of the Alternative typeclass must also adhere to specific laws, ensuring predictable behavior when working with alternatives. Common instances of the Alternative typeclass include Maybe and lists (`[]`). Alternatives are also very useful for *Parsers*, where we try to run first parser, if it fails, we run the second parser.
 
 ```haskell
 > Just 2 <|> Just 5
@@ -678,7 +700,8 @@ Just 5
 ```
 
 ### Exercise
-* One useful function, which will be coming up throughout the semester is `asum` with the type definition `asum :: Alternative f => [f a] -> f a`.
+
+- One useful function, which will be coming up throughout the semester is `asum` with the type definition `asum :: Alternative f => [f a] -> f a`.
 
 #### Solution
 
@@ -690,11 +713,12 @@ asum [] = empty -- When we reach empty list, return the empty alternative
 asum (x:xs) = x <|> asum xs -- Otherwise recursively combine the first value and the rest of the list
 ```
 
-However, you may recognize this pattern, of recursion to a base case, combining current value with an accumulated value. 
+However, you may recognize this pattern, of recursion to a base case, combining current value with an accumulated value.
 
 This is a classic example of a *foldr*
 
 Therefore we can write `asum` simply as:
+
 ```haskell
 asum :: Alternative f => [f a] -> f a
 asum = foldr (<|>) empty
@@ -760,7 +784,7 @@ int :: Parser Int
 int = Parser parseInt
 ```
 
-And here's a simple generic function we can use to run these parsers. All this does, is extract the inner function `p` from the `Parser` constructor 
+And here's a simple generic function we can use to run these parsers. All this does, is extract the inner function `p` from the `Parser` constructor
 
 ```haskell
 -- >>> parse int "123+456"
@@ -782,6 +806,7 @@ is c = Parser $
 ### Aside: How do we get to that parser?
 
 The `is` function constructs a parser that succeeds and consumes a character from the input string if it matches the specified character c, otherwise it fails.
+
 ```haskell
 -- >>> parse (is '+') "+456"
 -- Just ("456",'+')
@@ -796,7 +821,7 @@ is c = Parser $ \inputString ->
       False -> Nothing
 ```
 
-However, this is quickly becoming very deeply nested, lets use our previous `char` parser to ensure correct behaviour for the empty string, rather than duplicating that logic. 
+However, this is quickly becoming very deeply nested, lets use our previous `char` parser to ensure correct behaviour for the empty string, rather than duplicating that logic.
 
 ```haskell
 -- >>> parse (is '+') "+456"
@@ -812,7 +837,7 @@ is c = Parser $
     _ -> Nothing
 ```
 
-In this example, the `otherwise = Nothing` guard is not needed, as our `case` statement can handle that in the wildcard statement 
+In this example, the `otherwise = Nothing` guard is not needed, as our `case` statement can handle that in the wildcard statement
 
 ```haskell
 is :: Char -> Parser Char
@@ -821,7 +846,8 @@ is c = Parser $
     Just (rest, result) | result == c -> Just (rest, result)
     _ -> Nothing
 ```
----
+
+---------
 
 By making `Parser` an instance of `Functor` we will be able to map functions over the result of a parse, this is very useful! For example, consider the `int` parser, which parses a string to an `integer`, and if we want to apply a function to the result, such as adding 1 `(+1)`, we can fmap this over the parser.
 
@@ -853,6 +879,7 @@ instance Functor Parser where
       Just (rest, result) -> Just (f <$> (rest, result))
       _ -> Nothing
 ```
+
 Carefully examining this, what we are doing is applying `(f <$>)` if the result is a `Just`, or ignoring if the result is `Nothing`. This is exactly what the `Maybe` instance of `Functor` does, so we can `fmap` over the `Maybe` also:
 
 ```haskell
@@ -862,10 +889,12 @@ instance Functor Parser where
 
 Let's try rearrange to make it point [point-free](/haskell3/#point-free-code), eliminating the lambda:
 First, let's add some brackets, to make the evaluation order more explicit.
+
 ```haskell
 instance Functor Parser where
   fmap f (Parser p) = Parser (\i -> ((f <$>) <$>) (p i))
 ```
+
 This is now in the form  `(f . g) i)` where `f` is equal to `((f <$>) <$>)` and g is equal to `p`. Therefore:
 
 ```haskell
@@ -896,14 +925,13 @@ The whacky triple-nested application of `<$>` comes about because the result typ
 Just ("bc",2)
 ```
 
-So `(+1)<$>int` creates a new `Parser` which parses an `int` from the input stream and adds one to the value parsed (if it succeeds).  Behind the scenes, using the implementation above, the `Parser`'s instance of Functor is effectively lifting over three additional layers of nested types to reach the `Int` value, i.e.: 
+So `(+1)<$>int` creates a new `Parser` which parses an `int` from the input stream and adds one to the value parsed (if it succeeds).  Behind the scenes, using the implementation above, the `Parser`'s instance of Functor is effectively lifting over three additional layers of nested types to reach the `Int` value, i.e.:
 
 ![Applicative Visual Summary](/assets/images/chapterImages/haskell3/parserfunctor.png)
 
 Just as we have seen before, making our `Parser` an instance of `Applicative` is going to let us do nifty things like lifting a binary function over the results of two `Parser`s.  Thus, instead of implementing all the messy logic of connecting two Parsers to make `plus` above, we'll be able to lift `(+)` over two `Parser`s.
 
 Now the definition for the `Applicative` is going to stitch together all the messy bits of handling both the `Just` and `Nothing` cases of the `Maybe` that we saw above in the definition of `plus`, abstracting it out so that people implementing parsers like `plus` won't have to:
-
 
 ```haskell
 instance Applicative Parser where
@@ -919,11 +947,11 @@ instance Applicative Parser where
 
 All that `pure` does is put the given value on the right side of the tuple.
 
-The key insight for this applicative instance is that we first use `f` (the parser on the LHS of `<*>`). This consumes input from `i` giving back the remaining input in `r1`. We then run the second parser `g` on the RHS of `<*>` on `r1` (the remaining input). 
+The key insight for this applicative instance is that we first use `f` (the parser on the LHS of `<*>`). This consumes input from `i` giving back the remaining input in `r1`. We then run the second parser `g` on the RHS of `<*>` on `r1` (the remaining input).
 
-The main take-away message is that `<*>` allows us to combine two parsers in sequence, that is, we can run the first one and then the second one. 
+The main take-away message is that `<*>` allows us to combine two parsers in sequence, that is, we can run the first one and then the second one.
 
-Let's walk through a concrete example of this. 
+Let's walk through a concrete example of this.
 
 ```haskell
 > charIntPairParser = (,) <$> char <*> int
@@ -934,19 +962,20 @@ Just ("b",('a',12345))
 As both `<$>` and `<*>` have the same precedence, firstly `(,) <$> char` will be evaluated, the result will be then applied to `int`.
 
 So how does `(,) <$> char` work? Well, we parse a character and then make that character the first item of a tuple, therefore:
+
 ```haskell
 > charPairParser = (,) <$> char
 > :t charPairParser
 charPairParser :: Parser (b -> (Char, b))
 ```
+
 So for the applicative instance the LHS will be the `charPairParser` and the RHS will be `int`.
 That is, first step in applicative parsing is to parse the input `i` using the LHS parser, what we called here `charPairParser`.
 This will match the `Just (r1, p1)` case where it will be equal to `Just ("12345b", ('a',))`. Therefore, `r1` is equal to the unparsed portion of the input `12345b` and the result is a tuple partially applied `('a', )`.
 
 We then run the second parser `int` on the remaining input `"12345b"`. This will match the `Just (r2, p2)` case where it will be equal to `Just ("b", 12345)`, where `r2` is equal to the remaining input `"b"` and `p2` is equal to `"12345"`
 
-We then return `Just (r2, p1 p2)`, which will evaluate to `Just ("b", ('a',12345))`. 
-
+We then return `Just (r2, p1 p2)`, which will evaluate to `Just ("b", ('a',12345))`.
 
 Using the `<*>` operator we can make our calculator magnificently simple:
 
@@ -987,7 +1016,6 @@ plus = (+) <$> int <* is '+'  <*> int
 
 Obviously, the above is not a fully featured parsing system.  A real parser would need to give us more information in the case of failure, so a `Maybe` is not really a sufficiently rich type to package the result.  Also, a real language would need to be able to handle alternatives - e.g. `minus` or `plus`, as well as expressions with an arbitrary number of terms.  We will revisit all of these topics with a more feature rich set of [parser combinators later](/parsercombinators).
 
-
 ### Left and Right Applicatives
 
 We briefly introduced both `(<*)` and `(*>)` but lets deep dive in to why these functions are so useful. The full type definitions are:
@@ -999,8 +1027,8 @@ We briefly introduced both `(<*)` and `(*>)` but lets deep dive in to why these 
 
 A more intuitive look at these would be:
 
-* `(<*)`: Executes two actions, but only returns the result of the first action.
-* `(*>)`: Executes two actions, but only returns the result of the second action.
+- `(<*)`: Executes two actions, but only returns the result of the first action.
+- `(*>)`: Executes two actions, but only returns the result of the second action.
 
 The key term here is *action*, we can consider the *action* of our parser as doing the *parsing*
 
@@ -1013,11 +1041,11 @@ A definition of `(<*)` is
 
 Where `liftA2 = f <$> a <*> b`
 
-Let's relate this to our parsing, and how this *executes* the two actions. We will consider the example of parsing something in the form of "123+", wanting to parse the number and ignore the "+". The execution order will be changed around a little bit, hoping to provide some intuition in to these functions. 
+Let's relate this to our parsing, and how this *executes* the two actions. We will consider the example of parsing something in the form of "123+", wanting to parse the number and ignore the "+". The execution order will be changed around a little bit, hoping to provide some intuition in to these functions.
 
 So, we can use our "<*" to ignore the second action, i.e., `int <* (is '+')`.
 
-Plugging this in to liftA2 definition: 
+Plugging this in to liftA2 definition:
 
 ```haskell
 liftA2 (\a _ -> a) int (is '+')
@@ -1039,14 +1067,13 @@ So, in this scenario our function `f` is (\a b -> a) and our `(Parser p)` is the
 
 Therefore, `(\a b -> a) <$> int` will result in `Just ("+", (\a b -> a) 123)`
 
-Now, we want need to consider the second half, which is 
+Now, we want need to consider the second half, which is
 
 `Just ("+", (\a b -> a) 123)` being applied to `(is '+')`
 
-The applicative defintion says to apply the second parser `is '+'` to the remaning input, and apply the result to the function inside the RHS of the tuple.
+The applicative definition says to apply the second parser `is '+'` to the remaining input, and apply the result to the function inside the RHS of the tuple.
 
 Therefore, after applying this parser, it will result in: `Just ("", (\a b -> a) 123 "+")`. Finally, we will apply the function call to ignore the second value, finally resulting in: `Just ("", 123)`. But the key point, is we still *executed* the `is '+'` but we ignored the value. That is the beauty of using our `<*` and `*>` to ignore results, while still *executing* actions
-
 
 <div class="glossary" markdown="1">
 
@@ -1071,8 +1098,3 @@ Therefore, after applying this parser, it will result in: `Just ("", (\a b -> a)
 *Parser Combinator*: A higher-order function that takes parsers as input and returns a new parser as output. Parser combinators are used to build complex parsers from simpler ones.
 
 </div>
-
-
-
-
-
