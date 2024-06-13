@@ -42,7 +42,7 @@ const suits$ = from(suits)
 const ranks$ = from(observables)
 ```
 
-Using the webtooal, we can visualize each of these streams.
+Using the webtool, we can visualize each of these streams.
 
 ![Rank Observable Visualized](/assets/images/chapterImages/frpanimated/rank.gif)
 ![Suit Observable Visualized](/assets/images/chapterImages/frpanimated/suit.gif)
