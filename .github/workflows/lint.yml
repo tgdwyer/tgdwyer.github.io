@@ -1,0 +1,41 @@
+name: Lint Checks
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+
+      - name: Install markdownlint-cli
+        run: npm install -g markdownlint-cli
+
+      - name: Install codespell
+        run: pip install codespell
+
+      - name: Run markdownlint
+        run: |
+          markdownlint '**/*.md' --fix --disable MD013 MD033 MD051 MD025 MD024 MD028
+
+      - name: Run codespell
+        run: |
+          codespell -I custom_words.txt --exclude-file=Gemfile.lock
