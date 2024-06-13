@@ -57,7 +57,7 @@ const deck = suits$.pipe(
 
 ![Deck Observable Visualized](/assets/images/chapterImages/frpanimated/mapDeck.gif)
 
-However, this exists as four nested streams rather than one continuous flat stream. How do we fix this? We use mergeMap to merge the sub-streams into a single long continuous stream of cards. We now have a lovely little deck of cards :)
+Howeaver, this exists as four nested streams rather than one continuous flat stream. How do we fix this? We use mergeMap to merge the sub-streams into a single long continuous stream of cards. We now have a lovely little deck of cards :)
 
 ```typescript
 const deck = suits$.pipe(
