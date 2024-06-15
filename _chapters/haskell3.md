@@ -168,7 +168,7 @@ map _ []     = []
 map f (x:xs) = f x : map f xs
 ```
 
-It’s easy to generalise this pattern to any data structure that holds one or more values: mapping a function over a data structure creates a new data structure whose elements are the result of applying the function to the elements of the original data structure.
+It’s easy to generalise this pattern to any data structure that holds one or more values: mapping a function over a data structure creates a new data structure whose elements are the result of applying the function to the elements of the original data structure. We have seen examples of generalizing the idea of mapping previously, for example, mapping over a `Tree`.
 
 In Haskell this pattern is captured in a type class called `Functor`, which defines a function called `fmap`.
 
@@ -183,7 +183,7 @@ instance Functor Maybe -- but this may surprise!
 ... -- and some other instances we'll talk about shortly
 ```
 
-The first line says that an instances of the Functor typeclass `f` must be over a type that has the [kind](/haskell2#type-kinds) `(* -> *)`, that is, their constructors must be parameterised with a single type variable.  After this, the `class` definition specifies `fmap` as a function that will be available to any instance of Functor and that `f` is the type parameter for the constructor function, which again, takes one type parameter, e.g. `f a` as the input to `fmap`, which returns an `f b`.
+The first line says that an instances of the Functor typeclass `f` must be over a type that has the [kind](/haskell2#type-kinds) `(* -> *)`, that is, their constructors must be parameterised with a single type variable.  After this, the `class` definition specifies `fmap` as a function that will be available to any instance of Functor and that `f` is the type parameter for the constructor function, which again, takes one type parameter, e.g. `f a` as the input to `fmap`, which returns an `f b`. While, this may sound complex and abstract, the power of `fmap` is just applying the idea of a `map` function to any collection of item(s).
 
 Naturally, lists have an instance:
 
@@ -200,7 +200,7 @@ instance Functor [] where
     fmap = map
 ```
 
-And here’s the instance for `Maybe`:
+`fmap` is defined for other types we have seen, such as a `Maybe`. `Maybes` can be considered as list of 0 items (`Nothing`) or 1 item (`Just`), and therefore, naturally, we should be able to `fmap` over a `Maybe`.  
 
 ```haskell
 instance  Functor Maybe  where
@@ -208,7 +208,7 @@ instance  Functor Maybe  where
     fmap f (Just a)      = Just (f a)
 ```
 
-So we can `fmap` a function over a Maybe without having to unpack it:
+We can use `fmap` to apply a function to a `Maybe` value without needing to unpack it. The true power of `fmap` lies in its ability to apply a function to value(s) within a context without requiring knowledge of how to extract those values from the context.
 
 ```haskell
 GHCi> fmap (+1) (Just 6)
@@ -347,8 +347,7 @@ instance Functor Tree where
    fmap f (Node l v r) = Node (fmap f l) (f v) (fmap f r)
 ```
 
-Just as in the `Maybe` instance above, we use pattern matching to define a case for each possible constructor in the ADT.  The `Empty` and `Leaf` cases are very similar to `Maybe` `fmap` for `Nothing` and `Just` respectively, that is,
-for `Empty` we just return another `Empty`, for `Leaf` we return a new `Leaf` containing the application of `f` to the value `x` stored in the leaf.  The fun one is `Node`.  As for `Leaf`, `fmap f` of a `Node` returns a new `Node` whose own value is the result of applying `f` to the value stored in the input `Node`, but the left and right children of the new node will be the recursive application of `fmap f` to the children of the input node.
+Just as in the `Maybe` instance above, we use pattern matching to define a case for each possible constructor in the ADT.  The `Empty` and `Leaf` cases are very similar to `Maybe` `fmap` for `Nothing` and `Just` respectively, that is, for `Empty` we just return another `Empty`, for `Leaf` we return a new `Leaf` containing the application of `f` to the value `x` stored in the leaf.  The fun one is `Node`.  As for `Leaf`, `fmap f` of a `Node` returns a new `Node` whose own value is the result of applying `f` to the value stored in the input `Node`, but the left and right children of the new node will be the recursive application of `fmap f` to the children of the input node.
 
 Now we'll demonstrate (but not prove) that the two laws hold at least for our example tree:
 
@@ -379,7 +378,6 @@ GHCi> :i Applicative
 class Functor f => Applicative (f :: * -> *) where
   pure :: a -> f a
   (<*>) :: f (a -> b) -> f a -> f b
-...
 ```
 
 As for `Functor` all instances of the Applicative type-class must satisfy certain laws, which again are not checked by the compiler.
@@ -574,9 +572,9 @@ totalMark = (+) . exam <*> nonExam
 
 - derive the implementations of `pure` and `<*>` for `Maybe` and for functions `((->)r)`.
 
-(hint, if you get stuck there are spoilers in the source from GHC.Base that I linked above)
-
 #### Solutions
+
+##### Maybes
 
 First lets consider `Maybe`. The type signature for `pure` is:
 
@@ -606,13 +604,15 @@ by following the types
 (<*>) Nothing Nothing = Nothing -- Do not have value or function, not much we can do here...
 ```
 
-We observe that only one case returns a value, while all other cases, return `Nothing`, so we can simplify our code using pattern matching.
+We observe that only one case returns a value, while all other cases, return `Nothing`, so we can simplify our code using the wildcard `_` when pattern matching.
 
 ```haskell
 (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b
 (<*>) (Just a) (Just b) = Just (a b) -- We can apply the function to the value, we have both!
 (<*>) _ _ = Nothing -- All other cases, return Nothing
 ```
+
+##### Functions
 
 The type definitions for the function type `((->)r)` is a bit more nuanced. When we write `((->) r)`, we are partially applying the `->` type constructor. The `->` type constructor takes two type arguments: an argument type and a return type. By supplying only the first argument `r`, we get a type constructor that still needs one more type to become a complete type.
 
@@ -624,7 +624,7 @@ First, lets consider `pure`.
 pure :: a -> (((->)r) a)
 ```
 
-This may look confusing, but if you replace `((->)r)` with `Maybe`, you can see it is the same. Similar to converting prefix functions to infix, we can do the same thing with the type operation here, therefore, this is equivalent to:
+This may look confusing, but if you replace `((->)r)` with `Maybe`, you can see it is essentially the same. Similar to converting prefix functions to infix, we can do the same thing with the type operation here, therefore, this is equivalent to:
 
 ```haskell
 pure :: a -> (r -> a)
@@ -637,14 +637,14 @@ pure :: a -> (r -> a)
 pure a = \r -> a
 ```
 
-We can also write this as:
+This definition takes a single parameter a and returns a function. This function, when given any parameter r, will return the original parameter a. Since all functions are curried in Haskell, this is equivalent to:
 
 ```haskell
 pure :: a -> (r -> a)
 pure a _ = -> a
 ```
 
-The function `pure` helps you create a function that, no matter what the other input is, will always return this constant value.
+The function `pure` helps you create a function that, no matter what the second input is, will always return this first value, this is exactly the K-combinator.
 
 ---------
 
@@ -674,6 +674,8 @@ We have to do some [Lego](https://miro.medium.com/v2/resize:fit:640/format:webp/
 (<*>) :: (r -> (a -> b)) -> (r -> a) -> (r -> b)
 (<*>) f g = \r -> (f r) (g r)
 ```
+
+The function `(<*>)` takes two functions, one of type `r -> (a -> b)` and another of type `r -> a`, and combines them to produce a new function of type `r -> b`. It does this by applying both functions to the same input `r` and then applying the result of the first function to the result of the second.
 
 ## Alternative
 

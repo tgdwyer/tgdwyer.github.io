@@ -280,7 +280,7 @@ A function called “`join`” from `Control.Monad` also distills the essence of
 
 ```haskell
 join :: Monad m => m (m a) -> m a
-join = (>>=id)
+join = (>>= id)
 ```
 
 We can use `join` to flatten nested `Maybe`s:
