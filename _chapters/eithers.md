@@ -1,3 +1,8 @@
+---
+layout: chapter
+title: "Eithers"
+---
+
 # Eithers
 
 ## Learning Outcomes
@@ -14,7 +19,7 @@ In Haskell, the Either type is used to represent values with two possibilities: 
 data Either a b = Left a | Right b
 ```
 
-In Haskell's `Either` type, convention ([and the official documentation](https://hackage.haskell.org/package/base-4.20.0.1/docs/Data-Either.html)) says errors go on the `Left` and successes on the `Right`. Why? Because if it is not right (correct) it must be left. This can be considered another example bias against the left-handed people around the world, but alas, it is a [cruel world](https://www.youtube.com/watch?v=epvlvDzKfv8).
+In Haskell's `Either` type, convention ([and the official documentation](https://hackage.haskell.org/package/base-4.20.0.1/docs/Data-Either.html)) says errors go on the `Left` and successes on the `Right`. Why? Because if it is not right (correct) it must be left. This can be considered another example of bias against the left-handed people around the world, but alas, it is a [cruel world](https://www.youtube.com/watch?v=epvlvDzKfv8).
 
 The Left/Right convention is also more general then a Success/Error naming, as Left does not always need to be an error, but it is the most common usage.
 

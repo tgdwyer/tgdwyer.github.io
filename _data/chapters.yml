@@ -113,7 +113,9 @@
 - title: Eithers
   url: /eithers/
   description: |
-    - A fully worked example of creating instance of Functor, Applicative and Monad for the Either type. 
+    - Understand how the `Either` type handles values with two possibilities, typically used for error handling and success cases.
+    - Apply the `Functor`, `Applicative`, and `Monad` type classes to the `Either` type, learning how to implement instances for each.
+    - Recognize the power of monadic `do` blocks in simplifying code and handling complex workflows.
 - title: Parser Combinators
   url: /parsercombinators/
   description: |
