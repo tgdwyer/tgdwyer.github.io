@@ -1,5 +1,11 @@
 # Eithers
 
+## Learning Outcomes
+
+- Understand how the `Either` type handles values with two possibilities, typically used for error handling and success cases.
+- Apply the `Functor`, `Applicative`, and `Monad` type classes to the `Either` type, learning how to implement instances for each.
+- Recognize the power of monadic `do` blocks in simplifying code and handling complex workflows.
+
 ## Introduction to Eithers
 
 In Haskell, the Either type is used to represent values with two possibilities: a value of type Either a b is either Left a or Right b. By convention, Left is used to hold an error or exceptional value, while Right is used to hold a correct or expected value. This is particularly useful for error handling.
@@ -114,41 +120,45 @@ First, we'll define custom error types to represent possible failures at each st
 
 ```haskell
 data FileError = FileNotFound | FileReadError deriving (Show)
-data ParseError = ParseError String deriving (Show)
+data readError = readError String deriving (Show)
 data TransformError = TransformError String deriving (Show)
 ```
 
-Define a function to read data from a file. If reading succeeds, it returns a `Right` with the file content; otherwise, it returns a `Left` with a `FileError`.
+Define a function to read data from a file. If reading succeeds, it returns a `Right` with the file contents, otherwise, it returns a `Left` with a `FileError`.
 
 ```haskell
 import System.IO (readFile)
 import Control.Exception (catch, IOException)
 
 readFileSafe :: FilePath -> IO (Either FileError String)
-readFileSafe path = catch (fmap Right (readFile path)) handleError
+-- catch any IOException, and use `handleError` on IOException
+readFileSafe path = catch (Right <$> (readFile path)) handleError
   where
     handleError :: IOException -> IO (Either FileError String)
     handleError _ = return $ Left FileReadError
 ```
 
-Define a function to parse the file content. It returns a Right with the parsed data or a Left with a ParseError.
+Define a function to split the file content in to separate lines, if it exists. It returns a `Right` with the read data or a `Left` with a `readError`.
 
 ```haskell
-parseData :: String -> Either ParseError [String]
-parseData content
-    | null content = Left $ ParseError "Empty file content"
+readData :: String -> Either readError [String]
+readData content
+    | null content = Left $ readError "Empty file content"
     | otherwise = Right $ lines content
 
 ```
 
-Define a function to transform the parsed data. It returns a Right with transformed data or a Left with a TransformError.
+Define a function to transform the read data. It returns a `Right` with transformed data or a `Left` with a `TransformError`.
 
 ```haskell
 transformData :: [String] -> Either TransformError [String]
 transformData lines
     | null lines = Left $ TransformError "No lines to transform"
+    -- Simple transformation, where, we reverse each line.
     | otherwise = Right $ map reverse lines
 ```
+
+The outer `do` block, is using the `IO` monad, while the inner `do` block is using the `Either` monad. This code looks very much like imperative code, using the power of monad to allow for sequencing of operations. However, this is powerful, as it will allow the `Left` error to be threaded through the monadic `do` block, with the user not needing to handle the threading of the error state.
 
 ```haskell
 main :: IO ()
@@ -156,14 +166,10 @@ main = do
     -- Attempt to read the file
     fileResult <- readFileSafe "example.txt"
     
-    let parseResult1 = fileResult >>= parseData
-    let transformResult1 = parseResult1 >>= transformData
-    print transformResult1
-    
     let result = do
             -- Use monad instance to compute sequential operations
             content <- fileResult
-            parsedData <- parseData content
-            transformData parsedData
+            readData <- readData content
+            transformData readdData
     print result
 ```
