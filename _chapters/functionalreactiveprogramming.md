@@ -406,7 +406,7 @@ Compared to our state machine diagram above:
 - the only side effects (the movement of the rectangle) occur in the function passed to the subscribe;
 - the cleanup of subscriptions to the mousemove and mouseup events is handled automatically by the ```takeUntil``` function when it closes the streams.
 
-However, there is still something not very elegant about this version.  As indicated by my crude ASCII art in the comment above, there is a dendency in the function applied to the stream by the first `map`, on the DOM element being repositioned in the function applied by subscribe.  This dependency on mutable state outside the function scope makes this solution impure.
+However, there is still something not very elegant about this version.  As indicated by my crude ASCII art in the comment above, there is a dependency in the function applied to the stream by the first `map`, on the DOM element being repositioned in the function applied by subscribe.  This dependency on mutable state outside the function scope makes this solution impure.
 
 ### Pure FRP Solution
 
@@ -495,7 +495,7 @@ Note that inside the `mergeMap` we use the `startWith` operator to force a `Down
 
 The advantage of this code is not brevity; with the introduced type definitions it's longer than the previous implementations of the same logic.  Rather, the advantages of this pattern are:
 
-- *maintainability*: we have separated setup code and state management code;
+- *maintainability*: we have separated setup code and state management code and importantly, separate the side effects to only be in `subscribe`;
 - *scalability*: we can extend this code pattern to handle more complicated state machines. We can easily `merge` in more input streams, adding Event types to handle their `State` updates, and the only place we have to worry about effects visible to the outside world is in the function passed to `subscribe`.
 
 As an example of *scalability* we will be using this same pattern to implement the logic of an asteroids arcade game in the [next chapter](/asteroids).

@@ -110,6 +110,10 @@
     - Understand the operation of the monadic bind and join functions in the `Maybe`, `IO`, List and Function instances of Monad.
     - Be able to refactor monadic binds using [`do` notation](/monad/#do-notation).
     - [Loop with Monadic effects](/monad/#looping-with-monadic-effects).
+- title: Eithers
+  url: /eithers/
+  description: |
+    - A fully worked example of creating instance of Functor, Applicative and Monad for the Either type. 
 - title: Parser Combinators
   url: /parsercombinators/
   description: |

@@ -372,7 +372,7 @@ function tailRecFactorial(a, n) {
 }
 ```
 
-The function tailRecFactorial is tail recursive because the final operation in the function is the recursive call to itself, with no additional computation after this call. We can convert this function in to a continuation version, by adding an extra parameter `finalAction`
+The function `tailRecFactorial` is tail recursive because the final operation in the function is the recursive call to itself, with no additional computation after this call. We can convert this function in to a continuation version, by adding an extra parameter `finalAction`
 
 ```javascript
 function continuationFactorial(
