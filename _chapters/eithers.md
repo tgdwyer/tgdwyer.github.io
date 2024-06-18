@@ -125,7 +125,7 @@ First, we'll define custom error types to represent possible failures at each st
 
 ```haskell
 data FileError = FileNotFound | FileReadError deriving (Show)
-data readError = readError String deriving (Show)
+data ReadError = ReadError String deriving (Show)
 data TransformError = TransformError String deriving (Show)
 ```
 
@@ -143,12 +143,12 @@ readFileSafe path = catch (Right <$> (readFile path)) handleError
     handleError _ = return $ Left FileReadError
 ```
 
-Define a function to split the file content in to separate lines, if it exists. It returns a `Right` with the read data or a `Left` with a `readError`.
+Define a function to split the file content in to separate lines, if it exists. It returns a `Right` with the read data or a `Left` with a `ReadError`.
 
 ```haskell
-readData :: String -> Either readError [String]
+readData :: String -> Either ReadError [String]
 readData content
-    | null content = Left $ readError "Empty file content"
+    | null content = Left $ ReadError "Empty file content"
     | otherwise = Right $ lines content
 
 ```
@@ -187,6 +187,6 @@ main = do
 
 *Applicative*: A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (<*>).
 
-*Monad*: A type class in Haskell that represents computations as a series of steps. It provides the bind operation (>>=) to chain operations and the return (or pure) function to inject values into the monadic context.
+*Monad*: A type class in Haskell that represents computations as a series of steps. It provides the bind operation (`>>=`) to chain operations and the return (or `pure`) function to inject values into the monadic context.
 
 </div>
