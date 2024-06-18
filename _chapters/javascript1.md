@@ -364,7 +364,7 @@ sumTo(1000000)
 
 > Uncaught RangeError: Maximum call stack size exceeded
 
-However, functional languages (like Haskell) rely on recursion because they have no other way to create loops without mutable variables -- so they must have a way to make this scale to real-world computations.  When a recursive function is written in a special way, such that the recursive call is in *tail position*, (a lot of modern compilers)[https://en.wikipedia.org/wiki/Tail_call#Language_support] are able to transform the recursion into a loop with constant memory use (commonly a `while` loop) -- this is called *tail call optimisation*.
+However, functional languages (like Haskell) rely on recursion because they have no other way to create loops without mutable variables -- so they must have a way to make this scale to real-world computations.  When a recursive function is written in a special way, such that the recursive call is in *tail position*, [a lot of modern compilers](https://en.wikipedia.org/wiki/Tail_call#Language_support) are able to transform the recursion into a loop with constant memory use (commonly a `while` loop) -- this is called *tail call optimisation*.
 
 Let's see what a *tail recursive* version of the `sumTo` function looks like:
 
@@ -1029,7 +1029,6 @@ Informally, this type of polymorphism is called “Duck Typing” (i.e. "If it l
   <img src="/assets/images/chapterImages/javascript1/duck_typing.webp" alt="Duck Typing" style="width: 50%; display: block; margin-left: auto; margin-right: auto;" />
   <figcaption class="figure-caption" style="text-align: center;">An example of a duck, typing.</figcaption>
 </figure>
-
 
 Another type of polymorphism which is key to strongly typed functional programming languages (like Haskell), but also a feature of many modern OO languages is *parametric polymorphism*.  We will see this in action when we introduce [TypeScript generics](/typescript1/#generic-types).
 
