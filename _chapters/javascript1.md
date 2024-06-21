@@ -364,7 +364,7 @@ sumTo(1000000)
 
 > Uncaught RangeError: Maximum call stack size exceeded
 
-However, functional languages (like Haskell) rely on recursion because they have no other way to create loops without mutable variables -- so they must have a way to make this scale to real-world computations.  When a recursive function is written in a special way, such that the recursive call is in *tail position*, compilers are able to transform the recursion into a `while` loop with constant memory use -- this is called *tail call optimisation*.
+However, functional languages (like Haskell) rely on recursion because they have no other way to create loops without mutable variables -- so they must have a way to make this scale to real-world computations.  When a recursive function is written in a special way, such that the recursive call is in *tail position*, [a lot of modern compilers](https://en.wikipedia.org/wiki/Tail_call#Language_support) are able to transform the recursion into a loop with constant memory use (commonly a `while` loop) -- this is called *tail call optimisation*.
 
 Let's see what a *tail recursive* version of the `sumTo` function looks like:
 
@@ -385,7 +385,7 @@ sumTo(10)
 
 The important change is that the recursive call (on the branch of execution that requires it) is now the very last operation to be executed before the function returns.  The computation (`sum + n`) occurs before the recursive call.  Therefore, no local state needs to be stored on the stack.
 
-Note: although it has been proposed for the EcmaScript standard, as of 2022, not all JavaScript engines support tail call optimisation (only WebKit AFAIK).  
+Note: although it has been proposed for the EcmaScript standard, as of 2024, not all JavaScript engines support tail call optimisation (only Safari/WebKit AFAIK).  
 
 ## Functions as parameters to other functions
 
@@ -673,7 +673,7 @@ all(x => x < 5, [1, 3, 5])
 
 - Can you write a function `any` that returns true if any of the tests pass?
 
-What if we wanted to see how many times each word appears in a list?
+- What if we wanted to see how many times each word appears in a list?
 
 ```javascript
 const wordCount = (array) => array.reduce(
@@ -880,7 +880,7 @@ Some notes about this implementation of range:
 
 - Although the `Array(n)` function allocates space for n elements, the result is still "empty" so `fill()` is necessary to actually create the entries.
 - The function passed to `map` is using an optional second argument which receives the index of the current element.  *See note in the [Array Cheatsheat](#array-cheatsheet) suggesting not to use this*.
-- The `_` is not special syntax, it's a valid variable name. I use `_` as a convention for a parameter that I don't use.  This is imitating Haskell syntax.
+- The `_` is not special syntax, it's a valid variable name. `_` is a common convention for a parameter that is not used. This is seen throughout various languages such as Python, Javascript and Haskell.
 
 ---------------------
 
@@ -925,6 +925,36 @@ class Person {
 }
 ```
 
+The equivalent in Java is:
+
+```java
+public class Person {
+    private String name;
+    private String occupation;
+
+    public Person(String name, String occupation) {
+        this.name = name;
+        this.occupation = occupation;
+    }
+
+    public void sayHello() {
+        System.out.println("Hi, my name's " + this.name + " and I " + this.occupation + "!");
+    }
+}
+```
+
+And Python:
+
+```python
+class Person:
+    def __init__(self, name, occupation):
+        self.name = name
+        self.occupation = occupation
+
+    def say_hello(self):
+        print(f"Hi, my name's {self.name} and I {self.occupation}!")
+```
+
 There is also now syntax for “getter properties”: functions which can be invoked without `()`, i.e. to look more like properties:
 
 ```javascript
@@ -942,7 +972,23 @@ class Person {
 }
 ```
 
-And classes of course support single-inheritance to achieve polymorphism:
+This is similar to the `@property` decorator you may have seen in Python:
+
+```python
+class Person:
+    def __init__(self, name, occupation):
+        self.name = name
+        self.occupation = occupation
+
+    @property
+    def greeting():
+       return f"Hi, my name's {self.name} and I {self.occupation}!"
+   
+    def say_hello(self):
+        print(self.greeting)
+```
+
+And Javascript classes support single-inheritance to achieve polymorphism:
 
 ```javascript
 class LoudPerson extends Person {
@@ -978,6 +1024,11 @@ const b = {f: ()=>console.log("b")}
 > b
 
 Informally, this type of polymorphism is called “Duck Typing” (i.e. "If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck").
+
+<figure style="display: block; margin-left: auto; margin-right: auto; text-align: center;">
+  <img src="/assets/images/chapterImages/javascript1/duck_typing.webp" alt="Duck Typing" style="width: 50%; display: block; margin-left: auto; margin-right: auto;" />
+  <figcaption class="figure-caption" style="text-align: center;">An example of a duck, typing.</figcaption>
+</figure>
 
 Another type of polymorphism which is key to strongly typed functional programming languages (like Haskell), but also a feature of many modern OO languages is *parametric polymorphism*.  We will see this in action when we introduce [TypeScript generics](/typescript1/#generic-types).
 
