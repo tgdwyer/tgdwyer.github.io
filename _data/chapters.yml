@@ -49,7 +49,7 @@
 - title: FRP Asteroids
   url: /asteroids/
   description: |
-    A fully worked example of FRP using rx.js Observables to create an in-browser version of a classic arcade game.
+    A fully worked example of FRP using RxJS Observables to create an in-browser version of a classic arcade game.
 - title: Higher Order Functions
   url: /higherorderfunctions/
   description: |

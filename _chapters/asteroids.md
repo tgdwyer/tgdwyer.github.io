@@ -5,7 +5,7 @@ title: "FRP Asteroids"
 ## Introduction
 Functional Reactive Programming (specifically the Observable/Observer pattern) allows us to capture asynchronous actions like user interface events in streams.  These allow us to "linearise" the flow of control, avoid deeply nested loops, and process the stream with pure, referentially transparent functions.
 
-As an example we will build a little "Asteroids" game using FRP.  We're going to use [rxjs](https://rxjs.dev/) as our Observable implementation, and we are going to render it in HTML using SVG.
+As an example we will build a little "Asteroids" game using FRP.  We're going to use [RxJS](https://rxjs.dev/) as our Observable implementation, and we are going to render it in HTML using SVG.
 We're also going to take some pains to make pure functional code (and lots of beautiful curried lambda (arrow) functions). We'll use [typescript type annotations](https://www.typescriptlang.org/) to help us ensure that our data is indeed immutable and to guide us in plugging everything together without type errors into a nicely decoupled [Model-View-Controller (MVC) architecture](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller):
 
 ![MVC Architecture](/assets/images/chapterImages/asteroids/generalMVC.png)
@@ -103,7 +103,7 @@ We're not done yet.  We have to stop the rotation on keyup by calling `clearInte
 And finally we're done.  But it was surprisingly messy for what should be a relatively straightforward and commonplace interaction.  Furthermore, the imperative style code above finished up deeply nested with function declarations inside function declarations, inside `if`s and variables like `d`, `handle` and `keyupListener` are referenced from inside these nested function scopes in ways that are difficult to read and make sense of.  The state machine is relatively straightforward, but it's tangled up by imperative code blocks.
 
 # Using Observable
-Observable (we'll use the implementation from rxjs) wraps common asynchronous actions like user events and intervals in streams, that we can process with a chain of 'operators' applied to the chain through a `pipe`.
+Observable (we'll use the implementation from RxJS) wraps common asynchronous actions like user events and intervals in streams, that we can process with a chain of 'operators' applied to the chain through a `pipe`.
 
 We start more or less the same as before, inside a function applied on `window.onload` and we still need local variables for the ship visual and its position/angle:
 ```typescript
@@ -113,7 +113,7 @@ window.onload = function() {
     state = { x:100, y:100, angle:0 };
 ...
 ```
-But now we use the rxjs `fromEvent` function to create an Observable `keydown$` (the '$' is a convention indicating the variable is a stream), 
+But now we use the RxJS `fromEvent` function to create an Observable `keydown$` (the '$' is a convention indicating the variable is a stream), 
 ```typescript
   const keydown$ = fromEvent<KeyboardEvent>(document, 'keydown');
 ```
@@ -367,7 +367,7 @@ And finally we `merge` our different inputs and scan over `State`, and the final
     .subscribe(updateView);
 ```
 
-Note, there are two versions of `merge` in rxjs. One is a function which merges multiple Observables and returns a new Observable, it is imported from `'rxjs'`.  Here we are using the operator version of `merge` to merge additional Observables into the pipe, imported from `'rxjs/operators'`.
+Note, there are two versions of `merge` in RxJS. One is a function which merges multiple Observables and returns a new Observable, it is imported from `'rxjs'`.  Here we are using the operator version of `merge` to merge additional Observables into the pipe, imported from `'rxjs/operators'`.
 
 # View
 

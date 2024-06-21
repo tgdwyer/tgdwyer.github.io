@@ -18,7 +18,7 @@ Functional Reactive Programming describes an approach to modelling complex, asyn
 - Applications of functions to elements of containers to transform to a new container (e.g. map, filter, reduce etc. over arrays).
 - Use of function composition and higher-order functions to define complex transformations from simple, reusable function elements.
 
-We will explore FRP through an implementation of the [Observable](#observable-streams) data structure in [the Reactive Extensions for JavaScript (rx.js) library](https://www.learnrxjs.io/).  We will then see it applied in application to a straight-forward [browser-based user interface problem](#a-user-interface-example).
+We will explore FRP through an implementation of the [Observable](#observable-streams) data structure in [the Reactive Extensions for JavaScript (RxJS) library](https://www.learnrxjs.io/).  We will then see it applied in application to a straight-forward [browser-based user interface problem](#a-user-interface-example).
 
 To support the code examples, the streams are visualized using [rxviz](https://rxviz.com/)
 
@@ -52,7 +52,7 @@ of(1,2,3,4)
 The requirement to invoke `subscribe` before anything is produced by the Observable is conceptually similar to the [lazy sequence](lazyevaluation), where nothing happened until we started calling ```next```.  But there is also a difference.
 You could think of our lazy sequences as being "pull-based" data structures, because we had to "pull" the values out one at a time by calling the ```next``` function as many times as we wanted elements of the list.  Observables are a bit different.  They are used to handle "streams" of things, such as asynchronous UI (e.g. mouse clicks on an element of a web page) or communication events (e.g. responses from a web service).  These things are asynchronous in the sense that we do not know when they will occur.  
 
-Just as we have done for various data structures (arrays and so on) in previous chapters, we can define a transform over an Observable to create a new Observable.  This transformation may have multiple steps the same way that we chained ```filter``` and ```map``` operations over arrays previously.  In rx.js's Observable implementation, however, they've gone a little bit more functional, by insisting that such operations are composed (rather than chained) inside a ```pipe```.  For example, here's the squares of even numbers in the range [0,10):
+Just as we have done for various data structures (arrays and so on) in previous chapters, we can define a transform over an Observable to create a new Observable.  This transformation may have multiple steps the same way that we chained ```filter``` and ```map``` operations over arrays previously.  In RxJS's Observable implementation, however, they've gone a little bit more functional, by insisting that such operations are composed (rather than chained) inside a ```pipe```.  For example, here's the squares of even numbers in the range [0,10):
 
 ```javascript
 const isEven = x=>x%2===0,
@@ -223,7 +223,7 @@ merge(key$.pipe(map(e=>e.key)),
 
 ## Observable Cheatsheet
 
-The following is a very small (but sufficiently useful) subset of the functionality available for [rx.js](https://www.learnrxjs.io/).
+The following is a very small (but sufficiently useful) subset of the functionality available for [RxJS](https://www.learnrxjs.io/).
 I've simplified the types rather greatly for readability and not always included all the optional arguments.
 
 ### Creation
