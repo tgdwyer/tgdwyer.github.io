@@ -825,6 +825,25 @@ The other thing happening at game over, is the call to `subscription.unsubscribe
     ).subscribe(updateView);
 ```
 
+This section here, is **key** to FRP, with four key ingredients:
+
+1. A constant rate _interval_ tick, to ensure consistent frame rate
+2. _Merged_ with Inputs from the user
+3. _Scan_ to update the state of the game
+4. Impure updates based on game state in _subscribe_
+
+Any other game in FRP style, will likely involve an _almost_ identical skeleton of:
+
+```typescript
+  const subscription = interval(FRAME_RATE).pipe(
+    map(elapsed=>new Tick(elapsed)),
+    merge(USER_INPUT_STREAMS),
+    scan(reduceState, INITIAL_GAME_STATE)
+    ).subscribe(updateView);
+```
+
+The job of the programmer (e.g., you in Assignment 1) will be to create appropriate functions to handle modification of the state, view, and inputs to ensure correct behaviour of the chosen game.
+
 Finally, we need to make a couple more additions to the CSS to display the rocks and game over text:
 
 ```CSS
