@@ -253,6 +253,24 @@ Where the expression in brackets above we notice is equivalent to `K`:
 K  ≡  x=> y=> x  ≡  h=> _=> h
 ```
 
+Of course, this definition is not unique to Javascript, we mainly use this language to explore this idea, but the equivalent can be completed in Python, with a slightly more verbose syntax
+
+```python
+K = lambda x : lambda y : x
+I = lambda x : x
+cons = lambda x: lambda y : lambda f : f(x)(y)
+head = lambda l : l(K)
+tail = lambda l : l(K(I))
+forEach = lambda f : lambda l : (f(head(l)),forEach(f)(tail(l))) if l is not None else None
+l = cons(1)(cons(2)(cons(3)(None)))
+
+forEach(print)(l)
+```
+
+> 1
+> 2
+> 3
+
 In the context of the [Lambda Calculus](/lambdacalculus), we will see that such a renaming is called *Alpha Conversion*.
 
 We are gradually changing our terminology to be more Haskell-like, so we have named the curried version of `rest` to `tail`.  The new definition of `tail`, compared to our previous definition of `rest`, is derived as follows:

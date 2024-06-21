@@ -287,6 +287,16 @@ function maxVal(x, y) {
 }
 ```
 
+This is semantically equivalent to familiar Python if/else construct, however, using `{` rather than indentation rules to establish scoping rules:
+
+```python
+def maxVal(x, y):
+  if (x >= y):
+    return x
+  else:
+    return y
+```
+
 There is also a useful ternary expression syntax for if-then-else:
 
 ```javascript
@@ -324,6 +334,16 @@ function sumTo(n) {
    }
    return sum;
 }
+```
+
+This looks slightly different to a `for` loop in Python, since in Javascript we normally use 3 parts to our for loop definition (initialization, end, update)
+
+```python
+def sumTo(n):
+    sum = 0
+    for i in range(1, n + 1):
+        sum += i
+    return sum
 ```
 
 Or we could perform the same computation using a recursive loop:
@@ -557,6 +577,19 @@ hi('tim')
 
 > "hello tim"
 
+You can actually do the same in Python
+
+```python
+def sayHello(person):
+    print('hello ' + person)
+sayHello('tim')
+hi = sayHello
+hi('tim')
+```
+
+> "hello tim"
+> "hello tim"
+
 ## Anonymous Functions
 
 The `sayHello` function is called a *named function*.  We can also create an anonymous function to be bound immediately to a variable:
@@ -623,6 +656,12 @@ You can also have functions with a list of arguments, just put the list in brack
 
 ```javascript
 const greeting = (greeting, person)=> greeting + ' ' + person
+```
+
+This is equivalent to using `lambda` in Python:
+
+```python
+greeting = lambda greeting, person: greeting + ' ' + person
 ```
 
 The body of the above functions are simple expressions.  If you need a more complex, multiline body (e.g. with local variables) you can do this but you need to surround the code block with curly braces `{}` and use an explicit `return` statement:

@@ -40,7 +40,22 @@ fibs -1
 
 would be a bad idea.  Good practice would be to add some exceptions for incorrect input to our function.  In a perfect world we would have a compiler that would check types dependent on values (actually, languages that support dependent types exist, e.g. the [Idris](https://www.idris-lang.org/) language is an interesting possible successor to Haskell in this space).
 
-One thing you will have noticed by now is that Haskell-like languages are light on syntax.  Especially, use of brackets is minimal, and typically to be avoided when evaluation order can be inferred correctly by the compiler’s application of lambda-calculus inspired precedence rules for function and operator application.
+Python3.10+ has taken inspiration from this pattern, and has its own alternative to pattern matching, with a slightly more verbose syntax. This is semantically identical to the PureScript definition, where we use pattern matching against the inputs. For completeness, all functions should aim to provide the type definition, similar to what we did in the PureScript example.
+
+```python
+def fibs(n: int) -> int:
+    match n:
+        case 0:
+            return 1
+        case 1: 
+            return 1
+        case _:
+            return fibs(n - 1) + fibs(n-2) 
+
+print(fibs(12))
+```
+
+One thing you will have noticed by now is that Haskell-like languages are light on syntax, this is obvious when compared next to the Python alternative.  Especially, use of brackets is minimal, and typically to be avoided when evaluation order can be inferred correctly by the compiler’s application of lambda-calculus inspired precedence rules for function and operator application.
 
 We can define a `main` function for our program, that maps the `fibs` function to a (`Nil`-terminated) linked-list of numbers and displays them to the console like so:
 
