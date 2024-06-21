@@ -208,7 +208,7 @@ function setLeftPadding(elem, value) {
 }
 ```
 
-So this function accepts either a string or a number for the ```value``` parameter -- but to find that out we need to dig into the code.  The "Union Type" facility in typescript allows us to specify the multiple options directly in the function definition, with a list of types separated by "```|```":
+So this function accepts either a string or a number for the ```value``` parameter -- but to find that out we need to dig into the code.  The "Union Type" facility in TypeScript allows us to specify the multiple options directly in the function definition, with a list of types separated by "```|```":
 
 ```typescript
 function setLeftPadding(elem: Element, value: string | number) {...

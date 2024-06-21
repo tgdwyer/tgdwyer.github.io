@@ -80,7 +80,7 @@ length [] = 0
 length (_:rest) = 1 + length rest
 ```
 
-The following visual summary shows pair data structures with accessor functions `fst` and `sec` defined using [Record Syntax](#record-syntax) with varying degrees of type flexibility, and compared with the equivalent [typescript generic notation](/typescript1#generic-types):
+The following visual summary shows pair data structures with accessor functions `fst` and `sec` defined using [Record Syntax](#record-syntax) with varying degrees of type flexibility, and compared with the equivalent [TypeScript generic notation](/typescript1#generic-types):
 
 - Hard-coded for `Int` pairs only
 - with one type parameter (by convention called `a` in Haskell, and `T` in TypeScript)
