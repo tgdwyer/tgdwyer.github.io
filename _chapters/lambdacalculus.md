@@ -313,7 +313,7 @@ Y g = (λf. ( λx . f (x x) ) ( λx. f (x x) ) ) g
     = ( λx . f (x x) ) ( λx. f (x x) ) [f:=g]  <i>- beta reduction</i>
     = <b>( λx . g (x x) ) ( λx. g (x x) )</b>         <i>- a partial expansion of Y g, remember this...</i>
     = g (x x) [ x:= λx. g (x x)]               <i>- beta reduction</i>
-    = g ( <b>(λx. g (x x) (λx. g (x x) )</b> )        <i>- bold part matches Y g above, so now...</i>
+    = g ( <b>(λx. g (x x) ) (λx. g (x x) )</b> )        <i>- bold part matches Y g above, so now...</i>
     = g (Y g)
 <i>... more beta reduction as above
 ... followed by substitution with Y g when we see the pattern above...</i>
