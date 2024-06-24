@@ -49,8 +49,8 @@ i = 'hello!';
 
 (Each of these features is described in more detail in subsequent sections -- this is just a summary and roadmap)
 
-A type annotation begins with ```:``` and goes after the variable name, but before any assignment. 
-Primitive types include ```number```, ```string```, ```boolean```.
+A type annotation begins with `:` and goes after the variable name, but before any assignment. 
+Primitive types include `number`, `string`, `boolean`.
 
 ```typescript
 let x: number, s: string, b: boolean = false;
@@ -67,7 +67,7 @@ x = "hello" // no problem now
 x = false; // type error!  only numbers or strings allowed.
 ```
 
-Function parameter types are declared similarly, the return type of the function goes after the ```)``` of the parameter list:
+Function parameter types are declared similarly, the return type of the function goes after the `)` of the parameter list:
 
 ```typescript
 function theFunction(x: number, y: number): number {
@@ -113,7 +113,7 @@ type ImmutableStudent = Readonly<{
 }>
 ```
 
-When type annotations get long and complex we can declare aliases for them using the ```type``` keyword:
+When type annotations get long and complex we can declare aliases for them using the `type` keyword:
 
 ```typescript
 type CurriedFunc<U,V,W> = (x:U)=>(y:V)=>W
@@ -135,7 +135,7 @@ Consider that JavaScript is commonly used to manipulate HTML pages.  For example
 const headings = document.getElementsByTagName("h1")
 ```
 
-In the browser, the global ```document``` variable always points to the currently loaded HTML document.  Its method ```getElementsByTagName``` returns a collection of elements with the specified tag, in this case ```<h1>```.
+In the browser, the global `document` variable always points to the currently loaded HTML document.  Its method `getElementsByTagName` returns a collection of elements with the specified tag, in this case `<h1>`.
 
 Let's say I want to indent the first heading by 100 pixels, I could do this by manipulating the "style" attribute of the element:
 
@@ -155,7 +155,7 @@ function setLeftPadding(elem, value) {
 setLeftPadding(headings[0], "100px")
 ```
 
-But how will a user of this function (other than myself, or myself in three weeks when I can't remember how I wrote this code) know what to pass in as parameters?  ```elem``` is a pretty good clue that it needs to be an instance of an HTML element, but is value a number or a string?
+But how will a user of this function (other than myself, or myself in three weeks when I can't remember how I wrote this code) know what to pass in as parameters?  `elem` is a pretty good clue that it needs to be an instance of an HTML element, but is value a number or a string?
 
 In TypeScript we can make the expectation explicit:
 
@@ -173,7 +173,7 @@ setLeftPadding(headings[0],100)
 
 > Argument of type '100' is not assignable to parameter of type 'string'.ts(2345)
 
-In JavaScript, the interpreter would silently convert the number to a string and set ```padding-left:100``` -- which wouldn't actually cause the element to be indented because CSS expects ```px``` (short for pixel) at the end of the value.
+In JavaScript, the interpreter would silently convert the number to a string and set `padding-left:100` -- which wouldn't actually cause the element to be indented because CSS expects `px` (short for pixel) at the end of the value.
 
 Potentially worse, I might forget to add the index after headings:
 
@@ -185,7 +185,7 @@ This would cause a run-time error in the browser:
 
 > VM360:1 Uncaught TypeError: headings.setAttribute is not a function
 
-This is because headings is not an HTML Element but an HTMLCollection, with no method ```setAttribute```.  Note that if I try to debug it, the error will be reported from a line of code inside the definition of ```setLeftPadding```.  I don't know if the problem is in the function itself or in my call.
+This is because headings is not an HTML Element but an HTMLCollection, with no method `setAttribute`.  Note that if I try to debug it, the error will be reported from a line of code inside the definition of `setLeftPadding`.  I don't know if the problem is in the function itself or in my call.
 
 The same call inside a TypeScript program would trigger a compile-time error.  In a fancy editor with compiler services like VSCode I'd know about it immediately because the call would get a red squiggly underline immediately after I type it, I can hover over the squiggly to get a detailed error message, and certainly, the generated broken JavaScript would never make it into production.
 ![Compile Error Screenshot](/assets/images/chapterImages/typescript1/setLeftPaddingTypeScript.png)
@@ -206,13 +206,13 @@ function setLeftPadding(elem, value) {
 }
 ```
 
-So this function accepts either a string or a number for the ```value``` parameter -- but to find that out we need to dig into the code.  The "Union Type" facility in TypeScript allows us to specify the multiple options directly in the function definition, with a list of types separated by "```|```":
+So this function accepts either a string or a number for the `value` parameter -- but to find that out we need to dig into the code.  The "Union Type" facility in TypeScript allows us to specify the multiple options directly in the function definition, with a list of types separated by "`|`":
 
 ```typescript
 function setLeftPadding(elem: Element, value: string | number) {...
 ```
 
-Going further, the following allows either a number, or a string, or a function that needs to be called to retrieve the ```string```.  It uses ```typeof``` to query the type of the parameter and do the right thing in each case.
+Going further, the following allows either a number, or a string, or a function that needs to be called to retrieve the `string`.  It uses `typeof` to query the type of the parameter and do the right thing in each case.
 
 ```typescript
 function setLeftPadding(elem: Element, value: number | string | (()=>string)) {
@@ -229,7 +229,7 @@ The TypeScript typechecker also knows about typeof expressions (as used above) a
 
 ## Interfaces
 
-In TypeScript I can declare an ```interface``` which defines the set of properties and their types, that I expect to be available for certain objects.
+In TypeScript I can declare an `interface` which defines the set of properties and their types, that I expect to be available for certain objects.
 
 For example, when tallying scores at the end of semester, I will need to work with collections of students that have a name, assignment and exam marks.  There might even be some special cases which require mark adjustments, the details of which I don't particularly care about but that I will need to be able to access, e.g. through a function particular to that student.  The student objects would need to provide an interface that looks like this:
 
@@ -242,7 +242,7 @@ interface Student {
 }
 ```
 
-Note that this interface guarantees that there is a function returning a number called ```markAdjustment``` available on any object implementing the ```Student``` interface, but it says nothing about how the adjustment is calculated.  Software engineers like to talk about [Separation of Concerns (SoC)](https://en.wikipedia.org/wiki/Separation_of_concerns).  To me, the implementation of `markAdjustment` is Someone Else's Problem (SEP).
+Note that this interface guarantees that there is a function returning a number called `markAdjustment` available on any object implementing the `Student` interface, but it says nothing about how the adjustment is calculated.  Software engineers like to talk about [Separation of Concerns (SoC)](https://en.wikipedia.org/wiki/Separation_of_concerns).  To me, the implementation of `markAdjustment` is Someone Else's Problem (SEP).
 
 Now I can define functions which work with students, for example to calculate the average score for the class:
 
@@ -269,7 +269,7 @@ interface Student<T> {
 }
 ```
 
-Here ```T``` is the *type parameter*, and the compiler will infer its type when it is used.  It could be `number`, or it could be a `string` (e.g. if it's an email), or it could be something else. 
+Here `T` is the *type parameter*, and the compiler will infer its type when it is used.  It could be `number`, or it could be a `string` (e.g. if it's an email), or it could be something else. 
 
 Type parameters can have more descriptive names if you like, but they must start with a capital.  The convention though is to use rather terse single letter parameter names in the same vicinity of the alphabet as T.  This habit comes from C++, where T used to stand for "Template", and the terseness stems from the fact that we don't really care about the details of what it is.  
 
@@ -295,7 +295,7 @@ interface IListNode<T> {
 }
 ```
 
-The specific type of ```T``` will be resolved when ```data``` is assigned a specific type value.
+The specific type of `T` will be resolved when `data` is assigned a specific type value.
 
 We can add type parameters to interfaces, ES6 classes, type aliases, and also functions.  Consider the function which performs a binary search over an array of numbers (it assumes the array is sorted):
 
@@ -415,13 +415,13 @@ So type checking helps us to create functions correctly, but also to use them co
 You begin to appreciate type checking more and more as your programs grow larger and the error messages appear further from their definitions.  However, the most important thing is that these errors are being caught at *compile time* rather than at *run time*, when it might be too late!
 
 ## Optional Properties
-Look again at the ```next``` property of ```IListNode```:
+Look again at the `next` property of `IListNode`:
 
 ```typescript
     next?: IListNode<T>;
 ```
 
-The ```?``` after the ```next``` property means that this property is optional.  Thus, if ```node``` is an instance of ```IListNode<T>```, we can test if it has any following nodes:
+The `?` after the `next` property means that this property is optional.  Thus, if `node` is an instance of `IListNode<T>`, we can test if it has any following nodes:
 ```javascript
 typeof node.next === 'undefined'
 ```
@@ -429,9 +429,9 @@ or simply:
 ```javascript
 !node.next 
 ```
-In either case, if these expressions are ```true```, it would indicate the end of the list.
+In either case, if these expressions are `true`, it would indicate the end of the list.
 
-A concrete implementation of a class for ```IListNode<T>``` can provide a constructor:
+A concrete implementation of a class for `IListNode<T>` can provide a constructor:
 
 ```javascript
 class ListNode<T> implements IListNode<T> {
@@ -446,8 +446,8 @@ const list = new ListNode(1, new ListNode(2, new ListNode(3)));
 ```
 ------
 ## Exercises
-- Implement a class ```List<T>``` whose constructor takes an array parameter and creates a linked list of ListNode<T>.  
-- Add methods to your ```List<T>``` class for:
+- Implement a class `List<T>` whose constructor takes an array parameter and creates a linked list of ListNode<T>.  
+- Add methods to your `List<T>` class for:
 
 ```typescript
 forEach(f: (_:T)=> void): List<T>
@@ -475,7 +475,7 @@ const studentVersion1 = {
 }
 ```
 
-which prevents reassigning ```studentVersion1``` to any other object, the ```const``` declaration does not prevent properties of the object from being changed:
+which prevents reassigning `studentVersion1` to any other object, the `const` declaration does not prevent properties of the object from being changed:
 
 ```javascript
 studentVersion1.name = "Tom"
@@ -499,7 +499,7 @@ studentVersion2.name = "Tom"
 > Cannot assign to 'name' because it is a read-only property.ts(2540)
 
 The above is a singleton immutable Object.  However, more generally, if we need multiple instances of a deeply immutable object, we can 
-declare immutable types using the ```Readonly``` construct:
+declare immutable types using the `Readonly` construct:
 
 ```javascript
 type ImmutableStudent = Readonly<{
@@ -545,4 +545,4 @@ value = <any>"hello"
 // no error.
 ```
 
-While leaving off type annotations and forcing types with any may be convenient, for example, to quickly port legacy JavaScript into a TypeScript program, generally speaking it is good practice to use types wherever possible, and can actually be enforced with the ```--noImplicitAny``` compiler flag.  The compiler’s type checker is a sophisticated constraint satisfaction system and the correctness checks it applies are usually worth the extra effort -- especially in modern compilers like TypeScript where type inference does most of the work for you.
+While leaving off type annotations and forcing types with any may be convenient, for example, to quickly port legacy JavaScript into a TypeScript program, generally speaking it is good practice to use types wherever possible, and can actually be enforced with the `--noImplicitAny` compiler flag.  The compiler’s type checker is a sophisticated constraint satisfaction system and the correctness checks it applies are usually worth the extra effort -- especially in modern compilers like TypeScript where type inference does most of the work for you.
