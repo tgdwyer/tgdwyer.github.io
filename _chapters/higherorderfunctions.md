@@ -186,9 +186,9 @@ Note that `compose` let us define `roundFloat` without any messing around with a
 
 ## Exercise
 
-- Create a ```compose``` function in Javascript that takes a variable number of functions as arguments and composes (chains) them.  Using the spread operator (`...`) to take a variable number of arguments as an array and the `Array.prototype.reduce` method, the function should be very small.
+- Create a `compose` function in Javascript that takes a variable number of functions as arguments and composes (chains) them.  Using the spread operator (`...`) to take a variable number of arguments as an array and the `Array.prototype.reduce` method, the function should be very small.
 
-- Create a ```pipe``` function which composes its arguments in the opposite order to the ```compose``` function above.  That is, left-to-right.  Note that in [RxJS](https://www.learnrxjs.io/), such a ```pipe``` function is an important way to create chains of operations (over Observable streams).
+- Create a `pipe` function which composes its arguments in the opposite order to the `compose` function above.  That is, left-to-right.  Note that in [RxJS](https://www.learnrxjs.io/), such a `pipe` function is an important way to create chains of operations (over Observable streams).
 
 ### Solutions
 
@@ -427,7 +427,7 @@ We have a function that lets us lookup the id for a student in a particular clas
 const lookup = class_=> name=> class_[name]
 ```
 
-Now we can try to find an id for each student, first from ```class1``` but fall back to ```class2``` if it isn’t there:
+Now we can try to find an id for each student, first from `class1` but fall back to `class2` if it isn’t there:
 
 ```javascript
 const ids = students.map(or(lookup(class1))(lookup(class2)))
@@ -520,7 +520,7 @@ But, here’s an interesting example where mixing up unary and binary functions 
 ['1','2','3'].map(parseInt);
 ```
 
-We are converting an array of strings into an array of int.  The output will be ```[1,2,3]``` right?  WRONG!
+We are converting an array of strings into an array of int.  The output will be `[1,2,3]` right?  WRONG!
 
 ```javascript
 ['1','2','3'].map(parseInt);
@@ -545,9 +545,9 @@ The point of this demonstration is that curried functions are a more principled 
 
 ## Exercises
 
-1. From the docs for ```Array.map``` and ```parseInt```  can you figure out why the above is happening?
+1. From the docs for `Array.map` and `parseInt`  can you figure out why the above is happening?
 2. Write a function called unary that takes a binary function and a value to bind to its first argument, and returns a unary function.  What is its fully specified TypeScript type signature?
-3. Flip - e.g. applied to ```map(Iterable,fn)``` to create ```mapApplyFn(Iterable)```.
+3. Flip - e.g. applied to `map(Iterable,fn)` to create `mapApplyFn(Iterable)`.
 
 ### Solutions
 

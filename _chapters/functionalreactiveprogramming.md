@@ -48,10 +48,10 @@ of(1,2,3,4)
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/of1234.gif)
 
-The requirement to invoke `subscribe` before anything is produced by the Observable is conceptually similar to the [lazy sequence](lazyevaluation), where nothing happened until we started calling ```next```.  But there is also a difference.
-You could think of our lazy sequences as being "pull-based" data structures, because we had to "pull" the values out one at a time by calling the ```next``` function as many times as we wanted elements of the list.  Observables are a bit different.  They are used to handle "streams" of things, such as asynchronous UI (e.g. mouse clicks on an element of a web page) or communication events (e.g. responses from a web service).  These things are asynchronous in the sense that we do not know when they will occur.  
+The requirement to invoke `subscribe` before anything is produced by the Observable is conceptually similar to the [lazy sequence](lazyevaluation), where nothing happened until we started calling `next`.  But there is also a difference.
+You could think of our lazy sequences as being "pull-based" data structures, because we had to "pull" the values out one at a time by calling the `next` function as many times as we wanted elements of the list.  Observables are a bit different.  They are used to handle "streams" of things, such as asynchronous UI (e.g. mouse clicks on an element of a web page) or communication events (e.g. responses from a web service).  These things are asynchronous in the sense that we do not know when they will occur.  
 
-Just as we have done for various data structures (arrays and so on) in previous chapters, we can define a transform over an Observable to create a new Observable.  This transformation may have multiple steps the same way that we chained ```filter``` and ```map``` operations over arrays previously.  In RxJS's Observable implementation, however, they've gone a little bit more functional, by insisting that such operations are composed (rather than chained) inside a ```pipe```.  For example, here's the squares of even numbers in the range [0,10):
+Just as we have done for various data structures (arrays and so on) in previous chapters, we can define a transform over an Observable to create a new Observable.  This transformation may have multiple steps the same way that we chained `filter` and `map` operations over arrays previously.  In RxJS's Observable implementation, however, they've gone a little bit more functional, by insisting that such operations are composed (rather than chained) inside a `pipe`.  For example, here's the squares of even numbers in the range [0,10):
 
 ```javascript
 const isEven = x=>x%2===0,
@@ -69,7 +69,7 @@ range(10)
 > 36  
 > 64
 
-The three animations represent the creation (```range```) and the two transformations (```filter``` and ```map```), respectively.
+The three animations represent the creation (`range`) and the two transformations (`filter` and `map`), respectively.
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even.gif)
 
@@ -88,11 +88,11 @@ In the developer console, only one number will be printed:
 
 > 233168
 
-We can see the values changes as they move further and further down the stream. The four animations represent the creation (```range```) and the three transformations (```filter```, ```scan``` and ```last```), respectively. The ```last``` animation is empty, since we only emit the *last* value, which will be off screen.
+We can see the values changes as they move further and further down the stream. The four animations represent the creation (`range`) and the three transformations (`filter`, `scan` and `last`), respectively. The `last` animation is empty, since we only emit the *last* value, which will be off screen.
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler.gif)
 
-Scan is very much like the ```reduce``` function on Array in that it applies an accumulator function to the elements coming through the Observable, except instead of just outputting a single value (as ```reduce``` does), it emits a stream of the running accumulation (in this case, the sum so far).  Thus, we use the ```last``` function to produce an Observable with just the final value.
+Scan is very much like the `reduce` function on Array in that it applies an accumulator function to the elements coming through the Observable, except instead of just outputting a single value (as `reduce` does), it emits a stream of the running accumulation (in this case, the sum so far).  Thus, we use the `last` function to produce an Observable with just the final value.
 
 There are also functions for combining Observable streams.  The `zip` function lets you pair the values from two streams into an array:
 
@@ -112,7 +112,7 @@ zip(columns,rows)
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/zip1.gif)
 
 If you like mathy vector speak, you can think of the above as an *inner product* of the two streams.  
-By contrast, the ```mergeMap``` operator gives the *cartesian product* of two streams.  That is, it gives us a way to take, for every element of a stream, a whole other stream, but flattened (or projected) together with the parent stream.  The following enumerates all the row/column indices of cells in a spreadsheet:
+By contrast, the `mergeMap` operator gives the *cartesian product* of two streams.  That is, it gives us a way to take, for every element of a stream, a whole other stream, but flattened (or projected) together with the parent stream.  The following enumerates all the row/column indices of cells in a spreadsheet:
 
 ```javascript
 columns.pipe(
@@ -134,7 +134,7 @@ columns.pipe(
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/mergeMap.gif)
 
-If we contrast ```mergeMap``` and ```map```, map will produce an Observable of Observables, while mergeMap, will produce a single stream with all of the values. Contrast the animation for ```map```, with the previous ```mergeMap``` animation.  ```map``` has three separate branches, where each one represents its own observable stream. The output of the ```console.log```, is an instance of the Observable class itself, which is not very useful!
+If we contrast `mergeMap` and `map`, map will produce an Observable of Observables, while mergeMap, will produce a single stream with all of the values. Contrast the animation for `map`, with the previous `mergeMap` animation.  `map` has three separate branches, where each one represents its own observable stream. The output of the `console.log`, is an instance of the Observable class itself, which is not very useful!
 
 ```javascript
 columns.pipe(
@@ -150,7 +150,7 @@ columns.pipe(
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/mapmap.gif)
 
-Another way to combine streams is ```merge```.  Streams that are generated with ```of``` and ```range``` have all their elements available immediately, so the result of a merge is not very interesting, just the elements of one followed by the elements of the other:
+Another way to combine streams is `merge`.  Streams that are generated with `of` and `range` have all their elements available immediately, so the result of a merge is not very interesting, just the elements of one followed by the elements of the other:
 
 ```javascript
 merge(columns,rows)
@@ -166,7 +166,7 @@ merge(columns,rows)
 
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/merge.gif)
 
-However, ```merge``` when applied to asynchronous streams will merge the elements in the order that they arrive in the stream.  For example, a stream of key-down and mouse-down events from a web-page:
+However, `merge` when applied to asynchronous streams will merge the elements in the order that they arrive in the stream.  For example, a stream of key-down and mouse-down events from a web-page:
 
 ```javascript
 const
@@ -174,7 +174,7 @@ const
   mouse$ = fromEvent<MouseEvent>(document,"mousedown");
 ```
 
-It's a convention to end variable names referring to Observable streams with a ```$``` (I like to think it's short for "$tream", or implies a plurality of the things in the stream, or maybe it's just because [cash rules everything around me](https://www.youtube.com/watch?v=PBwAxmrE194)).
+It's a convention to end variable names referring to Observable streams with a `$` (I like to think it's short for "$tream", or implies a plurality of the things in the stream, or maybe it's just because [cash rules everything around me](https://www.youtube.com/watch?v=PBwAxmrE194)).
 
 The following lets us see in the console the keys pressed as they come in, it will keep running for as long as the web page is open:
 
@@ -202,7 +202,7 @@ The yellow highlight signifies when the mouse is clicked!
 
 Once again this will keep producing the message for every mouse click for as long as the page is open.  Note that the subscribes do not "block", so the above two subscriptions will run in parallel.  That is, we will receive messages on the console for either key or mouse downs whenever they occur.
 
-The following achieves the same thing with a single subscription using ```merge```:
+The following achieves the same thing with a single subscription using `merge`:
 
 ```javascript
 merge(key$.pipe(map(e=>e.key)),
@@ -276,7 +276,7 @@ subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: ()
 
 ### Operators
 
-Operators are passed to ```pipe```.  They all return an ```OperatorFunction``` which is used by ```pipe```.
+Operators are passed to `pipe`.  They all return an `OperatorFunction` which is used by `pipe`.
 
 ```typescript
 // transform the elements of the input stream using the `project' function
@@ -332,7 +332,7 @@ There are only three transitions, each triggered by an event.
 
 The typical way to add interaction to web-pages and other UIs has historically been by adding Event Listeners to the UI elements for which we want interactive behaviour.  In software engineering terms it's typically referred to as the [Observer Pattern](https://en.wikipedia.org/wiki/Observer_pattern) (not to be confused with the "Observable" FRP abstraction we have been discussing).
 
-Here’s an event-driven code fragment that provides such dragging for some SVG element ```draggableRect``` that is a child of an SVG canvas element referred to by the variable ```svg```:
+Here’s an event-driven code fragment that provides such dragging for some SVG element `draggableRect` that is a child of an SVG canvas element referred to by the variable `svg`:
 
 ```typescript
 const svg = document.getElementById("svgCanvas")!;
@@ -353,7 +353,7 @@ rect.addEventListener('mousedown',e => {
 })
 ```
 
-We add 'event listeners' to the HTML elements, which invoke the specified functions when the event fires.  There are some awkward dependencies.  The ```moveListener``` function needs access to the mouse coordinates from the mousedown event, the `done` function which ends the drag on a ```mouseup``` event needs a reference to the ```moveListener``` function so that it can clean it up.
+We add 'event listeners' to the HTML elements, which invoke the specified functions when the event fires.  There are some awkward dependencies.  The `moveListener` function needs access to the mouse coordinates from the mousedown event, the `done` function which ends the drag on a `mouseup` event needs a reference to the `moveListener` function so that it can clean it up.
 
 It’s all a bit amorphous:
 
@@ -404,7 +404,7 @@ Compared to our state machine diagram above:
 - we have modelled each of the possible transition triggers as streams;
 - the flow of data is from top to bottom, with the cycling branch handled by the mergeMap operation;
 - the only side effects (the movement of the rectangle) occur in the function passed to the subscribe;
-- the cleanup of subscriptions to the mousemove and mouseup events is handled automatically by the ```takeUntil``` function when it closes the streams.
+- the cleanup of subscriptions to the mousemove and mouseup events is handled automatically by the `takeUntil` function when it closes the streams.
 
 However, there is still something not very elegant about this version.  As indicated by my crude ASCII art in the comment above, there is a dependency in the function applied to the stream by the first `map`, on the DOM element being repositioned in the function applied by subscribe.  This dependency on mutable state outside the function scope makes this solution impure.
 

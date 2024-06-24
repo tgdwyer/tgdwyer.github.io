@@ -625,9 +625,9 @@ With just the above definition we can construct a list (the term cons dates back
 const list123 = cons(1, cons(2, cons(3, null)));
 ```
 
-The data element, and the reference to the next node in the list are stored in the closure returned by the ```cons``` function.  Created like this, the only side-effect of growing the list is creation of new cons closures.  Mutation of more complex structures such as trees can be managed in a similarly ‘pure’ way, and surprisingly efficiently, as we will see later in this course.
+The data element, and the reference to the next node in the list are stored in the closure returned by the `cons` function.  Created like this, the only side-effect of growing the list is creation of new cons closures.  Mutation of more complex structures such as trees can be managed in a similarly ‘pure’ way, and surprisingly efficiently, as we will see later in this course.
 
-So ```cons``` is a function that takes two parameters ```_head``` and ```_rest``` (the `_` prefix is just to differentiate them from the functions I create below), and returns a function that itself takes a function (selector) as argument.  The selector function is then applied to ```_head``` and ```_rest```.  
+So `cons` is a function that takes two parameters `_head` and `_rest` (the `_` prefix is just to differentiate them from the functions I create below), and returns a function that itself takes a function (selector) as argument.  The selector function is then applied to `_head` and `_rest`.  
 
 The `selector` function that we pass to the list is our ticket to accessing its elements:  
 
@@ -651,7 +651,7 @@ const
     rest = list=> list((_,r)=>r)
 ```
 
-Now, ```head``` gives us the first data element from the list, and ```rest``` gives us another list.  Now we can access things in the list like so:
+Now, `head` gives us the first data element from the list, and `rest` gives us another list.  Now we can access things in the list like so:
 
 ```javascript
 const one = head(list123), // ===1
@@ -679,7 +679,7 @@ In the above, we are using closures to store data.  It's just a trick to show th
 
 ### Towards Lambda Calculus and Church Encoding
 
-Thus, with only pure function expressions and JavaScript conditional expressions (```?:```) we can begin to perform complex computations.  We can actually go further and eliminate the conditional expressions with more functions! Here’s the gist of it: we wrap list nodes with another function of two arguments, one argument, ```whenempty```, is a function to apply when the list is empty, the other argument, ```notempty```, is applied by all internal nodes in the list.  An empty list node (instead of null) applies the ```whenempty``` function when visited, a non-empty node applies the ```notempty``` function. The implementations of each of these functions then form the two conditions to be handled by a recursive algorithm like ```map``` or ```reduce```.  See [“Making Data out of Functions” by Braithwaite](https://leanpub.com/javascriptallongesix/read#leanpub-auto-making-data-out-of-functions) for a more detailed exposition of this idea.
+Thus, with only pure function expressions and JavaScript conditional expressions (`?:`) we can begin to perform complex computations.  We can actually go further and eliminate the conditional expressions with more functions! Here’s the gist of it: we wrap list nodes with another function of two arguments, one argument, `whenempty`, is a function to apply when the list is empty, the other argument, `notempty`, is applied by all internal nodes in the list.  An empty list node (instead of null) applies the `whenempty` function when visited, a non-empty node applies the `notempty` function. The implementations of each of these functions then form the two conditions to be handled by a recursive algorithm like `map` or `reduce`.  See [“Making Data out of Functions” by Braithwaite](https://leanpub.com/javascriptallongesix/read#leanpub-auto-making-data-out-of-functions) for a more detailed exposition of this idea.
 
 These ideas, of computation through pure function expressions, are inspired by Alonzo Church’s *lambda calculus*.   We’ll be looking again at the lambda calculus later.  Obviously, for the program to be at all useful you will need some sort of side effect, such as outputting the results of a computation to a display device.  When we begin to explore PureScript and Haskell later in this course we will discuss how such languages manage this trick while remaining “pure”.
 
@@ -687,11 +687,11 @@ These ideas, of computation through pure function expressions, are inspired by A
 
 ## Exercises
 
-* Implement a ```fromArray``` function to construct a ```cons``` list from an array
-* Implement a ```filter``` function, which takes a function and a cons list, and returns another cons list populated only with those elements of the list for which the function returns true
-* Implement a ```reduce``` function for these cons lists, similar to javascript’s ```Array.reduce```
-* Implement a ```reduceRight``` function for these cons lists, similar to javascript’s ```Array.reduceRight```
-* Implement a ```concat``` function that takes two lists as arguments and returns a new list of their concatenation.
+* Implement a `fromArray` function to construct a `cons` list from an array
+* Implement a `filter` function, which takes a function and a cons list, and returns another cons list populated only with those elements of the list for which the function returns true
+* Implement a `reduce` function for these cons lists, similar to javascript’s `Array.reduc`e
+* Implement a `reduceRight` function for these cons lists, similar to javascript’s `Array.reduceRigh`t
+* Implement a `concat` function that takes two lists as arguments and returns a new list of their concatenation.
 * How can we update just one element in this list without mutating any data and what is the run-time complexity of such an operation?
 
 ---
@@ -711,7 +711,7 @@ const studentVersion1 = {
 > studentVersion1  
 > {name: "Tim", assignmentMark: 20, examMark: 15}
 
-Conveniently, one can copy all of the properties from an existing object into a new object using the "spread" operator ```...```, followed by more JSON properties that can potentially overwrite those of the original.  For example, the following creates a new object with all the properties of the first, but with a different assignmentMark:
+Conveniently, one can copy all of the properties from an existing object into a new object using the "spread" operator `...`, followed by more JSON properties that can potentially overwrite those of the original.  For example, the following creates a new object with all the properties of the first, but with a different assignmentMark:
 
 ```javascript
 const studentVersion2 = {
@@ -736,7 +736,7 @@ const studentVersion3 = updateExamMark(studentVersion2, 19);
 > studentVersion3  
 > {name: "Tim", assignmentMark: 19, examMark: 19}
 
-Note that when we declared each of the variables ```studentVersion1-3``` as ```const```, these variables are only constant in the sense that the object reference cannot be changed.  That is, they cannot be reassigned to refer to different objects:
+Note that when we declared each of the variables `studentVersion1-3` as `const`, these variables are only constant in the sense that the object reference cannot be changed.  That is, they cannot be reassigned to refer to different objects:
 
 ```javascript
 studentVersion1 = studentVersion2;
