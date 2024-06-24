@@ -125,14 +125,14 @@ Of course, you should not abuse the ability to layout code in different ways and
 
 ## JavaScript Types
 
-JavaScript has several "primitive types" (simple types that are not [Objects](#objects)).  These include:
+JavaScript has several “primitive types” (simple types that are not [Objects](#objects)).  These include:
 
 - `number`: any numeric value, integer or decimal
 - `string`: delineated like `"hello"` or `'hello'` or even ``` `hello` ```.  
 - `boolean`: can be only `true` or `false`
 - `undefined`: is a special type with only one value which is `undefined`.
 
-and a [couple of others](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) that we won't worry about here.
+and a [couple of others](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) that we won’t worry about here.
 
 JavaScript is *loosely typed* in the sense that a mutable variable can be assigned (and re-assigned) different values of different types.
 
@@ -153,7 +153,7 @@ JavaScript is *loosely typed* in the sense that a mutable variable can be assign
 
 ## Variable scope
 
-A variable's *scope* is the region of the program where it is visible, i.e. it can be referenced.
+A variable’s *scope* is the region of the program where it is visible, i.e. it can be referenced.
 You can limit the scope of a variable by declaring it inside a block of code delineated by curly braces:
 
 ```javascript
@@ -246,11 +246,11 @@ x += <expr>
 
 ## Functions
 
-Functions are declared with the `function` keyword.  You can give the function a name followed by a tuple of zero or more parameters.  Variables declared within the function's body (marked by a matching pair of curly braces `{ … }`) are limited to the scope of that function body, but of course the parameters to the function are also in scope within the function body.  You return the result with the `return` keyword.
+Functions are declared with the `function` keyword.  You can give the function a name followed by a tuple of zero or more parameters.  Variables declared within the function’s body (marked by a matching pair of curly braces `{ … }`) are limited to the scope of that function body, but of course the parameters to the function are also in scope within the function body.  You return the result with the `return` keyword.
 
 ```javascript
 /**
-* define a function called "myFunction" with two parameters, x and y
+* define a function called “myFunction” with two parameters, x and y
 * which does some silly math, prints something and returns the result
 */
 function myFunction(x, y) {
@@ -264,7 +264,7 @@ function myFunction(x, y) {
 const z = 1; // z is immutable and defined in the global scope
 ```
 
-You invoke (or 'call', or 'apply') a function like so:
+You invoke (or “call”, or “apply”) a function like so:
 
 ```javascript
 myFunction(1,2)
@@ -387,7 +387,7 @@ sumTo(1000000)
 
 However, functional languages (like Haskell) rely on recursion because they have no other way to create loops without mutable variables -- so they must have a way to make this scale to real-world computations.  When a recursive function is written in a special way, such that the recursive call is in *tail position*, [a lot of modern compilers](https://en.wikipedia.org/wiki/Tail_call#Language_support) are able to transform the recursion into a loop with constant memory use (commonly a `while` loop) -- this is called *tail call optimisation*.
 
-Let's see what a *tail recursive* version of the `sumTo` function looks like:
+Let’s see what a *tail recursive* version of the `sumTo` function looks like:
 
 ```javascript
 function sumTo(n, sum = 0) {
@@ -465,7 +465,7 @@ Note that when we declare an object with the `const` keyword as above, it is onl
 ```javascript
 myObj = {
     aProperty: 0,
-    anotherProperty: "tim wasn't here"
+    anotherProperty: "tim wasn’t here"
 };
 ```
 
@@ -500,7 +500,7 @@ function showX({x}) {
 }
 ```
 
-You can also initialise an object's properties directly with variables.  Unless a new property name is specified, the variable names become property names, like so:
+You can also initialise an object’s properties directly with variables.  Unless a new property name is specified, the variable names become property names, like so:
 
 ```javascript
 const x = 123, tempY = 456;
@@ -968,9 +968,9 @@ Of course, if you do something like this in your JS library, and it pollutes the
 
 Some notes about this implementation of range:
 
-- Although the `Array(n)` function allocates space for n elements, the result is still "empty" so `fill()` is necessary to actually create the entries.
+- Although the `Array(n)` function allocates space for n elements, the result is still “empty” so `fill()` is necessary to actually create the entries.
 - The function passed to `map` is using an optional second argument which receives the index of the current element.  *See note in the [Array Cheatsheat](#array-cheatsheet) suggesting not to use this*.
-- The `_` is not special syntax, it's a valid variable name. `_` is a common convention for a parameter that is not used. This is seen throughout various languages such as Python, Javascript and Haskell.
+- The `_` is not special syntax, it’s a valid variable name. `_` is a common convention for a parameter that is not used. This is seen throughout various languages such as Python, Javascript and Haskell.
 
 ---
 
@@ -1035,13 +1035,13 @@ function Person(name, occupation) {
    this.occupation = occupation
 }
 Person.prototype.sayHello = function() {
-   console.log(`Hi, my name's ${this.name} and I ${this.occupation}!`)
+   console.log(`Hi, my name’s ${this.name} and I ${this.occupation}!`)
 }
 const tim = new Person("Tim","lecture Programming Paradigms")
 tim.sayHello()
 ```
 
-> Hi, my name's Tim and I lecture Programming Paradigms!
+> Hi, my name’s Tim and I lecture Programming Paradigms!
 
 ES6 introduced a new syntax for classes that will be more familiar to Java programmers:
 
@@ -1052,7 +1052,7 @@ class Person {
        this.occupation = occupation
    }
    sayHello() {
-       console.log(`Hi, my name's ${this.name} and I ${this.occupation}!`)
+       console.log(`Hi, my name’s ${this.name} and I ${this.occupation}!`)
    }
 }
 ```
@@ -1096,7 +1096,7 @@ class Person {
        this.occupation = occupation
    }
    get greeting() {
-       return `Hi, my name's ${this.name} and I ${this.occupation}!`
+       return `Hi, my name’s ${this.name} and I ${this.occupation}!`
    }
    sayHello() {
        console.log(this.greeting)
@@ -1137,12 +1137,12 @@ const tims = [
 tims.forEach(t => t.sayHello())
 ```
 
-> Hi, my name's Tim and I lecture Programming Paradigms!  
-> HI, MY NAME'S TIM AND I SHOUT ABOUT PROGRAMMING PARADIGMS!
+> Hi, my name’s Tim and I lecture Programming Paradigms!  
+> HI, MY NAME’S TIM AND I SHOUT ABOUT PROGRAMMING PARADIGMS!
 
 ## Polymorphism
 
-According to Cartelli *et al.*, "Polymorphic types are types whose operations are applicable to values of more than one type."  Thus, although `Person` and `LoudPerson` are different types, since `LoudPerson` is a sub-type of `Person`, they present a common `sayHello` method allowing operations like `forEach` to operate over an array of the base class.  In a traditional Object Oriented language like Java, the compiler enforces that objects must be instances of a common base class or interface to be treated as such.  This type of polymorphism is called *subtyping polymorphism*.
+According to Cartelli *et al.*, “Polymorphic types are types whose operations are applicable to values of more than one type.”  Thus, although `Person` and `LoudPerson` are different types, since `LoudPerson` is a sub-type of `Person`, they present a common `sayHello` method allowing operations like `forEach` to operate over an array of the base class.  In a traditional Object Oriented language like Java, the compiler enforces that objects must be instances of a common base class or interface to be treated as such.  This type of polymorphism is called *subtyping polymorphism*.
 
 In JavaScript, with no compile-time typecheck, a kind of polymorphism is possible such that if two objects both present a similarly named method that is callable in the same way, of course there is nothing preventing you simply using that method on each object as if it is the same:
 
@@ -1155,7 +1155,7 @@ const b = {f: ()=>console.log("b")}
 > a  
 > b
 
-Informally, this type of polymorphism is called “Duck Typing” (i.e. "If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck").
+Informally, this type of polymorphism is called “Duck Typing” (i.e. “If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck”).
 
 <figure style="display: block; margin-left: auto; margin-right: auto; text-align: center;">
   <img src="/assets/images/chapterImages/javascript1/duck_typing.webp" alt="Duck Typing" style="width: 50%; display: block; margin-left: auto; margin-right: auto;" />
@@ -1164,7 +1164,7 @@ Informally, this type of polymorphism is called “Duck Typing” (i.e. "If it l
 
 Another type of polymorphism which is key to strongly typed functional programming languages (like Haskell), but also a feature of many modern OO languages is *parametric polymorphism*.  We will see this in action when we introduce [TypeScript generics](/typescript1/#generic-types).
 
-*Reference: Cardelli, Luca, and Peter Wegner. "On understanding types, data abstraction, and polymorphism." ACM Computing Surveys (CSUR) 17.4 (1985): 471-523.*
+*Reference: Cardelli, Luca, and Peter Wegner. “On understanding types, data abstraction, and polymorphism.” ACM Computing Surveys (CSUR) 17.4 (1985): 471-523.*
 
 ## Dependency Injection
 
@@ -1178,7 +1178,7 @@ class Person {
        this.voiceTransform = voiceTransform
    }
    get greeting() {
-       return `Hi, my name's ${this.name} and I ${this.occupation}!`
+       return `Hi, my name’s ${this.name} and I ${this.occupation}!`
    }
    sayHello() {
        console.log(this.voiceTransform(this.greeting))
@@ -1191,8 +1191,8 @@ const tims = [
 tims.forEach(t => t.sayHello())
 ```
 
-> Hi, my name's Tim and I lecture Programming Paradigms!  
-> HI, MY NAME'S TIM AND I SHOUT ABOUT PROGRAMMING PARADIGMS!
+> Hi, my name’s Tim and I lecture Programming Paradigms!  
+> HI, MY NAME’S TIM AND I SHOUT ABOUT PROGRAMMING PARADIGMS!
 
 So the filter property defaults to the identity function (a function which simply returns its argument), but a user of the `Person` class can inject a dependency on another function from outside the class when they construct an instance.
 

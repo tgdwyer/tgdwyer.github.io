@@ -13,11 +13,11 @@ title: "Creating and Running Haskell Programs"
 
 ## Introduction
 
-This section is not your usual "First Introduction To Haskell" because it assumes you have arrived here having already studied some reasonably sophisticated functional programming concepts in JavaScript, basic parametric polymorphic types in [TypeScript](/typescript/), and [Lambda Calculus](/lambdacalculus).  Familiarity with [higher-order](/higherorderfunctions/) and [curried functions](/functionaljavascript/) is assumed.  
+This section is not your usual “First Introduction To Haskell” because it assumes you have arrived here having already studied some reasonably sophisticated functional programming concepts in JavaScript, basic parametric polymorphic types in [TypeScript](/typescript/), and [Lambda Calculus](/lambdacalculus).  Familiarity with [higher-order](/higherorderfunctions/) and [curried functions](/functionaljavascript/) is assumed.  
 
-I try to summarise the syntax we use with "cheatsheets" throughout, but [the official CheatSheet](https://hackage.haskell.org/package/CheatSheet-1.10/src/CheatSheet.pdf) will be a useful reference.  The other reference every Haskell programmer needs is the official library docs on [Hackage](https://hackage.haskell.org/) which is searchable by the excellent [Hoogle](https://hoogle.haskell.org/) search engine, which lets you search by types as well as function keywords.
+I try to summarise the syntax we use with “cheatsheets” throughout, but [the official CheatSheet](https://hackage.haskell.org/package/CheatSheet-1.10/src/CheatSheet.pdf) will be a useful reference.  The other reference every Haskell programmer needs is the official library docs on [Hackage](https://hackage.haskell.org/) which is searchable by the excellent [Hoogle](https://hoogle.haskell.org/) search engine, which lets you search by types as well as function keywords.
 
-If you would like a more gradual introduction, [“Haskell Programming from First Principles” by Allen and Moronuki](http://haskellbook.com/) is a recent and excellent introduction to Haskell that is quite compatible with the goals of this course.  The ebook is not too expensive, but unfortunately, it is independently published and hence not available from our library.  There are a few copies of [Programming Haskell by Hutton](https://monash.hosted.exlibrisgroup.com/permalink/f/31uhmh/catau21316253770001751) which is an excellent academic textbook, but it's expensive to buy.  [“Learn you a Haskell” by Miran Lipovaca](https://learnyouahaskell.github.io/) is a freely available alternative that is also a useful introduction.  
+If you would like a more gradual introduction, [“Haskell Programming from First Principles” by Allen and Moronuki](http://haskellbook.com/) is a recent and excellent introduction to Haskell that is quite compatible with the goals of this course.  The ebook is not too expensive, but unfortunately, it is independently published and hence not available from our library.  There are a few copies of [Programming Haskell by Hutton](https://monash.hosted.exlibrisgroup.com/permalink/f/31uhmh/catau21316253770001751) which is an excellent academic textbook, but it’s expensive to buy.  [“Learn you a Haskell” by Miran Lipovaca](https://learnyouahaskell.github.io/) is a freely available alternative that is also a useful introduction.  
 
 ## Starting with the GHCi REPL
 
@@ -37,13 +37,13 @@ Then load it into GHCi like so:
 stack ghci fibs.hs  
 ```
 
-You'll get a prompt that looks like:
+You’ll get a prompt that looks like:
 
 ```haskell
 Prelude>
 ```
 
-Where the text left of the `>` tells you what libraries are loaded into the current scope.  "Prelude" is the default library which already includes everything we need for this chapter.
+Where the text left of the `>` tells you what libraries are loaded into the current scope.  “Prelude” is the default library which already includes everything we need for this chapter.
 
 You can enter haskell expressions directly at the prompt:
 
@@ -53,7 +53,7 @@ Prelude> fibs 6
 
 > 13  
 
-I'm going to stop showing the prompt now, but you can enter all of the following directly at the prompt and you will see similar results printed to those indicated below.
+I’m going to stop showing the prompt now, but you can enter all of the following directly at the prompt and you will see similar results printed to those indicated below.
 
 Basic logic operators are similar to C/Java/etc: `==`, `&&`, `||`.  
 
@@ -63,7 +63,7 @@ fibs 6 == 13
 
 > True
 
-An exception is "not-equal", whose operator is `/=` (Haskell tends to prefer more "mathy" syntax whenever possible).
+An exception is “not-equal”, whose operator is `/=` (Haskell tends to prefer more “mathy” syntax whenever possible).
 
 ```haskell
 fibs 6 /= 13
@@ -85,7 +85,7 @@ if fibs 6 == 13 && fibs 7 == 12 then "yes" else "no"
 
 >"no"
 
-GHCi also has a number of non-haskell commands you can enter from the prompt, they are prefixed by "`:`".
+GHCi also has a number of non-haskell commands you can enter from the prompt, they are prefixed by `:`.
 You can reload your .hs file into ghci after an edit with `:r`.  Type `:h` for help.
 
 You can declare local variables in the `repl`:
@@ -98,7 +98,7 @@ x + y
 
 > 7
 
-One of Haskell's distinguishing features from other languages is that its variables are strictly immutable (i.e. not variable at all really).  This is similar to variables declared with JavaScript's `const` keyword - but everything in Haskell is deeply immutable by default.
+One of Haskell’s distinguishing features from other languages is that its variables are strictly immutable (i.e. not variable at all really).  This is similar to variables declared with JavaScript’s `const` keyword - but everything in Haskell is deeply immutable by default.
 
 However, in the GHCi REPL, you can redefine variables and haskell will not complain.
 
@@ -117,7 +117,7 @@ What this tells us is that the main function produces an IO side effect.  This m
 
 By the way, once you are in the `IO` monad, you can’t easily get rid of it.  Any function that calls a function that returns an `IO` monad, must have `IO` in its return type.  Thus, effectful code is possible, but the type system ensures we are aware of it and can limit its taint.  The general strategy is to use pure functions wherever possible, and push the effectful code as high in your call hierarchy as possible -- that is, limit the size and scope of impure code as much as possible.  Pure functions are much more easily reusable in different contexts.
 
-The `print` function is equivalent to the PureScript `log $ show`.  That is, it uses any available `show` function for the type of value being printed to convert it to a string, and it then prints that string.  Haskell defines show for many types in the Prelude, but print in this case invokes it for us.  The other difference here is that square brackets operators are defined in the prelude for linked lists.  In PureScript they were used for Arrays - which (in PureScript) don’t have the range operator (`..`) defined so I avoided them.  Speaking of List operators, here's a summary:
+The `print` function is equivalent to the PureScript `log $ show`.  That is, it uses any available `show` function for the type of value being printed to convert it to a string, and it then prints that string.  Haskell defines show for many types in the Prelude, but print in this case invokes it for us.  The other difference here is that square brackets operators are defined in the prelude for linked lists.  In PureScript they were used for Arrays - which (in PureScript) don’t have the range operator (`..`) defined so I avoided them.  Speaking of List operators, here’s a summary:
 
 <div class="cheatsheet" markdown="1">
 
@@ -129,7 +129,7 @@ The default Haskell lists are cons lists (linked lists defined with a `cons` fun
 []           -- an empty list
 [1,2,3,4]    -- a simple lists of values
 [1..4]       -- ==[1,2,3,4] (..) is range operator
-1:[2,3,4]    -- ==[1,2,3,4], use `:` to "cons" an element to the start of a list
+1:[2,3,4]    -- ==[1,2,3,4], use `:` to “cons” an element to the start of a list
 1:2:3:[4]    -- ==[1,2,3,4], you can chain `:`
 [1,2]++[3,4] -- ==[1,2,3,4], i.e. (++) is concat
 
@@ -137,7 +137,7 @@ The default Haskell lists are cons lists (linked lists defined with a `cons` fun
 -- Not the enclosing `()` to delimit the pattern for the parameter.
 length [] = 0
 length (x:xs) = 1 + length xs
--- (although you don't need to define `length`, it's already loaded by the prelude)
+-- (although you don’t need to define `length`, it’s already loaded by the prelude)
 
 length [1,2,3]
 ```
@@ -187,7 +187,7 @@ b
 
 > "hello"
 
-Note that we created tuples in JavaScript using `[]` -- actually they were fixed-length arrays, don't confuse them for Haskell lists or tuples.
+Note that we created tuples in JavaScript using `[]` -- actually they were fixed-length arrays, don’t confuse them for Haskell lists or tuples.
 </div>
 
 ## Lazy by Default
@@ -303,7 +303,7 @@ I deliberately avoided the type declaration for the above function because, (1) 
 sort :: Ord t => [t] -> [t]
 ```
 
-Thus, the function sort has a generic type-parameter `t` (we'll talk more about such [parametric polymorphism in haskell](/haskell2/#type-parameters-and-polymorphism) later) which is constrained to be in the `Ord` type class (anything that is orderable - we'll talk more about [type classes](/haskell2/#typeclasses) too).  It’s input parameter is a list of `t`, as is its return type.  This is also precisely the syntax that one would use to declare the type explicitly.  Usually, for all top-level functions in a Haskell file it is good practice to explicitly give the type declaration.  Although, it is not always necessary, it can avoid ambiguity in many situations, and secondly, once you get good at reading Haskell types, it becomes useful documentation.
+Thus, the function sort has a generic type-parameter `t` (we’ll talk more about such [parametric polymorphism in haskell](/haskell2/#type-parameters-and-polymorphism) later) which is constrained to be in the `Ord` type class (anything that is orderable - we’ll talk more about [type classes](/haskell2/#typeclasses) too).  It’s input parameter is a list of `t`, as is its return type.  This is also precisely the syntax that one would use to declare the type explicitly.  Usually, for all top-level functions in a Haskell file it is good practice to explicitly give the type declaration.  Although, it is not always necessary, it can avoid ambiguity in many situations, and secondly, once you get good at reading Haskell types, it becomes useful documentation.
 
 Here’s another refactoring of the quick-sort code.  This time with type declaration because I just said it was the right thing to do:
 
@@ -329,7 +329,7 @@ sort (pivot:rest) = below pivot rest ++ [pivot] ++ above pivot rest
 ```
 
 as:
-> the sort of a list where we take the first element as the 'pivot' and everything after the list as 'rest' is
+> the sort of a list where we take the first element as the “pivot” and everything after the list as “rest” is
 > everything that is below pivot in rest,  
 > concatenated with a list containing just the pivot,  
 > concatenated with everything that is above pivot in rest.

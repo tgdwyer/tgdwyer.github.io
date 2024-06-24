@@ -57,7 +57,7 @@
 - title: Functional Reactive Programming
   url: /functionalreactiveprogramming/
   description: |
-    - Understand that the Functional Reactive Programming Observable construct is just another container of elements, but whose "push-based" architecture allows them to be used to capture asynchronous behaviour
+    - Understand that the Functional Reactive Programming Observable construct is just another container of elements, but whose “push-based” architecture allows them to be used to capture asynchronous behaviour
     - Understand that Observables provide the benefits of functional programming: composability, reusability.
     - See that Observables structure complex stateful programs in a more linear and understandable way that maps more easily to the underlying state machine.
     - Use Observables to create simple UI programs in-place of asynchronous event handling.
@@ -94,7 +94,7 @@
 - title: Data Types and Type Classes
   url: /haskell2/
   description: |
-    - Define data structures using Haskell's [Algebraic Data Types](/haskell2#algebraic-data-types) and use [pattern matching](/haskell2#pattern-matching) to define functions that handle each of the possible instances
+    - Define data structures using Haskell’s [Algebraic Data Types](/haskell2#algebraic-data-types) and use [pattern matching](/haskell2#pattern-matching) to define functions that handle each of the possible instances
     - Use the alternate [record syntax](/haskell2#record-syntax) to define data structures with named fields
     - Understand that Haskell [type classes](/haskell2#typeclasses) are similar to TypeScript interfaces in providing a definition for the set of functions that must be available for instances of those type classes and that typeclasses can extend upon one another to create rich hierarchies
     - Understand that the [Maybe](/haskell2#maybe) type provides an elegant way to handle *partial functions*
@@ -108,7 +108,7 @@
 - title: Foldable and Traversable
   url: /haskell4/
   description: |
-    - Understand that the "reduce" function we met for arrays and other data structures in JavaScript is referred to as ["folding"](/haskell4/#folds) in Haskell and there are two variants `foldl` and `foldr` for left and right folds respectively
+    - Understand that the “reduce” function we met for arrays and other data structures in JavaScript is referred to as [“folding”](/haskell4/#folds) in Haskell and there are two variants `foldl` and `foldr` for left and right folds respectively
     - Understand that the [Monoid](/haskell4#monoid) typeclass for things that have a predefined rule for aggregation (concatenation), making containers of `Monoid` values trivial to `fold`
     - Understand that [Foldable](/haskell4#foldable) generalises containers that may be folded (or reduced) into values
     - Understand that [Traversable](/haskell4#traversable) generalises containers over which we can traverse applying a function with an Applicative effect

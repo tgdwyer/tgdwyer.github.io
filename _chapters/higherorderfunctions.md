@@ -20,10 +20,10 @@ The really exciting aspect of higher-order function support in languages like Ja
 ## Higher-Order Functions
 
 Functions that [take other functions as parameters](/javascript1#functions-as-parameters-to-other-functions) or which [return functions](/javascript1#closures) are called *higher-order functions*.
-They are called "higher-order" because they are functions which operate on other functions.
+They are called “higher-order” because they are functions which operate on other functions.
 Higher-order functions are a very powerful feature and central to the functional programming paradigm.  
 
-We've seen many examples of functions which take functions as parameters, for example, operations on arrays:
+We’ve seen many examples of functions which take functions as parameters, for example, operations on arrays:
 
 ```javascript
 [1,2,3].map(x=>x*x)
@@ -67,7 +67,7 @@ add9(1)
 
 >10  
 
-Here's a practical example of a curried function. Let’s say we want a function for computing the volume of cylinders, parameterised by the approximation for π that we plan to use:
+Here’s a practical example of a curried function. Let’s say we want a function for computing the volume of cylinders, parameterised by the approximation for π that we plan to use:
 
 ```javascript
 function cylinderVolume(pi: number, height: number, radius: number): number {
@@ -146,7 +146,7 @@ add(3)(4)
 We can also create curried versions of functions with more than two variables -- but the TypeScript syntax for functions with arbitrary numbers of arguments gets a bit scary (one of the many reasons we will shortly [switch to Haskell](/haskell1/) for our exploration of more advanced functional programming topics).
 
 ```javascript
-// Don't try to understand this - this is just to show you why Haskell is better for strictly-typed FP
+// Don’t try to understand this - this is just to show you why Haskell is better for strictly-typed FP
 function curry<T extends unknown[], U extends unknown[], R>(fn: (...ts: [...T, ...U]) => R, ...args:T): (...bs:U) => R {
     return (...bargs: U) => fn(...args, ...bargs);
 }
@@ -238,7 +238,7 @@ But it has some important applications:
 
 - Higher-order functions which take a user specified function to apply in some context ([such as our sumTo from earlier](/javascript1/#functions-as-parameters-to-other-functions)) can be passed `identity` to restore the default behaviour.
 - For extracting data from encapsulated types (e.g. by passing `identity` into map).
-- The above scenarios are also indicative of a useful way to test such higher-order functions, broadly: "does passing the `identity` operator really give us back what we started with?".
+- The above scenarios are also indicative of a useful way to test such higher-order functions, broadly: “does passing the `identity` operator really give us back what we started with?”.
 - For composition with other combinators, as below.
 
 ### K-Combinator
@@ -325,9 +325,9 @@ Where `_=> r=> r  ≡  y=> i=> i` and therefore `tail ≡ l=>l(K(i))`.  QED!!!
 
 FYI it has been shown that simple combinators like K and I (at least one other is required) are sufficient to create languages as powerful as lambda calculus without the need for lambdas, e.g. see [SKI Combinator Calculus](https://en.wikipedia.org/wiki/SKI_combinator_calculus).
 
-In previous sections we have seen a number of versions of functions which transform lists (or other containers) into new lists like `map`, `filter` and so on.  We have also introduced the reduce function as a way to compute a single value over a list.  If we realise that the value we produce from reduce can also be a list, we can actually use reduce to implement all of the other lists transformations.  Instead of returning a value from a reduce, we could apply a function which produces only side effects, thus, performing a `forEach`.  We'll use this as an example momentarily.
+In previous sections we have seen a number of versions of functions which transform lists (or other containers) into new lists like `map`, `filter` and so on.  We have also introduced the reduce function as a way to compute a single value over a list.  If we realise that the value we produce from reduce can also be a list, we can actually use reduce to implement all of the other lists transformations.  Instead of returning a value from a reduce, we could apply a function which produces only side effects, thus, performing a `forEach`.  We’ll use this as an example momentarily.
 
-First, here's another implementation of `reduce` for the above formulation of cons lists - but we rename it `fold` (again, as our JavaScript becomes more and more Haskell like we are beginning to adopt Haskell terminology).
+First, here’s another implementation of `reduce` for the above formulation of cons lists - but we rename it `fold` (again, as our JavaScript becomes more and more Haskell like we are beginning to adopt Haskell terminology).
 
 ```js
 const fold = f=> i=> l=> l ? fold(f)(f(i)(head(l)))(tail(l)) : i
@@ -339,7 +339,7 @@ Now, for example, we can define `forEach` in terms of `fold`:
 const forEach = f=>l=>fold(_=>v=>f(v))(null)(l)
 ```
 
-Now, the function `f` takes one parameter and we don't do anything with its return type (in TypeScript we could enforce the return type to be `void`).
+Now, the function `f` takes one parameter and we don’t do anything with its return type (in TypeScript we could enforce the return type to be `void`).
 However, `fold` is expecting as its first argument a curried function of two parameters (the accumulator and the list element).  Since in `forEach` we are not actually accumulating a value, we can ignore the first parameter, hence we give `fold` the function `_=>v=>f(v)`, to apply `f` to each value `v` from the list.
 
 But note that `v=>f(v)` is precisely the same as just `f`.
@@ -357,7 +357,7 @@ K(f)  ≡  (x=> y=> x)(f) -- expand K
       ≡  _=> f          -- rename y to _
 ```
 
-Where, in the last line above, since y doesn't appear anywhere in the body of the function we don't care what it's called anymore and rename it to `_`.
+Where, in the last line above, since y doesn’t appear anywhere in the body of the function we don’t care what it’s called anymore and rename it to `_`.
 
 Therefore, we can use our `K` combinator to entirely avoid defining any functions in the body of `forEach`:
 
@@ -496,7 +496,7 @@ function fork<T, U, V, R>(join: (a: U, b: V) => R, f: (value: T) => U, g: (value
 ### Unary versus Binary Functions in JavaScript
 
 Uncurried functions of two parameters can be called Binary functions.  Functions of only one parameter can therefore be called Unary functions.  Note that all of our curried functions are unary functions, which return other unary functions.
-We've seen situations now where curried functions are flexibly combined to be used in different situations.  
+We’ve seen situations now where curried functions are flexibly combined to be used in different situations.  
 
 Note that in JavaScript you sometimes see casual calls to binary functions but with only one parameter specified.  Inside the called function the unspecified parameter will simply be `undefined` which is fine if the case of that parameter being `undefined` is handled in a way that does not cause an error or unexpected results, e.g.:
 
@@ -520,7 +520,7 @@ unaryFunc("Hello", "World")
 > Hello  
 > Hello
 
-But, here’s an interesting example where mixing up unary and binary functions in JavaScript's very forgiving environment can go wrong.
+But, here’s an interesting example where mixing up unary and binary functions in JavaScript’s very forgiving environment can go wrong.
 
 ```javascript
 ['1','2','3'].map(parseInt);
@@ -544,7 +544,7 @@ parseInt('2')
 
 > 2
 
-What's going on?
+What’s going on?
 HINT: [parseInt is not actually a unary function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt).
 
 The point of this demonstration is that curried functions are a more principled way to support partial function application, and also much safer and easier to use when the types guard against improper use.  Thus, this is about as sophisticated as we are going to try to get with Functional Programming in JavaScript, and we will pick up our discussion further exploring the power of FP in the context of the [Haskell functional programming language](/haskell1/).  However, libraries do exist that provide quite flexible functional programming abstractions in JavaScript.  For example, you might like to investigate [Ramda](http://ramdajs.com).
