@@ -21,7 +21,7 @@ Part of the appeal of JavaScript is that being able to run the source code direc
 TypeScript is interesting because it forms a relatively minimal augmentation, or superset, of ECMAScript syntax that simply adds type annotations.  For the most part, the compilation process simply performs validation on the declared types and strips away the type annotations rendering just the legal JavaScript ready for deployment.  This lightweight compilation into a language with a similar level of abstraction to the source is also known as transpiling (as opposed to C++ or Java where the object code is much closer to the machine execution model).
 
 The following is intended as a minimally sufficient intro to TypeScript features such that we can type some fairly rich data structures and higher-order functions.
-An excellent free resource for learning the TypeScript language in depth is the [TypeScript Deep-dive book](https://basarat.gitbooks.io/typescript/content/docs/getting-started.html).  
+An excellent free resource for learning the TypeScript language in depth is the [TypeScript Deep-dive book](https://basarat.gitbooks.io/typescript/content/docs/getting-started.html).
 
 ## Type annotations
 
@@ -49,14 +49,14 @@ i = 'hello!';
 
 (Each of these features is described in more detail in subsequent sections -- this is just a summary and roadmap)
 
-A type annotation begins with `:` and goes after the variable name, but before any assignment. 
+A type annotation begins with `:` and goes after the variable name, but before any assignment.
 Primitive types include `number`, `string`, `boolean`.
 
 ```typescript
 let x: number, s: string, b: boolean = false;
 x = "hello" // type error: x can only be assigned numbers!
 ```
-*Note:* the primitive types begin with a lower-case letter and are not to be mistaken for `Number`, `String` and `Boolean` which are not types at all but Object wrappers with some handy properties and methods. Don't try to use these Object wrappers in your type definitions.
+*Note:* the primitive types begin with a lower-case letter and are not to be mistaken for `Number`, `String` and `Boolean` which are not types at all but Object wrappers with some handy properties and methods. Don’t try to use these Object wrappers in your type definitions.
 
 [Union types](#union-types) allow more than one option for the type of value that can be assigned to a variable:
 
@@ -75,7 +75,7 @@ function theFunction(x: number, y: number): number {
 }
 ```
 
-When working with [higher-order functions](/functionaljavascript#higher-order-functions) you'll need to pass functions into and/or return them from other functions.  Function types use the fat-arrow syntax:
+When working with [higher-order functions](/functionaljavascript#higher-order-functions) you’ll need to pass functions into and/or return them from other functions.  Function types use the fat-arrow syntax:
 
 ```typescript
 function curry(f: (x:number, y:number)=>number): (x:number)=>(y:number)=>number {
@@ -83,7 +83,7 @@ function curry(f: (x:number, y:number)=>number): (x:number)=>(y:number)=>number 
 }
 ```
 
-The [`curry`](/functionaljavascript#curried-functions) function above only works for functions that are operations on two numbers.  We can make it [*generic*](#generic-types) by parameterising the argument types.  
+The [`curry`](/functionaljavascript#curried-functions) function above only works for functions that are operations on two numbers.  We can make it [*generic*](#generic-types) by parameterising the argument types.
 
 ```typescript
 function curry<U,V,W>(f:(x:U,y:V)=>W): (x:U)=>(y:V)=>W {
@@ -137,13 +137,13 @@ const headings = document.getElementsByTagName("h1")
 
 In the browser, the global `document` variable always points to the currently loaded HTML document.  Its method `getElementsByTagName` returns a collection of elements with the specified tag, in this case `<h1>`.
 
-Let's say I want to indent the first heading by 100 pixels, I could do this by manipulating the "style" attribute of the element:
+Let’s say I want to indent the first heading by 100 pixels, I could do this by manipulating the "style" attribute of the element:
 
 ```javascript
 headings[0].setAttribute("style","padding-left:100px")
 ```
 
-Now let's say I do a lot of indenting and I want to build a library function to simplify manipulating padding of HTML elements.
+Now let’s say I do a lot of indenting and I want to build a library function to simplify manipulating padding of HTML elements.
 
 ```javascript
 function setLeftPadding(elem, value) {
@@ -155,7 +155,7 @@ function setLeftPadding(elem, value) {
 setLeftPadding(headings[0], "100px")
 ```
 
-But how will a user of this function (other than myself, or myself in three weeks when I can't remember how I wrote this code) know what to pass in as parameters?  `elem` is a pretty good clue that it needs to be an instance of an HTML element, but is value a number or a string?
+But how will a user of this function (other than myself, or myself in three weeks when I can’t remember how I wrote this code) know what to pass in as parameters? `elem` is a pretty good clue that it needs to be an instance of an HTML element, but is value a number or a string?
 
 In TypeScript we can make the expectation explicit:
 
@@ -173,7 +173,7 @@ setLeftPadding(headings[0],100)
 
 > Argument of type '100' is not assignable to parameter of type 'string'.ts(2345)
 
-In JavaScript, the interpreter would silently convert the number to a string and set `padding-left:100` -- which wouldn't actually cause the element to be indented because CSS expects `px` (short for pixel) at the end of the value.
+In JavaScript, the interpreter would silently convert the number to a string and set `padding-left:100` -- which wouldn’t actually cause the element to be indented because CSS expects `px` (short for pixel) at the end of the value.
 
 Potentially worse, I might forget to add the index after headings:
 
@@ -185,17 +185,17 @@ This would cause a run-time error in the browser:
 
 > VM360:1 Uncaught TypeError: headings.setAttribute is not a function
 
-This is because headings is not an HTML Element but an HTMLCollection, with no method `setAttribute`.  Note that if I try to debug it, the error will be reported from a line of code inside the definition of `setLeftPadding`.  I don't know if the problem is in the function itself or in my call.
+This is because headings is not an HTML Element but an HTMLCollection, with no method `setAttribute`.  Note that if I try to debug it, the error will be reported from a line of code inside the definition of `setLeftPadding`.  I don’t know if the problem is in the function itself or in my call.
 
-The same call inside a TypeScript program would trigger a compile-time error.  In a fancy editor with compiler services like VSCode I'd know about it immediately because the call would get a red squiggly underline immediately after I type it, I can hover over the squiggly to get a detailed error message, and certainly, the generated broken JavaScript would never make it into production.
+The same call inside a TypeScript program would trigger a compile-time error.  In a fancy editor with compiler services like VSCode I’d know about it immediately because the call would get a red squiggly underline immediately after I type it, I can hover over the squiggly to get a detailed error message, and certainly, the generated broken JavaScript would never make it into production.
 ![Compile Error Screenshot](/assets/images/chapterImages/typescript1/setLeftPaddingTypeScript.png)
 
 ## Union Types
 
 Above we see how TypeScript prevents a variable from being assigned values of different types.
-However, it is a fairly common practice in JavaScript to implicitly create overloaded functions by accepting arguments of different types and resolving them at run-time.  
+However, it is a fairly common practice in JavaScript to implicitly create overloaded functions by accepting arguments of different types and resolving them at run-time.
 
-The following will append the "px" after the value if a number is passed in, or simply use the given string (assuming the user added their own "px") otherwise.
+The following will append the “px” after the value if a number is passed in, or simply use the given string (assuming the user added their own “px”) otherwise.
 
 ```javascript
 function setLeftPadding(elem, value) {
@@ -206,7 +206,7 @@ function setLeftPadding(elem, value) {
 }
 ```
 
-So this function accepts either a string or a number for the `value` parameter -- but to find that out we need to dig into the code.  The "Union Type" facility in TypeScript allows us to specify the multiple options directly in the function definition, with a list of types separated by "`|`":
+So this function accepts either a string or a number for the `value` parameter -- but to find that out we need to dig into the code.  The “Union Type” facility in TypeScript allows us to specify the multiple options directly in the function definition, with a list of types separated by `|`:
 
 ```typescript
 function setLeftPadding(elem: Element, value: string | number) {...
@@ -231,7 +231,7 @@ The TypeScript typechecker also knows about typeof expressions (as used above) a
 
 In TypeScript I can declare an `interface` which defines the set of properties and their types, that I expect to be available for certain objects.
 
-For example, when tallying scores at the end of semester, I will need to work with collections of students that have a name, assignment and exam marks.  There might even be some special cases which require mark adjustments, the details of which I don't particularly care about but that I will need to be able to access, e.g. through a function particular to that student.  The student objects would need to provide an interface that looks like this:
+For example, when tallying scores at the end of semester, I will need to work with collections of students that have a name, assignment and exam marks.  There might even be some special cases which require mark adjustments, the details of which I don’t particularly care about but that I will need to be able to access, e.g. through a function particular to that student.  The student objects would need to provide an interface that looks like this:
 
 ```typescript
 interface Student {
@@ -258,7 +258,7 @@ Other parts of my program might work with richer interfaces for the student data
 
 ## Generic Types
 
-Sometimes when we do marking we get lists of students indexed by their Student Number (a `number`).  Sometimes it's by email address (a `string`).  You can see the concept of student numbers probably predates the existence of student emails (yes, universities often predate the internet!).
+Sometimes when we do marking we get lists of students indexed by their Student Number (a `number`).  Sometimes it’s by email address (a `string`).  You can see the concept of student numbers probably predates the existence of student emails (yes, universities often predate the internet!).
 What if one day our systems will use yet another identifier?  We can future proof a program that works with lists of students by deferring the decision of the particular type of the id:
 
 ```typescript
@@ -269,9 +269,9 @@ interface Student<T> {
 }
 ```
 
-Here `T` is the *type parameter*, and the compiler will infer its type when it is used.  It could be `number`, or it could be a `string` (e.g. if it's an email), or it could be something else. 
+Here `T` is the *type parameter*, and the compiler will infer its type when it is used.  It could be `number`, or it could be a `string` (e.g. if it’s an email), or it could be something else.
 
-Type parameters can have more descriptive names if you like, but they must start with a capital.  The convention though is to use rather terse single letter parameter names in the same vicinity of the alphabet as T.  This habit comes from C++, where T used to stand for "Template", and the terseness stems from the fact that we don't really care about the details of what it is.  
+Type parameters can have more descriptive names if you like, but they must start with a capital.  The convention though is to use rather terse single letter parameter names in the same vicinity of the alphabet as T.  This habit comes from C++, where T used to stand for “Template”, and the terseness stems from the fact that we don’t really care about the details of what it is.
 
 As in function parameter lists, you can also have more than one type parameter:
 
@@ -284,7 +284,7 @@ interface Student<T,U> {
 }
 ```
 
-Formally, this is a kind of "parametric polymorphism".  The `T` and `U` here may be referred to as *type parameters* or *type variables*. We say that `id` has *generic type*.  
+Formally, this is a kind of “parametric polymorphism”.  The `T` and `U` here may be referred to as *type parameters* or *type variables*. We say that `id` has *generic type*.
 
 You see generic types definitions used a lot in algorithm and data structure libraries, to give a type---to be specified by the calling code---for the data stored in the data structures.  For example, the following interface might be the basis of a linked list element:
 
@@ -347,7 +347,7 @@ console.log(studentsByEmail[binarySearch2(stringIds,'harry@monash.edu')].name)
 ```
 > Harry Smith
 
-Why is this better than raw JavaScript with no type checking, or simply using TypeScript's wildcard `any` type?  Well it ensures that we use the types *consistently*.
+Why is this better than raw JavaScript with no type checking, or simply using TypeScript’s wildcard `any` type?  Well it ensures that we use the types *consistently*.
 For example:
 ```javascript
 binarySearch(numberIds,"harry@monash.edu")
@@ -355,7 +355,7 @@ binarySearch(numberIds,"harry@monash.edu")
 > TYPE ERROR!
 
 The `binarySearch2` function above is usable with more types than `binarySearch1`, but it still requires that T does something sensible with `<` and `>`.  
-We can add a function to use for comparison, so now we can use it with students uniquely identified by some other weird thing that we don't even know about yet:
+We can add a function to use for comparison, so now we can use it with students uniquely identified by some other weird thing that we don’t even know about yet:
 
 ```javascript
 function binarySearch3<T>(arr:T[], key:T, compare: (a:T,b:T)=>number): number {
@@ -388,7 +388,7 @@ function curry<U,V,W>(f:(x:U,y:V)=>W): (x:U)=>(y:V)=>W {
 The TypeScript compiler underlines `y,x` and says:
 > Error: Argument of type 'V' is not assignable to parameter of type 'U'. 'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
 
-So it's complaining that our use of a `y:V` into a parameter that should be a `U` and vice-versa for `x`.  We flip them back and we are good again... but TypeScript helps us make sure we use the function consistently too:
+So it’s complaining that our use of a `y:V` into a parameter that should be a `U` and vice-versa for `x`.  We flip them back and we are good again... but TypeScript helps us make sure we use the function consistently too:
 
 ```typescript
 function curry<U,V,W>(f:(x:U,y:V)=>W): (x:U)=>(y:V)=>W {
@@ -427,7 +427,7 @@ typeof node.next === 'undefined'
 ```
 or simply:
 ```javascript
-!node.next 
+!node.next
 ```
 In either case, if these expressions are `true`, it would indicate the end of the list.
 
@@ -448,7 +448,7 @@ const list = new ListNode(1, new ListNode(2, new ListNode(3)));
 ---
 
 ## Exercises
-- Implement a class `List<T>` whose constructor takes an array parameter and creates a linked list of ListNode<T>.  
+- Implement a class `List<T>` whose constructor takes an array parameter and creates a linked list of ListNode<T>.
 - Add methods to your `List<T>` class for:
 
 ```typescript
@@ -500,7 +500,7 @@ studentVersion2.name = "Tom"
 
 > Cannot assign to 'name' because it is a read-only property.ts(2540)
 
-The above is a singleton immutable Object.  However, more generally, if we need multiple instances of a deeply immutable object, we can 
+The above is a singleton immutable Object.  However, more generally, if we need multiple instances of a deeply immutable object, we can
 declare immutable types using the `Readonly` construct:
 
 ```javascript

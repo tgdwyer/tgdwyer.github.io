@@ -35,10 +35,10 @@ Examples of side-effects from inside a function:
 
 In languages without compilers that specifically guard against them, side effects can occur:
 
-* intentionally through sloppy coding practices, where a misguided programmer may think it's more convenient to have a function do multiple things at once;
+* intentionally through sloppy coding practices, where a misguided programmer may think it’s more convenient to have a function do multiple things at once;
 * unintentionally, for example by accidentally setting a global variable instead of a local one.
 
-We'll see more examples in actual code below.
+We’ll see more examples in actual code below.
 
 ## Function Purity and Referential Transparency
 
@@ -101,7 +101,7 @@ It has two effects: incrementing `i` and mutating `a`.
 You could not simply replace the expression with the value computed by the expression and have the program work in the same way.
 This piece of code does not have the property of *referential transparency*.
 
-True pure functional languages (such as Haskell) enforce referential transparency through immutable variables (*note: yes, "immutable variable" sounds like an oxymoron -- two words with opposite meanings put together*).  That is, once any variable in such a language is bound to a value, it cannot be reassigned.  
+True pure functional languages (such as Haskell) enforce referential transparency through immutable variables (*note: yes, “immutable variable” sounds like an oxymoron -- two words with opposite meanings put together*).  That is, once any variable in such a language is bound to a value, it cannot be reassigned.  
 
 In JavaScript we can opt-in to immutable variables by declaring them `const`, but it is only a shallow immutability.  Thus, the variable `myArray` above cannot be reassigned to reference a different array.  However, we can change the contents of the array as shown above.
 
@@ -183,7 +183,7 @@ e=>{
 
 Note that callback functions passed as event handlers are a situation where the one semantic difference between the arrow syntax and regular anonymous function syntax really matters.  In the body of the arrow function above, `this` will be bound to the context of the *caller*, which is probably what you want if you are coding a class for a reusable component.  For functions defined with the `function` keyword the object that `this` refers to will depend on the context of the *callee*, although the precise behaviour of `this` for functions defined with `function` [may vary with the particular JavaScript engine and the mode of execution](https://www.codementor.io/@dariogarciamoya/understanding--this--in-javascript-du1084lyn).  
 
-Here's a situation where this makes a difference.  Recall that JavaScript functions are just objects.  Therefore, we can also assign properties to them.  We can do this from within the function itself using the `this` keyword:
+Here’s a situation where this makes a difference.  Recall that JavaScript functions are just objects.  Therefore, we can also assign properties to them.  We can do this from within the function itself using the `this` keyword:
 
 ```javascript
 function Counter() {
@@ -264,7 +264,7 @@ console.log('job queued on the event loop...');
 ### Function and Method Chaining
 
 *Chained functions* are a common pattern.  
-Take a simple linked-list data structure as an example.  We'll hard code a list object to start off with:
+Take a simple linked-list data structure as an example.  We’ll hard code a list object to start off with:
 
 ```javascript
 const l = {
@@ -390,7 +390,7 @@ const map = (f, list)=> !list ? null
                               : cons(f(head(list)), map(f, rest(list)))
 ```
 
-In the above, we are using closures to store data.  It's just a trick to show the power of functions and to put us into the right state of mind for the Lambda Calculus -- which provides a complete model of computation using only anonymous functions like those above.  In a real program I would expect you would use JavaScript's class and object facilities to create data structures.
+In the above, we are using closures to store data.  It’s just a trick to show the power of functions and to put us into the right state of mind for the Lambda Calculus -- which provides a complete model of computation using only anonymous functions like those above.  In a real program I would expect you would use JavaScript’s class and object facilities to create data structures.
 
 ### Towards Lambda Calculus and Church Encoding
 
@@ -426,7 +426,7 @@ const studentVersion1 = {
 > studentVersion1  
 > {name: "Tim", assignmentMark: 20, examMark: 15}
 
-Conveniently, one can copy all of the properties from an existing object into a new object using the "spread" operator `...`, followed by more JSON properties that can potentially overwrite those of the original.  For example, the following creates a new object with all the properties of the first, but with a different assignmentMark:
+Conveniently, one can copy all of the properties from an existing object into a new object using the “spread” operator `...`, followed by more JSON properties that can potentially overwrite those of the original.  For example, the following creates a new object with all the properties of the first, but with a different assignmentMark:
 
 ```javascript
 const studentVersion2 = {
@@ -470,4 +470,4 @@ studentVersion1.name = "Tom"
 
 We will see later how the [TypeScript compiler](/typescript1) allows us to create deeply immutable objects that will trigger compile errors if we try to change their properties.
 
-You may wonder how pure functions can be efficient if the only way to mutate data structures is by returning a modified copy of the original.  There are two responses to such a question, one is: "purity helps us avoid errors in state management through wanton mutation effects -- in modern programming correctness is often a bigger concern than efficiency", the other is "properly structured data permits log(n) time copy-updates, which should be good enough for most purposes".  We'll explore what is meant by the latter in later sections of these notes.
+You may wonder how pure functions can be efficient if the only way to mutate data structures is by returning a modified copy of the original.  There are two responses to such a question, one is: “purity helps us avoid errors in state management through wanton mutation effects -- in modern programming correctness is often a bigger concern than efficiency”, the other is “properly structured data permits log(n) time copy-updates, which should be good enough for most purposes”.  We’ll explore what is meant by the latter in later sections of these notes.

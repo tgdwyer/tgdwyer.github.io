@@ -6,7 +6,7 @@ title: "Functional Reactive Programming"
 
 ## Learning Outcomes
 
-- Understand that the Observable construct of Functional Reactive Programming is just another container of elements, but whose "push-based" architecture allows them to be used to capture asynchronous behaviour
+- Understand that the Observable construct of Functional Reactive Programming is just another container of elements, but whose “push-based” architecture allows them to be used to capture asynchronous behaviour
 - Understand that Observables provide the benefits of functional programming: composability, reusability.
 - See that Observables structure complex stateful programs in a more linear and understandable way that maps more easily to the underlying state machine.
 - Use Observables to create simple UI programs in-place of asynchronous event handling.
@@ -24,7 +24,7 @@ To support the code examples, the streams are visualized using [rxviz](https://r
 
 ## Observable Streams
 
-We have seen a number of different ways of wrapping collections of things in containers: built-in JavaScript arrays, linked-list data structures, and also lazy sequences.  Now we'll see that Observable is just another type of container with some simple examples, before demonstrating that it also easily applies to asynchronous streams.  
+We have seen a number of different ways of wrapping collections of things in containers: built-in JavaScript arrays, linked-list data structures, and also lazy sequences.  Now we’ll see that Observable is just another type of container with some simple examples, before demonstrating that it also easily applies to asynchronous streams.  
 
 You can [also play with a live version of this code](https://stackblitz.com/edit/rxjs-introexamples?file=index.ts).  Note that the code in this live version begins with a pair of `import` statements, bringing the set of functions that we describe below into scope for this file from the `rxjs` libraries:
 
@@ -34,7 +34,7 @@ import { last,filter,scan,map,mergeMap,take,takeUntil } from 'rxjs/operators';
 ```
 
 Conceptually, the Observable data structure just wraps a collection of things in a container in a similar way to the data structures we have seen before.
-The function `of` creates an Observable that will emit the specified elements in its parameter list in order.  However, nothing actually happens until we initialise the stream.  We do this by "subscribing" to the Observable, passing in an "effectful" function that is applied to each of the elements in the stream.  For example, we could print the elements out with `console.log`:
+The function `of` creates an Observable that will emit the specified elements in its parameter list in order.  However, nothing actually happens until we initialise the stream.  We do this by “subscribing” to the Observable, passing in an “effectful” function that is applied to each of the elements in the stream.  For example, we could print the elements out with `console.log`:
 
 ```javascript
 of(1,2,3,4)
@@ -50,9 +50,9 @@ of(1,2,3,4)
 
 
 The requirement to invoke `subscribe` before anything is produced by the Observable is conceptually similar to the [lazy sequence](lazyevaluation), where nothing happened until we started calling `next`.  But there is also a difference.
-You could think of our lazy sequences as being "pull-based" data structures, because we had to "pull" the values out one at a time by calling the `next` function as many times as we wanted elements of the list.  Observables are a bit different.  They are used to handle "streams" of things, such as asynchronous UI (e.g. mouse clicks on an element of a web page) or communication events (e.g. responses from a web service).  These things are asynchronous in the sense that we do not know when they will occur.  
+You could think of our lazy sequences as being “pull-based” data structures, because we had to “pull” the values out one at a time by calling the `next` function as many times as we wanted elements of the list.  Observables are a bit different.  They are used to handle “streams” of things, such as asynchronous UI (e.g. mouse clicks on an element of a web page) or communication events (e.g. responses from a web service).  These things are asynchronous in the sense that we do not know when they will occur.
 
-Just as we have done for various data structures (arrays and so on) in previous chapters, we can define a transform over an Observable to create a new Observable.  This transformation may have multiple steps the same way that we chained `filter` and `map` operations over arrays previously.  In RxJS's Observable implementation, however, they've gone a little bit more functional, by insisting that such operations are composed (rather than chained) inside a `pipe`.  For example, here's the squares of even numbers in the range [0,10):
+Just as we have done for various data structures (arrays and so on) in previous chapters, we can define a transform over an Observable to create a new Observable.  This transformation may have multiple steps the same way that we chained `filter` and `map` operations over arrays previously.  In RxJS’s Observable implementation, however, they’ve gone a little bit more functional, by insisting that such operations are composed (rather than chained) inside a `pipe`.  For example, here’s the squares of even numbers in the range [0,10):
 
 ```javascript
 const isEven = x=>x%2===0,
@@ -76,7 +76,7 @@ The three animations represent the creation (`range`) and the two transformation
 Range: ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even.gif)
 
 
-Now here's the solution to the first Project Euler problem, the sum of numbers divisible by 3 or 5 under 1000:
+Now here’s the solution to the first Project Euler problem, the sum of numbers divisible by 3 or 5 under 1000:
 
 ```javascript
 range(1000)
@@ -182,7 +182,7 @@ const
   mouse$ = fromEvent<MouseEvent>(document,"mousedown");
 ```
 
-It's a convention to end variable names referring to Observable streams with a `$` (I like to think it's short for "$tream", or implies a plurality of the things in the stream, or maybe it's just because [cash rules everything around me](https://www.youtube.com/watch?v=PBwAxmrE194)).
+It’s a convention to end variable names referring to Observable streams with a `$` (I like to think it’s short for “$tream”, or implies a plurality of the things in the stream, or maybe it’s just because [cash rules everything around me](https://www.youtube.com/watch?v=PBwAxmrE194)).
 
 The following lets us see in the console the keys pressed as they come in, it will keep running for as long as the web page is open:
 
@@ -197,7 +197,7 @@ The animation displays the stream as the user types in the best FIT unit in to t
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/keydown.gif)
 
 
-The following prints "!!" on every mousedown:
+The following prints “!!” on every mousedown:
 ```javascript
 mouse$.pipe(
   map(_=>"!!")
@@ -208,7 +208,7 @@ The yellow highlight signifies when the mouse is clicked!
 ![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/click.gif)
 
 
-Once again this will keep producing the message for every mouse click for as long as the page is open.  Note that the subscribes do not "block", so the above two subscriptions will run in parallel.  That is, we will receive messages on the console for either key or mouse downs whenever they occur.
+Once again this will keep producing the message for every mouse click for as long as the page is open.  Note that the subscribes do not “block”, so the above two subscriptions will run in parallel.  That is, we will receive messages on the console for either key or mouse downs whenever they occur.
 
 The following achieves the same thing with a single subscription using `merge`:
 ```javascript
@@ -224,7 +224,7 @@ merge(key$.pipe(map(e=>e.key)),
 ## Observable Cheatsheet
 
 The following is a very small (but sufficiently useful) subset of the functionality available for [RxJS](https://www.learnrxjs.io/).
-I've simplified the types rather greatly for readability and not always included all the optional arguments.
+I’ve simplified the types rather greatly for readability and not always included all the optional arguments.
 
 ### Creation
 
@@ -234,14 +234,14 @@ The following functions create Observable streams from various sources.
 // produces the list of arguments as elements of the stream
 of<T>(...args: T[]): Observable<T> 
 
-// produces a stream of numbers from 'start' until 'count' have been emitted
+// produces a stream of numbers from “start” until “count” been emitted
 range(start?: number, count?: number): Observable<number>
 
 // produces a stream for the specified event, element type depends on 
 // event type and should be specified by the type parameter, e.g.: MouseEvent, KeyboardEvent
 fromEvent<T>(target: FromEventTarget<T>, eventName: string): Observable<T>
 
-// produces a stream of increasing numbers, emitted every 'period' milliseconds
+// produces a stream of increasing numbers, emitted every “period” milliseconds
 // emits the first event immediately
 interval(period?: number): Observable<number>
 
@@ -276,7 +276,7 @@ pipe<A>(...op1: OperatorFunction<T, A>): Observable<A>;
 // {next} is a function applied to each element of the stream
 // {error} is a function applied in case of error (only really applicable for communications)
 // {complete} is a function applied on completion of the stream (e.g. cleanup)
-// @return {Subscription} returns an object whose "unsubscribe" method may be called to cleanup
+// @return {Subscription} returns an object whose “unsubscribe” method may be called to cleanup
 //              e.g. unsubscribe could be called to cancel an ongoing Observable
 subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): Subscription;
 ```
@@ -286,13 +286,13 @@ subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: ()
 Operators are passed to `pipe`.  They all return an `OperatorFunction` which is used by `pipe`.
 
 ```typescript
-// transform the elements of the input stream using the `project' function
+// transform the elements of the input stream using the “project” function
 map<T, R>(project: (value: T) => R)
 
 // only take elements which satisfy the predicate
 filter<T>(predicate: (value: T) => boolean)
 
-// take `n' elements
+// take “n” elements
 take<T>(n: number)
 
 // take the last element
@@ -337,7 +337,7 @@ There are only three transitions, each triggered by an event.
 
 ### Turning a State-Machine into Code with Event Listeners
 
-The typical way to add interaction to web-pages and other UIs has historically been by adding Event Listeners to the UI elements for which we want interactive behaviour.  In software engineering terms it's typically referred to as the [Observer Pattern](https://en.wikipedia.org/wiki/Observer_pattern) (not to be confused with the "Observable" FRP abstraction we have been discussing).
+The typical way to add interaction to web-pages and other UIs has historically been by adding Event Listeners to the UI elements for which we want interactive behaviour.  In software engineering terms it’s typically referred to as the [Observer Pattern](https://en.wikipedia.org/wiki/Observer_pattern) (not to be confused with the “Observable” FRP abstraction we have been discussing).
 
 Here’s an event-driven code fragment that provides such dragging for some SVG element `draggableRect` that is a child of an SVG canvas element referred to by the variable `svg`:
 
@@ -360,7 +360,7 @@ rect.addEventListener('mousedown',e => {
 })
 ```
 
-We add 'event listeners' to the HTML elements, which invoke the specified functions when the event fires.  There are some awkward dependencies.  The `moveListener` function needs access to the mouse coordinates from the mousedown event, the `done` function which ends the drag on a `mouseup` event needs a reference to the `moveListener` function so that it can clean it up.
+We add “event listeners” to the HTML elements, which invoke the specified functions when the event fires.  There are some awkward dependencies.  The `moveListener` function needs access to the mouse coordinates from the mousedown event, the `done` function which ends the drag on a `mouseup` event needs a reference to the `moveListener` function so that it can clean it up.
 
 It’s all a bit amorphous:
 
@@ -417,9 +417,9 @@ However, there is still something not very elegant about this version.  As indic
 
 ### Pure FRP Solution
 
-We can remove this dependency on mutable state, making our event stream a pure 'closed system', by introducing a `scan` operator on the stream to accumulate the state using a pure function. 
-First, let's define a type for the state that will be accumulated by the `scan` operator. We are concerned with
-the position of the top-left corner of the rectangle, and (optionally, since it's only relevant during mouse-down dragging) the offset of the click position from the top-left of the rectangle:
+We can remove this dependency on mutable state, making our event stream a pure “closed system”, by introducing a `scan` operator on the stream to accumulate the state using a pure function. 
+First, let’s define a type for the state that will be accumulated by the `scan` operator. We are concerned with
+the position of the top-left corner of the rectangle, and (optionally, since it’s only relevant during mouse-down dragging) the offset of the click position from the top-left of the rectangle:
 ```typescript
 type State = Readonly<{
   pos:Point,
@@ -427,7 +427,7 @@ type State = Readonly<{
 }>
 ```
 
-We'll introduce some types to model the objects coming through the stream and the effects they have when applied to a `State` object in the `scan`.  First, all the events we care about have a position on the SVG canvas associated with them, so we'll have a simple immutable `Point` interface with `x` and `y` positions and a couple of handy vector math methods (note that these create a new `Point` rather than mutating any existing state within the `Point`):
+We’ll introduce some types to model the objects coming through the stream and the effects they have when applied to a `State` object in the `scan`.  First, all the events we care about have a position on the SVG canvas associated with them, so we’ll have a simple immutable `Point` interface with `x` and `y` positions and a couple of handy vector math methods (note that these create a new `Point` rather than mutating any existing state within the `Point`):
 ```typescript
 class Point {
    constructor(public readonly x:number, public readonly y:number){}
@@ -459,7 +459,7 @@ const svg = document.getElementById("svgCanvas")!,
       mousemove = fromEvent<MouseEvent>(svg,'mousemove'),
       mouseup = fromEvent<MouseEvent>(svg,'mouseup');
 ```
-But now we'll capture initial position of the rectangle one time only in an immutable `Point` object outside of the stream logic.
+But now we’ll capture initial position of the rectangle one time only in an immutable `Point` object outside of the stream logic.
 ```typescript
 const initialState: State = { 
   pos: new Point(
@@ -487,7 +487,7 @@ mousedown
 ```
 Note that inside the `mergeMap` we use the `startWith` operator to force a `DownEvent` onto the start of the flattened stream.  Then the accumulator function passed to `scan` uses sub-type polymorphism to cause the correct behaviour for the different types of `MousePosEvent``.
 
-The advantage of this code is not brevity; with the introduced type definitions it's longer than the previous implementations of the same logic.  Rather, the advantages of this pattern are:
+The advantage of this code is not brevity; with the introduced type definitions it’s longer than the previous implementations of the same logic.  Rather, the advantages of this pattern are:
 
  * *maintainability*: we have separated setup code and state management code;
  * *scalability*: we can extend this code pattern to handle more complicated state machines. We can easily `merge` in more input streams, adding Event types to handle their `State` updates, and the only place we have to worry about effects visible to the outside world is in the function passed to `subscribe`.

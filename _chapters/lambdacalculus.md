@@ -37,7 +37,7 @@ When we discussed combinators in JavaScript, we gave this function a name.  What
 Some things to note about such lambda expressions:
 
 * A lambda expression has no name, it is anonymous.  Note that anonymous functions in languages like JavaScript and Python are also frequently called lambda expressions, or just lambdas.  Now you know why.
-* The only values that Lambda Calculus variables can take on is other functions (i.e. lambda expressions).  It's lambdas all the way down!  However, to actually model and perform useful computations we say that certain expressions represent values.  See the discussion of [Church Encodings](#church-encodings), below, to see how this is done.
+* The only values that Lambda Calculus variables can take on is other functions (i.e. lambda expressions).  It’s lambdas all the way down!  However, to actually model and perform useful computations we say that certain expressions represent values.  See the discussion of [Church Encodings](#church-encodings), below, to see how this is done.
 * The names of variables bound to parameters in a lambda expression are only meaningful within the context of that expression.  Thus, `λx.x` is semantically equivalent (or *alpha* equivalent) to `λy.y` or any other possible renaming of the variable.
 * Lambda functions can have multiple parameters in the parameter list, e.g.: `λxy. x y`, but they are implicitly curried (e.g. a sequence of nested univariate functions).  Thus the following are all equivalent:
 
@@ -147,7 +147,7 @@ z b [z:=b]                    => BETA Reduction
 ⇒
 b b         => Beta normal form, cannot be reduced again.
 ```
-Note, sometimes I add extra spaces as above just to make things a little more readable - but it doesn't change the order of application, indicate a variable is not part of a lambda to its left (unless there is a bracket) or have any other special meaning.
+Note, sometimes I add extra spaces as above just to make things a little more readable - but it doesn’t change the order of application, indicate a variable is not part of a lambda to its left (unless there is a bracket) or have any other special meaning.
 
 ## Church Encodings
 
@@ -262,13 +262,13 @@ If we directly translate the above version of the Y-combinator into JavaScript w
 const Y = f=> (x => f(x(x)))(x=> f(x(x))) // warning infinite recursion ahead!
 ```
 
-So now `Y` is just a function which can be applied to another function, but what sort of function do we pass into `Y`?  If we are to respect the rules of the Lambda calculus we cannot have a function that calls itself directly.  That is, because Lambda expressions have no name, they can't refer to themselves by name.
+So now `Y` is just a function which can be applied to another function, but what sort of function do we pass into `Y`?  If we are to respect the rules of the Lambda calculus we cannot have a function that calls itself directly.  That is, because Lambda expressions have no name, they can’t refer to themselves by name.
 
 Therefore, we need to wrap the recursive function in a lambda expression into which a reference to the recursive function itself can be passed as parameter.  We can then in the body of the function refer to the parameter function by name.
-It's a bit weird, let me just give you a JavaScript function which fits the bill:
+It’s a bit weird, let me just give you a JavaScript function which fits the bill:
 
 ```javascript
-// A function that recursively calculates 'n!'
+// A function that recursively calculates “n!”
 //  - but it needs to be reminded of its own name in the f parameter in order to call itself.
 const FAC = f => n => n>1 ? n * f(n-1) : 1
 ```
@@ -291,15 +291,15 @@ console.log(Y(FAC)(6))
 ```
 > stack overflow
 
-Well we got a recurrence, but unfortunately the JavaScript engine's strict (or eager) evaluation means that we must completely evaluate Y(FAC) before we can ever apply the returned function to (6).  
-Therefore, we get an infinite loop - and actually it doesn't matter what function we pass in to Y, it will never actually be called and any stopping condition will never be checked.
+Well we got a recurrence, but unfortunately the JavaScript engine’s strict (or eager) evaluation means that we must completely evaluate Y(FAC) before we can ever apply the returned function to (6).  
+Therefore, we get an infinite loop - and actually it doesn’t matter what function we pass in to Y, it will never actually be called and any stopping condition will never be checked.
 How do we restore the laziness necessary to make progress in this recursion?
 
 (**Hint:** it involves wrapping some part of `Y` in another lambda)
 
-Did you get it?  If so, good for you!  If not, never mind, it is tricky and in fact was the subject of research papers at one time, so I'll give you a bigger hint.
+Did you get it?  If so, good for you!  If not, never mind, it is tricky and in fact was the subject of research papers at one time, so I’ll give you a bigger hint.
 
-**Bigger hint:** there's another famous combinator called `Z` which is basically `Y` adapted to work with strict evaluation:
+**Bigger hint:** there’s another famous combinator called `Z` which is basically `Y` adapted to work with strict evaluation:
 
 ```lc
 Z=λf.(λx.f(λv.xxv))(λx.f(λv.xxv))

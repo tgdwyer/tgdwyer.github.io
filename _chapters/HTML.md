@@ -9,7 +9,7 @@ HTML, or HyperText Markup Language, is the standard markup language used to crea
 
 HTML is considered a declarative language because it focuses on describing the structure and content of a web page without specifying how to achieve it. Instead of giving step-by-step instructions for rendering elements, HTML allows developers to declare the desired structure and let the browser handle the rendering process.
 
-## Key Aspects of HTML's Declarative Nature:
+## Key Aspects of HTML’s Declarative Nature:
 
 1. Descriptive Tags: HTML tags are descriptive elements that define the purpose and meaning of content. For example, \<p\> tags indicate a paragraph, \<h1\> to \<h6\> tags denote headings of varying levels, \<ul\> and \<ol\> represent unordered and ordered lists respectively. These tags describe the content they enclose rather than instructing how it should be displayed.
 
@@ -38,11 +38,11 @@ Copy code
 </html>
 ```
 
-In this step, we've set up the basic HTML structure with a \<!DOCTYPE\> declaration, \<html\>, \<head\>, and \<body\> tags. We've also included meta tags for character encoding and viewport settings, as well as a title for the page.
+In this step, we’ve set up the basic HTML structure with a \<!DOCTYPE\> declaration, \<html\>, \<head\>, and \<body\> tags. We’ve also included meta tags for character encoding and viewport settings, as well as a title for the page.
 
 ### Step 2: Adding an SVG Element
 
-Next, let's add an SVG element to the body of our HTML document. This SVG element will contain the rectangle that we'll animate later:
+Next, let’s add an SVG element to the body of our HTML document. This SVG element will contain the rectangle that we’ll animate later:
 
 ```html
 <body>
@@ -52,10 +52,10 @@ Next, let's add an SVG element to the body of our HTML document. This SVG elemen
 </body>
 ```
 
-We've added an SVG element with a width and height of 100 units each. This provides a canvas for our SVG graphics.
+We’ve added an SVG element with a width and height of 100 units each. This provides a canvas for our SVG graphics.
 
 ### Step 3: Adding a Rectangle to the SVG
-Now, let's add a rectangle (<rect>) element inside the SVG to represent the moving rectangle:
+Now, let’s add a rectangle (<rect>) element inside the SVG to represent the moving rectangle:
 
 ```html
 <svg width="100" height="100">
@@ -63,7 +63,7 @@ Now, let's add a rectangle (<rect>) element inside the SVG to represent the movi
 </svg>
 ```
 
-In this step, we've defined a rectangle with a starting position at coordinates (10, 10) and a width and height of 20 units each. The rectangle is filled with a blue color. 
+In this step, we’ve defined a rectangle with a starting position at coordinates (10, 10) and a width and height of 20 units each. The rectangle is filled with a blue color. 
 
 Most HTML elements, including SVG elements have certain attributes according to their documentation, which determine how they are rendered and behave in the browser. [MDN](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/rect) is normally a good reference for what is available to use.
 
