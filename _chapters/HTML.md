@@ -115,12 +115,12 @@ const rectangle = document.getElementById('movingRect')
 animate(rectangle, 10, 50, null);
 ```
 
+---
+
 ## Exercises
 
 - Modify Rectangle Properties: Experiment with changing the attributes of the rectangle such as width, height, fill color, and position. See how these changes affect the appearance of the rectangle on the screen.
 - Animate Different Shapes: Besides rectangles, try animating other SVG shapes such as circles, ellipses, or polygons. Explore how the animation function can be adapted to work with different types of shapes.
 - Create a Mini Game: Challenge yourself by creating a simple game using SVG shapes and animation. For example, you could create a game where the player controls a character (represented by a shape) to avoid obstacles (other shapes) moving across the screen.
 
-
-
-
+---

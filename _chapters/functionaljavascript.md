@@ -398,7 +398,7 @@ Thus, with only pure function expressions and JavaScript conditional expressions
 
 These ideas, of computation through pure function expressions, are inspired by Alonzo Church’s *lambda calculus*.   We’ll be looking again at the lambda calculus later.  Obviously, for the program to be at all useful you will need some sort of side effect, such as outputting the results of a computation to a display device.  When we begin to explore PureScript and Haskell later in this course we will discuss how such languages manage this trick while remaining “pure”.
 
----------------
+---
 
 ## Exercises
 
@@ -409,7 +409,7 @@ These ideas, of computation through pure function expressions, are inspired by A
 - Implement a `concat` function that takes two lists as arguments and returns a new list of their concatenation.
 - How can we update just one element in this list without mutating any data and what is the run-time complexity of such an operation?
 
--------------
+---
 
 ## Updating Data Structures With Pure Functions
 

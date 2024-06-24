@@ -305,14 +305,14 @@ Did you get it?  If so, good for you!  If not, never mind, it is tricky and in f
 Z=λf.(λx.f(λv.xxv))(λx.f(λv.xxv))
 ```
 
--------
+---
 
 ### Exercises
 
 * Note the similarities between `Y` and `Z` and perform a similar set of Beta reductions on `Z FAC` to see how it forces FAC to be evaluated.
 * Write a version of the Z-Combinator in JavaScript such that `Z(FAC)(6)` successfully evaluates to `720`.
 
--------
+---
 
 ## Conclusion
 

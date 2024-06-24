@@ -444,7 +444,9 @@ Then we can construct a list like so:
 ```javascript
 const list = new ListNode(1, new ListNode(2, new ListNode(3)));
 ```
-------
+
+---
+
 ## Exercises
 - Implement a class `List<T>` whose constructor takes an array parameter and creates a linked list of ListNode<T>.  
 - Add methods to your `List<T>` class for:
@@ -461,7 +463,7 @@ Note that each of these functions returns a list, so that we can chain the opera
 ```typescript
 list.filter(x=>x%2===0).reduce((x,y)=>x+y,0)
 ```
--------------
+---
 
 ## Using the compiler to ensure immutability
 

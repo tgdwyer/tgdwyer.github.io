@@ -121,6 +121,8 @@ In code written by experienced haskellers it is very common to see functions red
 
 Some more (and deeper) discussion is available on the Haskell Wiki.
 
+---
+
 ### Exercises
 
 * Refactor the following function to be point-free:
@@ -128,6 +130,8 @@ Some more (and deeper) discussion is available on the Haskell Wiki.
 ```haskell
 f a b c = (a+b)*c
 ```
+
+---
 
 (This is clearly an extreme example but is a useful -- and easily verified -- practice of operator sectioning, composition and eta-conversion.)
 

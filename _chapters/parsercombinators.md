@@ -259,11 +259,15 @@ spaces :: Parser ()
 spaces = (is ' ' >> spaces) <|> pure ()
 ```
 
+---
+
 ### Exercises
 
 - make a less repetitive `digit` parser by creating a function `satisfy :: (Char -> Bool) -> Parser Char` which returns a parser that produces a character but fails if the input is empty or the character does not satisfy the given predicate. You can use the `isDigit` function from `Data.Char` as the predicate.
 
 - change the type of `spaces` to `Parser [Char]` and have it return the appropriately sized string of only spaces.
+
+---
 
 ## A Parser that returns an ADT
 
@@ -325,13 +329,17 @@ Result >< Camel
 ```
 What's really cool about this is that obviously the strings "cat" and "camel" overlap at the start.  Our alternative parser `(<|>)` effectively backtracks when the `cat` parser fails before eventually succeeding with the `camel` parser.  In an imperative style program this kind of logic would result in much messier code.
 
-**Exercises**
+---
+
+### Exercises
 
 - Write some messy imperative-style JavaScript (no higher-order functions allowed) to parse cat, dog or camel and construct a different class instance for each.
 - Now add "dolphin" to the grammar, and use a stopwatch to time yourself extending your messy imperative code.  I bet it takes longer than extending the `animal` parser combinator.
 - Make a parser `stringTok` which uses the `string` parser to parse a given string, but ignores any `spaces` before or after the token.
 - Modify the grammar and the ADT to have some extra data fields for each of the animal types, e.g. `humpCount`, `remainingLives`, `barkstyle`, etc.
 - Extend your parser to produce these records.
+
+---
 
 ## Creating a Parse Tree
 
@@ -389,16 +397,20 @@ Minus
      └──Number 2
 ```
 
-**Exercises**
+---
+
+### Exercises
 
 - make an instance of `show` for `Expr` which pretty prints such trees
 - Make a function which performs the calculation specified in an `Expr` tree like the one above.
+
+---
 
 Obviously we are going to need to parse numbers, so let's start with a simple parser which creates a `Number`.  
 Note that whereas our previous parser had type `phoneNumber :: Parser [Char]` -- i.e. it produced strings -- this, and most of the parsers below, produces an `Expr`.
 
 ```haskell
-number :: Parser Expr  
+number :: Parser Expr
 number = spaces >> Number . read . (:[]) <$> digit
 ```
 
@@ -484,10 +496,14 @@ chain p op = foldl applyOp <$> p <*> many (liftA2 (,) op p)
 
 `applyOp x (op, y)`: This function is used by `foldl` to combine the parsed values and operators. It takes an accumulated value `x`, an operator `op`, and a new value `y`, and applies the operator to the accumulated value and the new value.
 
-**Exercises**
+---
+
+### Exercises
 
 - Similar to `chain`, factor out the recursion of `spaces` into a function which returns a parser that continues producing a list of values from a given parser, i.e.
  `list :: Parser a -> Parser [a]`.
+
+---
 
 ## Parsing Rock-Paper-Scissors
 

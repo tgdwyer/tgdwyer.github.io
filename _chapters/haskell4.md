@@ -45,7 +45,7 @@ Here’s a left fold with a picture of the fold:
 
 Note that since the `(+)` operator is associative -- a+(b+c) = (a+b)+c -- `foldr` and `foldl` return the same result.  For functions that are not associative, however, this is not necessarily the case.
 
----------
+---
 
 ### Exercises
 
@@ -53,7 +53,7 @@ Note that since the `(+)` operator is associative -- a+(b+c) = (a+b)+c -- `foldr
 - What is the result of `foldr (:) []` applied to any list?
 - Implement `map` using `foldr`.
 
----------
+---
 
 ## Monoid
 
@@ -519,14 +519,14 @@ traverse :: (Traversable t, Applicative f) => (a -> f b) -> t a -> f (t b)
 traverse f l = sequenceA (f <$> l)
 ```
 
----------
+---
 
 ### Exercises
 
 - What would be the definition of sequenceA over a list? (without using traverse)
 - Can you make the `Maybe` data type an instance of traversable?
-  
-----------
+
+---
 
 ## Bringing it all together!
 

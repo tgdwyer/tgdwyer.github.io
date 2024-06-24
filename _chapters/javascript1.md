@@ -857,7 +857,7 @@ Some notes about this implementation of range:
 - The function passed to `map` is using an optional second argument which receives the index of the current element.  *See note in the [Array Cheatsheat](#array-cheatsheet) suggesting not to use this*.
 - The `_` is not special syntax, it's a valid variable name. I use `_` as a convention for a parameter that I don't use.  This is imitating Haskell syntax.
 
----------------------
+---
 
 ## Exercises
 
@@ -866,7 +866,7 @@ Some notes about this implementation of range:
 - Why might you lose friends doing this kind of thing to built-in types?
 - We are going to be dealing with linked-list like data structures a lot in this course.  Implement a linked list using JavaScript objects as simply as you can, and create some functions for working with it, like length and map.
 
----------------------
+---
 
 ## EcmaScript 6 Class Syntax
 

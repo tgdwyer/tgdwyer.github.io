@@ -423,6 +423,8 @@ HINT: [parseInt is not actually a unary function](https://developer.mozilla.org/
 
 The point of this demonstration is that curried functions are a more principled way to support partial function application, and also much safer and easier to use when the types guard against improper use.  Thus, this is about as sophisticated as we are going to try to get with Functional Programming in JavaScript, and we will pick up our discussion further exploring the power of FP in the context of the [Haskell functional programming language](/haskell1/).  However, libraries do exist that provide quite flexible functional programming abstractions in JavaScript.  For example, you might like to investigate [Ramda](http://ramdajs.com).
 
+---
+
 ## Exercises
 
 * From the docs for `Array.map` and `parseInt`  can you figure out why the above is happening?
