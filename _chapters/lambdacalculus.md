@@ -28,7 +28,7 @@ The `λ` (Greek letter Lambda) simply denotes the start of a function expression
 x => x
 ```
 
--------
+---
 
 ### Exercise
 
@@ -38,7 +38,7 @@ When we discussed combinators in JavaScript, we gave this function a name.  What
 
 It was the [I-combinator](/higherorderfunctions#identity-i-combinator)*
 
--------
+---
 
 Some things to note about such lambda expressions:
 
@@ -222,7 +222,7 @@ SUCC 2
 = 3
 ```
 
--------
+---
 
 ### Exercises
 
@@ -284,7 +284,7 @@ XOR TRUE TRUE
 = FALSE
 ```
 
--------
+---
 
 ## Divergent Lambda Expressions
 
@@ -377,14 +377,14 @@ Did you get it?  If so, good for you!  If not, never mind, it is tricky and in f
 Z=λf.(λx.f(λv.xxv))(λx.f(λv.xxv))
 ```
 
--------
+---
 
 ### Exercises
 
 * Note the similarities between `Y` and `Z` and perform a similar set of Beta reductions on `Z FAC` to see how it forces FAC to be evaluated.
 * Write a version of the Z-Combinator in JavaScript such that `Z(FAC)(6)` successfully evaluates to `720`.
 
--------
+---
 
 ## Conclusion
 

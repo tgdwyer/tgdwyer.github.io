@@ -189,7 +189,8 @@ Be especially careful to always declare variables with either `let` or `const` k
 
 > 1
 
----------------------
+---
+
 We are going to start to use a few operators that may be familiar from C or Java, some are JS specific.  
 Here’s a cheatsheet:
 
@@ -715,6 +716,8 @@ Note: Instead of writing our own `all` function, we could have used the builtin 
 [1, 3, 5].every(x => x < 5);
 ```
 
+---
+
 ### Exercise
 
 - Can you write a function `any` (without using the builtin `some` array method) that returns true if any of the tests pass?
@@ -766,6 +769,8 @@ const wordCount = (array) => array.reduce(
 ```
 
 `[word]` when used inside an object literal is an example of a computed property name. It allows you to set an object's property name based on the value of a variable.
+
+---
 
 <div class="cheatsheet" markdown="1">
 
@@ -967,7 +972,7 @@ Some notes about this implementation of range:
 - The function passed to `map` is using an optional second argument which receives the index of the current element.  *See note in the [Array Cheatsheat](#array-cheatsheet) suggesting not to use this*.
 - The `_` is not special syntax, it's a valid variable name. `_` is a common convention for a parameter that is not used. This is seen throughout various languages such as Python, Javascript and Haskell.
 
----------------------
+---
 
 ## Exercises
 
@@ -1018,7 +1023,7 @@ function map(f, list) {
 
 ```
 
----------------------
+---
 
 ## EcmaScript 6 Class Syntax
 

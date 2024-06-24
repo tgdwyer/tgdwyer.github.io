@@ -25,7 +25,7 @@ module Jekyll
       end
 
       def wrap_solutions(content)
-        content.gsub(/(##+ *Solutions.*?)(?=\n##+ |\n<div.*?>|\z)/m) do |match|
+        content.gsub(/(##+ *Solutions.*?)(?=\n##+ |\n<div.*?>|\n---|\z)/m) do |match|
         "{% capture solution_content %}\n#{match}\n{% endcapture %}\n{% include solutions.html solution_content=solution_content %}"
         end
       end

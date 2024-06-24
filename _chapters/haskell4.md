@@ -45,7 +45,7 @@ Here’s a left fold with a picture of the fold:
 
 Note that since the `(+)` operator is associative -- a+(b+c) = (a+b)+c -- `foldr` and `foldl` return the same result.  For functions that are not associative, however, this is not necessarily the case.
 
----------
+---
 
 ### Exercises
 
@@ -99,7 +99,8 @@ Note that since the `(+)` operator is associative -- a+(b+c) = (a+b)+c -- `foldr
   map f = foldr ((:) . f) []
   ```
 <!-- markdownlint-enable MD029 -->
----------
+
+---
 
 ## Monoid
 
@@ -275,6 +276,8 @@ Since list is an instance of Monoid, `foldMap` will concatenate these singleton 
 [1,2,3,4,5,6,7]
 ```
 
+---
+
 ### Exercise
 
 - Make an instance of `Foldable` for `Tree` in terms of `foldr` instead of `foldMap`.
@@ -289,7 +292,7 @@ instance Foldable Tree where
     foldr f z (Node l x r) = foldr f (f x (foldr f z r)) l -- fold over right first, then over left
 ```
 
----------
+---
 
 ## Traversable
 
@@ -464,7 +467,7 @@ Node (Node (Leaf (Just 1)) (Just 2) (Leaf (Just 3))) (Just 4) (Node (Leaf (Just 
 Just (Node (Node (Leaf 1) 2 (Leaf 3)) 4 (Node (Leaf 5) 6 (Leaf 7)))
 ```
 
----------
+---
 
 ## Applying Functions Over Contexts
 
@@ -575,7 +578,7 @@ traverse :: (Traversable t, Applicative f) => (a -> f b) -> t a -> f (t b)
 traverse f l = sequenceA (f <$> l)
 ```
 
----------
+---
 
 ### Exercises
 
@@ -606,8 +609,8 @@ traverse f l = sequenceA (f <$> l)
 
 - What would be the definition of sequenceA over a list? (without using traverse)
 - Can you make the `Maybe` data type an instance of traversable?
-  
----------
+
+---
 
 ## Bringing it all together
 

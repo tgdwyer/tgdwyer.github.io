@@ -486,7 +486,7 @@ Then we can construct a list like so:
 const list = new ListNode(1, new ListNode(2, new ListNode(3)));
 ```
 
-------
+---
 
 ## Exercises
 
@@ -508,9 +508,9 @@ list.filter(x=>x%2===0).reduce((x,y)=>x+y,0)
 
 ### Solutions
 
-[Solutions to this exercise can be found here](https://stackblitz.com/edit/typescript-nszdpm?file=index.ts)
+[Solutions to this exercise can be found here.](https://stackblitz.com/edit/typescript-nszdpm?file=index.ts)
 
-------
+---
 
 ## Using the compiler to ensure immutability
 

@@ -89,13 +89,13 @@ apply f x = f x
 
 Woah!  What is f and what is `x`?  Well, in PureScript functions are generic by default - but we (and the compiler) can infer, since f x  is a function call with argument x, that f is a function and x is… anything.  So apply literally applies the function f to the argument x.  Since the binding precedence of the `$` operator is so low compared to most things that could be placed to its right, brackets are (usually) unnecessary.
 
----------
+---
 
 ### Exercise
 
 * If one didn’t happen to like the fact that function chaining with the $ operator reads right to left, how would one go about creating an operator that chains left to right?  (Hint: infixl is a thing and you will need to make a slightly different apply function also).
 
----------
+---
 
 So anyway, back to the chain of functions in `main`:
 
@@ -136,24 +136,24 @@ var main = Control_Monad_Eff_Console.log(
     Data_Functor.map
      (Data_List_Types.functorList)(fibs)(Data_List.range(1)(10))
   )
-); 
+);
 ```
 
 Each of the functions lives in an object that encapsulates the module where it is defined.  That’s pretty standard JavaScript practice.  The rest is just function calls (application).  The call to the range function is interesting:
 
 ```javascript
-Data_List.range(1)(10) 
+Data_List.range(1)(10)
 ```
 
 Woah! It’s a curried function!  Data_List.range(1) returns a function that creates lists of numbers starting from 1.  The second call specifies the upper bound.
 
----------
+---
 
 ### Exercise
 
 * What other functions called in the JavaScript code generated for the above definition of `main` are curried?  Why?
 
----------
+---
 
 ## Tail Call Optimisation
 

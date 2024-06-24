@@ -206,7 +206,7 @@ But there are definitely cons:
 - It can be hard to reason about run-time performance
 - Mixing up strict and lazy evaluation (which can happen inadvertently) can lead to (for example) O(n<sup>2</sup>) behaviour in what should be linear time processing.
 
---------
+---
 
 ### A Side Note on the Y Combinator
 
@@ -238,7 +238,7 @@ y = \f -> (\x -> f (unsafeCoerce x x)) (\x -> f (unsafeCoerce x x))
 main = putStrLn $ y ("circular reasoning works because " ++)
 ```
 
---------
+---
 
 ## Functional Programming in Haskell versus JavaScript
 

@@ -127,6 +127,8 @@ In code written by experienced haskellers it is very common to see functions red
 
 Some more (and deeper) discussion is available on the Haskell Wiki.
 
+---
+
 ### Exercises
 
 - Refactor the following functions to be point-free. These are clearly extreme examples but is a useful -- and easily verified -- practice of operator sectioning, composition and eta-conversion.
@@ -204,6 +206,8 @@ f a = (. (apply (*))) . ((+) . (apply (*))) a -- composition
 f = (. (apply (*))) . ((+) . (apply (*))) -- eta conversion
 f = (. apply (*)) . (+) . apply (*) -- simplify brackets
 ```
+
+---
 
 ## Functor
 
@@ -581,8 +585,10 @@ Or, since both `Suit` and `Rank` derive `Enum`, we can enumerate the full lists 
 
 ```haskell
 GHCi> Card <$> [Spade ..] <*> [Two ..]
-[Card ^ Two,Card ^ Three,Card ^ Four,Card ^ Five,Card ^ Six,Card ^ Seven,Card ^ Eight,Card ^ Nine,Card ^ Ten,Card ^ Jack,Card ^ Queen,Card ^ King,Card ^ Ace,Card & Two,Card & Three,Card & Four,Card & Five,Card & Six,Card & Seven,Card & Eight,Card & Nine,Card & Ten,Card & Jack,Card & Queen,Card & King,Card & Ace,Card O Two,Card O Three,Card O Four,Card O Five,Card O Six,Card O Seven,Card O Eight,Card O Nine,Card O Ten,Card O Jack,Card O Queen,Card O King,Card O Ace,Card V Two,Card V Three,Card V Four,Card V Five,Card V Six,Card V Seven,Card V Eight,Card V Nine,Card V Ten,Card V Jack,Card V Queen,Card V King,Card V Ace] 
+[Card ^ Two,Card ^ Three,Card ^ Four,Card ^ Five,Card ^ Six,Card ^ Seven,Card ^ Eight,Card ^ Nine,Card ^ Ten,Card ^ Jack,Card ^ Queen,Card ^ King,Card ^ Ace,Card & Two,Card & Three,Card & Four,Card & Five,Card & Six,Card & Seven,Card & Eight,Card & Nine,Card & Ten,Card & Jack,Card & Queen,Card & King,Card & Ace,Card O Two,Card O Three,Card O Four,Card O Five,Card O Six,Card O Seven,Card O Eight,Card O Nine,Card O Ten,Card O Jack,Card O Queen,Card O King,Card O Ace,Card V Two,Card V Three,Card V Four,Card V Five,Card V Six,Card V Seven,Card V Eight,Card V Nine,Card V Ten,Card V Jack,Card V Queen,Card V King,Card V Ace]
 ```
+
+---
 
 ### Exercise
 
@@ -590,7 +596,6 @@ GHCi> Card <$> [Spade ..] <*> [Two ..]
 
 ```haskell
 [^2,^3,^4,^5,^6,^7,^8,^9,^10,^J,^Q,^K,^A,&2,&3,&4,&5,&6,&7,&8,&9,&10,&J,&Q,&K,&A,O2,O3,O4,O5,O6,O7,O8,O9,O10,OJ,OQ,OK,OA,V2,V3,V4,V5,V6,V7,V8,V9,V10,VJ,VQ,VK,VA]
-
 ```
 
 - Try and make the definition of `show` for `Rank` a one-liner using `zip` and `lookup`.
@@ -629,6 +634,8 @@ To define the show method for Rank as a one-liner using `zip` and `lookup`, we c
 instance Show Rank where
     show r = fromMaybe "" $ lookup r (zip [Two .. Ace] ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"])
 ```
+
+---
 
 <div class="cheatsheet" markdown="1">
 
@@ -670,11 +677,11 @@ Or equivalently:
 totalMark = (+) . exam <*> nonExam
 ```
 
----------
+---
 
 ### Applicative Exercises
 
-- derive the implementations of `pure` and `<*>` for `Maybe` and for functions `((->)r)`.
+- Derive the implementations of `pure` and `<*>` for `Maybe` and for functions `((->)r)`.
 
 #### Solutions
 
@@ -752,7 +759,7 @@ pure a _ = -> a
 
 The function `pure` helps you create a function that, no matter what the second input is, will always return this first value, this is exactly the K-combinator.
 
----------
+---
 
 Reminder the definition for applicative is:
 
@@ -834,6 +841,8 @@ Just 2
 Just 5
 ```
 
+---
+
 ### Exercise
 
 - One useful function, which will be coming up throughout the semester is `asum` with the type definition `asum :: Alternative f => [f a] -> f a`. Write this function using `foldr`
@@ -858,6 +867,8 @@ Therefore we can write `asum` simply as:
 asum :: Alternative f => [f a] -> f a
 asum = foldr (<|>) empty
 ```
+
+---
 
 ## A simple Applicative Functor for Parsing
 
@@ -982,7 +993,7 @@ is c = Parser $
     _ -> Nothing
 ```
 
----------
+---
 
 By making `Parser` an instance of `Functor` we will be able to map functions over the result of a parse, this is very useful! For example, consider the `int` parser, which parses a string to an `integer`, and if we want to apply a function to the result, such as adding 1 `(+1)`, we can fmap this over the parser.
 

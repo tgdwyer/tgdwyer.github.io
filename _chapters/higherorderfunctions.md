@@ -184,6 +184,8 @@ grades.map(roundFloat)
 
 Note that `compose` let us define `roundFloat` without any messing around with anonymous functions and explicit wiring-up of return values to parameters.  We call this *tacit* or *point-free* style programming.
 
+---
+
 ## Exercise
 
 - Create a `compose` function in Javascript that takes a variable number of functions as arguments and composes (chains) them.  Using the spread operator (`...`) to take a variable number of arguments as an array and the `Array.prototype.reduce` method, the function should be very small.
@@ -215,6 +217,8 @@ const pipe = (...funcs) => (initialArg) =>
 ```
 
 The pipe function is similar to the compose function, but it applies its functions in the opposite order—from left to right.
+
+---
 
 ## Combinators
 
@@ -361,7 +365,7 @@ Therefore, we can use our `K` combinator to entirely avoid defining any function
 const forEach = f=>l=>fold(K(f))(null)(l)
 ```
 
-----
+---
 
 ### Fold Exercise
 
@@ -390,19 +394,19 @@ forEach(console.log)(mappedList);
 This construct a new cons every time, applying the function `f` to the current item in `v`. However, this will reverse the list because fold processes the list from head to tail, and constructs the new list by *prepending* each element to the accumulator. Hence, reversing the list.
 
 ```javascript
-const reverse = l => 
+const reverse = l =>
   fold(acc => v => cons(v)(acc))(null)(l);
 
-const map = f => l => 
+const map = f => l =>
   fold(acc => v => cons(f(v))(acc))(null)(reverse(l));
- 
-const filter = pred => l => 
+
+const filter = pred => l =>
   fold(acc => v => pred(v) ? cons(v)(acc) : acc)(null)(reverse(l));
 ```
 
 Therefore, we need to reverse the list, using a separate function, to ensure that we apply the functions in the correct order. However, the preferred way around this, would be to reduce in the other direction, e.g., using [reduceRight](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduceRight), to fold through the list tail to head.
 
-----
+---
 
 ### Alternation (OR-Combinator)
 
@@ -445,11 +449,13 @@ function fork(join, f, g) {
 
 The `fork` function is a higher-order combinator that combines two functions, `f` and `g`, and then merges their results using a `join` function.
 
+---
+
 ### Fork-Join Exercise
 
 - Use the fork-join combinator to compute the average over a sequence of numeric values.
 
-- Add Type annotations to the above definition of the fork function. How many distinct type variables do you need?
+- Add type annotations to the above definition of the fork function. How many distinct type variables do you need?
 
 #### Solutions
 
@@ -483,7 +489,7 @@ function fork<T, U, V, R>(join: (a: U, b: V) => R, f: (value: T) => U, g: (value
 3. `V` for the type of the result of function `g`.
 4. `R` for the type of the result of the `join` function.
 
-----
+---
 
 ## End Note
 
@@ -543,6 +549,8 @@ HINT: [parseInt is not actually a unary function](https://developer.mozilla.org/
 
 The point of this demonstration is that curried functions are a more principled way to support partial function application, and also much safer and easier to use when the types guard against improper use.  Thus, this is about as sophisticated as we are going to try to get with Functional Programming in JavaScript, and we will pick up our discussion further exploring the power of FP in the context of the [Haskell functional programming language](/haskell1/).  However, libraries do exist that provide quite flexible functional programming abstractions in JavaScript.  For example, you might like to investigate [Ramda](http://ramdajs.com).
 
+---
+
 ## Exercises
 
 1. From the docs for `Array.map` and `parseInt`  can you figure out why the above is happening?
@@ -575,7 +583,7 @@ function flip<T, U, V>(binaryFunc: (arg1: T, arg2: U) => V): (arg2: U, arg1: T) 
 }
 ```
 
-----
+---
 
 ## Glossary
 
