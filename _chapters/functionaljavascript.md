@@ -252,7 +252,7 @@ For many standard loops, however, the logic is the same every time and can easil
     const someArray = [1,2,3,4,5];
     let newArray = [];
     for (let i = 0; i <= someArray.length; i++) {
-        newArray.push_back(someArray[i] * 2);
+        newArray.push(someArray[i] * 2);
     }
     ```
 
