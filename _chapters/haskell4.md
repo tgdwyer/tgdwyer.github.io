@@ -53,7 +53,7 @@ Note that since the `(+)` operator is associative -- a+(b+c) = (a+b)+c -- `foldr
 2. What is the result of `foldr (:) []` applied to any list?
 3. Implement `map` using `foldr`.
 
-#### Solution
+#### Solutions
 
 <!-- markdownlint-disable MD029 -->
 1. The right fold processes the list from the right (end) to the left (beginning). The result of each application   of the function is passed as the accumulator to the next application.
@@ -279,7 +279,7 @@ Since list is an instance of Monoid, `foldMap` will concatenate these singleton 
 
 - Make an instance of `Foldable` for `Tree` in terms of `foldr` instead of `foldMap`.
 
-#### Solution
+#### Solutions
 
 ```haskell
 instance Foldable Tree where

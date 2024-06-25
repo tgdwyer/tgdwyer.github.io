@@ -226,6 +226,60 @@ SUCC 2
 * Our JavaScript [cons list](/higherorderfunctions/#k-combinator) was based on the Church Encoding for linked lists.  Try writing the `cons`, `head` and `rest` functions as Lambda expressions.
 * Investigate [Church Numerals](https://en.wikipedia.org/wiki/Church_encoding) and try using lambda calculus to compute some basic math.
 
+#### Solutions
+
+* First, let's recall the definition of XOR: If either, but not both, of the inputs is true, then the output is true.
+
+```lambda
+XOR = λxy. IF x (NOT y) y
+```
+
+```lambda
+XOR TRUE FALSE
+
+= (λxy. IF x (NOT y) y) TRUE FALSE - expand XOR
+= IF x (NOT y) y [x:=TRUE, y:=FALSE] - beta reduction
+= IF (TRUE) (NOT FALSE) TRUE
+= (λbtf.b t f) TRUE (NOT FALSE) TRUE - expand IF
+= b t f [b:=TRUE,t:=(NOT FALSE),f:=TRUE] - beta reduction
+= TRUE (NOT FALSE) TRUE
+= (λxy.x) (NOT FALSE) TRUE - expand TRUE
+= x [x:=(NOT FALSE), y:=TRUE] - beta reduction
+= NOT FALSE
+= (λx. IF x FALSE TRUE) FALSE - expand NOT
+= IF x FALSE TRUE (x:=FALSE)
+= IF FALSE FALSE TRUE
+= (λbtf.b t f) FALSE FALSE TRUE - expand IF
+= b t f [b:=FALSE,t:=FALSE,f:=TRUE] - beta reduction
+= FALSE FALSE TRUE
+= (λxy.y) FALSE TRUE - expand FALSE
+= y [x:=FALSE, y:=TRUE] - beta reduction
+= TRUE
+```
+
+```lambda
+XOR TRUE TRUE
+
+= (λxy. IF x (NOT y) y) TRUE TRUE - expand XOR
+= IF x (NOT y) y [x:=TRUE, y:=TRUE] - beta reduction
+= IF (TRUE) (NOT TRUE) TRUE
+= (λbtf.b t f) TRUE (NOT TRUE) TRUE - expand IF
+= b t f [b:=TRUE,t:=(NOT TRUE),f:=TRUE] - beta reduction
+= TRUE (NOT TRUE) TRUE
+= (λxy.x) (NOT TRUE) TRUE - expand TRUE
+= x [x:=(NOT TRUE), y:=TRUE] - beta reduction
+= NOT TRUE
+= (λx. IF x FALSE TRUE) TRUE - expand NOT
+= IF x FALSE TRUE (x:=TRUE)
+= IF TRUE FALSE TRUE
+= (λbtf.b t f) TRUE FALSE TRUE - expand IF
+= b t f [b:=TRUE,t:=FALSE,f:=TRUE] - beta reduction
+= TRUE FALSE TRUE
+= (λxy.x) FALSE TRUE - expand TRUE
+= x [x:=FALSE, y:=TRUE] - beta reduction
+= FALSE
+```
+
 -------
 
 ## Divergent Lambda Expressions

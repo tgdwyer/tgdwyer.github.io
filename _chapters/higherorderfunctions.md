@@ -367,7 +367,7 @@ const forEach = f=>l=>fold(K(f))(null)(l)
 
 - Write `map` and `filter` for the above cons list definition in terms of `fold`
 
-#### Solution
+#### Solutions
 
 A naive implementation of map using fold, would be:
 

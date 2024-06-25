@@ -705,7 +705,7 @@ Just 5
 
 - One useful function, which will be coming up throughout the semester is `asum` with the type definition `asum :: Alternative f => [f a] -> f a`.
 
-#### Solution
+#### Solutions
 
 A naive approach will be to use recursion (recursion is hard).
 
