@@ -210,17 +210,17 @@ Do the following functions have side effects?
 
 #### Solutions
 
-1. <p class="spoiler">Yes, it modifies the global variable counter.</p>
+1. Yes, it modifies the global variable counter.
 
-2. <p class="spoiler">No, it simply returns a new string and does not modify any external state.</p>
+2. No, it simply returns a new string and does not modify any external state.
 
-3. <p class="spoiler">Yes, it modifies the input array numbers in place.</p>
+3. Yes, it modifies the input array numbers in place.
 
-4. <p class="spoiler">Yes, it writes to the console, which is an external action.</p>
+4. Yes, it writes to the console, which is an external action.
 
-5. <p class="spoiler">No, it returns a new array without modifying the input array.</p>
+5. No, it returns a new array without modifying the input array.
 
-6. <p class="spoiler">Yes, it relies on and modifies a global seed for random number generation.</p>
+6. Yes, it relies on and modifies a global seed for random number generation.
 
 ## Functional Patterns
 

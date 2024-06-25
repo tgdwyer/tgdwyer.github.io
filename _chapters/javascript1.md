@@ -714,6 +714,16 @@ all(x => x < 5, [1, 3, 5])
 
 - What if we wanted to see how many times each word appears in a list?
 
+#### Solutions
+
+Any is similar to reduce, however, we use the or operator (`||`)
+
+```javascript
+const any = (test, array) => array.reduce(
+    (accumulator, x) => accumulator || test(x),
+    false);
+```
+
 ```javascript
 const wordCount = (array) => array.reduce(
     (accumulator, word) => {
@@ -735,6 +745,20 @@ wordCount(['tim', 'sally', 'tim'])
 ```
 
 > { tim: 2, sally: 1 }
+
+We can modify this to be pure:
+
+```javascript
+const wordCount = (array) => array.reduce(
+    (accumulator, word) => ({
+        ...accumulator,
+        [word]: (word in accumulator ? accumulator[word] : 0) + 1
+    }),
+    {}
+);
+```
+
+`[word]` when used inside an object literal is an example of a computed property name. It allows you to set an object's property name based on the value of a variable.
 
 <div class="cheatsheet" markdown="1">
 
@@ -929,6 +953,48 @@ Some notes about this implementation of range:
 - Hack a sum function onto the `Array.prototype` (you’ll need to use an old style anonymous function to access the array through `this`).
 - Why might you lose friends doing this kind of thing to built-in types?
 - We are going to be dealing with linked-list like data structures a lot in this course.  Implement a linked list using JavaScript objects as simply as you can, and create some functions for working with it, like length and map.
+
+### Solutions
+
+```javascript
+Array.prototype.range = (from, to) =>
+  Array(to - from) // Correctly size the array
+    .fill()
+    .map((_, i) => i + from);
+```
+
+Adding a sum function on Array.prototype can be done using an old style anonymous function to access `this` which refers to the array instance:
+
+```javascript
+Array.prototype.sum = function() {
+  return this.reduce((acc, val) => acc + val, 0);
+};
+```
+
+Modifying built-in types, like adding functions to Array.prototype, can lead to several issues, e.g., compatibility Issues -- if future versions of JavaScript add a method with the same name but different behavior, it can break your or others' code unexpectedly, conflicts -- If different libraries try to modify the same prototype with different implementations, it can lead to conflicts that are hard to diagnose.
+
+One possible implementation of a linked list, is storing two values in an array, the current value and the next value.
+
+```javascript
+function createNode(value, next = null) {
+    return () => next ? [value, next] : [value];
+}
+
+const list = createNode(1, createNode(2, createNode(3)))
+
+function length(list) {
+    if (!list) return 0;
+    const result = list();
+    return 1 + (result[1] ? length(result[1]) : 0);
+}
+
+function map(f, list) {
+    if (!list) return null;
+    const [value, next] = list();
+    return createNode(f(value), next ? map(next, f) : null);
+}
+
+```
 
 ---------------------
 

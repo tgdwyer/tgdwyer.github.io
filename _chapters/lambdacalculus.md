@@ -32,7 +32,11 @@ x => x
 
 ### Exercise
 
-When we discussed combinators in JavaScript, we gave this function a name.  What was it? *[spoiler](/higherorderfunctions#identity-i-combinator)*
+When we discussed combinators in JavaScript, we gave this function a name.  What was it?
+
+### Solutions
+
+It was the [I-combinator](/higherorderfunctions#identity-i-combinator)*
 
 -------
 

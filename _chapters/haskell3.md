@@ -137,6 +137,20 @@ f a b c = (a+b)*c
 
 (This is clearly an extreme example but is a useful -- and easily verified -- practice of operator sectioning, composition and eta-conversion.)
 
+#### Solutions
+
+```haskell
+f a b c = (a+b)*c
+f a b c = (*) (a + b) c -- operator sectioning
+f a b = (*) (a + b) -- eta conversion
+f a b = (*) (((+) a) b) -- operator sectioning
+f a b = ((*) . ((+) a)) b -- composition
+f a = (*) . ((+) a) -- eta conversion
+f a = ((*) .) ((+) a)
+f a = (((*) . ) . (+)) a -- composition
+f  = ((*) . ) . (+) -- eta conversion
+```
+
 ## Functor
 
 We’ve been mapping over lists and arrays many times, first in JavaScript:
@@ -522,9 +536,45 @@ GHCi> Card <$> [Spade ..] <*> [Two ..]
 
 ```haskell
 [^2,^3,^4,^5,^6,^7,^8,^9,^10,^J,^Q,^K,^A,&2,&3,&4,&5,&6,&7,&8,&9,&10,&J,&Q,&K,&A,O2,O3,O4,O5,O6,O7,O8,O9,O10,OJ,OQ,OK,OA,V2,V3,V4,V5,V6,V7,V8,V9,V10,VJ,VQ,VK,VA]
+
 ```
 
 - Try and make the definition of `show` for `Rank` a one-liner using `zip` and `lookup`.
+
+#### Solutions
+
+```haskell
+instance Show Suit where
+    show Spade = "^"     -- Represents Spades
+    show Club = "&"      -- Represents Clubs
+    show Diamond = "O"   -- Represents Diamonds
+    show Heart = "V"     -- Represents Hearts
+
+instance Show Rank where
+    show Two = "2"
+    show Three = "3"
+    show Four = "4"
+    show Five = "5"
+    show Six = "6"
+    show Seven = "7"
+    show Eight = "8"
+    show Nine = "9"
+    show Ten = "10"
+    show Jack = "J"
+    show Queen = "Q"
+    show King = "K"
+    show Ace = "A"
+
+instance Show Card where
+    show (Card s r) = show s ++ show r
+```
+
+To define the show method for Rank as a one-liner using `zip` and `lookup`, we can leverage these functions to directly map the Rank constructors to their respective string representations.
+
+```haskell
+instance Show Rank where
+    show r = fromMaybe "" $ lookup r (zip [Two .. Ace] ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"])
+```
 
 <div class="cheatsheet" markdown="1">
 
@@ -703,7 +753,7 @@ Just 5
 
 ### Exercise
 
-- One useful function, which will be coming up throughout the semester is `asum` with the type definition `asum :: Alternative f => [f a] -> f a`.
+- One useful function, which will be coming up throughout the semester is `asum` with the type definition `asum :: Alternative f => [f a] -> f a`. Write this function using `foldr`
 
 #### Solutions
 
