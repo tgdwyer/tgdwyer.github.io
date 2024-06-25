@@ -186,9 +186,35 @@ Note that `compose` let us define `roundFloat` without any messing around with a
 
 ## Exercise
 
-- Create a ```compose``` function in JavaScript that takes a variable number of functions as arguments and composes (chains) them.  Using the spread operator (`...`) to take a variable number of arguments as an array and the `Array.prototype.reduce` method, the function should be very small.
+- Create a ```compose``` function in Javascript that takes a variable number of functions as arguments and composes (chains) them.  Using the spread operator (`...`) to take a variable number of arguments as an array and the `Array.prototype.reduce` method, the function should be very small.
 
 - Create a ```pipe``` function which composes its arguments in the opposite order to the ```compose``` function above.  That is, left-to-right.  Note that in [rx.js](https://www.learnrxjs.io/), such a ```pipe``` function is an important way to create chains of operations (over Observable streams).
+
+### Solutions
+
+The `compose` function takes multiple functions and returns a new function that applies these functions from right to left to an initial argument using `reduceRight`. In the example, `add1` adds 1 to a number, and `double` multiplies a number by 2. `compose(double, add1)` creates a function that first adds 1 and then doubles the result. Calling this function with 5 results in 12.
+
+```javascript
+const compose = (...funcs) => (initialArg) =>
+  funcs.reduceRight((arg, fn) => fn(arg), initialArg);
+
+// Example usage
+const add1 = x => x + 1;
+const double = x => x * 2;
+
+const add1ThenDouble = compose(double, add1);
+
+console.log(add1ThenDouble(5)); // Output: 12
+```
+
+Using TypeScript to create a flexible compose function requires accommodating varying input and output types for each function in the chain. To achieve this flexibility without losing type safety, we need to ensure that the output type of one function matches the input type of the next function. However, if we try to type this correctly without using any, we face significant complexity with the lack of expressiveness in typescripts type system. `pipe` in RxJS solves this issue by [hardcoding up to 9 functions inside the pipe](https://rxjs.dev/api/index/function/pipe), any functions larger then this will not be typed correctly.
+
+```javascript
+const pipe = (...funcs) => (initialArg) =>
+  funcs.reduce((arg, fn) => fn(arg), initialArg);
+```
+
+The pipe function is similar to the compose function, but it applies its functions in the opposite order—from left to right.
 
 ## Combinators
 
@@ -340,6 +366,41 @@ const forEach = f=>l=>fold(K(f))(null)(l)
 ### Fold Exercise
 
 - Write `map` and `filter` for the above cons list definition in terms of `fold`
+
+#### Solution
+
+A naive implementation of map using fold, would be:
+
+```javascript
+const map = f => l => 
+  fold(acc => v => cons(f(v))(acc))(null)(l);
+
+const l = cons(1)(cons(2)(cons(3)(null)));
+const mappedList = map(x => x * 2)(l);
+forEach(console.log)(mappedList); 
+
+```
+
+> 6
+>
+> 4
+>
+> 2
+
+This construct a new cons every time, applying the function `f` to the current item in `v`. However, this will reverse the list because fold processes the list from head to tail, and constructs the new list by *prepending* each element to the accumulator. Hence, reversing the list.
+
+```javascript
+const reverse = l => 
+  fold(acc => v => cons(v)(acc))(null)(l);
+
+const map = f => l => 
+  fold(acc => v => cons(f(v))(acc))(null)(reverse(l));
+ 
+const filter = pred => l => 
+  fold(acc => v => pred(v) ? cons(v)(acc) : acc)(null)(reverse(l));
+```
+
+Therefore, we need to reverse the list, using a separate function, to ensure that we apply the functions in the correct order. However, the preferred way around this, would be to reduce in the other direction, e.g., using [reduceRight](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduceRight), to fold through the list tail to head.
 
 ----
 

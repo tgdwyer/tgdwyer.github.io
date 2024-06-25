@@ -506,6 +506,8 @@ Note that each of these functions returns a list, so that we can chain the opera
 list.filter(x=>x%2===0).reduce((x,y)=>x+y,0)
 ```
 
+### Solutions
+
 [Solutions to this exercise can be found here](https://stackblitz.com/edit/typescript-nszdpm?file=index.ts)
 
 ------
