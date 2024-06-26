@@ -427,6 +427,51 @@ The `join` function passes one argument to a binary function twice which can be 
 6
 ```
 
+### Returning To Point Free
+
+The very observant of you, might recognize this construct of passing one argument to a binary function twice. We previously called this `apply`, when discussing [Function instances for applicatives](./haskell3.md#applicative-exercises). This can be a very useful pattern when making code point free.
+
+We previously gave you an exercise, and labeled it as a *scary extension*, but now with more tools, we can make this much less scary:
+
+```haskell
+f a b = a*a + b*b
+```
+
+First, lets use join to apply the binary function (`*`) to the same argument twice
+
+```haskell
+f :: Num a => a -> a -> a
+f a b = (join (*) a) + (join (*) b)
+```
+
+One function, you may have been introduced to in your travels is `on`:
+
+```haskell
+on :: (b -> b -> c) -> (a -> b) -> a -> a -> c
+```
+
+The `on` function in Haskell takes a binary function, a unary function, and two arguments. It first applies the unary function to each argument separately, and then applies the binary function to the results of these applications. Using some operator sectioning, we can see our code fits exactly that pattern.
+
+```haskell
+f a b = (+) ((join (*)) a) ((join (*)) b)
+f a b = on (+) (join (*)) a b
+```
+
+We can now do two rounds of eta-conversion to make our code point free.
+
+```haskell
+f = on (+) (join (*))
+```
+
+By convention, the `on` function is normally written as an infix operation, i.e., surrounded by backticks
+
+```haskell
+f :: Num a => a -> a -> a
+f = (+) `on` join (*)
+```
+
+This is quite a common pattern in Haskell code, where this code says we apply the `+` operation, after applying `join (*)` (multiplying by itself) to each argument.
+
 ## Looping with Monadic Effects
 
 There are also various functions in `Control.Monad` for looping functions with monadic effects (functions that return a result inside a Monad) over containers that are `Foldable` and `Traversable`.

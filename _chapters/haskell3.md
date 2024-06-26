@@ -131,7 +131,6 @@ Some more (and deeper) discussion is available on the Haskell Wiki.
 
 - Refactor the following functions to be point-free. These are clearly extreme examples but is a useful -- and easily verified -- practice of operator sectioning, composition and eta-conversion.
 
-
 ```haskell
 g x y = x^2 + y
 ```
@@ -171,7 +170,6 @@ f       = ((*) . ) . (+) -- eta conversion
 ```
 
 Only look at this one if you are curious (very non-assessable, and no one will ask anything harder then first two questions)
-
 
 ```haskell
 f a b = a*a + b*b
@@ -674,11 +672,13 @@ totalMark = (+) . exam <*> nonExam
 
 ---------
 
-### Exercise
+### Applicative Exercises
 
 - derive the implementations of `pure` and `<*>` for `Maybe` and for functions `((->)r)`.
 
 #### Solutions
+
+<!-- markdownlint-disable MD036 -->
 
 **Maybes**
 
@@ -783,12 +783,13 @@ We have to do some [Lego](https://miro.medium.com/v2/resize:fit:640/format:webp/
 
 The function `(<*>)` takes two functions, one of type `r -> (a -> b)` and another of type `r -> a`, and combines them to produce a new function of type `r -> b`. It does this by applying both functions to the same input `r` and then applying the result of the first function to the result of the second.
 
-One neat function we can make out of this is to apply the same argument `b` to a binary function
+One neat function we can make out of this, we will call `apply` passes one argument to a binary function twice which can be a useful trick.
 
 ```haskell
 apply :: (b -> b -> c) -> b -> c
 apply f b = (f <*> (\x -> x)) b
 ```
+
 or more simply:
 
 ```haskell
@@ -796,7 +797,7 @@ apply :: (b -> b -> c) -> b -> c
 apply f = f <*> id
 ```
 
-This will allow us to make more functions point-free 
+This will allow us to make more functions point-free
 
 ```haskell
 square :: Num a => a => a
@@ -807,6 +808,7 @@ square = a * a
 square a = apply (*) a
 square = apply (*)
 ```
+<!-- markdownlint-enable MD036 -->
 
 ## Alternative
 
