@@ -129,26 +129,82 @@ Some more (and deeper) discussion is available on the Haskell Wiki.
 
 ### Exercises
 
-- Refactor the following function to be point-free:
+- Refactor the following functions to be point-free. These are clearly extreme examples but is a useful -- and easily verified -- practice of operator sectioning, composition and eta-conversion.
+
+
+```haskell
+g x y = x^2 + y
+```
 
 ```haskell
 f a b c = (a+b)*c
 ```
 
-(This is clearly an extreme example but is a useful -- and easily verified -- practice of operator sectioning, composition and eta-conversion.)
+**Extension: Warning, this one scary**
+This is very non-assessable, and no one will ask anything harder then first two questions
+
+```haskell
+f a b = a*a + b*b
+```
 
 #### Solutions
 
 ```haskell
+g x y = x^2 + y
+g x y = (+) (x^2) y -- operator sectioning
+g x   = (+) (x^2) -- eta conversion
+g x   = (+) ((^2) x) -- operator sectioning
+g x   = ((+) . (^2)) x -- composition
+g     = (+) . (^2) -- eta conversion
+```
+
+```haskell
 f a b c = (a+b)*c
 f a b c = (*) (a + b) c -- operator sectioning
-f a b = (*) (a + b) -- eta conversion
-f a b = (*) (((+) a) b) -- operator sectioning
-f a b = ((*) . ((+) a)) b -- composition
-f a = (*) . ((+) a) -- eta conversion
-f a = ((*) .) ((+) a)
-f a = (((*) . ) . (+)) a -- composition
-f  = ((*) . ) . (+) -- eta conversion
+f a b   = (*) (a + b) -- eta conversion
+f a b   = (*) (((+) a) b) -- operator sectioning
+f a b   = ((*) . ((+) a)) b -- composition
+f a     = (*) . ((+) a) -- eta conversion
+f a     = ((*) .) ((+) a)
+f a     = (((*) . ) . (+)) a -- composition
+f       = ((*) . ) . (+) -- eta conversion
+```
+
+Only look at this one if you are curious (very non-assessable, and no one will ask anything harder then first two questions)
+
+
+```haskell
+f a b = a*a + b*b
+f a b = (+) (a * a) (b * b)
+```
+
+Where do we go from here?
+We need a function which applies the `*` function to the same argument `b`
+Lets invent one:
+
+```haskell
+apply :: (b -> b -> c) -> b -> c
+apply f b = f b b
+```
+
+```haskell
+f a b = a*a + b*b
+f a b = (+) (a * a) (b * b)
+f a b = (+) (apply (*) a) (apply (*) b) -- using our applyFunction
+f a b = ((+) (apply (*) a)) ((apply (*)) b) -- this is in the form f (g x), where f == ((+) (apply (*) a)) and g == (apply (*))
+
+f a b = f (g b)
+  where
+    f = ((+) (apply (*) a))
+    g = (apply (*))
+
+f a b = (((+) (apply (*) a)) . (apply (*))) b -- apply function composition
+f a = ((+) (apply (*) a)) . (apply (*)) -- eta conversion
+f a = (. (apply (*))) ((+) (apply (*) a))  -- operator sectioning
+f a = (. (apply (*))) ((+) . (apply (*)) a) -- composition inside brackets ((+) (apply (*) a))
+f a = (. (apply (*))) . ((+) . (apply (*))) a -- composition
+f = (. (apply (*))) . ((+) . (apply (*))) -- eta conversion
+f = (. apply (*)) . (+) . apply (*) -- simplify brackets
 ```
 
 ## Functor
@@ -624,7 +680,7 @@ totalMark = (+) . exam <*> nonExam
 
 #### Solutions
 
-##### Maybes
+**Maybes**
 
 First lets consider `Maybe`. The type signature for `pure` is:
 
@@ -662,7 +718,7 @@ We observe that only one case returns a value, while all other cases, return `No
 (<*>) _ _ = Nothing -- All other cases, return Nothing
 ```
 
-##### Functions
+**Functions**
 
 The type definitions for the function type `((->)r)` is a bit more nuanced. When we write `((->) r)`, we are partially applying the `->` type constructor. The `->` type constructor takes two type arguments: an argument type and a return type. By supplying only the first argument `r`, we get a type constructor that still needs one more type to become a complete type.
 
@@ -726,6 +782,31 @@ We have to do some [Lego](https://miro.medium.com/v2/resize:fit:640/format:webp/
 ```
 
 The function `(<*>)` takes two functions, one of type `r -> (a -> b)` and another of type `r -> a`, and combines them to produce a new function of type `r -> b`. It does this by applying both functions to the same input `r` and then applying the result of the first function to the result of the second.
+
+One neat function we can make out of this is to apply the same argument `b` to a binary function
+
+```haskell
+apply :: (b -> b -> c) -> b -> c
+apply f b = (f <*> (\x -> x)) b
+```
+or more simply:
+
+```haskell
+apply :: (b -> b -> c) -> b -> c
+apply f = f <*> id
+```
+
+This will allow us to make more functions point-free 
+
+```haskell
+square :: Num a => a => a
+square = a * a
+```
+
+```haskell
+square a = apply (*) a
+square = apply (*)
+```
 
 ## Alternative
 
