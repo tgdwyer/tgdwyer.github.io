@@ -190,7 +190,7 @@ apply f b = f b b
 ```haskell
 f a b = a*a + b*b
 f a b = (+) (a * a) (b * b)
-f a b = (+) (apply (*) a) (apply (*) b) -- using our applyFunction
+f a b = (+) (apply (*) a) (apply (*) b) -- using our apply function
 f a b = ((+) (apply (*) a)) ((apply (*)) b) -- this is in the form f (g x), where f == ((+) (apply (*) a)) and g == (apply (*))
 
 f a b = f (g b)
