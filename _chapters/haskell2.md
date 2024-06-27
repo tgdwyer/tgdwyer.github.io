@@ -286,6 +286,7 @@ Nothing
 We can use pattern matching to extract values from a `Maybe` (when we have `Just` a value), or to perform some sensible default behaviour when we have `Nothing`.
 
 ```haskell
+printNumber :: String -> IO ()
 printNumber name = msg $ lookup name phonebook
 where
    msg (Just number)  = print number
@@ -300,6 +301,7 @@ where
 We can also do this using a [case statement](/haskell1#conditional-code-constructs-cheatsheet) statement
 
 ```haskell
+printNumber :: String -> IO ()
 printNumber name = msg $ lookup name phonebook
 where
    msg value = case value of
@@ -308,8 +310,6 @@ where
 ````
 
 Here we use the wildcard `_` to match any other possible value, in this case, there is only one other value, `Nothing`.
-
-<div class="glossary" markdown="1">
 
 ## Glossary
 
@@ -328,5 +328,3 @@ Here we use the wildcard `_` to match any other possible value, in this case, th
 *Total Functions*: Functions that provide a mapping for every element in the input type to an element in the output type.
 
 *Partial Functions*: Functions that do not have a mapping for every input, potentially failing for some inputs.
-
-</div>

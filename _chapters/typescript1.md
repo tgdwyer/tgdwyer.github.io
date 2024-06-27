@@ -597,8 +597,6 @@ value = <any>"hello"
 
 While leaving off type annotations and forcing types with any may be convenient, for example, to quickly port legacy JavaScript into a TypeScript program, generally speaking it is good practice to use types wherever possible, and can actually be enforced with the ```--noImplicitAny``` compiler flag. This flag will be on by *default* in the applied classes.  The compiler’s type checker is a sophisticated constraint satisfaction system and the correctness checks it applies are usually worth the extra effort -- especially in modern compilers like TypeScript where type inference does most of the work for you.
 
-<div class="glossary" markdown="1">
-
 ## Glossary
 
 *Generic Types:* A way to create reusable and type-safe components, functions, or classes by parameterizing types. These types are specified when the function or class is used.
@@ -614,5 +612,3 @@ While leaving off type annotations and forcing types with any may be convenient,
 *Type Parameter*: A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
 
 *Union Type*: A TypeScript construct that allows a variable to hold values of multiple specified types, separated by the `|` symbol.
-
-</div>

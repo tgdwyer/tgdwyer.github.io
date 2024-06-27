@@ -1210,8 +1210,6 @@ The applicative definition says to apply the second parser `is '+'` to the remai
 
 Therefore, after applying this parser, it will result in: `Just ("", (\a b -> a) 123 "+")`. Finally, we will apply the function call to ignore the second value, finally resulting in: `Just ("", 123)`. But the key point, is we still *executed* the `is '+'` but we ignored the value. That is the beauty of using our `<*` and `*>` to ignore results, while still *executing* actions
 
-<div class="glossary" markdown="1">
-
 ## Glossary
 
 *Eta Conversion*: A technique in Haskell and Lambda Calculus where a function f x is simplified to f, removing the explicit mention of the parameter when it is not needed.
@@ -1233,5 +1231,3 @@ Therefore, after applying this parser, it will result in: `Just ("", (\a b -> a)
 *Parser*: A function or program that interprets structured input, often used to convert strings into data structures.
 
 *Parser Combinator*: A higher-order function that takes parsers as input and returns a new parser as output. Parser combinators are used to build complex parsers from simpler ones.
-
-</div>

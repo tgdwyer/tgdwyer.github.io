@@ -694,8 +694,6 @@ evalResult = (evalTree <$>) <$> parsedResult
 -- >>> evalResult = Just ("", 10)
 ```
 
-<div class="glossary" markdown="1">
-
 ## Glossary
 
 *Folding:* The process of reducing a data structure to a single value by applying a function. Haskell provides two types of folds: foldl (left fold) and foldr (right fold).
@@ -711,5 +709,3 @@ evalResult = (evalTree <$>) <$> parsedResult
 *Traversable*: A type class for data structures that can be traversed, applying a function with an Applicative effect to each element. It extends both Foldable and Functor and includes functions like traverse and sequenceA.
 
 *Unit*: A type with exactly one value, (), used to indicate the absence of meaningful return value, similar to void in other languages.
-
-</div>

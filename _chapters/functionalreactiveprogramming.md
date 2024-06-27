@@ -500,8 +500,6 @@ The advantage of this code is not brevity; with the introduced type definitions 
 
 As an example of *scalability* we will be using this same pattern to implement the logic of an asteroids arcade game in the [next chapter](/asteroids).
 
-<div class="glossary" markdown="1">
-
 ## Glossary
 
 *Asynchronous*: Operations that occur independently of the main program flow, allowing the program to continue executing while waiting for the operation to complete.
@@ -509,5 +507,3 @@ As an example of *scalability* we will be using this same pattern to implement t
 *Functional Reactive Programming (FRP)*: A programming paradigm that combines functional and reactive programming to handle asynchronous data streams and event-driven systems.
 
 *Observable*: A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
-
-</div>

@@ -1171,8 +1171,6 @@ So the filter property defaults to the identity function (a function which simpl
 
 This is a “lighter-weight” style of code reuse or specialisation.
 
-<div class="glossary" markdown="1">
-
 ## Glossary
 
 *Anonymous Function*: A function defined without a name, often used as an argument to other functions. Also known as lambda function.
@@ -1196,5 +1194,3 @@ This is a “lighter-weight” style of code reuse or specialisation.
 *Referential Transparency*: An expression that can be replaced with its value without changing the program's behavior, indicating no side effects and consistent results.
 
 *Side Effects*: Any state change that occurs outside of a function's local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
-
-</div>

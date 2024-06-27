@@ -179,8 +179,6 @@ main = do
     print result
 ```
 
-<div class="glossary" markdown="1">
-
 ## Glossary
 
 *Functor*: A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the fmap function, which applies a function to every element in a structure.
@@ -188,5 +186,3 @@ main = do
 *Applicative*: A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (<*>).
 
 *Monad*: A type class in Haskell that represents computations as a series of steps. It provides the bind operation (`>>=`) to chain operations and the return (or `pure`) function to inject values into the monadic context.
-
-</div>

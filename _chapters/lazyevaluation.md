@@ -181,8 +181,6 @@ console.log(sumOfFirstNNaturalsNotDivisibleBy3Or5(1000));
 
 > 233168
 
-<div class="glossary" markdown="1">
-
 ## Glossary
 
 *Eager Evaluation*: A strategy where expressions are evaluated immediately as they are bound to variables.
@@ -190,5 +188,3 @@ console.log(sumOfFirstNNaturalsNotDivisibleBy3Or5(1000));
 *IIFE (Immediately Invoked Function Expression)*: A JavaScript function that runs as soon as it is defined, used to create local scopes and encapsulate code.
 
 *Lazy Evaluation*: A strategy where expressions are not evaluated until their values are needed, allowing for the creation of infinite sequences and delayed computations.
-
-</div>

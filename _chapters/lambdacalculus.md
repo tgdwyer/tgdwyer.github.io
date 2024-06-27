@@ -392,8 +392,6 @@ If you want to dig deeper there is much [more written about Lambda Calculus enco
 
 However, the above description should be enough to give you a working knowledge of how to apply the three operations to manipulate Lambda Calculus expressions, as well as an appreciation for how they can be used to reason about combinators in real-world functional style curried code.  The other important take away is that the Lambda Calculus is a turing-complete model of computation, with Church encodings demonstrating how beta-reduction can evaluate church-encoded logical and numerical expressions and the trick of the Y-combinator giving us a way to perform loops.
 
-<div class="glossary" markdown="1">
-
 ## Glossary
 
 *Lambda Calculus*: Model of computation developed in the 1930s by Alonzo Church, providing a complete model of computation similar to Turing Machines.
@@ -409,5 +407,3 @@ However, the above description should be enough to give you a working knowledge 
 *Combinator*: A lambda expression with no free variables.
 
 *Divergent lambda expressions*: Expressions that do not simplify when beta reduced, leading to infinite loops.
-
-</div>

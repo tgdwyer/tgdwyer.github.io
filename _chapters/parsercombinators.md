@@ -668,8 +668,6 @@ convert' Played{rocks, papers, scissors} =
 (P,"2R1P1S")
 ```
 
-<div class="glossary" markdown="1">
-
 ## Glossary
 
 *Parser*: A program that processes a string of text to extract structured information from it. Parsers are used in interpreting programming languages, data formats, and other structured text formats.
@@ -685,5 +683,3 @@ convert' Played{rocks, papers, scissors} =
 *Parser Combinator*: A higher-order function that takes parsers as input and combines them to create new parsers. Parser combinators are used to build complex parsers in a modular and compositional way.
 
 *Abstract Syntax Tree*: A tree representation of the abstract syntactic structure of a string of text. Each node in the tree represents a construct occurring in the text.
-
-</div>

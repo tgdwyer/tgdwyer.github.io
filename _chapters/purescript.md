@@ -206,12 +206,8 @@ Obviously, it’s a less direct translation than was generated for our previous 
 
 We have seen all we need for now of PureScript.  It’s a small but nicely put together language.  It takes the best features of Haskell and reinterprets some of them quite cleverly to achieve relatively seamless interop with JavaScript.  However, it’s still a bit niche.  For the remainder of this unit [we’ll dive more deeply into Haskell](/haskell1/), which has a long history and is supported by a very large and active community across academia and industry.
 
-<div class="glossary" markdown="1">
-
 ## Glossary
 
 *Pattern Matching*: A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
 
-*Tail Call Optimisation*: A compiler feature that optimises tail-recursive functions to prevent additional stack frames from being created, effectively converting recursion into iteration.
-
-</div>
+*Tail Call Optimisation*: A compiler feature that optimises tail-recursive functions to prevent additional stack frames from being created, effectively converting recursion into iteration.1

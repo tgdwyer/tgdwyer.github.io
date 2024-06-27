@@ -21,7 +21,7 @@
   border-bottom: 1px dotted #000;
 }
 
-.glossary-term:hover::after {
+.glossary-term::after {
   content: attr(data-definition);
   position: absolute;
   left: 0;
@@ -34,7 +34,21 @@
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   z-index: 1000;
   white-space: normal;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
 }
+
+.glossary-term:hover::after {
+  animation: showTooltip 0s linear 0.25s forwards;
+}
+
+@keyframes showTooltip {
+  to {
+    opacity: 1;
+  }
+}
+
 
 #pagination {
   width: 100%;

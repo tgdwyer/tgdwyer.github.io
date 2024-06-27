@@ -400,8 +400,6 @@ fibs n = case n of
 
 </div>
 
-<div class="glossary" markdown="1">
-
 ## Glossary
 
 *GHCi REPL*: The interactive Read-Eval-Print Loop for GHC, the Glasgow Haskell Compiler, allowing users to test Haskell programs and expressions interactively.
@@ -423,5 +421,3 @@ fibs n = case n of
 *Type Class*: A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
 
 *Unit*: A type with exactly one value, (), used to indicate the absence of meaningful return value, similar to void in other languages.
-
-</div>

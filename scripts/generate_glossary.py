@@ -34,7 +34,7 @@ for file in l:
         if "title: " in l:
             title = l.split(":")[1].strip()[1:-1]
 
-        if not flag and l.strip() != '<div class="glossary" markdown="1">':
+        if not flag and l.strip() != '## Glossary':
             continue
 
         assert title is not None

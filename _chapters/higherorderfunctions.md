@@ -577,8 +577,6 @@ function flip<T, U, V>(binaryFunc: (arg1: T, arg2: U) => V): (arg2: U, arg1: T) 
 
 ----
 
-<div class="glossary" markdown="1">
-
 ## Glossary
 
 *Combinator*: A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
@@ -594,5 +592,3 @@ function flip<T, U, V>(binaryFunc: (arg1: T, arg2: U) => V): (arg2: U, arg1: T) 
 *Identity function (I-combinator)*: A function that returns its argument unchanged.
 
 *K-combinator*: A combinator that takes two arguments and returns the first one.
-
-</div>
