@@ -23,12 +23,13 @@ module Jekyll
         processed_content = wrap_glossary(processed_content)
         page.content = processed_content
       end
-  
+
       def wrap_solutions(content)
-        content.gsub(/(##+ *Solutions.*?)(?=\n##+ |\z)/m) do |match|
-          "{% capture solution_content %}\n#{match}\n{% endcapture %}\n{% include solutions.html solution_content=solution_content %}"
+        content.gsub(/(##+ *Solutions.*?)(?=\n##+ |\n<div.*?>|\z)/m) do |match|
+        "{% capture solution_content %}\n#{match}\n{% endcapture %}\n{% include solutions.html solution_content=solution_content %}"
         end        
       end
+      
       def wrap_glossary(content)
         content.gsub(/(##+ *Glossary.*)(?=\z)/m) do |match|
           "<div class=\"glossary\" markdown=\"1\">\n#{match}\n</div>"

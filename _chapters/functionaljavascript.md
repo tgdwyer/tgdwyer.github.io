@@ -446,7 +446,7 @@ take(2,
 
 > { data: 2, next: { data: 4, next: null }}
 
-#### Aside: Dive in to the definitions
+#### Aside: Dive in to the definition of Map
 
 The definition of `map` (and friends) may look scary, but lets break it down. We will write it in a more verbose way for now:
 
@@ -550,6 +550,14 @@ Now, here’s the ubiquitous map function:
 const map = (f, list)=> !list ? null
                               : cons(f(head(list)), map(f, rest(list)))
 ```
+
+We can now apply our map function to `list123` to perform some transformation of the data
+
+```javascript
+const list234 = map(x => x + 1, list123) 
+```
+
+> `cons(2, cons(3, cons(4, null)));`
 
 In the above, we are using closures to store data.  It's just a trick to show the power of functions and to put us into the right state of mind for the Lambda Calculus -- which provides a complete model of computation using only anonymous functions like those above.  In a real program I would expect you would use JavaScript's class and object facilities to create data structures.
 
