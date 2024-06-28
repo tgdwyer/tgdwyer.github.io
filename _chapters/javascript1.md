@@ -697,7 +697,7 @@ const all = (test, array) => array.reduce(
     true)
 ```
 
-Here the `accumulator` is a boolean with initial value `true`.  If an element of the array fails the test the `accumulator` becomes `false` and stays `false`, using the `&&` operator.
+We call `test` a predicate function, i.e., a function which returns true or false. Here the `accumulator` is a boolean with initial value `true`.  If an element of the array fails the test the `accumulator` becomes `false` and stays `false`, using the `&&` operator.
 
 ```javascript
 all(x => x < 5, [1, 2, 3])
@@ -815,7 +815,7 @@ function add(x) {
                      // the variable x from its enclosing scope 
                      // - “a closure”
 }
-let addNine = add(9)
+const addNine = add(9)
 addNine(10)
 ```
 
@@ -890,7 +890,7 @@ Now, we can create custom functions that compute sums over arbitrary sequences:
 In JavaScript you can also create functions as members of objects:
 
 ```javascript
-let say = {
+const say = {
     hello: person => console.log('hello ' + person)
 }
 say.hello("tim")
@@ -906,7 +906,7 @@ function Person(name, surname) {
     this.name = name
     this.surname = surname
 }
-let author = new Person('tim', 'dwyer')
+const author = new Person('tim', 'dwyer')
 sayHello(author.name)
 ```
 
