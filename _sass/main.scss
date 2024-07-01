@@ -67,6 +67,20 @@
   }
 }
 
+.site-header > .wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &::after {
+    content: none;
+  }
+}
+
+#toggle-div {
+  align-items: center;
+}
+
 // https://www.w3schools.com/howto/howto_css_switch.asp
 /* The switch - the box around the slider */
 .switch {
