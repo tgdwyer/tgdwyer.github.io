@@ -161,7 +161,7 @@ safeSolve a b c = do
     pure (x1,x2)
 ```
 
-So inside a `do`-block `y<-x` is completely equivalent to `x >>= \y -> ...`, where in both cases the variable `y` is in scope for the rest of the expression.  We’ll see more [explanation and examples of `do` notation below](/monad/#do-notation).
+So inside a `do`-block `y<-x` is completely equivalent to `x >>= \y -> …`, where in both cases the variable `y` is in scope for the rest of the expression.  We’ll see more [explanation and examples of `do` notation below](/monad/#do-notation).
 
 How is a `Nothing` result from either of our `safe` functions handled?  Well, the [Maybe instance of Monad](https://hackage.haskell.org/package/base-4.14.0.0/docs/src/GHC.Base.html#line-1005) defines bind like so:
 
@@ -173,7 +173,7 @@ instance  Monad Maybe  where
 
 Meaning that anything on the right-hand side of a `Nothing>>=` will be left unevaluated and `Nothing` returned.
 
-So that’s one instance of `Monad`; let’s look at some more...
+So that’s one instance of `Monad`; let’s look at some more…
 
 ### IO
 
@@ -390,14 +390,14 @@ they all take a common parameter, e.g. a line break character.
 
 ```haskell
 greet linebreak = "Dear Gentleperson,"++linebreak 
-body sofar linebreak = sofar ++ linebreak ++ "It has come to my attention that... " ++ linebreak
+body sofar linebreak = sofar ++ linebreak ++ "It has come to my attention that… " ++ linebreak
 signoff sofar linebreak = sofar ++ linebreak ++ "Your’s truly," ++ linebreak ++ "Tim" ++ linebreak
 putStrLn $ (greet >>= body >>= signoff) "\r\n"
 ```
 
 >Dear Gentleperson,  
 >
->It has come to my attention that...  
+>It has come to my attention that…  
 >
 >Your’s truly,  
 >Tim

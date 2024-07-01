@@ -653,7 +653,7 @@ Finally, we make a quick addition to the CSS so that the bullets are a different
 
 ## Collisions
 
-So far the game we have built allows you to hoon around in a space-ship blasting the void with fireballs which is kind of fun, but not very challenging.  The Asteroids game doesn’t really become “Asteroids” until you actually have... asteroids.  Also, you should be able to break them up with your blaster and crashing into them should end the game.  Here’s a preview:
+So far the game we have built allows you to hoon around in a space-ship blasting the void with fireballs which is kind of fun, but not very challenging.  The Asteroids game doesn’t really become “Asteroids” until you actually have… asteroids.  Also, you should be able to break them up with your blaster and crashing into them should end the game.  Here’s a preview:
 
 [![Spaceship flying](/assets/images/chapterImages/asteroids/asteroidsComplete.gif)](https://stackblitz.com/edit/asteroids05?file=index.ts)
 

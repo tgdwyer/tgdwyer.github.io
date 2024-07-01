@@ -546,11 +546,11 @@ setTimeout(()=>console.log('done.'), 0);
 // the above tells the event loop to execute
 // the continuation after 0 milliseconds delay.
 // even with a zero-length delay, the synchronous code
-// after the setTimeout will be run first...
-console.log('job queued on the event loop...');
+// after the setTimeout will be run first…
+console.log('job queued on the event loop…');
 ```
 
-> job queued on the event loop...  
+> job queued on the event loop…  
 > done.
 
 ### Function and Method Chaining

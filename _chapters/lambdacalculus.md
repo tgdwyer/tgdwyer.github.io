@@ -311,15 +311,15 @@ When we apply `Y` to another function `g` we see an interesting divergence:
 <pre class="code">
 Y g = (λf. ( λx . f (x x) ) ( λx. f (x x) ) ) g
     = ( λx . f (x x) ) ( λx. f (x x) ) [f:=g]  <i>- beta reduction</i>
-    = <b>( λx . g (x x) ) ( λx. g (x x) )</b>         <i>- a partial expansion of Y g, remember this...</i>
+    = <b>( λx . g (x x) ) ( λx. g (x x) )</b>         <i>- a partial expansion of Y g, remember this…</i>
     = g (x x) [ x:= λx. g (x x)]               <i>- beta reduction</i>
-    = g ( <b>(λx. g (x x) ) (λx. g (x x) )</b> )        <i>- bold part matches Y g above, so now...</i>
+    = g ( <b>(λx. g (x x) ) (λx. g (x x) )</b> )      <i>- bold part matches Y g above, so now…</i>
     = g (Y g)
-<i>... more beta reduction as above
-... followed by substitution with Y g when we see the pattern above...</i>
+<i>  … more beta reduction as above
+  … followed by substitution with Y g when we see the pattern above…</i>
     = g (g (Y g))
     = g (g (g (Y g)))
-<i>... etc</i>
+<i>  … etc</i>
 </pre>
 
 If we directly translate the above version of the Y-combinator into JavaScript we get the following:
@@ -355,7 +355,7 @@ FAC(FAC(FAC(FAC(FAC(FAC(FAC(FAC(FAC()))))))))(6)
 
 > 720
 
-From the expansion of `Y g = g (g (g (...)))` it would seem that `Y(FAC)` would give us the recurrence we need. But will the JavaScript translation of the Y-combinator be able to generate this sequence of calls?  
+From the expansion of `Y g = g (g (g (…)))` it would seem that `Y(FAC)` would give us the recurrence we need. But will the JavaScript translation of the Y-combinator be able to generate this sequence of calls?  
 
 ```js
 console.log(Y(FAC)(6))

@@ -275,7 +275,7 @@ What if one day our systems will use yet another identifier?  We can future proo
 interface Student<T> {
   id: T;
   name: string;
-  ... // other properties such as marks etc...
+  ... // other properties such as marks etc…
 }
 ```
 
@@ -422,7 +422,7 @@ function curry<U,V,W>(f:(x:U,y:V)=>W): (x:U)=>(y:V)=>W {
 The TypeScript compiler underlines `y,x` and says:
 > Error: Argument of type 'V' is not assignable to parameter of type 'U'. 'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
 
-So it’s complaining that our use of a `y:V` into a parameter that should be a `U` and vice-versa for `x`.  We flip them back and we are good again... but TypeScript helps us make sure we use the function consistently too:
+So it’s complaining that our use of a `y:V` into a parameter that should be a `U` and vice-versa for `x`.  We flip them back and we are good again… but TypeScript helps us make sure we use the function consistently too:
 
 ```typescript
 function curry<U,V,W>(f:(x:U,y:V)=>W): (x:U)=>(y:V)=>W {

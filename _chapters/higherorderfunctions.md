@@ -534,7 +534,7 @@ We are converting an array of strings into an array of int.  The output will be 
 
 > [1, NaN, NaN]
 
-What the ...!
+What the …!
 
 But:
 
