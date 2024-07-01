@@ -236,7 +236,7 @@ i--     // post-decrement
 ### In-place math operators
 
 ```javascript
-x += <expr> 
+x += <expr>
 // add result of expr to x
 // also -=, *=, /=, |=, &=.
 ```
@@ -255,8 +255,8 @@ Functions are declared with the `function` keyword.  You can give the function a
 function myFunction(x, y) {
   let t = x + y; // t is mutable
   t += z;  // += adds the result of the expression on the right to the value of t
-  const result = t // semicolons are not essential (but can help to catch errors)
-  console.log("hello world") // prints to the console
+  const result = t; // semicolons are not essential (but can help to catch errors)
+  console.log("hello world"); // prints to the console
   return result; // returns the result to the caller
 }
 
@@ -448,15 +448,15 @@ Like Java, everything in JavaScript is an object. You can construct an object po
 const myObj = {
     aProperty: 123,
     anotherProperty: "tim was here"
-}
+};
 ```
 
 However, in JavaScript, objects are simply property bags, indexed by a hashtable:
 
 ```javascript
 // the following are equivalent and both involve a hashtable lookup:
-console.log(myObj.aProperty)
-console.log(myObj['aProperty'])
+console.log(myObj.aProperty);
+console.log(myObj['aProperty']);
 ```
 
 Note that when we declare an object with the `const` keyword as above, it is only *weakly immutable*.  This means that we cannot reassign `myObj` to refer to a different object, however, we can change the properties inside `myObj`.  Thus, the `myObj` variable is constant/immutable, but the object created by the declaration is mutable.  So, after making the above `const` declaration, if we try the following reassignment of `myObj` we receive an error:
@@ -465,7 +465,7 @@ Note that when we declare an object with the `const` keyword as above, it is onl
 myObj = {
     aProperty: 0,
     anotherProperty: "tim wasn't here"
-}
+};
 ```
 
 > VM48:1 Uncaught TypeError: Assignment to constant variable.
@@ -473,38 +473,38 @@ myObj = {
 But the immutability due to `const` is *weak* or *shallow* in the sense that while the `myObj` variable which references the object is immutable, the properties of the object are mutable, i.e. we can reassign properties on `myObj` with no error:
 
 ```javascript
-myObj.aProperty = 0
+myObj.aProperty = 0;
 ```
 
 We can also quickly declare variables that take the values of properties of an object, through *destructuring* syntax:
 
 ```javascript
-const {aProperty} = myObj
-console.log(aProperty)
+const {aProperty} = myObj;
+console.log(aProperty);
 123
 ```
 
 Which is equivalent to:
 
 ```javascript
-const aProperty = myObj.aProperty
+const aProperty = myObj.aProperty;
 ```
 
 This is most convenient to destructure objects passed as arguments to functions. It makes it clear from the function definition precisely which properties are going to be accessed.  Consider:
 
 ```javascript
-const point = {x:123, y:456}
+const point = {x:123, y:456};
 function showX({x}) {
-   console.log(x)
+   console.log(x);
 }
 ```
 
 You can also initialise an object's properties directly with variables.  Unless a new property name is specified, the variable names become property names, like so:
 
 ```javascript
-const x = 123, tempY = 456
+const x = 123, tempY = 456;
 const point = {x /* variable name used as property name */,
-               y:tempY /* value from variable but new property name */}
+               y:tempY /* value from variable but new property name */};
 point
 ```
 
@@ -515,7 +515,7 @@ point
 JavaScript has Python-like syntax for array objects:
 
 ```javascript
-const a = [1,2,3]
+const a = [1,2,3];
 a.length
 ```
 
@@ -536,7 +536,7 @@ a[2]
 You can also destructure arrays into local variables:
 
 ```javascript
-const [x,y,z] = a
+const [x,y,z] = a;
 z
 ```
 
@@ -561,9 +561,9 @@ The nifty thing about JavaScript -- one Scheme’ish thing that presumably survi
 
 ```javascript
 function sayHello(person) {
-    console.log('hello ' + person)
+    console.log('hello ' + person);
 }
-sayHello('tim')
+sayHello('tim');
 ```
 
 > "hello tim"
@@ -571,8 +571,8 @@ sayHello('tim')
 We can easily bind a function to a variable:
 
 ```javascript
-const hi = sayHello
-hi('tim')
+const hi = sayHello;
+hi('tim');
 ```
 
 > "hello tim"
@@ -596,15 +596,15 @@ The `sayHello` function is called a *named function*.  We can also create an ano
 
 ```javascript
 const hi = function(person) {
-    console.log("hello " + person)
-}
+    console.log("hello " + person);
+};
 ```
 
 or to pass as a parameter into another function. For example, `Array` objects have a `forEach` member that expects a function as an argument, which is then applied to every member of the array:
 
 ```javascript
-['tim', 'sally', 'anne'].forEach(function(person) { 
-    console.log('hello ' + person)
+['tim', 'sally', 'anne'].forEach(function(person) {
+    console.log('hello ' + person);
 })
 ```
 
@@ -618,7 +618,7 @@ This pattern of passing functions as parameters to other functions is now so com
 ['tim', 'sally', 'anne'].forEach(person=> console.log('hello ' + person))
 ```
 
-Note that whatever value the expression on the right-hand side of the arrow evaluates to is implicitly returned:
+Note that whatever value the expression on the right-hand side of the arrow evaluates to is implicitly returned. Here, we use the `map` array method to create a new array from applying the provided function to each element:
 
 ```javascript
 ['tim', 'sally', 'anne'].map(person=> "hello " + person)
@@ -630,9 +630,9 @@ Multiple statements (either split across lines or separated with `;`s) including
 
 ```javascript
 ['tim', 'sally', 'anne'].map(person=> {
-   const message = "hello " + person
-   console.log(message)
-   return message
+   const message = "hello " + person;
+   console.log(message);
+   return message;
 })
 ```
 
@@ -641,14 +641,14 @@ Multiple statements (either split across lines or separated with `;`s) including
 As mentioned above, ES6 introduced compact notation for anonymous functions:
 
 ```javascript
-const greeting = person=> 'hello' + person
+const greeting = person=> 'hello' + person;
 ```
 
 Which is completely equivalent to the long form:
 
 ```javascript
 const greeting = function(person) {
-    return 'hello ' + person
+    return 'hello ' + person;
 }
 ```
 
@@ -671,7 +671,7 @@ const greeting = (greeting, person)=> {
     const msg = greeting + ' ' + person
     console.log(msg)
     return msg
-}
+};
 ```
 
 ### Reduce
@@ -694,29 +694,36 @@ The `reduce` method applies a function to each of the elements in the array in o
 ```javascript
 const all = (test, array) => array.reduce(
     (accumulator, x) => accumulator && test(x),
-    true)
+    true);
 ```
 
 We call `test` a predicate function, i.e., a function which returns true or false. Here the `accumulator` is a boolean with initial value `true`.  If an element of the array fails the test the `accumulator` becomes `false` and stays `false`, using the `&&` operator.
 
 ```javascript
-all(x => x < 5, [1, 2, 3])
-all(x => x < 5, [1, 3, 5])
+all(x => x < 5, [1, 2, 3]);
+all(x => x < 5, [1, 3, 5]);
 ```
 
 > true
 
 > false
 
+Note: Instead of writing our own `all` function, we could have used the builtin `every` array method instead:
+
+```javascript
+[1, 2, 3].every(x => x < 5);
+[1, 3, 5].every(x => x < 5);
+```
+
 ### Exercise
 
-- Can you write a function `any` that returns true if any of the tests pass?
+- Can you write a function `any` (without using the builtin `some` array method) that returns true if any of the tests pass?
 
 - What if we wanted to see how many times each word appears in a list?
 
 #### Solutions
 
-Any is similar to reduce, however, we use the or operator (`||`)
+`any` is similar to `reduce`, however, we use the or operator (`||`):
 
 ```javascript
 const any = (test, array) => array.reduce(
@@ -727,7 +734,7 @@ const any = (test, array) => array.reduce(
 ```javascript
 const wordCount = (array) => array.reduce(
     (accumulator, word) => {
-        if (accumulator[word]) {
+        if (word in accumulator) {
             accumulator[word] += 1
         } else {
             accumulator[word] = 1
@@ -764,8 +771,8 @@ const wordCount = (array) => array.reduce(
 
 ## Array Cheatsheet
 
-In the following, the annotations beginning with `:` describe the type of each parameter and the return type of the function.  The array `a` has elements of type `U`, and `U=>V` is the type of a function with input parameter type `U` and return type `V`
-(Note: these are not correct [TS annotations](/typescript1), but an informal “shorthand”)
+In the following, the annotations beginning with `:` describe the type of each parameter and the return type of the function.  The array `a` has elements of type `U`, and `U=>V` is the type of a function with input parameter type `U` and return type `V`.
+(Note: these are not correct [TS annotations](/typescript1), but an informal “shorthand”.)
 
 ```javascript
 a.forEach(f: U=> void): void  // apply the function f to each element of the array
@@ -776,31 +783,46 @@ Although it does not typically mutate `a`, `forEach` is impure if `f` has any si
 ### Pure Methods on Array
 
 ```javascript
-a.slice(): U[]                // copy the whole array
-a.slice(start: number): U[]   // copy from the specified index to the end of the array
-a.slice(start: number,        // copy from start index up to 
-        end: number): U[]     //    (but not including) end index
-a.map(f: U=> V): V[]          // apply f to elements of array
-                              //    and return result in new array of type V
-a.filter(f: U=> boolean): U[] // returns a new array of the elements of a
-                              //    for which f returns true
-a.concat(b: U[]): U[]         // return a new array with the elements of b
-                              //    concatenated after the elements of a
-a.concat(b: U[], c: U[]): U[] // return b and c appended to a.
-                              //    further arrays can be passed after c
-a.reduce(f: (V, U)=> V, V): V // Uses f to combine elements of
-                              // the array into a single result of type V
+// Copy the whole array
+a.slice(): U[]
+// Copy from the specified index to the end of the array
+a.slice(start: number): U[]
+// Copy from start index up to (but not including) end index
+a.slice(start: number, end: number): U[]
+
+// Returns a new array with the elements of b concatenated after the
+// elements of a
+a.concat(b: U[]): U[]
+// Returns b and c appended to a. Further arrays can be passed after c
+a.concat(b: U[], c: U[]): U[]
+
+// Apply f to elements of array and return result in new array of type
+// V
+a.map(f: U=> V): V[]
+
+// Returns a new array of the elements of a for which f returns true
+a.filter(f: U=> boolean): U[]
+// Returns the first element of a for which f returns true, or
+// undefined if there is no such element
+a.find(f: U=> boolean): U | undefined
+// Returns whether all elements satisfy the function f
+a.every(f: U=> boolean): boolean
+// Returns whether at least one element satisfies the function f
+a.some(f: U=> boolean): boolean
+
+// Uses f to combine elements of the array into a single result of
+// type V
+a.reduce(f: (V, U)=> V, V): V
 ```
 
 All of the above are pure in the sense that they do not mutate `a`, but return the result in a new object.
 
-*Note: the function passed to `forEach` takes an optional second parameter (not shown above) which is the index of the element being visited (see [docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach)).  While `map`, `filter` & `reduce` have a similar optional index parameter I suggest to avoid using it because it leads to hacky imperative style thinking about loops.*
-
+*Note: the function passed to `forEach` takes an optional second parameter (not shown above) which is the index of the element being visited (see [docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach)).  While `map`, `filter`, `reduce`, `every`, & `some` have a similar optional index parameter, I suggest to avoid using it because it leads to hacky imperative style thinking about loops.*
 </div>
 
 ## Closures
 
-Functions can be nested inside other function definitions and can access variables from the enclosing scope.  
+Functions can be nested inside other function definitions and can access variables from the enclosing scope.
 
 **Definitions:**
 
@@ -812,7 +834,7 @@ You can also have a function that creates and returns a closure that can be appl
 ```javascript
 function add(x) {
     return y => y+x; // we are going to return a function which includes
-                     // the variable x from its enclosing scope 
+                     // the variable x from its enclosing scope
                      // - “a closure”
 }
 const addNine = add(9)
@@ -832,7 +854,7 @@ addNine(1)
 We can also call the add function with two arguments at once:
 
 ```javascript
-add(1)(2) 
+add(1)(2)
 ```
 
 > 3
@@ -863,22 +885,22 @@ const add = x=>y=>x+y
 As another example, consider a curried wrapper for our `sumTo` from [before](#functions-as-parameters-to-other-functions):
 
 ```javascript
- function sumOf(f) {
-     return n => sumTo(n, f)
- }
+function sumOf(f) {
+    return n => sumTo(n, f)
+}
 ```
 
 Now, we can create custom functions that compute sums over arbitrary sequences:
 
 ```javascript
- const sumOfSquares = sumOf(square)
- sumOfSquares(10)
+const sumOfSquares = sumOf(square)
+sumOfSquares(10)
 ```
 
 > 385
 
 ```javascript
- sumOfSquares(20)
+sumOfSquares(20)
 ```
 
 > 2870
@@ -898,7 +920,7 @@ say.hello("tim")
 
 > "hello tim"
 
-But these objects are only single instances.  
+However, these objects are only single instances.  
 JavaScript supports creating object instances of a certain type (i.e. having a set of archetypical members, like a Java class) through a function prototype mechanism.  You create a constructor function:
 
 ```javascript
@@ -926,7 +948,7 @@ Note that above we use the old-style verbose JavaScript anonymous function synta
 It’s very tempting to use the prototype editing mechanism for evil.  For example, I’ve always wished that JS had a function to create arrays initialised over a range:
 
 ```javascript
-Array.prototype.range = 
+Array.prototype.range =
   (from, to)=>Array(to)  // allocate space for an array of size `to`
   .fill()                // populate the array (with `undefined`s)
   .map((_,i)=>i)         // set each element of the array to its index
@@ -1088,7 +1110,7 @@ class Person:
     @property
     def greeting():
        return f"Hi, my name's {self.name} and I {self.occupation}!"
-   
+
     def say_hello(self):
         print(self.greeting)
 ```

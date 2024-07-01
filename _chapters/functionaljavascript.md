@@ -290,16 +290,129 @@ For many standard loops, however, the logic is the same every time and can easil
     const result = someArray.reduce((acc, el) => el * acc, 1);
     ```
 
+---
+
+#### Exercises
+
+1. Refactor this code to use [`map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) and [`filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) instead of a loop:
+
+    ```javascript
+    const numbers = [2, 6, 3, 7, 10];
+    const result = [];
+    for (let i = 0; i < numbers.length; i++) {
+        if (numbers[i] % 2 === 0) {
+            result.push(numbers[i] / 2);
+        }
+    }
+    ```
+
+2. Refactor this code to remove the loop:
+
+    ```javascript
+    const words = ["apple", "banana", "cherry"];
+    let totalLength = 0;
+    for (let i = 0; i < words.length; i++) {
+        totalLength += words[i].length;
+    }
+    ```
+
+3. Refactor this code to remove the loop:
+
+    ```javascript
+    const people = [
+        {name: "Alice", age: 20},
+        {name: "Bob", age: 15},
+        {name: "Charlie", age: 30},
+        {name: "David", age: 10},
+    ];
+    let firstChildName = undefined;
+    for (let i = 0; i < people.length; i++) {
+        if (people[i].age < 18) {
+            firstChildName = people[i].name;
+            break;
+        }
+    }
+    ```
+
+4. Refactor this code to remove the loop:
+
+    ```javascript
+    const people = [
+        {name: "Alice", age: 20},
+        {name: "Bob", age: 15},
+        {name: "Charlie", age: 30},
+        {name: "David", age: 10},
+    ];
+    let result = "";
+    for (let i = 0; i < people.length; i++) {
+        result += `Person #${i + 1}: ${people[i].name} is ${people[i].age} years old`;
+        if (i != people.length - 1) {
+            result += "\n";
+        }
+    }
+    ```
+
+#### Solutions
+
+1. We can use `filter` to get the even numbers, then `map` to divide each of those numbers by 2:
+
+    ```javascript
+    const numbers = [2, 6, 3, 7, 10];
+    const result = numbers.filter(x => x % 2 === 0).map(x => x / 2);
+    ```
+
+2. We need to sum up the lengths of each word. One way to do that would be to use `reduce`:
+
+    ```javascript
+    const words = ["apple", "banana", "cherry"];
+    const totalLength = words.reduce((acc, x) => acc + x.length);
+    ```
+
+3. We want to get the name of the first person under 18 years old. We can get the person with the `find` method and then access the `name` property if the person exists:
+
+    ```javascript
+    const people = [
+        {name: "Alice", age: 20},
+        {name: "Bob", age: 15},
+        {name: "Charlie", age: 30},
+        {name: "David", age: 10},
+    ];
+    const firstChild = people.find(x => x.age < 18);
+    const firstChildName = firstChild !== undefined ? firstChild.name : undefined;
+    ```
+
+    We could also do the last part more succinctly using [optional chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) (`?.`):
+
+    ```javascript
+    const firstChildName = people.find(x => x.age < 18)?.name;
+    ```
+
+4. We can use the second parameter in the function passed to `map` to get the index of each element, and then combine the resulting array of strings into one string with `join`:
+
+    ```javascript
+    const people = [
+        {name: "Alice", age: 20},
+        {name: "Bob", age: 15},
+        {name: "Charlie", age: 30},
+        {name: "David", age: 10},
+    ];
+    const result = people
+        .map((x, i) => `Person #${i + 1}: ${x.name} is ${x.age} years old`)
+        .join("\n");
+    ```
+
+---
+
 ### Callbacks
 
 In JavaScript and HTML5 events trigger actions associated with all mouse clicks and other interactions with the page.  You subscribe to an event on a given HTML element as follows:
 
 ```javascript
-element.addEventHandler('click', 
+element.addEventHandler('click',
 e=>{
-// do something when the event occurs, 
+// do something when the event occurs,
 // maybe using the result of the event e
-})
+});
 ```
 
 Note that callback functions passed as event handlers are a situation where the one semantic difference between the arrow syntax and regular anonymous function syntax really matters.  In the body of the arrow function above, `this` will be bound to the context of the *caller*, which is probably what you want if you are coding a class for a reusable component.  For functions defined with the `function` keyword the object that `this` refers to will depend on the context of the *callee*, although the precise behaviour of `this` for functions defined with `function` [may vary with the particular JavaScript engine and the mode of execution](https://www.codementor.io/@dariogarciamoya/understanding--this--in-javascript-du1084lyn).  
@@ -376,7 +489,7 @@ The function `tailRecFactorial` is tail recursive because the final operation in
 
 ```javascript
 function continuationFactorial(
-a, n, finalAction=(result)=>{}) 
+a, n, finalAction=(result)=>{})
 {
    if (n<=1) finalAction(a);
    else continuationFactorial(n*a, n-1, finalAction);
@@ -389,7 +502,7 @@ Continuations are essential in asynchronous processing, which abounds in web pro
 
 ```javascript
 setTimeout(()=>console.log('done.'), 0);
-// the above tells the event loop to execute 
+// the above tells the event loop to execute
 // the continuation after 0 milliseconds delay.
 // even with a zero-length delay, the synchronous code
 // after the setTimeout will be run first...
@@ -414,7 +527,7 @@ const l = {
             next: null
         }
     }
-}
+};
 ```
 
 We can create simple functions similar to [those of Array](/javascript1#array-cheatsheet), which we can chain:
@@ -424,15 +537,18 @@ const
   map = (f,l) => l ? ({data: f(l.data), next: map(f,l.next)}) : null
 , filter = (f,l) => !l ? null :
                     (next =>
-                        f(l.data) ? ({data: l.data, next}) 
+                        f(l.data) ? ({data: l.data, next})
                                   : next
                     ) (filter(f,l.next))
-                    // the above is using an IIFE such that
-                    // the function parameter `next` is used 
-                    // like a local variable for filter(f,l.next)
+                    // the above is using an immediately invoked
+                    // function expression (IIFE) such that the function
+                    // parameter `next` is used like a local variable for
+                    // filter(f,l.next)
 , take = (n,l) => l && n ? ({data: l.data, next: take(n-1,l.next)})
-                         : null
+                         : null;
 ```
+
+(An IIFE is an immediately invoked function expression.)
 
 We can chain calls to these functions like so:
 
@@ -456,10 +572,10 @@ function map(func, list) {
         return {
             data: func(l.data),
             next: map(f, l.next)
-        }
+        };
     }
     else {
-        return null
+        return null;
     }
 }
 ```
@@ -548,13 +664,13 @@ Now, here’s the ubiquitous map function:
 
 ```javascript
 const map = (f, list)=> !list ? null
-                              : cons(f(head(list)), map(f, rest(list)))
+                              : cons(f(head(list)), map(f, rest(list)));
 ```
 
 We can now apply our map function to `list123` to perform some transformation of the data
 
 ```javascript
-const list234 = map(x => x + 1, list123) 
+const list234 = map(x => x + 1, list123);
 ```
 
 > `cons(2, cons(3, cons(4, null)));`
@@ -567,7 +683,7 @@ Thus, with only pure function expressions and JavaScript conditional expressions
 
 These ideas, of computation through pure function expressions, are inspired by Alonzo Church’s *lambda calculus*.   We’ll be looking again at the lambda calculus later.  Obviously, for the program to be at all useful you will need some sort of side effect, such as outputting the results of a computation to a display device.  When we begin to explore PureScript and Haskell later in this course we will discuss how such languages manage this trick while remaining “pure”.
 
----------------
+---
 
 ## Exercises
 
@@ -578,7 +694,7 @@ These ideas, of computation through pure function expressions, are inspired by A
 * Implement a ```concat``` function that takes two lists as arguments and returns a new list of their concatenation.
 * How can we update just one element in this list without mutating any data and what is the run-time complexity of such an operation?
 
----------------
+---
 
 ## Updating Data Structures With Pure Functions
 
@@ -589,7 +705,7 @@ const studentVersion1 = {
   name: "Tim",
   assignmentMark: 20,
   examMark: 15
-}
+};
 ```
 
 > studentVersion1  
@@ -601,7 +717,7 @@ Conveniently, one can copy all of the properties from an existing object into a 
 const studentVersion2 = {
     ...studentVersion1,
     assignmentMark: 19
-}
+};
 ```
 
 > studentVersion2  
@@ -611,10 +727,10 @@ One can encapsulate such updates in a succinct pure function:
 
 ```javascript
 function updateExamMark(student, newMark) {
-    return {...student, examMark: newMark}
+    return {...student, examMark: newMark};
 }
 
-const studentVersion3 = updateExamMark(studentVersion2, 19)
+const studentVersion3 = updateExamMark(studentVersion2, 19);
 ```
 
 > studentVersion3  
@@ -623,7 +739,7 @@ const studentVersion3 = updateExamMark(studentVersion2, 19)
 Note that when we declared each of the variables ```studentVersion1-3``` as ```const```, these variables are only constant in the sense that the object reference cannot be changed.  That is, they cannot be reassigned to refer to different objects:
 
 ```javascript
-studentVersion1 = studentVersion2
+studentVersion1 = studentVersion2;
 ```
 
 > VM430:1 Uncaught TypeError: Assignment to constant variable.  
@@ -631,7 +747,7 @@ studentVersion1 = studentVersion2
 However, there is nothing in these definitions to prevent the properties of those objects from being changed:
 
 ```javascript
-studentVersion1.name = "Tom"
+studentVersion1.name = "Tom";
 ```
 
 > studentVersion1  

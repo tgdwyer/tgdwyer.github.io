@@ -7,7 +7,7 @@ module Jekyll
             process_page(page)
           end
         end
-  
+
         # Process documents in collections
         site.collections.each do |_label, collection|
           collection.docs.each do |doc|
@@ -17,8 +17,8 @@ module Jekyll
           end
         end
       end
-  
-      def process_page(page)        
+
+      def process_page(page)
         processed_content = wrap_solutions(page.content)
         processed_content = wrap_glossary(processed_content)
         page.content = processed_content
@@ -27,13 +27,13 @@ module Jekyll
       def wrap_solutions(content)
         content.gsub(/(##+ *Solutions.*?)(?=\n##+ |\n<div.*?>|\z)/m) do |match|
         "{% capture solution_content %}\n#{match}\n{% endcapture %}\n{% include solutions.html solution_content=solution_content %}"
-        end        
+        end
       end
-      
+
       def wrap_glossary(content)
         content.gsub(/(##+ *Glossary.*)(?=\z)/m) do |match|
           "<div class=\"glossary\" markdown=\"1\">\n#{match}\n</div>"
-        end      
+        end
       end
     end
   end
