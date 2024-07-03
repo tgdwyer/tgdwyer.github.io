@@ -90,11 +90,11 @@ Consider the following *impure* function:
 Since the function modifies `a` in place we get a different outcome if we call it more than once.
 
 ```javascript
- const myArray=[1,2,3]
- impureSquares(myArray)
- // now myArray = [1,4,9]
- impureSquares(myArray)
- // now myArray = [1,16,81]
+const myArray=[1,2,3]
+impureSquares(myArray)
+// now myArray = [1,4,9]
+impureSquares(myArray)
+// now myArray = [1,16,81]
 ```
 
 Furthermore, the very imperative style computation in `impureSquares` at the line marked with `*` is not pure.
@@ -256,11 +256,11 @@ For many standard loops, however, the logic is the same every time and can easil
     }
     ```
 
-    <p class="spoiler">The condition should be `<` not `<=`</p>
+    <p class="spoiler" markdown="1">The condition should be `<`, not `<=`.</p>
 
-    To avoid the likelihood of errors we can replace the `for` loop with the use of `.map`
+    To avoid the likelihood of errors, we can replace the `for` loop with the use of `.map`.
 
-    We use the `map` function, since we want to apply a function to every element in the list
+    We use the `map` function since we want to apply a function to every element in the list.
 
     ```javascript
     const someArray = [1,2,3,4,5];
@@ -275,15 +275,15 @@ For many standard loops, however, the logic is the same every time and can easil
     const someArray = [1,2,3,4,5];
     let result = 1;
     for (let i = 0; i < someArray.length; i++) {
-        result *= i
+        result *= i;
     }
     ```
 
-    <p class="spoiler">We should multiply by `someArray[i]` not `i`</p>
+    <p class="spoiler" markdown="1">We should multiply by `someArray[i]`, not `i`.</p>
 
     Again, to avoid the likelihood of errors, we can replace the `for` loop with the use of `.reduce`.
 
-    We use the `reduce` function, since we want to reduce the list to a singular value
+    We use the `reduce` function since we want to reduce the list to a singular value.
 
     ```javascript
     const someArray = [1,2,3,4,5];

@@ -151,3 +151,31 @@ input:checked + .slider:before {
   padding: 10px; /* Add some padding for better spacing */
   box-sizing: border-box; /* Ensure padding is included in the width calculation */
 }
+
+.spoiler, .spoiler * {
+  color: #333;
+  border: none;
+}
+
+.spoiler {
+  color: white;
+  padding: 3px 5px;
+  background-color: #333;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.spoiler * {
+  background: none;
+}
+
+.spoiler[data-revealed], .spoiler[data-revealed] * {
+  color: inherit;
+  transition: background-color 0.5s, border-color 0.5s;
+  background-color: #ccc;
+}
+
+.spoiler[data-revealed] code {
+  background-color: #aaa;
+  border: 1px solid #999;
+}
