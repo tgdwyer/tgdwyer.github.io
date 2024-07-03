@@ -365,8 +365,10 @@ For many standard loops, however, the logic is the same every time and can easil
 
     ```javascript
     const words = ["apple", "banana", "cherry"];
-    const totalLength = words.reduce((acc, x) => acc + x.length);
+    const totalLength = words.reduce((acc, x) => acc + x.length, 0);
     ```
+
+    Here, we initialise the accumulator to 0, and then add the length of the string `x` tot the accumulator for each string in the `words` array.
 
 3. We want to get the name of the first person under 18 years old. We can get the person with the `find` method and then access the `name` property if the person exists:
 
