@@ -294,7 +294,7 @@ For many standard loops, however, the logic is the same every time and can easil
 
 #### Exercises
 
-1. Refactor this code to use [`map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) and [`filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) instead of a loop:
+1. Refactor this code to use `map` and `filter` instead of a loop:
 
     ```javascript
     const numbers = [2, 6, 3, 7, 10];
@@ -352,6 +352,20 @@ For many standard loops, however, the logic is the same every time and can easil
     }
     ```
 
+5. Identify what is wrong with this code and correct it:
+
+    ```javascript
+    // Don’t worry about this line
+    const value = document.getElementById('some-input-element').value.toLowerCase();
+
+    const filteredNames = [];
+
+    roleNames.forEach(role => {
+        if (role.slice(0, value.length).toLowerCase() === value)
+            filteredNames.push(role);
+    });
+    ```
+
 #### Solutions
 
 1. We can use `filter` to get the even numbers, then `map` to divide each of those numbers by 2:
@@ -402,6 +416,31 @@ For many standard loops, however, the logic is the same every time and can easil
         .map((x, i) => `Person #${i + 1}: ${x.name} is ${x.age} years old`)
         .join("\n");
     ```
+
+5. We should use the `filter` method to get a new array with only the roles that match `value`:
+
+    ```javascript
+    // Don’t worry about this line
+    const value = document.getElementById('some-input-element').value.toLowerCase();
+
+    const filteredNames = roleNames
+        .filter(role => role.slice(0, value.length).toLowerCase() === value);
+    ```
+
+    We should reuse existing methods and functions wherever possible, and `filter` does exactly what we want to do without having to manually and impurely `push` each matching element into a new array.
+
+    Generally, you should only use `forEach` when you don’t care about the result and thus want to do something that will cause a side effect, such as printing each element (e.g. `roleNames.forEach(role => console.log(role))`). While the function passed to `forEach` in the original code does technically cause a side effect (appending to the `filteredNames` array), the overall effect of the lines below
+
+    ```javascript
+    const filteredNames = [];
+
+    roleNames.forEach(role => {
+        if (role.slice(0, value.length).toLowerCase() === value)
+            filteredNames.push(role);
+    });
+    ```
+
+    is to simply create a new array, which can be done purely with `filter`.
 
 ---
 
