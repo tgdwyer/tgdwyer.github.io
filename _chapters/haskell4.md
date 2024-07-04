@@ -43,7 +43,7 @@ Here’s a left fold with a picture of the fold:
 
 ![Left Fold](/assets/images/chapterImages/haskell4/leftFold.png)
 
-Note that since the `(+)` operator is associative -- a+(b+c) = (a+b)+c -- `foldr` and `foldl` return the same result.  For functions that are not associative, however, this is not necessarily the case.
+Note that since the `(+)` operator is associative—a+(b+c) = (a+b)+c—`foldr` and `foldl` return the same result.  For functions that are not associative, however, this is not necessarily the case.
 
 ---
 
@@ -376,7 +376,7 @@ Prelude> :t print
 print :: Show a => a -> IO ()
 ```
 
-The `()` is like `void` in TypeScript -- it’s a type with exactly one value `()`, and hence is called “Unit”.  There is no return value from `print`, only the `IO` effect, and hence the return type is `()`.  `IO` is also an instance of `Applicative`.  This means we can use `traverse` to print out the contents of a list:
+The `()` is like `void` in TypeScript—it’s a type with exactly one value `()`, and hence is called “Unit”.  There is no return value from `print`, only the `IO` effect, and hence the return type is `()`.  `IO` is also an instance of `Applicative`.  This means we can use `traverse` to print out the contents of a list:
 
 ```haskell
 Prelude> traverse print [1,2,3]
@@ -386,14 +386,14 @@ Prelude> traverse print [1,2,3]
 [(),(),()]
 ```
 
-Here `1,2,3` are printed to the console each on their own line (which is `print`’s IO effect), and `[(),(),()]` is the return value reported by GHCi -- a list of Unit.
+Here `1,2,3` are printed to the console each on their own line (which is `print`’s IO effect), and `[(),(),()]` is the return value reported by GHCi—a list of Unit.
 
 ```haskell
 Prelude> :t traverse print [1,2,3]
 traverse print [1,2,3] :: IO [()]
 ```
 
-When we ran this at the REPL, GHCi consumed the `IO` effect (because it runs all commands inside the [`IO Monad`](/monad/)).  However, inside a pure function there is no easy way to get rid of this `IO` return type -- which protects you from creating `IO` effects unintentionally.
+When we ran this at the REPL, GHCi consumed the `IO` effect (because it runs all commands inside the [`IO Monad`](/monad/)).  However, inside a pure function there is no easy way to get rid of this `IO` return type—which protects you from creating `IO` effects unintentionally.
 
 A related function defined in `Traversable` is `sequenceA` which allows us to convert directly from Traversables of Applicatives, to Applicatives of Traversables:
 

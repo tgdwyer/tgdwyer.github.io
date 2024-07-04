@@ -315,7 +315,7 @@ class Vec {
 ```
 
 To implement the toroidal topology of space, we’ll need to know the canvas size.
-For now, we’ll hard code it in a constant `CanvasSize`.  Alternately, we could query it from the svg element, or we could set the SVG size -- maybe later.
+For now, we’ll hard code it in a constant `CanvasSize`.  Alternately, we could query it from the svg element, or we could set the SVG size—maybe later.
 The torus wrapping function will use the `CanvasSize` to determine the bounds and simply teleport any `Vec` which goes out of bounds to the opposite side.
 
 ```typescript
@@ -469,7 +469,7 @@ And here’s our updated updateView function where we not only move the ship but
 
 ## Additional Objects
 
-Things get more complicated when we start adding more objects to the canvas that all participate in the physics simulation.  Furthermore, objects like asteroids and bullets will need to be added and removed from the canvas dynamically -- unlike the ship whose visual is currently defined in the `svg` and never leaves.  
+Things get more complicated when we start adding more objects to the canvas that all participate in the physics simulation.  Furthermore, objects like asteroids and bullets will need to be added and removed from the canvas dynamically—unlike the ship whose visual is currently defined in the `svg` and never leaves.  
 
 However, we now have all the pieces of our MVC architecture in place, all tied together with an observable stream:
 
@@ -511,7 +511,7 @@ The first complication is generalising bodies that participate in the force mode
   }>
 ```
 
-So the `ship` is a `Body`, and we will have collections of `Body` for both `bullets` and `rocks`.  What’s this `exit` thing?  Well, when we remove something from the canvas, e.g. a bullet, we’ll create a new state with a copy of the `bullets` array minus the removed bullet, and we’ll add that removed bullet -- together with any other removed `Body`s -- to the `exit` array.  This notifies the `updateView` function that they can be removed.
+So the `ship` is a `Body`, and we will have collections of `Body` for both `bullets` and `rocks`.  What’s this `exit` thing?  Well, when we remove something from the canvas, e.g. a bullet, we’ll create a new state with a copy of the `bullets` array minus the removed bullet, and we’ll add that removed bullet—together with any other removed `Body`s—to the `exit` array.  This notifies the `updateView` function that they can be removed.
 
 Note the `objCount`.  This counter is incremented every time we add a `Body` and gives us a way to create a unique id that can be used to match the `Body` against its corresponding view object.
 
@@ -859,6 +859,6 @@ Finally, we need to make a couple more additions to the CSS to display the rocks
 
 At this point we have more-or-less all the elements of a game.  The implementation above could be extended quite a lot.  For example, we could add score, ability to restart the game, multiple lives, perhaps some more physics.  But generally, these are just extensions to the framework above: manipulation and then display of additional state.
 
-The key thing is that the observable has allowed us to keep well separated state management (model), its input and manipulation (control) and the visuals (view).  Further extensions are just additions within each of these elements -- and doing so should not add greatly to the complexity.
+The key thing is that the observable has allowed us to keep well separated state management (model), its input and manipulation (control) and the visuals (view).  Further extensions are just additions within each of these elements—and doing so should not add greatly to the complexity.
 
 I invite you to click through on the animations above, to the live code editor where you can extend or refine the framework I’ve started.

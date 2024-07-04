@@ -21,7 +21,7 @@ title: "JavaScript Introduction"
 
 In the late 90s the mood was right for a language that was small and simple and with executable files small enough to be distributed over the web.  Originally Java was meant to be that language but, while it quickly gained traction as a language for building general purpose applications and server-side middleware, it never really took off in the browser.  Something even simpler, and better integrated with the Document Object Model (DOM) of HTML pages was required to add basic interaction to web pages.
 
-Brendan Eich was hired by Netscape in 1995 to integrate a Scheme interpreter into their browser for this purpose.  No messy deployment of Java bytecode bundles -- the browser would have been able to run Scheme scripts embedded directly into web pages.  This would have been awesome.  Unfortunately, for reasons that were largely political and marketing related, it was felt that something more superficially resembling Java was required.  Thus, Eich created a prototype scripting language in 2 weeks that eventually became JavaScript.  As we will see, it is syntactically familiar for Java developers.  Under the hood, however, it follows quite a different paradigm.
+Brendan Eich was hired by Netscape in 1995 to integrate a Scheme interpreter into their browser for this purpose.  No messy deployment of Java bytecode bundles—the browser would have been able to run Scheme scripts embedded directly into web pages.  This would have been awesome.  Unfortunately, for reasons that were largely political and marketing related, it was felt that something more superficially resembling Java was required.  Thus, Eich created a prototype scripting language in 2 weeks that eventually became JavaScript.  As we will see, it is syntactically familiar for Java developers.  Under the hood, however, it follows quite a different paradigm.
 
 The fact it was initially rushed to market, the fact that browser makers seemingly had difficulty early on making standards-compliant implementations, and a couple of regrettable decisions at first regarding things like scoping semantics, meant that JavaScript developed something of a bad name.  It’s also possible that there was some inherent snobbiness amongst computer science types that, since JavaScript was not a compiled language, it must inevitably lead to armageddon.  Somehow, however, it survived and began the “web 2.0” phenomenon of what we now refer to as rich, client-side “web apps”.  It has also matured and, with the EcmaScript 6 (ES6) and up versions, has actually become quite an elegant little multi paradigm language.
 
@@ -175,7 +175,7 @@ x
 
 > Uncaught ReferenceError: x is not defined
 
-The above console.log statement successfully output the value of x because it was inside the same scope (the same set of curly braces).  The subsequent error occurs because we tried to look at x outside the scope of its definition.  Variables declared outside of any scope are said to be “global” and will be visible to any code loaded on the same page and could clobber or be clobbered by other global definitions -- so take care!
+The above `console.log statement` successfully output the value of `x` because it was inside the same scope (the same set of curly braces).  The subsequent error occurs because we tried to look at x outside the scope of its definition.  Variables declared outside of any scope are said to be “global” and will be visible to any code loaded on the same page and could clobber or be clobbered by other global definitions---so take care!
 
 Be especially careful to always declare variables with either `let` or `const` keywords.  If you omit these keywords, a variable will be created at the global scope even though it is inside a `{ ... }` delimited scope, like so:
 
@@ -385,7 +385,7 @@ sumTo(1000000)
 
 > Uncaught RangeError: Maximum call stack size exceeded
 
-However, functional languages (like Haskell) rely on recursion because they have no other way to create loops without mutable variables -- so they must have a way to make this scale to real-world computations.  When a recursive function is written in a special way, such that the recursive call is in *tail position*, [a lot of modern compilers](https://en.wikipedia.org/wiki/Tail_call#Language_support) are able to transform the recursion into a loop with constant memory use (commonly a `while` loop) -- this is called *tail call optimisation*.
+However, functional languages (like Haskell) rely on recursion because they have no other way to create loops without mutable variables---so they must have a way to make this scale to real-world computations.  When a recursive function is written in a special way, such that the recursive call is in *tail position*, [a lot of modern compilers](https://en.wikipedia.org/wiki/Tail_call#Language_support) are able to transform the recursion into a loop with constant memory use (commonly a `while` loop)---this is called *tail call optimisation*.
 
 Let’s see what a *tail recursive* version of the `sumTo` function looks like:
 
@@ -547,7 +547,7 @@ Below, we see how [Anonymous Functions](#anonymous-functions) can be applied to 
 
 ## Dynamic Typing
 
-The members of `myObj` are implicitly typed as `number` and `string` respectively, and as we see in the `console.log`, conversion to string happens automatically.  JavaScript is interpreted by a JavaScript engine rather than compiled into a static executable format.  Originally, this had implications on execution speed, as interpreting the program line by line at run time could be slow.  Modern JavaScript engines, however, feature Just in Time (JIT) compilation and optimisation -- and speed can sometimes be comparable to execution of C++ code that is compiled in advance to native machine code.  However, another implication remains.  JavaScript is not type checked by a compiler.  Thus, type errors cause run-time failures rather than being caught at compile time.  JavaScript is dynamically typed in that types are associated with values rather than variables.  That is, a variable that is initially bound to one type, can later be rebound to a different type, e.g.:
+The members of `myObj` are implicitly typed as `number` and `string` respectively, and as we see in the `console.log`, conversion to string happens automatically.  JavaScript is interpreted by a JavaScript engine rather than compiled into a static executable format.  Originally, this had implications on execution speed, as interpreting the program line by line at run time could be slow.  Modern JavaScript engines, however, feature Just in Time (JIT) compilation and optimisation---and speed can sometimes be comparable to execution of C++ code that is compiled in advance to native machine code.  However, another implication remains.  JavaScript is not type checked by a compiler.  Thus, type errors cause run-time failures rather than being caught at compile time.  JavaScript is dynamically typed in that types are associated with values rather than variables.  That is, a variable that is initially bound to one type, can later be rebound to a different type, e.g.:
 
 ```javascript
 let i = 123;    // a numeric literal has type number
@@ -558,7 +558,7 @@ The C compiler would spit the dummy when trying to reassign `i` with a value of 
 
 ## Functions are Objects
 
-The nifty thing about JavaScript -- one Scheme’ish thing that presumably survived from Eich’s original plan -- is that functions are also just objects.  That is, given the following function:
+The nifty thing about JavaScript---one Scheme’ish thing that presumably survived from Eich’s original plan---is that functions are also just objects.  That is, given the following function:
 
 ```javascript
 function sayHello(person) {
@@ -848,7 +848,7 @@ addNine(10)
 
 > 19
 
-In the above example, the parameter `x` of the `add` function is captured by the anonymous function that is returned, which forms a closure.  Thus, the binding of `x` to a value *persists* beyond the scope of the `add` function itself.  Effectively, we have used the `add` function to create a new function: `y=>y+9` -- without actually writing the code ourselves.
+In the above example, the parameter `x` of the `add` function is captured by the anonymous function that is returned, which forms a closure.  Thus, the binding of `x` to a value *persists* beyond the scope of the `add` function itself.  Effectively, we have used the `add` function to create a new function: `y=>y+9`---without actually writing the code ourselves.
 
 ```javascript
 addNine(1)
@@ -912,7 +912,7 @@ sumOfSquares(20)
 
 ## Prototype Class Mechanism
 
-*Note: the following way to achieve class encapsulation is deprecated by ES6 syntax -- skip to [the next section](#ecmascript-6-class-syntax) to see the modern way to do it.*
+*Note: the following way to achieve class encapsulation is deprecated by ES6 syntax---skip to [the next section](#ecmascript-6-class-syntax) to see the modern way to do it.*
 
 In JavaScript you can also create functions as members of objects:
 
@@ -964,7 +964,7 @@ Array.prototype.range =
 
 > [3,4,5,6,7,8]
 
-Of course, if you do something like this in your JS library, and it pollutes the global namespace, and one day EcmaScript 9 introduces an actual `range` function with slightly different semantics, and someone else goes to use the `[].range` function expecting the official semantics -- well, you may lose a friend or two.
+Of course, if you do something like this in your JS library, and it pollutes the global namespace, and one day EcmaScript 9 introduces an actual `range` function with slightly different semantics, and someone else goes to use the `[].range` function expecting the official semantics---well, you may lose a friend or two.
 
 Some notes about this implementation of range:
 
@@ -990,7 +990,7 @@ Array.prototype.range = (from, to) =>
     .map((_, i) => i + from);
 ```
 
-Adding a sum function on Array.prototype can be done using an old style anonymous function to access `this` which refers to the array instance:
+Adding a sum function on `Array.prototype` can be done using an old style anonymous function to access `this` which refers to the array instance:
 
 ```javascript
 Array.prototype.sum = function() {
@@ -998,7 +998,7 @@ Array.prototype.sum = function() {
 };
 ```
 
-Modifying built-in types, like adding functions to Array.prototype, can lead to several issues, e.g., compatibility Issues -- if future versions of JavaScript add a method with the same name but different behavior, it can break your or others' code unexpectedly, conflicts -- If different libraries try to modify the same prototype with different implementations, it can lead to conflicts that are hard to diagnose.
+Modifying built-in types, like adding functions to `Array.prototype`, can lead to several issues, e.g., compatibility issues---if future versions of JavaScript add a method with the same name but different behavior, it can break your or others' code unexpectedly, and conflicts---if different libraries try to modify the same prototype with different implementations, it can lead to conflicts that are hard to diagnose.
 
 One possible implementation of a linked list, is storing two values in an array, the current value and the next value.
 

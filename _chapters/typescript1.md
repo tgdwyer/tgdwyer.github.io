@@ -46,7 +46,7 @@ i = 'hello!';
 
 ## Type Annotations Cheat Sheet
 
-(Each of these features is described in more detail in subsequent sections -- this is just a summary and roadmap)
+(Each of these features is described in more detail in subsequent sections—this is just a summary and roadmap)
 
 A type annotation begins with `:` and goes after the variable name, but before any assignment.
 Primitive types include `number`, `string`, `boolean`.
@@ -175,7 +175,7 @@ setLeftPadding(headings[0],100)
 
 > Argument of type '100' is not assignable to parameter of type 'string'.ts(2345)
 
-In JavaScript, the interpreter would silently convert the number to a string and set `padding-left:100` -- which wouldn’t actually cause the element to be indented because CSS expects `px` (short for pixel) at the end of the value.
+In JavaScript, the interpreter would silently convert the number to a string and set `padding-left:100`—which wouldn’t actually cause the element to be indented because CSS expects `px` (short for pixel) at the end of the value.
 
 Potentially worse, I might forget to add the index after headings:
 
@@ -208,7 +208,7 @@ function setLeftPadding(elem, value) {
 }
 ```
 
-So this function accepts either a string or a number for the `value` parameter -- but to find that out we need to dig into the code.  The “Union Type” facility in TypeScript allows us to specify the multiple options directly in the function definition, with a list of types separated by `|`:
+So this function accepts either a string or a number for the `value` parameter—but to find that out we need to dig into the code.  The “Union Type” facility in TypeScript allows us to specify the multiple options directly in the function definition, with a list of types separated by `|`:
 
 ```typescript
 function setLeftPadding(elem: Element, value: string | number) {...
@@ -595,7 +595,7 @@ value = <any>"hello"
 // no error.
 ```
 
-While leaving off type annotations and forcing types with any may be convenient, for example, to quickly port legacy JavaScript into a TypeScript program, generally speaking it is good practice to use types wherever possible, and can actually be enforced with the `--noImplicitAny` compiler flag. This flag will be on by *default* in the applied classes.  The compiler’s type checker is a sophisticated constraint satisfaction system and the correctness checks it applies are usually worth the extra effort -- especially in modern compilers like TypeScript where type inference does most of the work for you.
+While leaving off type annotations and forcing types with any may be convenient, for example, to quickly port legacy JavaScript into a TypeScript program, generally speaking it is good practice to use types wherever possible, and can actually be enforced with the `--noImplicitAny` compiler flag. This flag will be on by *default* in the applied classes.  The compiler’s type checker is a sophisticated constraint satisfaction system and the correctness checks it applies are usually worth the extra effort—especially in modern compilers like TypeScript where type inference does most of the work for you.
 
 ## Glossary
 

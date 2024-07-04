@@ -55,7 +55,7 @@ Things to notice:
 
 - `Monad` is a subclass of `Applicative` (and therefore also a `Functor`)
 - `return` = `pure`, from [`Applicative`](/haskell3/#applicative). The `return` function exists for historical reasons and you can safely use only `pure` (PureScript has only `pure`).
-- the operator `(>>=)` (pronounced “bind”) is the minimal definition (the one function you must create -- in addition to the functions also required for `Functor` and `Applicative` -- to make a new `Monad` instance).
+- the operator `(>>=)` (pronounced “bind”) is the minimal definition (the one function you must create—in addition to the functions also required for `Functor` and `Applicative`—to make a new `Monad` instance).
 - `>>` is a special case of bind (described below)
 - lots of built-in types are already monads
 
@@ -74,7 +74,7 @@ The type of the flipped bind `(=<<)` has a nice correspondence to the other oper
 ($)   ::                    (a -> b) -> a   -> b
 ```
 
-So the bind function `(>>=)` (and equally its flipped version `(=<<)`) gives us another way to map functions over contexts -- but why do we need another way?
+So the bind function `(>>=)` (and equally its flipped version `(=<<)`) gives us another way to map functions over contexts—but why do we need another way?
 
 As an example we’ll consider computation using the `Maybe` type, which we said is useful for [partial functions](/haskell2/#maybe), that is functions which are not sensibly defined over all of their inputs.  A more complex example of such a function than we have seen before is the [quadratic formula](https://en.wikipedia.org/wiki/Quadratic_formula) which, for quadratic functions of the form:
 
@@ -177,7 +177,7 @@ So that’s one instance of `Monad`; let’s look at some more...
 
 ### IO
 
-The Haskell type which captures Input/Output effects is called `IO`.  As we demonstrated with the `traverse` function, it is possible to perform `IO` actions using `fmap` (`<$>`) and applicative (`<*>`) -- for example printing to the console. The challenge is taking values out of an `IO` context and using them to create further `IO` effects.
+The Haskell type which captures Input/Output effects is called `IO`.  As we demonstrated with the `traverse` function, it is possible to perform `IO` actions using `fmap` (`<$>`) and applicative (`<*>`)—for example printing to the console. The challenge is taking values out of an `IO` context and using them to create further `IO` effects.
 
 Here are some simple `IO` “actions”:
 

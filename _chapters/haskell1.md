@@ -115,7 +115,7 @@ I’ve included the type signature for main although it’s not absolutely neces
 
 What this tells us is that the main function produces an IO side effect.  This mechanism is what allows Haskell to be a pure functional programming language while still allowing you to get useful stuff done.  Side effects can happen, but when they do occur they must be neatly bundled up and declared to the type system, in this case through the `IO` monad.  For functions without side-effects, we have strong, compiler-checked guarantees that this is indeed so (that they are *pure*).
 
-By the way, once you are in the `IO` monad, you can’t easily get rid of it.  Any function that calls a function that returns an `IO` monad, must have `IO` in its return type.  Thus, effectful code is possible, but the type system ensures we are aware of it and can limit its taint.  The general strategy is to use pure functions wherever possible, and push the effectful code as high in your call hierarchy as possible -- that is, limit the size and scope of impure code as much as possible.  Pure functions are much more easily reusable in different contexts.
+By the way, once you are in the `IO` monad, you can’t easily get rid of it.  Any function that calls a function that returns an `IO` monad, must have `IO` in its return type.  Thus, effectful code is possible, but the type system ensures we are aware of it and can limit its taint.  The general strategy is to use pure functions wherever possible, and push the effectful code as high in your call hierarchy as possible—that is, limit the size and scope of impure code as much as possible.  Pure functions are much more easily reusable in different contexts.
 
 The `print` function is equivalent to the PureScript `log $ show`.  That is, it uses any available `show` function for the type of value being printed to convert it to a string, and it then prints that string.  Haskell defines show for many types in the Prelude, but print in this case invokes it for us.  The other difference here is that square brackets operators are defined in the prelude for linked lists.  In PureScript they were used for Arrays - which (in PureScript) don’t have the range operator (`..`) defined so I avoided them.  Speaking of List operators, here’s a summary:
 
@@ -187,12 +187,12 @@ b
 
 > "hello"
 
-Note that we created tuples in JavaScript using `[]` -- actually they were fixed-length arrays, don’t confuse them for Haskell lists or tuples.
+Note that we created tuples in JavaScript using `[]`—actually they were fixed-length arrays, don’t confuse them for Haskell lists or tuples.
 </div>
 
 ## Lazy by Default
 
-Haskell strategy for evaluating expressions is lazy by default -- that is it defers evaluation of expressions until it absolutely must produce a value.  Laziness is of course possible in other languages ([as we have seen in JavaScript](/lazyevaluation/)), and there are many lazy data-structures defined and available for PureScript (and most other functional languages).
+Haskell strategy for evaluating expressions is lazy by default—that is it defers evaluation of expressions until it absolutely must produce a value.  Laziness is of course possible in other languages ([as we have seen in JavaScript](/lazyevaluation/)), and there are many lazy data-structures defined and available for PureScript (and most other functional languages).
 Conversely, Haskell can be [forced to use strict evaluation](https://wiki.haskell.org/Performance/Strictness) and has libraries of datastructures with strict semantics if you need them.
 
 However, lazy by default sets Haskell apart.  It has pros and cons, on the pro side:

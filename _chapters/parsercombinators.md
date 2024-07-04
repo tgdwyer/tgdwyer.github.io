@@ -120,7 +120,7 @@ Then the `Parser` type has one field `parse` which is a function of type `Input 
   deriving Eq
 ```
 
-We’ll come back to the `ParseError` type - which will be returned in the case of unexpected input, but we can see that a successful Parse is going to produce a `Result` which has two fields -- more `Input` (the part of the input remaining after we took a bit off and parsed it), and an `a`, a type parameter that we may specify for concrete `Parser` instances.
+We’ll come back to the `ParseError` type - which will be returned in the case of unexpected input, but we can see that a successful Parse is going to produce a `Result` which has two fields—more `Input` (the part of the input remaining after we took a bit off and parsed it), and an `a`, a type parameter that we may specify for concrete `Parser` instances.
 
 The `Parser` and the `ParseResult` types are pretty abstract.  They say nothing about what precise `Input` string we are going to parse, or what type `a` we are going to return in the result.  This is the strength of the parser, allowing us to build up sophisticated parsers for different input grammars through composition using [instances of Function, Applicative and Monad](/parsercombinators/#instances), and the `ParseResult` parameter `a` allows us to produce whatever we want from the parsers we create.
 
@@ -155,7 +155,7 @@ instance Show a => Show (ParseResult a) where
     "Expected end of stream, but got >" ++ show i ++ "<"
 ```
 
-And `ParseResult` is also an instance of `Functor` so that we can map functions over the output of a successful parse -- or do nothing if the result is an `Error`:
+And `ParseResult` is also an instance of `Functor` so that we can map functions over the output of a successful parse—or do nothing if the result is an `Error`:
 
 ```haskell
 instance Functor ParseResult where
@@ -350,7 +350,7 @@ What’s really cool about this is that obviously the strings “cat” and “c
 
 ## Creating a Parse Tree
 
-Programs are usually parsed into a tree structure called an *Abstract Syntax Tree* (AST), more generally known as a *parse tree*.  Further processing ultimately into an object file in the appropriate format (whether it’s some sort of machine code directly executable on the machine architecture or some sort of intermediate format -- e.g. Java bytecode) then essentially boils down to traversal of this tree to evaluate the statements and expressions there in the appropriate order.
+Programs are usually parsed into a tree structure called an *Abstract Syntax Tree* (AST), more generally known as a *parse tree*.  Further processing ultimately into an object file in the appropriate format (whether it’s some sort of machine code directly executable on the machine architecture or some sort of intermediate format—e.g. Java bytecode) then essentially boils down to traversal of this tree to evaluate the statements and expressions there in the appropriate order.
 
 We will not implement a parser for a full programming language, but to at least demonstrate what this concept looks like in Haskell we will create a simple parser for simple arithmetic expressions.  The parser generates a tree structure capturing the order of operations, which we may then traverse to perform a calculation.
 
@@ -414,7 +414,7 @@ Minus
 ---
 
 Obviously we are going to need to parse numbers, so let’s start with a simple parser which creates a `Number`.  
-Note that whereas our previous parser had type `phoneNumber :: Parser [Char]` -- i.e. it produced strings -- this, and most of the parsers below, produces an `Expr`.
+Note that whereas our previous parser had type `phoneNumber :: Parser [Char]`—i.e. it produced strings—this, and most of the parsers below, produces an `Expr`.
 
 ```haskell
 number :: Parser Expr
@@ -637,7 +637,7 @@ play (Just (_, opponent, mem)) = (winning whole, concatMap convert whole)
   where
     -- Convert the memory to a list of different choices
     as_choices = getMem . parse (list choice)
-    -- Get the whole set of moves -- all the prev. rounds + last one
+    -- Get the whole set of moves—all the prev. rounds + last one
     whole = opponent: as_choices mem
     winning = winAgainst . mostCommon
 ```

@@ -143,7 +143,7 @@ add(3)(4)
 
 > 7
 
-We can also create curried versions of functions with more than two variables -- but the TypeScript syntax for functions with arbitrary numbers of arguments gets a bit scary (one of the many reasons we will shortly [switch to Haskell](/haskell1/) for our exploration of more advanced functional programming topics).
+We can also create curried versions of functions with more than two variables—but the TypeScript syntax for functions with arbitrary numbers of arguments gets a bit scary (one of the many reasons we will shortly [switch to Haskell](/haskell1/) for our exploration of more advanced functional programming topics).
 
 ```javascript
 // Don’t try to understand this - this is just to show you why Haskell is better for strictly-typed FP

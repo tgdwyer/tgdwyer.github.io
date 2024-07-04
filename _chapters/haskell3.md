@@ -131,7 +131,7 @@ Some more (and deeper) discussion is available on the Haskell Wiki.
 
 ### Exercises
 
-- Refactor the following functions to be point-free. These are clearly extreme examples but is a useful -- and easily verified -- practice of operator sectioning, composition and eta-conversion.
+- Refactor the following functions to be point-free. These are clearly extreme examples but is a useful—and easily verified—practice of operator sectioning, composition and eta-conversion.
 
 ```haskell
 g x y = x^2 + y
@@ -389,7 +389,7 @@ data Tree a = Empty
   deriving (Show)
 ```
 
-Note that `Leaf` is a bit redundant as we could also encode nodes with no children as `Node Empty value Empty` -- but that’s kind of ugly and makes showing our trees more verbose.  Also, having both `Leaf` and `Empty` provides a nice parallel to `Maybe`.
+Note that `Leaf` is a bit redundant as we could also encode nodes with no children as `Node Empty value Empty`—but that’s kind of ugly and makes showing our trees more verbose.  Also, having both `Leaf` and `Empty` provides a nice parallel to `Maybe`.
 
 Here’s an example tree defined:
 
@@ -443,7 +443,7 @@ Node (Node (Leaf 3) 5 (Leaf 7)) 9 (Node (Leaf 11) 13 (Leaf 15))
 
 The typeclass `Applicative` introduces a new operator `<*>` (pronounced “apply”), which lets us apply functions inside a computational context.
 
-Applicative is a “subclass” of `Functor`, meaning that an instance of `Applicative` can be `fmap`ed over, but Applicatives also declare (at least) two additional functions, `pure` and `(<*>)` (pronounced ‘apply’ -- but I like calling it [“TIE Fighter”](https://en.wikipedia.org/wiki/TIE_fighter)):
+Applicative is a “subclass” of `Functor`, meaning that an instance of `Applicative` can be `fmap`ed over, but Applicatives also declare (at least) two additional functions, `pure` and `(<*>)` (pronounced ‘apply’—but I like calling it [“TIE Fighter”](https://en.wikipedia.org/wiki/TIE_fighter)):
 
 ```haskell
 GHCi> :i Applicative
@@ -915,7 +915,7 @@ parsePlus s =
         Nothing -> Nothing
 ```
 
-But that’s not very elegant and Haskell is all about elegant simplicity.  So how can we use Haskell’s typeclass system to make parsers that are more easily combined?  We’ve seen how things that are instances of the `Functor` and `Applicative` typeclasses can be combined -- so let’s make a type definition for parsers and then make it an instance of `Functor` and `Applicative`.  Here’s a generic type for parsers:
+But that’s not very elegant and Haskell is all about elegant simplicity.  So how can we use Haskell’s typeclass system to make parsers that are more easily combined?  We’ve seen how things that are instances of the `Functor` and `Applicative` typeclasses can be combined—so let’s make a type definition for parsers and then make it an instance of `Functor` and `Applicative`.  Here’s a generic type for parsers:
 
 ```haskell
 newtype Parser a = Parser (String -> Maybe (String, a))
@@ -1016,7 +1016,7 @@ instance Functor Parser where
 
 That definition may be difficult to understand, on first look, but we take apply the parser `p` and apply the function `f` to the result of the parsing, i.e., we apply the parser `p` and if it succeeds (returns a `Just`) we apply the function `f` to the `result`.
 
-However, we can take advantage of the fact that the `Tuple` returned by the parse function is also an instance of `Functor` to make the definition more succinct.  That is, we are applying the function `f` to the second item of a tuple -- that is exactly what the `fmap` for the `Functor` instance of a `Tuple` does! So we can rewrite to use the `Tuple` `fmap`, or rather its alias `(<$>)`:
+However, we can take advantage of the fact that the `Tuple` returned by the parse function is also an instance of `Functor` to make the definition more succinct.  That is, we are applying the function `f` to the second item of a tuple—that is exactly what the `fmap` for the `Functor` instance of a `Tuple` does! So we can rewrite to use the `Tuple` `fmap`, or rather its alias `(<$>)`:
 
 ```haskell
 instance Functor Parser where
