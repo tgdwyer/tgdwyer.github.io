@@ -5,9 +5,16 @@
     - Understand the difference between *syntax*, the textual symbols and grammatical rules of a program, and *semantics*, the meaning of what is computed
     - Understand that there are different models of computation upon which different programming languages are based, including machine models such as Turing Machines and von Neumann architecture, and the Lambda Calculus based on mathematical functions.
     - Compare the dominant paradigms of [Functional and Objected-Oriented Programming](/levelsofabstraction/#alternative-abstractions) in terms of how they abstract data and behaviour.
+- title: HTML as a declarative language
+  url: /html1/
+  description: |
+    - Understand that [HTML](/html1#declarative-nature-of-html) is a declarative language, where the programmer specifies the desired result, not the steps to achieve it
 - title: JavaScript Introduction
   url: /javascript1/
   description: |
+    - Understand how functions can be used to delay evaluation of code until the result is actually required
+    - Understand how this *lazy* evaluation allows for the definition of *infinite sequences*
+    - Code and use lazily evaluated infinite number sequences
     - Understand and use basic JavaScript coding concepts and features
     - Understand the difference between [mutable and immutable (const) variables](/javascript1#declaring-variables)
     - Explain the relationship between javascript [functions](/javascript1#functions) and [objects](/javascript1#objects)
