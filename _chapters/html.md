@@ -76,7 +76,7 @@ Most HTML elements, including SVG elements have certain attributes according to 
 
 ### Step 5: Adding Animation declaratively using CSS
 
-There are many ways to achieve the same thing in HTML. We will now look at how an animation may be added *declaritively* to our SVG rectangle using CSS.  First, we need to tell the browser where to find our CSS file from the (<head>) element of our HTML.
+There are many ways to achieve the same thing in HTML. We will now look at how an animation may be added *declaratively* to our SVG rectangle using CSS.  First, we need to tell the browser where to find our CSS file from the (`<head>`) element of our HTML.
 
 ```html
 <head>
@@ -88,7 +88,7 @@ There are many ways to achieve the same thing in HTML. We will now look at how a
 Now we create the `style.css` file as follows:
 
 ```css
-#ourRectangle {  
+#ourRectangle {
     animation-name: moveX;
     animation-duration: 5s;
 }
@@ -140,7 +140,7 @@ function animate(rect, x, speed, lastTime) {
   // Update position based on elapsed time and speed
   const newX = x + (speed * deltaTime) / 1000; // Convert milliseconds to seconds
 
-  // We can use `setAttribute` to change the variables of the HTML Element. In this case, we are changing the x attribute. 
+  // We can use `setAttribute` to change the variables of the HTML Element. In this case, we are changing the x attribute.
   rect.setAttribute('x', newX);
 
   // Set timeout to call the animate function again
@@ -169,6 +169,8 @@ We saw that the philosophy of HTML programming is primarily *declarative* in the
 
 By contrast, we saw a different *imperative* approach to adding an animation to our web page using JavaScript. There are pros and cons to each:
 
+<!-- markdownlint-disable MD036 -->
+
 *Declarative*
 
 - Easier and faster to code, easier to read
@@ -179,6 +181,8 @@ By contrast, we saw a different *imperative* approach to adding an animation to 
 
 - Greater control than the pure declarative HTML/CSS approach
 - We can create richer interaction
+
+<!-- markdownlint-enable MD036 -->
 
 ## Exercises
 
