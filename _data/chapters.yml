@@ -46,6 +46,12 @@
     - Understand how functions can be used to delay evaluation of code until the result is actually required
     - Understand how this *lazy* evaluation allows for the definition of *infinite sequences*
     - Code and use lazily evaluated infinite number sequences
+- title: HTML Introduction
+  url: /html/
+  description: |
+    - Understand what makes HTML a declarative language and how it describes the structure and content of a web page.
+    - Comprehend the separation of concerns by differentiating structure (HTML), presentation (CSS), and behavior (JavaScript).
+    - Understand how to include and define a basic SVG element within an HTML document.
 - title: Functional Reactive Programming
   url: /functionalreactiveprogramming/
   description: |
@@ -56,7 +62,7 @@
 - title: FRP Asteroids
   url: /asteroids/
   description: |
-    A fully worked example of FRP using rx.js Observables to create an in-browser version of a classic arcade game.
+    A fully worked example of FRP using RxJS Observables to create an in-browser version of a classic arcade game.
 - title: Higher Order Functions
   url: /higherorderfunctions/
   description: |
@@ -111,6 +117,12 @@
     - Understand the operation of the monadic bind and join functions in the `Maybe`, `IO`, List and Function instances of Monad.
     - Be able to refactor monadic binds using [`do` notation](/monad/#do-notation).
     - [Loop with Monadic effects](/monad/#looping-with-monadic-effects).
+- title: Eithers
+  url: /eithers/
+  description: |
+    - Understand how the `Either` type handles values with two possibilities, typically used for error handling and success cases.
+    - Apply the `Functor`, `Applicative`, and `Monad` type classes to the `Either` type, learning how to implement instances for each.
+    - Recognize the power of monadic `do` blocks in simplifying code and handling complex workflows.
 - title: Parser Combinators
   url: /parsercombinators/
   description: |

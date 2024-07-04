@@ -17,7 +17,7 @@ This section is not your usual "First Introduction To Haskell" because it assume
 
 I try to summarise the syntax we use with "cheatsheets" throughout, but [the official CheatSheet](https://hackage.haskell.org/package/CheatSheet-1.10/src/CheatSheet.pdf) will be a useful reference.  The other reference every Haskell programmer needs is the official library docs on [Hackage](https://hackage.haskell.org/) which is searchable by the excellent [Hoogle](https://hoogle.haskell.org/) search engine, which lets you search by types as well as function keywords.
 
-If you would like a more gradual introduction, ["Haskell Programming from First Principles” by Allen and Moronuki](http://haskellbook.com/) is a recent and excellent introduction to Haskell that is quite compatible with the goals of this course.  The ebook is not too expensive, but unfortunately, it is independently published and hence not available from our library.  There are a few copies of [Programming Haskell by Hutton](https://monash.hosted.exlibrisgroup.com/permalink/f/31uhmh/catau21316253770001751) which is an excellent academic textbook, but it's expensive to buy.  [”Learn you a Haskell” by Miran Lipovaca](http://learnyouahaskell.com/) is a freely available alternative that is also a useful introduction.  
+If you would like a more gradual introduction, [“Haskell Programming from First Principles” by Allen and Moronuki](http://haskellbook.com/) is a recent and excellent introduction to Haskell that is quite compatible with the goals of this course.  The ebook is not too expensive, but unfortunately, it is independently published and hence not available from our library.  There are a few copies of [Programming Haskell by Hutton](https://monash.hosted.exlibrisgroup.com/permalink/f/31uhmh/catau21316253770001751) which is an excellent academic textbook, but it's expensive to buy.  [“Learn you a Haskell” by Miran Lipovaca](https://learnyouahaskell.github.io/) is a freely available alternative that is also a useful introduction.  
 
 ## Starting with the GHCi REPL
 
@@ -33,8 +33,8 @@ fibs n = fibs (n-1) + fibs (n-2) -- recursive definition
 
 Then load it into GHCi like so:
 
-```haskell
-$ stack ghci fibs.hs  
+```bash
+stack ghci fibs.hs  
 ```
 
 You'll get a prompt that looks like:
@@ -42,37 +42,47 @@ You'll get a prompt that looks like:
 ```haskell
 Prelude>
 ```
-Where the text left of the `>` tells you what libraries are loaded into the current scope.  "Prelude" is the default library which already includes everything we need for this chapter. 
+
+Where the text left of the `>` tells you what libraries are loaded into the current scope.  "Prelude" is the default library which already includes everything we need for this chapter.
 
 You can enter haskell expressions directly at the prompt:
+
 ```haskell
 Prelude> fibs 6
 ```
+
 > 13  
- 
+
 I'm going to stop showing the prompt now, but you can enter all of the following directly at the prompt and you will see similar results printed to those indicated below.
 
 Basic logic operators are similar to C/Java/etc: `==`, `&&`, `||`.  
+
 ```haskell
 fibs 6 == 13
 ```
+
 > True
 
 An exception is "not-equal", whose operator is `/=` (Haskell tends to prefer more "mathy" syntax whenever possible).
+
 ```haskell
 fibs 6 /= 13
 ```
+
 > False
 
 If-then-else expressions return a result (like javascript ternary `? :`)
+
 ```haskell
 if fibs 6 == 13 then "yes" else "no"
 ```
+
 > "yes"
 
 ```haskell
 if fibs 6 == 13 && fibs 7 == 12 then "yes" else "no"
 ```
+
 >"no"
 
 GHCi also has a number of non-haskell commands you can enter from the prompt, they are prefixed by "`:`".
@@ -114,6 +124,7 @@ The `print` function is equivalent to the PureScript `log $ show`.  That is, it 
 ## Basic List and Tuple Operator Cheatsheet
 
 The default Haskell lists are cons lists (linked lists defined with a `cons` function), similar to [those we defined in JavaScript](/functionaljavascript/#computation-with-pure-functions).
+
 ```haskell
 []           -- an empty list
 [1,2,3,4]    -- a simple lists of values
@@ -146,7 +157,8 @@ maximum [1,2,3] -- 3
 map f [1,2,3] -- maps the function f over the elements of the list returning the result in another list
 ```
 
-Tuples are fixed-length collections of values that may not necessarily be of the same type.  They are enclosed in `()` 
+Tuples are fixed-length collections of values that may not necessarily be of the same type.  They are enclosed in `()`
+
 ```haskell
 t = (1,"hello") -- define variable t to a tuple of an Int and a String.
 fst t
@@ -154,22 +166,25 @@ fst t
 
 > 1
 
-```
+```haskell
 snd t
 ```
 
 > "hello"
 
 And you can destructure and pattern match tuples:
-```
+
+```haskell
 (a,b) = t
 a
 ```
+
 > 1
 
-```
+```haskell
 b
 ```
+
 > "hello"
 
 Note that we created tuples in JavaScript using `[]` -- actually they were fixed-length arrays, don't confuse them for Haskell lists or tuples.
@@ -182,16 +197,16 @@ Conversely, Haskell can be [forced to use strict evaluation](https://wiki.haskel
 
 However, lazy by default sets Haskell apart.  It has pros and cons, on the pro side:
 
-* It can make certain operations more efficient, for example, we have already seen in JavaScript how it can make streaming of large data efficient
-* It can enable infinite sequences to be defined and used efficiently (this is a significant semantic difference)
-* It opens up possibilities for the compiler to be really quite smart about its optimisations.
+- It can make certain operations more efficient, for example, we have already seen in JavaScript how it can make streaming of large data efficient
+- It can enable infinite sequences to be defined and used efficiently (this is a significant semantic difference)
+- It opens up possibilities for the compiler to be really quite smart about its optimisations.
 
 But there are definitely cons:
 
-* It can be hard to reason about run-time performance
-* Mixing up strict and lazy evaluation (which can happen inadvertently) can lead to (for example) O(n<sup>2</sup>) behaviour in what should be linear time processing.
+- It can be hard to reason about run-time performance
+- Mixing up strict and lazy evaluation (which can happen inadvertently) can lead to (for example) O(n<sup>2</sup>) behaviour in what should be linear time processing.
 
---------
+---
 
 ### A Side Note on the Y Combinator
 
@@ -222,18 +237,19 @@ y :: (a -> a) -> a
 y = \f -> (\x -> f (unsafeCoerce x x)) (\x -> f (unsafeCoerce x x))
 main = putStrLn $ y ("circular reasoning works because " ++)
 ```
-------------
+
+---
 
 ## Functional Programming in Haskell versus JavaScript
 
 Consider the following pseudocode for a simple recursive definition of the Quick Sort algorithm:
 
-```
+```lambdacalc
 QuickSort list:
   Take head of list as a pivot  
   Take tail of list as rest
   return 
-	QuickSort( elements of rest < pivot ) ++ (pivot : QuickSort( elements of rest >= pivot ))
+ QuickSort( elements of rest < pivot ) ++ (pivot : QuickSort( elements of rest >= pivot ))
 ```
 
 We’ve added a bit of notation here: `a : l` inserts a (“cons”es) to the front of a list `l` ; `l1 ++ l2` is the concatenation of lists `l1` and `l2`.
@@ -265,7 +281,7 @@ sort (pivot:rest) = lesser ++ [pivot] ++ greater
     greater = sort $ filter (>=pivot) rest
 ```
 
-An essential thing to know before trying to type in the above function is that Haskell delimits the scope of multi-line function definitions (and all multiline expressions) with indentation ([complete indentation rules reference here]([indentation](https://en.wikibooks.org/wiki/Haskell/Indentation))). The `where` keyword lets us create multiple function definitions that are visible within the scope of the parent function, but they must all be left-aligned with each other and to the right of the start of the line containing the `where` keyword.
+An essential thing to know before trying to type in the above function is that Haskell delimits the scope of multi-line function definitions (and all multiline expressions) with indentation ([complete indentation rules reference here](https://en.wikibooks.org/wiki/Haskell/Indentation)). The `where` keyword lets us create multiple function definitions that are visible within the scope of the parent function, but they must all be left-aligned with each other and to the right of the start of the line containing the `where` keyword.
 
 Haskell also helps with a number of other language features.  
 First, is pattern matching.  Pattern matching is like function overloading that you may be familiar with from languages like Java or C++ - where the compiler matches the version of the function to invoke for a given call by matching the type of the parameters to the type of the call - except in Haskell the compiler goes a bit deeper to inspect the values of the parameters.  
@@ -334,7 +350,6 @@ sort (pivot:rest) = let
 
 Note that where is only available in function declarations, not inside expressions and therefore is not available in a lambda.  However, let, in is part of the expression, and therefore available inside a lambda function.  A silly example would be:  `\i -> let f x = 2*x in f i`, which could also be spread across lines, but be careful to get the correct indentation.
 
-
 <div class="cheatsheet" markdown="1">
 
 ## Conditional Code Constructs Cheatsheet
@@ -342,6 +357,7 @@ Note that where is only available in function declarations, not inside expressio
 ### Pattern matching
 
 Provides alternative cases for function definitions matching different values or possible destructurings of the function arguments ([more detail](/haskell2#pattern-matching)).  As per examples above and:
+
 ```haskell
 fibs 0 = 1
 fibs 1 = 1
@@ -349,17 +365,22 @@ fibs n = fibs (n-1) + fibs (n-2)
 ```
 
 ### if-then-else
-```
+
+```haskell
   If <condition> then <case 1> else <case2>   
 ```
+
 just like javascript ternary if operator: `<condition> ? <case 1> : <case 3>`
 
 ```haskell
 fibs n = if n==0 then 1 else if n==1 then 1 else fibs (n-1) + fibs (n-2)
  
 ```
+
 ### Guards
+
 Can test Bool expressions (i.e. not just values matching as in pattern matching)
+
 ```haskell
 fibs n
   | n == 0 = 1
@@ -367,6 +388,7 @@ fibs n
   |otherwise = fibs (n-1) + fibs (n-2)
 
 ```
+
 ### case
 
 ```haskell
@@ -375,4 +397,27 @@ fibs n = case n of
   1 -> 1
   otherwise -> fibs (n-1) + fibs (n-2)
 ```
+
 </div>
+
+## Glossary
+
+*GHCi REPL*: The interactive Read-Eval-Print Loop for GHC, the Glasgow Haskell Compiler, allowing users to test Haskell programs and expressions interactively.
+
+*Pattern Matching*: A mechanism in Haskell that checks a value against a pattern. It is used to simplify code by specifying different actions for different input patterns.
+
+*Guards*: A feature in Haskell used to test boolean expressions. They provide a way to conditionally execute code based on the results of boolean expressions.
+
+*Where Clauses*: A way to define local bindings in Haskell, allowing variables or functions to be used within a function body.
+
+*Let Clauses*: A way to bind variables or functions within an expression in Haskell, allowing for more localized definitions.
+
+*Hoogle*: A Haskell API search engine that allows users to search for functions by name or by type signature.
+
+*Prelude*: The default library loaded in Haskell that includes basic functions and operators.
+
+*Case Expressions*: A way to perform pattern matching in Haskell that allows for more complex conditional logic within expressions.
+
+*Type Class*: A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+
+*Unit*: A type with exactly one value, (), used to indicate the absence of meaningful return value, similar to void in other languages.

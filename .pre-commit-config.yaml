@@ -1,0 +1,24 @@
+repos:
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.41.0
+    hooks:
+      - id: markdownlint
+        args:
+          [
+            --fix,
+            --disable=MD013,
+            --disable=MD033,
+            --disable=MD051,
+            --disable=MD025,
+            --disable=MD024,
+            --disable=MD028,
+          ]
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.3.0
+    hooks:
+      - id: codespell
+        args: 
+          [
+            -I custom_words.txt,
+            --exclude-file=Gemfile.lock
+          ]
