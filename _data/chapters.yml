@@ -5,12 +5,12 @@
     - Understand the difference between *syntax*, the textual symbols and grammatical rules of a program, and *semantics*, the meaning of what is computed
     - Understand that there are different models of computation upon which different programming languages are based, including machine models such as Turing Machines and von Neumann architecture, and the Lambda Calculus based on mathematical functions.
     - Compare the dominant paradigms of [Functional and Objected-Oriented Programming](/levelsofabstraction/#alternative-abstractions) in terms of how they abstract data and behaviour.
-- title: HTML as a declarative language
+- title: HTML as a Declarative Language
   url: /html/
   description: |
     - Understand what makes HTML a declarative language and how it describes the structure and content of a web page.
     - Comprehend the separation of concerns by differentiating structure (HTML), presentation (CSS), and behavior (JavaScript).
-    - Understand how to include and define a basic SVG element within an HTML document. 
+    - Understand how to include and define a basic SVG element within an HTML document.
 - title: JavaScript Introduction
   url: /javascript1/
   description: |
