@@ -7,7 +7,7 @@ HTML, or HyperText Markup Language, is the standard markup language used to crea
 
 ## Declarative Nature of HTML
 
-HTML is considered a declarative language because it focuses on describing the structure and content of a web page without specifying how to achieve it. Instead of giving step-by-step instructions for rendering elements, HTML allows developers to declare the desired structure and let the browser handle the rendering process.
+HTML is considered a declarative language because it focuses on describing the structure and content of a web page without specifying how to achieve it. Instead of giving step-by-step instructions for rendering elements, HTML allows developers to declare the desired structure and let the browser handle the rendering  process.
 
 ## Key Aspects of HTML's Declarative Nature:
 
