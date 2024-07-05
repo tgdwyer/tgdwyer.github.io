@@ -19,7 +19,8 @@ HTML is considered a declarative language because it focuses on describing the s
 
 ## Key Aspects of HTML’s Declarative Nature
 
-1. Descriptive Tags: HTML tags are descriptive elements that define the purpose and meaning of content. For example, `<p>` tags indicate a paragraph, `<h1>` to `<h6>` tags denote headings of varying levels, `<ul>` and `<ol>` represent unordered and ordered lists respectively. These tags describe the content they enclose rather than instructing how it should be displayed.  Pairs of opening and closing HTML tags (e.g. `<h1>` defines the start of a heading, `</h1>` marks the end) define *elements* in a Document Object Model (DOM).  Elements can be nested within each other such that the DOM is a hierarchical (tree) structure.  
+1. Descriptive Tags: HTML tags are descriptive elements that define the purpose and meaning of content. For example, `<p>` tags indicate a paragraph, `<h1>` to `<h6>` tags denote headings of varying levels, `<ul>` and `<ol>` represent unordered and ordered lists respectively. These tags describe the content they enclose rather than instructing how it should be displayed.  Pairs of opening and closing HTML tags (e.g. `<h1>` defines the start of a heading, `</h1>` marks the end) define *elements* in a Document Object Model (DOM).  Elements can be nested within each other such that the DOM is a hierarchical (tree) structure.
+
 2. Attribute-Based: HTML elements can have attributes that provide additional information or functionality. Attributes like class, id, src, href, etc., provide hooks for styling, scripting, or specifying behavior. However, these attributes do not dictate how elements are displayed; they simply provide metadata or instructions to browsers.
 
 3. Separation of Concerns: Modern HTML5 is actually a suite of languages which encourages a separation of concerns by delineating structure (HTML), presentation (CSS), and behavior (JavaScript). This promotes maintainability and scalability by allowing each aspect of web development to be managed independently.
@@ -74,7 +75,7 @@ In this step, we’ve defined a rectangle with a starting position at coordinate
 
 Most HTML elements, including SVG elements have certain attributes according to their documentation, which determine how they are rendered and behave in the browser. [MDN](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/rect) is normally a good reference for what is available to use.
 
-### Step 5: Adding Animation declaratively using CSS
+### Step 4: Adding Animation declaratively using CSS
 
 There are many ways to achieve the same thing in HTML. We will now look at how an animation may be added *declaratively* to our SVG rectangle using CSS.  First, we need to tell the browser where to find our CSS file from the (`<head>`) element of our HTML.
 
@@ -103,11 +104,11 @@ Now we create the `style.css` file as follows:
 }
 ```
 
-This first clause *selects* the rectangle by the unique id we gave it, and then declares some style properties. Specifically, it sets up on animation using “key frames” with a duration of 5 seconds.  In the keyframes declaration we can declare style properties for various time frames, and the browser will interpolate between them.  In this case, we have simply set an initial and final `x` position for the rectangle.
+This first clause *selects* the rectangle by the unique id we gave it, and then declares some style properties. Specifically, it sets up an animation using “key frames” with a duration of 5 seconds.  In the keyframes declaration we can declare style properties which should be applied at different percentages of completion of the animation, and the browser will interpolate between them.  In this case, we have simply set an initial and final `x` position for the rectangle.
 
-This is a program of sorts, but it’s declarative in the sense that we did not tell the browser *how* to perform the animation.  Rather we *declared* what we wanted the rectangle to look like at the start and end of the animation and let the browser figure out how to perform the transition.
+This is a program of sorts (in that it causes a lot of computation to happen in the browser with outputs that we can see on our webpage), but it’s declarative in the sense that we did not tell the browser *how* to perform the animation.  Rather we *declared* what we wanted the rectangle to look like at the start and end of the animation and let the browser figure out how to perform the transition.
 
-### Alternate Step 5: Adding a custom animation from Javascript
+### Alternate Step 4: Adding a custom animation from an imperative Javascript program
 
 By contrast, we can create an *imperative* JavaScript program which explicitly gives the list of instructions for *how* to move the rectangle. First, remove the `<link>` to the CSS that we created in the `<head>` element of the html file.
 Then can integrate a javascript by including a reference to a file, e.g., `script.js`
@@ -121,7 +122,7 @@ Then can integrate a javascript by including a reference to a file, e.g., `scrip
 </body>
 ```
 
-This will be a recursive function, which will animate the rectangle at 60 FPS. We use setTimeout to call our recursive function at around 60 frames per second.
+We now create a function which encodes the precise steps to animate the rectangle at 60 FPS (the `setTimeout` call queues up each successive frame of animation).
 
 ```javascript
 // Define an animation function
@@ -164,9 +165,9 @@ animate(rectangle, 0, 370, duration);
 However, there are some serious issues with this code.
 
 - Obviously it's more complex and requires more code than using the built-in CSS animation feature.
-- The animate function updates the state of the DOM (the `x` position of the rectangle) from deep inside it's logic. Normally, we look for outputs of functions in the value that they return, but this function has no explicit return value.  To see what it does, we have to carefully inspect the code to identify the line which causes the side effect (the `rect.setAttribute` call).  Such a hidden side effect is the opposite of the intention of declarative-style programming.
+- The animate function updates the state of the DOM (the `x` position of the rectangle) from deep inside it's logic. Normally, we look for outputs of functions in the value that they `return`, but this function has no explicit return value.  To see what it does, we have to carefully inspect the code to identify the line which causes the *side effect* of moving the rectangle (the `rect.setAttribute` calls).  Another somewhat hidden complexity is the asynchronous (or delayed) behaviour due to the use of  `setTimeout` to queue up the successive frames of animation. Such hidden side effects and complexity are the opposite of the intention of declarative-style programming.
 
-Luckily, [functional reactive programming](/functionalreactiveprogramming) will save us from most of these issues!
+Later, we will see how [functional reactive programming](/functionalreactiveprogramming) techniques can be used to separate code with such side effects on global state from code that implements behavioural logic in interactive web pages.
 
 ## Conclusion
 
@@ -187,6 +188,11 @@ By contrast, we saw a different *imperative* approach to adding an animation to 
 - Greater control than the pure declarative HTML/CSS approach
 - We can create richer interaction
 
+A major theme of this course will be seeing how *pure functional programming* techniques give us a coding style that:
+
+- is as powerful as imperative programming
+- but is more declarative (through functions that clearly declare their inputs and outputs)
+- and forces us to clearly distinquish code with side effects from pure computation.
 <!-- markdownlint-enable MD036 -->
 
 ## Exercises
