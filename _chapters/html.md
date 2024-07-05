@@ -9,7 +9,7 @@ title: "HTML as a Declarative Language"
 - Comprehend the separation of concerns by differentiating structure (HTML), presentation (CSS), and custom behaviour (JavaScript).
 - Understand how to include and define a basic SVG element within an HTML document
 - Understand how an SVG element may be animated either declaratively through CSS or imperatively through JavaScript
-- Start to appreciate the dangers of imperative programs with hidden side effects versus the transparency of declarative style programs
+- Compare the dangers of imperative programs with hidden side effects versus the transparency of declarative style programs
 
 ## What is HTML?
 
