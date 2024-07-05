@@ -35,7 +35,7 @@ A [live version of the following code is available together with an online edito
 
 ### Step 1: Setting Up the HTML Document
 
-First, create a new HTML file and define the basic structure of the document:
+First, create a new HTML file (name it `index.html`) and define the basic structure of the document:
 
 ```html
 <!DOCTYPE html>
