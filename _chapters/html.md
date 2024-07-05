@@ -32,8 +32,8 @@ HTML is considered a declarative language because it focuses on describing the s
 ## An Animated Rectangle Using SVG in HTML
 
 A [live version of the following code is available together with an online editor](https://stackblitz.com/edit/stackblitz-starters-6m6cfd?file=index.html) for you to experiment with.  Or you can create the files locally on your computer, all in the same directory, and drag-and-drop the `index.html` file into your browser to see the animation.
-We are going to build an HTML page that looks something like this, but with rectangles that actually move!
-![Animated Rectangles Screenshot](/assets/images/chapterImages/html/animatedrects.png)
+We are going to build an HTML page that looks something like this:
+![Animated Rectangles Screenshot](/assets/images/chapterImages/html/animatedrects.gif)
 
 ### Step 1: Setting Up the HTML Document
 
@@ -96,21 +96,23 @@ Now we create the `style.css` file as follows:
 
 ```css
 #blueRectangle {
-    animation-name: moveX;
-    animation-duration: 5s;
+  animation-name: moveX;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
 }
 
 @keyframes moveX {
-    0% {
-        x: 0;
-    }
-    100% {
-        x: 370;
-    }
+  0% {
+    x: 0;
+  }
+  100% {
+    x: 370;
+  }
 }
 ```
 
-This first clause *selects* the rectangle by the unique id we gave it, and then declares some style properties. Specifically, it sets up an animation using “key frames” with a duration of 5 seconds.  In the keyframes declaration we can declare style properties which should be applied at different percentages of completion of the animation, and the browser will interpolate between them.  In this case, we have simply set an initial and final `x` position for the rectangle.
+This first clause *selects* the rectangle by the unique id we gave it, and then declares some style properties. Specifically, it sets up an animation using “key frames”, with attributes that specify: a duration of 5 seconds; that the animation should be interpolated linearly (as opposed to something non-linear like ease-in-out); and that it should play forwards as opposed to a gamut of other options.  In the keyframes declaration we can declare style properties which should be applied at different percentages of completion of the animation, and the browser will interpolate between them according to the other style settings we specified.  In this case, we have simply set an initial and final `x` position for the rectangle.
 
 This is a program of sorts (in that it causes a lot of computation to happen in the browser with outputs that we can see on our webpage), but it’s declarative in the sense that we did not tell the browser *how* to perform the animation.  Rather we *declared* what we wanted the rectangle to look like at the start and end of the animation and let the browser figure out how to perform the transition.
 
@@ -129,7 +131,7 @@ We'll create another rectangle with the id "redRectangle" which we can manipulat
 </body>
 ```
 
-We now create a function which encodes the precise steps to animate the rectangle at 60 FPS (the `setTimeout` call queues up each successive frame of animation). If you have experience with other languages like python hopefully this will be understandable even if the syntax looks a bit unfamiliar.  If it's not completely clear yet don't worry. We'll point out the things that are important to note for now below, and [later we'll get into the nitty gritty of javascript syntax](javascript1).
+We now create a function which encodes the precise steps to animate the rectangle at 60 FPS (the `setTimeout` call queues up each successive frame of animation). If you have experience with other languages like python hopefully this will be understandable even if the syntax looks a bit unfamiliar.  If it's not completely clear yet don't worry. We'll point out the things that are important to note for now below, but you can refer to our [intro to JavaScript](javascript1) for the basics.
 
 ```javascript
 // Define an animation function

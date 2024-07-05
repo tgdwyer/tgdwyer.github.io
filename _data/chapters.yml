@@ -5,14 +5,6 @@
     - Understand the difference between *syntax*, the textual symbols and grammatical rules of a program, and *semantics*, the meaning of what is computed
     - Understand that there are different models of computation upon which different programming languages are based, including machine models such as Turing Machines and von Neumann architecture, and the Lambda Calculus based on mathematical functions.
     - Compare the dominant paradigms of [Functional and Objected-Oriented Programming](/levelsofabstraction/#alternative-abstractions) in terms of how they abstract data and behaviour.
-- title: HTML as a Declarative Language
-  url: /html/
-  description: |
-    - Understand what makes HTML a declarative language and how it describes the structure and content of a web page.
-    - Comprehend the separation of concerns by differentiating structure (HTML), presentation (CSS), and custom behaviour (JavaScript).
-    - Understand how to include and define a basic SVG element within an HTML document
-    - Understand how an SVG element may be animated either declaratively through CSS or imperatively through JavaScript
-    - Compare the dangers of imperative programs with hidden side effects versus the transparency of declarative style programs
 - title: JavaScript Introduction
   url: /javascript1/
   description: |
@@ -26,6 +18,14 @@
     - Explain JavaScript’s [prototype mechanism](/javascript1#prototype-class-mechanism) for creating classes from functions
     - Create [ES6 style classes](/javascript1#ecmascript-6-class-syntax) with constructors and getters
     - Compare object oriented [polymorphism](/javascript1#polymorphism) to [dependency injection](/javascript1#dependency-injection) through functions
+- title: HTML as a Declarative Language
+  url: /html/
+  description: |
+    - Understand what makes HTML a declarative language and how it describes the structure and content of a web page.
+    - Comprehend the separation of concerns by differentiating structure (HTML), presentation (CSS), and custom behaviour (JavaScript).
+    - Understand how to include and define a basic SVG element within an HTML document
+    - Understand how an SVG element may be animated either declaratively through CSS or imperatively through JavaScript
+    - Compare the dangers of imperative programs with hidden side effects versus the transparency of declarative style programs
 - title: Functional Programming in JavaScript
   url: /functionaljavascript/
   description: |
