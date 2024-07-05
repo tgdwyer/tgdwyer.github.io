@@ -60,7 +60,7 @@ Next, let’s add an SVG element to the body of our HTML document. This SVG elem
 
 ```html
 <body>
-  <svg width="100" height="100">
+  <svg width="100" height="30">
     <!-- SVG content will go here -->
   </svg>
 </body>
@@ -73,8 +73,9 @@ We’ve added an SVG element with a width and height of 100 units each. This pro
 Now, let’s add a rectangle `<rect>` element inside the SVG to represent the moving rectangle:
 
 ```html
-<svg width="100" height="100">
-  <rect id="blueRectangle" x="10" y="10" width="20" height="20" fill="blue"/></svg>
+<svg width="100" height="30">
+  <rect id="blueRectangle" x="10" y="5" width="20" height="20" fill="blue"/>
+</svg>
 ```
 
 In this step, we’ve defined a rectangle with a starting position at coordinates (10, 10) and a width and height of 20 units each. The rectangle is filled with a blue color.  Importantly, we’ve given the `<rect>` element a unique id “blueRectangle” by which we can refer to it elsewhere, below we’ll demonstrate adding an animation behaviour to this rectangle using this id from CSS or JavaScript.
@@ -112,7 +113,14 @@ Now we create the `style.css` file as follows:
 }
 ```
 
-This first clause *selects* the rectangle by the unique id we gave it, and then declares some style properties. Specifically, it sets up an animation using “key frames”, with attributes that specify: a duration of 5 seconds; that the animation should be interpolated linearly (as opposed to something non-linear like ease-in-out); and that it should play forwards as opposed to a gamut of other options.  In the keyframes declaration we can declare style properties which should be applied at different percentages of completion of the animation, and the browser will interpolate between them according to the other style settings we specified.  In this case, we have simply set an initial and final `x` position for the rectangle.
+This first clause *selects* the rectangle by the unique id we gave it: `blueRectangle`, and then declares some style attributes for animation that specify:
+
+- an id for the animation: `moveX`;
+- a duration of 5 seconds; 
+- that the animation should be interpolated linearly (as opposed to something non-linear like ease-in-out);
+- and that it should play forwards as opposed to a gamut of other options.  
+  
+In the `keyframes` declaration we declare style properties which should be applied at different percentages of completion of the `moveX` animation. The browser will interpolate between them according to the other style settings we specified.  In this case, we have simply set an initial and final `x` position for the rectangle.
 
 This is a program of sorts (in that it causes a lot of computation to happen in the browser with outputs that we can see on our webpage), but it’s declarative in the sense that we did not tell the browser *how* to perform the animation.  Rather we *declared* what we wanted the rectangle to look like at the start and end of the animation and let the browser figure out how to perform the transition.
 
@@ -123,9 +131,9 @@ We'll create another rectangle with the id "redRectangle" which we can manipulat
 
 ```html
 <body>
-  <svg width="100" height="100" id="svg">
-    ...
-    <rect id="redRectangle" x="10" y="10" width="20" height="20" fill="red"/>
+  ...
+  <svg width="100" height="30" id="svg">
+    <rect id="redRectangle" x="10" y="5" width="20" height="20" fill="red"/>
   </svg>
   <script src="script.js"></script>
 </body>
@@ -173,7 +181,8 @@ animate(rectangle, 0, 370, duration);
 However, there are some serious issues with this code.
 
 - Obviously it's more complex and requires more code than using the built-in CSS animation feature.
-- The `animate` function updates the state of the DOM (the `x` position of the rectangle) from deep inside it's logic. Normally, we look for outputs of functions in the value that they `return`, but this function has no explicit return value.  To see what it does, we have to carefully inspect the code to identify the line which causes the *side effect* of moving the rectangle (the `rect.setAttribute` calls).  Another somewhat hidden complexity is the asynchronous (or delayed) behaviour due to the use of  `setTimeout` to queue up the successive frames of animation. Such hidden side effects and complexity are the opposite of the intention of declarative-style programming.
+- The `animate` function updates the state of the DOM (the `x` position of the rectangle) from deep inside it's logic. Normally, we look for outputs of functions in the value that they `return`, but this function has no explicit return value.  To see what it does, we have to carefully inspect the code to identify the line which causes the *side effect* of moving the rectangle (the `rect.setAttribute` calls).  
+- Another hidden complexity is the asynchronous (or delayed) behaviour due to the use of  `setTimeout` to queue up the successive frames of animation. Such hidden side effects and complexity are the opposite of the intention of declarative-style programming.
 
 Later, we will see how [functional reactive programming](/functionalreactiveprogramming) techniques can be used to separate code with such side effects on global state from code that implements behavioural logic in interactive web pages.
 
