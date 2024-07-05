@@ -6,7 +6,7 @@ title: "Data Types and Type Classes"
 
 ## Learning Outcomes
 
-- Define data structures using Haskell's [Algebraic Data Types](#algebraic-data-types) and use [pattern matching](#pattern-matching) to define functions that handle each of the possible instances
+- Define data structures using Haskell’s [Algebraic Data Types](#algebraic-data-types) and use [pattern matching](#pattern-matching) to define functions that handle each of the possible instances
 - Use the alternate [record syntax](#record-syntax) to define data structures with named fields
 - Understand that Haskell [type classes](#typeclasses) are similar to TypeScript interfaces in providing a definition for the set of functions that must be available for instances of those type classes and that typeclasses can extend upon one another to create rich hierarchies
 - Understand that the [Maybe](#maybe) type provides an elegant way to handle *partial functions*.
@@ -72,7 +72,7 @@ intListLength (_:rest) = 1 + intListLength rest
 
 ## Type Parameters and Polymorphism
 
-Similar to TypeScript, Haskell provides *parametric polymorphism*.  That is, the type definitions for functions and data structures (defined with `data` like the `ConsList` above) can have type parameters (AKA type variables).  For example, the definition `intListLength` above is defined to only work with lists with `Int` elements.  This seems a silly restriction because in this function we don't actually do anything with the elements themselves.  Below, we introduce the type parameter `a` so that the `length` function will able to work with lists of any type of elements.
+Similar to TypeScript, Haskell provides *parametric polymorphism*.  That is, the type definitions for functions and data structures (defined with `data` like the `ConsList` above) can have type parameters (AKA type variables).  For example, the definition `intListLength` above is defined to only work with lists with `Int` elements.  This seems a silly restriction because in this function we don’t actually do anything with the elements themselves.  Below, we introduce the type parameter `a` so that the `length` function will able to work with lists of any type of elements.
 
 ```haskell
 length :: [a] -> Int -- a is a type parameter
@@ -90,12 +90,12 @@ The following visual summary shows pair data structures with accessor functions 
 
 ## Type Kinds
 
-GHCi allows you to use the `:kind` (or `:k`) command to interrogate the *Kind* of types -- think of it as "meta information" about types and their type parameters.  The kind syntax indicates the *arity* or number of type parameters a type has.  Note that it is like the syntax for function types (with the `->`), you can think of it as information about what is required in terms of type parameters to instantiate the type.  If the constructor takes no type parameters the kind is just `*`, (it returns a type), `*->*` if it takes one type parameter, `*->*->*` for two type parameters and so on.
+GHCi allows you to use the `:kind` (or `:k`) command to interrogate the *Kind* of types -- think of it as “meta information” about types and their type parameters.  The kind syntax indicates the *arity* or number of type parameters a type has.  Note that it is like the syntax for function types (with the `->`), you can think of it as information about what is required in terms of type parameters to instantiate the type.  If the constructor takes no type parameters the kind is just `*`, (it returns a type), `*->*` if it takes one type parameter, `*->*->*` for two type parameters and so on.
 
 ![Polymorphism Summary](/assets/images/chapterImages/haskell2/kinds.png)
 
-Another sort of "kind" are for [type classes](#typeclasses) which we will introduce more properly in a moment.
-For example, the "kind" for the `Ord` type class (the class of things that are Orderable and which we came across in [our simple  implementation of quicksort](/haskell1#functional-programming-in-haskell-versus-javascript)) is:
+Another sort of “kind” are for [type classes](#typeclasses) which we will introduce more properly in a moment.
+For example, the “kind” for the `Ord` type class (the class of things that are Orderable and which we came across in [our simple  implementation of quicksort](/haskell1#functional-programming-in-haskell-versus-javascript)) is:
 
 ```haskell
 > :k Ord

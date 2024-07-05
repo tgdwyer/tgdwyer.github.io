@@ -3,8 +3,6 @@ layout: chapter
 title: "Eithers"
 ---
 
-# Eithers
-
 ## Learning Outcomes
 
 - Understand how the `Either` type handles values with two possibilities, typically used for error handling and success cases.
@@ -19,7 +17,7 @@ In Haskell, the Either type is used to represent values with two possibilities: 
 data Either a b = Left a | Right b
 ```
 
-In Haskell's `Either` type, convention ([and the official documentation](https://hackage.haskell.org/package/base-4.20.0.1/docs/Data-Either.html)) says errors go on the `Left` and successes on the `Right`. Why? Because if it is not right (correct) it must be left. This can be considered another example of bias against the left-handed people around the world, but alas, it is a [cruel world](https://www.youtube.com/watch?v=epvlvDzKfv8).
+In Haskell’s `Either` type, convention ([and the official documentation](https://hackage.haskell.org/package/base-4.20.0.1/docs/Data-Either.html)) says errors go on the `Left` and successes on the `Right`. Why? Because if it is not right (correct) it must be left. This can be considered another example of bias against the left-handed people around the world, but alas, it is a [cruel world](https://www.youtube.com/watch?v=epvlvDzKfv8).
 
 The Left/Right convention is also more general then a Success/Error naming, as Left does not always need to be an error, but it is the most common usage.
 
@@ -33,7 +31,7 @@ divide _ 0 = Left "Division by zero error"
 divide x y = Right (x / y)
 ```
 
-Similar to Maybes, we can also use pattern matching against `Either`'s in a function.
+Similar to Maybes, we can also use pattern matching against `Either`s in a function.
 
 ```haskell
 handleResult :: Either String Double -> String
@@ -49,9 +47,9 @@ The `Either` type constructor has the kind `* -> * -> *`. This means that Either
 
 ### Recap: Kinds in Haskell
 
-In Haskell, types are classified into different kinds. A kind can be thought of as a type of a type, describing the number of type parameters a type constructor takes and how they are applied. The Either type has an interesting kind, which we'll explore in detail.
+In Haskell, types are classified into different kinds. A kind can be thought of as a type of a type, describing the number of type parameters a type constructor takes and how they are applied. The Either type has an interesting kind, which we’ll explore in detail.
 
-Before diving into the `Either` typeclass, let's briefly recap what kinds are:
+Before diving into the `Either` typeclass, let’s briefly recap what kinds are:
 
 `*` (pronounced "star") represents the kind of all concrete types. For example, `Int` and `Bool` have the kind `*`.
 `*` -> * represents the kind of type constructors that take one type parameter and return a concrete type. For example, `Maybe` and `[]` (the list type constructor) have the kind `* -> *`.
@@ -121,7 +119,7 @@ Right 3 >>= (\x -> Left "Something went wrong") -- Result: Left "Something went 
 
 ## Example
 
-First, we'll define custom error types to represent possible failures at each stage.
+First, we’ll define custom error types to represent possible failures at each stage.
 
 ```haskell
 data FileError = FileNotFound | FileReadError deriving (Show)

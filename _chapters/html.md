@@ -17,7 +17,7 @@ HTML, or HyperText Markup Language, is the standard markup language used to crea
 
 HTML is considered a declarative language because it focuses on describing the structure and content of a web page without specifying how to achieve it. Instead of giving step-by-step instructions for rendering elements, HTML allows developers to declare the desired structure and let the browser handle the rendering process.
 
-## Key Aspects of HTML's Declarative Nature
+## Key Aspects of HTML’s Declarative Nature
 
 1. Descriptive Tags: HTML tags are descriptive elements that define the purpose and meaning of content. For example, `<p>` tags indicate a paragraph, `<h1>` to `<h6>` tags denote headings of varying levels, `<ul>` and `<ol>` represent unordered and ordered lists respectively. These tags describe the content they enclose rather than instructing how it should be displayed.  Pairs of opening and closing HTML tags (e.g. `<h1>` defines the start of a heading, `</h1>` marks the end) define *elements* in a Document Object Model (DOM).  Elements can be nested within each other such that the DOM is a hierarchical (tree) structure.  
 2. Attribute-Based: HTML elements can have attributes that provide additional information or functionality. Attributes like class, id, src, href, etc., provide hooks for styling, scripting, or specifying behavior. However, these attributes do not dictate how elements are displayed; they simply provide metadata or instructions to browsers.
@@ -45,11 +45,11 @@ First, create a new HTML file and define the basic structure of the document:
 </html>
 ```
 
-In this step, we've set up the basic HTML structure with a `<!DOCTYPE>` declaration, `<html>`, `<head>`, and `<body>` tags. We've also included meta tags for character encoding and viewport settings, as well as a title for the page.
+In this step, we’ve set up the basic HTML structure with a `<!DOCTYPE>` declaration, `<html>`, `<head>`, and `<body>` tags. We’ve also included meta tags for character encoding and viewport settings, as well as a title for the page.
 
 ### Step 2: Adding an SVG Element
 
-Next, let's add an SVG element to the body of our HTML document. This SVG element will contain the rectangle that we'll animate later:
+Next, let’s add an SVG element to the body of our HTML document. This SVG element will contain the rectangle that we’ll animate later:
 
 ```html
 <body>
@@ -59,24 +59,24 @@ Next, let's add an SVG element to the body of our HTML document. This SVG elemen
 </body>
 ```
 
-We've added an SVG element with a width and height of 100 units each. This provides a canvas for our SVG graphics.
+We’ve added an SVG element with a width and height of 100 units each. This provides a canvas for our SVG graphics.
 
 ### Step 3: Adding a Rectangle to the SVG
 
-Now, let's add a rectangle `<rect>` element inside the SVG to represent the moving rectangle:
+Now, let’s add a rectangle `<rect>` element inside the SVG to represent the moving rectangle:
 
 ```html
 <svg width="100" height="100">
   <rect id="ourRectangle" x="10" y="10" width="20" height="20" fill="blue"/></svg>
 ```
 
-In this step, we've defined a rectangle with a starting position at coordinates (10, 10) and a width and height of 20 units each. The rectangle is filled with a blue color.  Importantly, we've given the `<rect>` element a unique id "ourRectangle" by which we can refer to it elsewhere, below we'll demonstrate adding an animation behaviour to this rectangle using this id from CSS or JavaScript.
+In this step, we’ve defined a rectangle with a starting position at coordinates (10, 10) and a width and height of 20 units each. The rectangle is filled with a blue color.  Importantly, we’ve given the `<rect>` element a unique id “ourRectangle” by which we can refer to it elsewhere, below we’ll demonstrate adding an animation behaviour to this rectangle using this id from CSS or JavaScript.
 
 Most HTML elements, including SVG elements have certain attributes according to their documentation, which determine how they are rendered and behave in the browser. [MDN](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/rect) is normally a good reference for what is available to use.
 
 ### Step 5: Adding Animation declaratively using CSS
 
-There are many ways to achieve the same thing in HTML. We will now look at how an animation may be added *declaritively* to our SVG rectangle using CSS.  First, we need to tell the browser where to find our CSS file from the (<head>) element of our HTML.
+There are many ways to achieve the same thing in HTML. We will now look at how an animation may be added *declaratively* to our SVG rectangle using CSS.  First, we need to tell the browser where to find our CSS file from the (`<head>`) element of our HTML.
 
 ```html
 <head>
@@ -88,7 +88,7 @@ There are many ways to achieve the same thing in HTML. We will now look at how a
 Now we create the `style.css` file as follows:
 
 ```css
-#ourRectangle {  
+#ourRectangle {
     animation-name: moveX;
     animation-duration: 5s;
 }
@@ -103,9 +103,9 @@ Now we create the `style.css` file as follows:
 }
 ```
 
-This first clause *selects* the rectangle by the unique id we gave it, and then declares some style properties. Specifically, it sets up on animation using "key frames" with a duration of 5 seconds.  In the keyframes declaration we can declare style properties for various time frames, and the browser will interpolate between them.  In this case, we have simply set an initial and final `x` position for the rectangle.
+This first clause *selects* the rectangle by the unique id we gave it, and then declares some style properties. Specifically, it sets up on animation using “key frames” with a duration of 5 seconds.  In the keyframes declaration we can declare style properties for various time frames, and the browser will interpolate between them.  In this case, we have simply set an initial and final `x` position for the rectangle.
 
-This is a program of sorts, but it's declarative in the sense that we did not tell the browser *how* to perform the animation.  Rather we *declared* what we wanted the rectangle to look like at the start and end of the animation and let the browser figure out how to perform the transition.
+This is a program of sorts, but it’s declarative in the sense that we did not tell the browser *how* to perform the animation.  Rather we *declared* what we wanted the rectangle to look like at the start and end of the animation and let the browser figure out how to perform the transition.
 
 ### Alternate Step 5: Adding a custom animation from Javascript
 
@@ -121,7 +121,7 @@ Then can integrate a javascript by including a reference to a file, e.g., `scrip
 </body>
 ```
 
-This will be a recursive function, which will animate the rectangle at 60 FPS. We use setTimeout to call our recursive function at around 60 frames per second. 
+This will be a recursive function, which will animate the rectangle at 60 FPS. We use setTimeout to call our recursive function at around 60 frames per second.
 
 ```javascript
 // Define an animation function
@@ -140,7 +140,7 @@ function animate(rect, x, speed, lastTime) {
   // Update position based on elapsed time and speed
   const newX = x + (speed * deltaTime) / 1000; // Convert milliseconds to seconds
 
-  // We can use `setAttribute` to change the variables of the HTML Element. In this case, we are changing the x attribute. 
+  // We can use `setAttribute` to change the variables of the HTML Element. In this case, we are changing the x attribute.
   rect.setAttribute('x', newX);
 
   // Set timeout to call the animate function again
@@ -165,9 +165,11 @@ Luckily, [functional reactive programming](/functionalreactiveprogramming) will 
 
 ## Conclusion
 
-We saw that the philosophy of HTML programming is primarily *declarative* in the sense that the programmer/designer tells the browser what they want to see and rely on the browser's sophisticated rendering engine to figure out how to display the content.  This extends to adding dynamic behaviours such as animation declaratively through CSS.
+We saw that the philosophy of HTML programming is primarily *declarative* in the sense that the programmer/designer tells the browser what they want to see and rely on the browser’s sophisticated rendering engine to figure out how to display the content.  This extends to adding dynamic behaviours such as animation declaratively through CSS.
 
 By contrast, we saw a different *imperative* approach to adding an animation to our web page using JavaScript. There are pros and cons to each:
+
+<!-- markdownlint-disable MD036 -->
 
 *Declarative*
 
@@ -179,6 +181,8 @@ By contrast, we saw a different *imperative* approach to adding an animation to 
 
 - Greater control than the pure declarative HTML/CSS approach
 - We can create richer interaction
+
+<!-- markdownlint-enable MD036 -->
 
 ## Exercises
 

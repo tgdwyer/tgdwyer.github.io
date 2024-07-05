@@ -20,16 +20,16 @@
   definition: A type of polymorphism where functions or data types can be written generically so that they can handle values uniformly without depending on their type.
   first_appeared: javascript1
 - term: Weakly Immutable
-  definition: A property of const-declared objects in JavaScript, where the variable reference is immutable, but the object's properties can still be changed.
+  definition: A property of const-declared objects in JavaScript, where the variable reference is immutable, but the object’s properties can still be changed.
   first_appeared: javascript1
 - term: Pure Function
   definition: A function that always produces the same output for the same input and has no side effects.
   first_appeared: javascript1
 - term: Referential Transparency
-  definition: An expression that can be replaced with its value without changing the program's behavior, indicating no side effects and consistent results.
+  definition: An expression that can be replaced with its value without changing the program’s behavior, indicating no side effects and consistent results.
   first_appeared: javascript1
 - term: Side Effects
-  definition: Any state change that occurs outside of a function's local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+  definition: Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
   first_appeared: javascript1
 - term: Combinator
   definition: A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
@@ -167,7 +167,7 @@
   definition: A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
   first_appeared: typescript1
 - term: Transpiling
-  definition: A process where source code in one programming language is translated into another language with a similar level of abstraction, typically preserving the original code's structure and functionality.
+  definition: A process where source code in one programming language is translated into another language with a similar level of abstraction, typically preserving the original code’s structure and functionality.
   first_appeared: typescript1
 - term: Type Annotation
   definition: A syntax in TypeScript where types are explicitly specified for variables, function parameters, and return types to ensure type safety and correctness.
