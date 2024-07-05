@@ -9,8 +9,9 @@
   url: /html/
   description: |
     - Understand what makes HTML a declarative language and how it describes the structure and content of a web page.
-    - Comprehend the separation of concerns by differentiating structure (HTML), presentation (CSS), and behavior (JavaScript).
-    - Understand how to include and define a basic SVG element within an HTML document.
+    - Comprehend the separation of concerns by differentiating structure (HTML), presentation (CSS), and custom behaviour (JavaScript).
+    - Understand how to include and define a basic SVG element within an HTML document
+    - Start to appreciate the dangers of imperative programs with hidden side effects versus the transparency of declarative style programs
 - title: JavaScript Introduction
   url: /javascript1/
   description: |

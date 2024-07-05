@@ -6,8 +6,9 @@ title: "HTML as a Declarative Language"
 ## Learning Outcomes
 
 - Understand what makes HTML a declarative language and how it describes the structure and content of a web page.
-- Comprehend the separation of concerns by differentiating structure (HTML), presentation (CSS), and behavior (JavaScript).
-- Understand how to include and define a basic SVG element within an HTML document.
+- Comprehend the separation of concerns by differentiating structure (HTML), presentation (CSS), and custom behaviour (JavaScript).
+- Understand how to include and define a basic SVG element within an HTML document
+- Start to appreciate the dangers of imperative programs with hidden side effects versus the transparency of declarative style programs
 
 ## What is HTML?
 
@@ -122,38 +123,40 @@ Then can integrate a javascript by including a reference to a file, e.g., `scrip
 </body>
 ```
 
-We now create a function which encodes the precise steps to animate the rectangle at 60 FPS (the `setTimeout` call queues up each successive frame of animation).
+We now create a function which encodes the precise steps to animate the rectangle at 60 FPS (the `setTimeout` call queues up each successive frame of animation). If you have experience with other languages like python hopefully this will be understandable even if the syntax looks a bit unfamiliar.  If it's not completely clear yet don't worry. We'll point out the things that are important to note for now below, and [later we'll get into the nitty gritty of javascript syntax](javascript1).
 
 ```javascript
 // Define an animation function
 function animate(rect, startX, finalX, duration) {
-    const startTime = performance.now();
-    const endTime = startTime + duration;
-    function _animate() {
-    
+    const 
+      startTime = performance.now(),
+      endTime = startTime + duration;
+    function updateRectPosition() {
         // Calculate elapsed time
-        const currentTime = performance.now();
-        const elapsedTime = currentTime - startTime;
-        console.log(elapsedTime)
-    
+        const 
+          currentTime = performance.now(),
+          elapsedTime = currentTime - startTime;
+              
         // Check if animation duration has elapsed
-        if (elapsedTime >= duration) {        
+        if (elapsedTime >= duration) {
+            // Set the final position of the rectangle.
+            // We can use `setAttribute` to modify the HTML Element. In this case, we are changing the x attribute. 
             rect.setAttribute('x', finalX);
             return; // Stop the animation
         }
 
-        // Update position based on elapsed time and speed
+        // Calculate position based on elapsed time
         const x = startX + (finalX - startX) * elapsedTime / duration;
-    
-        // We can use `setAttribute` to change the variables of the HTML Element. In this case, we are changing the x attribute. 
+
+        // Set the intermediate position of the rectangle.
         rect.setAttribute('x', x);
     
         // Set timeout to call the animate function again
         setTimeout(() => {
-            _animate();
+            updateRectPosition();
         }, 1000 / 60); // 60 FPS
     }
-    _animate();
+    updateRectPosition();
 }
   
 const rectangle = document.getElementById('ourRectangle')
