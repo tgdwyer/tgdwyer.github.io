@@ -55,8 +55,7 @@ In summary, the languages we will study (in varying degrees of depth) will be As
 
 ## The Machine Level
 
-Conceptually, modern computer architecture deviates little from the von Neumann model proposed in 1945 by Hungarian-American computer scientist John von Neumann.  The development of the von Neumann model occurred shortly after the introduction of the theoretical Turing Machine concept.
-
+Conceptually, modern computer architecture deviates little from the von Neumann model proposed in 1945 by Hungarian-American computer scientist John von Neumann.  
 The von Neumann architecture was among the first to unify the concepts of data and programs.  That is, in a von Neumann architecture, a program is just data that can be loaded into memory.  A program is a list of instructions that read data from memory, manipulate it, and then write it back to memory.  This is much more flexible than previous computer designs which had stored the programs separately in a fixed (read-only) manner.
 
 The classic von Neumann model looks like so:
