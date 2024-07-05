@@ -32,6 +32,8 @@ HTML is considered a declarative language because it focuses on describing the s
 ## An Animated Rectangle Using SVG in HTML
 
 A [live version of the following code is available together with an online editor](https://stackblitz.com/edit/stackblitz-starters-6m6cfd?file=index.html) for you to experiment with.  Or you can create the files locally on your computer, all in the same directory, and drag-and-drop the `index.html` file into your browser to see the animation.
+We are going to build an HTML page with a blue rectangle animated declaratively by CSS, and a red rectangle animated imperatively using JavaScript, e.g.:
+![Animated Rectangles Screenshot](/assets/images/chapterImages/html/animatedrects.png)
 
 ### Step 1: Setting Up the HTML Document
 
@@ -72,10 +74,10 @@ Now, let’s add a rectangle `<rect>` element inside the SVG to represent the mo
 
 ```html
 <svg width="100" height="100">
-  <rect id="ourRectangle" x="10" y="10" width="20" height="20" fill="blue"/></svg>
+  <rect id="blueRectangle" x="10" y="10" width="20" height="20" fill="blue"/></svg>
 ```
 
-In this step, we’ve defined a rectangle with a starting position at coordinates (10, 10) and a width and height of 20 units each. The rectangle is filled with a blue color.  Importantly, we’ve given the `<rect>` element a unique id “ourRectangle” by which we can refer to it elsewhere, below we’ll demonstrate adding an animation behaviour to this rectangle using this id from CSS or JavaScript.
+In this step, we’ve defined a rectangle with a starting position at coordinates (10, 10) and a width and height of 20 units each. The rectangle is filled with a blue color.  Importantly, we’ve given the `<rect>` element a unique id “blueRectangle” by which we can refer to it elsewhere, below we’ll demonstrate adding an animation behaviour to this rectangle using this id from CSS or JavaScript.
 
 Most HTML elements, including SVG elements have certain attributes according to their documentation, which determine how they are rendered and behave in the browser. [MDN](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/rect) is normally a good reference for what is available to use.
 
@@ -93,7 +95,7 @@ There are many ways to achieve the same thing in HTML. We will now look at how a
 Now we create the `style.css` file as follows:
 
 ```css
-#ourRectangle {
+#blueRectangle {
     animation-name: moveX;
     animation-duration: 5s;
 }
@@ -114,13 +116,14 @@ This is a program of sorts (in that it causes a lot of computation to happen in 
 
 ### Alternate Step 4: Adding a custom animation from an imperative Javascript program
 
-By contrast, we can create an *imperative* JavaScript program which explicitly gives the list of instructions for *how* to move the rectangle. First, remove the `<link>` to the CSS that we created in the `<head>` element of the html file.
-Then can integrate a javascript by including a reference to a file, e.g., `script.js`
+By contrast, we can create an *imperative* JavaScript program which explicitly gives the list of instructions for *how* to move the rectangle. 
+We'll create another rectangle with the id "redRectangle" which we can manipulate from javascript by including a reference to a js file, e.g., `script.js`
 
 ```html
 <body>
   <svg width="100" height="100" id="svg">
-    <rect x="10" y="10" width="20" height="20" fill="blue" id="ourRectangle"/>
+    ...
+    <rect id="redRectangle" x="10" y="10" width="20" height="20" fill="red"/>
   </svg>
   <script src="script.js"></script>
 </body>
@@ -160,8 +163,7 @@ function animate(rect, startX, finalX, duration) {
     nextFrame();
 }
   
-const rectangle = document.getElementById('ourRectangle')
-// Start the animation
+const rectangle = document.getElementById('redRectangle')
 const duration = 5000; // 5 seconds in milliseconds
 animate(rectangle, 0, 370, duration);
 ```
