@@ -1,3 +1,18 @@
+- term: Imperative
+  definition: programs are a sequence of statements that change a programs state. This is probably the dominant paradigm for programming languages today. Languages from Assembler to Python are built around this concept and most modern languages still allow you to program in this style.
+  first_appeared: levelsofabstraction
+- term: Procedural
+  definition: languages are basically imperative in nature, but add the concept of named procedures, i.e. named subroutines that may be invoked from elsewhere in the program, with parameterised variables that may be passed in.
+  first_appeared: levelsofabstraction
+- term: Object-oriented
+  definition: languages are built around the concept of objects where an objects captures the set of data (state) and behaviours (methods) associated with entities in the system.
+  first_appeared: levelsofabstraction
+- term: Declarative
+  definition: languages focus on declaring what a procedure (or function) should do rather than how it should do it.
+  first_appeared: levelsofabstraction
+- term: Functional
+  definition: languages are built around the concept of composable functions. Such languages support higher order functions which can take other functions as arguments or return new functions as their result, following the rules of the Lambda Calculus.
+  first_appeared: levelsofabstraction
 - term: Anonymous Function
   definition: A function defined without a name, often used as an argument to other functions. Also known as lambda function.
   first_appeared: javascript1
