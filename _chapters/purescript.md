@@ -19,7 +19,7 @@ There are a number of efforts to bring Haskell-like purity to web programming, i
 
 The JavaScript-targeting Haskell derivative we are going to look at now is [PureScript](https://www.purescript.org/).  The reason for this choice is that PureScript generates standalone and surprisingly readable JavaScript.  For a full introduction to the language, [the PureScript Book](https://leanpub.com/purescript/read), written by the language’s creator, is available for free.  However, in this unit we will only make a brief foray into PureScript as a segue from JavaScript to Haskell.  To avoid overwhelming ourselves with minor syntactic differences we will also endeavor to stick to a subset of PureScript that is syntactically the same as Haskell.
 
-## Hello Functional Language!
+## Hello Functional Language
 
 Without further ado, here is some PureScript code.  Fibonacci number computation is often called the “hello world!” of functional programming:
 
@@ -40,14 +40,29 @@ fibs -1
 
 would be a bad idea.  Good practice would be to add some exceptions for incorrect input to our function.  In a perfect world we would have a compiler that would check types dependent on values (actually, languages that support dependent types exist, e.g. the [Idris](https://www.idris-lang.org/) language is an interesting possible successor to Haskell in this space).
 
-One thing you will have noticed by now is that Haskell-like languages are light on syntax.  Especially, use of brackets is minimal, and typically to be avoided when evaluation order can be inferred correctly by the compiler’s application of lambda-calculus inspired precedence rules for function and operator application.
+Python3.10+ has taken inspiration from this pattern, and has its own alternative to pattern matching, with a slightly more verbose syntax. This is semantically identical to the PureScript definition, where we use pattern matching against the inputs. For completeness, all functions should aim to provide the type definition, similar to what we did in the PureScript example.
+
+```python
+def fibs(n: int) -> int:
+    match n:
+        case 0:
+            return 1
+        case 1: 
+            return 1
+        case _:
+            return fibs(n - 1) + fibs(n-2) 
+
+print(fibs(12))
+```
+
+One thing you will have noticed by now is that Haskell-like languages are light on syntax, this is obvious when compared next to the Python alternative.  Especially, use of brackets is minimal, and typically to be avoided when evaluation order can be inferred correctly by the compiler’s application of lambda-calculus inspired precedence rules for function and operator application.
 
 We can define a `main` function for our program, that maps the `fibs` function to a (`Nil`-terminated) linked-list of numbers and displays them to the console like so:
 
 ```haskell
 main = log $ show $ map fibs $ 1..10
 ```
- 
+
 and here’s the output when you run it from the command line:
 
 > (1 : 2 : 3 : 5 : 8 : 13 : 21 : 34 : 55 : 89 : Nil)
@@ -74,12 +89,13 @@ apply f x = f x
 
 Woah!  What is f and what is `x`?  Well, in PureScript functions are generic by default - but we (and the compiler) can infer, since f x  is a function call with argument x, that f is a function and x is… anything.  So apply literally applies the function f to the argument x.  Since the binding precedence of the `$` operator is so low compared to most things that could be placed to its right, brackets are (usually) unnecessary.
 
----------
+---
+
 ### Exercise
 
 * If one didn’t happen to like the fact that function chaining with the $ operator reads right to left, how would one go about creating an operator that chains left to right?  (Hint: infixl is a thing and you will need to make a slightly different apply function also).
 
-----------
+---
 
 So anyway, back to the chain of functions in `main`:
 
@@ -108,7 +124,7 @@ var fibs = function (v) {
 }; 
 ```
 
-Woah!  It’s pretty much the way a savvy JavaScript programmer would write it.  The one part that may look a bit unusual are the expressions like `v - 1 | 0`.  Of course, JavaScript has no `Int` type, so this is PureScript trying to sensibly convert to the all-purpose JavaScript `number` type.  The `|` is a bitwise OR, so `|0` ensures that resulting expression is an integer which is both [a safety measure and a potential optimisation](https://stackoverflow.com/questions/44778826/why-does-the-purescript-compiler-generate-lots-of-0).  It's a situation where the declared types give the PureScript compiler more information about the intent of the code than would otherwise be present in JavaScript, and which it's able to use to good effect.
+Woah!  It’s pretty much the way a savvy JavaScript programmer would write it.  The one part that may look a bit unusual are the expressions like `v - 1 | 0`.  Of course, JavaScript has no `Int` type, so this is PureScript trying to sensibly convert to the all-purpose JavaScript `number` type.  The `|` is a bitwise OR, so `|0` ensures that resulting expression is an integer which is both [a safety measure and a potential optimisation](https://stackoverflow.com/questions/44778826/why-does-the-purescript-compiler-generate-lots-of-0).  It’s a situation where the declared types give the PureScript compiler more information about the intent of the code than would otherwise be present in JavaScript, and which it’s able to use to good effect.
 
 At first glance the code generated for `main` is a bit denser.  Here it is, again as generated by the compiler but I’ve inserted some line breaks so we can see it a little more clearly:
 
@@ -120,23 +136,24 @@ var main = Control_Monad_Eff_Console.log(
     Data_Functor.map
      (Data_List_Types.functorList)(fibs)(Data_List.range(1)(10))
   )
-); 
+);
 ```
 
 Each of the functions lives in an object that encapsulates the module where it is defined.  That’s pretty standard JavaScript practice.  The rest is just function calls (application).  The call to the range function is interesting:
 
 ```javascript
-Data_List.range(1)(10) 
+Data_List.range(1)(10)
 ```
 
 Woah! It’s a curried function!  Data_List.range(1) returns a function that creates lists of numbers starting from 1.  The second call specifies the upper bound.
 
----------
+---
+
 ### Exercise
 
 * What other functions called in the JavaScript code generated for the above definition of `main` are curried?  Why?
 
--------------
+---
 
 ## Tail Call Optimisation
 
@@ -188,3 +205,9 @@ var fibs = function (n) {
 Obviously, it’s a less direct translation than was generated for our previous version of `fibs`.  However, you can fairly easily understand it still.  Hint, the `tco_` prefix in many of the generated variable names stands for “Tail Call Optimisation” and the local function `f` is a curried function, as are all functions of more than one argument in PureScript.  The important thing is that the recursive call is gone, replaced by a while loop.
 
 We have seen all we need for now of PureScript.  It’s a small but nicely put together language.  It takes the best features of Haskell and reinterprets some of them quite cleverly to achieve relatively seamless interop with JavaScript.  However, it’s still a bit niche.  For the remainder of this unit [we’ll dive more deeply into Haskell](/haskell1/), which has a long history and is supported by a very large and active community across academia and industry.
+
+## Glossary
+
+*Pattern Matching*: A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
+
+*Tail Call Optimisation*: A compiler feature that optimises tail-recursive functions to prevent additional stack frames from being created, effectively converting recursion into iteration.1

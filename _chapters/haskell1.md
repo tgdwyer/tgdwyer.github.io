@@ -13,11 +13,11 @@ title: "Creating and Running Haskell Programs"
 
 ## Introduction
 
-This section is not your usual "First Introduction To Haskell" because it assumes you have arrived here having already studied some reasonably sophisticated functional programming concepts in JavaScript, basic parametric polymorphic types in [TypeScript](/typescript/), and [Lambda Calculus](/lambdacalculus).  Familiarity with [higher-order](/higherorderfunctions/) and [curried functions](/functionaljavascript/) is assumed.  
+This section is not your usual “First Introduction To Haskell” because it assumes you have arrived here having already studied some reasonably sophisticated functional programming concepts in JavaScript, basic parametric polymorphic types in [TypeScript](/typescript/), and [Lambda Calculus](/lambdacalculus).  Familiarity with [higher-order](/higherorderfunctions/) and [curried functions](/functionaljavascript/) is assumed.  
 
-I try to summarise the syntax we use with "cheatsheets" throughout, but [the official CheatSheet](https://hackage.haskell.org/package/CheatSheet-1.10/src/CheatSheet.pdf) will be a useful reference.  The other reference every Haskell programmer needs is the official library docs on [Hackage](https://hackage.haskell.org/) which is searchable by the excellent [Hoogle](https://hoogle.haskell.org/) search engine, which lets you search by types as well as function keywords.
+I try to summarise the syntax we use with “cheatsheets” throughout, but [the official CheatSheet](https://hackage.haskell.org/package/CheatSheet-1.10/src/CheatSheet.pdf) will be a useful reference.  The other reference every Haskell programmer needs is the official library docs on [Hackage](https://hackage.haskell.org/) which is searchable by the excellent [Hoogle](https://hoogle.haskell.org/) search engine, which lets you search by types as well as function keywords.
 
-If you would like a more gradual introduction, ["Haskell Programming from First Principles” by Allen and Moronuki](http://haskellbook.com/) is a recent and excellent introduction to Haskell that is quite compatible with the goals of this course.  The ebook is not too expensive, but unfortunately, it is independently published and hence not available from our library.  There are a few copies of [Programming Haskell by Hutton](https://monash.hosted.exlibrisgroup.com/permalink/f/31uhmh/catau21316253770001751) which is an excellent academic textbook, but it's expensive to buy.  [”Learn you a Haskell” by Miran Lipovaca](http://learnyouahaskell.com/) is a freely available alternative that is also a useful introduction.  
+If you would like a more gradual introduction, [“Haskell Programming from First Principles” by Allen and Moronuki](http://haskellbook.com/) is a recent and excellent introduction to Haskell that is quite compatible with the goals of this course.  The ebook is not too expensive, but unfortunately, it is independently published and hence not available from our library.  There are a few copies of [Programming Haskell by Hutton](https://monash.hosted.exlibrisgroup.com/permalink/f/31uhmh/catau21316253770001751) which is an excellent academic textbook, but it’s expensive to buy.  [“Learn you a Haskell” by Miran Lipovaca](https://learnyouahaskell.github.io/) is a freely available alternative that is also a useful introduction.  
 
 ## Starting with the GHCi REPL
 
@@ -33,49 +33,59 @@ fibs n = fibs (n-1) + fibs (n-2) -- recursive definition
 
 Then load it into GHCi like so:
 
-```haskell
-$ stack ghci fibs.hs  
+```bash
+stack ghci fibs.hs  
 ```
 
-You'll get a prompt that looks like:
+You’ll get a prompt that looks like:
 
 ```haskell
 Prelude>
 ```
-Where the text left of the `>` tells you what libraries are loaded into the current scope.  "Prelude" is the default library which already includes everything we need for this chapter. 
+
+Where the text left of the `>` tells you what libraries are loaded into the current scope.  “Prelude” is the default library which already includes everything we need for this chapter.
 
 You can enter haskell expressions directly at the prompt:
+
 ```haskell
 Prelude> fibs 6
 ```
+
 > 13  
- 
-I'm going to stop showing the prompt now, but you can enter all of the following directly at the prompt and you will see similar results printed to those indicated below.
+
+I’m going to stop showing the prompt now, but you can enter all of the following directly at the prompt and you will see similar results printed to those indicated below.
 
 Basic logic operators are similar to C/Java/etc: `==`, `&&`, `||`.  
+
 ```haskell
 fibs 6 == 13
 ```
+
 > True
 
-An exception is "not-equal", whose operator is `/=` (Haskell tends to prefer more "mathy" syntax whenever possible).
+An exception is “not-equal”, whose operator is `/=` (Haskell tends to prefer more “mathy” syntax whenever possible).
+
 ```haskell
 fibs 6 /= 13
 ```
+
 > False
 
 If-then-else expressions return a result (like javascript ternary `? :`)
+
 ```haskell
 if fibs 6 == 13 then "yes" else "no"
 ```
+
 > "yes"
 
 ```haskell
 if fibs 6 == 13 && fibs 7 == 12 then "yes" else "no"
 ```
+
 >"no"
 
-GHCi also has a number of non-haskell commands you can enter from the prompt, they are prefixed by "`:`".
+GHCi also has a number of non-haskell commands you can enter from the prompt, they are prefixed by `:`.
 You can reload your .hs file into ghci after an edit with `:r`.  Type `:h` for help.
 
 You can declare local variables in the `repl`:
@@ -88,7 +98,7 @@ x + y
 
 > 7
 
-One of Haskell's distinguishing features from other languages is that its variables are strictly immutable (i.e. not variable at all really).  This is similar to variables declared with JavaScript's `const` keyword - but everything in Haskell is deeply immutable by default.
+One of Haskell’s distinguishing features from other languages is that its variables are strictly immutable (i.e. not variable at all really).  This is similar to variables declared with JavaScript’s `const` keyword - but everything in Haskell is deeply immutable by default.
 
 However, in the GHCi REPL, you can redefine variables and haskell will not complain.
 
@@ -105,20 +115,21 @@ I’ve included the type signature for main although it’s not absolutely neces
 
 What this tells us is that the main function produces an IO side effect.  This mechanism is what allows Haskell to be a pure functional programming language while still allowing you to get useful stuff done.  Side effects can happen, but when they do occur they must be neatly bundled up and declared to the type system, in this case through the `IO` monad.  For functions without side-effects, we have strong, compiler-checked guarantees that this is indeed so (that they are *pure*).
 
-By the way, once you are in the `IO` monad, you can’t easily get rid of it.  Any function that calls a function that returns an `IO` monad, must have `IO` in its return type.  Thus, effectful code is possible, but the type system ensures we are aware of it and can limit its taint.  The general strategy is to use pure functions wherever possible, and push the effectful code as high in your call hierarchy as possible -- that is, limit the size and scope of impure code as much as possible.  Pure functions are much more easily reusable in different contexts.
+By the way, once you are in the `IO` monad, you can’t easily get rid of it.  Any function that calls a function that returns an `IO` monad, must have `IO` in its return type.  Thus, effectful code is possible, but the type system ensures we are aware of it and can limit its taint.  The general strategy is to use pure functions wherever possible, and push the effectful code as high in your call hierarchy as possible—that is, limit the size and scope of impure code as much as possible.  Pure functions are much more easily reusable in different contexts.
 
-The `print` function is equivalent to the PureScript `log $ show`.  That is, it uses any available `show` function for the type of value being printed to convert it to a string, and it then prints that string.  Haskell defines show for many types in the Prelude, but print in this case invokes it for us.  The other difference here is that square brackets operators are defined in the prelude for linked lists.  In PureScript they were used for Arrays - which (in PureScript) don’t have the range operator (`..`) defined so I avoided them.  Speaking of List operators, here's a summary:
+The `print` function is equivalent to the PureScript `log $ show`.  That is, it uses any available `show` function for the type of value being printed to convert it to a string, and it then prints that string.  Haskell defines show for many types in the Prelude, but print in this case invokes it for us.  The other difference here is that square brackets operators are defined in the prelude for linked lists.  In PureScript they were used for Arrays - which (in PureScript) don’t have the range operator (`..`) defined so I avoided them.  Speaking of List operators, here’s a summary:
 
 <div class="cheatsheet" markdown="1">
 
 ## Basic List and Tuple Operator Cheatsheet
 
 The default Haskell lists are cons lists (linked lists defined with a `cons` function), similar to [those we defined in JavaScript](/functionaljavascript/#computation-with-pure-functions).
+
 ```haskell
 []           -- an empty list
 [1,2,3,4]    -- a simple lists of values
 [1..4]       -- ==[1,2,3,4] (..) is range operator
-1:[2,3,4]    -- ==[1,2,3,4], use `:` to "cons" an element to the start of a list
+1:[2,3,4]    -- ==[1,2,3,4], use `:` to “cons” an element to the start of a list
 1:2:3:[4]    -- ==[1,2,3,4], you can chain `:`
 [1,2]++[3,4] -- ==[1,2,3,4], i.e. (++) is concat
 
@@ -126,7 +137,7 @@ The default Haskell lists are cons lists (linked lists defined with a `cons` fun
 -- Not the enclosing `()` to delimit the pattern for the parameter.
 length [] = 0
 length (x:xs) = 1 + length xs
--- (although you don't need to define `length`, it's already loaded by the prelude)
+-- (although you don’t need to define `length`, it’s already loaded by the prelude)
 
 length [1,2,3]
 ```
@@ -146,7 +157,8 @@ maximum [1,2,3] -- 3
 map f [1,2,3] -- maps the function f over the elements of the list returning the result in another list
 ```
 
-Tuples are fixed-length collections of values that may not necessarily be of the same type.  They are enclosed in `()` 
+Tuples are fixed-length collections of values that may not necessarily be of the same type.  They are enclosed in `()`
+
 ```haskell
 t = (1,"hello") -- define variable t to a tuple of an Int and a String.
 fst t
@@ -154,44 +166,47 @@ fst t
 
 > 1
 
-```
+```haskell
 snd t
 ```
 
 > "hello"
 
 And you can destructure and pattern match tuples:
-```
+
+```haskell
 (a,b) = t
 a
 ```
+
 > 1
 
-```
+```haskell
 b
 ```
+
 > "hello"
 
-Note that we created tuples in JavaScript using `[]` -- actually they were fixed-length arrays, don't confuse them for Haskell lists or tuples.
+Note that we created tuples in JavaScript using `[]`—actually they were fixed-length arrays, don’t confuse them for Haskell lists or tuples.
 </div>
 
 ## Lazy by Default
 
-Haskell strategy for evaluating expressions is lazy by default -- that is it defers evaluation of expressions until it absolutely must produce a value.  Laziness is of course possible in other languages ([as we have seen in JavaScript](/lazyevaluation/)), and there are many lazy data-structures defined and available for PureScript (and most other functional languages).
+Haskell strategy for evaluating expressions is lazy by default—that is it defers evaluation of expressions until it absolutely must produce a value.  Laziness is of course possible in other languages ([as we have seen in JavaScript](/lazyevaluation/)), and there are many lazy data-structures defined and available for PureScript (and most other functional languages).
 Conversely, Haskell can be [forced to use strict evaluation](https://wiki.haskell.org/Performance/Strictness) and has libraries of datastructures with strict semantics if you need them.
 
 However, lazy by default sets Haskell apart.  It has pros and cons, on the pro side:
 
-* It can make certain operations more efficient, for example, we have already seen in JavaScript how it can make streaming of large data efficient
-* It can enable infinite sequences to be defined and used efficiently (this is a significant semantic difference)
-* It opens up possibilities for the compiler to be really quite smart about its optimisations.
+- It can make certain operations more efficient, for example, we have already seen in JavaScript how it can make streaming of large data efficient
+- It can enable infinite sequences to be defined and used efficiently (this is a significant semantic difference)
+- It opens up possibilities for the compiler to be really quite smart about its optimisations.
 
 But there are definitely cons:
 
-* It can be hard to reason about run-time performance
-* Mixing up strict and lazy evaluation (which can happen inadvertently) can lead to (for example) O(n<sup>2</sup>) behaviour in what should be linear time processing.
+- It can be hard to reason about run-time performance
+- Mixing up strict and lazy evaluation (which can happen inadvertently) can lead to (for example) O(n<sup>2</sup>) behaviour in what should be linear time processing.
 
---------
+---
 
 ### A Side Note on the Y Combinator
 
@@ -222,18 +237,19 @@ y :: (a -> a) -> a
 y = \f -> (\x -> f (unsafeCoerce x x)) (\x -> f (unsafeCoerce x x))
 main = putStrLn $ y ("circular reasoning works because " ++)
 ```
-------------
+
+---
 
 ## Functional Programming in Haskell versus JavaScript
 
 Consider the following pseudocode for a simple recursive definition of the Quick Sort algorithm:
 
-```
+```lambdacalc
 QuickSort list:
   Take head of list as a pivot  
   Take tail of list as rest
   return 
-	QuickSort( elements of rest < pivot ) ++ (pivot : QuickSort( elements of rest >= pivot ))
+ QuickSort( elements of rest < pivot ) ++ (pivot : QuickSort( elements of rest >= pivot ))
 ```
 
 We’ve added a bit of notation here: `a : l` inserts a (“cons”es) to the front of a list `l` ; `l1 ++ l2` is the concatenation of lists `l1` and `l2`.
@@ -265,7 +281,7 @@ sort (pivot:rest) = lesser ++ [pivot] ++ greater
     greater = sort $ filter (>=pivot) rest
 ```
 
-An essential thing to know before trying to type in the above function is that Haskell delimits the scope of multi-line function definitions (and all multiline expressions) with indentation ([complete indentation rules reference here]([indentation](https://en.wikibooks.org/wiki/Haskell/Indentation))). The `where` keyword lets us create multiple function definitions that are visible within the scope of the parent function, but they must all be left-aligned with each other and to the right of the start of the line containing the `where` keyword.
+An essential thing to know before trying to type in the above function is that Haskell delimits the scope of multi-line function definitions (and all multiline expressions) with indentation ([complete indentation rules reference here](https://en.wikibooks.org/wiki/Haskell/Indentation)). The `where` keyword lets us create multiple function definitions that are visible within the scope of the parent function, but they must all be left-aligned with each other and to the right of the start of the line containing the `where` keyword.
 
 Haskell also helps with a number of other language features.  
 First, is pattern matching.  Pattern matching is like function overloading that you may be familiar with from languages like Java or C++ - where the compiler matches the version of the function to invoke for a given call by matching the type of the parameters to the type of the call - except in Haskell the compiler goes a bit deeper to inspect the values of the parameters.  
@@ -287,7 +303,7 @@ I deliberately avoided the type declaration for the above function because, (1) 
 sort :: Ord t => [t] -> [t]
 ```
 
-Thus, the function sort has a generic type-parameter `t` (we'll talk more about such [parametric polymorphism in haskell](/haskell2/#type-parameters-and-polymorphism) later) which is constrained to be in the `Ord` type class (anything that is orderable - we'll talk more about [type classes](/haskell2/#typeclasses) too).  It’s input parameter is a list of `t`, as is its return type.  This is also precisely the syntax that one would use to declare the type explicitly.  Usually, for all top-level functions in a Haskell file it is good practice to explicitly give the type declaration.  Although, it is not always necessary, it can avoid ambiguity in many situations, and secondly, once you get good at reading Haskell types, it becomes useful documentation.
+Thus, the function sort has a generic type-parameter `t` (we’ll talk more about such [parametric polymorphism in haskell](/haskell2/#type-parameters-and-polymorphism) later) which is constrained to be in the `Ord` type class (anything that is orderable - we’ll talk more about [type classes](/haskell2/#typeclasses) too).  It’s input parameter is a list of `t`, as is its return type.  This is also precisely the syntax that one would use to declare the type explicitly.  Usually, for all top-level functions in a Haskell file it is good practice to explicitly give the type declaration.  Although, it is not always necessary, it can avoid ambiguity in many situations, and secondly, once you get good at reading Haskell types, it becomes useful documentation.
 
 Here’s another refactoring of the quick-sort code.  This time with type declaration because I just said it was the right thing to do:
 
@@ -303,7 +319,7 @@ sort (pivot:rest) = below pivot rest ++ [pivot] ++ above pivot rest
 
 The `list` parameter for `below` and `above` has been eta-reduced away just as we were able to [eta-reduce lambda calculus expressions](/lambdacalculus/#lambda-calculus-cheatsheet).  The definition of the `partition` function in this version uses the `.` operator for [function composition](/higherorderfunctions/#composition).  That is, `partition comparison` is the composition of `sort` and `filter comparison` and again the `list` parameter is eta-reduced away.  
 
-Although it looks like the comparison parameter could also go away here with eta conversion, actually the low precedence of the `.` operator means there is (effectively) implicit parentheses around filter comparison.  We will see how to [more agressively refactor code to be point-free later](/haskell3/#point-free-code).
+Although it looks like the comparison parameter could also go away here with eta conversion, actually the low precedence of the `.` operator means there is (effectively) implicit parentheses around filter comparison.  We will see how to [more aggressively refactor code to be point-free later](/haskell3/#point-free-code).
 
 The idea of refactoring our code into the above form was to demonstrate the freedom that Haskell gives us to express logic
 in a way that makes sense to us.  This version reads almost like a natural language declarative definition of the algorithm.  That is, you can read:
@@ -313,7 +329,7 @@ sort (pivot:rest) = below pivot rest ++ [pivot] ++ above pivot rest
 ```
 
 as:
-> the sort of a list where we take the first element as the 'pivot' and everything after the list as 'rest' is
+> the sort of a list where we take the first element as the “pivot” and everything after the list as “rest” is
 > everything that is below pivot in rest,  
 > concatenated with a list containing just the pivot,  
 > concatenated with everything that is above pivot in rest.
@@ -334,7 +350,6 @@ sort (pivot:rest) = let
 
 Note that where is only available in function declarations, not inside expressions and therefore is not available in a lambda.  However, let, in is part of the expression, and therefore available inside a lambda function.  A silly example would be:  `\i -> let f x = 2*x in f i`, which could also be spread across lines, but be careful to get the correct indentation.
 
-
 <div class="cheatsheet" markdown="1">
 
 ## Conditional Code Constructs Cheatsheet
@@ -342,6 +357,7 @@ Note that where is only available in function declarations, not inside expressio
 ### Pattern matching
 
 Provides alternative cases for function definitions matching different values or possible destructurings of the function arguments ([more detail](/haskell2#pattern-matching)).  As per examples above and:
+
 ```haskell
 fibs 0 = 1
 fibs 1 = 1
@@ -349,17 +365,22 @@ fibs n = fibs (n-1) + fibs (n-2)
 ```
 
 ### if-then-else
-```
+
+```haskell
   If <condition> then <case 1> else <case2>   
 ```
+
 just like javascript ternary if operator: `<condition> ? <case 1> : <case 3>`
 
 ```haskell
 fibs n = if n==0 then 1 else if n==1 then 1 else fibs (n-1) + fibs (n-2)
  
 ```
+
 ### Guards
+
 Can test Bool expressions (i.e. not just values matching as in pattern matching)
+
 ```haskell
 fibs n
   | n == 0 = 1
@@ -367,6 +388,7 @@ fibs n
   |otherwise = fibs (n-1) + fibs (n-2)
 
 ```
+
 ### case
 
 ```haskell
@@ -375,4 +397,27 @@ fibs n = case n of
   1 -> 1
   otherwise -> fibs (n-1) + fibs (n-2)
 ```
+
 </div>
+
+## Glossary
+
+*GHCi REPL*: The interactive Read-Eval-Print Loop for GHC, the Glasgow Haskell Compiler, allowing users to test Haskell programs and expressions interactively.
+
+*Pattern Matching*: A mechanism in Haskell that checks a value against a pattern. It is used to simplify code by specifying different actions for different input patterns.
+
+*Guards*: A feature in Haskell used to test boolean expressions. They provide a way to conditionally execute code based on the results of boolean expressions.
+
+*Where Clauses*: A way to define local bindings in Haskell, allowing variables or functions to be used within a function body.
+
+*Let Clauses*: A way to bind variables or functions within an expression in Haskell, allowing for more localized definitions.
+
+*Hoogle*: A Haskell API search engine that allows users to search for functions by name or by type signature.
+
+*Prelude*: The default library loaded in Haskell that includes basic functions and operators.
+
+*Case Expressions*: A way to perform pattern matching in Haskell that allows for more complex conditional logic within expressions.
+
+*Type Class*: A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+
+*Unit*: A type with exactly one value, (), used to indicate the absence of meaningful return value, similar to void in other languages.

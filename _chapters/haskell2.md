@@ -6,12 +6,12 @@ title: "Data Types and Type Classes"
 
 ## Learning Outcomes
 
-- Define data structures using Haskell's [Algebraic Data Types](#algebraic-data-types) and use [pattern matching](#pattern-matching) to define functions that handle each of the possible instances
+- Define data structures using Haskell’s [Algebraic Data Types](#algebraic-data-types) and use [pattern matching](#pattern-matching) to define functions that handle each of the possible instances
 - Use the alternate [record syntax](#record-syntax) to define data structures with named fields
 - Understand that Haskell [type classes](#typeclasses) are similar to TypeScript interfaces in providing a definition for the set of functions that must be available for instances of those type classes and that typeclasses can extend upon one another to create rich hierarchies
 - Understand that the [Maybe](#maybe) type provides an elegant way to handle *partial functions*.
 
-## Algebraic Data Types
+## Algebraic Data Types (ADTs)
 
 We can declare custom types for data in Haskell using the `data` keyword.  Consider the following declaration of our familiar cons list:
 
@@ -28,6 +28,25 @@ Now we can create a small list like so:
 ```haskell
 l = Cons 1 $ Cons 2 $ Cons 3 Nil  
 ```
+
+### Aside: data vs newtype
+
+We can construct a type `UserId` with one parameter, `Int`
+
+```haskell
+data UserId = UserId Int
+newtype UserId = UserId Int
+
+These are almost identical, and we can use them both equivallentally, e.g., 
+
+```haskell
+student :: UserId
+student = UserId 1337
+```
+
+The `newtype` keyword is used to define a type that has **exactly** one constructor with **exactly** one field. It is primarily used for creating a distinct type from an existing type with *zero runtime* overhead. This can be useful for adding type safety to your code by creating new types that are distinct from their underlying types or giving types a greater semantic meaning, e.g., a UserId compared to an Int.
+
+The data keyword is used to define an algebraic data type (ADT). This allows for the creation of complex data structures that can have multiple constructors. Each constructor can take zero or more arguments, and these arguments can be of any type.
 
 ## Pattern Matching
 
@@ -53,7 +72,7 @@ intListLength (_:rest) = 1 + intListLength rest
 
 ## Type Parameters and Polymorphism
 
-Similar to TypeScript Haskell provides *parametric polymorphism*.  That is, the type definitions for functions and data structures (defined with `data` like the `ConsList` above) can have type parameters (AKA type variables).  For example, the definition `intListLength` above is defined to only work with lists with `Int` elements.  This seems a silly restriction because in this function we don't actually do anything with the elements themselves.  Below, we introduce the type parameter `a` so that the `length` function will able to work with lists of any type of elements.
+Similar to TypeScript, Haskell provides *parametric polymorphism*.  That is, the type definitions for functions and data structures (defined with `data` like the `ConsList` above) can have type parameters (AKA type variables).  For example, the definition `intListLength` above is defined to only work with lists with `Int` elements.  This seems a silly restriction because in this function we don’t actually do anything with the elements themselves.  Below, we introduce the type parameter `a` so that the `length` function will able to work with lists of any type of elements.
 
 ```haskell
 length :: [a] -> Int -- a is a type parameter
@@ -61,7 +80,7 @@ length [] = 0
 length (_:rest) = 1 + length rest
 ```
 
-The following visual summary shows pair data structures with accessor functions `fst` and `sec` defined using [Record Syntax](#record-syntax) with varying degrees of type flexibility, and compared with the equivalent [typescript generic notation](/typescript1#generic-types):
+The following visual summary shows pair data structures with accessor functions `fst` and `sec` defined using [Record Syntax](#record-syntax) with varying degrees of type flexibility, and compared with the equivalent [TypeScript generic notation](/typescript1#generic-types):
 
 - Hard-coded for `Int` pairs only
 - with one type parameter (by convention called `a` in Haskell, and `T` in TypeScript)
@@ -71,16 +90,18 @@ The following visual summary shows pair data structures with accessor functions 
 
 ## Type Kinds
 
-GHCi allows you to use the `:kind` (or `:k`) command to interrogate the *Kind* of types -- think of it as "meta information" about types and their type parameters.  The kind syntax indicates the *arity* or number of type parameters a type has.  Note that it is like the syntax for function types (with the `->`), you can think of it as information about what is required in terms of type parameters to instantiate the type.  If the constructor takes no type parameters the kind is just `*`, (it returns a type), `*->*` if it takes one type parameter, `*->*->*` for two type parameters and so on.
+GHCi allows you to use the `:kind` (or `:k`) command to interrogate the *Kind* of types -- think of it as “meta information” about types and their type parameters.  The kind syntax indicates the *arity* or number of type parameters a type has.  Note that it is like the syntax for function types (with the `->`), you can think of it as information about what is required in terms of type parameters to instantiate the type.  If the constructor takes no type parameters the kind is just `*`, (it returns a type), `*->*` if it takes one type parameter, `*->*->*` for two type parameters and so on.
 
 ![Polymorphism Summary](/assets/images/chapterImages/haskell2/kinds.png)
 
-Another sort of "kind" are for [type classes](#typeclasses) which we will introduce more properly in a moment.
-For example, the "kind" for the `Ord` type class (the class of things that are Orderable and which we came across in [our simple  implementation of quicksort](/haskell1#functional-programming-in-haskell-versus-javascript)) is:
+Another sort of “kind” are for [type classes](#typeclasses) which we will introduce more properly in a moment.
+For example, the “kind” for the `Ord` type class (the class of things that are Orderable and which we came across in [our simple  implementation of quicksort](/haskell1#functional-programming-in-haskell-versus-javascript)) is:
+
 ```haskell
 > :k Ord
 Ord :: * -> Constraint
 ```
+
 This tells us that `Ord` takes one type parameter (for example it could be an `Int` or other numeric type, or something more complex like the `Student` type below), and returns a `Constraint` rather than an actual type.  Such a constraint is used to narrow the set of types to which a function may be applied, just as we saw `Ord` being used as the type constraint for `sort`:
 
 ```haskell
@@ -90,7 +111,7 @@ sort :: Ord t => [t] -> [t]
 
 ## Record Syntax
 
-Consider the following simple record data type: 
+Consider the following simple record data type:
 
 ```haskell
 data Student = Student Int String Int 
@@ -158,11 +179,13 @@ instance Num Int -- Defined in `GHC.Num'
 instance Num Float -- Defined in `GHC.Float'
 instance Num Double -- Defined in `GHC.Float' 
 ```
+
 The first line (beginning `class`) tells us that for a type to be an instance of the `Num` typeclass, it must provide the operators `+`, `*` and the functions `abs`, `signum` and `fromInteger`, and either `(-)` or `negate`.  The last is an option because a default definition exists for each in terms of the other.  The last five lines (beginning with “`instance`”) tell us which types have been declared as instances of `Num` and hence have definitions of the necessary functions.  These are `Word`, `Integer`, `Int`, `Float` and `Double`.  Obviously this is a much more finely grained set of types than JavaScript’s universal “`number`” type.  This granularity allows the type system to guard against improper use of numbers that might result in loss in precision or division by zero.
 
 The main numeric type we will use in this course is `Int`, i.e. fixed-precision integers.
 
 Note some obvious operations we would likely need to perform on numbers that are missing from the `Num` typeclass.  For example, equality checking.  This is defined in a separate type class `Eq`, that is also instanced by concrete numeric types like `Int`:
+
 ```haskell
 > :i Eq
 class Eq a where
@@ -175,6 +198,7 @@ instance Eq Int
 ```
 
 Note again that instances need implement only `==` or `/=` (not equal to), since each can be easily defined in terms of the other.  Still we are missing some obviously important operations, e.g., what about greater-than and less-than?  These are defined in the `Ord` type class:
+
 ```haskell
 > :i Ord
 class Eq a => Ord a where
@@ -260,7 +284,9 @@ Nothing
 ```
 
 We can use pattern matching to extract values from a `Maybe` (when we have `Just` a value), or to perform some sensible default behaviour when we have `Nothing`.
+
 ```haskell
+printNumber :: String -> IO ()
 printNumber name = msg $ lookup name phonebook
 where
    msg (Just number)  = print number
@@ -271,3 +297,34 @@ where
 *GHCi> printNumber "Tim"
 "Tim not found in database"
 ```
+
+We can also do this using a [case statement](/haskell1#conditional-code-constructs-cheatsheet) statement
+
+```haskell
+printNumber :: String -> IO ()
+printNumber name = msg $ lookup name phonebook
+where
+   msg value = case value of
+    (Just number) -> print number
+    _             -> print $ name ++ " not found in database"
+````
+
+Here we use the wildcard `_` to match any other possible value, in this case, there is only one other value, `Nothing`.
+
+## Glossary
+
+*Algebraic Data Types (ADTs)*: Custom data types in Haskell defined using the data keyword, allowing the combination of different types into one composite type using the | operator.
+
+*Record Syntax*: An alternate way to define data structures in Haskell with named fields, automatically creating accessor functions for those fields.
+
+*Type Classes*: A way in Haskell to associate functions with types, similar to TypeScript interfaces. They define a set of functions that must be available for instances of those type classes.
+
+*Constraint*: A restriction on type parameters in Haskell, specifying that a type must belong to a certain type class.
+
+*Type Kind*: Meta-information about types and their type parameters in Haskell, indicating the number of type parameters a type has and the type it returns.
+
+*Maybe*: A built-in type in Haskell used to represent optional values, allowing functions to return either Just a value or Nothing to handle cases where no value is available.
+
+*Total Functions*: Functions that provide a mapping for every element in the input type to an element in the output type.
+
+*Partial Functions*: Functions that do not have a mapping for every input, potentially failing for some inputs.
