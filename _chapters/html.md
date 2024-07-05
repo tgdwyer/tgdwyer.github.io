@@ -125,48 +125,46 @@ This will be a recursive function, which will animate the rectangle at 60 FPS. W
 
 ```javascript
 // Define an animation function
-function animate(rect, startX, speed, duration) {
-    const now = performance.now();
-    const endTime = now + duration;
-    function _animate(x, prevTime) {
+function animate(rect, startX, finalX, duration) {
+    const startTime = performance.now();
+    const endTime = startTime + duration;
+    function _animate() {
     
         // Calculate elapsed time
         const currentTime = performance.now();
+        const elapsedTime = currentTime - startTime;
+        console.log(elapsedTime)
     
         // Check if animation duration has elapsed
-        if (currentTime >= endTime) {
+        if (elapsedTime >= duration) {        
+            rect.setAttribute('x', finalX);
             return; // Stop the animation
         }
-    
-        // calculate precise elapsed time since the last frame
-        const deltaTime = currentTime - prevTime;
 
         // Update position based on elapsed time and speed
-        const newX = x + (speed * deltaTime) / 1000; // Convert milliseconds to seconds
+        const x = startX + (finalX - startX) * elapsedTime / duration;
     
         // We can use `setAttribute` to change the variables of the HTML Element. In this case, we are changing the x attribute. 
-        rect.setAttribute('x', newX);
+        rect.setAttribute('x', x);
     
         // Set timeout to call the animate function again
         setTimeout(() => {
-            _animate(newX, currentTime);
+            _animate();
         }, 1000 / 60); // 60 FPS
     }
-    _animate(startX, now);
+    _animate();
 }
   
 const rectangle = document.getElementById('ourRectangle')
 // Start the animation
 const duration = 5000; // 5 seconds in milliseconds
-animate(rectangle, 10, 50, duration);
+animate(rectangle, 0, 370, duration);
 ```
 
 However, there are some serious issues with this code.
 
-- The rectangle attribute `x`, is a global variable, which the user of the webpage has access too!
-  - If this was a game, the user could easily change this themselves to whatever value they please.
-- If we wanted the duration to be very high, this could reach maximum recursion depth, which would cause the browser to crash
-- We do not separate the state-management from where we cause the side-effects, which will increase difficulty when debugging.
+- Obviously it's more complex and requires more code than using the built-in CSS animation feature.
+- The animate function updates the state of the DOM (the `x` position of the rectangle) from deep inside it's logic. Normally, we look for outputs of functions in the value that they return, but this function has no explicit return value.  To see what it does, we have to carefully inspect the code to identify the line which causes the side effect (the `rect.setAttribute` call).  Such a hidden side effect is the opposite of the intention of declarative-style programming.
 
 Luckily, [functional reactive programming](/functionalreactiveprogramming) will save us from most of these issues!
 
