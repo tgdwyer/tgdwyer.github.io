@@ -32,7 +32,7 @@ HTML is considered a declarative language because it focuses on describing the s
 ## An Animated Rectangle Using SVG in HTML
 
 A [live version of the following code is available together with an online editor](https://stackblitz.com/edit/stackblitz-starters-6m6cfd?file=index.html) for you to experiment with.  Or you can create the files locally on your computer, all in the same directory, and drag-and-drop the `index.html` file into your browser to see the animation.
-We are going to build an HTML page with a blue rectangle animated declaratively by CSS, and a red rectangle animated imperatively using JavaScript, e.g.:
+We are going to build an HTML page that looks something like this, but with rectangles that actually move!
 ![Animated Rectangles Screenshot](/assets/images/chapterImages/html/animatedrects.png)
 
 ### Step 1: Setting Up the HTML Document
