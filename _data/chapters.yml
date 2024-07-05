@@ -16,9 +16,6 @@
 - title: JavaScript Introduction
   url: /javascript1/
   description: |
-    - Understand how functions can be used to delay evaluation of code until the result is actually required
-    - Understand how this *lazy* evaluation allows for the definition of *infinite sequences*
-    - Code and use lazily evaluated infinite number sequences
     - Understand and use basic JavaScript coding concepts and features
     - Understand the difference between [mutable and immutable (const) variables](/javascript1#declaring-variables)
     - Explain the relationship between javascript [functions](/javascript1#functions) and [objects](/javascript1#objects)
