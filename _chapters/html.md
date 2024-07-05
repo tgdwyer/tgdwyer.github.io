@@ -125,33 +125,40 @@ This will be a recursive function, which will animate the rectangle at 60 FPS. W
 
 ```javascript
 // Define an animation function
-function animate(rect, x, speed, lastTime) {
-  const duration = 5000; // 5 seconds in milliseconds
+function animate(rect, startX, speed, duration) {
+    const now = performance.now();
+    const endTime = now + duration;
+    function _animate(x, prevTime) {
+    
+        // Calculate elapsed time
+        const currentTime = performance.now();
+    
+        // Check if animation duration has elapsed
+        if (currentTime >= endTime) {
+            return; // Stop the animation
+        }
+    
+        // calculate precise elapsed time since the last frame
+        const deltaTime = currentTime - prevTime;
 
-  // Calculate elapsed time
-  const currentTime = performance.now();
-  const deltaTime = lastTime ? (currentTime - lastTime) : 0;
-
-  // Check if animation duration has elapsed
-  if (elapsedTime >= duration) {
-    return; // Stop the animation
-  }
-
-  // Update position based on elapsed time and speed
-  const newX = x + (speed * deltaTime) / 1000; // Convert milliseconds to seconds
-
-  // We can use `setAttribute` to change the variables of the HTML Element. In this case, we are changing the x attribute.
-  rect.setAttribute('x', newX);
-
-  // Set timeout to call the animate function again
-  setTimeout(() => {
-    animate(rect, newX, speed, currentTime);
-  }, 1000 / 60); // 60 FPS
+        // Update position based on elapsed time and speed
+        const newX = x + (speed * deltaTime) / 1000; // Convert milliseconds to seconds
+    
+        // We can use `setAttribute` to change the variables of the HTML Element. In this case, we are changing the x attribute. 
+        rect.setAttribute('x', newX);
+    
+        // Set timeout to call the animate function again
+        setTimeout(() => {
+            _animate(newX, currentTime);
+        }, 1000 / 60); // 60 FPS
+    }
+    _animate(startX, now);
 }
-
+  
 const rectangle = document.getElementById('ourRectangle')
 // Start the animation
-animate(rectangle, 10, 50, null);
+const duration = 5000; // 5 seconds in milliseconds
+animate(rectangle, 10, 50, duration);
 ```
 
 However, there are some serious issues with this code.
