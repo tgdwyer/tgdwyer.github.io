@@ -131,7 +131,7 @@ function animate(rect, startX, finalX, duration) {
     const 
       startTime = performance.now(),
       endTime = startTime + duration;
-    function updateRectPosition() {
+    function nextFrame() {
         // Calculate elapsed time
         const 
           currentTime = performance.now(),
@@ -151,12 +151,10 @@ function animate(rect, startX, finalX, duration) {
         // Set the intermediate position of the rectangle.
         rect.setAttribute('x', x);
     
-        // Set timeout to call the animate function again
-        setTimeout(() => {
-            updateRectPosition();
-        }, 1000 / 60); // 60 FPS
+        // Call the nextFrame function again after a delay of 1000/60 milliseconds
+        setTimeout(nextFrame, 1000 / 60); // 60 FPS
     }
-    updateRectPosition();
+    nextFrame();
 }
   
 const rectangle = document.getElementById('ourRectangle')
@@ -168,7 +166,7 @@ animate(rectangle, 0, 370, duration);
 However, there are some serious issues with this code.
 
 - Obviously it's more complex and requires more code than using the built-in CSS animation feature.
-- The animate function updates the state of the DOM (the `x` position of the rectangle) from deep inside it's logic. Normally, we look for outputs of functions in the value that they `return`, but this function has no explicit return value.  To see what it does, we have to carefully inspect the code to identify the line which causes the *side effect* of moving the rectangle (the `rect.setAttribute` calls).  Another somewhat hidden complexity is the asynchronous (or delayed) behaviour due to the use of  `setTimeout` to queue up the successive frames of animation. Such hidden side effects and complexity are the opposite of the intention of declarative-style programming.
+- The `animate` function updates the state of the DOM (the `x` position of the rectangle) from deep inside it's logic. Normally, we look for outputs of functions in the value that they `return`, but this function has no explicit return value.  To see what it does, we have to carefully inspect the code to identify the line which causes the *side effect* of moving the rectangle (the `rect.setAttribute` calls).  Another somewhat hidden complexity is the asynchronous (or delayed) behaviour due to the use of  `setTimeout` to queue up the successive frames of animation. Such hidden side effects and complexity are the opposite of the intention of declarative-style programming.
 
 Later, we will see how [functional reactive programming](/functionalreactiveprogramming) techniques can be used to separate code with such side effects on global state from code that implements behavioural logic in interactive web pages.
 
