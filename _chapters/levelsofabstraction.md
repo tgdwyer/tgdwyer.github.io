@@ -6,7 +6,7 @@ title: "Levels of Abstraction"
 ## Learning Outcomes
 
 - Understand the motivation for different programming paradigms: to abstract machine operation into human understandable and composable programs
-- Understand the difference between *syntax* the textual symbols and grammatical rules of a program, and *semantics* the meaning of what is computed
+- Understand the difference between *syntax* (the textual symbols and grammatical rules of a program) and *semantics* (the meaning of what is computed)
 - Understand that there are different models of computation upon which different programming languages are based, including machine models such as Turing Machines and von Neumann architecture, and the Lambda Calculus based on mathematical functions.
 
 ## Syntax versus Semantics
