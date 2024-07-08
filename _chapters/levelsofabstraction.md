@@ -130,12 +130,18 @@ These notes focus on introducing programmers who are familiar with the OO paradi
 
 *Semantics*: The processes a computer follows when executing a program in a given language.
 
-*Imperative*: programs are a sequence of statements that change a programs state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembler to Python are built around this concept and most modern languages still allow you to program in this style.
+*Imperative*: Imperative programs are a sequence of statements that change a programs state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembler to Python are built around this concept and most modern languages still allow you to program in this style.
 
-*Procedural*: languages are basically *imperative* in nature, but add the concept of named *procedures*, i.e. named subroutines that may be invoked from elsewhere in the program, with parameterised variables that may be passed in.
+*Procedural*: Procedural languages are basically *imperative* in nature, but add the concept of named *procedures*, i.e. named subroutines that may be invoked from elsewhere in the program, with parameterised variables that may be passed in.
 
-*Object-oriented*: languages are built around the concept of *objects* where an objects captures the set of data (state) and behaviours (methods) associated with entities in the system.  
+*Object-oriented*: Object-oriented languages are built around the concept of *objects* where an objects captures the set of data (state) and behaviours (methods) associated with entities in the system.  
 
-*Declarative*: languages focus on declaring *what* a procedure (or function) should do rather than *how* it should do it.  
+*Declarative*: Declarative languages focus on declaring *what* a procedure (or function) should do rather than *how* it should do it.  
 
-*Functional*: languages are built around the concept of composable functions.  Such languages support [*higher order functions*](/higherorderfunctions/#higher-order-functions) which can take other functions as arguments or return new functions as their result, following the rules of the *Lambda Calculus*.
+*Functional*: Functional languages are built around the concept of composable functions.  Such languages support [*higher order functions*](/higherorderfunctions/#higher-order-functions) which can take other functions as arguments or return new functions as their result, following the rules of the *Lambda Calculus*.
+
+*Lambda Calculus*: A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+
+*Turing Machine*: A model of computation based on a hypothetical machine reading or writing instructions on a tape, which decides how to proceed based on the symbols it reads from the tape.
+
+*von Neumann model*: A model of computation which is the basis for most modern computer architectures. Proposed by John von Neumann in 1945.
