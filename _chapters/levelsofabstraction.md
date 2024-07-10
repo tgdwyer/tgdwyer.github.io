@@ -21,8 +21,10 @@ Example: functions in python and C that are syntactically different, but semanti
 # python code
 def sumTo(n):
    sum = 0
-   for i in range(0,n):
-       sum = sum + i
+   i = 0
+   while i < n:
+       sum += i
+       i += 1
    return sum
 ```
 
