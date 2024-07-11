@@ -268,6 +268,38 @@ spaces = (is ' ' >> spaces) <|> pure ()
 
 - change the type of `spaces` to `Parser [Char]` and have it return the appropriately sized string of only spaces.
 
+#### Solutions
+
+We can generalise the `is` parser to handle a predicate
+
+```haskell
+satisfy :: (Char -> Bool) -> Parser Char
+satisfy predicate = do
+  c <- character
+  let next = if f c then pure else unexpectedCharParser
+  next c
+ 
+
+digit :: Parser Char
+digit = satisfy isDigit
+```
+
+```haskell
+spaces :: Parser [Char]
+spaces = (do
+    _ <- is ' '
+    rest <- spaces
+    pure (' ' : rest)
+  ) <|> pure []
+```
+
+We can do this recursively, by trying to parse as many as possible, or we can use the many function to parse many spaces.
+
+```haskell
+spaces :: Parser [Char]
+spaces = many (satisfy isSpace)
+```
+
 ---
 
 ## A Parser that returns an ADT
@@ -340,11 +372,73 @@ What’s really cool about this is that obviously the strings “cat” and “c
 
 ## Exercises
 
+- Make a parser `stringTok` which uses the `string` parser to parse a given string, but ignores any `spaces` before or after the token.
 - Write some messy imperative-style JavaScript (no higher-order functions allowed) to parse cat, dog or camel and construct a different class instance for each.
 - Now add “dolphin” to the grammar, and use a stopwatch to time yourself extending your messy imperative code.  I bet it takes longer than extending the `animal` parser combinator.
-- Make a parser `stringTok` which uses the `string` parser to parse a given string, but ignores any `spaces` before or after the token.
 - Modify the grammar and the ADT to have some extra data fields for each of the animal types, e.g. `humpCount`, `remainingLives`, `barkstyle`, etc.
 - Extend your parser to produce these records.
+
+```javascript
+// Define the classes for Cat, Dog, and Camel
+class Cat {
+  constructor() {
+    this.type = 'Cat';
+  }
+}
+
+class Dog {
+  constructor() {
+    this.type = 'Dog';
+  }
+}
+
+class Camel {
+  constructor() {
+    this.type = 'Camel';
+  }
+}
+
+class Dolphin {
+  constructor() {
+    this.type = 'Dolphin';
+  }
+}
+
+// Imperative parser function
+function parseAnimal(input) {
+  let animal = null;
+
+  if (input === 'cat') {
+    animal = new Cat();
+  } else if (input === 'dog') {
+    animal = new Dog();
+  } else if (input === 'dolphin') {
+    animal = new Dolphin();
+  } else if (input === 'camel') {
+    animal = new Camel();
+  } else {
+    throw new Error('Invalid input');
+  }
+
+  return animal;
+}
+
+// Example usage
+try {
+  const animal1 = parseAnimal('cat');
+  console.log(animal1); // Cat { type: 'Cat' }
+
+  const animal2 = parseAnimal('dog');
+  console.log(animal2);
+}
+```
+
+To create `stringTok`, we can make use of `<<` or `>>` to ignore parts of the result:
+
+```haskell
+stringTok :: String -> Parser String
+stringTok s = spaces >> string s << spaces
+```
 
 ---
 
