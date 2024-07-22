@@ -136,11 +136,11 @@ These notes focus on introducing programmers who are familiar with the OO paradi
 
 *Procedural*: Procedural languages are basically *imperative* in nature, but add the concept of named *procedures*, i.e. named subroutines that may be invoked from elsewhere in the program, with parameterised variables that may be passed in.
 
-*Object-oriented*: Object-oriented languages are built around the concept of *objects* where an objects captures the set of data (state) and behaviours (methods) associated with entities in the system.  
+*Object-oriented*: Object-oriented languages are built around the concept of *objects* where an objects captures the set of data (state) and behaviours (methods) associated with entities in the system.
 
-*Declarative*: Declarative languages focus on declaring *what* a procedure (or function) should do rather than *how* it should do it.  
+*Declarative*: Declarative languages focus on declaring *what* a procedure (or function) should do rather than *how* it should do it.
 
-*Functional*: Functional languages are built around the concept of composable functions.  Such languages support [*higher order functions*](/higherorderfunctions/#higher-order-functions) which can take other functions as arguments or return new functions as their result, following the rules of the *Lambda Calculus*.
+*Functional*: Functional languages are built around the concept of composable functions.  Such languages support *higher order functions* which can take other functions as arguments or return new functions as their result, following the rules of the *Lambda Calculus*.
 
 *Lambda Calculus*: A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
 
