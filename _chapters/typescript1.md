@@ -18,7 +18,7 @@ As the Web 2.0 revolution hit in 2000s web apps built on JavaScript grew increas
 
 Part of the appeal of JavaScript is that being able to run the source code directly in a production environment gives an immediacy and attractive simplicity to software deployment.  However, in recent years more and more tools have been developed that introduce a build-chain into the web development stack.  Examples include: minifiers, which compact and obfuscate JavaScript code before it is deployed; bundlers, which merge different JavaScript files and libraries into a single file to (again) simplify deployment; and also, new languages that compile to JavaScript, which seek to fix the JavaScript language’s shortcomings and compatibility issues in different browsers (although modern ECMAScript has less of these issues).  Examples of languages that compile to JavaScript include CoffeeScript, ClojureScript and (more recently) PureScript (which we will visit later in this unit).  Right now, however, we will take a closer look at another language in this family called TypeScript.  See [the official TypeScript documentation](https://www.typescriptlang.org/docs/) for some tutorials and deeper reference.
 
-TypeScript is interesting because it forms a relatively minimal augmentation, or superset, of ECMAScript syntax that simply adds type annotations.  For the most part, the compilation process simply performs validation on the declared types and strips away the type annotations rendering just the legal JavaScript ready for deployment.  This lightweight compilation into a language with a similar level of abstraction to the source is also known as transpiling (as opposed to C++ or Java where the compiled code is much closer to the machine execution model).
+TypeScript is interesting because it forms a relatively minimal augmentation, or superset, of ECMAScript syntax that simply adds type annotations.  For the most part, the compilation process just performs validation on the declared types and strips away the type annotations rendering just the legal JavaScript ready for deployment.  This lightweight compilation into a language with a similar level of abstraction to the source is also known as transpiling (as opposed to C++ or Java where the compiled code is much closer to the machine execution model).
 
 The following is intended as a minimally sufficient intro to TypeScript features such that we can type some fairly rich data structures and higher-order functions.
 An excellent free resource for learning the TypeScript language in depth is the [TypeScript Deep-dive book](https://basarat.gitbooks.io/typescript/content/docs/getting-started.html).
@@ -33,7 +33,7 @@ let i: number = 123;
 
 Actually, in this case the type annotation is completely redundant.  The TypeScript compiler features sophisticated type inference.  In this case it can trivially infer the type from the type of the literal.
 
-Previously, we showed how rebinding such a variable to a string in JavaScript is perfectly fine by the JavaScript interpreter.  However, such a change of type in a variable a dangerous pattern that is likely an error on the programmer’s part.  The TypeScript compiler will generate an error:
+Previously, we showed how rebinding such a variable to a string in JavaScript is perfectly fine by the JavaScript interpreter.  However, such a change of type in a variable is a dangerous pattern that is likely an error on the programmer’s part.  The TypeScript compiler will generate an error:
 
 ```javascript
 let i = 123;
