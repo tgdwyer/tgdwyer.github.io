@@ -232,9 +232,9 @@ The TypeScript typechecker also knows about typeof expressions (as used above) a
 We can now use this function to indent our heading in various ways:
 
 ```typescript
-setLeftPadding(headings,100); // This will be converted to 100px
-setLeftPadding(headings,"100px"); // This will be used directly
-setLeftPadding(headings, () => "100px"); // This will call the function which returns 100px
+setLeftPadding(headings[0],100); // This will be converted to 100px
+setLeftPadding(headings[0],"100px"); // This will be used directly
+setLeftPadding(headings[0], () => "100px"); // This will call the function which returns 100px
 ```
 
 ## Interfaces
