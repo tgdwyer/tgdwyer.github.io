@@ -166,7 +166,7 @@ Using this code, we can solve the [first euler problem](https://projecteuler.net
 ```typescript
 function sumOfFirstNNaturalsNotDivisibleBy3Or5(n: number): number {
   const naturals = naturalNumbers(); // Generate the natural numbers sequence
-  // Take the first n elements and filter out those divisible by 3 or 5
+  // Take the first n elements and filter out those not divisible by 3 or 5
   const filtered = filter(
     (x) => x % 3 === 0 || x % 5 === 0,
     take(n - 1, naturals)
