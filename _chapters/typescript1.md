@@ -407,7 +407,7 @@ function binarySearch3<T>(arr:T[], key:T, compare: (a:T,b:T)=>number): number {
 Elsewhere in our program where we know how students are sorted, we can specify the appropriate compare function:
 
 ```javascript
-binarySearch3(students, (a,b)=>/* return 1 if a is greater than b, 0 if they are the same, -1 otherwise */)
+binarySearch3(students, key, (a,b)=>/* return 1 if a is greater than b, 0 if they are the same, -1 otherwise */)
 ```
 
 We can also have multiple type parameters for a single function.
