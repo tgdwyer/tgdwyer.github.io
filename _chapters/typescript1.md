@@ -450,6 +450,112 @@ first("hello")(3) // good now!
 So type checking helps us to create functions correctly, but also to use them correctly.
 You begin to appreciate type checking more and more as your programs grow larger and the error messages appear further from their definitions.  However, the most important thing is that these errors are being caught at *compile time* rather than at *run time*, when it might be too late!
 
+### More Examples of Generic Types
+
+#### Typing the Map Function
+
+We have previously seen how useful the function `map` is, which applies a function to every item in an array.
+
+```javascript
+const map = (func, l) => {
+  if (l.length === 0) {
+    return []
+  }
+  else {
+    // Apply function to the first item, and 
+    // recursively apply to the rest of the list
+    return [func(l[0]), ...map(func, l.slice(1))];
+  }
+}
+```
+
+If we wanted to provide types for this, we could consider a specific use case, for example converting a `number` to a `string`
+
+```typescript
+const map_num2str = (func: (x: number) => string, l: number[]): string[] => {
+  // same as above...
+}
+```
+
+This would correctly typecheck, and we could use this function to convert between a number and a string, but this means we would have to create one of these for each possible type, and this would be time consuming and be a lot of code you would have to write and provide types for. This is where generic types come in handy! Instead of `func` converting between a `number` and a `string`, we will say `func` is some operation which inputs something of a generic type `T`, and returns another generic type `V`.
+
+```typescript
+const map = <T, V>(func: (x: T) => V, l: T[]): V[] => {
+  // same as above...
+}
+```
+
+The important part of this definition:
+
+- `<T, V>`: Here we define the type parameters which will be usable inside the type of our function. We can only use the generic types defined in this last. You can consider this analogous to defining variables in normal coding, and you only have access to variables which exist.
+- The generic type `T` is the type of the elements in the input array l.
+- The generic type `V` is the type of the elements in the output array, determined by the function `func`.
+- `func: (x: T) => V` specifies that `func` is a function that takes a parameter of type `T` and returns a value of type `V`.
+- `l: T[]` indicates that `l` is an array of elements of type `T`.
+- `V[]` is the return type of the function is an array of elements of type `V`.
+
+All types defined by the generic parameters (`T` and `V`) are scoped within the function's definition. This means that within the function, every instance of `T` must be the same type, and every instance of `V` must be the same type, ensuring type consistency, e.g., all `T`'s can be a `string`, but a `T` cannot be both a `string` at one point, and then `number` at any other point in the type definition. `T` and `V` can be the same type (e.g., both `numbers`), but they can also be different (e.g., `T` could be `string` and `V` could be `number`). The generic function doesn't enforce any specific relationship between `T` and `V`, allowing for flexibility.
+
+#### Typing the Filter Function
+
+We have previously seen how useful the function `filter` is, which optionally removes item in a list.
+
+```javascript
+const filter = (func, l) => {
+  if (l.length === 0) {
+    return []
+  }
+  else {
+    if (func(l[0])) {
+      // Keep the current value
+      return [l[0], ...filter(func, l.slice(1))];
+    }
+    else {
+      // Skip the current item.
+      return filter(func, l.slice(1)); 
+    }
+  }
+}
+```
+
+If we have an array of numbers, and we wanted to keep only even numbers, we could define a helper function such as:
+
+```javascript
+const isEven = num => num % 2 === 0
+```
+
+If you do not know how to write an [isEven function](https://www.npmjs.com/package/is-even), luckily there are libraries for that. But, we know how to do it know.
+
+We can provide the type of our function as:
+
+```typescript
+const isEven = (num: number): boolean => num % 2 === 0;
+```
+
+This specifies that our input, is of type `number` and it returns a `boolean`. We can write a specific filter operation, which operates directly on numbers, such as:
+
+```typescript
+const filterNumbers = (func: (x: number) => boolean , l: number[]) : number[] => {
+  // same as above
+}
+```
+
+This runs in to the same issue as before, where we would need to write this for each possible type, where generic types can help us by allowing us to write a filter function which works over a generic type.
+
+```typescript
+const filterNumbers = <T>(func: (x: T) => boolean , l: T[]) : T[] => {
+// same as above
+}
+```
+
+The important part of this definition:
+
+- `<T>`: Here we define the type parameters which will be usable inside the type of our function. Compared to `map`, we only need a singular type parameter, as `filter` only keeps or remove items, and does not change any data.
+- The generic type `T` is the type of the elements in the input array l.
+- `func: (x: T) => V` specifies that `func` is a function that takes a parameter of type `T` and returns a value of type `boolean`. We **do not** use generic for the output type, as we should be as strict as possible, and we know that the function provided to filter should return a boolean
+- `l: T[]` indicates that `l` is an array of elements of type `T`.
+- `T[]` is the return type of the function is an array of elements of type `T`.
+
 ## Optional Properties
 
 Look again at the `next` property of `IListNode`:
