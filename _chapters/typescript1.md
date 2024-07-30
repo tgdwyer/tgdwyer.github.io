@@ -487,7 +487,7 @@ const map = <T, V>(func: (x: T) => V, l: T[]): V[] => {
 
 The important part of this definition:
 
-- `<T, V>`: Here we define the type parameters which will be usable inside the type of our function. We can only use the generic types defined in this last. You can consider this analogous to defining variables in normal coding, and you only have access to variables which exist.
+- `<T, V>`: Here we define the type parameters which will be usable inside the type of our function. We can only use the generic types defined in this list. You can consider this analogous to defining variables in normal coding, and you only have access to variables which exist.
 - The generic type `T` is the type of the elements in the input array l.
 - The generic type `V` is the type of the elements in the output array, determined by the function `func`.
 - `func: (x: T) => V` specifies that `func` is a function that takes a parameter of type `T` and returns a value of type `V`.
