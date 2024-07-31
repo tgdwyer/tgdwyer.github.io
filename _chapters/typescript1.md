@@ -314,7 +314,7 @@ const jsonToString = (json: JsonVal): string => {
 }
 ```
 
-Notice in the final ternary if expression (`?:`), by the time we have determined that json is not an Array, the only thing left that it could be is an Object with `[key,value]` pairs that we can iterate over using `Object.entries(json)`.
+Notice in the final ternary if expression (`?:`), by the time we have determined that `json` is not an Array, the only thing left that it could be is an Object with `[key,value]` pairs that we can iterate over using `Object.entries(json)`.
 
 Note the use of array destructuring (`[brackets,entries] = ...`)to get more than one value from an expression, in this case we get the correct set of brackets to enclose elements of arrays `[...]` versus objects `{...}`.  This is to avoid having more if expressions than necessary. Like for-loops, ifs are easy to mess up so less is generally better.
 
