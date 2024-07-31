@@ -28,7 +28,7 @@ module Jekyll
 
       site.data.glossary.each do |entry|
         term = entry['term'].downcase
-        definition = entry['definition']
+        definition = Kramdown::Document.new(entry['definition']).to_html.gsub(/<\/?p>/, '')
         first_appeared = entry['first_appeared']
 
         @@glossary_terms[term] = [definition, first_appeared]
@@ -36,8 +36,7 @@ module Jekyll
 
       end
 
-      @@glossary_terms = @@glossary_terms.sort_by { |term, _| -term.length }.to_h
-
+      @@glossary_term_regex ||= /(#{@@glossary_terms.map { |term, _| "\\b#{Regexp.escape(term)}\\b" }.join('|')})(?![^<]*<\/span>)/i
     end
 
     def pluralize(term)
@@ -54,14 +53,8 @@ module Jekyll
 
     Jekyll::Hooks.register :documents, :post_render do |document|
       if document.output_ext == '.html'
-        @@compiled_glossary_terms ||= @@glossary_terms.map do |term, (definition, first_appeared)|
-          regex = Regexp.new(/(\b#{Regexp.escape(term)}\b)(?![^<]*<\/span>)/i)
-          [term, CGI.escapeHTML(definition), first_appeared, regex]
-        end
-
         file_name = File.basename(document.relative_path, File.extname(document.relative_path))
         document.output = replace_glossary_terms(document.output, file_name)
-
       end
     end
 
@@ -71,14 +64,13 @@ module Jekyll
       doc.traverse do |node|
         if node.text?
           unless node.ancestors.any? { |ancestor| ancestor.name.match?(/^h[1-6]$/i) || ancestor.name == 'pre' || ancestor.name == 'blockquote' || ancestor['class'] == 'glossary' || ancestor.name == 'code' || ancestor['class'] == 'glossary-term' || ancestor.name == 'title' }
-            new_content = node.content
-            @@compiled_glossary_terms.each do |term, definition, first_appeared, regex|
-
+            new_content = node.content.gsub(@@glossary_term_regex) do |match|
+              term = match.downcase
+              definition, first_appeared = @@glossary_terms[term]
               if @@titles.include?(file_name) and @@titles.index(file_name) >= @@titles.index(first_appeared)
-                new_content = new_content.gsub(regex) do |match|
-                  definition_html = Kramdown::Document.new(definition).to_html.gsub(/<\/?p>/, '')
-                  "<span class='glossary-term' data-term='#{term}'>#{match}<span class='glossary-popup' markdown='1'>#{definition_html}</span></span>"
-                end
+                "<span class='glossary-term' data-term='#{term}'>#{match}<span class='glossary-popup'>#{definition}</span></span>"
+              else
+                match
               end
             end
             node.replace(Nokogiri::HTML.fragment(new_content))
