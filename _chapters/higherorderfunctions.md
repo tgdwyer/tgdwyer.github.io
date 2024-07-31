@@ -1,6 +1,6 @@
 ---
 layout: chapter
-title: "Higher Order Functions"
+title: "Higher-Order Functions"
 ---
 
 

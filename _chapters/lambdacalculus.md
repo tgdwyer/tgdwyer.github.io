@@ -384,6 +384,19 @@ Z=λf.(λx.f(λv.xxv))(λx.f(λv.xxv))
 * Note the similarities between `Y` and `Z` and perform a similar set of Beta reductions on `Z FAC` to see how it forces FAC to be evaluated.
 * Write a version of the Z-Combinator in JavaScript such that `Z(FAC)(6)` successfully evaluates to `720`.
 
+Key Idea:
+
+* The Z-combinator introduces an additional lambda to delay the evaluation of the recursive call.
+* This ensures that each step of the recursion only evaluates when needed, preventing infinite immediate recursion.
+
+<!-- Not sure? -->
+
+```javascript
+const Z = f => (x => f(v => x(x)(v)))(x => f(v => x(x)(v)));
+const FAC = f => n => n > 1 ? n * f(n - 1) : 1;
+console.log(Z(FAC)(6)); // Should print 720
+```
+
 ---
 
 ## Conclusion

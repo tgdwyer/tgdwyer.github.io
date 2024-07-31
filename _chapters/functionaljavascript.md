@@ -609,10 +609,10 @@ The definition of `map` (and friends) may look scary, but lets break it down. We
 
 ```javascript
 function map(func, list) {
-    if (list ==! null) {
+    if (list !== null) {
         return {
-            data: func(l.data),
-            next: map(f, l.next)
+            data: func(list.data),
+            next: map(func, list.next)
         };
     }
     else {
@@ -734,6 +734,8 @@ These ideas, of computation through pure function expressions, are inspired by A
 * Implement a `reduceRight` function for these cons lists, similar to javascript’s `Array.reduceRigh`t
 * Implement a `concat` function that takes two lists as arguments and returns a new list of their concatenation.
 * How can we update just one element in this list without mutating any data and what is the run-time complexity of such an operation?
+
+The solutions for this exercise will be discussed in class.
 
 ---
 

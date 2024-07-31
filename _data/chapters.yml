@@ -58,7 +58,7 @@
   url: /asteroids/
   description: |
     A fully worked example of FRP using RxJS Observables to create an in-browser version of a classic arcade game.
-- title: Higher Order Functions
+- title: Higher-Order Functions
   url: /higherorderfunctions/
   description: |
     - Understand that [Higher-Order Functions](/higherorderfunctions/#higher-order-functions) are those which take other functions as input parameters or which return functions
