@@ -241,8 +241,10 @@ setLeftPadding(headings[0], () => "100px"); // This will call the function which
 <div class="cheatsheet" markdown="1">
 
 ## Disambiguating Types Cheat Sheet
-It is a common pattern in TypeScript to have functions with union type parameters that need to handle each of the different types.
-`typeof v` gets the type of variable `v` as a string. This returns 'number', 'string' or 'boolean' (and a couple of others that we won't worry about) for the primitive types.  It can also differentiate objects and functions, e.g.:
+It is common in TypeScript to have functions with union type parameters that need to handle each of the different types separately.
+There are several ways to test types of variables. 
+
+**Primitive Types:** `typeof v` gets the type of variable `v` as a string. This returns 'number', 'string' or 'boolean' (and a couple of others that we won't worry about) for the primitive types.  It can also differentiate objects and functions, e.g.:
 
 ```typescript
 const x=1, s="hello", b=true, o={prop1:1,prop2:"hi"}, f=x=>x+1
@@ -258,7 +260,7 @@ typeof f
 > 'function'
 ```
 
-However, a number of null values and arrays are considered objects:
+However, a null values and arrays are considered objects:
 ```typescript
 const o={prop1:1,prop2:"hi"}, n=null, a=[1,2,3]
 typeof o
