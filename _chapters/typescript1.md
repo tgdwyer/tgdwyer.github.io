@@ -280,6 +280,8 @@ n===null             // true
 a instanceof Array   // true
 ```
 
+</div>
+
 Union types can be quite complex.  Here is a type for JSON objects which can hold primitive values (`string`,`boolean`,`number`,`null`) or Arrays containing elements of `JsonVal`, or an object with named properties, each of which is also a `JsonVal`.
 
 ```typescript
@@ -303,15 +305,17 @@ const jsonToString = (json: JsonVal): string => {
     case 'number':
       return String(json)
   }
-  const [openbracket,closebracket,entries]  
+  const [openbracket, closebracket, entries]  
+    = json instanceof Array
       ? ['[', ']', json.map(jsonToString)]
       : ['{', '}', Object.entries(json)
                     .map(/* exercise: what goes here? */)];
   return `${openbracket} ${entries.join(', ')} ${closebracket}`
 }
 ```
-Note the use of array destructuring to get more than one value from an expression, in this case the correct type of brackets to enclose elements of arrays `[...]` versus objects `{...}`.
-</div>
+
+Notice in the final ternary if expression (`?:`), by the time we have determined that json is not an Array, the only thing left that it could be is an Object.
+Don't be confused by the use of array destructuring to get more than one value from an expression, in this case the correct type of brackets to enclose elements of arrays `[...]` versus objects `{...}`.  This is to avoid having more if expressions than necessary. Like for-loops, ifs are easy to mess up so less is generally better.
 
 ## Interfaces
 
