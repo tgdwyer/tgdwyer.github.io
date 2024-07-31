@@ -245,7 +245,7 @@ setLeftPadding(headings[0], () => "100px"); // This will call the function which
 It is common in TypeScript to have functions with union type parameters that need to handle each of the different types separately.
 There are several ways to test types of variables.
 
-**Primitive Types:** `typeof v` gets the type of variable `v` as a string. This returns 'number', 'string' or 'boolean' (and a couple of others that we won't worry about) for the primitive types.  It can also differentiate objects and functions, e.g.:
+**Primitive types:** `typeof v` gets the type of variable `v` as a string. This returns 'number', 'string' or 'boolean' (and a couple of others that we won't worry about) for the primitive types.  It can also differentiate objects and functions, e.g.:
 
 ```typescript
 const x = 1, 
@@ -261,7 +261,7 @@ typeof o      // 'object'
 typeof f      // 'function'
 ```
 
-However, a null values and arrays are considered objects:
+**Object types:** null values and arrays are considered objects:
 
 ```typescript
 const o={prop1:1,prop2:"hi"}, 
