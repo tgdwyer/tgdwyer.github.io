@@ -248,56 +248,54 @@ There are several ways to test types of variables.
 **Primitive Types:** `typeof v` gets the type of variable `v` as a string. This returns 'number', 'string' or 'boolean' (and a couple of others that we won't worry about) for the primitive types.  It can also differentiate objects and functions, e.g.:
 
 ```typescript
-const x=1, s="hello", b=true, o={prop1:1,prop2:"hi"}, f=x=>x+1
-typeof x
-> 'number'
-typeof s
-> 'string'
-typeof b
-> 'boolean'
-typeof o
-> 'object'
-typeof f
-> 'function'
+const x = 1, 
+      s = "hello", 
+      b = true, 
+      o = {prop1:1, prop2:"hi"}, 
+      f = x=>x+1
+
+typeof x      // 'number'
+typeof s      // 'string'
+typeof b      // 'boolean'
+typeof o      // 'object'
+typeof f      // 'function'
 ```
 
 However, a null values and arrays are considered objects:
 
 ```typescript
-const o={prop1:1,prop2:"hi"}, n=null, a=[1,2,3]
-typeof o
-> 'object'
-typeof n
-> 'object'
-typeof a
-> 'object'
+const o={prop1:1,prop2:"hi"}, 
+      n=null, 
+      a=[1,2,3]
+
+typeof o      // 'object'
+typeof n      // 'object'
+typeof a      // 'object'
 ```
 
 To differentiate null and arrays from other objects, we need different tests:
 
 ```typescript
-n===null
-> true
-a instanceof Array
-> true
+n===null             // true
+a instanceof Array   // true
 ```
 
-Union types can be quite complex.  Here is a type for JSON objects which can hold primitive values (`string`,`boolean`,`number`,`null`) or Arrays containing elements of JsonTypes, or they can be an object with a set of named properties, each of which may also be JsonTypes.
+Union types can be quite complex.  Here is a type for JSON objects which can hold primitive values (`string`,`boolean`,`number`,`null`) or Arrays containing elements of `JsonVal`, or an object with named properties, each of which is also a `JsonVal`.
 
 ```typescript
-type JsonTypes =
-  | Array<JsonTypes>
-  | { [key: string]: JsonTypes }
+type JsonVal =
+  | Array<JsonVal>
+  | { [key: string]: JsonVal }
   | string
   | boolean
   | number
   | null;
 ```
 
-Given such a union type, we can differentiate types using the above tests in `if` or `switch` statements or ternary if-else expressions (`?:`), for example to convert JsonTypes to string:
+Given such a union type, we can differentiate types using the above tests in `if` or `switch` statements or ternary if-else expressions (`?:`), for example to convert a `JsonVal` to string:
 
 ```typescript
-const jsonToString = (json: JsonTypes): string => {
+const jsonToString = (json: JsonVal): string => {
   if(json===null) return 'null';
   switch(typeof json) {
     case 'string':
@@ -305,15 +303,14 @@ const jsonToString = (json: JsonTypes): string => {
     case 'number':
       return String(json)
   }
-  const [openbracket,closebracket,entries]
-    = json instanceof Array
-      ? ['[',']', json.map(jsonToString)]
-      : ['{','}', Object.entries(json)
+  const [openbracket,closebracket,entries]  
+      ? ['[', ']', json.map(jsonToString)]
+      : ['{', '}', Object.entries(json)
                     .map(/* exercise: what goes here? */)];
   return `${openbracket} ${entries.join(', ')} ${closebracket}`
 }
 ```
-
+Note the use of array destructuring to get more than one value from an expression, in this case the correct type of brackets to enclose elements of arrays `[...]` versus objects `{...}`.
 </div>
 
 ## Interfaces
