@@ -282,16 +282,16 @@ a instanceof Array   // true
 
 </div>
 
-Union types can be quite complex.  Here is a type for JSON objects which can hold primitive values (`string`,`boolean`,`number`,`null`) or Arrays containing elements of `JsonVal`, or an object with named properties, each of which is also a `JsonVal`.
+Union types can be quite complex.  Here is a type for JSON objects which can hold primitive values (`string`,`boolean`,`number`), or `null`, or Arrays containing elements of `JsonVal`, or an object with named properties, each of which is also a `JsonVal`.
 
 ```typescript
 type JsonVal =
-  | Array<JsonVal>
-  | { [key: string]: JsonVal }
   | string
   | boolean
   | number
-  | null;
+  | null
+  | Array<JsonVal>
+  | { [key: string]: JsonVal }
 ```
 
 Given such a union type, we can differentiate types using the above tests in `if` or `switch` statements or ternary if-else expressions (`?:`), for example to convert a `JsonVal` to string:
@@ -315,6 +315,8 @@ const jsonToString = (json: JsonVal): string => {
 ```
 
 Notice in the final ternary if expression (`?:`), by the time we have determined that `json` is not an Array, the only thing left that it could be is an Object with `[key,value]` pairs that we can iterate over using `Object.entries(json)`.
+
+Note also that TypeScript is smart about checking types inside these kinds of conditional statements. So, for example, inside the last if expression, where we know `json instanceof Array` is `true`, we can immediately treat `json` as an array and call its `map` method.
 
 Note the use of array destructuring (`[brackets,entries] = ...`)to get more than one value from an expression, in this case we get the correct set of brackets to enclose elements of arrays `[...]` versus objects `{...}`.  This is to avoid having more if expressions than necessary. Like for-loops, ifs are easy to mess up so less is generally better.
 
