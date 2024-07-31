@@ -7,7 +7,7 @@ In this chapter we will meet some more typeclasses that abstract common coding p
 
 ## Learning Outcomes
 
-- Understand that the "reduce" function we met for arrays and other data structures in JavaScript is referred to as ["folding"](/haskell4/#folds) in Haskell and there are two variants `foldl` and `foldr` for left and right folds respectively.
+- Understand that the “reduce” function we met for arrays and other data structures in JavaScript is referred to as [“folding”](/haskell4/#folds) in Haskell and there are two variants `foldl` and `foldr` for left and right folds respectively.
 - Understand that the [Monoid](#monoid) typeclass for things that have a predefined rule for aggregation (concatenation), making containers of `Monoid` values trivial to `fold`
 - Understand that [Foldable](#foldable) generalises containers that may be folded (or reduced) into values
 - Understand that [Traversable](#traversable) generalises containers over which we can traverse applying a function with an Applicative effect
@@ -16,8 +16,8 @@ In this chapter we will meet some more typeclasses that abstract common coding p
 
 Recall the “`reduce`” function that is a member of JavaScript’s `Array` type, and which we implemented ourselves for linked and cons lists, was a way to generalise loops over enumerable types.
 In Haskell, this concept is once again generalised with a typeclass called `Foldable` -- the class of things which can be “folded” over to produce a single value.  
-We will come back to [the `Foldable` typeclass](#foldable), but first let's limit our conversation to the familiar `Foldable` instance, basic lists.  
-Although in JavaScript `reduce` always associates elements from left to right, Haskell's `Foldable` typeclass offers both `foldl` (which folds left-to-right) and `foldr` (which folds right-to-left):
+We will come back to [the `Foldable` typeclass](#foldable), but first let’s limit our conversation to the familiar `Foldable` instance, basic lists.  
+Although in JavaScript `reduce` always associates elements from left to right, Haskell’s `Foldable` typeclass offers both `foldl` (which folds left-to-right) and `foldr` (which folds right-to-left):
 
 ```haskell
 Prelude> :t foldl
@@ -43,21 +43,68 @@ Here’s a left fold with a picture of the fold:
 
 ![Left Fold](/assets/images/chapterImages/haskell4/leftFold.png)
 
-Note that since the `(+)` operator is associative -- a+(b+c) = (a+b)+c -- `foldr` and `foldl` return the same result.  For functions that are not associative, however, this is not necessarily the case.
+Note that since the `(+)` operator is associative—a+(b+c) = (a+b)+c—`foldr` and `foldl` return the same result.  For functions that are not associative, however, this is not necessarily the case.
 
----------
+---
 
 ### Exercises
 
-- Predict what the results of a left- and right-fold will be for `(-)` folded over `[1,2,3,4]` with initial value `0`.
-- What is the result of `foldr (:) []` applied to any list?
-- Implement `map` using `foldr`.
+1. Predict what the results of a left- and right-fold will be for `(-)` folded over `[1,2,3,4]` with initial value `0`.
+2. What is the result of `foldr (:) []` applied to any list?
+3. Implement `map` using `foldr`.
 
----------
+#### Solutions
+
+<!-- markdownlint-disable MD029 -->
+1. The right fold processes the list from the right (end) to the left (beginning). The result of each application   of the function is passed as the accumulator to the next application.
+
+  ```haskell
+    foldr (-) 0 [1,2,3,4]
+   = 1 - (2 - (3 - (4 - 0)))
+   = 1 - (2 - (3 - 4))
+   = 1 - (2 - (-1))
+   = 1 - 3
+   = -2
+  ```
+
+  The left fold processes the list from the left (beginning) to the right (end). The result of each application of the function is passed as the accumulator to the next application.
+
+  ```haskell
+   foldl (-) 0 [1,2,3,4]
+   = (((0 - 1) - 2) - 3) - 4
+   = ((-1 - 2) - 3) - 4
+   = (-3 - 3) - 4
+   = -6 - 4
+   = -10
+  ```
+
+2. The function foldr `(:)` `[]` applied to any list essentially reconstructs the list
+
+  ```haskell
+  foldr (:) [] [1, 2, 3, 4]
+   = 1 : (2 : (3 : (4 : [])))
+  ```
+
+3. Taking intuition from the previous question, we know that `(:)` does not change the list, but reconstructs it, therefore, to implement `map`, we just apply the function `f` to the list as we go.
+
+  ```haskell
+  map :: (a -> b) -> [a] -> [b]
+  map f = foldr (\x acc -> f x : acc) []
+  ```
+
+  Or, by making the lambda function point-free
+
+  ```haskell
+  map :: (a -> b) -> [a] -> [b]
+  map f = foldr ((:) . f) []
+  ```
+<!-- markdownlint-enable MD029 -->
+
+---
 
 ## Monoid
 
-In the example fold above, we provide the `(+)` function to tell `foldl` how to aggregate elements of the list.  There is also a typeclass for things that are “automatically aggregatable” or “concatenatable” called `Monoid` which declares a general function for `mappend` combining two `Monoid`s into one, a `mempty` value such that any Monoid `mappend`ed with `mempty` is itself, and a concatenation function for lists of `Monoid` called `mconcat`.  
+In the example fold above, we provide the `(+)` function to tell `foldl` how to aggregate elements of the list.  There is also a typeclass for things that are “automatically aggregatable” or “concatenatable” called `Monoid` which declares a general function for `mappend` combining two `Monoid`s into one, a `mempty` value such that any Monoid `mappend`'ed with `mempty` is itself, and a concatenation function for lists of `Monoid` called `mconcat`.
 
 ```haskell
 Prelude> :i Monoid
@@ -126,8 +173,8 @@ And for lists (and `String`) we have:
 
 ## Foldable
 
-So now we've already been introduced to `foldl` and `foldr` for lists, and we've also seen the `Monoid` typeclass, let's take a look at the general class of things that are `Foldable`.
-As always, your best friend for exploring a new typeclass in Haskell is GHCi's `:i` command:
+So now we’ve already been introduced to `foldl` and `foldr` for lists, and we’ve also seen the `Monoid` typeclass, let’s take a look at the general class of things that are `Foldable`.
+As always, your best friend for exploring a new typeclass in Haskell is GHCi’s `:i` command:
 
 ```haskell
 Prelude> :i Foldable
@@ -141,7 +188,7 @@ class Foldable (t :: * -> *) where
   minimum :: Ord a => t a -> a -- smallest element
   sum :: Num a => t a -> a -- compute the sum of a Foldable of Num
   product :: Num a => t a -> a -- compute the product of a Foldable of Num
-  Data.Foldable.fold :: Monoid m => t m -> m -- if the elements of t are Monoids then we don't need an operator to aggregate them
+  Data.Foldable.fold :: Monoid m => t m -> m -- if the elements of t are Monoids then we don’t need an operator to aggregate them
   foldMap :: Monoid m => (a -> m) -> t a -> m -- uses the specified function to convert elements to Monoid and then folds them
   Data.Foldable.toList :: t a -> [a] -- convert any Foldable things to a list
   {-# MINIMAL foldMap | foldr #-}
@@ -152,7 +199,7 @@ instance Foldable (Either a) -- Defined in `Data.Foldable'
 instance Foldable ((,) a) -- Defined in `Data.Foldable'
 ```
 
-Note that I've reordered the list of functions to the order we want to discuss them, removed a few things we're not interested in at the moment and the comments are mine.
+Note that I’ve reordered the list of functions to the order we want to discuss them, removed a few things we’re not interested in at the moment and the comments are mine.
 However, once you get used to reading types the `:info` for this class is pretty self explanatory.  Most of these functions are also familiar from their use with lists.  The surprise (OK, not really) is that lots of other things can be `Foldable` as well.
 
 ```haskell
@@ -209,6 +256,7 @@ instance Foldable Tree where
 ```
 
 We can use `foldMap` to map the values stored in the tree to an instance of `Monoid` and then concatenate these `Monoid`s.  For example, we could map and concatenate them as a `Sum`:
+
 ```haskell
 > getSum $ foldMap Sum tree
 28
@@ -228,17 +276,27 @@ Since list is an instance of Monoid, `foldMap` will concatenate these singleton 
 [1,2,3,4,5,6,7]
 ```
 
-----
+---
 
-### Exercises
+### Exercise
 
 - Make an instance of `Foldable` for `Tree` in terms of `foldr` instead of `foldMap`.
 
-----
+#### Solutions
+
+```haskell
+instance Foldable Tree where
+    foldr :: (a -> b -> b) -> b -> Tree a -> b
+    foldr _ z Empty = z -- base case, return accumulator
+    foldr f z (Leaf x) = f x z -- when we see a leaf, combine accumulator and leaf
+    foldr f z (Node l x r) = foldr f (f x (foldr f z r)) l -- fold over right first, then over left
+```
+
+---
 
 ## Traversable
 
-`Traversable` extends both `Foldable` and `Functor`, in a typeclass for things that we can `traverse` a function with an `Applicative` effect over. Here's a sneak peak of what this lets us do:
+`Traversable` extends both `Foldable` and `Functor`, in a typeclass for things that we can `traverse` a function with an `Applicative` effect over. Here’s a sneak peak of what this lets us do:
 
 ```haskell
 Prelude> traverse putStrLn ["tim","was","here"]
@@ -271,6 +329,7 @@ The following map shows how all of these typeclasses are starting to come togeth
 ![Traversable Typeclasses](/assets/images/chapterImages/haskell4/traversableTypeClasses.png)
 
 So what does the traverse function do?  By way of example, remember our safe modulo function this we used to experiment with [Functor](/haskell3/#functor):
+
 ```haskell
 safeMod :: Integral a => a-> a-> Maybe a
 safeMod _ 0 = Nothing
@@ -284,7 +343,7 @@ It lets us map over a list of numbers without throwing divide-by-zero exceptions
 [Just 0,Just 1,Nothing,Just 1]
 ```
 
-But what if `0`s in the list really are indicative of disaster so that we should bail rather than proceeding?  The `traverse` function of the `Traversable` type-class gives us this kind of "all or nothing" capability:
+But what if `0`s in the list really are indicative of disaster so that we should bail rather than proceeding?  The `traverse` function of the `Traversable` type-class gives us this kind of “all or nothing” capability:
 
 ```haskell
 > traverse (safeMod 3) [1,2,0,2]
@@ -317,7 +376,7 @@ Prelude> :t print
 print :: Show a => a -> IO ()
 ```
 
-The `()` is like `void` in TypeScript -- it’s a type with exactly one value `()`, and hence is called “Unit”.  There is no return value from `print`, only the `IO` effect, and hence the return type is `()`.  `IO` is also an instance of `Applicative`.  This means we can use `traverse` to print out the contents of a list:
+The `()` is like `void` in TypeScript—it’s a type with exactly one value `()`, and hence is called “Unit”.  There is no return value from `print`, only the `IO` effect, and hence the return type is `()`.  `IO` is also an instance of `Applicative`.  This means we can use `traverse` to print out the contents of a list:
 
 ```haskell
 Prelude> traverse print [1,2,3]
@@ -327,14 +386,14 @@ Prelude> traverse print [1,2,3]
 [(),(),()]
 ```
 
-Here `1,2,3` are printed to the console each on their own line (which is `print`'s IO effect), and `[(),(),()]` is the return value reported by GHCi -- a list of Unit.
+Here `1,2,3` are printed to the console each on their own line (which is `print`’s IO effect), and `[(),(),()]` is the return value reported by GHCi—a list of Unit.
 
 ```haskell
 Prelude> :t traverse print [1,2,3]
 traverse print [1,2,3] :: IO [()]
 ```
 
-When we ran this at the REPL, GHCi consumed the `IO` effect (because it runs all commands inside the [`IO Monad`](/monad/)).  However, inside a pure function there is no easy way to get rid of this `IO` return type -- which protects you from creating `IO` effects unintentionally.
+When we ran this at the REPL, GHCi consumed the `IO` effect (because it runs all commands inside the [`IO Monad`](/monad/)).  However, inside a pure function there is no easy way to get rid of this `IO` return type—which protects you from creating `IO` effects unintentionally.
 
 A related function defined in `Traversable` is `sequenceA` which allows us to convert directly from Traversables of Applicatives, to Applicatives of Traversables:
 
@@ -408,10 +467,11 @@ Node (Node (Leaf (Just 1)) (Just 2) (Leaf (Just 3))) (Just 4) (Node (Leaf (Just 
 Just (Node (Node (Leaf 1) 2 (Leaf 3)) 4 (Node (Leaf 5) 6 (Leaf 7)))
 ```
 
-----
+---
+
 ## Applying Functions Over Contexts
 
-Thus far we have seen a variety of functions for applying functions in and over different contexts.  It is useful to note the similarities between these, and recognise that they are all doing conceptually the same thing, i.e. function application.  The difference is the in the type of context.  The simplest function for applying functions is the ($) operator, with just a function (no context), applied directly to a value.  Then `fmap`, just a function, mapped over a Functor context/container.  Then Applicative (function also in the context).  Then, most recently `traverse`: the function produces a result in an Applicative context, applied (traversed) over some data structure, and the resulting data structure returned in an Applicative context.  Below, I line up all the types so that the similarities and differences are as clear as possible.  It's worth making sure at this stage that you can read such type signatures, as they really do summarise everything that we have discussed.
+Thus far we have seen a variety of functions for applying functions in and over different contexts.  It is useful to note the similarities between these, and recognise that they are all doing conceptually the same thing, i.e. function application.  The difference is the in the type of context.  The simplest function for applying functions is the ($) operator, with just a function (no context), applied directly to a value.  Then `fmap`, just a function, mapped over a Functor context/container.  Then Applicative (function also in the context).  Then, most recently `traverse`: the function produces a result in an Applicative context, applied (traversed) over some data structure, and the resulting data structure returned in an Applicative context.  Below, I line up all the types so that the similarities and differences are as clear as possible.  It’s worth making sure at this stage that you can read such type signatures, as they really do summarise everything that we have discussed.
 
 ```haskell
 ($)      ::                                      (a -> b) -> a   -> b
@@ -419,9 +479,10 @@ Thus far we have seen a variety of functions for applying functions in and over 
 (<*>)    :: Applicative f                  =>  f (a -> b) -> f a -> f b
 traverse :: (Traversable t, Applicative f) =>  (a -> f b) -> t a -> f (t b)
 ```
+
 ## Parsing a String Using Traversable?
 
-What if we want to parse an exact match for a given string, for example, a token in a programming language like the word `function`.  Or, to look for a polite greeting at the start of an email before deciding whether to respond, such as "hello".
+What if we want to parse an exact match for a given string, for example, a token in a programming language like the word `function`.  Or, to look for a polite greeting at the start of an email before deciding whether to respond, such as “hello”.
 
 ```haskell
 > parse (string "hello") "hello world"
@@ -431,11 +492,10 @@ Just (" world", "hello")
 Nothing
 ```
 
-So the string "hello" is the prototype for the expected input.  How would we do this? 
+So the string “hello” is the prototype for the expected input.  How would we do this?
 
-Our parser would have to process characters from the input stream and check if each successive character  **is** the one expected from the prototype. 
-If it is the correct character, we would cons it to our result and than parse the next character. 
-
+Our parser would have to process characters from the input stream and check if each successive character  **is** the one expected from the prototype.
+If it is the correct character, we would cons it to our result and than parse the next character.
 
 This can be written using a `foldr` to parse all the characters while checking with the `is` parser.
 
@@ -446,7 +506,7 @@ string l = foldr (\c acc -> liftA2 (:) (is c) acc) (pure "") l
 Remembering `liftA2` is equivalent to `f <$> a <*> b`.
 
 Our `<*>` will allow for the seqeuencing of the applicative effect, so this will sequentially parse all characters, making sure they are correct.
-As soon, as one applicative parser fails, the result of the parsing will fail. 
+As soon, as one applicative parser fails, the result of the parsing will fail.
 
 This could also be written as:
 
@@ -471,7 +531,7 @@ This is almost exactly the definition of our string parser using `foldr` but the
 
 Therefore, we can write `string = traverse is`
 
-Let's break down how the `string` parser using `traverse` and is works in terms of types:
+Let’s break down how the `string` parser using `traverse` and is works in terms of types:
 
 ```haskell
 string :: String -> Parser String
@@ -487,12 +547,11 @@ traverse :: (Traversable t, Applicative f) => (a -> f b) -> t a -> f (t b)
 `t` is a traversable data structure, which in our case is a `String` (since `String` is a list of characters).
 `a` is the element type of the traversable structure, which is `Char` (the individual characters in the `String`).
 `f` is an applicative functor, which is the `Parser` type in our case.
-The function `(a -> f b)` is the parser for a single character. In our case, it's the `is` parser.
+The function `(a -> f b)` is the parser for a single character. In our case, it’s the `is` parser.
 
 So, we will apply the `is` function to each element in the the traversable `t` (the list) and store collect the result in to a `Parser [Char]`.
 
 Therefore, `traverse is` is of type `Parser String`, which is a parser that attempts to parse the entire String and returns it as a result.
-
 
 Can we also write this using `sequenceA`?
 
@@ -510,25 +569,50 @@ string = sequenceA . map is
 
 `map is str` maps the is parser over each character in the input string `str`. This produces a list of parsers, where each parser checks if the corresponding character in the input matches the character in the target string.
 
-sequenceA is then used to turn the list of parsers into a single parser. This function applies each parser to the input string and collects the results. If all character parsers succeed, it returns a list of characters; otherwise, it returns Nothing.
+`sequenceA` is then used to turn the list of parsers into a single parser. This function applies each parser to the input string and collects the results. If all character parsers succeed, it returns a list of characters; otherwise, it returns Nothing.
 
-In fact an equivalent definition of traverse can be written using the sequenceA as follows:
+In fact an equivalent definition of traverse can be written using the `sequenceA` as follows:
 
 ```haskell
 traverse :: (Traversable t, Applicative f) => (a -> f b) -> t a -> f (t b)
 traverse f l = sequenceA (f <$> l)
 ```
 
----------
+---
 
 ### Exercises
 
+- What would be the definition of `sequenceA` over a list? (without using traverse)
+- Can you make the `Maybe` data type an instance of traversable?
+
+#### Solutions
+
+- `sequenceA` takes a list of applicative actions and returns an applicative action that returns a list of results. For lists, this means that `sequenceA` should combine a list of applicative actions into a single applicative action that returns a list of results.
+
+  ```haskell
+  sequenceA :: (Applicative f) => [f a] -> f [a]
+  sequenceA [] = pure []
+  sequenceA (x:xs) = (:) <$> x <*> sequenceA xs
+  ```
+
+- For `Maybe`, the definition of traverse function is `traverse :: (Applicative f) => (a -> f b) -> Maybe a -> f (Maybe b)`
+
+  ```haskell
+  instance Traversable Maybe where
+      traverse :: (Applicative f) => (a -> f b) -> Maybe a -> f (Maybe b)
+      traverse _ Nothing = pure Nothing
+      traverse f (Just x) = Just <$> f x
+  ```
+
+  - If the input is `Nothing`, we return pure `Nothing`, which is an applicative action that produces `Nothing`.
+  - If the input is `Just x`, we apply `f` to `x` and then wrap the result with `Just`.
+
 - What would be the definition of sequenceA over a list? (without using traverse)
 - Can you make the `Maybe` data type an instance of traversable?
-  
-----------
 
-## Bringing it all together!
+---
+
+## Bringing it all together
 
 We can also parse a tree by traversing a parser over it, the same way we parsed `string` by traversing a list of `Char`!
 
@@ -549,7 +633,7 @@ instance Traversable Tree where
 
 We can write a similar definition for parsing an exact tree compared to parsing a string!
 
-We will consider a Value which is either an integer, or an operator which can combine integers. We will assume the only possible combination operator is `+` to avoid complexities with ordering expressions. 
+We will consider a Value which is either an integer, or an operator which can combine integers. We will assume the only possible combination operator is `+` to avoid complexities with ordering expressions.
 
 ```haskell
 
@@ -606,9 +690,25 @@ evalTree tree = getSum $ foldMap toSum tree
   where
     toSum :: Value -> Sum Int
     toSum (Value v) = Sum v
-    toSum BinaryPlus = Sum 0 -- For BinaryPlus, we don't need to add anything to the sum
+    toSum BinaryPlus = Sum 0 -- For BinaryPlus, we don’t need to add anything to the sum
 
 evalResult :: Maybe (String, Int)
 evalResult = (evalTree <$>) <$> parsedResult
 -- >>> evalResult = Just ("", 10)
 ```
+
+## Glossary
+
+*Folding:* The process of reducing a data structure to a single value by applying a function. Haskell provides two types of folds: foldl (left fold) and foldr (right fold).
+
+*foldl:* A left fold function that processes elements from left to right. Its type signature is foldl :: Foldable t => (b -> a -> b) -> b -> t a -> b.
+
+*foldr:* A right fold function that processes elements from right to left. Its type signature is foldr :: Foldable t => (a -> b -> b) -> b -> t a -> b.
+
+*Monoid*: A type class for types that have an associative binary operation (mappend) and an identity element (mempty). Instances of Monoid can be concatenated using mconcat.
+
+*Foldable*: A type class for data structures that can be folded (reduced) to a single value. It includes functions like foldr, foldl, length, null, elem, maximum, minimum, sum, product, and foldMap.
+
+*Traversable*: A type class for data structures that can be traversed, applying a function with an Applicative effect to each element. It extends both Foldable and Functor and includes functions like traverse and sequenceA.
+
+*Unit*: A type with exactly one value, (), used to indicate the absence of meaningful return value, similar to void in other languages.

@@ -6,7 +6,7 @@ title: "Levels of Abstraction"
 ## Learning Outcomes
 
 - Understand the motivation for different programming paradigms: to abstract machine operation into human understandable and composable programs
-- Understand the difference between *syntax* the textual symbols and grammatical rules of a program, and *semantics* the meaning of what is computed
+- Understand the difference between *syntax* (the textual symbols and grammatical rules of a program) and *semantics* (the meaning of what is computed)
 - Understand that there are different models of computation upon which different programming languages are based, including machine models such as Turing Machines and von Neumann architecture, and the Lambda Calculus based on mathematical functions.
 
 ## Syntax versus Semantics
@@ -21,8 +21,10 @@ Example: functions in python and C that are syntactically different, but semanti
 # python code
 def sumTo(n):
    sum = 0
-   for i in range(0,n):
-       sum = sum + i
+   i = 0
+   while i < n:
+       sum += i
+       i += 1
    return sum
 ```
 
@@ -55,8 +57,7 @@ In summary, the languages we will study (in varying degrees of depth) will be As
 
 ## The Machine Level
 
-Conceptually, modern computer architecture deviates little from the von Neumann model proposed in 1945 by Hungarian-American computer scientist John von Neumann.  The development of the von Neumann model occurred shortly after the introduction of the theoretical Turing Machine concept.
-
+Conceptually, modern computer architecture deviates little from the von Neumann model proposed in 1945 by Hungarian-American computer scientist John von Neumann.  
 The von Neumann architecture was among the first to unify the concepts of data and programs.  That is, in a von Neumann architecture, a program is just data that can be loaded into memory.  A program is a list of instructions that read data from memory, manipulate it, and then write it back to memory.  This is much more flexible than previous computer designs which had stored the programs separately in a fixed (read-only) manner.
 
 The classic von Neumann model looks like so:
@@ -79,7 +80,7 @@ Registers are locations on the CPU with very low-latency access due to their phy
 
 ## Other Models of Computation
 
-Turing Machines are a conceptual model of computation based on a physical analogy of tapes being written to and read from as they feed through a machine.  The operations written on the tape determine the machine's operation.  The von Neumann model of computation has in common with Turing Machines that it follows an *imperative* paradigm of sequential instruction execution, but it is a practical model upon which most modern computers base their architecture.
+Turing Machines are a conceptual model of computation based on a physical analogy of tapes being written to and read from as they feed through a machine.  The operations written on the tape determine the machine’s operation.  The von Neumann model of computation has in common with Turing Machines that it follows an *imperative* paradigm of sequential instruction execution, but it is a practical model upon which most modern computers base their architecture.
 
 There are other models of computation that are also useful.  In particular, we will look at the [Lambda Calculus](/lambdacalculus), which was roughly a contemporary of these other models but based on mathematical functions, their application and composition.  We will see that while imperative programming languages are roughly abstractions of machine architecture, functional programming languages provide an alternative abstraction built upon the rules of the lambda calculus.  
 
@@ -94,20 +95,24 @@ There is a clear and overwhelmingly agreed-upon need to create human-readable an
 
 First some definitions which help to describe the different families of programming languages that we will be considering in this course.  It is assumed that the reader already has experience with the first three paradigms (*imperative*, *procedural* and *objected-oriented*) since these are taught in most introductory programming courses.  The rest are discussed further in later chapters in these notes.
 
-* **Imperative** programs are [a sequence of statements that change a programs state](https://en.wikipedia.org/wiki/Imperative_programming).  They follow the Turing machine model described above.  This is probably the dominant paradigm for programming languages today.  Languages from Assembler to Python are built around this concept and most modern languages still allow you to program in this style.
-* **Procedural** languages are basically *imperative* in nature, but add the concept of named *procedures*, i.e. named subroutines that may be invoked from elsewhere in the program, with parameterised variables that may be passed in.  The result of the procedure may be returned as an explicit return value, or the procedure may *mutate* (change) the value of variables referenced elsewhere in the program (such a mutation is called a *side effect*).  Again, most modern languages support definition of such procedures.  Sometimes, the term *function* is used synonymously with procedure.  Some languages (e.g. Pascal) make a distinction between procedures which mutate state without an explicit return value, while a *function* has an explicit return value.  Note that the latter is closer to the definition of *function* in mathematics.
-* **Object-oriented** languages are built around the concept of *objects* where an objects captures the set of data (state) and behaviours (methods) associated with entities in the system.  We assume most readers have already studied the basics of *object oriented* programming, such as defining classes of objects, inheritance and encapsulation.
-* **Declarative** languages focus on declaring *what* a procedure (or function) should do rather than *how* it should do it.  Classic examples of declarative languages are SQL - which precisely describes a relational database query (i.e. what should be returned) without having to tell the database *how* the computation should be performed (e.g. the sequence of steps to carry out to perform the query).  HTML is also declarative: describing what a web page should look like without specifying how to render it.  SQL and HTML both avoid defining the *how* by relying on an engine which already knows how to do the task (i.e. the database system (SQL) or the browser (HTML)).  By contrast, Prolog is an example of a language which is declarative but also a complete programming language (being able to perform any computation that a Turing machine can compute, i.e. Turing Complete).  Declarative languages like Prolog manage to perform arbitrarily complex computations (e.g. with loops and evolving state) through recursive definitions.
-* **Functional** languages are built around the concept of composable functions.  Such languages support [*higher order functions*](https://tgdwyer.github.io/higherorderfunctions/#higher-order-functions) which can take other functions as arguments or return new functions as their result, following the rules of the *Lambda Calculus* (which we will [explore in some depth later](https://tgdwyer.github.io/lambdacalculus/)).  Functional languages such as *Haskell* (which we are going to [explore later](https://tgdwyer.github.io/purescript/)) adhere closely to the mathematical definition of functions that are *pure*, i.e. that do not have side effects but whose only result is an explicit return value.  Pure functional programs tend to be closer to a *declarative* definition of the solution since their manipulation of state is made explicit from the function parameter and return types rather than hidden in side effects (this is a quality which we will see through many examples later). Many modern languages support a mixture of functional (i.e. by supporting higher-order functions) and imperative style programming (by allowing mutable variables and side effects from functions).
+- **Imperative** programs are [a sequence of statements that change a programs state](https://en.wikipedia.org/wiki/Imperative_programming).  They follow the Turing machine model described above.  This is probably the dominant paradigm for programming languages today.  Languages from Assembler to Python are built around this concept and most modern languages still allow you to program in this style.
+- **Procedural** languages are basically *imperative* in nature, but add the concept of named *procedures*, i.e. named subroutines that may be invoked from elsewhere in the program, with parameterised variables that may be passed in.  The result of the procedure may be returned as an explicit return value, or the procedure may *mutate* (change) the value of variables referenced elsewhere in the program (such a mutation is called a *side effect*).  Again, most modern languages support definition of such procedures.  Sometimes, the term *function* is used synonymously with procedure.  Some languages (e.g. Pascal) make a distinction between procedures which mutate state without an explicit return value, while a *function* has an explicit return value.  Note that the latter is closer to the definition of *function* in mathematics.
+- **Object-oriented** languages are built around the concept of *objects* where an objects captures the set of data (state) and behaviours (methods) associated with entities in the system.  We assume most readers have already studied the basics of *object oriented* programming, such as defining classes of objects, inheritance and encapsulation.
+- **Declarative** languages focus on declaring *what* a procedure (or function) should do rather than *how* it should do it.  Classic examples of declarative languages are SQL, HTML and Prolog.
+  - SQL precisely describes a relational database query (i.e. what should be returned) without having to tell the database *how* the computation should be performed (e.g. the sequence of steps to carry out to perform the query).  
+  - HTML describes what a web page should look like without specifying how to render it. SQL and HTML both avoid defining the *how* by relying on an engine which already knows how to do the task (i.e. the database system (SQL) or the browser (HTML)).  
+  - By contrast, Prolog is an example of a language which is declarative but also a complete programming language (being able to perform any computation that a Turing machine can compute, i.e. Turing Complete).  Declarative languages like Prolog manage to perform arbitrarily complex computations (e.g. with loops and evolving state) through recursive definitions.
+- **Functional** languages are built around the concept of composable functions.  Such languages support [*higher order functions*](/higherorderfunctions/#higher-order-functions) which can take other functions as arguments or return new functions as their result, following the rules of the *Lambda Calculus* (which we will [explore in some depth later](/lambdacalculus/)).  Functional languages such as *Haskell* (which we are going to [explore later](/purescript/)) adhere closely to the mathematical definition of functions that are *pure*, i.e. that do not have side effects but whose only result is an explicit return value.  Pure functional programs tend to be closer to a *declarative* definition of the solution since their manipulation of state is made explicit from the function parameter and return types rather than hidden in side effects (this is a quality which we will see through many examples later). Many modern languages support a mixture of functional (i.e. by supporting higher-order functions) and imperative style programming (by allowing mutable variables and side effects from functions).
 
-Until relatively recently there was a fairly clear distinction between languages which followed the Functional Programming (FP) paradigm versus the Object Oriented (OO) paradigm.  From the 1990s to... well it still is... Object Oriented programming has been arguably the dominant paradigm.  Programmers and system architects have found organising their programs and data into class hierarchies a natural way to model everything from simulations, to games, to business rules.  But this focus on creating rigid structures around data is a static view of the world which becomes messy when dealing with dynamic state.  Functional programming, however, focuses on functions as *transformations* of data.  These two alternatives, Object-Oriented versus Functional, have been described as [a Kingdom of Nouns versus a Kingdom of Verbs](http://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html), respectively, where nouns are descriptions of data and verbs are functions.
+Until relatively recently there was a fairly clear distinction between languages which followed the Functional Programming (FP) paradigm versus the Object Oriented (OO) paradigm.  From the 1990s to… well it still is… Object Oriented programming has been arguably the dominant paradigm.  Programmers and system architects have found organising their programs and data into class hierarchies a natural way to model everything from simulations, to games, to business rules.  But this focus on creating rigid structures around data is a static view of the world which becomes messy when dealing with dynamic state.  Functional programming, however, focuses on functions as *transformations* of data.  These two alternatives, Object-Oriented versus Functional, have been described as [a Kingdom of Nouns versus a Kingdom of Verbs](http://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html), respectively, where nouns are descriptions of data and verbs are functions.
 
-Historically these were seen as competing paradigms, leading to quite different languages such as C++ and Haskell.  However, modern languages like TypeScript, Scala, C++17, Java >8, Swift, Rust, etc, provide facilities for both paradigms for you to use (or abuse) as you please.
+Historically these were seen as competing paradigms, leading to quite different languages such as C++ and Haskell.  However, modern languages like TypeScript, Scala, C++17, Java >8, Swift, Rust, Python3 etc, provide facilities for both paradigms for you to use (or abuse) as you please.
 
-Thus, these are no longer competing paradigms. Rather they are complementary, or at-least they can be depending on the skill of the programmer.  They provide programmers with a choice of abstractions to apply as necessary to better manage complexity and achieve robust, reusable, scalable and maintainable code.
+Thus, these are no longer competing paradigms. Rather they are complementary, or at-least they can be depending on the skill of the programmer (we hope you come away with the skill to recognize the advantages of both paradigms). They provide programmers with a choice of abstractions to apply as necessary to better manage complexity and achieve robust, reusable, scalable and maintainable code.
+
+Furthermore, the use of functional style code has become more common place throughout both indsutry and academia, and it is important you become literate in understanding this style of coding and how you can use it as tool to make your code more robust.
 
 These notes focus on introducing programmers who are familiar with the OO paradigm to FP concepts via the ubiquitous multiparadigm language of JavaScript.  The following table functions as a summary but also an overview of the contents of these notes with links to relevant sections.
-
 
 |  | Functional | Object-Oriented |
 |--|------------|-----------------|
@@ -120,3 +125,25 @@ These notes focus on introducing programmers who are familiar with the OO paradi
 |  Thread Safety       | Pure functions easily used concurrently | Can be difficult to manage |
 |  Encapsulation       | Less essential | Needed to protect data integrity |
 | Model of Computation | [Lambda Calculus](/lambdacalculus/)  | Imperative (von Neumann/Turing)  |
+
+## Glossary
+
+*Syntax*: The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+
+*Semantics*: The processes a computer follows when executing a program in a given language.
+
+*Imperative*: Imperative programs are a sequence of statements that change a programs state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembler to Python are built around this concept and most modern languages still allow you to program in this style.
+
+*Procedural*: Procedural languages are basically *imperative* in nature, but add the concept of named *procedures*, i.e. named subroutines that may be invoked from elsewhere in the program, with parameterised variables that may be passed in.
+
+*Object-oriented*: Object-oriented languages are built around the concept of *objects* where an objects captures the set of data (state) and behaviours (methods) associated with entities in the system.
+
+*Declarative*: Declarative languages focus on declaring *what* a procedure (or function) should do rather than *how* it should do it.
+
+*Functional*: Functional languages are built around the concept of composable functions.  Such languages support *higher order functions* which can take other functions as arguments or return new functions as their result, following the rules of the *Lambda Calculus*.
+
+*Lambda Calculus*: A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+
+*Turing Machine*: A model of computation based on a hypothetical machine reading or writing instructions on a tape, which decides how to proceed based on the symbols it reads from the tape.
+
+*von Neumann model*: A model of computation which is the basis for most modern computer architectures. Proposed by John von Neumann in 1945.
