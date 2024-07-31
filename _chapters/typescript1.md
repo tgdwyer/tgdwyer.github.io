@@ -305,17 +305,18 @@ const jsonToString = (json: JsonVal): string => {
     case 'number':
       return String(json)
   }
-  const [openbracket, closebracket, entries]  
+  const [brackets, entries]  
     = json instanceof Array
-      ? ['[', ']', json.map(jsonToString)]
-      : ['{', '}', Object.entries(json)
+      ? ['[]', json.map(jsonToString)]
+      : ['{}', Object.entries(json)
                     .map(/* exercise: what goes here? */)];
-  return `${openbracket} ${entries.join(', ')} ${closebracket}`
+  return `${brackets[0]} ${entries.join(', ')} ${brackets[1]}`
 }
 ```
 
-Notice in the final ternary if expression (`?:`), by the time we have determined that json is not an Array, the only thing left that it could be is an Object.
-Don't be confused by the use of array destructuring to get more than one value from an expression, in this case the correct type of brackets to enclose elements of arrays `[...]` versus objects `{...}`.  This is to avoid having more if expressions than necessary. Like for-loops, ifs are easy to mess up so less is generally better.
+Notice in the final ternary if expression (`?:`), by the time we have determined that json is not an Array, the only thing left that it could be is an Object with `[key,value]` pairs that we can iterate over using `Object.entries(json)`.
+
+Note the use of array destructuring (`[brackets,entries] = ...`)to get more than one value from an expression, in this case we get the correct set of brackets to enclose elements of arrays `[...]` versus objects `{...}`.  This is to avoid having more if expressions than necessary. Like for-loops, ifs are easy to mess up so less is generally better.
 
 ## Interfaces
 
