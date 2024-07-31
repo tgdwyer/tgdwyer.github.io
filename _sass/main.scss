@@ -139,6 +139,11 @@ input:checked + .slider:before {
   display: none;
 }
 
+.site-nav {
+  // Prevent .glossary-term from floating on top of it
+  z-index: 1;
+}
+
 .site-nav .trigger {
   display: flex;
   align-items: center;
