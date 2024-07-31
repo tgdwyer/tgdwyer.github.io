@@ -318,7 +318,7 @@ Notice in the final ternary if expression (`?:`), by the time we have determined
 
 Note also that TypeScript is smart about checking types inside these kinds of conditional statements. So, for example, inside the last if expression, where we know `json instanceof Array` is `true`, we can immediately treat `json` as an array and call its `map` method.
 
-Note the use of array destructuring (`[brackets,entries] = ...`)to get more than one value from an expression, in this case we get the correct set of brackets to enclose elements of arrays `[...]` versus objects `{...}`.  This is to avoid having more if expressions than necessary. Like for-loops, ifs are easy to mess up so less is generally better.
+Finally, don't be confused by the use of array destructuring (`[brackets,entries] = ...`) to get more than one value as the result of an expression. In this case we get the correct set of brackets to enclose elements of arrays `[...]` versus objects `{...}`.  This avoids having more conditional logic than necessary. Like for-loops, ifs are easy to mess up, so less is generally safer.
 
 ## Interfaces
 
