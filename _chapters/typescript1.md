@@ -242,8 +242,7 @@ setLeftPadding(headings[0], () => "100px"); // This will call the function which
 
 ## Disambiguating Types Cheat Sheet
 
-It is common in TypeScript to have functions with union type parameters that need to handle each of the different types separately.
-There are several ways to test types of variables.
+It is common in TypeScript to have functions with union type parameters where each of the possible types need to be handled separately. There are several ways to test types of variables.
 
 **Primitive types:** `typeof v` gets the type of variable `v` as a string. This returns 'number', 'string' or 'boolean' (and a couple of others that we won't worry about) for the primitive types.  It can also differentiate objects and functions, e.g.:
 
