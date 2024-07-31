@@ -241,8 +241,9 @@ setLeftPadding(headings[0], () => "100px"); // This will call the function which
 <div class="cheatsheet" markdown="1">
 
 ## Disambiguating Types Cheat Sheet
+
 It is common in TypeScript to have functions with union type parameters that need to handle each of the different types separately.
-There are several ways to test types of variables. 
+There are several ways to test types of variables.
 
 **Primitive Types:** `typeof v` gets the type of variable `v` as a string. This returns 'number', 'string' or 'boolean' (and a couple of others that we won't worry about) for the primitive types.  It can also differentiate objects and functions, e.g.:
 
@@ -261,6 +262,7 @@ typeof f
 ```
 
 However, a null values and arrays are considered objects:
+
 ```typescript
 const o={prop1:1,prop2:"hi"}, n=null, a=[1,2,3]
 typeof o
@@ -272,6 +274,7 @@ typeof a
 ```
 
 To differentiate null and arrays from other objects, we need different tests:
+
 ```typescript
 n===null
 > true
@@ -305,9 +308,8 @@ const jsonToString = (json: JsonTypes): string => {
   const [openbracket,closebracket,entries]
     = json instanceof Array
       ? ['[',']', json.map(jsonToString)]
-      : ['{','}', Object
-                    .entries(json)
-                    .map(([k,v])=>k+': '+jsonToString(v))];
+      : ['{','}', Object.entries(json)
+                    .map(/* exercise: what goes here? */)];
   return `${openbracket} ${entries.join(', ')} ${closebracket}`
 }
 ```
@@ -316,7 +318,7 @@ const jsonToString = (json: JsonTypes): string => {
 
 ## Interfaces
 
-In TypeScript I can declare an `interface` which defines the set of properties and their types, that I expect to be available for certain objects.
+In TypeScript you can declare an `interface` which defines the set of properties and their types, that I expect to be available for certain objects.
 
 For example, when tallying scores at the end of semester, I will need to work with collections of students that have a name, assignment and exam marks.  There might even be some special cases which require mark adjustments, the details of which I don’t particularly care about but that I will need to be able to access, e.g. through a function particular to that student.  The student objects would need to provide an interface that looks like this:
 
