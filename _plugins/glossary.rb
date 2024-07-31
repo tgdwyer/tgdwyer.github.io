@@ -61,32 +61,33 @@ module Jekyll
 
         file_name = File.basename(document.relative_path, File.extname(document.relative_path))
         document.output = replace_glossary_terms(document.output, file_name)
-    
+
       end
     end
 
     def self.replace_glossary_terms(content, file_name)
       doc = Nokogiri::HTML.fragment(content)
-    
+
       doc.traverse do |node|
         if node.text?
-          unless node.ancestors.any? { |ancestor| ancestor.name.match?(/^h[1-6]$/i) || ancestor.name == 'pre' || ancestor.name == "blockquote" || ancestor['class'] == 'glossary' || ancestor.name == 'code' || ancestor['class'] == 'glossary-term' || ancestor.name == 'title' }
+          unless node.ancestors.any? { |ancestor| ancestor.name.match?(/^h[1-6]$/i) || ancestor.name == 'pre' || ancestor.name == 'blockquote' || ancestor['class'] == 'glossary' || ancestor.name == 'code' || ancestor['class'] == 'glossary-term' || ancestor.name == 'title' }
             new_content = node.content
             @@compiled_glossary_terms.each do |term, definition, first_appeared, regex|
 
               if @@titles.include?(file_name) and @@titles.index(file_name) >= @@titles.index(first_appeared)
                 new_content = new_content.gsub(regex) do |match|
-                  "<span class='glossary-term' data-term='#{term}' data-definition='#{definition}'>#{match}</span>"
+                  definition_html = Kramdown::Document.new(definition).to_html.gsub(/<\/?p>/, '')
+                  "<span class='glossary-term' data-term='#{term}'>#{match}<span class='glossary-popup' markdown='1'>#{definition_html}</span></span>"
                 end
               end
             end
             node.replace(Nokogiri::HTML.fragment(new_content))
-          end        
+          end
         end
       end
-    
+
       doc.to_html
     end
-    
+
   end
 end

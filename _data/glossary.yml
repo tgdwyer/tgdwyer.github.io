@@ -1,17 +1,62 @@
+- term: GHCi REPL
+  definition: The interactive Read-Eval-Print Loop for GHC, the Glasgow Haskell Compiler, allowing users to test Haskell programs and expressions interactively.
+  first_appeared: haskell1
+- term: Pattern Matching
+  definition: A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
+  first_appeared: purescript
+- term: Guards
+  definition: A feature in Haskell used to test boolean expressions. They provide a way to conditionally execute code based on the results of boolean expressions.
+  first_appeared: haskell1
+- term: Where Clauses
+  definition: A way to define local bindings in Haskell, allowing variables or functions to be used within a function body.
+  first_appeared: haskell1
+- term: Let Clauses
+  definition: A way to bind variables or functions within an expression in Haskell, allowing for more localized definitions.
+  first_appeared: haskell1
+- term: Hoogle
+  definition: A Haskell API search engine that allows users to search for functions by name or by type signature.
+  first_appeared: haskell1
+- term: Prelude
+  definition: The default library loaded in Haskell that includes basic functions and operators.
+  first_appeared: haskell1
+- term: Case Expressions
+  definition: A way to perform pattern matching in Haskell that allows for more complex conditional logic within expressions.
+  first_appeared: haskell1
+- term: Type Class
+  definition: A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+  first_appeared: haskell1
+- term: Unit
+  definition: A type with exactly one value, (), used to indicate the absence of meaningful return value, similar to void in other languages.
+  first_appeared: haskell1
+- term: Syntax
+  definition: The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+  first_appeared: levelsofabstraction
+- term: Semantics
+  definition: The processes a computer follows when executing a program in a given language.
+  first_appeared: levelsofabstraction
 - term: Imperative
-  definition: programs are a sequence of statements that change a programs state. This is probably the dominant paradigm for programming languages today. Languages from Assembler to Python are built around this concept and most modern languages still allow you to program in this style.
+  definition: Imperative programs are a sequence of statements that change a programs state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembler to Python are built around this concept and most modern languages still allow you to program in this style.
   first_appeared: levelsofabstraction
 - term: Procedural
-  definition: languages are basically imperative in nature, but add the concept of named procedures, i.e. named subroutines that may be invoked from elsewhere in the program, with parameterised variables that may be passed in.
+  definition: Procedural languages are basically *imperative* in nature, but add the concept of named *procedures*, i.e. named subroutines that may be invoked from elsewhere in the program, with parameterised variables that may be passed in.
   first_appeared: levelsofabstraction
 - term: Object-oriented
-  definition: languages are built around the concept of objects where an objects captures the set of data (state) and behaviours (methods) associated with entities in the system.
+  definition: Object-oriented languages are built around the concept of *objects* where an objects captures the set of data (state) and behaviours (methods) associated with entities in the system.  
   first_appeared: levelsofabstraction
 - term: Declarative
-  definition: languages focus on declaring what a procedure (or function) should do rather than how it should do it.
+  definition: Declarative languages focus on declaring *what* a procedure (or function) should do rather than *how* it should do it.  
   first_appeared: levelsofabstraction
 - term: Functional
-  definition: languages are built around the concept of composable functions. Such languages support higher order functions which can take other functions as arguments or return new functions as their result, following the rules of the Lambda Calculus.
+  definition: Functional languages are built around the concept of composable functions.  Such languages support *higher order functions* which can take other functions as arguments or return new functions as their result, following the rules of the *Lambda Calculus*.
+  first_appeared: levelsofabstraction
+- term: Lambda Calculus
+  definition: A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+  first_appeared: levelsofabstraction
+- term: Turing Machine
+  definition: A model of computation based on a hypothetical machine reading or writing instructions on a tape, which decides how to proceed based on the symbols it reads from the tape.
+  first_appeared: levelsofabstraction
+- term: von Neumann model
+  definition: A model of computation which is the basis for most modern computer architectures. Proposed by John von Neumann in 1945.
   first_appeared: levelsofabstraction
 - term: Anonymous Function
   definition: A function defined without a name, often used as an argument to other functions. Also known as lambda function.
@@ -35,20 +80,134 @@
   definition: A type of polymorphism where functions or data types can be written generically so that they can handle values uniformly without depending on their type.
   first_appeared: javascript1
 - term: Weakly Immutable
-  definition: A property of const-declared objects in JavaScript, where the variable reference is immutable, but the object’s properties can still be changed.
+  definition: A property of const-declared objects in JavaScript, where the variable reference is immutable, but the object's properties can still be changed.
   first_appeared: javascript1
 - term: Pure Function
   definition: A function that always produces the same output for the same input and has no side effects.
   first_appeared: javascript1
 - term: Referential Transparency
-  definition: An expression that can be replaced with its value without changing the program’s behavior, indicating no side effects and consistent results.
+  definition: An expression that can be replaced with its value without changing the program's behavior, indicating no side effects and consistent results.
   first_appeared: javascript1
 - term: Side Effects
-  definition: Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+  definition: Any state change that occurs outside of a function's local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
   first_appeared: javascript1
+- term: Monoid
+  definition: A type class for types that have an associative binary operation (mappend) and an identity element (mempty). Instances of Monoid can be concatenated using mconcat.
+  first_appeared: haskell4
+- term: Foldable
+  definition: A type class for data structures that can be folded (reduced) to a single value. It includes functions like foldr, foldl, length, null, elem, maximum, minimum, sum, product, and foldMap.
+  first_appeared: haskell4
+- term: Traversable
+  definition: A type class for data structures that can be traversed, applying a function with an Applicative effect to each element. It extends both Foldable and Functor and includes functions like traverse and sequenceA.
+  first_appeared: haskell4
+- term: Tail Call Optimisation
+  definition: A compiler feature that optimises tail-recursive functions to prevent additional stack frames from being created, effectively converting recursion into iteration.1
+  first_appeared: purescript
+- term: Asynchronous
+  definition: Operations that occur independently of the main program flow, allowing the program to continue executing while waiting for the operation to complete.
+  first_appeared: functionalreactiveprogramming
+- term: Functional Reactive Programming (FRP)
+  definition: A programming paradigm that combines functional and reactive programming to handle asynchronous data streams and event-driven systems.
+  first_appeared: functionalreactiveprogramming
+- term: Observable
+  definition: A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+  first_appeared: functionalreactiveprogramming
+- term: Lambda expressions
+  definition: Functions written using the λ notation, e.g., λx.x, which are anonymous and can only take on other functions as values.
+  first_appeared: lambdacalculus
+- term: Alpha equivalence
+  definition: Renaming variables in lambda expressions as long as the names remain consistent within the scope.
+  first_appeared: lambdacalculus
+- term: Beta reduction
+  definition: Substituting the arguments of a function application into the function body.
+  first_appeared: lambdacalculus
+- term: Eta conversion
+  definition: Substituting functions that simply apply another expression to their argument with the expression in their body.
+  first_appeared: lambdacalculus
 - term: Combinator
   definition: A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
   first_appeared: higherorderfunctions
+- term: Divergent lambda expressions
+  definition: Expressions that do not simplify when beta reduced, leading to infinite loops.
+  first_appeared: lambdacalculus
+- term: Interface
+  definition: A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+  first_appeared: typescript1
+- term: Transpiling
+  definition: A process where source code in one programming language is translated into another language with a similar level of abstraction, typically preserving the original code’s structure and functionality.
+  first_appeared: typescript1
+- term: Type Annotation
+  definition: A syntax in TypeScript where types are explicitly specified for variables, function parameters, and return types to ensure type safety and correctness.
+  first_appeared: typescript1
+- term: Type Parameter
+  definition: A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+  first_appeared: typescript1
+- term: Union Type
+  definition: A TypeScript construct that allows a variable to hold values of multiple specified types, separated by the `|` symbol.
+  first_appeared: typescript1
+- term: Functor
+  definition: A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the fmap function, which applies a function to every element in a structure.
+  first_appeared: haskell3
+- term: Applicative
+  definition: A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (<*>).
+  first_appeared: haskell3
+- term: Monad
+  definition: A type class in Haskell that represents computations as a series of steps. It provides the bind operation (>>=) to chain operations and the return (or pure) function to inject values into the monadic context.
+  first_appeared: monad
+- term: Parser
+  definition: A function or program that interprets structured input, often used to convert strings into data structures.
+  first_appeared: haskell3
+- term: Context-Free Grammar
+  definition: A type of formal grammar that is used to define the syntax of programming languages and data formats. CFGs consist of a set of production rules that define how terminals and non-terminals can be combined to produce strings in the language.
+  first_appeared: parsercombinators
+- term: Backus-Naur Form
+  definition: A notation for expressing context-free grammars. It is used to formally describe the syntax of programming languages.
+  first_appeared: parsercombinators
+- term: Terminal
+  definition: In the context of grammars, a terminal is a symbol that appears in the strings generated by the grammar. Terminals are the actual characters or tokens of the language.
+  first_appeared: parsercombinators
+- term: Non-Terminal
+  definition: A symbol in a grammar that can be replaced by a sequence of terminals and non-terminals according to the production rules of the grammar.
+  first_appeared: parsercombinators
+- term: Parser Combinator
+  definition: A higher-order function that takes parsers as input and returns a new parser as output. Parser combinators are used to build complex parsers from simpler ones.
+  first_appeared: haskell3
+- term: Abstract Syntax Tree
+  definition: A tree representation of the abstract syntactic structure of a string of text. Each node in the tree represents a construct occurring in the text.
+  first_appeared: parsercombinators
+- term: Eager Evaluation
+  definition: A strategy where expressions are evaluated immediately as they are bound to variables.
+  first_appeared: lazyevaluation
+- term: IIFE (Immediately Invoked Function Expression)
+  definition: A JavaScript function that runs as soon as it is defined, used to create local scopes and encapsulate code.
+  first_appeared: lazyevaluation
+- term: Lazy Evaluation
+  definition: A strategy where expressions are not evaluated until their values are needed, allowing for the creation of infinite sequences and delayed computations.
+  first_appeared: lazyevaluation
+- term: Eta Conversion
+  definition: A technique in Haskell and Lambda Calculus where a function f x is simplified to f, removing the explicit mention of the parameter when it is not needed.
+  first_appeared: haskell3
+- term: Operator Sectioning
+  definition: The process of partially applying an infix operator in Haskell by specifying one of its arguments. For example, (+1) is a section of the addition operator with 1 as the second argument.
+  first_appeared: haskell3
+- term: Compose Operator
+  definition: Represented as (.) in Haskell, it allows the composition of two functions, where the output of the second function is passed as the input to the first function.
+  first_appeared: haskell3
+- term: Point-Free Code
+  definition: A style of defining functions without mentioning their arguments explicitly. This often involves the use of function composition and other combinators.
+  first_appeared: haskell3
+- term: Lifting
+  definition: The process of applying a function to arguments that are within a context, such as a Functor or Applicative.
+  first_appeared: haskell3
+- term: Alternative
+  definition: A type class in Haskell that extends Applicative, introducing the empty and \<\|\> functions for representing computations that can fail or have multiple outcomes.
+  first_appeared: haskell3
+- term: Do Notation
+  definition: A syntactic sugar in Haskell for chaining monadic operations. It makes the code more readable by hiding the explicit use of bind (>>=).
+  first_appeared: monad
+- term: Monadic Effects
+  definition: Operations that produce side effects and are managed within a monadic context, ensuring that the effects are sequenced and controlled.
+  first_appeared: monad
 - term: Point-free style
   definition: A way of defining functions without mentioning their arguments.
   first_appeared: higherorderfunctions
@@ -64,72 +223,6 @@
 - term: K-combinator
   definition: A combinator that takes two arguments and returns the first one.
   first_appeared: higherorderfunctions
-- term: Eta Conversion
-  definition: A technique in Haskell and Lambda Calculus where a function f x is simplified to f, removing the explicit mention of the parameter when it is not needed.
-  first_appeared: haskell3
-- term: Operator Sectioning
-  definition: The process of partially applying an infix operator in Haskell by specifying one of its arguments. For example, (+1) is a section of the addition operator with 1 as the second argument.
-  first_appeared: haskell3
-- term: Compose Operator
-  definition: Represented as (.) in Haskell, it allows the composition of two functions, where the output of the second function is passed as the input to the first function.
-  first_appeared: haskell3
-- term: Point-Free Code
-  definition: A style of defining functions without mentioning their arguments explicitly. This often involves the use of function composition and other combinators.
-  first_appeared: haskell3
-- term: Functor
-  definition: A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the fmap function, which applies a function to every element in a structure.
-  first_appeared: haskell3
-- term: Applicative
-  definition: A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (<*>).
-  first_appeared: haskell3
-- term: Lifting
-  definition: The process of applying a function to arguments that are within a context, such as a Functor or Applicative.
-  first_appeared: haskell3
-- term: Alternative
-  definition: A type class in Haskell that extends Applicative, introducing the empty and \<\|\> functions for representing computations that can fail or have multiple outcomes.
-  first_appeared: haskell3
-- term: Parser
-  definition: A function or program that interprets structured input, often used to convert strings into data structures.
-  first_appeared: haskell3
-- term: Parser Combinator
-  definition: A higher-order function that takes parsers as input and returns a new parser as output. Parser combinators are used to build complex parsers from simpler ones.
-  first_appeared: haskell3
-- term: Monad
-  definition: A type class in Haskell that represents computations as a series of steps. It provides the bind operation (>>=) to chain operations and the return (or pure) function to inject values into the monadic context.
-  first_appeared: monad
-- term: Monoid
-  definition: A type class for types that have an associative binary operation (mappend) and an identity element (mempty). Instances of Monoid can be concatenated using mconcat.
-  first_appeared: haskell4
-- term: Foldable
-  definition: A type class for data structures that can be folded (reduced) to a single value. It includes functions like foldr, foldl, length, null, elem, maximum, minimum, sum, product, and foldMap.
-  first_appeared: haskell4
-- term: Traversable
-  definition: A type class for data structures that can be traversed, applying a function with an Applicative effect to each element. It extends both Foldable and Functor and includes functions like traverse and sequenceA.
-  first_appeared: haskell4
-- term: Unit
-  definition: A type with exactly one value, (), used to indicate the absence of meaningful return value, similar to void in other languages.
-  first_appeared: haskell1
-- term: Do Notation
-  definition: A syntactic sugar in Haskell for chaining monadic operations. It makes the code more readable by hiding the explicit use of bind (>>=).
-  first_appeared: monad
-- term: Monadic Effects
-  definition: Operations that produce side effects and are managed within a monadic context, ensuring that the effects are sequenced and controlled.
-  first_appeared: monad
-- term: Context-Free Grammar
-  definition: A type of formal grammar that is used to define the syntax of programming languages and data formats. CFGs consist of a set of production rules that define how terminals and non-terminals can be combined to produce strings in the language.
-  first_appeared: parsercombinators
-- term: Backus-Naur Form
-  definition: A notation for expressing context-free grammars. It is used to formally describe the syntax of programming languages.
-  first_appeared: parsercombinators
-- term: Terminal
-  definition: In the context of grammars, a terminal is a symbol that appears in the strings generated by the grammar. Terminals are the actual characters or tokens of the language.
-  first_appeared: parsercombinators
-- term: Non-Terminal
-  definition: A symbol in a grammar that can be replaced by a sequence of terminals and non-terminals according to the production rules of the grammar.
-  first_appeared: parsercombinators
-- term: Abstract Syntax Tree
-  definition: A tree representation of the abstract syntactic structure of a string of text. Each node in the tree represents a construct occurring in the text.
-  first_appeared: parsercombinators
 - term: Algebraic Data Types (ADTs)
   definition: Custom data types in Haskell defined using the data keyword, allowing the combination of different types into one composite type using the | operator.
   first_appeared: haskell2
@@ -154,84 +247,12 @@
 - term: Partial Functions
   definition: Functions that do not have a mapping for every input, potentially failing for some inputs.
   first_appeared: haskell2
-- term: Pattern Matching
-  definition: A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
-  first_appeared: purescript
-- term: Tail Call Optimisation
-  definition: A compiler feature that optimises tail-recursive functions to prevent additional stack frames from being created, effectively converting recursion into iteration.1
-  first_appeared: purescript
-- term: Lambda Calculus
-  definition: Model of computation developed in the 1930s by Alonzo Church, providing a complete model of computation similar to Turing Machines.
-  first_appeared: lambdacalculus
-- term: Lambda expressions
-  definition: Functions written using the λ notation, e.g., λx.x, which are anonymous and can only take on other functions as values.
-  first_appeared: lambdacalculus
-- term: Alpha equivalence
-  definition: Renaming variables in lambda expressions as long as the names remain consistent within the scope.
-  first_appeared: lambdacalculus
-- term: Beta reduction
-  definition: Substituting the arguments of a function application into the function body.
-  first_appeared: lambdacalculus
-- term: Eta conversion
-  definition: Substituting functions that simply apply another expression to their argument with the expression in their body.
-  first_appeared: lambdacalculus
-- term: Divergent lambda expressions
-  definition: Expressions that do not simplify when beta reduced, leading to infinite loops.
-  first_appeared: lambdacalculus
-- term: Interface
-  definition: A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
-  first_appeared: typescript1
-- term: Transpiling
-  definition: A process where source code in one programming language is translated into another language with a similar level of abstraction, typically preserving the original code’s structure and functionality.
-  first_appeared: typescript1
-- term: Type Annotation
-  definition: A syntax in TypeScript where types are explicitly specified for variables, function parameters, and return types to ensure type safety and correctness.
-  first_appeared: typescript1
-- term: Type Parameter
-  definition: A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
-  first_appeared: typescript1
-- term: Union Type
-  definition: A TypeScript construct that allows a variable to hold values of multiple specified types, separated by the `|` symbol.
-  first_appeared: typescript1
-- term: Asynchronous
-  definition: Operations that occur independently of the main program flow, allowing the program to continue executing while waiting for the operation to complete.
-  first_appeared: functionalreactiveprogramming
-- term: Functional Reactive Programming (FRP)
-  definition: A programming paradigm that combines functional and reactive programming to handle asynchronous data streams and event-driven systems.
-  first_appeared: functionalreactiveprogramming
-- term: Observable
-  definition: A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
-  first_appeared: functionalreactiveprogramming
-- term: Eager Evaluation
-  definition: A strategy where expressions are evaluated immediately as they are bound to variables.
-  first_appeared: lazyevaluation
-- term: IIFE (Immediately Invoked Function Expression)
-  definition: A JavaScript function that runs as soon as it is defined, used to create local scopes and encapsulate code.
-  first_appeared: lazyevaluation
-- term: Lazy Evaluation
-  definition: A strategy where expressions are not evaluated until their values are needed, allowing for the creation of infinite sequences and delayed computations.
-  first_appeared: lazyevaluation
-- term: GHCi REPL
-  definition: The interactive Read-Eval-Print Loop for GHC, the Glasgow Haskell Compiler, allowing users to test Haskell programs and expressions interactively.
-  first_appeared: haskell1
-- term: Guards
-  definition: A feature in Haskell used to test boolean expressions. They provide a way to conditionally execute code based on the results of boolean expressions.
-  first_appeared: haskell1
-- term: Where Clauses
-  definition: A way to define local bindings in Haskell, allowing variables or functions to be used within a function body.
-  first_appeared: haskell1
-- term: Let Clauses
-  definition: A way to bind variables or functions within an expression in Haskell, allowing for more localized definitions.
-  first_appeared: haskell1
-- term: Hoogle
-  definition: A Haskell API search engine that allows users to search for functions by name or by type signature.
-  first_appeared: haskell1
-- term: Prelude
-  definition: The default library loaded in Haskell that includes basic functions and operators.
-  first_appeared: haskell1
-- term: Case Expressions
-  definition: A way to perform pattern matching in Haskell that allows for more complex conditional logic within expressions.
-  first_appeared: haskell1
-- term: Type Class
-  definition: A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
-  first_appeared: haskell1
+- term: HTML
+  definition: Hyper-Text Markup Language - the declarative language for specifying web page content.
+  first_appeared: html
+- term: CSS
+  definition: Cascading Style Sheets - another declarative (part of the HTML5 standard) for specifying reusable styles for web page rendering.
+  first_appeared: html
+- term: SVG
+  definition: Scalable Vector Graphics - another part of the HTML standard for specifying images declaratively as sets of shapes and paths.
+  first_appeared: html
