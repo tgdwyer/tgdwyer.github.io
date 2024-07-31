@@ -735,6 +735,8 @@ These ideas, of computation through pure function expressions, are inspired by A
 * Implement a `concat` function that takes two lists as arguments and returns a new list of their concatenation.
 * How can we update just one element in this list without mutating any data and what is the run-time complexity of such an operation?
 
+The solutions for this exercise will be discussed in class.
+
 ---
 
 ## Updating Data Structures With Pure Functions
