@@ -380,6 +380,13 @@ What’s really cool about this is that obviously the strings “cat” and “c
 
 #### Solutions
 
+- To create `stringTok`, we can make use of `<<` or `>>` to ignore parts of the result:
+
+```haskell
+stringTok :: String -> Parser String
+stringTok s = spaces >> string s << spaces
+```
+
 - Messy imperative JavaScript to parse animals and construct appropriate class instances:
 
 ```javascript
@@ -435,13 +442,6 @@ try {
   const animal2 = parseAnimal('dog');
   console.log(animal2);
 }
-```
-
-To create `stringTok`, we can make use of `<<` or `>>` to ignore parts of the result:
-
-```haskell
-stringTok :: String -> Parser String
-stringTok s = spaces >> string s << spaces
 ```
 
 ---
