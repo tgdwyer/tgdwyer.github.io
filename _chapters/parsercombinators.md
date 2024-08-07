@@ -378,6 +378,17 @@ What’s really cool about this is that obviously the strings “cat” and “c
 - Modify the grammar and the ADT to have some extra data fields for each of the animal types, e.g. `humpCount`, `remainingLives`, `barkstyle`, etc.
 - Extend your parser to produce these records.
 
+#### Solutions
+
+- To create `stringTok`, we can make use of `<<` or `>>` to ignore parts of the result:
+
+```haskell
+stringTok :: String -> Parser String
+stringTok s = spaces >> string s << spaces
+```
+
+- Messy imperative JavaScript to parse animals and construct appropriate class instances:
+
 ```javascript
 // Define the classes for Cat, Dog, and Camel
 class Cat {
@@ -431,13 +442,6 @@ try {
   const animal2 = parseAnimal('dog');
   console.log(animal2);
 }
-```
-
-To create `stringTok`, we can make use of `<<` or `>>` to ignore parts of the result:
-
-```haskell
-stringTok :: String -> Parser String
-stringTok s = spaces >> string s << spaces
 ```
 
 ---

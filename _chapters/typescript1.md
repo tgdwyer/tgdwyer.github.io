@@ -18,7 +18,7 @@ As the Web 2.0 revolution hit in 2000s web apps built on JavaScript grew increas
 
 Part of the appeal of JavaScript is that being able to run the source code directly in a production environment gives an immediacy and attractive simplicity to software deployment.  However, in recent years more and more tools have been developed that introduce a build-chain into the web development stack.  Examples include: minifiers, which compact and obfuscate JavaScript code before it is deployed; bundlers, which merge different JavaScript files and libraries into a single file to (again) simplify deployment; and also, new languages that compile to JavaScript, which seek to fix the JavaScript language’s shortcomings and compatibility issues in different browsers (although modern ECMAScript has less of these issues).  Examples of languages that compile to JavaScript include CoffeeScript, ClojureScript and (more recently) PureScript (which we will visit later in this unit).  Right now, however, we will take a closer look at another language in this family called TypeScript.  See [the official TypeScript documentation](https://www.typescriptlang.org/docs/) for some tutorials and deeper reference.
 
-TypeScript is interesting because it forms a relatively minimal augmentation, or superset, of ECMAScript syntax that simply adds type annotations.  For the most part, the compilation process simply performs validation on the declared types and strips away the type annotations rendering just the legal JavaScript ready for deployment.  This lightweight compilation into a language with a similar level of abstraction to the source is also known as transpiling (as opposed to C++ or Java where the compiled code is much closer to the machine execution model).
+TypeScript is interesting because it forms a relatively minimal augmentation, or superset, of ECMAScript syntax that simply adds type annotations.  For the most part, the compilation process just performs validation on the declared types and strips away the type annotations rendering just the legal JavaScript ready for deployment.  This lightweight compilation into a language with a similar level of abstraction to the source is also known as transpiling (as opposed to C++ or Java where the compiled code is much closer to the machine execution model).
 
 The following is intended as a minimally sufficient intro to TypeScript features such that we can type some fairly rich data structures and higher-order functions.
 An excellent free resource for learning the TypeScript language in depth is the [TypeScript Deep-dive book](https://basarat.gitbooks.io/typescript/content/docs/getting-started.html).
@@ -33,7 +33,7 @@ let i: number = 123;
 
 Actually, in this case the type annotation is completely redundant.  The TypeScript compiler features sophisticated type inference.  In this case it can trivially infer the type from the type of the literal.
 
-Previously, we showed how rebinding such a variable to a string in JavaScript is perfectly fine by the JavaScript interpreter.  However, such a change of type in a variable a dangerous pattern that is likely an error on the programmer’s part.  The TypeScript compiler will generate an error:
+Previously, we showed how rebinding such a variable to a string in JavaScript is perfectly fine by the JavaScript interpreter.  However, such a change of type in a variable is a dangerous pattern that is likely an error on the programmer’s part.  The TypeScript compiler will generate an error:
 
 ```javascript
 let i = 123;
@@ -232,14 +232,96 @@ The TypeScript typechecker also knows about typeof expressions (as used above) a
 We can now use this function to indent our heading in various ways:
 
 ```typescript
-setLeftPadding(headings,100); // This will be converted to 100px
-setLeftPadding(headings,"100px"); // This will be used directly
-setLeftPadding(headings, () => "100px"); // This will call the function which returns 100px
+setLeftPadding(headings[0],100); // This will be converted to 100px
+setLeftPadding(headings[0],"100px"); // This will be used directly
+setLeftPadding(headings[0], () => "100px"); // This will call the function which returns 100px
 ```
+
+
+<div class="cheatsheet" markdown="1">
+
+## Disambiguating Types Cheat Sheet
+
+It is common in TypeScript to have functions with union type parameters where each of the possible types need to be handled separately. There are several ways to test types of variables.
+
+**Primitive types:** `typeof v` gets the type of variable `v` as a string. This returns 'number', 'string' or 'boolean' (and a couple of others that we won't worry about) for the primitive types.  It can also differentiate objects and functions, e.g.:
+
+```typescript
+const x = 1, 
+      s = "hello", 
+      b = true, 
+      o = {prop1:1, prop2:"hi"}, 
+      f = x=>x+1
+
+typeof x      // 'number'
+typeof s      // 'string'
+typeof b      // 'boolean'
+typeof o      // 'object'
+typeof f      // 'function'
+```
+
+**Object types:** null values and arrays are considered objects:
+
+```typescript
+const o={prop1:1,prop2:"hi"}, 
+      n=null, 
+      a=[1,2,3]
+
+typeof o      // 'object'
+typeof n      // 'object'
+typeof a      // 'object'
+```
+
+To differentiate null and arrays from other objects, we need different tests:
+
+```typescript
+n===null             // true
+a instanceof Array   // true
+```
+
+</div>
+
+Union types can be quite complex.  Here is a type for JSON objects which can hold primitive values (`string`,`boolean`,`number`), or `null`, or Arrays containing elements of `JsonVal`, or an object with named properties, each of which is also a `JsonVal`.
+
+```typescript
+type JsonVal =
+  | string
+  | boolean
+  | number
+  | null
+  | Array<JsonVal>
+  | { [key: string]: JsonVal }
+```
+
+Given such a union type, we can differentiate types using the above tests in `if` or `switch` statements or ternary if-else expressions (`?:`), for example to convert a `JsonVal` to string:
+
+```typescript
+const jsonToString = (json: JsonVal): string => {
+  if(json===null) return 'null';
+  switch(typeof json) {
+    case 'string':
+    case 'boolean':
+    case 'number':
+      return String(json)
+  }
+  const [brackets, entries]  
+    = json instanceof Array
+      ? ['[]', json.map(jsonToString)]
+      : ['{}', Object.entries(json)
+                    .map(/* exercise: what goes here? */)];
+  return `${brackets[0]} ${entries.join(', ')} ${brackets[1]}`
+}
+```
+
+Notice in the final ternary if expression (`?:`), by the time we have determined that `json` is not an Array, the only thing left that it could be is an Object with `[key,value]` pairs that we can iterate over using `Object.entries(json)`.
+
+Note also that TypeScript is smart about checking types inside these kinds of conditional statements. So, for example, inside the last if expression, where we know `json instanceof Array` is `true`, we can immediately treat `json` as an array and call its `map` method.
+
+Finally, don't be confused by the use of array destructuring (`[brackets,entries] = ...`) to get more than one value as the result of an expression. In this case we get the correct set of brackets to enclose elements of arrays `[...]` versus objects `{...}`.  This avoids having more conditional logic than necessary. Like for-loops, ifs are easy to mess up, so less is generally safer.
 
 ## Interfaces
 
-In TypeScript I can declare an `interface` which defines the set of properties and their types, that I expect to be available for certain objects.
+In TypeScript you can declare an `interface` which defines the set of properties and their types, that I expect to be available for certain objects.
 
 For example, when tallying scores at the end of semester, I will need to work with collections of students that have a name, assignment and exam marks.  There might even be some special cases which require mark adjustments, the details of which I don’t particularly care about but that I will need to be able to access, e.g. through a function particular to that student.  The student objects would need to provide an interface that looks like this:
 
@@ -407,7 +489,7 @@ function binarySearch3<T>(arr:T[], key:T, compare: (a:T,b:T)=>number): number {
 Elsewhere in our program where we know how students are sorted, we can specify the appropriate compare function:
 
 ```javascript
-binarySearch3(students, (a,b)=>/* return 1 if a is greater than b, 0 if they are the same, -1 otherwise */)
+binarySearch3(students, key, (a,b)=>/* return 1 if a is greater than b, 0 if they are the same, -1 otherwise */)
 ```
 
 We can also have multiple type parameters for a single function.

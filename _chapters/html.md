@@ -116,7 +116,7 @@ Now we create the `style.css` file as follows:
 This first clause *selects* the rectangle by the unique id we gave it: `blueRectangle`, and then declares some style attributes for animation that specify:
 
 - an id for the animation: `moveX`;
-- a duration of 5 seconds; 
+- a duration of 5 seconds;
 - that the animation should be interpolated linearly (as opposed to something non-linear like ease-in-out);
 - and that it should play forwards as opposed to a gamut of other options.  
   
@@ -126,7 +126,7 @@ This is a program of sorts (in that it causes a lot of computation to happen in 
 
 ### Alternate Step 4: Adding a custom animation from an imperative Javascript program
 
-By contrast, we can create an *imperative* JavaScript program which explicitly gives the list of instructions for *how* to move the rectangle. 
+By contrast, we can create an *imperative* JavaScript program which explicitly gives the list of instructions for *how* to move the rectangle.
 We'll create another rectangle with the id "redRectangle" which we can manipulate from javascript by including a reference to a js file, e.g., `script.js`
 
 ```html
@@ -209,7 +209,7 @@ A major theme of this course will be seeing how *pure functional programming* te
 
 - is as powerful as imperative programming
 - but is more declarative (through functions that clearly declare their inputs and outputs)
-- and forces us to clearly distinquish code with side effects from pure computation.
+- and forces us to clearly distinguish code with side effects from pure computation.
 <!-- markdownlint-enable MD036 -->
 
 ## Exercises

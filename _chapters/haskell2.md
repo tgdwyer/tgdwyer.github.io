@@ -36,6 +36,7 @@ We can construct a type `UserId` with one parameter, `Int`
 ```haskell
 data UserId = UserId Int
 newtype UserId = UserId Int
+```
 
 These are almost identical, and we can use them both equivallentally, e.g., 
 

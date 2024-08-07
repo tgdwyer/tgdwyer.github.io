@@ -609,10 +609,10 @@ The definition of `map` (and friends) may look scary, but lets break it down. We
 
 ```javascript
 function map(func, list) {
-    if (list ==! null) {
+    if (list !== null) {
         return {
-            data: func(l.data),
-            next: map(f, l.next)
+            data: func(list.data),
+            next: map(func, list.next)
         };
     }
     else {

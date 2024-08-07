@@ -1,11 +1,11 @@
 .cheatsheet {
-    background-color: #e8e8e8;
-    padding: 8px 12px;
-  }
+  background-color: #e8e8e8;
+  padding: 8px 12px;
+}
 
 .glossary {
-    background-color: #f3f0f0;
-    padding: 8px 12px;
+  background-color: #f3f0f0;
+  padding: 8px 12px;
 }
 
 
@@ -19,34 +19,34 @@
   position: relative;
   cursor: pointer;
   border-bottom: 1px dotted #000;
+
+  &:hover .glossary-popup {
+    visibility: visible;
+    opacity: 1;
+  }
 }
 
-.glossary-term::after {
-  content: attr(data-definition);
+.glossary-popup {
+  visibility: hidden;
+  opacity: 0;
+
   position: absolute;
-  left: 0;
   bottom: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
+  left: 50%;
   width: 200px;
+  margin-left: -120px;
+
+  padding: 10px;
   background: #fff;
   border: 1px solid #ccc;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   z-index: 1000;
   white-space: normal;
-  opacity: 0;
   transition: opacity 0.3s ease-in-out;
   pointer-events: none;
-}
 
-.glossary-term:hover::after {
-  animation: showTooltip 0s linear 0.25s forwards;
-}
-
-@keyframes showTooltip {
-  to {
-    opacity: 1;
-  }
+  /* Force it to be the default font */
+  font: 400 16px / 1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 
@@ -56,10 +56,6 @@
 
   a {
     flex: 50%;
-
-    &#left {
-
-    }
 
     &#right {
       text-align: right;
@@ -141,6 +137,11 @@ input:checked + .slider:before {
 
 .solutions {
   display: none;
+}
+
+.site-nav {
+  // Prevent .glossary-term from floating on top of it
+  z-index: 1;
 }
 
 .site-nav .trigger {
