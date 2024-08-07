@@ -483,7 +483,7 @@ mousedown
         map(mouseDragEvent=>new DragEvent(mouseDragEvent)),
         startWith(new DownEvent(mouseDownEvent)))),
       scan((s: State, e: MousePosEvent) => e.apply(s),
-        initialState)
+        initialState))
  .subscribe(e => {
    rect.setAttribute('x', String(e.rect.x))
    rect.setAttribute('y', String(e.rect.y))
