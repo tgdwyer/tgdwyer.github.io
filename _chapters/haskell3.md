@@ -37,12 +37,12 @@ Remember haskell binary operators are just infix curried functions of two parame
        ≡ (x+) y     -- binary operators can also be partially applied
 ```
 
-Such operator sectioning allows us to get the right-most parameter of the function on it’s own at the right-hand side of the body expression such that we can apply Eta conversion, thus:
+Such operator sectioning allows us to get the right-most parameter of the function on it’s own at the right-hand side of the body expression such that we can apply eta conversion, thus:
 
 ```haskell
 f x = 1 + x
 f x = (1+) x
-f = (1+)             -- Eta conversion
+f = (1+)             -- eta conversion
 ```
 
 ### Compose
@@ -1222,8 +1222,6 @@ The applicative definition says to apply the second parser `is '+'` to the remai
 Therefore, after applying this parser, it will result in: `Just ("", (\a b -> a) 123 "+")`. Finally, we will apply the function call to ignore the second value, finally resulting in: `Just ("", 123)`. But the key point, is we still *executed* the `is '+'` but we ignored the value. That is the beauty of using our `<*` and `*>` to ignore results, while still *executing* actions
 
 ## Glossary
-
-*Eta Conversion*: A technique in Haskell and Lambda Calculus where a function f x is simplified to f, removing the explicit mention of the parameter when it is not needed.
 
 *Operator Sectioning*: The process of partially applying an infix operator in Haskell by specifying one of its arguments. For example, (+1) is a section of the addition operator with 1 as the second argument.
 

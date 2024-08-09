@@ -122,7 +122,7 @@
   definition: Substituting the arguments of a function application into the function body.
   first_appeared: lambdacalculus
 - term: Eta conversion
-  definition: Substituting functions that simply apply another expression to their argument with the expression in their body.
+  definition: Substituting functions that simply apply another expression to their argument with the expression in their body. This is a technique in Haskell and Lambda Calculus where a function f x is simplified to f, removing the explicit mention of the parameter when it is not needed.
   first_appeared: lambdacalculus
 - term: Combinator
   definition: A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
@@ -184,9 +184,6 @@
 - term: Lazy Evaluation
   definition: A strategy where expressions are not evaluated until their values are needed, allowing for the creation of infinite sequences and delayed computations.
   first_appeared: lazyevaluation
-- term: Eta Conversion
-  definition: A technique in Haskell and Lambda Calculus where a function f x is simplified to f, removing the explicit mention of the parameter when it is not needed.
-  first_appeared: haskell3
 - term: Operator Sectioning
   definition: The process of partially applying an infix operator in Haskell by specifying one of its arguments. For example, (+1) is a section of the addition operator with 1 as the second argument.
   first_appeared: haskell3
