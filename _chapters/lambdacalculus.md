@@ -415,7 +415,7 @@ However, the above description should be enough to give you a working knowledge 
 
 *Beta reduction*: Substituting the arguments of a function application into the function body.
 
-*Eta conversion*: Substituting functions that simply apply another expression to their argument with the expression in their body.
+*Eta conversion*: Substituting functions that simply apply another expression to their argument with the expression in their body. This is a technique in Haskell and Lambda Calculus where a function f x is simplified to f, removing the explicit mention of the parameter when it is not needed.
 
 *Combinator*: A lambda expression with no free variables.
 
