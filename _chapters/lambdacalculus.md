@@ -305,9 +305,7 @@ SUCC 2
     ```lambda
     ADD 1 2
     = (λmnfx.m f (n f x)) (λfx.f x) (λfx. f (f x))
-    = (λnfx.m f (n f x)) (λfx. f (f x)) [m:=(λfx.f x)]
-    = (λnfx.(λfx.f x) f (n f x)) (λfx. f (f x))
-    = (λfx.(λfx.f x) f (n f x)) [n:=(λfx. f (f x))]
+    = (λfx.m f (n f x)) [m:=(λfx.f x), n:=(λfx. f (f x))]
     = λfx.(λfx.f x) f ((λfx. f (f x)) f x) - this is the same as λfx.1 f (2 f x)
     = λfx.(λfx.f x) f ((λx. f (f x)) x)
     = λfx.(λfx.f x) f (f (f x))
@@ -327,9 +325,7 @@ SUCC 2
     ```lambda
     MULTIPLY 2 3
     = (λmnfx.m (n f) x) (λfx. f (f x)) (λfx. f (f (f x)))
-    = (λnfx.m (n f) x) (λfx. f (f (f x))) [m:=(λfx. f (f x))]
-    = (λnfx.(λfx. f (f x)) (n f) x) (λfx. f (f (f x)))
-    = (λfx.(λfx. f (f x)) (n f) x) [n:=(λfx. f (f (f x)))]
+    = (λfx.m (n f) x) [m:=(λfx. f (f x)), n:=(λfx. f (f (f x)))]
     = λfx.(λfx. f (f x)) ((λfx. f (f (f x))) f) x
     = λfx.(λfx. f (f x)) (λx. f (f (f x))) x - this is the same as λfx.2 3 x
     = λfx.(λx. (λx. f (f (f x))) ((λx. f (f (f x))) x)) x
