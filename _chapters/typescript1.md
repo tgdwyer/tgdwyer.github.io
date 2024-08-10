@@ -634,7 +634,7 @@ The important part of this definition:
 
 - `<T>`: Here we define the type parameters which will be usable inside the type of our function. Compared to `map`, we only need a singular type parameter, as `filter` only keeps or remove items, and does not change any data.
 - The generic type `T` is the type of the elements in the input array l.
-- `func: (x: T) => V` specifies that `func` is a function that takes a parameter of type `T` and returns a value of type `boolean`. We **do not** use generic for the output type, as we should be as strict as possible, and we know that the function provided to filter should return a boolean
+- `func: (x: T) => boolean` specifies that `func` is a function that takes a parameter of type `T` and returns a value of type `boolean`. We **do not** use generic for the output type, as we should be as strict as possible, and we know that the function provided to filter should return a boolean
 - `l: T[]` indicates that `l` is an array of elements of type `T`.
 - `T[]` is the return type of the function is an array of elements of type `T`.
 
