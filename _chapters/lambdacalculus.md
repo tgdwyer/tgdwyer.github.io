@@ -243,12 +243,12 @@ SUCC 2
 
     = (λxy. IF x (NOT y) y) TRUE FALSE - expand XOR
     = IF x (NOT y) y [x:=TRUE, y:=FALSE] - beta reduction
-    = IF (TRUE) (NOT FALSE) TRUE
-    = (λbtf.b t f) TRUE (NOT FALSE) TRUE - expand IF
-    = b t f [b:=TRUE,t:=(NOT FALSE),f:=TRUE] - beta reduction
-    = TRUE (NOT FALSE) TRUE
-    = (λxy.x) (NOT FALSE) TRUE - expand TRUE
-    = x [x:=(NOT FALSE), y:=TRUE] - beta reduction
+    = IF (TRUE) (NOT FALSE) FALSE
+    = (λbtf.b t f) TRUE (NOT FALSE) FALSE - expand IF
+    = b t f [b:=TRUE,t:=(NOT FALSE),f:=FALSE] - beta reduction
+    = TRUE (NOT FALSE) FALSE
+    = (λxy.x) (NOT FALSE) FALSE - expand TRUE
+    = x [x:=(NOT FALSE), y:=FALSE] - beta reduction
     = NOT FALSE
     = (λx. IF x FALSE TRUE) FALSE - expand NOT
     = IF x FALSE TRUE (x:=FALSE)
