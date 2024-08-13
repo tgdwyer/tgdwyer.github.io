@@ -39,7 +39,7 @@ type Card = Readonly<{
 }>;
 
 const suits$ = from(suits)
-const ranks$ = from(observables)
+const ranks$ = from(ranks)
 ```
 
 Using the webtool, we can visualize each of these streams.
