@@ -110,7 +110,7 @@ Historically these were seen as competing paradigms, leading to quite different 
 
 Thus, these are no longer competing paradigms. Rather they are complementary, or at-least they can be depending on the skill of the programmer (we hope you come away with the skill to recognize the advantages of both paradigms). They provide programmers with a choice of abstractions to apply as necessary to better manage complexity and achieve robust, reusable, scalable and maintainable code.
 
-Furthermore, the use of functional style code has become more common place throughout both indsutry and academia, and it is important you become literate in understanding this style of coding and how you can use it as tool to make your code more robust.
+Furthermore, the use of functional style code has become more common place throughout both industry and academia, and it is important you become literate in understanding this style of coding and how you can use it as tool to make your code more robust.
 
 These notes focus on introducing programmers who are familiar with the OO paradigm to FP concepts via the ubiquitous multiparadigm language of JavaScript.  The following table functions as a summary but also an overview of the contents of these notes with links to relevant sections.
 
