@@ -36,7 +36,7 @@ When we discussed combinators in JavaScript, we gave this function a name.  What
 
 ### Solutions
 
-It was the [I-combinator](/higherorderfunctions#identity-i-combinator)*
+It was the [I-combinator](/higherorderfunctions#identity-i-combinator).
 
 ---
 
@@ -180,7 +180,7 @@ IF = λbtf.b t f
 
 ```lambda
 AND = λxy. IF x  y FALSE
-OR = λxy. IF x TRUE y 
+OR = λxy. IF x TRUE y
 NOT = λx. IF x FALSE TRUE
 ```
 
@@ -226,63 +226,114 @@ SUCC 2
 
 ### Exercises
 
-* Try using beta reduction to compute some more logical expressions.  E.g. make an expression for XOR.
-* Our JavaScript [cons list](/higherorderfunctions/#k-combinator) was based on the Church Encoding for linked lists.  Try writing the `cons`, `head` and `rest` functions as Lambda expressions.
-* Investigate [Church Numerals](https://en.wikipedia.org/wiki/Church_encoding) and try using lambda calculus to compute some basic math.
+1. Try using beta reduction to compute some more logical expressions.  E.g. make an expression for XOR.
+2. Our JavaScript [cons list](/higherorderfunctions/#k-combinator) was based on the Church Encoding for linked lists.  Try writing the `cons`, `head` and `rest` functions as Lambda expressions.
+3. Investigate [Church Numerals](https://en.wikipedia.org/wiki/Church_encoding) and try using lambda calculus to compute some basic math.
 
 #### Solutions
 
-* First, let’s recall the definition of XOR: If either, but not both, of the inputs is true, then the output is true.
+1. First, let’s recall the definition of XOR: If either, but not both, of the inputs is true, then the output is true.
 
-```lambda
-XOR = λxy. IF x (NOT y) y
-```
+    ```lambda
+    XOR = λxy. IF x (NOT y) y
+    ```
 
-```lambda
-XOR TRUE FALSE
+    ```lambda
+    XOR TRUE FALSE
 
-= (λxy. IF x (NOT y) y) TRUE FALSE - expand XOR
-= IF x (NOT y) y [x:=TRUE, y:=FALSE] - beta reduction
-= IF (TRUE) (NOT FALSE) TRUE
-= (λbtf.b t f) TRUE (NOT FALSE) TRUE - expand IF
-= b t f [b:=TRUE,t:=(NOT FALSE),f:=TRUE] - beta reduction
-= TRUE (NOT FALSE) TRUE
-= (λxy.x) (NOT FALSE) TRUE - expand TRUE
-= x [x:=(NOT FALSE), y:=TRUE] - beta reduction
-= NOT FALSE
-= (λx. IF x FALSE TRUE) FALSE - expand NOT
-= IF x FALSE TRUE (x:=FALSE)
-= IF FALSE FALSE TRUE
-= (λbtf.b t f) FALSE FALSE TRUE - expand IF
-= b t f [b:=FALSE,t:=FALSE,f:=TRUE] - beta reduction
-= FALSE FALSE TRUE
-= (λxy.y) FALSE TRUE - expand FALSE
-= y [x:=FALSE, y:=TRUE] - beta reduction
-= TRUE
-```
+    = (λxy. IF x (NOT y) y) TRUE FALSE - expand XOR
+    = IF x (NOT y) y [x:=TRUE, y:=FALSE] - beta reduction
+    = IF (TRUE) (NOT FALSE) FALSE
+    = (λbtf.b t f) TRUE (NOT FALSE) FALSE - expand IF
+    = b t f [b:=TRUE,t:=(NOT FALSE),f:=FALSE] - beta reduction
+    = TRUE (NOT FALSE) FALSE
+    = (λxy.x) (NOT FALSE) FALSE - expand TRUE
+    = x [x:=(NOT FALSE), y:=FALSE] - beta reduction
+    = NOT FALSE
+    = (λx. IF x FALSE TRUE) FALSE - expand NOT
+    = IF x FALSE TRUE (x:=FALSE)
+    = IF FALSE FALSE TRUE
+    = (λbtf.b t f) FALSE FALSE TRUE - expand IF
+    = b t f [b:=FALSE,t:=FALSE,f:=TRUE] - beta reduction
+    = FALSE FALSE TRUE
+    = (λxy.y) FALSE TRUE - expand FALSE
+    = y [x:=FALSE, y:=TRUE] - beta reduction
+    = TRUE
+    ```
 
-```lambda
-XOR TRUE TRUE
+    ```lambda
+    XOR TRUE TRUE
 
-= (λxy. IF x (NOT y) y) TRUE TRUE - expand XOR
-= IF x (NOT y) y [x:=TRUE, y:=TRUE] - beta reduction
-= IF (TRUE) (NOT TRUE) TRUE
-= (λbtf.b t f) TRUE (NOT TRUE) TRUE - expand IF
-= b t f [b:=TRUE,t:=(NOT TRUE),f:=TRUE] - beta reduction
-= TRUE (NOT TRUE) TRUE
-= (λxy.x) (NOT TRUE) TRUE - expand TRUE
-= x [x:=(NOT TRUE), y:=TRUE] - beta reduction
-= NOT TRUE
-= (λx. IF x FALSE TRUE) TRUE - expand NOT
-= IF x FALSE TRUE (x:=TRUE)
-= IF TRUE FALSE TRUE
-= (λbtf.b t f) TRUE FALSE TRUE - expand IF
-= b t f [b:=TRUE,t:=FALSE,f:=TRUE] - beta reduction
-= TRUE FALSE TRUE
-= (λxy.x) FALSE TRUE - expand TRUE
-= x [x:=FALSE, y:=TRUE] - beta reduction
-= FALSE
-```
+    = (λxy. IF x (NOT y) y) TRUE TRUE - expand XOR
+    = IF x (NOT y) y [x:=TRUE, y:=TRUE] - beta reduction
+    = IF (TRUE) (NOT TRUE) TRUE
+    = (λbtf.b t f) TRUE (NOT TRUE) TRUE - expand IF
+    = b t f [b:=TRUE,t:=(NOT TRUE),f:=TRUE] - beta reduction
+    = TRUE (NOT TRUE) TRUE
+    = (λxy.x) (NOT TRUE) TRUE - expand TRUE
+    = x [x:=(NOT TRUE), y:=TRUE] - beta reduction
+    = NOT TRUE
+    = (λx. IF x FALSE TRUE) TRUE - expand NOT
+    = IF x FALSE TRUE (x:=TRUE)
+    = IF TRUE FALSE TRUE
+    = (λbtf.b t f) TRUE FALSE TRUE - expand IF
+    = b t f [b:=TRUE,t:=FALSE,f:=TRUE] - beta reduction
+    = TRUE FALSE TRUE
+    = (λxy.x) FALSE TRUE - expand TRUE
+    = x [x:=FALSE, y:=TRUE] - beta reduction
+    = FALSE
+    ```
+
+2. We can define these just like we did [in JavaScript](/functionaljavascript/#computation-with-pure-functions):
+
+    ```lambda
+    CONS = λhrf.f h r
+    HEAD = λl.l(λhr.h)
+    REST = λl.l(λhr.r)
+    ```
+
+3. Recall that a number `n` in lambda calculus can be represented by a function that takes in a function `f` and applies it to a value `n` times. Hence, a number `m+n` in lambda calculus should apply a function `f` `m+n` times.
+
+    We can implement `ADD` by applying `f` `n` times and then applying `f` `m` times:
+
+    ```lambda
+    ADD = λmnfx.m f (n f x)
+    ```
+
+    For example,
+
+    ```lambda
+    ADD 1 2
+    = (λmnfx.m f (n f x)) (λfx.f x) (λfx. f (f x))
+    = (λfx.m f (n f x)) [m:=(λfx.f x), n:=(λfx. f (f x))]
+    = λfx.(λfx.f x) f ((λfx. f (f x)) f x) - this is the same as λfx.1 f (2 f x)
+    = λfx.(λfx.f x) f ((λx. f (f x)) x)
+    = λfx.(λfx.f x) f (f (f x))
+    = λfx.(λx.f x) (f (f x))
+    = λfx.f (f (f x))
+    = 3
+    ```
+
+    For multiplication, we need a function that applies `f` `m*n` times. We can do this by creating a function that applies `f` `n` times (`n f`), and then applying that function `m` times (`m (n f)`):
+
+    ```lambda
+    MULTIPLY = λmnfx.m (n f) x
+    ```
+
+    For example,
+
+    ```lambda
+    MULTIPLY 2 3
+    = (λmnfx.m (n f) x) (λfx. f (f x)) (λfx. f (f (f x)))
+    = (λfx.m (n f) x) [m:=(λfx. f (f x)), n:=(λfx. f (f (f x)))]
+    = λfx.(λfx. f (f x)) ((λfx. f (f (f x))) f) x
+    = λfx.(λfx. f (f x)) (λx. f (f (f x))) x - this is the same as λfx.2 3 x
+    = λfx.(λx. (λx. f (f (f x))) ((λx. f (f (f x))) x)) x
+    = λfx.(λx. f (f (f x)) ((λx. f (f (f x))) x)) x
+    = λfx.(f (f (f ((λx. f (f (f x))) x)))) x
+    = λfx.(f (f (f (f (f (f x)))))) x
+    = 6
+    ```
 
 ---
 
@@ -364,7 +415,7 @@ console.log(Y(FAC)(6))
 > stack overflow
 
 Well we got a recurrence, but unfortunately the JavaScript engine’s strict (or eager) evaluation means that we must completely evaluate Y(FAC) before we can ever apply the returned function to (6).  
-Therefore, we get an infinite loop - and actually it doesn’t matter what function we pass in to Y, it will never actually be called and any stopping condition will never be checked.
+Therefore, we get an infinite loop - and actually it doesn’t matter what function we pass in to Y, it will never actually be called and any stopping condition will never be checked.  
 How do we restore the laziness necessary to make progress in this recursion?
 
 (**Hint:** it involves wrapping some part of `Y` in another lambda)
@@ -373,7 +424,7 @@ Did you get it?  If so, good for you!  If not, never mind, it is tricky and in f
 
 **Bigger hint:** there’s another famous combinator called `Z` which is basically `Y` adapted to work with strict evaluation:
 
-```lc
+```lambda
 Z=λf.(λx.f(λv.xxv))(λx.f(λv.xxv))
 ```
 
@@ -384,17 +435,57 @@ Z=λf.(λx.f(λv.xxv))(λx.f(λv.xxv))
 * Note the similarities between `Y` and `Z` and perform a similar set of Beta reductions on `Z FAC` to see how it forces FAC to be evaluated.
 * Write a version of the Z-Combinator in JavaScript such that `Z(FAC)(6)` successfully evaluates to `720`.
 
-Key Idea:
+#### Solutions
 
-* The Z-combinator introduces an additional lambda to delay the evaluation of the recursive call.
+Key ideas:
+
+* The Z-combinator introduces an additional lambda (`λv.xxv`) to delay the evaluation of the recursive call. Note that eta-reducing `λv.xxv` into `xx` would give us the Y-combinator.
 * This ensures that each step of the recursion only evaluates when needed, preventing infinite immediate recursion.
-
-<!-- Not sure? -->
 
 ```javascript
 const Z = f => (x => f(v => x(x)(v)))(x => f(v => x(x)(v)));
 const FAC = f => n => n > 1 ? n * f(n - 1) : 1;
 console.log(Z(FAC)(6)); // Should print 720
+```
+
+Let’s see how `Z FAC 2` would evaluate in lambda calculus:
+
+```lambda
+Z FAC 2
+= (λf. (λx. f (λv.xxv)) (λx. f (λv.xxv))) FAC 2
+= (λx. FAC (λv.xxv)) (λx. FAC (λv.xxv)) 2
+= FAC (λv. (λx. FAC (λv.xxv)) (λx. FAC (λv.xxv)) v) 2
+```
+
+Notice how the `(λx. FAC (λv.xxv)) (λx. FAC (λv.xxv))` has not been evaluated yet since it is inside the `λv` lambda. (If we had used the Y-combinator, we would have infinite recursion here.)
+
+Since 2 > 1, `FAC` returns `n * f(n - 1)`, and it is only in the `f(n - 1)` call that the `(λx. FAC (λv.xxv)) (λx. FAC (λv.xxv))` is evaluated to `FAC (λv.(λx. FAC (λv.xxv)) (λx. FAC (λv.xxv)) v)`:
+
+```lambda
+= 2 * (λv. (λx. FAC (λv.xxv)) (λx. FAC (λv.xxv)) v) 1
+= 2 * (λx. FAC (λv.xxv)) (λx. FAC (λv.xxv)) 1
+= 2 * FAC (λv.(λx. FAC (λv.xxv)) (λx. FAC (λv.xxv)) v) 1
+```
+
+Now, since we have reached the base case (n ≤ 1), `FAC` simply returns 1. `(λx. FAC (λv.xxv)) (λx. FAC (λv.xxv))` will not evaluate here since `FAC` returns 1 immediately:
+
+```lambda
+= 2 * 1
+= 2
+```
+
+Here’s the same thing in JavaScript:
+
+```js
+Z(FAC)(2)
+= (f => (x => f(v => x(x)(v)))(x => f(v => x(x)(v))))(FAC)(2)
+= (x => FAC(v => x(x)(v)))(x => FAC(v => x(x)(v)))(2)
+= FAC(v => (x => FAC(v => x(x)(v)))(x => FAC(v => x(x)(v)))(v))(2)
+= 2 * (v => (x => FAC(v => x(x)(v)))(x => FAC(v => x(x)(v)))(v))(1)
+= 2 * (x => FAC(v => x(x)(v)))(x => FAC(v => x(x)(v)))(1)
+= 2 * FAC(v => (x => FAC(v => x(x)(v)))(x => FAC(v => x(x)(v)))(v))(1)
+= 2 * 1
+= 2
 ```
 
 ---
@@ -415,7 +506,7 @@ However, the above description should be enough to give you a working knowledge 
 
 *Beta reduction*: Substituting the arguments of a function application into the function body.
 
-*Eta conversion*: Substituting functions that simply apply another expression to their argument with the expression in their body.
+*Eta conversion*: Substituting functions that simply apply another expression to their argument with the expression in their body. This is a technique in Haskell and Lambda Calculus where a function f x is simplified to f, removing the explicit mention of the parameter when it is not needed.
 
 *Combinator*: A lambda expression with no free variables.
 
