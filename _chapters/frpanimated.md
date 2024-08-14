@@ -10,18 +10,6 @@ This page will support the workshop solutions with a worked example of how we ca
 
 ## Animation Generation
 
-rxviz.com was used to create the visualizations below.
-
-Here is a neat function allowing us to add a delay to an Observable stream for visualization purposes.
-
-```typescript
-const addDelay =
-  <T>(time : number) =>
-    (obs : Observable<T>) =>       // zipping the interval stream with the given observable
-       zip(interval(time), obs)    // so that they are emitted at a controlled rate.
-         .pipe(map(([[_,e]) => e)) // Just emit the elements from the original stream (ignore the output of interval)
-```
-
 Consider, the definitions for ranks, suits and card, as per the workshop:
 
 ```typescript

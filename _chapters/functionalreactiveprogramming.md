@@ -46,7 +46,7 @@ of(1,2,3,4)
 > 3  
 > 4  
 
-![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/of1234.gif)
+![Using Of](/assets/images/chapterImages/functionalreactiveprogramming/of1234.gif)
 
 The requirement to invoke `subscribe` before anything is produced by the Observable is conceptually similar to the [lazy sequence](lazyevaluation), where nothing happened until we started calling `next`.  But there is also a difference.
 You could think of our lazy sequences as being “pull-based” data structures, because we had to “pull” the values out one at a time by calling the `next` function as many times as we wanted elements of the list.  Observables are a bit different.  They are used to handle “streams” of things, such as asynchronous UI (e.g. mouse clicks on an element of a web page) or communication events (e.g. responses from a web service).  These things are asynchronous in the sense that we do not know when they will occur.
@@ -71,9 +71,19 @@ range(10)
 
 The three animations represent the creation (`range`) and the two transformations (`filter` and `map`), respectively.
 
-![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/even.gif)
+![Even Numbers](/assets/images/chapterImages/functionalreactiveprogramming/even.gif)
 
-To solve the first Project Euler problem using RxJS, we generate a sequence of numbers from 0 to 999 with `range(1000)`. We then use the `filter` operator to select numbers divisible by 3 or 5. The `scan` operator, akin to reduce, accumulates the sum of these filtered numbers over time, and the `last` operator emits only the final accumulated sum. Finally, we subscribe to the observable and log the result to the console. Here’s the complete code:
+We can relate this to similar operations on arrays which we have seen before:
+
+```javascript
+const range = n => Array(n).fill().map((_, i) => i)
+range(10)
+  .filter(isEven)
+  .map(square)
+  .forEach(console.log)
+```
+
+To solve the first Project Euler problem using RxJS, we generate a sequence of numbers from 0 to 999 with `range(1000)`. We then use the `filter` operator to select numbers divisible by 3 or 5. We then use he `scan` operator, akin to reduce, accumulates the sum of these filtered numbers over time, and the `last` operator emits only the final accumulated sum. Finally, we subscribe to the observable and log the result to the console. Here’s the complete code:
 
 ```javascript
 range(1000)
@@ -90,7 +100,7 @@ In the developer console, only one number will be printed:
 
 We can see the values changes as they move further and further down the stream. The four animations represent the creation (`range`) and the three transformations (`filter`, `scan` and `last`), respectively. The `last` animation is empty, since we only emit the *last* value, which will be off screen.
 
-![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/euler.gif)
+![Euler Example](/assets/images/chapterImages/functionalreactiveprogramming/euler.gif)
 
 Scan is very much like the `reduce` function on Array in that it applies an accumulator function to the elements coming through the Observable, except instead of just outputting a single value (as `reduce` does), it emits a stream of the running accumulation (in this case, the sum so far).  Thus, we use the `last` function to produce an Observable with just the final value.
 
@@ -109,7 +119,7 @@ zip(columns,rows)
 > ["B",1]  
 > ["C",2]
 
-![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/zip1.gif)
+![Zip Example](/assets/images/chapterImages/functionalreactiveprogramming/zip1.gif)
 
 If you like mathy vector speak, you can think of the above as an *inner product* of the two streams.  
 By contrast, the `mergeMap` operator gives the *cartesian product* of two streams.  That is, it gives us a way to take, for every element of a stream, a whole other stream, but flattened (or projected) together with the parent stream.  The following enumerates all the row/column indices of cells in a spreadsheet:
@@ -132,7 +142,7 @@ columns.pipe(
 > ["C", 1]  
 > ["C", 2]  
 
-![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/mergeMap.gif)
+![Merge Map Example](/assets/images/chapterImages/functionalreactiveprogramming/mergeMap.gif)
 
 If we contrast `mergeMap` and `map`, map will produce an Observable of Observables, while mergeMap, will produce a single stream with all of the values. Contrast the animation for `map`, with the previous `mergeMap` animation.  `map` has three separate branches, where each one represents its own observable stream. The output of the `console.log`, is an instance of the Observable class itself, which is not very useful!
 
@@ -148,7 +158,7 @@ columns.pipe(
 > Observable
 > Observable
 
-![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/mapmap.gif)
+![Map Map Example](/assets/images/chapterImages/functionalreactiveprogramming/mapmap.gif)
 
 Another way to combine streams is `merge`.  Streams that are generated with `of` and `range` have all their elements available immediately, so the result of a merge is not very interesting, just the elements of one followed by the elements of the other:
 
@@ -164,7 +174,7 @@ merge(columns,rows)
 > 1  
 > 2  
 
-![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/merge.gif)
+![Example of Merge](/assets/images/chapterImages/functionalreactiveprogramming/merge.gif)
 
 However, `merge` when applied to asynchronous streams will merge the elements in the order that they arrive in the stream.  For example, a stream of key-down and mouse-down events from a web-page:
 
@@ -176,6 +186,8 @@ const
 
 It’s a convention to end variable names referring to Observable streams with a `$` (I like to think it’s short for “$tream”, or implies a plurality of the things in the stream, or maybe it’s just because [cash rules everything around me](https://www.youtube.com/watch?v=PBwAxmrE194)).
 
+We can analogously think of `mouse$` as an array of `MouseEvent` objects, e.g., `[MouseEvent, MouseEvent, MouseEvent, MouseEvent, MouseEvent]`, and then we can perform operations on this array just as we would with a typical array of values. However, rather than being a fixed array of `MouseEvent`, they are an ongoing stream of `MouseEvent` objects that occur over time. Therefore, instead of being a static collection of events that you can iterate over all at once, the Observable `mouse$` represents a dynamic, potentially infinite sequence of events that are emitted as they happen in real-time.
+
 The following lets us see in the console the keys pressed as they come in, it will keep running for as long as the web page is open:
 
 ```javascript
@@ -186,7 +198,7 @@ key$.pipe(
 
 The animation displays the stream as the user types in the best FIT unit in to the webpage
 
-![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/keydown.gif)
+![Key Down Example](/assets/images/chapterImages/functionalreactiveprogramming/keydown.gif)
 
 The following prints “!!” on every mousedown:
 
@@ -198,7 +210,7 @@ mouse$.pipe(
 
 The yellow highlight signifies when the mouse is clicked!
 
-![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/click.gif)
+![Click Example](/assets/images/chapterImages/functionalreactiveprogramming/click.gif)
 
 Once again this will keep producing the message for every mouse click for as long as the page is open.  Note that the subscribes do not “block”, so the above two subscriptions will run in parallel.  That is, we will receive messages on the console for either key or mouse downs whenever they occur.
 
@@ -210,7 +222,7 @@ merge(key$.pipe(map(e=>e.key)),
 ).subscribe(console.log)
 ```
 
-![Mouse drag geometry](/assets/images/chapterImages/functionalreactiveprogramming/keyboardclick.gif)
+![Keyboard Example](/assets/images/chapterImages/functionalreactiveprogramming/keyboardclick.gif)
 
 <div class="cheatsheet" markdown="1">
 
@@ -498,6 +510,40 @@ The advantage of this code is not brevity; with the introduced type definitions 
 - *scalability*: we can extend this code pattern to handle more complicated state machines. We can easily `merge` in more input streams, adding Event types to handle their `State` updates, and the only place we have to worry about effects visible to the outside world is in the function passed to `subscribe`.
 
 As an example of *scalability* we will be using this same pattern to implement the logic of an asteroids arcade game in the [next chapter](/asteroids).
+
+### MergeMap vs SwitchMap vs ConcatMap
+
+In RxJS, `mergeMap`, `switchMap`, and `concatMap` are operators used for transforming and flattening observables. Each has its own specific behavior in terms of how it handles incoming values and the resulting observable streams. Here's a breakdown of each:
+
+Lets consider three almost identical pieces of code
+
+```javascript
+fromEvent(document, "mousedown").pipe(mergeMap(() => interval(200)))
+fromEvent(document, "mousedown").pipe(switchMap(() => interval(200)))
+fromEvent(document, "mousedown").pipe(concatMap(() => interval(200)))
+```
+
+With `mergeMap`, each mousedown event triggers a new `interval(200)` observable. All these interval observables will run **concurrently**, meaning their emitted values will *interleave* in the output. In the animation, the `x2` occurs when two observables emit at a approximately the same time, and it cannot be visualized easily.
+
+![Merge Map Visualized](/assets/images/chapterImages/functionalreactiveprogramming/mergeMapMouseDown.gif)
+
+With `switchMap`, each time a `mousedown` event occurs, it triggers an `interval(200)` observable. If another mousedown event occurs before the interval observable finishes (interval  doesn’t finish on its own), the previous interval observable is canceled, and a new one begins. This means only the most recent mousedown event's observable is active. This can be seen as the counter restarting every single time a click occurs, as our interval always emits sequential numbers.
+
+![Switch Map Visualized](/assets/images/chapterImages/functionalreactiveprogramming/switchMap.gif)
+
+With `concatMap`, each time a mousedown event occurs, it starts emitting values from the `interval(200)` observable. Importantly, if a second mousedown event occurs while the previous interval observable is still emitting, the new interval won't start until the previous one has completed. However, since interval is a never-ending observable, in practice, each mousedown event's observable will queue up and only start after the previous ones are manually stopped or canceled. Therefore, no matter how many times a click occurs, the next interval will never begin.
+
+![Concat Map Visualized](/assets/images/chapterImages/functionalreactiveprogramming/concatMap.gif)
+
+We can make an adjustment to this, where, we stop the interval after four items.
+
+```javascript
+fromEvent(document, "mousedown").pipe(concatMap(() => interval(200).pipe(take(4))))
+```
+
+![Concat Map Visualized w/ End](/assets/images/chapterImages/functionalreactiveprogramming/concatMap_take4.gif)
+
+Unlike the previous example with a never-ending interval, in this case, each interval observable completes after emitting four values, so the next mousedown event's observable will queue up and start automatically as soon as the previous one completes. This setup ensures that each click's sequence of interval emissions will be handled one after the other, with no overlap, maintaining the order of clicks and processing each one to completion before starting the next.
 
 ## Glossary
 
