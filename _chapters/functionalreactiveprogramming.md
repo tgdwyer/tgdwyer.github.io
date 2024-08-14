@@ -499,6 +499,40 @@ The advantage of this code is not brevity; with the introduced type definitions 
 
 As an example of *scalability* we will be using this same pattern to implement the logic of an asteroids arcade game in the [next chapter](/asteroids).
 
+### MergeMap vs SwitchMap vs ConcatMap
+
+In RxJS, `mergeMap`, `switchMap`, and `concatMap` are operators used for transforming and flattening observables. Each has its own specific behavior in terms of how it handles incoming values and the resulting observable streams. Here's a breakdown of each:
+
+Lets consider three almost identical pieces of code
+
+```javascript
+fromEvent(document, "mousedown").pipe(mergeMap(() => interval(200)))
+fromEvent(document, "mousedown").pipe(switchMap(() => interval(200)))
+fromEvent(document, "mousedown").pipe(concatMap(() => interval(200)))
+```
+
+With `mergeMap`, each mousedown event triggers a new `interval(200)` observable. All these interval observables will run **concurrently**, meaning their emitted values will *interleave* in the output. In the animation, the `x2` occurs when two observables emit at a approximately the same time, and it cannot be visualized easily.
+
+![Merge Map Visualized](/assets/images/chapterImages/functionalreactiveprogramming/mergeMapMouseDown.gif)
+
+With `switchMap`, each time a `mousedown` event occurs, it triggers an `interval(200)` observable. If another mousedown event occurs before the interval observable finishes (interval  doesn’t finish on its own), the previous interval observable is canceled, and a new one begins. This means only the most recent mousedown event's observable is active. This can be seen as the counter restarting every single time a click occurs, as our interval always emits sequential numbers.
+
+![Switch Map Visualized](/assets/images/chapterImages/functionalreactiveprogramming/switchMap.gif)
+
+With `concatMap`, each time a mousedown event occurs, it starts emitting values from the `interval(200)` observable. Importantly, if a second mousedown event occurs while the previous interval observable is still emitting, the new interval won't start until the previous one has completed. However, since interval is a never-ending observable, in practice, each mousedown event's observable will queue up and only start after the previous ones are manually stopped or canceled. Therefore, no matter how many times a click occurs, the next interval will never begin.
+
+![Concat Map Visualized](/assets/images/chapterImages/functionalreactiveprogramming/concatMap.gif)
+
+We can make an adjustment to this, where, we stop the interval after four items.
+
+```javascript
+fromEvent(document, "mousedown").pipe(concatMap(() => interval(200).pipe(take(4))))
+```
+
+![Concat Map Visualized w/ End](/assets/images/chapterImages/functionalreactiveprogramming/concatMap_take4.gif)
+
+Unlike the previous example with a never-ending interval, in this case, each interval observable completes after emitting four values, so the next mousedown event's observable will queue up and start automatically as soon as the previous one completes. This setup ensures that each click's sequence of interval emissions will be handled one after the other, with no overlap, maintaining the order of clicks and processing each one to completion before starting the next.
+
 ## Glossary
 
 *Asynchronous*: Operations that occur independently of the main program flow, allowing the program to continue executing while waiting for the operation to complete.
