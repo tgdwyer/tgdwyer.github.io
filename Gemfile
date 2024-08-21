@@ -4,7 +4,7 @@ source "https://rubygems.org"
 # Run Jekyll: bundle exec jekyll serve
 
 gem "minima"
-gem "jekyll", "~> 4.2.0"
+gem "jekyll"#, "~> 4.2.0"
 gem "jekyll-feed", "~> 0.12"
 gem "jekyll-sitemap", "~> 1.4"
 gem "jekyll-sass-converter", "~> 2.1"
