@@ -329,9 +329,9 @@ SUCC 2
     = λfx.(λfx. f (f x)) ((λfx. f (f (f x))) f) x
     = λfx.(λfx. f (f x)) (λx. f (f (f x))) x - this is the same as λfx.2 3 x
     = λfx.(λx. (λx. f (f (f x))) ((λx. f (f (f x))) x)) x
-    = λfx.(λx. f (f (f x)) ((λx. f (f (f x))) x)) x
-    = λfx.(f (f (f ((λx. f (f (f x))) x)))) x
-    = λfx.(f (f (f (f (f (f x)))))) x
+    = λfx.(λx. f (f (f x)) ((λx. f (f (f x))) x))
+    = λfx.(f (f (f ((λx. f (f (f x))) x))))
+    = λfx.(f (f (f (f (f (f x))))))
     = 6
     ```
 

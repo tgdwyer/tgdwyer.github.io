@@ -17,18 +17,28 @@ title: Tim’s code stuff
 email: tgdwyer@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Examples and tutorials for various programming paradigms.
-twitter_username: immersivecola
-github_username:  tgdwyer
+#twitter_username: immersivecola
+#github_username:  tgdwyer
 # Google Analytics
 google_analytics: UA-159840333-1
 
 # Build settings
 markdown: kramdown
-theme: minima
+#theme: minima
+remote_theme: jekyll/minima
 
 plugins:
   - jekyll-feed
   - jekyll-sitemap
+  - jekyll-remote-theme
+
+minima:
+  skin: auto
+  social_links:
+    - platform: github
+      user_url: "https://github.com/tgdwyer"
+    - platform: x
+      user_url: "https://x.com/immersivecola"
 
 plugins_dir: _plugins
 

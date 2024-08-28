@@ -515,7 +515,7 @@ As an example of *scalability* we will be using this same pattern to implement t
 
 In RxJS, `mergeMap`, `switchMap`, and `concatMap` are operators used for transforming and flattening observables. Each has its own specific behavior in terms of how it handles incoming values and the resulting observable streams. Here's a breakdown of each:
 
-Lets consider three almost identical pieces of code
+Let's consider three almost identical pieces of code
 
 ```javascript
 fromEvent(document, "mousedown").pipe(mergeMap(() => interval(200)))
@@ -523,11 +523,11 @@ fromEvent(document, "mousedown").pipe(switchMap(() => interval(200)))
 fromEvent(document, "mousedown").pipe(concatMap(() => interval(200)))
 ```
 
-With `mergeMap`, each mousedown event triggers a new `interval(200)` observable. All these interval observables will run **concurrently**, meaning their emitted values will *interleave* in the output. In the animation, the `x2` occurs when two observables emit at a approximately the same time, and it cannot be visualized easily.
+With `mergeMap`, each mousedown event triggers a new `interval(200)` observable. All these interval observables will run **concurrently**, meaning their emitted values will *interleave* in the output. In the animation, the `x2` occurs when two observables emit at approximately the same time, and the values overlap too much to show separately.
 
 ![Merge Map Visualized](/assets/images/chapterImages/functionalreactiveprogramming/mergeMapMouseDown.gif)
 
-With `switchMap`, each time a `mousedown` event occurs, it triggers an `interval(200)` observable. If another mousedown event occurs before the interval observable finishes (interval  doesn’t finish on its own), the previous interval observable is canceled, and a new one begins. This means only the most recent mousedown event's observable is active. This can be seen as the counter restarting every single time a click occurs, as our interval always emits sequential numbers.
+With `switchMap`, each time a `mousedown` event occurs, it triggers an `interval(200)` observable. If another mousedown event occurs before the interval observable finishes (interval  doesn’t finish on its own), the previous interval observable is canceled, and a new one begins. This means only the most recent mousedown event's observable is active. This can be seen as the counter restarting every single time a click occurs (remember interval emits sequential numbers).
 
 ![Switch Map Visualized](/assets/images/chapterImages/functionalreactiveprogramming/switchMap.gif)
 
