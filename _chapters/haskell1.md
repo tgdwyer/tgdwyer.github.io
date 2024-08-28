@@ -212,7 +212,7 @@ But there are definitely cons:
 
 The Haskell way of defining Lambda (anonymous) functions is heavily inspired by [Lambda Calculus](/lambdacalculus/), but also looks a bit reminiscent of the JavaScript arrow syntax:
 
-```haskell
+```none
 JavaScript
 x=>x
 
@@ -244,12 +244,12 @@ main = putStrLn $ y ("circular reasoning works because " ++)
 
 Consider the following pseudocode for a simple recursive definition of the Quick Sort algorithm:
 
-```lambdacalc
+```none
 QuickSort list:
   Take head of list as a pivot  
   Take tail of list as rest
   return 
- QuickSort( elements of rest < pivot ) ++ (pivot : QuickSort( elements of rest >= pivot ))
+QuickSort( elements of rest < pivot ) ++ (pivot : QuickSort( elements of rest >= pivot ))
 ```
 
 We’ve added a bit of notation here: `a : l` inserts a (“cons”es) to the front of a list `l` ; `l1 ++ l2` is the concatenation of lists `l1` and `l2`.
@@ -367,14 +367,13 @@ fibs n = fibs (n-1) + fibs (n-2)
 ### if-then-else
 
 ```haskell
-  If <condition> then <case 1> else <case2>   
+if <condition> then <case 1> else <case 2>   
 ```
 
 just like javascript ternary if operator: `<condition> ? <case 1> : <case 3>`
 
 ```haskell
-fibs n = if n==0 then 1 else if n==1 then 1 else fibs (n-1) + fibs (n-2)
- 
+fibs n = if n == 0 then 1 else if n == 1 then 1 else fibs (n-1) + fibs (n-2)
 ```
 
 ### Guards
@@ -385,8 +384,7 @@ Can test Bool expressions (i.e. not just values matching as in pattern matching)
 fibs n
   | n == 0 = 1
   | n == 1 = 1
-  |otherwise = fibs (n-1) + fibs (n-2)
-
+  | otherwise = fibs (n-1) + fibs (n-2)
 ```
 
 ### case
@@ -395,7 +393,7 @@ fibs n
 fibs n = case n of
   0 -> 1
   1 -> 1
-  otherwise -> fibs (n-1) + fibs (n-2)
+  _ -> fibs (n-1) + fibs (n-2)
 ```
 
 </div>
