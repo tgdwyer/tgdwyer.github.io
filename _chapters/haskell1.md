@@ -21,7 +21,7 @@ If you would like a more gradual introduction, [“Haskell Programming from Firs
 
 ## Starting with the GHCi REPL
 
-A good way to get started with haskell is simply to experiment with the GHCi REPL (Read Eval Print Loop).  
+A good way to get started with haskell is simply to experiment with the GHCi REPL (or Read Eval Print Loop).  You can install GHC from [here](https://www.haskell.org/ghcup/).
 
 Start by making a file: `fibs.hs`
 
@@ -31,7 +31,7 @@ fibs 1 = 1                       -- resolved by pattern matching
 fibs n = fibs (n-1) + fibs (n-2) -- recursive definition
 ```
 
-Then (assuming you've [installed the Haskell compiler GHC](https://www.haskell.org/ghcup/)) load it into GHCi like so:
+Then load it into GHCi like so:
 
 ```bash
 ghci fibs.hs  
@@ -132,9 +132,9 @@ The default Haskell lists are cons lists (linked lists defined with a `cons` fun
 [1,2]++[3,4] -- ==[1,2,3,4], i.e. (++) is concat
 
 -- You can use `:` to pattern match lists in function definitions.
--- Not the enclosing `()` to delimit the pattern for the parameter.
+-- Note the enclosing `()` to delimit the pattern for the parameter.
 length [] = 0
-length (x:xs) = 1 + length xs
+length (x:xs) = 1 + length xs -- x is bound to the head of the list and xs the tail
 -- (although you don’t need to define `length`, it’s already loaded by the prelude)
 
 length [1,2,3]
@@ -211,11 +211,11 @@ But there are definitely cons:
 The Haskell way of defining Lambda (anonymous) functions is heavily inspired by [Lambda Calculus](/lambdacalculus/), but also looks a bit reminiscent of the JavaScript arrow syntax:
 
 ```none
-JavaScript
-x=>x
-
 Lambda Calculus
 λx. x
+
+JavaScript
+x => x
 
 Haskell
 \x -> x
@@ -294,14 +294,14 @@ Next, we have the `where` which lets us create locally scoped variables within t
 
 Finally, you’ll notice that the haskell version of sort appears to be missing a parameterisation of the order function.  Does this mean it is limited to number types?  In fact, no - from our use of `<` and `>=` the compiler has inferred that it is applicable to any ordered type.  More specifically, to any type in the type class `Ord`.
 
-I deliberately avoided the type declaration for the above function because, (1) we haven’t really talked about types properly yet, and (2) because I wanted to show off how clever Haskell type inference is.  However, it is actually good practice to include the type signature.  If one were to load the above code, without type definition, into GHCi (the Haskell REPL), one could interrogate the type like so:
+I deliberately avoided the type declaration for the above function because: (1) we haven’t really talked about types properly yet, and (2) I wanted to show off how clever Haskell type inference is.  However, it is actually good practice to include the type signature.  If one were to load the above code, without type definition, into GHCi (the Haskell REPL), one could interrogate the type like so:
 
 ```haskell
 > :t sort
 sort :: Ord t => [t] -> [t]
 ```
 
-Thus, the function sort has a generic type-parameter `t` (we’ll talk more about such [parametric polymorphism in haskell](/haskell2/#type-parameters-and-polymorphism) later) which is constrained to be in the `Ord` type class (anything that is orderable - we’ll talk more about [type classes](/haskell2/#typeclasses) too).  It’s input parameter is a list of `t`, as is its return type.  This is also precisely the syntax that one would use to declare the type explicitly.  Usually, for all top-level functions in a Haskell file it is good practice to explicitly give the type declaration.  Although, it is not always necessary, it can avoid ambiguity in many situations, and secondly, once you get good at reading Haskell types, it becomes useful documentation.
+Thus, the function `sort` has a generic type-parameter `t` (we’ll talk more about such [parametric polymorphism in haskell](/haskell2/#type-parameters-and-polymorphism) later) which is constrained to be in the `Ord` type class (anything that is orderable - we’ll talk more about [type classes](/haskell2/#typeclasses) too).  Its input parameter is a list of `t`, as is its return type.  This is also precisely the syntax that one would use to declare the type explicitly.  Usually, for all top-level functions in a Haskell file it is good practice to explicitly give the type declaration.  Although it is not always necessary, it can avoid ambiguity in many situations and once you get good at reading Haskell types it becomes useful documentation.
 
 Here’s another refactoring of the quick-sort code.  This time with type declaration because I just said it was the right thing to do:
 
@@ -327,7 +327,7 @@ sort (pivot:rest) = below pivot rest ++ [pivot] ++ above pivot rest
 ```
 
 as:
-> the sort of a list where we take the first element as the “pivot” and everything after the list as “rest” is
+> the sort of a list where we take the first element as the “pivot” and everything after   as “rest” is
 > everything that is below pivot in rest,  
 > concatenated with a list containing just the pivot,  
 > concatenated with everything that is above pivot in rest.
@@ -346,7 +346,7 @@ sort (pivot:rest) = let
    partition comparison = sort . filter comparison
 ```
 
-Note that where is only available in function declarations, not inside expressions and therefore is not available in a lambda.  However, let, in is part of the expression, and therefore available inside a lambda function.  A silly example would be:  `\i -> let f x = 2*x in f i`, which could also be spread across lines, but be careful to get the correct indentation.
+Note that where is only available in function declarations, not inside expressions and therefore is not available in a lambda.  However, `let`-`in` is part of the expression, and therefore available inside a lambda function.  A silly example would be:  `\i -> let f x = 2*x in f i`, which could also be spread across lines, but be careful to get the correct indentation.
 
 <div class="cheatsheet" markdown="1">
 
