@@ -10,7 +10,7 @@ GEM
       http_parser.rb (~> 0)
     eventmachine (1.2.7)
     ffi (1.17.0-x64-mingw-ucrt)
-    ffi (1.17.0-x86_64-linux-gnu)
+    ffi (1.17.0-x86_64-linux)
     forwardable-extended (2.6.0)
     http_parser.rb (0.8.0)
     i18n (1.14.5)
@@ -85,6 +85,7 @@ GEM
     tzinfo-data (1.2024.1)
       tzinfo (>= 1.0.0)
     unicode-display_width (2.5.0)
+    wdm (0.1.1)
     webrick (1.8.1)
 
 PLATFORMS
@@ -100,6 +101,7 @@ DEPENDENCIES
   minima
   nokogiri
   tzinfo-data
+  wdm (~> 0.1.0)
   webrick
 
 BUNDLED WITH

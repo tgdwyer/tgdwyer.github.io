@@ -31,24 +31,22 @@ fibs 1 = 1                       -- resolved by pattern matching
 fibs n = fibs (n-1) + fibs (n-2) -- recursive definition
 ```
 
-Then load it into GHCi like so:
+Then (assuming you've [installed the Haskell compiler GHC](https://www.haskell.org/ghcup/)) load it into GHCi like so:
 
 ```bash
-stack ghci fibs.hs  
+ghci fibs.hs  
 ```
 
 You’ll get a prompt that looks like:
 
 ```haskell
-Prelude>
+ghci>
 ```
-
-Where the text left of the `>` tells you what libraries are loaded into the current scope.  “Prelude” is the default library which already includes everything we need for this chapter.
 
 You can enter haskell expressions directly at the prompt:
 
 ```haskell
-Prelude> fibs 6
+ghci> fibs 6
 ```
 
 > 13  
