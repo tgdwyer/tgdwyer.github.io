@@ -144,6 +144,11 @@ input:checked + .slider:before {
   z-index: 1;
 }
 
+
+#nav-menu {
+  display: flex;
+}
+
 .site-nav .trigger {
   display: flex;
   align-items: center;
