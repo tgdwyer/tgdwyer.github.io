@@ -143,13 +143,35 @@ add(3)(4)
 
 > 7
 
-We can also create curried versions of functions with more than two variables—but the TypeScript syntax for functions with arbitrary numbers of arguments gets a bit scary (one of the many reasons we will shortly [switch to Haskell](/haskell1/) for our exploration of more advanced functional programming topics).
+We can also create curried versions of functions with more than two variables; but the TypeScript syntax for functions with arbitrary numbers of arguments gets a bit scary, requiring advanced use of [conditional types](https://www.typescriptlang.org/docs/handbook/2/conditional-types.html). This is one of the many reasons we will shortly [switch to Haskell](/haskell1/) for our exploration of more advanced functional programming topics.
 
 ```javascript
-// Don’t try to understand this - this is just to show you why Haskell is better for strictly-typed FP
-function curry<T extends unknown[], U extends unknown[], R>(fn: (...ts: [...T, ...U]) => R, ...args:T): (...bs:U) => R {
-    return (...bargs: U) => fn(...args, ...bargs);
+// A type for a regular Uncurried function with arbitrary number of arguments
+type Uncurried = (...args: any[]) => any;
+
+// Warning - advanced TypeScript types!
+// A type for curried functions with arbitrary numbers of arguments.
+// Full disclosure: I needed ChatGPT to help figure this out.
+type Curried<T> = T extends (...args: infer Args) => infer R
+  ? Args extends [infer First, ...infer Rest]
+    ? (arg: First) => Curried<(...args: Rest) => R>
+    : R
+  : never;
+
+// now the curry function returns a function which, when called in curried style,
+// will build the argument list until it has enough arguments to call the original fn
+function curry<T extends Uncurried>(fn: T): Curried<T> {
+  const curried = (...args: any[]): any =>
+    args.length >= fn.length ? fn(...args)
+                             : (...moreArgs: any[]) => curried(...args, ...moreArgs);
+  return curried as Curried<T>;
 }
+
+const weirdAdd = (a:number,b:boolean,c:string) => a + (b?1:0) + parseInt(c)
+
+// type of curriedWeirdAdd is: 
+//  (arg: number) => (arg: boolean) => (arg: string) => number
+const curriedWeirdAdd = curry(weirdAdd);
 ```
 
 ## Composition
