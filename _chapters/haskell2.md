@@ -299,7 +299,7 @@ where
 "Tim not found in database"
 ```
 
-We can also do this using a [case statement](/haskell1#conditional-code-constructs-cheatsheet)
+We can also do this using a [case statement](/haskell1#conditional-code-constructs-cheatsheet).
 
 ```haskell
 printNumber :: String -> IO ()
@@ -314,7 +314,7 @@ Here we use the wildcard `_` to match any other possible value, in this case, th
 
 ## Glossary
 
-*Algebraic Data Types (ADTs)*: Custom data types in Haskell defined using the data keyword, allowing the combination of different types into one composite type using the \| operator.
+*Algebraic Data Types*: (or ADTs) Custom data types in Haskell defined using the data keyword, allowing the combination of different types into one composite type using the \| operator.
 
 *Record Syntax*: An alternate way to define data structures in Haskell with named fields, automatically creating accessor functions for those fields.
 

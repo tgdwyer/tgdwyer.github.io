@@ -388,6 +388,15 @@ fibs n
 ### case
 
 ```haskell
+case <expression> of
+  <pattern1> -> <result if pattern1 matches>
+  <pattern2> -> <result if pattern2 matches>
+  _ -> <result if no pattern above matches>
+```
+
+For example:
+
+```haskell
 fibs n = case n of
   0 -> 1
   1 -> 1
