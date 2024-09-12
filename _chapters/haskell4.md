@@ -506,7 +506,7 @@ string l = foldr (\c acc -> liftA2 (:) (is c) acc) (pure "") l
 Remembering `liftA2` is equivalent to `f <$> a <*> b`.
 
 Our `<*>` will allow for the sequencing of the applicative effect, so this will sequentially parse all characters, making sure they are correct.
-As soon, as one applicative parser fails, the result of the parsing will fail.
+As soon as one applicative parser fails, the result of the parsing will fail.
 
 This could also be written as:
 
