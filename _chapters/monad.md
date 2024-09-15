@@ -78,7 +78,7 @@ So the bind function `(>>=)` (and equally its flipped version `(=<<)`) gives us 
 
 As an example we’ll consider computation using the `Maybe` type, which we said is useful for [partial functions](/haskell2/#maybe), that is functions which are not sensibly defined over all of their inputs.  A more complex example of such a function than we have seen before is the [quadratic formula](https://en.wikipedia.org/wiki/Quadratic_formula) which, for quadratic functions of the form:
 
-![quadratic](/assets/images/chapterImages/monad/quadratic.drawio.png)
+![quadratic](/assets/images/chapterImages/monad/quadratic.png)
 
 This may fail in two ways:
 
