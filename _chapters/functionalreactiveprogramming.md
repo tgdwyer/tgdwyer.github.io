@@ -403,10 +403,10 @@ We now rewrite precisely the same behaviour using Observable FRP:
                 x: clientX + mouseDownXOffset,                      //   E
                 y: clientY + mouseDownYOffset                       //   N
               })))))                                                //   C
-   .subscribe(({x, y}) => {                                         //   Y
-     rect.setAttribute('x', String(x))  // >-----------------------------|
-     rect.setAttribute('y', String(y))  // >-----------------------------/
-   });
+    .subscribe(({x, y}) => {                                         //   Y
+      rect.setAttribute('x', String(x))  // >-----------------------------|
+      rect.setAttribute('y', String(y))  // >-----------------------------/
+    });
 ```
 
 The Observable’s mousedown, mousemove and mouseup are like streams which we can transform with familiar operators like map and takeUntil.   The mergeMap operator “flattens” the inner  mousemove  Observable stream back to the top level, then subscribe will apply a final action before doing whatever cleanup is necessary for the stream.
