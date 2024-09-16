@@ -636,7 +636,6 @@ We can write a similar definition for parsing an exact tree compared to parsing 
 We will consider a Value which is either an integer, or an operator which can combine integers. We will assume the only possible combination operator is `+` to avoid complexities with ordering expressions.
 
 ```haskell
-
 data Value = Value Int | BinaryPlus 
   deriving (Show)
 ```
@@ -654,7 +653,6 @@ satisfy p f = Parser $ \i -> case parse p i of
 From this satisfy, we will use traverse to ensure our string *exactly* matches a wanted expression Tree.
 
 ```haskell
-
 isValue :: Value -> Parser Value
 isValue (Value v) = Value <$> satisfy int (==v)
 isValue BinaryPlus = BinaryPlus <$ satisfy char (=='+')
