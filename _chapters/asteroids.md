@@ -382,7 +382,7 @@ class Rotate implements Action {
   constructor(public readonly direction:number) {} 
   apply(s:State):State {
     return {...s,
-      torque: e.direction
+      torque: this.direction
     }
   }
 }
@@ -390,7 +390,7 @@ class Thrust implements Action {
   constructor(public readonly on:boolean) {} 
   apply(s:State):State {
       return {...s, 
-        acc:e.on ? Vec.unitVecInDirection(s.angle).scale(0.05)
+        acc: this.on ? Vec.unitVecInDirection(s.angle).scale(0.05)
                  : Vec.Zero
       }
   }
@@ -523,7 +523,7 @@ Now we define functions to create objects:
     return {
       id: `bullet${s.objCount}`,
       pos:s.ship.pos.add(d.scale(s.ship.radius)),
-      vel:s.ship.vel.add(d.scale(-2)),
+      vel:s.ship.vel.add(d.scale(2)),
       createTime:s.time,
       thrust:false,
       angle:0,

@@ -237,12 +237,12 @@ The following functions create Observable streams from various sources.
 
 ```typescript
 // produces the list of arguments as elements of the stream
-of<T>(...args: T[]): Observable<T> 
+of<T>(...args: T[]): Observable<T>
 
 // produces a stream of numbers from “start” until “count” been emitted
 range(start?: number, count?: number): Observable<number>
 
-// produces a stream for the specified event, element type depends on 
+// produces a stream for the specified event, element type depends on
 // event type and should be specified by the type parameter, e.g.: MouseEvent, KeyboardEvent
 fromEvent<T>(target: FromEventTarget<T>, eventName: string): Observable<T>
 
@@ -251,7 +251,7 @@ fromEvent<T>(target: FromEventTarget<T>, eventName: string): Observable<T>
 interval(period?: number): Observable<number>
 
 // after given initial delay, emit numbers in sequence every specified duration
-timer(initialDelay: number, period? : number): Observable<number>
+timer(initialDelay: number, period?: number): Observable<number>
 
 ```
 
@@ -260,14 +260,14 @@ timer(initialDelay: number, period? : number): Observable<number>
 Creating new Observable streams from existing streams
 
 ```typescript
-// create a new Observable stream from the merge of multiple Observable streams.  
+// create a new Observable stream from the merge of multiple Observable streams.
 // The resulting stream will have elements of Union type.
 // i.e. the type of the elements will be the Union of the types of each of the merged streams
 // Note: there is also an operator version.
-merge<T, U...>(t: Observable<T>, u: Observable<U>, ...): Observable<T|U...>
+merge<T, U...>(t: Observable<T>, u: Observable<U>, ...): Observable<T | U | ...>
 
-// create n-ary tuples (arrays) of the elements at the head of each of the incoming streams 
-zip<T,U...>(t: Observable<T>, r: Observable<U>):Observable<[T,U,...]>
+// create n-ary tuples (arrays) of the elements at the head of each of the incoming streams
+zip<T, U...>(t: Observable<T>, r: Observable<U>):Observable<[T, U, ...]>
 ```
 
 ### Observable methods
@@ -303,15 +303,15 @@ take<T>(n: number)
 // take the last element
 last<T>()
 
-// AKA concatMap/flatMap: produces an Observable<R> for every input stream element<T>
+// AKA flatMap: produces an Observable<R> for every input stream element T
 mergeMap<T, R>(project: (value: T) => Observable<R>)
 
 // accumulates values from the stream
 scan<T, R>(accumulator: (acc: R, value: T) => R, seed?: R)
 
 // push an arbitrary object on to the start/end of the stream
-startWith<T>(o:T)
-endWith<T>(o:T)
+startWith<T>(o: T)
+endWith<T>(o: T)
 ```
 
 </div>
@@ -515,7 +515,7 @@ As an example of *scalability* we will be using this same pattern to implement t
 
 In RxJS, `mergeMap`, `switchMap`, and `concatMap` are operators used for transforming and flattening observables. Each has its own specific behavior in terms of how it handles incoming values and the resulting observable streams. Here's a breakdown of each:
 
-Lets consider three almost identical pieces of code
+Let's consider three almost identical pieces of code
 
 ```javascript
 fromEvent(document, "mousedown").pipe(mergeMap(() => interval(200)))
@@ -523,11 +523,11 @@ fromEvent(document, "mousedown").pipe(switchMap(() => interval(200)))
 fromEvent(document, "mousedown").pipe(concatMap(() => interval(200)))
 ```
 
-With `mergeMap`, each mousedown event triggers a new `interval(200)` observable. All these interval observables will run **concurrently**, meaning their emitted values will *interleave* in the output. In the animation, the `x2` occurs when two observables emit at a approximately the same time, and it cannot be visualized easily.
+With `mergeMap`, each mousedown event triggers a new `interval(200)` observable. All these interval observables will run **concurrently**, meaning their emitted values will *interleave* in the output. In the animation, the `x2` occurs when two observables emit at approximately the same time, and the values overlap too much to show separately.
 
 ![Merge Map Visualized](/assets/images/chapterImages/functionalreactiveprogramming/mergeMapMouseDown.gif)
 
-With `switchMap`, each time a `mousedown` event occurs, it triggers an `interval(200)` observable. If another mousedown event occurs before the interval observable finishes (interval  doesn’t finish on its own), the previous interval observable is canceled, and a new one begins. This means only the most recent mousedown event's observable is active. This can be seen as the counter restarting every single time a click occurs, as our interval always emits sequential numbers.
+With `switchMap`, each time a `mousedown` event occurs, it triggers an `interval(200)` observable. If another mousedown event occurs before the interval observable finishes (interval  doesn’t finish on its own), the previous interval observable is canceled, and a new one begins. This means only the most recent mousedown event's observable is active. This can be seen as the counter restarting every single time a click occurs (remember interval emits sequential numbers).
 
 ![Switch Map Visualized](/assets/images/chapterImages/functionalreactiveprogramming/switchMap.gif)
 

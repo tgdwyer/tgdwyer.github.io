@@ -21,7 +21,7 @@ If you would like a more gradual introduction, [“Haskell Programming from Firs
 
 ## Starting with the GHCi REPL
 
-A good way to get started with haskell is simply to experiment with the GHCi REPL (Read Eval Print Loop).  
+A good way to get started with haskell is simply to experiment with the GHCi REPL (or Read Eval Print Loop).  You can install GHC from [here](https://www.haskell.org/ghcup/).
 
 Start by making a file: `fibs.hs`
 
@@ -34,21 +34,19 @@ fibs n = fibs (n-1) + fibs (n-2) -- recursive definition
 Then load it into GHCi like so:
 
 ```bash
-stack ghci fibs.hs  
+ghci fibs.hs  
 ```
 
 You’ll get a prompt that looks like:
 
 ```haskell
-Prelude>
+ghci>
 ```
-
-Where the text left of the `>` tells you what libraries are loaded into the current scope.  “Prelude” is the default library which already includes everything we need for this chapter.
 
 You can enter haskell expressions directly at the prompt:
 
 ```haskell
-Prelude> fibs 6
+ghci> fibs 6
 ```
 
 > 13  
@@ -134,9 +132,9 @@ The default Haskell lists are cons lists (linked lists defined with a `cons` fun
 [1,2]++[3,4] -- ==[1,2,3,4], i.e. (++) is concat
 
 -- You can use `:` to pattern match lists in function definitions.
--- Not the enclosing `()` to delimit the pattern for the parameter.
+-- Note the enclosing `()` to delimit the pattern for the parameter.
 length [] = 0
-length (x:xs) = 1 + length xs
+length (x:xs) = 1 + length xs -- x is bound to the head of the list and xs the tail
 -- (although you don’t need to define `length`, it’s already loaded by the prelude)
 
 length [1,2,3]
@@ -212,12 +210,12 @@ But there are definitely cons:
 
 The Haskell way of defining Lambda (anonymous) functions is heavily inspired by [Lambda Calculus](/lambdacalculus/), but also looks a bit reminiscent of the JavaScript arrow syntax:
 
-```haskell
-JavaScript
-x=>x
-
+```none
 Lambda Calculus
 λx. x
+
+JavaScript
+x => x
 
 Haskell
 \x -> x
@@ -244,12 +242,12 @@ main = putStrLn $ y ("circular reasoning works because " ++)
 
 Consider the following pseudocode for a simple recursive definition of the Quick Sort algorithm:
 
-```lambdacalc
+```none
 QuickSort list:
   Take head of list as a pivot  
   Take tail of list as rest
   return 
- QuickSort( elements of rest < pivot ) ++ (pivot : QuickSort( elements of rest >= pivot ))
+QuickSort( elements of rest < pivot ) ++ (pivot : QuickSort( elements of rest >= pivot ))
 ```
 
 We’ve added a bit of notation here: `a : l` inserts a (“cons”es) to the front of a list `l` ; `l1 ++ l2` is the concatenation of lists `l1` and `l2`.
@@ -296,14 +294,14 @@ Next, we have the `where` which lets us create locally scoped variables within t
 
 Finally, you’ll notice that the haskell version of sort appears to be missing a parameterisation of the order function.  Does this mean it is limited to number types?  In fact, no - from our use of `<` and `>=` the compiler has inferred that it is applicable to any ordered type.  More specifically, to any type in the type class `Ord`.
 
-I deliberately avoided the type declaration for the above function because, (1) we haven’t really talked about types properly yet, and (2) because I wanted to show off how clever Haskell type inference is.  However, it is actually good practice to include the type signature.  If one were to load the above code, without type definition, into GHCi (the Haskell REPL), one could interrogate the type like so:
+I deliberately avoided the type declaration for the above function because: (1) we haven’t really talked about types properly yet, and (2) I wanted to show off how clever Haskell type inference is.  However, it is actually good practice to include the type signature.  If one were to load the above code, without type definition, into GHCi (the Haskell REPL), one could interrogate the type like so:
 
 ```haskell
 > :t sort
 sort :: Ord t => [t] -> [t]
 ```
 
-Thus, the function sort has a generic type-parameter `t` (we’ll talk more about such [parametric polymorphism in haskell](/haskell2/#type-parameters-and-polymorphism) later) which is constrained to be in the `Ord` type class (anything that is orderable - we’ll talk more about [type classes](/haskell2/#typeclasses) too).  It’s input parameter is a list of `t`, as is its return type.  This is also precisely the syntax that one would use to declare the type explicitly.  Usually, for all top-level functions in a Haskell file it is good practice to explicitly give the type declaration.  Although, it is not always necessary, it can avoid ambiguity in many situations, and secondly, once you get good at reading Haskell types, it becomes useful documentation.
+Thus, the function `sort` has a generic type-parameter `t` (we’ll talk more about such [parametric polymorphism in haskell](/haskell2/#type-parameters-and-polymorphism) later) which is constrained to be in the `Ord` type class (anything that is orderable - we’ll talk more about [type classes](/haskell2/#typeclasses) too).  Its input parameter is a list of `t`, as is its return type.  This is also precisely the syntax that one would use to declare the type explicitly.  Usually, for all top-level functions in a Haskell file it is good practice to explicitly give the type declaration.  Although it is not always necessary, it can avoid ambiguity in many situations and once you get good at reading Haskell types it becomes useful documentation.
 
 Here’s another refactoring of the quick-sort code.  This time with type declaration because I just said it was the right thing to do:
 
@@ -329,7 +327,7 @@ sort (pivot:rest) = below pivot rest ++ [pivot] ++ above pivot rest
 ```
 
 as:
-> the sort of a list where we take the first element as the “pivot” and everything after the list as “rest” is
+> the sort of a list where we take the first element as the “pivot” and everything after   as “rest” is
 > everything that is below pivot in rest,  
 > concatenated with a list containing just the pivot,  
 > concatenated with everything that is above pivot in rest.
@@ -348,7 +346,7 @@ sort (pivot:rest) = let
    partition comparison = sort . filter comparison
 ```
 
-Note that where is only available in function declarations, not inside expressions and therefore is not available in a lambda.  However, let, in is part of the expression, and therefore available inside a lambda function.  A silly example would be:  `\i -> let f x = 2*x in f i`, which could also be spread across lines, but be careful to get the correct indentation.
+Note that where is only available in function declarations, not inside expressions and therefore is not available in a lambda.  However, `let`-`in` is part of the expression, and therefore available inside a lambda function.  A silly example would be:  `\i -> let f x = 2*x in f i`, which could also be spread across lines, but be careful to get the correct indentation.
 
 <div class="cheatsheet" markdown="1">
 
@@ -367,14 +365,13 @@ fibs n = fibs (n-1) + fibs (n-2)
 ### if-then-else
 
 ```haskell
-  If <condition> then <case 1> else <case2>   
+if <condition> then <case 1> else <case 2>   
 ```
 
 just like javascript ternary if operator: `<condition> ? <case 1> : <case 3>`
 
 ```haskell
-fibs n = if n==0 then 1 else if n==1 then 1 else fibs (n-1) + fibs (n-2)
- 
+fibs n = if n == 0 then 1 else if n == 1 then 1 else fibs (n-1) + fibs (n-2)
 ```
 
 ### Guards
@@ -385,17 +382,25 @@ Can test Bool expressions (i.e. not just values matching as in pattern matching)
 fibs n
   | n == 0 = 1
   | n == 1 = 1
-  |otherwise = fibs (n-1) + fibs (n-2)
-
+  | otherwise = fibs (n-1) + fibs (n-2)
 ```
 
 ### case
 
 ```haskell
+case <expression> of
+  <pattern1> -> <result if pattern1 matches>
+  <pattern2> -> <result if pattern2 matches>
+  _ -> <result if no pattern above matches>
+```
+
+For example:
+
+```haskell
 fibs n = case n of
   0 -> 1
   1 -> 1
-  otherwise -> fibs (n-1) + fibs (n-2)
+  _ -> fibs (n-1) + fibs (n-2)
 ```
 
 </div>
