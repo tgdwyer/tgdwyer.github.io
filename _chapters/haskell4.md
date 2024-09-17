@@ -497,7 +497,14 @@ So the string “hello” is the prototype for the expected input.  How would we
 Our parser would have to process characters from the input stream and check if each successive character  **is** the one expected from the prototype.
 If it is the correct character, we would cons it to our result and than parse the next character.
 
-This can be written using a `foldr` to parse all the characters while checking with the `is` parser.
+This can have a recursive solution
+
+```haskell
+string [] = pure ""
+string (x:xs) = liftA2 (:) (is x) (string xs)
+```
+
+We parse the first character, `x`, then recursively parse the rest of the string. We *lift* the `(:)` operator in to the parser context to combine our results in to a single list. This can also be written using a `foldr` to parse all the characters while checking with the `is` parser.
 
 ```haskell
 string l = foldr (\c acc -> liftA2 (:) (is c) acc) (pure "") l
@@ -677,10 +684,15 @@ inputString :: String
 inputString = "3+5+2"
 
 parsedResult :: String -> Maybe (String, Tree Value)
-parsedResult = parse (stringTree sampleTree) 
+parsedResult = parse (stringTree sampleTree) inputString
 ```
 
-The parsedResult will only succeed if the input string exactly matches the desired tree.
+The parsedResult will only succeed if the input string **exactly** matches the desired tree.
+
+```haskell
+>>> parsedResult
+Just ("",Node (Leaf (Value 3)) BinaryPlus (Node (Leaf (Value 5)) BinaryPlus (Leaf (Value 2))))
+```
 
 To evaluate the parsed expression we can use foldMap and the Sum monoid:
 
