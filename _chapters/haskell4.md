@@ -518,7 +518,7 @@ string l = foldr cons (pure []) l
 
 But the title of this section was traverse?
 
-Well, lets consider how we would define a list as an instance of the traversable operator. The traverse function is defined [exactly](https://hackage.haskell.org/package/base-4.18.0.0/docs/src/Data.Traversable.html#traverse) as follows:
+Well, lets consider how we would define a list as an instance of the traversable operator. The traverse function is defined for lists [exactly](https://hackage.haskell.org/package/ghc-internal-9.1001.0/docs/src/GHC.Internal.Data.Traversable.html#line-241) as follows:
 
 ```haskell
 instance Traversable [] where
