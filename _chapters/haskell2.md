@@ -38,7 +38,7 @@ data UserId = UserId Int
 newtype UserId = UserId Int
 ```
 
-These are almost identical, and we can use them both equivallentally, e.g., 
+These are almost identical, and we can use them both equivallentally, e.g.,
 
 ```haskell
 student :: UserId
@@ -150,7 +150,7 @@ mark (Student _ _ n) = n
 It’s starting to look a bit like annoying boilerplate code.  Luckily, Haskell has another way to define such record types, called record syntax:
 
 ```haskell
-data Student = Student { id::Integer, name::String, mark::Int } 
+data Student = Student { id::Int, name::String, mark::Int } 
 ```
 
 This creates a record type in every way the same as the above, but the accessor functions `id`, `name` and `mark` are created automatically.

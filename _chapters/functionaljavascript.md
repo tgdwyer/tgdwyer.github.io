@@ -631,20 +631,20 @@ In the chained function calls above you have to read them inside-out to understa
 
 ```javascript
 class List {
-   constructor(private head) {}
-   map(f) {
-       return new List(map(f, this.head));
-   }
-...
+    constructor(private head) {}
+    map(f) {
+         return new List(map(f, this.head));
+    }
+  ...
 ```
 
 Then the same flow as above is possible without the nesting and can be read left-to-right, top-to-bottom:
 
 ```javascript
 new List(l)
-   .map(x=>x+1)
-   .filter(x=>x%2===0)
-   .take(2)
+    .map(x=>x+1)
+    .filter(x=>x%2===0)
+    .take(2)
 ```
 
 This is called *fluent* programming style.

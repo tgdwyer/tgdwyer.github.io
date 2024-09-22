@@ -23,8 +23,8 @@ The following equivalences make many refactorings possible in Haskell:
 Exactly as per [Lambda Calculus](/lambdacalculus):
 
 ```haskell
- f x ≡ g x
- f   ≡ g
+f x ≡ g x
+f   ≡ g
 ```
 
 ### Operator Sectioning
@@ -32,9 +32,9 @@ Exactly as per [Lambda Calculus](/lambdacalculus):
 Remember haskell binary operators are just infix curried functions of two parameters and that putting brackets around them makes them prefix instead of infix.
 
 ```haskell
- x + y ≡ (+) x y
-       ≡ ((+) x) y  -- making function application precedence explicit
-       ≡ (x+) y     -- binary operators can also be partially applied
+x + y ≡ (+) x y
+      ≡ ((+) x) y  -- making function application precedence explicit
+      ≡ (x+) y     -- binary operators can also be partially applied
 ```
 
 Such operator sectioning allows us to get the right-most parameter of the function on it’s own at the right-hand side of the body expression such that we can apply eta conversion, thus:
@@ -122,7 +122,7 @@ flip f a b = f b a
 ```
 
 can also be useful in reversing the arguments of a function or operator in order to get them into a position such that they can be eta-reduced.
-  
+
 In code written by experienced haskellers it is very common to see functions reduced to point-free form.  Does it make code more readable?  To experienced haskellers, many times yes.  To novices, perhaps not.  When to do it is a matter of preference.  Experienced haskellers tend to prefer it, they will argue that it reduces functions like the example one above “to their essence”, removing the “unnecessary plumbing” of explicitly named variables.   Whether you like it or not, it is worth being familiar with the tricks above, because you will undoubtedly see them used in practice.  The other place where point-free style is very useful is when you would otherwise need to use a lambda function.
 
 Some more (and deeper) discussion is available on the Haskell Wiki.
@@ -284,28 +284,28 @@ We can use `fmap` to apply a function to a `Maybe` value without needing to unpa
 
 ```haskell
 GHCi> fmap (+1) (Just 6)
-Just 7 
+Just 7
 ```
 
 This is such a common operation that there is an operator alias for fmap: `<$>`
 
 ```haskell
 GHCi> (+1) <$> (Just 6)
-Just 7 
+Just 7
 ```
 
 Which also works over lists:
 
 ```haskell
 GHCi> (+1) <$> [1,2,3]
-[2,3,4] 
+[2,3,4]
 ```
 
 Lists of `Maybe`s frequently arise.  For example, the `mod` operation on integers (e.g. `mod 3 2 == 1`) will throw an error if you pass 0 as the divisor:
 
 ```haskell
 > mod 3 0
-*** Exception: divide by zero 
+*** Exception: divide by zero
 ```
 
 We might define a safe modulo function:
@@ -313,28 +313,28 @@ We might define a safe modulo function:
 ```haskell
 safeMod :: Integral a => a-> a-> Maybe a
 safeMod _ 0 = Nothing
-safeMod numerator divisor = Just $ mod numerator divisor 
+safeMod numerator divisor = Just $ mod numerator divisor
 ```
 
 This makes it safe to apply `safeMod` to an arbitrary list of `Integral` values:
 
 ```haskell
 > map (safeMod 3) [1,2,0,4]
-[Just 0,Just 1,Nothing,Just 3] 
+[Just 0,Just 1,Nothing,Just 3]
 ```
 
 But how do we keep working with such a list of `Maybe`s?  We can map an `fmap` over the list:
 
 ```haskell
 GHCi> map ((+1) <$>) [Just 0,Just 1,Nothing,Just 3]
-[Just 1,Just 2,Nothing,Just 4] 
+[Just 1,Just 2,Nothing,Just 4]
 ```
 
 Or equivalently:
 
 ```haskell
 GHCi> ((+1) <$>) <$> [Just 0,Just 1,Nothing,Just 3]
-[Just 1,Just 2,Nothing,Just 4] 
+[Just 1,Just 2,Nothing,Just 4]
 ```
 
 In addition to lists and `Maybe`s, a number of other built-in types have instances of `Functor`:
@@ -345,14 +345,14 @@ GHCi> :i Functor
 instance Functor (Either a) -- Defined in `Data.Either'
 instance Functor IO -- Defined in `GHC.Base'
 instance Functor ((->) r) -- Defined in `GHC.Base'
-instance Functor ((,) a) -- Defined in `GHC.Base' 
+instance Functor ((,) a) -- Defined in `GHC.Base'
 ```
 
 The definition for functions `(->)` might surprise:
 
 ```haskell
 instance Functor ((->) r) where
-    fmap = (.) 
+    fmap = (.)
 ```
 
 So the composition of functions `f` and `g`, `f . g`, is equivalent to ‘mapping’ `f` over `g`, e.g.  `f <$> g`.  
@@ -464,14 +464,14 @@ For example, a function inside a `Maybe` can be applied to a value in a `Maybe`.
 
 ```haskell
 GHCi> Just (+3) <*> Just 2
-Just 5 
+Just 5
 ```
 
 Or a list of functions `[(+1),(+2)]` to things inside a similar context (e.g. a list `[1,2,3]`).
 
 ```haskell
 > [(+1),(+2)] <*> [1,2,3]
-[2,3,4,3,4,5] 
+[2,3,4,3,4,5]
 ```
 
 Note that lists definition of `<*>` produces the Cartesian product of the two lists, that is, all the possible ways to apply the functions in the left list to the values in the right list.  It is interesting to look at [the source](https://hackage.haskell.org/package/base-4.14.0.0/docs/src/GHC.Base.html#Applicative) for the definition of `Applicative` for lists on Hackage:
@@ -479,7 +479,7 @@ Note that lists definition of `<*>` produces the Cartesian product of the two li
 ```haskell
 instance Applicative [] where
   pure x    = [x]
-  fs <*> xs = [f x | f <- fs, x <- xs]  -- list comprehension 
+  fs <*> xs = [f x | f <- fs, x <- xs]  -- list comprehension
 ```
 
 The definition of `<*>` for lists uses a list comprehension.  List comprehensions are a short-hand way to generate lists, using notation similar to mathematical [“set builder notation”](https://en.wikipedia.org/wiki/Set-builder_notation).  The set builder notation here would be:  `{f(x) |  f ∈ fs ∧ x ∈ xs}`.  In English it means: “the set (Haskell list) of all functions in `fs` applied to all values in `xs`”.
@@ -488,7 +488,7 @@ A common use-case for Applicative is applying a binary (two-parameter) function 
 
 ```haskell
 > pure (+) <*> Just 3 <*> Just 2
-Just 5 
+Just 5
 ```
 
 So:
@@ -501,14 +501,14 @@ This is where the name “applicative” comes from, i.e. `Applicative` is a typ
 
 ```haskell
 > (+) <$> Just 3 <*> Just 2
-Just 5 
+Just 5
 ```
 
 This is also called “lifting” a function over an Applicative.  Actually, it’s so common that Applicative also defines dedicated functions for lifting binary functions (in the GHC.Base module):
 
 ```haskell
 > GHC.Base.liftA2 (+) (Just 3) (Just 2)
-Just 5 
+Just 5
 ```
 
 Here’s a little visual summary of Applicative and lifting (box metaphor inspired by [adit.io](http://www.adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html)):
@@ -519,14 +519,14 @@ It’s also useful to lift binary data constructors over two Applicative values,
 
 ```haskell
 > (,) <$> Just 3 <*> Just 2
-Just (3, 2) 
+Just (3, 2)
 ```
 
 We can equally well apply functions with more than two arguments over the correct number of values inside Applicative contexts.
 Recall our student data type:
 
 ```haskell
-data Student = Student { id::Integer, name::String, mark::Int } 
+data Student = Student { id::Integer, name::String, mark::Int }
 ```
 
 with a ternary constructor:
@@ -571,7 +571,7 @@ data Rank = Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten|Jack|Queen|King|Ace
  deriving (Eq,Ord,Enum,Show,Bounded)
 
 data Card = Card Suit Rank
- deriving (Eq, Ord, Show) 
+ deriving (Eq, Ord, Show)
 ```
 
 We can make one card using the Card constructor:
@@ -1008,7 +1008,7 @@ The `fmap` function for the `Functor` instance of `Parser` needs to apply the pa
 
 ```haskell
 instance Functor Parser where
-  fmap f (Parser p) = Parser $ 
+  fmap f (Parser p) = Parser $
     \i -> case p i of 
       Just (rest, result) -> Just (rest, f result)
       _ -> Nothing
@@ -1020,7 +1020,7 @@ However, we can take advantage of the fact that the `Tuple` returned by the pars
 
 ```haskell
 instance Functor Parser where
-  fmap f (Parser p) = Parser $ 
+  fmap f (Parser p) = Parser $
     \i -> case p i of 
       Just (rest, result) -> Just (f <$> (rest, result))
       _ -> Nothing
@@ -1083,7 +1083,7 @@ Now the definition for the `Applicative` is going to stitch together all the mes
 instance Applicative Parser where
   pure a = Parser (\b -> Just (b, a))
 
-  (Parser f) <*> (Parser g) = Parser $ 
+  (Parser f) <*> (Parser g) = Parser $
     \i -> case f i of                                       -- note that this is just
       Just (r1, p1) -> case g r1 of                         -- an abstraction of the
         Just (r2, p2) -> Just (r2, p1 p2)                   -- logic we saw in `plus`
@@ -1130,13 +1130,12 @@ Using the `<*>` operator we can make our calculator magnificently simple:
 -- Just ("",579)
 plus :: Parser Int
 plus = (+) <$> int <*> (is '+' *> int)
-
 ```
 
 Note that we make use of a different version of the applicative operator here: `*>`.  Note also that we didn’t have to provide an implementation of `*>` - rather, the typeclass system picks up a default implementation of this operator (and a bunch of other functions too) from the base definition of `Applicative`.  These default implementations are able to make use of the `<*>` that we provided for our instance of `Applicative` for `Parser`.
 
 ```haskell
-Prelude> :t (*>)                        
+Prelude> :t (*>)
 (*>) :: Applicative f => f a -> f b -> f b
 ```
 
@@ -1145,8 +1144,8 @@ the `*>` carries through the effect of the first `Applicative`, but doesn’t do
 
 In the context of the `Parser` instance when we do things like `(is '+' *> int)`, we try the `is`.  If it succeeds then we carry on and run the `int`.  But if the `is` fails, execution is short circuited and we return `Nothing`.  There is also a flipped version of the operator which works the other way:
 
- ```haskell
-Prelude> :t (<*)                        
+```haskell
+Prelude> :t (<*)
 (<*) :: Applicative f => f a -> f b -> f a
 ```
 
@@ -1157,7 +1156,6 @@ So we could have just as easily implement the `plus` parser:
 -- Just ("",579)
 plus :: Parser Int
 plus = (+) <$> int <* is '+'  <*> int
-
 ```
 
 Obviously, the above is not a fully featured parsing system.  A real parser would need to give us more information in the case of failure, so a `Maybe` is not really a sufficiently rich type to package the result.  Also, a real language would need to be able to handle alternatives - e.g. `minus` or `plus`, as well as expressions with an arbitrary number of terms.  We will revisit all of these topics with a more feature rich set of [parser combinators later](/parsercombinators).
@@ -1203,8 +1201,8 @@ Recall the definition of `Functor` for parsing:
 
 ```haskell
 instance Functor Parser where
-  fmap f (Parser p) = Parser $ 
-    \i -> case p i of 
+  fmap f (Parser p) = Parser $
+    \i -> case p i of
       Just (rest, result) -> Just (rest, f result)
       _ -> Nothing
 ```

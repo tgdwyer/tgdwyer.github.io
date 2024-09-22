@@ -11,7 +11,7 @@ We’re also going to take some pains to make pure functional code (and lots of 
 
 ![MVC Architecture](/assets/images/chapterImages/asteroids/generalMVC.png)
 
-If you’re the kind of person who likes to work backwards, [you can jump straight to playing the final result](https://asteroids2023.stackblitz.io/) and you can also [live edit its code](https://stackblitz.com/edit/asteroids2023?file=src%2Fmain.ts).
+If you’re the kind of person who likes to work backwards, [you can jump straight to playing the final result](https://stackblitz.com/edit/asteroids2023) and you can also live edit its code.
 
 We’ll build it up in several steps.
 

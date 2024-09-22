@@ -56,7 +56,7 @@ Note that since the `(+)` operator is associative—a+(b+c) = (a+b)+c—`foldr` 
 #### Solutions
 
 <!-- markdownlint-disable MD029 -->
-1. The right fold processes the list from the right (end) to the left (beginning). The result of each application   of the function is passed as the accumulator to the next application.
+1. The right fold processes the list from the right (end) to the left (beginning). The result of each application of the function is passed as the accumulator to the next application.
 
   ```haskell
     foldr (-) 0 [1,2,3,4]
@@ -244,10 +244,10 @@ We make this type of binary tree an instance of foldable by implementing either 
 
 ```haskell
 instance Foldable Tree where
-   foldMap :: Monoid m => (a -> m) -> Tree a -> m
-   foldMap _ Empty = mempty
-   foldMap f (Leaf x) = f x
-   foldMap f (Node l x r) = foldMap f l <> f x <> foldMap f r
+  foldMap :: Monoid m => (a -> m) -> Tree a -> m
+  foldMap _ Empty = mempty
+  foldMap f (Leaf x) = f x
+  foldMap f (Node l x r) = foldMap f l <> f x <> foldMap f r
 
 > length tree
 7
@@ -286,10 +286,10 @@ Since list is an instance of Monoid, `foldMap` will concatenate these singleton 
 
 ```haskell
 instance Foldable Tree where
-    foldr :: (a -> b -> b) -> b -> Tree a -> b
-    foldr _ z Empty = z -- base case, return accumulator
-    foldr f z (Leaf x) = f x z -- when we see a leaf, combine accumulator and leaf
-    foldr f z (Node l x r) = foldr f (f x (foldr f z r)) l -- fold over right first, then over left
+  foldr :: (a -> b -> b) -> b -> Tree a -> b
+  foldr _ z Empty = z -- base case, return accumulator
+  foldr f z (Leaf x) = f x z -- when we see a leaf, combine accumulator and leaf
+  foldr f z (Node l x r) = foldr f (f x (foldr f z r)) l -- fold over right first, then over left
 ```
 
 ---
@@ -518,13 +518,13 @@ string l = foldr cons (pure []) l
 
 But the title of this section was traverse?
 
-Well, lets consider how we would define a list as an instance of the traversable operator. The traverse function is defined [exactly](https://hackage.haskell.org/package/base-4.18.0.0/docs/src/Data.Traversable.html#traverse) as follows:
+Well, lets consider how we would define a list as an instance of the traversable operator. The traverse function is defined for lists [exactly](https://hackage.haskell.org/package/ghc-internal-9.1001.0/docs/src/GHC.Internal.Data.Traversable.html#line-241) as follows:
 
 ```haskell
 instance Traversable [] where
-    traverse :: Applicative f => (a -> f b) -> [a] -> f [b]
-    traverse f = foldr cons (pure [])
-      where cons x ys = liftA2 (:) (f x) ys
+  traverse :: Applicative f => (a -> f b) -> [a] -> f [b]
+  traverse f = foldr cons (pure [])
+    where cons x ys = liftA2 (:) (f x) ys
 ```
 
 This is almost exactly the definition of our string parser using `foldr` but the function `f` is exactly the `is` Parser.
@@ -599,9 +599,9 @@ traverse f l = sequenceA (f <$> l)
 
   ```haskell
   instance Traversable Maybe where
-      traverse :: (Applicative f) => (a -> f b) -> Maybe a -> f (Maybe b)
-      traverse _ Nothing = pure Nothing
-      traverse f (Just x) = Just <$> f x
+    traverse :: (Applicative f) => (a -> f b) -> Maybe a -> f (Maybe b)
+    traverse _ Nothing = pure Nothing
+    traverse f (Just x) = Just <$> f x
   ```
 
   - If the input is `Nothing`, we return pure `Nothing`, which is an applicative action that produces `Nothing`.
@@ -623,9 +623,9 @@ data Tree a = Empty
 
 instance Traversable Tree where
   --  traverse :: Applicative f => (a -> f b) -> Tree a -> f (Tree b)
-   traverse _ Empty = pure Empty
-   traverse f (Leaf a) = Leaf <$> f a
-   traverse f (Node l x r) = Node <$> traverse f l <*> f x <*> traverse f r
+  traverse _ Empty = pure Empty
+  traverse f (Leaf a) = Leaf <$> f a
+  traverse f (Node l x r) = Node <$> traverse f l <*> f x <*> traverse f r
 ```
 
 We can write a similar definition for parsing an exact tree compared to parsing a string!
@@ -633,7 +633,6 @@ We can write a similar definition for parsing an exact tree compared to parsing 
 We will consider a Value which is either an integer, or an operator which can combine integers. We will assume the only possible combination operator is `+` to avoid complexities with ordering expressions.
 
 ```haskell
-
 data Value = Value Int | BinaryPlus 
   deriving (Show)
 ```
@@ -651,7 +650,6 @@ satisfy p f = Parser $ \i -> case parse p i of
 From this satisfy, we will use traverse to ensure our string *exactly* matches a wanted expression Tree.
 
 ```haskell
-
 isValue :: Value -> Parser Value
 isValue (Value v) = Value <$> satisfy int (==v)
 isValue BinaryPlus = BinaryPlus <$ satisfy char (=='+')
