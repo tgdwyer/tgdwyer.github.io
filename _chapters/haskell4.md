@@ -505,8 +505,8 @@ string l = foldr (\c acc -> liftA2 (:) (is c) acc) (pure "") l
 
 Remembering `liftA2` is equivalent to `f <$> a <*> b`.
 
-Our `<*>` will allow for the seqeuencing of the applicative effect, so this will sequentially parse all characters, making sure they are correct.
-As soon, as one applicative parser fails, the result of the parsing will fail.
+Our `<*>` will allow for the sequencing of the applicative effect, so this will sequentially parse all characters, making sure they are correct.
+As soon as one applicative parser fails, the result of the parsing will fail.
 
 This could also be written as:
 
@@ -531,14 +531,14 @@ This is almost exactly the definition of our string parser using `foldr` but the
 
 Therefore, we can write `string = traverse is`
 
-Let’s break down how the `string` parser using `traverse` and is works in terms of types:
+Let’s break down how the `string` parser using `traverse` and `is` works in terms of types:
 
 ```haskell
 string :: String -> Parser String
 string = traverse is
 ```
 
-traverse is a higher-order function with the following type:
+`traverse` is a higher-order function with the following type:
 
 ```haskell
 traverse :: (Traversable t, Applicative f) => (a -> f b) -> t a -> f (t b)
@@ -606,9 +606,6 @@ traverse f l = sequenceA (f <$> l)
 
   - If the input is `Nothing`, we return pure `Nothing`, which is an applicative action that produces `Nothing`.
   - If the input is `Just x`, we apply `f` to `x` and then wrap the result with `Just`.
-
-- What would be the definition of sequenceA over a list? (without using traverse)
-- Can you make the `Maybe` data type an instance of traversable?
 
 ---
 
