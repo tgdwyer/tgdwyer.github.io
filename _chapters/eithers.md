@@ -167,7 +167,6 @@ main :: IO ()
 main = do
     -- Attempt to read the file
     fileResult <- readFileSafe "example.txt"
-    
     let result = do
             -- Use monad instance to compute sequential operations
             content <- fileResult
@@ -180,6 +179,6 @@ main = do
 
 *Functor*: A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the `fmap` function, which applies a function to every element in a structure.
 
-*Applicative*: A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions `pure` and (`<*>`).
+*Applicative*: A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions `pure` and `(<*>)`.
 
-*Monad*: A type class in Haskell that represents computations as a series of steps. It provides the bind operation (`>>=`) to chain operations and the return (or `pure`) function to inject values into the monadic context.
+*Monad*: A type class in Haskell that represents computations as a series of steps. It provides the bind operation `(>>=)` to chain operations and the `return` (or `pure`) function to inject values into the monadic context.
