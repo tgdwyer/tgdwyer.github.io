@@ -73,7 +73,7 @@ module Jekyll
                 match
               end
             end
-            node.replace(Nokogiri::HTML.fragment(new_content))
+            node.replace(Nokogiri::HTML5.fragment(new_content))
           end
         end
       end
