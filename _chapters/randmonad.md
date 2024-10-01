@@ -90,7 +90,7 @@ instance Monad Rand where
 
 ![Bind](/assets/images/chapterImages/randmonad/bind.png)
 
-### `Get` and `Put`
+## `Get` and `Put`
 
 `put` is used to set the internal state (the `Seed`) of the `Rand` monad. There is no value yet, hence we use the unit (`()`)
 
@@ -163,6 +163,8 @@ incrementSeed = do
   get           -- Return the updated seed
 ```
 
+## Rolling A Dice
+
 ```haskell
 nextRand :: Seed -> Seed
 nextRand prevSeed = (a*prevSeed + c) `mod` m
@@ -175,6 +177,12 @@ nextRand prevSeed = (a*prevSeed + c) `mod` m
 genRand :: Int -> Int -> Seed -> Int
 genRand l u seed = seed `mod` (u-l+1) + l
 ```
+
+Using the above two functions and our knowledge, we can make a function which rolls a dice. This will require 3 parts.
+
+1. Using `nextRand` to update the current seed
+2. Get the seed from the state
+3. Call `genRand` to get the integer.
 
 ```haskell
 rollDie :: Rand Int
@@ -190,3 +198,12 @@ We can also write this using bind notation, where we `modify nextRand` to update
 rollDie :: Rand Int
 rollDie = modify nextRand >> get >>= \s -> pure (genRand 1 6 s)
 ```
+
+Finally, how we can use this?
+
+```bash
+>>> next rollDie 123
+(1218640798,5)
+```
+
+`next` is used on `rollDie` to get the function of type `Seed -> (Seed, a)`. We then call this function with a seed value of `123`, to get a new seed and a dice roll
