@@ -11,7 +11,7 @@ title: "Eithers"
 
 ## Introduction to Eithers
 
-In Haskell, the Either type is used to represent values with two possibilities: a value of type Either a b is either Left a or Right b. By convention, Left is used to hold an error or exceptional value, while Right is used to hold a correct or expected value. This is particularly useful for error handling.
+In Haskell, the `Either` type is used to represent values with two possibilities: a value of type `Either a b` is either `Left a` or `Right b`. By convention, `Left` is used to hold an error or exceptional value, while `Right` is used to hold a correct or expected value. This is particularly useful for error handling.
 
 ```haskell
 data Either a b = Left a | Right b
@@ -19,7 +19,7 @@ data Either a b = Left a | Right b
 
 In Haskell’s `Either` type, convention ([and the official documentation](https://hackage.haskell.org/package/base-4.20.0.1/docs/Data-Either.html)) says errors go on the `Left` and successes on the `Right`. Why? Because if it is not right (correct) it must be left. This can be considered another example of bias against the left-handed people around the world, but alas, it is a [cruel world](https://www.youtube.com/watch?v=epvlvDzKfv8).
 
-The Left/Right convention is also more general then a Success/Error naming, as Left does not always need to be an error, but it is the most common usage.
+The `Left`/`Right` convention is also more general then a `Success`/`Error` naming, as `Left` does not always need to be an error, but it is the most common usage.
 
 ## Usage of Either
 
@@ -31,7 +31,7 @@ divide _ 0 = Left "Division by zero error"
 divide x y = Right (x / y)
 ```
 
-Similar to Maybes, we can also use pattern matching against `Either`s in a function.
+Similar to `Maybe`s, we can also use pattern matching against `Either`s in a function.
 
 ```haskell
 handleResult :: Either String Double -> String
@@ -41,25 +41,25 @@ handleResult (Right val) = "Success: " ++ show val
 
 ## The Kind of Either
 
-The `Either` type constructor has the kind `* -> * -> *`. This means that Either takes two type parameters and returns a concrete type.
+The `Either` type constructor has the kind `* -> * -> *`. This means that `Either` takes two type parameters and returns a concrete type.
 
 `Either String Int` is a concrete type. It has the kind `*` because both type parameters (`String` and `Int`) are concrete types.
 
 ### Recap: Kinds in Haskell
 
-In Haskell, types are classified into different kinds. A kind can be thought of as a type of a type, describing the number of type parameters a type constructor takes and how they are applied. The Either type has an interesting kind, which we’ll explore in detail.
+In Haskell, types are classified into different kinds. A kind can be thought of as a type of a type, describing the number of type parameters a type constructor takes and how they are applied. The `Either` type has an interesting kind, which we’ll explore in detail.
 
 Before diving into the `Either` typeclass, let’s briefly recap what kinds are:
 
 `*` (pronounced "star") represents the kind of all concrete types. For example, `Int` and `Bool` have the kind `*`.
-`*` -> * represents the kind of type constructors that take one type parameter and return a concrete type. For example, `Maybe` and `[]` (the list type constructor) have the kind `* -> *`.
-`* -> * -> *` represents the kind of type constructors that take two type parameters and return a concrete type. For example, Either and (,) (the tuple type constructor) have the kind `* -> * -> *`.
+`* -> *` represents the kind of type constructors that take one type parameter and return a concrete type. For example, `Maybe` and `[]` (the list type constructor) have the kind `* -> *`.
+`* -> * -> *` represents the kind of type constructors that take two type parameters and return a concrete type. For example, `Either` and `(,)` (the tuple type constructor) have the kind `* -> * -> *`.
 
 ## Typeclasses: Functor, Applicative, and Monad
 
 ### Functor
 
-The `Functor` type class expects a type of kind `* -> *`. `For Either`, this means partially applying the first type parameter, e.g., `instance Functor (Either a)`, where `a` will be the type of the `Left`.
+The `Functor` type class expects a type of kind `* -> *`. For `Either`, this means partially applying the first type parameter, e.g., `instance Functor (Either a)`, where `a` will be the type of the `Left`.
 
 We can then define, `fmap` over either, considering `Left` as the error case, and applying the function, when we have a correct (`Right`) case.
 
@@ -181,6 +181,6 @@ main = do
 
 *Functor*: A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the fmap function, which applies a function to every element in a structure.
 
-*Applicative*: A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (<*>).
+*Applicative*: A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions `pure` and (`<*>`).
 
 *Monad*: A type class in Haskell that represents computations as a series of steps. It provides the bind operation (`>>=`) to chain operations and the return (or `pure`) function to inject values into the monadic context.
