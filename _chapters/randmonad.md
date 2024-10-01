@@ -1,6 +1,6 @@
 ---
 layout: chapter
-title: "Foldable and Traversable"
+title: "Rand Monad"
 ---
 
 # Rand Monad
