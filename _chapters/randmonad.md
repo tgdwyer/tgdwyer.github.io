@@ -3,13 +3,66 @@ layout: chapter
 title: "Rand Monad"
 ---
 
-# Rand Monad
+Pseudorandom number generators create a sequence of unpredictable numbers.
+The following function generates the next element in a pseudorandom sequence from a previous seed.
+
+```haskell
+type Seed = Int
+
+nextRand :: Seed -> Seed
+nextRand prevSeed = (a*prevSeed + c) `mod` m
+  where -- Parameters for linear congruential RNG.
+    a = 1664525
+    c = 1013904223
+    m = 2^32
+```
+
+From a given seed in the pseudorandom sequence we can generate a number in a specified range.
+
+```haskell
+-- | Generate a number between `l` and `u`, inclusive.
+genRand :: Int -> Int -> Seed -> Int
+genRand l u seed = seed `mod` (u-l+1) + l
+```
+
+For example:
+
+```haskell
+-- | Roll a six-sided die once.
+-- >>> rollDie1 123
+-- (5,1218640798)
+-- >>> rollDie1 1218640798
+-- (4,1868869221)
+-- >>> rollDie1 1868869221
+-- (1,166005888)
+rollDie1 :: Seed -> (Int, Seed)
+rollDie1 s =
+  let s' = nextRand s
+      n = genRand 1 6 s'
+  in (n, s')
+```
+
+And if we want a sequence of dice rolls:
+
+```haskell
+-- | Roll a six-sided die `n` times.
+-- >>> diceRolls1 3 123
+-- ([5,4,1],166005888)
+diceRolls1 :: Int -> Seed -> ([Int], Seed)
+diceRolls1 0 s = ([], s)
+diceRolls1 n s =
+  let (r, s') = rollDie1 s
+      (rolls, s'') = diceRolls1 (n-1) s'
+  in (r:rolls, s'')
+```
+
+But keeping track of the various seeds (`s`,`s'`,`s''`) is tedious and error prone.  Let's invent a monad which manages the seed for us.
 
 ```haskell
 newtype Rand a = Rand { next :: Seed -> (Seed, a) }
 ```
 
-`Rand` is a newtype wrapper around a function `Seed -> (Seed, a)`.
+`Rand` is a `newtype` wrapper around a function with type `Seed -> (Seed, a)`.
 It represents a computation that, given a starting Seed, produces:
 
 1. A new updated `Seed`.
@@ -39,7 +92,7 @@ fmap constructs a new Rand value, Rand h, by:
 2. Defining a new function `h` that, given an initial Seed, runs `g` to get `(newSeed, a)`.
 3. Returning `(newSeed, f a)`, where `f a` is the transformed value.
 
-After applying fmap f, we have a new random computation that takes the same Seed as input and produces a transformed value (f a), while maintaining the same mechanics of randomness (i.e., correctly passing and updating the Seed state).
+After applying `fmap f`, we have a new random computation that takes the same Seed as input and produces a transformed value `(f a)`, while maintaining the same mechanics of randomness (i.e., correctly passing and updating the Seed state).
 
 We can also be a bit more succinct, by making use of `fmap` instances
 
