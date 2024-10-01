@@ -56,7 +56,7 @@ diceRolls1 n s =
   in (r:rolls, s'')
 ```
 
-But keeping track of the various seeds (`s`,`s'`,`s''`) is tedious and error prone.  Let's invent a monad which manages the seed for us.
+But keeping track of the various seeds (`s`,`s'`,`s''`) is tedious and error prone.  Let's invent a monad which manages the seed for us.  The seed will be threaded through all of our functions implicitly in the monadic return type.
 
 ```haskell
 newtype Rand a = Rand { next :: Seed -> (Seed, a) }
@@ -217,6 +217,8 @@ incrementSeed = do
 ```
 
 ## Rolling A Dice
+
+Let's revisit the dice rolling example, but use the `Rand` monad to thread the seed through all of our functions without us having to pass it around as a separate parameter.  First recall our `nextRand` and `genRand` functions:
 
 ```haskell
 nextRand :: Seed -> Seed
