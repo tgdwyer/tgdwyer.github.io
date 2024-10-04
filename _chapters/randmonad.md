@@ -35,11 +35,11 @@ For example:
 -- (4,1868869221)
 -- >>> rollDie1 1868869221
 -- (1,166005888)
-rollDie1 :: Seed -> (Int, Seed)
+rollDie1 :: Seed -> (Seed, Int)
 rollDie1 s =
   let s' = nextRand s
       n = genRand 1 6 s'
-  in (n, s')
+  in (s', n)
 ```
 
 And if we want a sequence of dice rolls:
@@ -48,12 +48,12 @@ And if we want a sequence of dice rolls:
 -- | Roll a six-sided die `n` times.
 -- >>> diceRolls1 3 123
 -- ([5,4,1],166005888)
-diceRolls1 :: Int -> Seed -> ([Int], Seed)
+diceRolls1 :: Int -> Seed -> (Seed, [Int])
 diceRolls1 0 s = ([], s)
 diceRolls1 n s =
-  let (r, s') = rollDie1 s
-      (rolls, s'') = diceRolls1 (n-1) s'
-  in (r:rolls, s'')
+  let (s', r) = rollDie1 s
+      (s'', rolls) = diceRolls1 (n-1) s'
+  in (s'', r:rolls)
 ```
 
 But keeping track of the various seeds (`s`,`s'`,`s''`) is tedious and error prone.  Let's invent a monad which manages the seed for us.  The seed will be threaded through all of our functions implicitly in the monadic return type.
@@ -261,4 +261,58 @@ Finally, how we can use this?
 (1218640798,5)
 ```
 
-`next` is used on `rollDie` to get the function of type `Seed -> (Seed, a)`. We then call this function with a seed value of `123`, to get a new seed and a dice roll
+`next` is used on `rollDie` to get the function of type `Seed -> (Seed, a)`. We then call this function with a seed value of `123`, to get a new seed and a dice roll.
+
+Now, here's how we get a list of dice rolls using a direct adaptation of our previous code, but trusting the `Rand` monad to thread the `Seed` through for us.  No more messy wiring up of parameters and inventing arbitrary variable names.
+
+```haskell
+-- | Roll a six-sided die `n` times.
+-- >>> runState (diceRolls 3) 123
+-- ([5,4,1],166005888)
+diceRolls :: Int -> Rand [Int]
+diceRolls 0 = pure []
+diceRolls n = do
+  r <- rollDie
+  rest <- diceRolls (n-1)
+  pure (r:rest)
+```
+
+## State Monad
+
+Of course, Haskell libraries are extensive, and if you can think of a monad that's useful, there's probably a version of it already in the libraries somewhere.
+
+Actually, we'll use two libraries. We'll replace our `Seed` type with `StdGen` and `nextRand` with `randomR`, both from `System.Random`. We'll replace our custom `Rand` monad with `Control.Monad.State`.
+
+In `diceRolls`, we'll also replace the recursive list construction, with `replicateM`, which just runs a function with a monadic effect `n` times, placing the results in a list.
+
+```haskell
+module StateDie
+where
+
+import System.Random
+import Control.Monad.State
+
+-- in System.Random seeds have type StdGen, we'll make the starting seed:
+seed :: StdGen
+seed = mkStdGen 123
+
+-- remake the Rand monad, but using the State monad to store the seed
+type Rand a = State StdGen a
+
+-- remake genRand using the randomR function from System.Random
+-- instead of our custom nextRand function
+genRand :: Int -> Int -> Rand Int
+genRand lower upper = state (randomR (lower,upper))
+
+-- | A function that simulates rolling a six-sided dice
+-- >>> runState rollDie seed
+-- (1,StdGen ...)
+rollDie :: Rand Int
+rollDie = genRand 1 6
+
+-- | Roll a six-sided die `n` times.
+-- >>> runState (diceRolls 3) seed
+-- ([1,5,6],StdGen ...)
+diceRolls :: Int -> Rand [Int]
+diceRolls n = replicateM n rollDie
+```
