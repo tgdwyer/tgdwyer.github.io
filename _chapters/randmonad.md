@@ -68,6 +68,7 @@ It represents a computation that, given a starting Seed, produces:
 1. A new updated `Seed`.
 2. A value of type `a`.
 
+Here it is in pictures sloppily edited from adit.io's excellent [Functors, Applicatives and Monads in Pictures](https://www.adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html).
 ![Rand Monad](/assets/images/chapterImages/randmonad/randMonad.png)
 
 ## Functor
