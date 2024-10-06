@@ -280,9 +280,13 @@ diceRolls n = do
 
 ## State Monad
 
-Of course, Haskell libraries are extensive, and if you can think of a monad that's useful, there's probably a version of it already in the libraries somewhere.
+Of course, Haskell libraries are extensive, and if you can think of useful code that's generalisable, there's probably a version of it already in the libraries somewhere.
 
-Actually, we'll use two libraries. We'll replace our `Seed` type with `StdGen` and `nextRand` with `randomR`, both from `System.Random`. We'll replace our custom `Rand` monad with `Control.Monad.State`.
+Actually, we'll use two libraries.
+
+From `System.Random`, we'll replace our `Seed` type with `StdGen` and `nextRand`/`genRand` with `randomR`.
+
+We'll use `Control.Monad.State` to replace our `Rand` monad. The `State` monad provides a context in-which data can be threaded through function calls without additional parameters. Similar to our `Rand` monad the data can be accessed with a `get` function, replaced with `put`, or updated with `modify`.
 
 In `diceRolls`, we'll also replace the recursive list construction, with `replicateM`, which just runs a function with a monadic effect `n` times, placing the results in a list.
 
@@ -293,23 +297,19 @@ where
 import System.Random
 import Control.Monad.State
 
--- in System.Random seeds have type StdGen, we'll make the starting seed:
+-- | Here's a starting seed for our tests.
+-- In System.Random seeds have type StdGen.
 seed :: StdGen
 seed = mkStdGen 123
 
--- remake the Rand monad, but using the State monad to store the seed
+-- | Remake the Rand monad, but using the State monad to store the seed
 type Rand a = State StdGen a
-
--- remake genRand using the randomR function from System.Random
--- instead of our custom nextRand function
-genRand :: Int -> Int -> Rand Int
-genRand lower upper = state (randomR (lower,upper))
 
 -- | A function that simulates rolling a six-sided dice
 -- >>> runState rollDie seed
 -- (1,StdGen ...)
 rollDie :: Rand Int
-rollDie = genRand 1 6
+rollDie = state (randomR (1,6))
 
 -- | Roll a six-sided die `n` times.
 -- >>> runState (diceRolls 3) seed
@@ -317,3 +317,5 @@ rollDie = genRand 1 6
 diceRolls :: Int -> Rand [Int]
 diceRolls n = replicateM n rollDie
 ```
+
+As you can see, there is now very little custom code required for this functionality. Note that there is also a readonly version of the `State` monad, called `Reader`, as well as a write-only version (e.g. for tasks like logging) called `Writer`.

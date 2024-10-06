@@ -521,10 +521,9 @@ Nothing
 
 ## Conclusion
 
-Monads really round out Haskell, making it a very powerful language with elegant ways to abstract common programming patterns.
-With everything you’ve covered so far you should now be empowered to go out and write real-world programs.  We’ll see Monads at work again in the next chapter when we build more sophisticated [parser combinators](https://tgdwyer.github.io/parsercombinators/).
+Monads really round out Haskell, making it a very powerful language with elegant ways to abstract common programming patterns. So far, we have looked at the `Maybe`, `IO`, and `List` monad instances. We’ll see Monads at work again in the next chapter when we build more sophisticated [parser combinators](https://tgdwyer.github.io/parsercombinators/). Here's a discussion about how to [thread state such as random seeds](https://tgdwyer.github.io/randmonad/) through functions using a custom monadic context which serves as an introduction to the builtin `State` monad.
 
-A slightly more advanced topic which you would soon encounter in the wild would be [Monad Transformers](https://en.wikibooks.org/wiki/Haskell/Monad_transformers), which let you work within multiple monadic contexts at once.  We’ll leave these for future self exploration though.
+With everything you’ve covered so far you should now be empowered to go out and write real-world programs. A slightly more advanced topic which you would soon encounter in the wild would be [Monad Transformers](https://en.wikibooks.org/wiki/Haskell/Monad_transformers), which let you work within multiple monadic contexts at once.  We’ll leave these for future self exploration though.
 
 ## Glossary
 
