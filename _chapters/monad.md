@@ -529,7 +529,7 @@ Nothing
 
 ## Conclusion
 
-Monads really round out Haskell, making it a very powerful language with elegant ways to abstract common programming patterns. So far, we have looked at the `Maybe`, `IO`, and `List` monad instances. The `Maybe` monad allowed us to chain operations which may fail; `IO` allowed us to chain operations which perform input and output; and the `List` instance of monad allows us to sequence operations that may have multiple results (flattening the cartesian product of the results).
+Monads really round out Haskell, making it a very powerful language with elegant ways to abstract common programming patterns. So far, we have looked at the `Maybe`, `IO`, and `List` monad instances. The `Maybe` monad allowed us to chain operations which may fail (in a more principled way than exception handling); `IO` allowed us to chain operations which perform input and output; and the `List` instance of monad allows us to sequence operations that may have multiple results (flattening the cartesian product of the results).
 
 We’ll see Monads at work again in the next chapter when we build more sophisticated [parser combinators](https://tgdwyer.github.io/parsercombinators/). Additionally, here's a discussion about how to [thread state such as random seeds](https://tgdwyer.github.io/randmonad/) through functions using a custom monadic context which serves as an introduction to the builtin `State` monad.
 

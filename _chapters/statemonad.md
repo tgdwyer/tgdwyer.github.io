@@ -1,7 +1,15 @@
 ---
 layout: chapter
-title: "Rand Monad"
+title: "State Monad"
 ---
+
+## Learning Outcomes
+
+- Develop a monad to thread an implicit state parameter through otherwise pure functions
+- Understand that this monad is generalisable to threading any type of state through a sequence of operations
+- Be aware of the related libraries: `System.Random` and `Control.Monad.State`.
+
+## Pseudo Random Number Sequences
 
 Pseudorandom number generators create a sequence of unpredictable numbers.
 The following function generates the next element in a pseudorandom sequence from a previous seed.
