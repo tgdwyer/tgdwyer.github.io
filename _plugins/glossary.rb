@@ -59,7 +59,7 @@ module Jekyll
     end
 
     def self.replace_glossary_terms(content, file_name)
-      doc = Nokogiri::HTML.fragment(content)
+      doc = Nokogiri::HTML5.parse(content)
 
       doc.traverse do |node|
         if node.text?
