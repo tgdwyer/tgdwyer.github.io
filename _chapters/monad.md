@@ -3,8 +3,7 @@ layout: chapter
 title: "Monad"
 ---
 ## Learning Outcomes
-
-- Understand that Monad extends [Functor and Applicative](/haskell3/) to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
+- Understand that Monad extends [Functor and Applicative](/haskell3) to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
 - Understand the operation of the monadic bind and join functions in the `Maybe`, `IO`, List and Function instances of Monad.
 - Be able to refactor monadic binds using [`do` notation](#do-notation).
 - [Loop with Monadic effects](#looping-with-monadic-effects).
@@ -26,7 +25,7 @@ As we will see shortly, the Haskell bind operator `>>=` can also be used to sequ
 getLine >>= \x -> putStrLn("hello "++x)
 ```
 
-However, it not only separates the two expressions, it is safely handling the `IO` type within which all code with IO side-effects in Haskell must operate.  But as well as allowing us to chain operations, bind is defined to do different and useful things for different Monad instances, as we shall see.
+However, it not only separates the two expressions, it is safely handling the `IO` type within which all code with IO side-effects in Haskell must operate.  But as well as allowing us to chain effectful operations, bind is defined to do different and useful things for different Monad instances, as we shall see.
 
 ## The Monad Typeclass
 
@@ -437,7 +436,7 @@ The `join` function passes one argument to a binary function twice which can be 
 
 ### Returning To Point Free
 
-The very observant of you, might recognize this construct of passing one argument to a binary function twice. We previously called this `apply`, when discussing [Function instances for applicatives](./haskell3.md#applicative-exercises). This can be a very useful pattern when making code point free.
+The very observant reader may recognize above construct of passing one argument to a binary function twice. We previously called this `apply`, when discussing [Function instances for applicatives](/haskell3#applicative-exercises). This can be a very useful pattern when making code point free.
 
 We previously gave you an exercise, and labeled it as a *scary extension*, but now with more tools, we can make this much less scary:
 
@@ -531,7 +530,7 @@ Nothing
 
 Monads really round out Haskell, making it a very powerful language with elegant ways to abstract common programming patterns. So far, we have looked at the `Maybe`, `IO`, and `List` monad instances. The `Maybe` monad allowed us to chain operations which may fail (in a more principled way than exception handling); `IO` allowed us to chain operations which perform input and output; and the `List` instance of monad allows us to sequence operations that may have multiple results (flattening the cartesian product of the results).
 
-We’ll see Monads at work again in the next chapter when we build more sophisticated [parser combinators](https://tgdwyer.github.io/parsercombinators/). Additionally, here's a discussion about how to [thread state such as random seeds](https://tgdwyer.github.io/randmonad/) through functions using a custom monadic context which serves as an introduction to the builtin `State` monad.
+We’ll see Monads at work again in the next chapter when we build more sophisticated [parser combinators](/parsercombinators). Additionally, here's a discussion about how to [thread state such as random seeds](/randmonad) through functions using a custom monadic context which serves as an introduction to the builtin `State` monad.
 
 With everything we've covered so far you should now be empowered to go out and write real-world programs. A slightly more advanced topic which you would soon encounter in the wild would be working within multiple  monadic contexts at once. The most standard way to do this is using [Monad Transformers](https://en.wikibooks.org/wiki/Haskell/Monad_transformers), but there are other approaches emerging, such as [algebraic effects libraries](https://github.com/fused-effects/fused-effects).  We’ll leave these for future self exploration though.
 
@@ -542,3 +541,5 @@ With everything we've covered so far you should now be empowered to go out and w
 *Do Notation*: A syntactic sugar in Haskell for chaining monadic operations. It makes the code more readable by hiding the explicit use of bind (>>=).
 
 *Monadic Effects*: Operations that produce side effects and are managed within a monadic context, ensuring that the effects are sequenced and controlled.
+
+*bind*: the defining function which all monads must implement.
