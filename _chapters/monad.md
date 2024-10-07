@@ -367,6 +367,8 @@ Our friend `join` in the list Monad is simply concatenation:
 [1,2,3,1,2]
 ```
 
+You can think of the way that results in the List monad are chained as being a logical extension of the way `Maybe` monad operations are chained. That is, a `Maybe` returns either zero or one result, while a list returns an arbitrary number of results. The results of two list operations chained with `(>>=)` is the cartesian product in a flat list. 
+
 ## Function
 
 We saw [previously that functions are instances of `Functor`](https://tgdwyer.github.io/haskell3/#functor), such that `fmap = (.)`.  We also saw that [functions are `Applicative`](https://tgdwyer.github.io/haskell3/#applicative) such that a binary function (such as `(+)`) can be lifted over multiple functions that need to be applied to the same argument, e.g.:
@@ -527,9 +529,11 @@ Nothing
 
 ## Conclusion
 
-Monads really round out Haskell, making it a very powerful language with elegant ways to abstract common programming patterns. So far, we have looked at the `Maybe`, `IO`, and `List` monad instances. We’ll see Monads at work again in the next chapter when we build more sophisticated [parser combinators](https://tgdwyer.github.io/parsercombinators/). Here's a discussion about how to [thread state such as random seeds](https://tgdwyer.github.io/randmonad/) through functions using a custom monadic context which serves as an introduction to the builtin `State` monad.
+Monads really round out Haskell, making it a very powerful language with elegant ways to abstract common programming patterns. So far, we have looked at the `Maybe`, `IO`, and `List` monad instances. The `Maybe` monad allowed us to chain operations which may fail; `IO` allowed us to chain operations which perform input and output; and the `List` instance of monad allows us to sequence operations that may have multiple results (flattening the cartesian product of the results).
 
-With everything you’ve covered so far you should now be empowered to go out and write real-world programs. A slightly more advanced topic which you would soon encounter in the wild would be [Monad Transformers](https://en.wikibooks.org/wiki/Haskell/Monad_transformers), which let you work within multiple monadic contexts at once.  We’ll leave these for future self exploration though.
+We’ll see Monads at work again in the next chapter when we build more sophisticated [parser combinators](https://tgdwyer.github.io/parsercombinators/). Additionally, here's a discussion about how to [thread state such as random seeds](https://tgdwyer.github.io/randmonad/) through functions using a custom monadic context which serves as an introduction to the builtin `State` monad.
+
+With everything we've covered so far you should now be empowered to go out and write real-world programs. A slightly more advanced topic which you would soon encounter in the wild would be [Monad Transformers](https://en.wikibooks.org/wiki/Haskell/Monad_transformers), which let you work within multiple monadic contexts at once.  We’ll leave these for future self exploration though.
 
 ## Glossary
 
