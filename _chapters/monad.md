@@ -533,7 +533,7 @@ Monads really round out Haskell, making it a very powerful language with elegant
 
 We’ll see Monads at work again in the next chapter when we build more sophisticated [parser combinators](https://tgdwyer.github.io/parsercombinators/). Additionally, here's a discussion about how to [thread state such as random seeds](https://tgdwyer.github.io/randmonad/) through functions using a custom monadic context which serves as an introduction to the builtin `State` monad.
 
-With everything we've covered so far you should now be empowered to go out and write real-world programs. A slightly more advanced topic which you would soon encounter in the wild would be [Monad Transformers](https://en.wikibooks.org/wiki/Haskell/Monad_transformers), which let you work within multiple monadic contexts at once.  We’ll leave these for future self exploration though.
+With everything we've covered so far you should now be empowered to go out and write real-world programs. A slightly more advanced topic which you would soon encounter in the wild would be working within multiple  monadic contexts at once. The most standard way to do this is using [Monad Transformers](https://en.wikibooks.org/wiki/Haskell/Monad_transformers), but there are other approaches emerging, such as [algebraic effects libraries](https://github.com/fused-effects/fused-effects).  We’ll leave these for future self exploration though.
 
 ## Glossary
 
