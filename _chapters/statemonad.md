@@ -17,8 +17,8 @@ The following function generates the next element in a pseudorandom sequence fro
 ```haskell
 type Seed = Int
 
-nextRand :: Seed -> Seed
-nextRand prevSeed = (a*prevSeed + c) `mod` m
+nextSeed :: Seed -> Seed
+nextSeed prevSeed = (a*prevSeed + c) `mod` m
   where -- Parameters for linear congruential RNG.
     a = 1664525
     c = 1013904223
@@ -45,7 +45,7 @@ For example:
 -- (1,166005888)
 rollDie1 :: Seed -> (Seed, Int)
 rollDie1 s =
-  let s' = nextRand s
+  let s' = nextSeed s
       n = genRand 1 6 s'
   in (s', n)
 ```
@@ -227,11 +227,11 @@ incrementSeed = do
 
 ## Rolling A Dice
 
-Let's revisit the dice rolling example, but use the `Rand` monad to thread the seed through all of our functions without us having to pass it around as a separate parameter.  First recall our `nextRand` and `genRand` functions:
+Let's revisit the dice rolling example, but use the `Rand` monad to thread the seed through all of our functions without us having to pass it around as a separate parameter.  First recall our `nextSeed` and `genRand` functions:
 
 ```haskell
-nextRand :: Seed -> Seed
-nextRand prevSeed = (a*prevSeed + c) `mod` m
+nextSeed :: Seed -> Seed
+nextSeed prevSeed = (a*prevSeed + c) `mod` m
   where -- Parameters for linear congruential RNG.
     a = 1664525
     c = 1013904223
@@ -244,23 +244,23 @@ genRand l u seed = seed `mod` (u-l+1) + l
 
 Using the above two functions and our knowledge, we can make a function which rolls a dice. This will require 3 parts.
 
-1. Using `nextRand` to update the current seed
+1. Using `nextSeed` to update the current seed
 2. Get the seed from the state
 3. Call `genRand` to get the integer.
 
 ```haskell
 rollDie :: Rand Int
 rollDie = do
-  modify nextRand -- update the current seed
+  modify nextSeed -- update the current seed
   s <- get -- get retrieves the updated seed value s from the Rand monad's state.
   pure (genRand 1 6 s) -- computes a random number and puts back in the context
 ```
 
-We can also write this using bind notation, where we `modify nextRand` to update the seed. We then use `>>` to ignore the result (i.e., the `()`). We use get to put the seed as the value, which is then binded on to `s` and used to generate a random number. We then use pure to update the value, the seed updating is handled by our bind!
+We can also write this using bind notation, where we `modify nextSeed` to update the seed. We then use `>>` to ignore the result (i.e., the `()`). We use get to put the seed as the value, which is then binded on to `s` and used to generate a random number. We then use pure to update the value, the seed updating is handled by our bind!
 
 ```haskell
 rollDie :: Rand Int
-rollDie = modify nextRand >> get >>= \s -> pure (genRand 1 6 s)
+rollDie = modify nextSeed >> get >>= \s -> pure (genRand 1 6 s)
 ```
 
 Finally, how we can use this?
@@ -292,7 +292,7 @@ Of course, Haskell libraries are extensive, and if you can think of useful code 
 
 Actually, we'll use two libraries.
 
-From `System.Random`, we'll replace our `Seed` type with `StdGen` and `nextRand`/`genRand` with `randomR`.
+From `System.Random`, we'll replace our `Seed` type with `StdGen` and `nextSeed`/`genRand` with `randomR`.
 
 We'll use `Control.Monad.State` to replace our `Rand` monad. The `State` monad provides a context in-which data can be threaded through function calls without additional parameters. Similar to our `Rand` monad the data can be accessed with a `get` function, replaced with `put`, or updated with `modify`.
 
