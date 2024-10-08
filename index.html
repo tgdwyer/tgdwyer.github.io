@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Notes on Programming Paradigms | Tim’s code stuff</title>
+<meta name="generator" content="Jekyll v4.3.3" />
+<meta property="og:title" content="Notes on Programming Paradigms" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Examples and tutorials for various programming paradigms." />
+<meta property="og:description" content="Examples and tutorials for various programming paradigms." />
+<meta property="og:site_name" content="Tim’s code stuff" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Notes on Programming Paradigms" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","description":"Examples and tutorials for various programming paradigms.","headline":"Notes on Programming Paradigms","name":"Tim’s code stuff","url":"/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="/assets/images/favicon.ico" />
+    <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Tim’s code stuff" /><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159840333-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159840333-1');
+</script></head>
+<script src="/assets/js/spoilers.js" defer></script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+  <body><header class="site-header">
+
+    <div class="wrapper"><a class="site-title" rel="author" href="/">Tim’s code stuff</a>
+        <script src="/assets/js/hide_solutions.js" defer></script><nav class="site-nav">
+            <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+            <label for="nav-trigger">
+            <span class="menu-icon">
+                <svg viewBox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+                </svg>
+            </span>
+            </label>
+
+            <div id="nav-menu" class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/">Notes on Programming Paradigms</a><!-- Radio Switch -->
+                <div id="toggle-div" style="display: none;">
+                    <p class="page-link" style="margin-bottom: 0px;">Show Solutions?</p>
+                    <label class="switch" style="vertical-align: middle;">
+                        <input type="checkbox" id="toggle-switch">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+        </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="home"><h1 class="page-heading">Notes on Programming Paradigms</h1>
+    <h2><a href="/levelsofabstraction/">Levels of Abstraction</a></h2>
+    <ul>
+  <li>Understand the motivation for different programming paradigms: to abstract machine operation into human understandable and composable programs</li>
+  <li>Understand the difference between <em>syntax</em>, the textual symbols and grammatical rules of a program, and <em>semantics</em>, the meaning of what is computed</li>
+  <li>Understand that there are different models of computation upon which different programming languages are based, including machine models such as Turing Machines and von Neumann architecture, and the Lambda Calculus based on mathematical functions.</li>
+  <li>Compare the dominant paradigms of <a href="/levelsofabstraction/#alternative-abstractions">Functional and Objected-Oriented Programming</a> in terms of how they abstract data and behaviour.</li>
+</ul>
+
+
+    <h2><a href="/javascript1/">JavaScript Introduction</a></h2>
+    <ul>
+  <li>Understand and use basic JavaScript coding concepts and features</li>
+  <li>Understand the difference between <a href="/javascript1#declaring-variables">mutable and immutable (const) variables</a></li>
+  <li>Explain the relationship between javascript <a href="/javascript1#functions">functions</a> and <a href="/javascript1#objects">objects</a></li>
+  <li>Understand that the scope of variables is limited to <a href="/javascript1#variable-scope">delineated code blocks</a> and within <a href="/javascript1#functions">functions</a></li>
+  <li>Understand that a <a href="/javascript1#closures">closure</a> captures variables referenced within its scope</li>
+  <li>Create and apply <a href="/javascript1#anonymous-functions">anonymous functions</a> to fluent style code</li>
+  <li>Compare <a href="/javascript1#arrow-functions">arrow functions</a> and regular function syntax</li>
+  <li>Explain JavaScript’s <a href="/javascript1#prototype-class-mechanism">prototype mechanism</a> for creating classes from functions</li>
+  <li>Create <a href="/javascript1#ecmascript-6-class-syntax">ES6 style classes</a> with constructors and getters</li>
+  <li>Compare object oriented <a href="/javascript1#polymorphism">polymorphism</a> to <a href="/javascript1#dependency-injection">dependency injection</a> through functions</li>
+</ul>
+
+
+    <h2><a href="/html/">HTML as a Declarative Language</a></h2>
+    <ul>
+  <li>Understand what makes HTML a declarative language and how it describes the structure and content of a web page.</li>
+  <li>Comprehend the separation of concerns by differentiating structure (HTML), presentation (CSS), and custom behaviour (JavaScript).</li>
+  <li>Understand how to include and define a basic SVG element within an HTML document</li>
+  <li>Understand how an SVG element may be animated either declaratively through CSS or imperatively through JavaScript</li>
+  <li>Compare the dangers of imperative programs with hidden side effects versus the transparency of declarative style programs</li>
+</ul>
+
+
+    <h2><a href="/functionaljavascript/">Functional Programming in JavaScript</a></h2>
+    <ul>
+  <li>Create programs in JavaScript in a functional style</li>
+  <li>Understand the definitions of <a href="/functionaljavascript#function-purity-and-referential-transparency">Function Purity and Referential Transparency</a></li>
+  <li>Explain the role of pure functional programming style in managing side effects</li>
+  <li>See how pure functions can be used to <a href="/functionaljavascript#computation-with-pure-functions">model sophisticated computation</a></li>
+</ul>
+
+
+    <h2><a href="/typescript1/">TypeScript Introduction</a></h2>
+    <ul>
+  <li>Create programs in TypeScript using types to ensure correctness at compile time.</li>
+  <li>Explain how TypeScript features like Interfaces, Union Types and Optional Properties allow us to model types in common JavaScript coding patterns with precision.</li>
+  <li>Explain how Generics allow us to create type safe but general and reusable code.</li>
+  <li>Compare and contrast strongly, dynamically and gradually typed languages.</li>
+  <li>Describe how compilers that support type inference assist us in writing type safe code.</li>
+</ul>
+
+
+    <h2><a href="/lazyevaluation/">Lazy Evaluation</a></h2>
+    <ul>
+  <li>Understand how functions can be used to delay evaluation of code until the result is actually required</li>
+  <li>Understand how this <em>lazy</em> evaluation allows for the definition of <em>infinite sequences</em></li>
+  <li>Code and use lazily evaluated infinite number sequences</li>
+</ul>
+
+
+    <h2><a href="/functionalreactiveprogramming/">Functional Reactive Programming</a></h2>
+    <ul>
+  <li>Understand that the Functional Reactive Programming Observable construct is just another container of elements, but whose “push-based” architecture allows them to be used to capture asynchronous behaviour</li>
+  <li>Understand that Observables provide the benefits of functional programming: composability, reusability.</li>
+  <li>See that Observables structure complex stateful programs in a more linear and understandable way that maps more easily to the underlying state machine.</li>
+  <li>Use Observables to create simple UI programs in-place of asynchronous event handling.</li>
+</ul>
+
+
+    <h2><a href="/asteroids/">FRP Asteroids</a></h2>
+    <p>A fully worked example of FRP using RxJS Observables to create an in-browser version of a classic arcade game.</p>
+
+
+    <h2><a href="/higherorderfunctions/">Higher-Order Functions</a></h2>
+    <ul>
+  <li>Understand that <a href="/higherorderfunctions/#higher-order-functions">Higher-Order Functions</a> are those which take other functions as input parameters or which return functions</li>
+  <li>Understand that <a href="/higherorderfunctions/#curried-functions">curried functions</a> support partial application and therefore creation of functions that are partially specified for reuse scenarios.</li>
+  <li>Understand that a <a href="/higherorderfunctions/#combinators">Combinator</a> is a higher-order function that uses only function application and earlier defined combinators to define a result from its arguments</li>
+  <li>Use simple Combinator functions to manipulate and compose other functions</li>
+</ul>
+
+
+    <h2><a href="/lambdacalculus/">Lambda Calculus</a></h2>
+    <ul>
+  <li>Understand that the lambda calculus provides a complete model of computation</li>
+  <li>Relate the lambda calculus to functional programming</li>
+  <li>Apply conversion and reduction rules to simplify lambda expressions</li>
+</ul>
+
+
+    <h2><a href="/purescript/">From JavaScript to Haskell (via PureScript)</a></h2>
+    <ul>
+  <li>Compare a lambda-calculus inspired Haskell-like language (PureScript) with the functional programming concepts explored earlier in JavaScript</li>
+  <li>Understand how tail call optimisation is applied in languages which support it</li>
+</ul>
+
+
+    <h2><a href="/haskell1/">Creating and Running Haskell Programs</a></h2>
+    <ul>
+  <li>Use the GHCi REPL to test Haskell programs and expressions</li>
+  <li>Compare the syntax of Haskell programs to Functional-style code in JavaScript</li>
+  <li>Understand that by default Haskell uses a lazy evaluation strategy</li>
+  <li>Create and use Haskell lists and tuples</li>
+  <li>Create Haskell functions using <em>pattern-matching</em>, <em>guards</em>, and local definitions using <code class="language-plaintext highlighter-rouge">where</code> and <code class="language-plaintext highlighter-rouge">let</code> clauses</li>
+</ul>
+
+
+    <h2><a href="/haskell2/">Data Types and Type Classes</a></h2>
+    <ul>
+  <li>Define data structures using Haskell’s <a href="/haskell2#algebraic-data-types">Algebraic Data Types</a> and use <a href="/haskell2#pattern-matching">pattern matching</a> to define functions that handle each of the possible instances</li>
+  <li>Use the alternate <a href="/haskell2#record-syntax">record syntax</a> to define data structures with named fields</li>
+  <li>Understand that Haskell <a href="/haskell2#typeclasses">type classes</a> are similar to TypeScript interfaces in providing a definition for the set of functions that must be available for instances of those type classes and that typeclasses can extend upon one another to create rich hierarchies</li>
+  <li>Understand that the <a href="/haskell2#maybe">Maybe</a> type provides an elegant way to handle <em>partial functions</em></li>
+</ul>
+
+
+    <h2><a href="/haskell3/">Functor and Applicative</a></h2>
+    <ul>
+  <li>Understand how <a href="/haskell3#eta-conversion">eta-conversion</a>, <a href="/haskell3#operator-sectioning">operator sectioning</a> and <a href="/haskell3#compose">compose</a>, together provide the ability to transform code to achieve a composable <a href="/haskell3#point-free-code">point free</a> form and use this technique to refactor code.</li>
+  <li>Understand that in Haskell the ability to map over container structures is generalised into the <a href="/haskell3#functor">Functor</a> typeclass, such that any type that is an instance of Functor has the <code class="language-plaintext highlighter-rouge">fmap</code> or <code class="language-plaintext highlighter-rouge">(&lt;$&gt;)</code> operation.</li>
+  <li>Understand that the <a href="/haskell3#applicative">Applicative Typeclass</a> extends Functor such that containers of functions may be applied (using the <code class="language-plaintext highlighter-rouge">(&lt;*&gt;)</code> operator) to containers of values.</li>
+  <li>Understand that Functor and Applicative allow powerful composable types through exploring a <a href="/haskell3#a-simple-applicative-functor-for-parsing">simple applicative functor for parsing</a>.</li>
+</ul>
+
+
+    <h2><a href="/haskell4/">Foldable and Traversable</a></h2>
+    <ul>
+  <li>Understand that the “reduce” function we met for arrays and other data structures in JavaScript is referred to as <a href="/haskell4/#folds">“folding”</a> in Haskell and there are two variants <code class="language-plaintext highlighter-rouge">foldl</code> and <code class="language-plaintext highlighter-rouge">foldr</code> for left and right folds respectively</li>
+  <li>Understand that the <a href="/haskell4#monoid">Monoid</a> typeclass for things that have a predefined rule for aggregation (concatenation), making containers of <code class="language-plaintext highlighter-rouge">Monoid</code> values trivial to <code class="language-plaintext highlighter-rouge">fold</code></li>
+  <li>Understand that <a href="/haskell4#foldable">Foldable</a> generalises containers that may be folded (or reduced) into values</li>
+  <li>Understand that <a href="/haskell4#traversable">Traversable</a> generalises containers over which we can traverse applying a function with an Applicative effect</li>
+</ul>
+
+
+    <h2><a href="/monad/">Monad</a></h2>
+    <ul>
+  <li>Understand that Monad extends <a href="/haskell3/">Functor and Applicative</a> to provide a bind <code class="language-plaintext highlighter-rouge">(&gt;&gt;=)</code> operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.</li>
+  <li>Understand the operation of the monadic bind and join functions in the <code class="language-plaintext highlighter-rouge">Maybe</code>, <code class="language-plaintext highlighter-rouge">IO</code>, List and Function instances of Monad.</li>
+  <li>Be able to refactor monadic binds using <a href="/monad/#do-notation"><code class="language-plaintext highlighter-rouge">do</code> notation</a>.</li>
+  <li><a href="/monad/#looping-with-monadic-effects">Loop with Monadic effects</a>.</li>
+</ul>
+
+
+    <h2><a href="/eithers/">Eithers</a></h2>
+    <ul>
+  <li>Understand how the <code class="language-plaintext highlighter-rouge">Either</code> type handles values with two possibilities, typically used for error handling and success cases.</li>
+  <li>Apply the <code class="language-plaintext highlighter-rouge">Functor</code>, <code class="language-plaintext highlighter-rouge">Applicative</code>, and <code class="language-plaintext highlighter-rouge">Monad</code> type classes to the <code class="language-plaintext highlighter-rouge">Either</code> type, learning how to implement instances for each.</li>
+  <li>Recognize the power of monadic <code class="language-plaintext highlighter-rouge">do</code> blocks in simplifying code and handling complex workflows.</li>
+</ul>
+
+
+    <h2><a href="/parsercombinators/">Parser Combinators</a></h2>
+    <ul>
+  <li>Understand that a parser is a program which extracts information from a structured text file</li>
+  <li>Apply what we have learned about Haskell typeclasses and other functional programming concepts to create solutions to real-world problems</li>
+  <li>In particular, we learn to use Parser combinators and see how they are put together</li>
+</ul>
+
+
+    <h2><a href="/statemonad/">State Monad</a></h2>
+    <ul>
+  <li>Develop a monad to thread an implicit state parameter through otherwise pure functions</li>
+  <li>Understand that this monad is generalisable to threading any type of state through a sequence of operations</li>
+  <li>Be aware of the related libraries: <code class="language-plaintext highlighter-rouge">System.Random</code> and <code class="language-plaintext highlighter-rouge">Control.Monad.State</code>.</li>
+</ul>
+
+
+
+
+  </div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+    <data class="u-url" href="/"></data>
+  
+    <div class="wrapper">
+  
+      <div class="footer-col-wrapper">
+        <div class="footer-col">
+          <!-- <p class="feed-subscribe">
+            <a href="/feed.xml">
+              <svg class="svg-icon orange">
+                <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+              </svg><span>Subscribe</span>
+            </a>
+          </p> -->
+        </div>
+        <div class="footer-col">
+          <p>Examples and tutorials for various programming paradigms.</p>
+        </div>
+      </div>
+  
+      <div class="social-links"><ul class="social-media-list"><li>
+  <a rel="me" href="https://github.com/tgdwyer" target="_blank" title="github">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#github"></use>
+    </svg>
+  </a>
+</li>
+<li>
+  <a rel="me" href="https://x.com/immersivecola" target="_blank" title="x">
+    <svg class="svg-icon grey">
+      <use xlink:href="/assets/minima-social-icons.svg#x"></use>
+    </svg>
+  </a>
+</li>
+</ul>
+</div>
+  
+    </div>
+  
+  </footer></body>
+
+</html>
