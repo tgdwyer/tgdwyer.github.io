@@ -122,7 +122,7 @@ Then the `Parser` type has one field `parse` which is a function of type `Input 
 
 We’ll come back to the `ParseError` type - which will be returned in the case of unexpected input, but we can see that a successful Parse is going to produce a `Result` which has two fields—more `Input` (the part of the input remaining after we took a bit off and parsed it), and an `a`, a type parameter that we may specify for concrete `Parser` instances.
 
-The `Parser` and the `ParseResult` types are pretty abstract.  They say nothing about what precise `Input` string we are going to parse, or what type `a` we are going to return in the result.  This is the strength of the parser, allowing us to build up sophisticated parsers for different input grammars through composition using [instances of Function, Applicative and Monad](/parsercombinators/#instances), and the `ParseResult` parameter `a` allows us to produce whatever we want from the parsers we create.
+The `Parser` and the `ParseResult` types are pretty abstract.  They say nothing about what precise `Input` string we are going to parse, or what type `a` we are going to return in the result.  This is the strength of the parser, allowing us to build up sophisticated parsers for different input grammars through composition using [instances of Functor, Applicative and Monad](/parsercombinators/#instances), and the `ParseResult` parameter `a` allows us to produce whatever we want from the parsers we create.
 
 ## Error Handling
 
