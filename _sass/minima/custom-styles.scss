@@ -150,11 +150,6 @@ input:checked + .slider:before {
   z-index: 1;
 }
 
-
-#nav-menu {
-  display: flex;
-}
-
 .site-nav .trigger {
   display: flex;
   align-items: center;
@@ -162,6 +157,11 @@ input:checked + .slider:before {
   width: 100%; /* Or any specific width you need */
   padding: 10px; /* Add some padding for better spacing */
   box-sizing: border-box; /* Ensure padding is included in the width calculation */
+}
+
+.solutions-toggle {
+  display: flex;
+  align-items: center;
 }
 
 .spoiler, .spoiler * {
