@@ -276,7 +276,7 @@ We can generalise the `is` parser to handle a predicate
 satisfy :: (Char -> Bool) -> Parser Char
 satisfy predicate = do
   c <- character
-  let next = if f c then pure else unexpectedCharParser
+  let next = if predicate c then pure else unexpectedCharParser
   next c
  
 
