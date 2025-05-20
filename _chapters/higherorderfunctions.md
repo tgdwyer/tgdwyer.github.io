@@ -19,10 +19,10 @@ The really exciting aspect of higher-order function support in languages like Ja
 
 ## Higher-Order Functions
 
-Functions that [take other functions as parameters](/javascript1#functions-as-parameters-to-other-functions) or which [return functions](/javascript1#closures) are called *higher-order functions*.
-They are called “higher-order” because they are functions which operate on other functions.
+<div class="alert-box alert-info" markdown="1">
+Functions that [take other functions as parameters](/javascript1#functions-as-parameters-to-other-functions) or which [return functions](/javascript1#closures) are called *higher-order functions*. They are called “higher-order” because they are functions which operate on other functions.
 Higher-order functions are a very powerful feature and central to the functional programming paradigm.  
-
+</div>
 We’ve seen many examples of functions which take functions as parameters, for example, operations on arrays:
 
 ```javascript
