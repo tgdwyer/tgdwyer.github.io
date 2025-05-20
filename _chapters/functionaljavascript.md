@@ -24,8 +24,9 @@ While JavaScript (and many---but not all, as we shall see---other languages insp
 
 ## Side Effects
 
+<div class="alert-box alert-info">
 Side effects of a function are changes to state outside of the result explicitly returned by the function.
-
+</div>
 Examples of side-effects from inside a function:
 
 * changing the value of a variable declared outside the function scope
@@ -42,11 +43,13 @@ We’ll see more examples in actual code below.
 
 ## Function Purity and Referential Transparency
 
+<div class="alert-box alert-info" markdown="1">
 A *pure function*:
 
 * has no *side effects*: i.e. it has no effects other than to create a return value;
 * always produces the same result for the same input.
 
+</div>
 In the context of functional programming, [*referential transparency*](https://soundcloud.com/tim-dwyer-17038309/referentialtransparency-lessboringmix) is:
 
 * the property of being able to substitute an expression that evaluates to some value, with that value, without affecting the behaviour of the program.
@@ -654,7 +657,7 @@ That is, the type system does not warn you whether the method mutates the object
 
 ## Computation with Pure Functions
 
-Pure functions may seem restrictive, but in fact pure function expressions and higher-order functions can be combined into powerful programs.  In fact, anything you can compute with an imperative program can be computed through function composition. Side effects are required eventually, but they can be managed and the places they occur can be isolated. Let’s do a little demonstration; although it might be a bit impractical, we’ll make a little list processing environment with just functions:
+Pure functions may seem restrictive, but in fact pure function expressions and higher-order functions can be combined into powerful programs.  In fact, anything you can compute with an imperative program can be computed through function composition. Side effects are required eventually, but they can be managed and the places they occur can be isolated. Let’s do a little demonstration; although it might be a bit impractical, we’ll make a list processing environment with just functions:
 
 ```javascript
 const cons = (_head, _rest)=> selector=> selector(_head, _rest);

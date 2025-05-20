@@ -16,7 +16,7 @@ title: "TypeScript Introduction"
 
 As the Web 2.0 revolution hit in 2000s web apps built on JavaScript grew increasingly complex and today, applications like GoogleDocs are as intricate as anything built over the decades in C++.  In the 90s I for one (though I don’t think I was alone) thought that this would be impossible in a dynamically typed language.  It is just too easy to make simple mistakes (as simple as typos) that won’t be caught until run time.  It’s likely only been made possible due to increased rigour in testing.  That is, instead of relying on a compiler to catch mistakes, you rely on a comprehensive suite of tests that evaluate running code before it goes live.
 
-Part of the appeal of JavaScript is that being able to run the source code directly in a production environment gives an immediacy and attractive simplicity to software deployment.  However, in recent years more and more tools have been developed that introduce a build-chain into the web development stack.  Examples include: minifiers, which compact and obfuscate JavaScript code before it is deployed; bundlers, which merge different JavaScript files and libraries into a single file to (again) simplify deployment; and also, new languages that compile to JavaScript, which seek to fix the JavaScript language’s shortcomings and compatibility issues in different browsers (although modern ECMAScript has less of these issues).  Examples of languages that compile to JavaScript include CoffeeScript, ClojureScript and (more recently) PureScript (which we will visit later in this unit).  Right now, however, we will take a closer look at another language in this family called TypeScript.  See [the official TypeScript documentation](https://www.typescriptlang.org/docs/) for some tutorials and deeper reference.
+Part of the appeal of JavaScript is that being able to run the source code directly in a production environment gives an immediacy and attractive simplicity to software deployment.  However, in recent years more and more tools have been developed that introduce a build-chain into the web development stack.  Examples include: minifiers, which compact and obfuscate JavaScript code before it is deployed; bundlers, which merge different JavaScript files and libraries into a single file to (again) simplify deployment; and also, new languages that compile to JavaScript, which seek to fix the JavaScript language’s shortcomings and compatibility issues in different browsers (although modern ECMAScript has less of these issues).  Examples of languages that compile to JavaScript include CoffeeScript, ClojureScript and (more recently) PureScript (which we will visit later in this unit).  Right now, however, we will take a closer look at another language in this family called **TypeScript**.  See [the official TypeScript documentation](https://www.typescriptlang.org/docs/) for some tutorials and deeper reference.
 
 TypeScript is interesting because it forms a relatively minimal augmentation, or superset, of ECMAScript syntax that simply adds type annotations.  For the most part, the compilation process just performs validation on the declared types and strips away the type annotations rendering just the legal JavaScript ready for deployment.  This lightweight compilation into a language with a similar level of abstraction to the source is also known as transpiling (as opposed to C++ or Java where the compiled code is much closer to the machine execution model).
 
@@ -31,9 +31,9 @@ Type annotations in TypeScript come after the variable name’s declaration, lik
 let i: number = 123;
 ```
 
-Actually, in this case the type annotation is completely redundant.  The TypeScript compiler features sophisticated type inference.  In this case it can trivially infer the type from the type of the literal.
+Actually, in this case the type annotation is completely redundant. The TypeScript compiler features sophisticated type inference. In this case it can trivially infer the type from the type of the literal.
 
-Previously, we showed how rebinding such a variable to a string in JavaScript is perfectly fine by the JavaScript interpreter.  However, such a change of type in a variable is a dangerous pattern that is likely an error on the programmer’s part.  The TypeScript compiler will generate an error:
+Previously, we showed how rebinding such a variable to a string in JavaScript is perfectly fine by the JavaScript interpreter. However, such a change of type in a variable is a dangerous pattern that is likely an error on the programmer’s part. The TypeScript compiler will generate an error:
 
 ```javascript
 let i = 123;
@@ -237,7 +237,6 @@ setLeftPadding(headings[0],"100px"); // This will be used directly
 setLeftPadding(headings[0], () => "100px"); // This will call the function which returns 100px
 ```
 
-
 <div class="cheatsheet" markdown="1">
 
 ## Disambiguating Types Cheat Sheet
@@ -383,6 +382,23 @@ const exampleStudent: Student<string> = {
 }
 ```
 
+<div class="alert-box alert-info" markdown="1">
+
+**What is a Generic Type?**
+A generic type is a type that is defined with a placeholder (called a *type parameter*) instead of specifying a concrete type up front. This allows code to be written once and used with different data types without losing type safety.
+Think of it as a template: the exact type gets "filled in" when the code is used.
+
+In TypeScript, we use angle brackets <T> to introduce a type parameter, like this:
+
+```typescript
+interface Box<T> {
+  value: T;
+}
+```
+
+Now `Box<number>` means a box that holds a number, while `Box<string>` means one that holds a string.
+</div>
+
 Type parameters can have more descriptive names if you like, but they **must** start with a capital.  The convention though is to use rather terse single letter parameter names in the same vicinity of the alphabet as T.  This habit comes from C++, where T used to stand for “Template”, and the terseness stems from the fact that we don’t really care about the details of what it is.  
 
 As in function parameter lists, you can also have more than one type parameter:
@@ -407,18 +423,21 @@ interface IListNode<T> {
 }
 ```
 
-The specific type of `T` will be resolved when `data` is assigned a specific type value.
+The specific type of `T` will be resolved when `data` is assigned a specific type value. But, all values of this linked list must have the same type `T`!
 
 We can add type parameters to interfaces, ES6 classes, type aliases, and also functions.  Consider the function which performs a binary search over an array of numbers (it assumes the array is sorted):
 
 ```javascript
 function binarySearch1(arr:number[], key:number): number {
     function bs(start:number, end:number): number {
+        // Base case: search range is empty
         if(start >= end) return -1;
+        // Find midpoint index
         const mid = Math.floor((start + end) / 2);
-        if(key > arr[mid]) return bs(mid + 1, end);
-        if(key < arr[mid]) return bs(start, mid);
-        return mid;
+        // Compare the key with the middle element
+        if (key > arr[mid]) return bs(mid + 1, end);  // Search right half
+        if (key < arr[mid]) return bs(start, mid);    // Search left half
+        return mid; // Key found
     }
     return bs(0,arr.length);
 }
@@ -469,7 +488,8 @@ binarySearch(numberIds,"harry@monash.edu")
 
 > TYPE ERROR!
 
-The `binarySearch2` function above is usable with more types than `binarySearch1`, but it still requires that T does something sensible with `<` and `>`.  
+The `binarySearch2` function above is usable with more types than `binarySearch1`, but it still requires that `T`` does something sensible with`<` and `>`.  
+
 We can add a function to use for comparison, so now we can use it with students uniquely identified by some other weird thing that we don’t even know about yet:
 
 ```javascript
@@ -764,7 +784,7 @@ C++ is considered a strongly typed language in the sense that all types of value
 
 JavaScript, by contrast, as we have already mentioned, is dynamically typed in that types are only checked at run time. Run-time type errors can occur and be caught by the interpreter on primitive types, for example the user tried to invoke an ordinary object like a function, or refer to an attribute that doesn’t exist, or to treat an array like a number.
 
-TypeScript represents a relatively new trend in being a gradually typed language.  Another way to think about this is that, by default, the type system is opt-in.  Unless declared otherwise, all variables have type any.  The any type is like a wild card that always matches, whether the any type is the target of the assignment:
+TypeScript represents a relatively new trend in being a gradually typed language.  Another way to think about this is that, by default, the type system is opt-in.  Unless declared otherwise, all variables have type `any`.  The `any` type is like a wild card that always matches, whether the `any` type is the target of the assignment:
 
 ```javascript
 let value; // has implicit <any> type
@@ -783,7 +803,7 @@ value = <any>"hello"
 // no error.
 ```
 
-While leaving off type annotations and forcing types with any may be convenient, for example, to quickly port legacy JavaScript into a TypeScript program, generally speaking it is good practice to use types wherever possible, and can actually be enforced with the `--noImplicitAny` compiler flag. This flag will be on by *default* in the applied classes.  The compiler’s type checker is a sophisticated constraint satisfaction system and the correctness checks it applies are usually worth the extra effort—especially in modern compilers like TypeScript where type inference does most of the work for you.
+While leaving off type annotations and forcing types with `any` may be convenient, for example, to quickly port legacy JavaScript into a TypeScript program, generally speaking it is good practice to use types wherever possible, and can actually be enforced with the `--noImplicitAny` compiler flag. This flag will be on by *default* in the applied classes and assignments. The compiler’s type checker is a sophisticated constraint satisfaction system and the correctness checks it applies are usually worth the extra effort—especially in modern compilers like TypeScript where type inference does most of the work for you.
 
 ## Glossary
 
