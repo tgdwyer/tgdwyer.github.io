@@ -239,7 +239,7 @@ instance Alternative Parser where
 
 ## Nitty gritty
 
-The last two pieces of our Phone Numbers grammar we also implement fairly straightforwardly from the BNF.  In a real parser combinator library you’d do it differently, as per our exercises below.
+The last two pieces of our Phone Numbers grammar we also implement fairly straightforwardly from the BNF. In a real parser combinator library you’d do it differently, as per our exercises below.
 
 ```haskell
 <digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
@@ -264,9 +264,9 @@ spaces = (is ' ' >> spaces) <|> pure ()
 
 ### Exercises
 
-- make a less repetitive `digit` parser by creating a function `satisfy :: (Char -> Bool) -> Parser Char` which returns a parser that produces a character but fails if the input is empty or the character does not satisfy the given predicate. You can use the `isDigit` function from `Data.Char` as the predicate.
+- Make a less repetitive `digit` parser by creating a function `satisfy :: (Char -> Bool) -> Parser Char` which returns a parser that produces a character but fails if the input is empty or the character does not satisfy the given predicate. You can use the `isDigit` function from `Data.Char` as the predicate.
 
-- change the type of `spaces` to `Parser [Char]` and have it return the appropriately sized string of only spaces.
+- Change the type of `spaces` to `Parser [Char]` and have it return the appropriately sized string of only spaces.
 
 #### Solutions
 
@@ -276,10 +276,9 @@ We can generalise the `is` parser to handle a predicate
 satisfy :: (Char -> Bool) -> Parser Char
 satisfy predicate = do
   c <- character
-  let next = if f c then pure else unexpectedCharParser
+  let next = if predicate c then pure else unexpectedCharParser
   next c
  
-
 digit :: Parser Char
 digit = satisfy isDigit
 ```
@@ -312,7 +311,7 @@ Let’s imagine we need to parse records from a vets office.  It treats only thr
 <Animal> ::= "cat" | "dog" | "camel"
 ```
 
-So our simple grammar consists of three terminals, each of which is a straightforward string *token* (a constant string that makes up a primitive word in our language).  To parse such a token, we’ll need a parser which succeeds if it finds the specified string next in its input.  We’ll use our `is` parser from above (which simply confirms a given character is next in its input).  The type of is was `Char -> Parser Char`.  Since `Parser` is an instance of `Applicative`, we can simply `traverse` the `is` parser across the given `String` (list of `Char`) to produce another `String` in the `Parser` applicative context.
+So our simple grammar consists of three terminals, each of which is a straightforward string *token* (a constant string that makes up a primitive word in our language).  To parse such a token, we’ll need a parser which succeeds if it finds the specified string next in its input.  We’ll use our `is` parser from above (which simply confirms a given character is next in its input).  The type of `is` was `Char -> Parser Char`.  Since `Parser` is an instance of `Applicative`, we can simply `traverse` the `is` parser across the given `String` (list of `Char`) to produce another `String` in the `Parser` applicative context.
 
 ```haskell
 string :: String -> Parser String
@@ -506,7 +505,7 @@ Minus
 
 ### Exercises
 
-- make an instance of `show` for `Expr` which pretty prints such trees
+- Make an instance of `show` for `Expr` which pretty prints such trees
 - Make a function which performs the calculation specified in an `Expr` tree like the one above.
 
 ---
@@ -562,7 +561,7 @@ term = chain number times
 These use the `chain` function to handle repeated chains of operators (`*`, `-`, `+`) of unknown length.  We could make each of these functions recursive with a `<|>` to provide an alternative for the base case end-of-chain (as we did for `spaces`, above), but we can factor the pattern out into a reusable function, like so:
 
 ```haskell
-chain :: Parser a -> Parser (a->a->a) -> Parser a
+chain :: Parser a -> Parser (a -> a -> a) -> Parser a
 chain p op = p >>= rest
    where
    rest :: a -> Parser a
@@ -575,13 +574,13 @@ chain p op = p >>= rest
 
 But, how does `chain` work?
 
-`p >>= rest`: The parser `p` is applied, and we pass this parsed value, to the function call `rest`
+`p >>= rest`: The parser `p` is applied, and we pass this parsed value, to the function called `rest`.
 
-`rest a`: Within the rest function, the parser op is applied to parse an operator `f`, and the parser `p` is applied again to parse another value `b`. The result is then combined using the function `f` applied to both `a` and `b` to form a new value. The rest function is then called recursively, with this new value.
+`rest a`: Within the `rest` function, the parser `op` is applied to parse an operator `f`, and the parser `p` is applied again to parse another value `b`. The result is then combined using the function `f` applied to both `a` and `b` to form a new value. The `rest` function is then called recursively, with this new value.
 
-Recursive calls: The recursive calls continue until there are no more operators `op` to parse, at which point the parser returns the last value `a`. This is achieved using the `pure a` expression. This makes the function *tail recursive*
+Recursive calls: The recursive calls continue until there are no more operators `op` to parse, at which point the parser returns the last value `a`. This is achieved using the `pure a` expression. This makes the function *tail recursive*.
 
-This gives us a way to parse expressions of the form “1+2+3+4+5” by parsing “1” initially, using `p` then repeatedly parsing something of the form “+2”, where `op` would parse the “+” and the `p` would then parse the “2”. These are combined using our `Plus` constructor to be of form `Plus 1 2`, this will then recessively apply the `p` and `op` parser over the rest of the string: “+3+4+5”.
+This gives us a way to parse expressions of the form “1+2+3+4+5” by parsing “1” initially, using `p` then repeatedly parsing something of the form “+2”, where `op` would parse the “+” and the `p` would then parse the “2”. These are combined using our `Plus` constructor to be of form `Plus 1 2`, this will then recursively apply the `p` and `op` parser over the rest of the string: “+3+4+5”.
 
 But, can we re-write this using a fold?
 
@@ -595,7 +594,7 @@ chain p op = foldl applyOp <$> p <*> many (liftA2 (,) op p)
 
 `foldl applyOp <$> p`: This part uses the Functor instances to combine the parsed values and apply the operators in a left-associative manner. `foldl applyOp` is partially applied to `p`, creating a parser that parses an initial value (`p`) and then applies the left-associative chain of operators and values.
 
-`many ((,) <$> op <*> p)`: This part represents the repetition of pairs (op, p) using the many combinator. The tuple structure here just allows us to store the pairs of `op` and `p`. We use liftA2 to lift both parse results in to the tuple constructor. We run this many times, to parse many pairs of `op` and `p`, and create a list of tuples. As a result, it creates a parser that parses an operator (op) followed by a value (p) and repeats this zero or more times.
+`many (liftA2 (,) op p)`: This part represents the repetition of pairs `(op, p)` using the `many` combinator. The tuple structure here just allows us to store the pairs of `op` and `p`. We use `liftA2` to lift both parse results into the tuple constructor. We run this many times, to parse many pairs of `op` and `p`, and create a list of tuples. As a result, it creates a parser that parses an operator (`op`) followed by a value (`p`) and repeats this zero or more times.
 
 `applyOp x (op, y)`: This function is used by `foldl` to combine the parsed values and operators. It takes an accumulated value `x`, an operator `op`, and a new value `y`, and applies the operator to the accumulated value and the new value.
 
@@ -736,7 +735,7 @@ play (Just (_, opponent, mem)) = (winning whole, concatMap convert whole)
     -- Convert the memory to a list of different choices
     as_choices = getMem . parse (list choice)
     -- Get the whole set of moves—all the prev. rounds + last one
-    whole = opponent: as_choices mem
+    whole = opponent : as_choices mem
     winning = winAgainst . mostCommon
 ```
 
@@ -773,7 +772,7 @@ data Played = Played {rocks, papers, scissors :: Int}
 -- | Store a @Played@ as a string in format: @nC@, with @n@ the number of
 -- occurrences and @C@ the choice.
 convert' :: Played -> String
-convert' Played{rocks, papers, scissors} = 
+convert' Played {rocks, papers, scissors} = 
   show rocks ++ "R" ++ show papers ++ "P" ++ show scissors ++ "S"
 ```
 
