@@ -1158,7 +1158,7 @@ const b = {f: ()=>console.log("b")}
 Informally, this type of polymorphism is called “Duck Typing” (i.e. “If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck”).
 
 <figure style="display: block; margin-left: auto; margin-right: auto; text-align: center;">
-  <img src="/assets/images/chapterImages/javascript1/duck_typing.webp" alt="Duck Typing" style="width: 50%; display: block; margin-left: auto; margin-right: auto;" />
+  <img src="/assets/images/chapterImages/javascript1/duck_typing.webp" alt="Duck Typing" style="width: 15%; display: block; margin-left: auto; margin-right: auto;" />
   <figcaption class="figure-caption" style="text-align: center;">An example of a duck, typing.</figcaption>
 </figure>
 

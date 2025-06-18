@@ -3,6 +3,8 @@ layout: chapter
 title: "Eithers"
 ---
 
+**Note** This is optional reading.
+
 ## Learning Outcomes
 
 - Understand how the `Either` type handles values with two possibilities, typically used for error handling and success cases.
