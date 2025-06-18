@@ -150,7 +150,7 @@ input:checked + .slider:before {
   z-index: 1;
 }
 
-.site-nav .trigger {
+.nav-items {
   display: flex;
   align-items: center;
   justify-content: space-between; /* Adjust this as needed */
@@ -159,9 +159,15 @@ input:checked + .slider:before {
   box-sizing: border-box; /* Ensure padding is included in the width calculation */
 }
 
+#nav-items {
+  display: flex;
+  gap: 1em;
+}
+
 .solutions-toggle {
   display: flex;
   align-items: center;
+  gap: 0.5em;
 }
 
 .spoiler, .spoiler * {
