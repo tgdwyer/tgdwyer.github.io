@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     const toggleDiv = document.getElementById('toggle-div')
 
-    toggleDiv.style.display = document.querySelectorAll('.solutions').length > 0 ? 'flex' : 'none'
+    toggleDiv.style.display = document.querySelectorAll('.solutions').length > 0 ? 'inline-block' : 'none'
 
     const toggleSwitch = document.getElementById('toggle-switch');
 
