@@ -126,7 +126,7 @@ const circleArea = cylVol(1)
 ```
 
 Such functions are called *curried functions* and they are named after a mathematician named Haskell Curry.  This gives you a hint as to what functions look like in the Haskell programming language and its variants.
-We can also create a function to make curried versions of conventional multiparameter JavaScript functions:
+We can also create a function to make curried versions of conventional multi-parameter JavaScript functions:
 
 ```typescript
 function curry2<T,U,V>(f: (x:T, y:U) => V): (x:T) => (y:U) => V {
@@ -498,7 +498,7 @@ console.log(computeAverage(values));
 
 > 3
 
-We would need four distinct genertic types for this function
+We would need four distinct generic types for this function:
 
 ```typescript
 function fork<T, U, V, R>(join: (a: U, b: V) => R, f: (value: T) => U, g: (value: T) => V): (value: T) => R {

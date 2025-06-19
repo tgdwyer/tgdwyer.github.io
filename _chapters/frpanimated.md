@@ -6,7 +6,7 @@ title: "Functional Reactive Programming"
 
 ## Introduction
 
-This page will support the workshop solutions with a worked example of how we can use the observables, filled with pretty animations
+This page will support the workshop solutions with a worked example of how we can use the observables, filled with pretty animations.
 
 ## Animation Generation
 

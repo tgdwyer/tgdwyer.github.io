@@ -191,7 +191,7 @@ Note that we created tuples in JavaScript using `[]`—actually they were fixed-
 ## Lazy by Default
 
 Haskell strategy for evaluating expressions is lazy by default—that is it defers evaluation of expressions until it absolutely must produce a value.  Laziness is of course possible in other languages ([as we have seen in JavaScript](/lazyevaluation/)), and there are many lazy data-structures defined and available for PureScript (and most other functional languages).
-Conversely, Haskell can be [forced to use strict evaluation](https://wiki.haskell.org/Performance/Strictness) and has libraries of datastructures with strict semantics if you need them.
+Conversely, Haskell can be [forced to use strict evaluation](https://wiki.haskell.org/Performance/Strictness) and has libraries of data structures with strict semantics if you need them.
 
 However, lazy by default sets Haskell apart.  It has pros and cons, on the pro side:
 

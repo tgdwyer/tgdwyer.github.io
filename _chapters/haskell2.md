@@ -38,7 +38,7 @@ data UserId = UserId Int
 newtype UserId = UserId Int
 ```
 
-These are almost identical, and we can use them both equivallentally, e.g.,
+These are almost identical, and we can use them both equivalently, e.g.,
 
 ```haskell
 student :: UserId

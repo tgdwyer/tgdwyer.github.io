@@ -123,7 +123,7 @@ flip f a b = f b a
 
 can also be useful in reversing the arguments of a function or operator in order to get them into a position such that they can be eta-reduced.
 
-In code written by experienced haskellers it is very common to see functions reduced to point-free form.  Does it make code more readable?  To experienced haskellers, many times yes.  To novices, perhaps not.  When to do it is a matter of preference.  Experienced haskellers tend to prefer it, they will argue that it reduces functions like the example one above “to their essence”, removing the “unnecessary plumbing” of explicitly named variables.   Whether you like it or not, it is worth being familiar with the tricks above, because you will undoubtedly see them used in practice.  The other place where point-free style is very useful is when you would otherwise need to use a lambda function.
+In code written by experienced Haskellers it is very common to see functions reduced to point-free form.  Does it make code more readable?  To experienced Haskellers, many times yes.  To novices, perhaps not.  When to do it is a matter of preference.  Experienced Haskellers tend to prefer it, they will argue that it reduces functions like the example one above “to their essence”, removing the “unnecessary plumbing” of explicitly named variables.   Whether you like it or not, it is worth being familiar with the tricks above, because you will undoubtedly see them used in practice.  The other place where point-free style is very useful is when you would otherwise need to use a lambda function.
 
 Some more (and deeper) discussion is available on the Haskell Wiki.
 
