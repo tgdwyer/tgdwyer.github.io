@@ -24,12 +24,12 @@ To support the code examples, the streams are visualized using [rxviz](https://r
 
 ## Observable Streams
 
-We have seen a number of different ways of wrapping collections of things in containers: built-in JavaScript arrays, linked-list data structures, and also lazy sequences.  Now we’ll see that Observable is just another type of container with some simple examples, before demonstrating that it also easily applies to asynchronous streams.  
+We have seen a number of different ways of wrapping collections of things in containers: built-in JavaScript arrays, linked-list data structures, and also lazy sequences.  Now we’ll see that Observable is just another type of container with some simple examples, before demonstrating that it also easily applies to asynchronous streams.
 
 You can [also play with a live version of this code](https://stackblitz.com/edit/rxjs-introexamples?file=index.ts).  Note that the code in this live version begins with a pair of `import` statements, bringing the set of functions that we describe below into scope for this file from the `rxjs` libraries:
 
 ```typescript
-import { of, range, fromEvent, zip, merge } from 'rxjs'; 
+import { of, range, fromEvent, zip, merge } from 'rxjs';
 import { last,filter,scan,map,mergeMap,take,takeUntil } from 'rxjs/operators';
 ```
 
@@ -44,7 +44,7 @@ of(1,2,3,4)
 > 1  
 > 2  
 > 3  
-> 4  
+> 4
 
 ![Using Of](/assets/images/chapterImages/functionalreactiveprogramming/of1234.gif)
 
@@ -91,7 +91,7 @@ range(1000)
     filter(x=> x%3===0 || x%5===0),
     scan((a,v)=>a+v),
     last())
-  .subscribe(console.log); 
+  .subscribe(console.log);
 ```
 
 In the developer console, only one number will be printed:
@@ -140,7 +140,7 @@ columns.pipe(
 > ["B", 2]  
 > ["C", 0]  
 > ["C", 1]  
-> ["C", 2]  
+> ["C", 2]
 
 ![Merge Map Example](/assets/images/chapterImages/functionalreactiveprogramming/mergeMap.gif)
 
@@ -172,7 +172,7 @@ merge(columns,rows)
 > C  
 > 0  
 > 1  
-> 2  
+> 2
 
 ![Example of Merge](/assets/images/chapterImages/functionalreactiveprogramming/merge.gif)
 
@@ -338,7 +338,7 @@ The state machine that models this behaviour is pretty simple:
 
 ![Mouse drag state machine](/assets/images/chapterImages/functionalreactiveprogramming/mouseDragStateMachine.png)
 
-There are only three transitions, each triggered by an event.  
+There are only three transitions, each triggered by an event.
 
 ### Turning a State-Machine into Code with Event Listeners
 
@@ -446,8 +446,8 @@ class Point {
 Now we create a subclass of `Point` with a constructor letting us instantiate it for a given (DOM) `MouseEvent` and an `abstract` (placeholder) definition for a function to apply the correct update action to the `State`:
 
 ```typescript
-abstract class MousePosEvent extends Point { 
-  constructor(e:MouseEvent) { super(e.clientX, e.clientY) } 
+abstract class MousePosEvent extends Point {
+  constructor(e:MouseEvent) { super(e.clientX, e.clientY) }
   abstract apply(s:State):State;
 }
 ```
@@ -476,7 +476,7 @@ const svg = document.getElementById("svgCanvas")!,
 But now we’ll capture initial position of the rectangle one time only in an immutable `Point` object outside of the stream logic.
 
 ```typescript
-const initialState: State = { 
+const initialState: State = {
   pos: new Point(
     Number(rect.getAttribute('x')),
     Number(rect.getAttribute('y')))

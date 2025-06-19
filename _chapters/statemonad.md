@@ -138,7 +138,7 @@ where
 ```haskell
 instance Monad Rand where
   (>>=) :: Rand a -> (a -> Rand b) -> Rand b
-  r >>= f = Rand $ \s -> 
+  r >>= f = Rand $ \s ->
     let (s1, val) = next r s
     in next (f val) s1
 ```
@@ -177,7 +177,7 @@ Using `get` and the monad instance, we can make a function to increase the seed 
 
 ```haskell
 incrementSeed' :: Rand Seed
-incrementSeed' = get >>= \s -> pure (s + 1) 
+incrementSeed' = get >>= \s -> pure (s + 1)
 ```
 
 ```haskell

@@ -83,7 +83,7 @@ function randomInsert<T>(a:readonly T[],e:T): readonly T[] {
     (impureRandomNumberGenerator(a.length + 1))
 }
 const shoe = (numDecks : number) => range(0, numDecks).pipe(
-  mergeMap(_ => deck), 
+  mergeMap(_ => deck),
   reduce(randomInsert, [])
 )
 ```
@@ -96,7 +96,7 @@ We need to turn this back into a stream. How can we do that, with the power of m
 
 ```typescript
 const shuffledShoe = (numDecks : number) => range(0, numDecks).pipe(
-  mergeMap(_ => deck), 
+  mergeMap(_ => deck),
   reduce(randomInsert, []),
   mergeMap(from)
 )

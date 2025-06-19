@@ -118,8 +118,8 @@ This first clause *selects* the rectangle by the unique id we gave it: `blueRect
 - an id for the animation: `moveX`;
 - a duration of 5 seconds;
 - that the animation should be interpolated linearly (as opposed to something non-linear like ease-in-out);
-- and that it should play forwards as opposed to a gamut of other options.  
-  
+- and that it should play forwards as opposed to a gamut of other options.
+
 In the `keyframes` declaration we declare style properties which should be applied at different percentages of completion of the `moveX` animation. The browser will interpolate between them according to the other style settings we specified.  In this case, we have simply set an initial and final `x` position for the rectangle.
 
 This is a program of sorts (in that it causes a lot of computation to happen in the browser with outputs that we can see on our webpage), but it’s declarative in the sense that we did not tell the browser *how* to perform the animation.  Rather we *declared* what we wanted the rectangle to look like at the start and end of the animation and let the browser figure out how to perform the transition.
@@ -144,19 +144,19 @@ We now create a function which encodes the precise steps to animate the rectangl
 ```javascript
 // Define an animation function
 function animate(rect, startX, finalX, duration) {
-    const 
+    const
       startTime = performance.now(),
       endTime = startTime + duration;
     function nextFrame() {
         // Calculate elapsed time
-        const 
+        const
           currentTime = performance.now(),
           elapsedTime = currentTime - startTime;
-              
+
         // Check if animation duration has elapsed
         if (elapsedTime >= duration) {
             // Set the final position of the rectangle.
-            // We can use `setAttribute` to modify the HTML Element. In this case, we are changing the x attribute. 
+            // We can use `setAttribute` to modify the HTML Element. In this case, we are changing the x attribute.
             rect.setAttribute('x', finalX);
             return; // Stop the animation
         }
@@ -166,13 +166,13 @@ function animate(rect, startX, finalX, duration) {
 
         // Set the intermediate position of the rectangle.
         rect.setAttribute('x', x);
-    
+
         // Call the nextFrame function again after a delay of 1000/60 milliseconds
         setTimeout(nextFrame, 1000 / 60); // 60 FPS
     }
     nextFrame();
 }
-  
+
 const rectangle = document.getElementById('redRectangle')
 const duration = 5000; // 5 seconds in milliseconds
 animate(rectangle, 0, 370, duration);
@@ -181,7 +181,7 @@ animate(rectangle, 0, 370, duration);
 However, there are some serious issues with this code.
 
 - Obviously it's more complex and requires more code than using the built-in CSS animation feature.
-- The `animate` function updates the state of the DOM (the `x` position of the rectangle) from deep inside it's logic. Normally, we look for outputs of functions in the value that they `return`, but this function has no explicit return value.  To see what it does, we have to carefully inspect the code to identify the line which causes the *side effect* of moving the rectangle (the `rect.setAttribute` calls).  
+- The `animate` function updates the state of the DOM (the `x` position of the rectangle) from deep inside it's logic. Normally, we look for outputs of functions in the value that they `return`, but this function has no explicit return value.  To see what it does, we have to carefully inspect the code to identify the line which causes the *side effect* of moving the rectangle (the `rect.setAttribute` calls).
 - Another hidden complexity is the asynchronous (or delayed) behaviour due to the use of  `setTimeout` to queue up the successive frames of animation. Such hidden side effects and complexity are the opposite of the intention of declarative-style programming.
 
 Later, we will see how [functional reactive programming](/functionalreactiveprogramming) techniques can be used to separate code with such side effects on global state from code that implements behavioural logic in interactive web pages.

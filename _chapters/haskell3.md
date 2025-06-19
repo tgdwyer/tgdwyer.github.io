@@ -272,7 +272,7 @@ instance Functor [] where
     fmap = map
 ```
 
-`fmap` is defined for other types we have seen, such as a `Maybe`. `Maybes` can be considered as list of 0 items (`Nothing`) or 1 item (`Just`), and therefore, naturally, we should be able to `fmap` over a `Maybe`.  
+`fmap` is defined for other types we have seen, such as a `Maybe`. `Maybes` can be considered as list of 0 items (`Nothing`) or 1 item (`Just`), and therefore, naturally, we should be able to `fmap` over a `Maybe`.
 
 ```haskell
 instance  Functor Maybe  where
@@ -355,7 +355,7 @@ instance Functor ((->) r) where
     fmap = (.)
 ```
 
-So the composition of functions `f` and `g`, `f . g`, is equivalent to ‘mapping’ `f` over `g`, e.g.  `f <$> g`.  
+So the composition of functions `f` and `g`, `f . g`, is equivalent to ‘mapping’ `f` over `g`, e.g.  `f <$> g`.
 
 ```haskell
 GHCi> f = (+1)
@@ -409,7 +409,7 @@ Node 4
      └──Leaf 7
 ```
 
-And here’s the instance of `Functor` for `Tree` that defines `fmap`.  
+And here’s the instance of `Functor` for `Tree` that defines `fmap`.
 
 ```haskell
 instance Functor Tree where
@@ -578,7 +578,7 @@ We can make one card using the Card constructor:
 
 ```haskell
 GHCi> Card Spade Ace
-Card ^ Ace 
+Card ^ Ace
 ```
 
 Or, since both `Suit` and `Rank` derive `Enum`, we can enumerate the full lists of `Suit`s and `Rank`s, and then lift the `Card` operator over both lists to create a whole deck:
@@ -931,7 +931,7 @@ asum = foldr (<|>) empty
 
 ## A simple Applicative Functor for Parsing
 
-As we will [discuss in more detail later](/parsercombinators), a parser is a program which takes some structured input and does something with it.  When we say “structured input” we typically mean something like a string that follows strict rules about its syntax, like source code in a particular programming language, or a file format like JSON.  A parser for a given syntax is a program which you run over some input and if the input is valid, it will do something sensible with it (like give us back some data), or fail: preferably in a way that we can handle gracefully.  
+As we will [discuss in more detail later](/parsercombinators), a parser is a program which takes some structured input and does something with it.  When we say “structured input” we typically mean something like a string that follows strict rules about its syntax, like source code in a particular programming language, or a file format like JSON.  A parser for a given syntax is a program which you run over some input and if the input is valid, it will do something sensible with it (like give us back some data), or fail: preferably in a way that we can handle gracefully.
 
 In Haskell, sophisticated parsers are often constructed from simple functions which try to read a certain element of the expected input and either succeed in consuming that input, returning a tuple containing the rest of the input string and the resultant data, or they fail producing nothing.  We’ve already seen one type which can be used to encode success or failure, namely `Maybe`.  Here’s the most trivial parser function I can think of. It tries to take a character from the input stream and either succeeds consuming it or fails if it’s given an empty string:
 
@@ -952,8 +952,8 @@ And here’s one to parse `Int`s off the input stream.  It uses the `reads` func
 -- Just ("+456",123)
 -- >>> parseInt "xyz456"
 -- Nothing
-parseInt :: String -> Maybe (String, Int) 
-parseInt s = case reads s of     
+parseInt :: String -> Maybe (String, Int)
+parseInt s = case reads s of
   [(x, rest)] -> Just (rest, x)
   _           -> Nothing
 ```
@@ -1068,7 +1068,7 @@ The `fmap` function for the `Functor` instance of `Parser` needs to apply the pa
 ```haskell
 instance Functor Parser where
   fmap f (Parser p) = Parser $
-    \i -> case p i of 
+    \i -> case p i of
       Just (rest, result) -> Just (rest, f result)
       _ -> Nothing
 ```
@@ -1080,7 +1080,7 @@ However, we can take advantage of the fact that the `Tuple` returned by the pars
 ```haskell
 instance Functor Parser where
   fmap f (Parser p) = Parser $
-    \i -> case p i of 
+    \i -> case p i of
       Just (rest, result) -> Just (f <$> (rest, result))
       _ -> Nothing
 ```

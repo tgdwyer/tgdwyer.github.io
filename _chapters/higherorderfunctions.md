@@ -21,7 +21,7 @@ The really exciting aspect of higher-order function support in languages like Ja
 
 <div class="alert-box alert-info" markdown="1">
 Functions that [take other functions as parameters](/javascript1#functions-as-parameters-to-other-functions) or which [return functions](/javascript1#closures) are called *higher-order functions*. They are called “higher-order” because they are functions which operate on other functions.
-Higher-order functions are a very powerful feature and central to the functional programming paradigm.  
+Higher-order functions are a very powerful feature and central to the functional programming paradigm.
 </div>
 We’ve seen many examples of functions which take functions as parameters, for example, operations on arrays:
 
@@ -65,7 +65,7 @@ Such use of a curried function with only a subset of its parameters is called *p
 add9(1)
 ```
 
->10  
+>10
 
 Here’s a practical example of a curried function. Let’s say we want a function for computing the volume of cylinders, parameterised by the approximation for π that we plan to use:
 
@@ -111,7 +111,7 @@ Which we can invoke when we are ready like so:
 cylVol(4)(2)
 ```
 
-What if we want to compute volumes for a whole batch of cylinders of fixed height of varying radii?  
+What if we want to compute volumes for a whole batch of cylinders of fixed height of varying radii?
 
 ```javascript
 const radii = [1.2,3.1,4.5, ... ],
@@ -169,7 +169,7 @@ function curry<T extends Uncurried>(fn: T): Curried<T> {
 
 const weirdAdd = (a:number,b:boolean,c:string) => a + (b?1:0) + parseInt(c)
 
-// type of curriedWeirdAdd is: 
+// type of curriedWeirdAdd is:
 //  (arg: number) => (arg: boolean) => (arg: string) => number
 const curriedWeirdAdd = curry(weirdAdd);
 ```
@@ -398,12 +398,12 @@ const forEach = f=>l=>fold(K(f))(null)(l)
 A naive implementation of map using fold, would be:
 
 ```javascript
-const map = f => l => 
+const map = f => l =>
   fold(acc => v => cons(f(v))(acc))(null)(l);
 
 const l = cons(1)(cons(2)(cons(3)(null)));
 const mappedList = map(x => x * 2)(l);
-forEach(console.log)(mappedList); 
+forEach(console.log)(mappedList);
 
 ```
 
@@ -518,7 +518,7 @@ function fork<T, U, V, R>(join: (a: U, b: V) => R, f: (value: T) => U, g: (value
 ### Unary versus Binary Functions in JavaScript
 
 Uncurried functions of two parameters can be called Binary functions.  Functions of only one parameter can therefore be called Unary functions.  Note that all of our curried functions are unary functions, which return other unary functions.
-We’ve seen situations now where curried functions are flexibly combined to be used in different situations.  
+We’ve seen situations now where curried functions are flexibly combined to be used in different situations.
 
 Note that in JavaScript you sometimes see casual calls to binary functions but with only one parameter specified.  Inside the called function the unspecified parameter will simply be `undefined` which is fine if the case of that parameter being `undefined` is handled in a way that does not cause an error or unexpected results, e.g.:
 

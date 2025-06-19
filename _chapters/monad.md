@@ -3,6 +3,7 @@ layout: chapter
 title: "Monad"
 ---
 ## Learning Outcomes
+
 - Understand that Monad extends [Functor and Applicative](/haskell3) to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
 - Understand the operation of the monadic bind and join functions in the `Maybe`, `IO`, List and Function instances of Monad.
 - Be able to refactor monadic binds using [`do` notation](#do-notation).
@@ -47,7 +48,7 @@ instance Monad [] -- Defined in `GHC.Base'
 instance Monad Maybe -- Defined in `GHC.Base'
 instance Monad IO -- Defined in `GHC.Base'
 instance Monad ((->) r) -- Defined in `GHC.Base'
-instance Monoid a => Monad ((,) a) -- Defined in `GHC.Base' 
+instance Monoid a => Monad ((,) a) -- Defined in `GHC.Base'
 ```
 
 Things to notice:
@@ -61,7 +62,7 @@ Things to notice:
 There also exists a flipped version of bind:
 
 ```haskell
-(=<<) = flip (>>=) 
+(=<<) = flip (>>=)
 ```
 
 The type of the flipped bind `(=<<)` has a nice correspondence to the other operators we have already seen for function application in various contexts:
@@ -245,7 +246,7 @@ main :: IO ()
 main = do
    sayHi
    name <- readName
-   greet name 
+   greet name
 ```
 
 Which is entirely equivalent to the above code, or more explicitly:
@@ -254,7 +255,7 @@ Which is entirely equivalent to the above code, or more explicitly:
 main =
    sayHi >>
    readName >>=
-   \name -> greet name 
+   \name -> greet name
 ```
 
 Note that although `<-` looks like assignment to a variable `name`, it actually expands to a parameter name for a lambda expression following the bind.  Thus, the way I read the line with the `<-` in the following do expression:
@@ -262,7 +263,7 @@ Note that although `<-` looks like assignment to a variable `name`, it actually 
 ```haskell
 do
   name <- readName
-  greet name 
+  greet name
 ```
 
 is:
@@ -310,8 +311,8 @@ Which will now execute as expected:
 join $ greet <$> readName
 ```
 
->Tim  
->Nice to meet you Tim!
+> Tim  
+> Nice to meet you Tim!
 
 ## List
 
@@ -366,7 +367,7 @@ Our friend `join` in the list Monad is simply concatenation:
 [1,2,3,1,2]
 ```
 
-You can think of the way that results in the List monad are chained as being a logical extension of the way `Maybe` monad operations are chained. That is, a `Maybe` returns either zero or one result, while a list returns an arbitrary number of results. The results of two list operations chained with `(>>=)` is the cartesian product in a flat list. 
+You can think of the way that results in the List monad are chained as being a logical extension of the way `Maybe` monad operations are chained. That is, a `Maybe` returns either zero or one result, while a list returns an arbitrary number of results. The results of two list operations chained with `(>>=)` is the cartesian product in a flat list.
 
 ## Function
 
@@ -402,12 +403,12 @@ signoff sofar linebreak = sofar ++ linebreak ++ "Your’s truly," ++ linebreak +
 putStrLn $ (greet >>= body >>= signoff) "\r\n"
 ```
 
->Dear Gentleperson,  
+> Dear Gentleperson,  
 >
->It has come to my attention that…  
+> It has come to my attention that…  
 >
->Your’s truly,  
->Tim
+> Your’s truly,  
+> Tim
 
 In the next example we use the argument `3` in three different functions without passing it directly to any of them.
 Note the pattern is that the right-most function is unary (taking only the specified argument), and subsequent functions in the chain are binary, their first argument being the result of the previous function application, and the second argument being the given `3`.

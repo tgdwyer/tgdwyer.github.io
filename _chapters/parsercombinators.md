@@ -171,7 +171,7 @@ instance Functor Parser where
   fmap f (P p) = P (fmap f . p)
 ```
 
-The applicative `pure` creates a `Parser` that always succeeds with the given input, and thus forms a basis for composition.  We saw it being used in the above example to return the results of a parse back into the `Parser` at the end of a `do` block.  
+The applicative `pure` creates a `Parser` that always succeeds with the given input, and thus forms a basis for composition.  We saw it being used in the above example to return the results of a parse back into the `Parser` at the end of a `do` block.
 
 The `(<*>)` allows us to map functions in the `Parser` over another `Parser`.  As with other `Applicative` instances, a common use case would be composition with a `Parser` that returns a data constructor as we will see in [the next example](/parsercombinators/#creating-a-parse-tree).
 
@@ -278,7 +278,7 @@ satisfy predicate = do
   c <- character
   let next = if predicate c then pure else unexpectedCharParser
   next c
- 
+
 digit :: Parser Char
 digit = satisfy isDigit
 ```
@@ -520,7 +520,7 @@ number = spaces >> Number . read . (:[]) <$> digit
 
 We keep things simple for now, make use of our existing `digit` parser, and limit our input to only single digit numbers.  
 The expression `Number . read . (:[])` is fmapped over the `Parser Char` returned by `digit`.  
-We use the Prelude function `read :: Read a => String -> a` to create the `Int` expected by `Number`.  Since `read` expects a string, we apply `(:[])` to turn the `Char` into `[Char]`, i.e. a `String`.  
+We use the Prelude function `read :: Read a => String -> a` to create the `Int` expected by `Number`.  Since `read` expects a string, we apply `(:[])` to turn the `Char` into `[Char]`, i.e. a `String`.
 
 Next, we’ll need a parser for the various operators (`*`,`+` and `-`).  There’s enough of them that we’ll make it a general purpose `Parser Char` parameterised by the character we expect:
 
@@ -772,7 +772,7 @@ data Played = Played {rocks, papers, scissors :: Int}
 -- | Store a @Played@ as a string in format: @nC@, with @n@ the number of
 -- occurrences and @C@ the choice.
 convert' :: Played -> String
-convert' Played {rocks, papers, scissors} = 
+convert' Played {rocks, papers, scissors} =
   show rocks ++ "R" ++ show papers ++ "P" ++ show scissors ++ "S"
 ```
 

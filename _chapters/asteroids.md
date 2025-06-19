@@ -42,7 +42,7 @@ And here’s the snippet of html that creates the ship:
 </svg>
 ```
 
-Note that the ship is rendered inside a transform group `<g>`.  We will be changing the `transform` attribute to move the ship around.  
+Note that the ship is rendered inside a transform group `<g>`.  We will be changing the `transform` attribute to move the ship around.
 
 ## Rotating the ship
 
@@ -242,7 +242,7 @@ The code above is a bit longer than what we started with, but it’s starting to
 ## Adding Physics and Handling More Inputs
 
 Classic Asteroids is more of a space flight simulator in a weird toroidal topology than the “static” rotation that we’ve provided above.  We will make our spaceship a freely floating body in space, with directional and rotational velocity.
-We are going to need more inputs than just left and right arrow keys to pilot our ship too.  
+We are going to need more inputs than just left and right arrow keys to pilot our ship too.
 
 Here’s a sneak preview of what this next stage will look like (click on the image to try it out in a live code editor):
 
@@ -319,10 +319,10 @@ For now, we’ll hard code it in a constant `CanvasSize`.  Alternately, we could
 The torus wrapping function will use the `CanvasSize` to determine the bounds and simply teleport any `Vec` which goes out of bounds to the opposite side.
 
 ```typescript
-const 
+const
   CanvasSize = 200,
-  torusWrap = ({x,y}:Vec) => { 
-    const wrap = (v:number) => 
+  torusWrap = ({x,y}:Vec) => {
+    const wrap = (v:number) =>
       v < 0 ? v + CanvasSize : v > CanvasSize ? v - CanvasSize : v;
     return new Vec(wrap(x),wrap(y))
   };
@@ -332,7 +332,7 @@ We’ll use `Vec` in a slightly richer set of State.
 
 ```typescript
   type State = Readonly<{
-    pos:Vec, 
+    pos:Vec,
     vel:Vec,
     acc:Vec,
     angle:number,
@@ -345,7 +345,7 @@ We create an `initialState` using `CanvasSize` to start the spaceship at the cen
 
 ```typescript
   const initialState:State = {
-      pos: new Vec(CanvasSize/2,CanvasSize/2), 
+      pos: new Vec(CanvasSize/2,CanvasSize/2),
       vel: Vec.Zero,
       acc: Vec.Zero,
       angle:0,
@@ -367,8 +367,8 @@ interface Action {
 Now we define a class implementing `Action` for each of `Tick`, `Rotate`, and `Thrust`:
 
 ```typescript
-class Tick implements Action { 
-  constructor(public readonly elapsed:number) {} 
+class Tick implements Action {
+  constructor(public readonly elapsed:number) {}
   apply(s:State):State {
     return {...s,
       rotation: s.rotation+s.torque,
@@ -378,18 +378,18 @@ class Tick implements Action {
     }
   }
 }
-class Rotate implements Action { 
-  constructor(public readonly direction:number) {} 
+class Rotate implements Action {
+  constructor(public readonly direction:number) {}
   apply(s:State):State {
     return {...s,
       torque: this.direction
     }
   }
 }
-class Thrust implements Action { 
-  constructor(public readonly on:boolean) {} 
+class Thrust implements Action {
+  constructor(public readonly on:boolean) {}
   apply(s:State):State {
-      return {...s, 
+      return {...s,
         acc: this.on ? Vec.unitVecInDirection(s.angle).scale(0.05)
                  : Vec.Zero
       }
@@ -455,21 +455,21 @@ And here’s our updated updateView function where we not only move the ship but
 
 ```typescript
   function updateView(s: State) {
-    const 
+    const
       ship = document.getElementById("ship")!,
-      show = (id:string,condition:boolean)=>((e:HTMLElement) => 
+      show = (id:string,condition:boolean)=>((e:HTMLElement) =>
         condition ? e.classList.remove('hidden')
                   : e.classList.add('hidden'))(document.getElementById(id)!);
     show("leftThrust",  s.torque<0);
     show("rightThrust", s.torque>0);
-    show("forwardThrust",    s.acc.len()>0); 
+    show("forwardThrust",    s.acc.len()>0);
     ship.setAttribute('transform', `translate(${s.pos.x},${s.pos.y}) rotate(${s.angle})`);
   }
 ```
 
 ## Additional Objects
 
-Things get more complicated when we start adding more objects to the canvas that all participate in the physics simulation.  Furthermore, objects like asteroids and bullets will need to be added and removed from the canvas dynamically—unlike the ship whose visual is currently defined in the `svg` and never leaves.  
+Things get more complicated when we start adding more objects to the canvas that all participate in the physics simulation.  Furthermore, objects like asteroids and bullets will need to be added and removed from the canvas dynamically—unlike the ship whose visual is currently defined in the `svg` and never leaves.
 
 However, we now have all the pieces of our MVC architecture in place, all tied together with an observable stream:
 
@@ -493,7 +493,7 @@ The first complication is generalising bodies that participate in the force mode
 ```typescript
   type Body = Readonly<{
     id:string,
-    pos:Vec, 
+    pos:Vec,
     vel:Vec,
     thrust:boolean,
     angle:number,
@@ -588,16 +588,16 @@ And now a function to move objects, same logic as before but now applicable to a
 And our `Tick` action is a little more complicated now:
 
 ```typescript
-class Tick implements Action { 
-  constructor(public readonly elapsed:number) {} 
+class Tick implements Action {
+  constructor(public readonly elapsed:number) {}
   apply(s:State):State {
     const not = <T>(f:(x:T)=>boolean)=>(x:T)=>!f(x),
       expired = (b:Body)=>(this.elapsed - b.createTime) > 100,
       expiredBullets:Body[] = s.bullets.filter(expired),
       activeBullets = s.bullets.filter(not(expired));
-    return <State>{...s, 
-      ship:moveObj(s.ship), 
-      bullets:activeBullets.map(moveObj), 
+    return <State>{...s,
+      ship:moveObj(s.ship),
+      bullets:activeBullets.map(moveObj),
       exit:expiredBullets,
       time:this.elapsed
     }
@@ -660,7 +660,7 @@ So far the game we have built allows you to hoon around in a space-ship blasting
 Before we go forward, let’s put all the magic numbers that are starting to permeate our code in one, immutable place:
 
 ```typescript
-  const 
+  const
     Constants = {
       CanvasSize: 600,
       BulletExpirationTime: 1000,
@@ -753,7 +753,7 @@ Our `tick` function is more or less the same as above, but it will apply one mor
           vel:r.vel.ortho().scale(dir)
         }),
         spawnChildren = (r:Body)=>
-                              r.radius >= Constants.StartRockRadius/4 
+                              r.radius >= Constants.StartRockRadius/4
                               ? [child(r,1), child(r,-1)] : [],
         newRocks = mergeMap(collidedRocks, spawnChildren)
           .map((r,i)=>createCircle('rock')(s.objCount + i)(s.time)(r.radius)(r.pos)(r.vel)),
@@ -762,7 +762,7 @@ Our `tick` function is more or less the same as above, but it will apply one mor
         elem = (a:ReadonlyArray<Body>) => (e:Body) => a.findIndex(b=>b.id === e.id) >= 0,
         // array a except anything in b
         except = (a:ReadonlyArray<Body>) => (b:Body[]) => a.filter(not(elem(b)))
-      
+
       return <State>{
         ...s,
         bullets: except(s.bullets)(collidedBullets),

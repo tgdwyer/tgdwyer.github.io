@@ -408,7 +408,7 @@ FAC(FAC(FAC(FAC(FAC(FAC(FAC(FAC(FAC()))))))))(6)
 
 > 720
 
-From the expansion of `Y g = g (g (g (…)))` it would seem that `Y(FAC)` would give us the recurrence we need. But will the JavaScript translation of the Y-combinator be able to generate this sequence of calls?  
+From the expansion of `Y g = g (g (g (…)))` it would seem that `Y(FAC)` would give us the recurrence we need. But will the JavaScript translation of the Y-combinator be able to generate this sequence of calls?
 
 ```js
 console.log(Y(FAC)(6))
@@ -494,7 +494,7 @@ Z(FAC)(2)
 
 ## Conclusion
 
-If you want to dig deeper there is much [more written about Lambda Calculus encodings](https://www.seas.harvard.edu/courses/cs152/2015sp/lectures/lec07-encodings.pdf) of logical expressions, natural numbers, as well as the `Y` and `Z` combinators, and also [more about their implementation in JavaScript](https://benestudio.co/fixed-point-combinators-in-javascript/).  
+If you want to dig deeper there is much [more written about Lambda Calculus encodings](https://www.seas.harvard.edu/courses/cs152/2015sp/lectures/lec07-encodings.pdf) of logical expressions, natural numbers, as well as the `Y` and `Z` combinators, and also [more about their implementation in JavaScript](https://benestudio.co/fixed-point-combinators-in-javascript/).
 
 However, the above description should be enough to give you a working knowledge of how to apply the three operations to manipulate Lambda Calculus expressions, as well as an appreciation for how they can be used to reason about combinators in real-world functional style curried code.  The other important take away is that the Lambda Calculus is a turing-complete model of computation, with Church encodings demonstrating how beta-reduction can evaluate church-encoded logical and numerical expressions and the trick of the Y-combinator giving us a way to perform loops.
 

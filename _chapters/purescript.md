@@ -13,7 +13,7 @@ title: "From JavaScript to Haskell (via PureScript)"
 
 JavaScript is a multiparadigm language that—due to its support for functions as objects, closures and, therefore, higher-order functions—is able to be used in a functional programming style.  However, if you are really enamoured with currying and combining higher-order functions, then it really makes a lot of sense to use a language that is actually designed for it.
 
-There are a number of purpose-built Functional Programming languages.  Lisp (as we have already discussed) is the original, but there are many others.  [Scheme](https://www.scheme.com/tspl4/) is a Lisp derivative, as is (more recently) [Clojure](https://clojure.org/).  SML and its derivatives (e.g. [OCaml](https://ocaml.org/), [F#](https://fsharp.org/), etc.) form another family of functional programming languages.  However, the strongest effort to build a language that holds to the principles of lambda-calculus inspired functional programming such as immutability (purity) is the Haskell family.  
+There are a number of purpose-built Functional Programming languages.  Lisp (as we have already discussed) is the original, but there are many others.  [Scheme](https://www.scheme.com/tspl4/) is a Lisp derivative, as is (more recently) [Clojure](https://clojure.org/).  SML and its derivatives (e.g. [OCaml](https://ocaml.org/), [F#](https://fsharp.org/), etc.) form another family of functional programming languages.  However, the strongest effort to build a language that holds to the principles of lambda-calculus inspired functional programming such as immutability (purity) is the Haskell family.
 
 There are a number of efforts to bring Haskell-like purity to web programming, inspired by the potential benefits the functional-style holds for managing complex state in asynchronous and distributed applications.  Firstly, it is possible to compile Haskell code directly to JavaScript (using [GHCJS](https://github.com/ghcjs/ghcjs)) although the generated code is opaque and requires a runtime.  Another promising and increasingly popular haskell-inspired language for client-side web development is [Elm](https://elm-lang.org/), although this again requires a runtime.  Also, Elm is rather specialised for creating interactive web apps.
 
@@ -47,10 +47,10 @@ def fibs(n: int) -> int:
     match n:
         case 0:
             return 1
-        case 1: 
+        case 1:
             return 1
         case _:
-            return fibs(n - 1) + fibs(n-2) 
+            return fibs(n - 1) + fibs(n-2)
 
 print(fibs(12))
 ```
@@ -121,7 +121,7 @@ var fibs = function (v) {
        return 1;
    };
    return fibs(v - 1 | 0) + fibs(v - 2 | 0) | 0;
-}; 
+};
 ```
 
 Woah!  It’s pretty much the way a savvy JavaScript programmer would write it.  The one part that may look a bit unusual are the expressions like `v - 1 | 0`.  Of course, JavaScript has no `Int` type, so this is PureScript trying to sensibly convert to the all-purpose JavaScript `number` type.  The `|` is a bitwise OR, so `|0` ensures that resulting expression is an integer which is both [a safety measure and a potential optimisation](https://stackoverflow.com/questions/44778826/why-does-the-purescript-compiler-generate-lots-of-0).  It’s a situation where the declared types give the PureScript compiler more information about the intent of the code than would otherwise be present in JavaScript, and which it’s able to use to good effect.

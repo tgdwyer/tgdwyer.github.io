@@ -38,7 +38,7 @@ const z = 1  // constant (immutable variable) at global scope
 You can try this in the [debug console in a browser such as Chrome](https://developers.google.com/web/tools/chrome-devtools/console). At the console, you enter JavaScript directly at the prompt (`>`). If we try to change the value of such a `const` variable, we get a run-time error:
 
 ```javascript
-> const z = 1 
+> const z = 1
 > z = 2
 ```
 
@@ -108,7 +108,7 @@ Unlike languages which use indentation to define code blocks and scopes (like Py
 
 ```javascript
 > 1 +
-    1 + 
+    1 +
       1
 ⋖ 3
 ```
@@ -128,7 +128,7 @@ Of course, you should not abuse the ability to layout code in different ways and
 JavaScript has several “primitive types” (simple types that are not [Objects](#objects)).  These include:
 
 - `number`: any numeric value, integer or decimal
-- `string`: delineated like `"hello"` or `'hello'` or even ``` `hello` ```.  
+- `string`: delineated like `"hello"` or `'hello'` or even ``` `hello` ```.
 - `boolean`: can be only `true` or `false`
 - `undefined`: is a special type with only one value which is `undefined`.
 
@@ -406,7 +406,7 @@ sumTo(10)
 
 The important change is that the recursive call (on the branch of execution that requires it) is now the very last operation to be executed before the function returns.  The computation (`sum + n`) occurs before the recursive call.  Therefore, no local state needs to be stored on the stack.
 
-Note: although it has been proposed for the EcmaScript standard, as of 2024, not all JavaScript engines support tail call optimisation (only Safari/WebKit AFAIK).  
+Note: although it has been proposed for the ECMAScript standard, as of 2024, not all JavaScript engines support tail call optimisation (only Safari/WebKit AFAIK).
 
 ## Functions as parameters to other functions
 
@@ -831,8 +831,8 @@ Functions can be nested inside other function definitions and can access variabl
 
 **Definitions:**
 
-- A function and the set of variables it accesses from its enclosing scope is called a *closure*.  
-- Variables from the enclosing scope that are accessed by the closure are said to be *captured* by the closure.  
+- A function and the set of variables it accesses from its enclosing scope is called a *closure*.
+- Variables from the enclosing scope that are accessed by the closure are said to be *captured* by the closure.
 
 You can also have a function that creates and returns a closure that can be applied later:
 

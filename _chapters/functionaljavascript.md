@@ -20,7 +20,7 @@ The elements of JavaScript covered in [our introduction](/javascript1), specific
 
 are sufficient for us to explore a paradigm called *functional programming*.  In the functional programming paradigm the primary model of computation is through the evaluation of functions.  Functional Programming is highly inspired by the [Lambda Calculus](/lambdacalculus/), a theory which develops a model for computation based on application and evaluation of mathematical functions.
 
-While JavaScript (and many---but not all, as we shall see---other languages inspired by the functional paradigm) do not enforce it, true functional programming mandates the functions be pure in the sense of not causing *side effects*.  
+While JavaScript (and many---but not all, as we shall see---other languages inspired by the functional paradigm) do not enforce it, true functional programming mandates the functions be pure in the sense of not causing *side effects*.
 
 ## Side Effects
 
@@ -105,7 +105,7 @@ It has two effects: incrementing `i` and mutating `a`.
 You could not simply replace the expression with the value computed by the expression and have the program work in the same way.
 This piece of code does not have the property of *referential transparency*.
 
-True pure functional languages (such as Haskell) enforce referential transparency through immutable variables (*note: yes, “immutable variable” sounds like an oxymoron---two words with opposite meanings put together*).  That is, once any variable in such a language is bound to a value, it cannot be reassigned.  
+True pure functional languages (such as Haskell) enforce referential transparency through immutable variables (*note: yes, “immutable variable” sounds like an oxymoron---two words with opposite meanings put together*).  That is, once any variable in such a language is bound to a value, it cannot be reassigned.
 
 In JavaScript we can opt-in to immutable variables by declaring them `const`, but it is only a shallow immutability.  Thus, the variable `myArray` above cannot be reassigned to reference a different array.  However, we can change the contents of the array as shown above.
 
@@ -478,9 +478,9 @@ But, if I run this program at a console, I get the following, each line emitted 
 > NaN  
 > NaN  
 > NaN  
-> ...  
+> ...
 
-This occurs because the `this` inside the function passed to `setInterval` is referring to the first function enclosing its scope, i.e. the `increment` function.  Since `increment` has no count property, we are trying to apply `++` to `undefined` and the result is `NaN` (Not a Number).  
+This occurs because the `this` inside the function passed to `setInterval` is referring to the first function enclosing its scope, i.e. the `increment` function.  Since `increment` has no count property, we are trying to apply `++` to `undefined` and the result is `NaN` (Not a Number).
 
 Arrow functions have different scoping rules for `this`. That is, they take the `this` of the enclosing scope (outside the arrow function), so in the following we get the expected behaviour:
 
@@ -651,7 +651,7 @@ new List(l)
 ```
 
 This is called *fluent* programming style.
-Interfaces in object-oriented languages that chain a sequence of method calls (as above) are often called *fluent interfaces*.  One thing to be careful about fluent interfaces in languages that do not enforce purity is that the methods may or may not be pure.  
+Interfaces in object-oriented languages that chain a sequence of method calls (as above) are often called *fluent interfaces*.  One thing to be careful about fluent interfaces in languages that do not enforce purity is that the methods may or may not be pure.
 
 That is, the type system does not warn you whether the method mutates the object upon which it is invoked and simply returns `this`, or creates a new object, leaving the original object untouched.  We can see,  however, that `List.map` as defined above creates a new list and is pure.
 
@@ -671,9 +671,9 @@ const list123 = cons(1, cons(2, cons(3, null)));
 
 The data element, and the reference to the next node in the list are stored in the closure returned by the `cons` function.  Created like this, the only side-effect of growing the list is creation of new cons closures.  Mutation of more complex structures such as trees can be managed in a similarly ‘pure’ way, and surprisingly efficiently, as we will see later in this course.
 
-So `cons` is a function that takes two parameters `_head` and `_rest` (the `_` prefix is just to differentiate them from the functions I create below), and returns a function that itself takes a function (selector) as argument.  The selector function is then applied to `_head` and `_rest`.  
+So `cons` is a function that takes two parameters `_head` and `_rest` (the `_` prefix is just to differentiate them from the functions I create below), and returns a function that itself takes a function (selector) as argument.  The selector function is then applied to `_head` and `_rest`.
 
-The `selector` function that we pass to the list is our ticket to accessing its elements:  
+The `selector` function that we pass to the list is our ticket to accessing its elements:
 
 ```javascript
 list123((_head, _rest)=> _head)
@@ -788,7 +788,7 @@ Note that when we declared each of the variables `studentVersion1-3` as `const`,
 studentVersion1 = studentVersion2;
 ```
 
-> VM430:1 Uncaught TypeError: Assignment to constant variable.  
+> VM430:1 Uncaught TypeError: Assignment to constant variable.
 
 However, there is nothing in these definitions to prevent the properties of those objects from being changed:
 

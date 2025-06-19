@@ -34,7 +34,7 @@ fibs n = fibs (n-1) + fibs (n-2) -- recursive definition
 Then load it into GHCi like so:
 
 ```bash
-ghci fibs.hs  
+ghci fibs.hs
 ```
 
 You’ll get a prompt that looks like:
@@ -49,11 +49,11 @@ You can enter haskell expressions directly at the prompt:
 ghci> fibs 6
 ```
 
-> 13  
+> 13
 
 I’m going to stop showing the prompt now, but you can enter all of the following directly at the prompt and you will see similar results printed to those indicated below.
 
-Basic logic operators are similar to C/Java/etc: `==`, `&&`, `||`.  
+Basic logic operators are similar to C/Java/etc: `==`, `&&`, `||`.
 
 ```haskell
 fibs 6 == 13
@@ -244,9 +244,9 @@ Consider the following pseudocode for a simple recursive definition of the Quick
 
 ```none
 QuickSort list:
-  Take head of list as a pivot  
+  Take head of list as a pivot
   Take tail of list as rest
-  return 
+  return
 QuickSort( elements of rest < pivot ) ++ (pivot : QuickSort( elements of rest >= pivot ))
 ```
 
@@ -282,11 +282,11 @@ sort (pivot:rest) = lesser ++ [pivot] ++ greater
 An essential thing to know before trying to type in the above function is that Haskell delimits the scope of multi-line function definitions (and all multiline expressions) with indentation ([complete indentation rules reference here](https://en.wikibooks.org/wiki/Haskell/Indentation)). The `where` keyword lets us create multiple function definitions that are visible within the scope of the parent function, but they must all be left-aligned with each other and to the right of the start of the line containing the `where` keyword.
 
 Haskell also helps with a number of other language features.  
-First, is pattern matching.  Pattern matching is like function overloading that you may be familiar with from languages like Java or C++ - where the compiler matches the version of the function to invoke for a given call by matching the type of the parameters to the type of the call - except in Haskell the compiler goes a bit deeper to inspect the values of the parameters.  
+First, is pattern matching.  Pattern matching is like function overloading that you may be familiar with from languages like Java or C++ - where the compiler matches the version of the function to invoke for a given call by matching the type of the parameters to the type of the call - except in Haskell the compiler goes a bit deeper to inspect the values of the parameters.
 
 There are two declarations of the sort function above.  The first handles the base case of an empty list.  The second handles the general case, and pattern matching is again used to destructure the lead cons expression into the pivot and rest variables.  No explicit call to head and tail functions is required.
 
-The next big difference between our Haskell quicksort and our previous JavaScript definition is the Haskell style of function application - which has more in common with lambda calculus than JavaScript.  The expression `f x` is application of the function `f` to whatever `x` is.  
+The next big difference between our Haskell quicksort and our previous JavaScript definition is the Haskell style of function application - which has more in common with lambda calculus than JavaScript.  The expression `f x` is application of the function `f` to whatever `x` is.
 
 Another thing that helps with readability is infix operators.  For example, `++` is an infix binary operator for list concatenation. The `:` operator for cons is another.  There is also the aforementioned $ which gives us another trick for removing brackets, and finally, the `<` and `>=` operators.  Note, that infix operators can also be curried and left only partially applied as in `(<pivot)`.
 
@@ -315,7 +315,7 @@ sort (pivot:rest) = below pivot rest ++ [pivot] ++ above pivot rest
    partition comparison = sort . filter comparison
 ```
 
-The `list` parameter for `below` and `above` has been eta-reduced away just as we were able to [eta-reduce lambda calculus expressions](/lambdacalculus/#lambda-calculus-cheatsheet).  The definition of the `partition` function in this version uses the `.` operator for [function composition](/higherorderfunctions/#composition).  That is, `partition comparison` is the composition of `sort` and `filter comparison` and again the `list` parameter is eta-reduced away.  
+The `list` parameter for `below` and `above` has been eta-reduced away just as we were able to [eta-reduce lambda calculus expressions](/lambdacalculus/#lambda-calculus-cheatsheet).  The definition of the `partition` function in this version uses the `.` operator for [function composition](/higherorderfunctions/#composition).  That is, `partition comparison` is the composition of `sort` and `filter comparison` and again the `list` parameter is eta-reduced away.
 
 Although it looks like the comparison parameter could also go away here with eta conversion, actually the low precedence of the `.` operator means there is (effectively) implicit parentheses around filter comparison.  We will see how to [more aggressively refactor code to be point-free later](/haskell3/#point-free-code).
 
@@ -327,7 +327,7 @@ sort (pivot:rest) = below pivot rest ++ [pivot] ++ above pivot rest
 ```
 
 as:
-> the sort of a list where we take the first element as the “pivot” and everything after   as “rest” is
+> the sort of a list where we take the first element as the “pivot” and everything after as “rest” is
 > everything that is below pivot in rest,  
 > concatenated with a list containing just the pivot,  
 > concatenated with everything that is above pivot in rest.
@@ -359,13 +359,13 @@ Provides alternative cases for function definitions matching different values or
 ```haskell
 fibs 0 = 1
 fibs 1 = 1
-fibs n = fibs (n-1) + fibs (n-2) 
+fibs n = fibs (n-1) + fibs (n-2)
 ```
 
 ### if-then-else
 
 ```haskell
-if <condition> then <case 1> else <case 2>   
+if <condition> then <case 1> else <case 2>
 ```
 
 just like javascript ternary if operator: `<condition> ? <case 1> : <case 3>`

@@ -333,7 +333,7 @@ So what does the traverse function do?  By way of example, remember our safe mod
 ```haskell
 safeMod :: Integral a => a-> a-> Maybe a
 safeMod _ 0 = Nothing
-safeMod numerator divisor = Just $ mod numerator divisor 
+safeMod numerator divisor = Just $ mod numerator divisor
 ```
 
 It lets us map over a list of numbers without throwing divide-by-zero exceptions:
@@ -359,7 +359,7 @@ Traverse applies a function with a result in an `Applicative` context (i.e. an A
 ```haskell
 Prelude> :t traverse
 traverse
-  :: (Applicative f, Traversable t) => (a -> f b) -> t a -> f (t b) 
+  :: (Applicative f, Traversable t) => (a -> f b) -> t a -> f (t b)
 ```
 
 What are some other functions with Applicative effects?  Lots! E.g.:
@@ -640,7 +640,7 @@ We can write a similar definition for parsing an exact tree compared to parsing 
 We will consider a Value which is either an integer, or an operator which can combine integers. We will assume the only possible combination operator is `+` to avoid complexities with ordering expressions.
 
 ```haskell
-data Value = Value Int | BinaryPlus 
+data Value = Value Int | BinaryPlus
   deriving (Show)
 ```
 
@@ -648,8 +648,8 @@ We can generalize the `is` parser to `satisfy`, which will run a given parser `p
 
 ```haskell
 satisfy :: Parser a -> (a -> Bool) -> Parser a
-satisfy p f = Parser $ \i -> case parse p i of 
-  Just (r, v) 
+satisfy p f = Parser $ \i -> case parse p i of
+  Just (r, v)
       | f v -> Just (r, v)
   _ -> Nothing
 ```

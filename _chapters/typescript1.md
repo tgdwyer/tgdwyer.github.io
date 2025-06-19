@@ -246,10 +246,10 @@ It is common in TypeScript to have functions with union type parameters where ea
 **Primitive types:** `typeof v` gets the type of variable `v` as a string. This returns 'number', 'string' or 'boolean' (and a couple of others that we won't worry about) for the primitive types.  It can also differentiate objects and functions, e.g.:
 
 ```typescript
-const x = 1, 
-      s = "hello", 
-      b = true, 
-      o = {prop1:1, prop2:"hi"}, 
+const x = 1,
+      s = "hello",
+      b = true,
+      o = {prop1:1, prop2:"hi"},
       f = x=>x+1
 
 typeof x      // 'number'
@@ -262,8 +262,8 @@ typeof f      // 'function'
 **Object types:** null values and arrays are considered objects:
 
 ```typescript
-const o={prop1:1,prop2:"hi"}, 
-      n=null, 
+const o={prop1:1,prop2:"hi"},
+      n=null,
       a=[1,2,3]
 
 typeof o      // 'object'
@@ -303,7 +303,7 @@ const jsonToString = (json: JsonVal): string => {
     case 'number':
       return String(json)
   }
-  const [brackets, entries]  
+  const [brackets, entries]
     = json instanceof Array
       ? ['[]', json.map(jsonToString)]
       : ['{}', Object.entries(json)
@@ -399,7 +399,7 @@ interface Box<T> {
 Now `Box<number>` means a box that holds a number, while `Box<string>` means one that holds a string.
 </div>
 
-Type parameters can have more descriptive names if you like, but they **must** start with a capital.  The convention though is to use rather terse single letter parameter names in the same vicinity of the alphabet as T.  This habit comes from C++, where T used to stand for “Template”, and the terseness stems from the fact that we don’t really care about the details of what it is.  
+Type parameters can have more descriptive names if you like, but they **must** start with a capital.  The convention though is to use rather terse single letter parameter names in the same vicinity of the alphabet as T.  This habit comes from C++, where T used to stand for “Template”, and the terseness stems from the fact that we don’t really care about the details of what it is.
 
 As in function parameter lists, you can also have more than one type parameter:
 
@@ -412,7 +412,7 @@ interface Student<T,U> {
 }
 ```
 
-Formally, this is a kind of “parametric polymorphism”.  The `T` and `U` here may be referred to as *type parameters* or *type variables*. We say that the property `id` has *generic type*.  
+Formally, this is a kind of “parametric polymorphism”.  The `T` and `U` here may be referred to as *type parameters* or *type variables*. We say that the property `id` has *generic type*.
 
 You see generic types definitions used a lot in algorithm and data structure libraries, to give a type---to be specified by the calling code---for the data stored in the data structures.  For example, the following interface might be the basis of a linked list element:
 
@@ -488,7 +488,7 @@ binarySearch(numberIds,"harry@monash.edu")
 
 > TYPE ERROR!
 
-The `binarySearch2` function above is usable with more types than `binarySearch1`, but it still requires that `T`` does something sensible with`<` and `>`.  
+The `binarySearch2` function above is usable with more types than `binarySearch1`, but it still requires that `T`` does something sensible with`<` and `>`.
 
 We can add a function to use for comparison, so now we can use it with students uniquely identified by some other weird thing that we don’t even know about yet:
 
@@ -540,8 +540,8 @@ const first = curry(prefix)
 first(3)("hello") // Error!
 ```
 
->Error: Argument of type 'number' is not assignable to parameter of type 'string'.  
->Error: Argument of type 'string' is not assignable to parameter of type 'number'.
+> Error: Argument of type 'number' is not assignable to parameter of type 'string'.  
+> Error: Argument of type 'string' is not assignable to parameter of type 'number'.
 
 So the error messages are similar to above, but now they list concrete types because the types for `U` and `V` have already been narrowed by the application of `curry` to `prefix`.
 
@@ -564,7 +564,7 @@ const map = (func, l) => {
     return []
   }
   else {
-    // Apply function to the first item, and 
+    // Apply function to the first item, and
     // recursively apply to the rest of the list
     return [func(l[0]), ...map(func, l.slice(1))];
   }
@@ -614,7 +614,7 @@ const filter = (func, l) => {
     }
     else {
       // Skip the current item.
-      return filter(func, l.slice(1)); 
+      return filter(func, l.slice(1));
     }
   }
 }
