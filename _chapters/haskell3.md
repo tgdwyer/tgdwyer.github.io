@@ -666,7 +666,7 @@ instance Applicative Maybe where
   liftA2 _ _ _ = Nothing
 ```
 
-So `Applicative` gives us the power to apply two arguments in context to a function. . Since we have two, we can also extend this to three, but we don’t need a new mechanism, we can keep applying functions to multiple arguments by combining liftA2 in a nested way. In other words, once we've applied a function to two contextual values using liftA2, the result is a new function still inside the context, and we can use liftA2 again to apply that to a third value — and so on.
+So `Applicative` gives us the power to apply two arguments in context to a function. Since we have two, we can also extend this to three, but we don’t need a new mechanism, we can keep applying functions to multiple arguments by combining liftA2 in a nested way. In other words, once we've applied a function to two contextual values using liftA2, the result is a new function still inside the context, and we can use liftA2 again to apply that to a third value — and so on.
 
 ### Can we recover the tie-fighter from liftA2?
 
