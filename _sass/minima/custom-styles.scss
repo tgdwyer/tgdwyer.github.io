@@ -217,3 +217,40 @@ input:checked + .slider:before {
     border-color: #111;
   }
 }
+
+.alert-box {
+  padding: 1em 1.25em;
+  margin: 2em 0;
+  border-left: 6px solid;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03);
+
+  strong {
+    display: block;
+    margin-bottom: 0.3em;
+    font-size: 1em;
+  }
+}
+
+@mixin alert($class, $text, $color) {
+  .alert-#{$class} {
+    border-color: $color;
+    background-color: scale-color($color, $lightness: 90%);
+    @media (prefers-color-scheme: dark) {
+      background-color: scale-color($color, $lightness: -70%);
+    }
+
+    strong::before {
+      content: $text;
+      font-weight: bold;
+    }
+  }
+}
+
+/* Info (Green) */
+@include alert(info, "💡 Note: ", #2c7a7b);
+/* Warning (Yellow) */
+@include alert(warning, "⚠️ Warning: ", #d69e2e);
+/* Danger (Red) */
+@include alert(danger, "🚨 Important: ", #c53030);
