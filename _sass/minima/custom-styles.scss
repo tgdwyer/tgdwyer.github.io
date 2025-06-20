@@ -231,6 +231,10 @@ input:checked + .slider:before {
     margin-bottom: 0.3em;
     font-size: 1em;
   }
+
+  :last-child {
+    margin-bottom: 0;
+  }
 }
 
 @mixin alert($class, $text, $color) {
