@@ -155,7 +155,7 @@ columns.pipe(
 ```
 
 > Observable  
-> Observable
+> Observable  
 > Observable
 
 ![Map Map Example](/assets/images/chapterImages/functionalreactiveprogramming/mapmap.gif)

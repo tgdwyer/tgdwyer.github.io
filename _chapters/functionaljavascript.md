@@ -733,8 +733,8 @@ These ideas, of computation through pure function expressions, are inspired by A
 
 * Implement a `fromArray` function to construct a `cons` list from an array
 * Implement a `filter` function, which takes a function and a cons list, and returns another cons list populated only with those elements of the list for which the function returns true
-* Implement a `reduce` function for these cons lists, similar to javascript’s `Array.reduc`e
-* Implement a `reduceRight` function for these cons lists, similar to javascript’s `Array.reduceRigh`t
+* Implement a `reduce` function for these cons lists, similar to javascript’s `Array.reduce`
+* Implement a `reduceRight` function for these cons lists, similar to javascript’s `Array.reduceRight`
 * Implement a `concat` function that takes two lists as arguments and returns a new list of their concatenation.
 * How can we update just one element in this list without mutating any data and what is the run-time complexity of such an operation?
 
