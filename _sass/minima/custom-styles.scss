@@ -222,6 +222,10 @@ input:checked + .slider:before {
   border-radius: 6px;
   background-color: #f9f9f9;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03);
+  @media (prefers-color-scheme: dark) {
+    background-color: #2e2e2e;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+  }
 
   strong {
     display: block;
