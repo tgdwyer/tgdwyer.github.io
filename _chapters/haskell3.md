@@ -635,6 +635,65 @@ instance Show Rank where
     show r = fromMaybe "" $ lookup r (zip [Two .. Ace] ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"])
 ```
 
+## Equivalent Definition of Applicative
+
+Feel free to skip this definition, if the previous one made sense. But, here is an alternative definition if it helps you .
+
+There is an alternative way to think about applicatives, which highlights (arguably) the main usage of applicative.
+
+```haskell
+class Functor f => Applicative f where
+  pure   :: a -> f a
+  liftA2 :: (a -> b -> c) -> f a -> f b -> f c
+```
+
+This definition says: we’re extending the idea of Functor (which allows you to apply a one-argument function to a value in a context) to two-argument functions.
+
+Recall that:
+
+```haskell
+(<$>) :: (a -> b) -> f a -> f b
+```
+
+`liftA2` is just the natural next step in this pattern.
+
+For example, here’s the instance for `Maybe`, which follows the same pattern as `fmap`, just extended to two inputs:
+
+```haskell
+instance Applicative Maybe where
+  pure = Just
+  liftA2 f (Just x) (Just y) = Just (f x y)
+  liftA2 _ _ _ = Nothing
+```
+
+So `Applicative` gives us the power to apply two arguments in context to a function. Since we have two, we can also extend this to three, but we don’t need a new mechanism, we can keep applying functions to multiple arguments by combining liftA2 in a nested way. In other words, once we've applied a function to two contextual values using liftA2, the result is a new function still inside the context, and we can use liftA2 again to apply that to a third value — and so on.
+
+### Can we recover the tie-fighter from liftA2?
+
+We can define `<*>` using `liftA2`, we can rephrase the `Applicative` definition like this:
+
+```haskell
+-- Default implementation of <*>
+(<*>)  :: f (a -> b) -> f a -> f b
+(<*>) ff fa = liftA2 (\f a -> f a) ff fa
+```
+
+Let’s unpack it:
+
+- `ff` is a function inside a context (i.e., `Just (+1)`)
+- `fa` is a value inside a context (i.e., `Just 3`)
+- `liftA2 (\f a -> f a)` says, apply the function f to the value (i.e., `(+1) 3` which will equate to 4)
+
+One thing we can observe is that `(\f a -> f a)` is the same thing as `($)`. So, we can simplify this too
+
+```haskell
+-- Default implementation of <*>
+(<*>)  :: f (a -> b) -> f a -> f b
+-- (<*>) ff fa = liftA2 ($) ff fa
+-- ETA REDUCTION:
+(<*>) = liftA2 ($)
+```
+
 ---
 
 <div class="cheatsheet" markdown="1">
@@ -1096,6 +1155,22 @@ All that `pure` does is put the given value on the right side of the tuple.
 The key insight for this applicative instance is that we first use `f` (the parser on the LHS of `<*>`). This consumes input from `i` giving back the remaining input in `r1`. We then run the second parser `g` on the RHS of `<*>` on `r1` (the remaining input).
 
 The main take-away message is that `<*>` allows us to combine two parsers in sequence, that is, we can run the first one and then the second one.
+
+Alternatively, we can think about this in terms of `liftA2`
+
+```haskell
+instance Applicative Parser where
+  pure a = Parser (\input -> Just (input, a))
+
+  liftA2 f (Parser pa) (Parser pb) = Parser $ \input ->
+    case pa input of
+      Just (rest1, a) -> case pb rest1 of
+        Just (rest2, b) -> Just (rest2, f a b)
+        Nothing         -> Nothing
+      Nothing -> Nothing
+```
+
+So, `liftA2` lets us run two parsers in *sequence* and then combine their results with a regular two-argument function — all without manually handling the `Maybe` logic.
 
 Let’s walk through a concrete example of this.
 
