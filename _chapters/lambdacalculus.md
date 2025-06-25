@@ -57,7 +57,9 @@ Some things to note about such lambda expressions:
 
 We have already discussed combinators in JavaScript, now we can give them a more formal definition:
 
-* A **combinator** is a lambda expression (function) with no free variables.
+<div class="alert-box alert-info" markdown="1">
+A *combinator* is a lambda expression (function) with no free variables.
+</div>
 
 Thus, the expression `λx.x` is a combinator because the variable `x` is bound to the parameter.  The expression `λx.xy` is not a combinator, because `y` is not bound to any parameter, it is *free*.
 
