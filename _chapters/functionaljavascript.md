@@ -6,7 +6,7 @@ title: "Functional Programming in JavaScript"
 ### Learning Outcomes
 
 * Create programs in JavaScript in a functional style
-* Understand the definitions of [Function Purity and Referential Transparency](#function-purity-and-referential-transparency)
+* Understand the definitions of [function purity and referential transparency](#function-purity-and-referential-transparency)
 * Explain the role of pure functional programming style in managing side effects
 * See how pure functions can be used to [model sophisticated computation](#computation-with-pure-functions)
 
