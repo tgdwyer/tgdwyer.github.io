@@ -825,7 +825,10 @@ The other thing happening at game over, is the call to `subscription.unsubscribe
     ).subscribe(updateView);
 ```
 
-This section here is **key** to FRP, with four key ingredients:
+<div class="alert-box alert-info" markdown="1">
+**Key ingredients of a game in FRP style**
+
+This section here is key to FRP, with four key ingredients:
 
 1. A constant rate _interval_ tick, to ensure consistent frame rate
 2. _Merged_ with Inputs from the user
@@ -843,6 +846,7 @@ Any other game in FRP style, will likely involve an _almost_ identical skeleton 
 ```
 
 The job of the programmer (e.g., you in Assignment 1) will be to create appropriate functions to handle modification of the state, view, and inputs to ensure correct behaviour of the chosen game.
+</div>
 
 Finally, we need to make a couple more additions to the CSS to display the rocks and game over text:
 

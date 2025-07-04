@@ -3,7 +3,9 @@ layout: chapter
 title: "Eithers"
 ---
 
-**Note** This is optional reading.
+<div class="alert-box alert-info" markdown="1">
+**This is optional reading.**
+</div>
 
 ## Learning Outcomes
 

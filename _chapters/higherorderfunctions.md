@@ -15,7 +15,10 @@ title: "Higher-Order Functions"
 
 The really exciting aspect of higher-order function support in languages like JavaScript is that it allows us to combine simple reusable functions in sophisticated ways.  We’ve already seen how functions like map, filter and reduce can be chained to flatten the control flow of data processing.  In this section we will look at some tricks that allow us to use functions that work with other functions in convenient ways.
 
-*A note about type annotations in this section.* If you are following the reading order given by the [index for these notes](/), then you have already read our [introduction to TypeScript](/typescript1/).  Therefore, below we frequently use TypeScript type annotations to be precise about the intended use of the functions.  However, as we start to rely more and more heavily on curried higher-order functions in this chapter, TypeScript type annotations start to become a bit cumbersome, and for the purposes of concisely representing use of combinators to create new functions, we abandon them entirely.  As an exercise, you may like to think about what the TypeScript annotations for some of these functions should be.  This is one of the reasons why we later in these notes move away from JavaScript and TypeScript entirely to instead focus on a real functional language, [Haskell](/haskell1/).
+<div class="alert-box alert-info" markdown="1">
+**Type annotations in this section**
+If you are following the reading order given by the [index for these notes](/), then you have already read our [introduction to TypeScript](/typescript1/).  Therefore, below we frequently use TypeScript type annotations to be precise about the intended use of the functions.  However, as we start to rely more and more heavily on curried higher-order functions in this chapter, TypeScript type annotations start to become a bit cumbersome, and for the purposes of concisely representing use of combinators to create new functions, we abandon them entirely.  As an exercise, you may like to think about what the TypeScript annotations for some of these functions should be.  This is one of the reasons why we later in these notes move away from JavaScript and TypeScript entirely to instead focus on a real functional language, [Haskell](/haskell1/).
+</div>
 
 ## Higher-Order Functions
 

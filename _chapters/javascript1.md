@@ -829,10 +829,13 @@ All of the above are pure in the sense that they do not mutate `a`, but return t
 
 Functions can be nested inside other function definitions and can access variables from the enclosing scope.
 
-**Definitions:**
+<div class="alert-box alert-info" markdown="1">
+**Definitions**
 
-- A function and the set of variables it accesses from its enclosing scope is called a *closure*.
-- Variables from the enclosing scope that are accessed by the closure are said to be *captured* by the closure.
+A function and the set of variables it accesses from its enclosing scope is called a *closure*.
+
+Variables from the enclosing scope that are accessed by the closure are said to be *captured* by the closure.
+</div>
 
 You can also have a function that creates and returns a closure that can be applied later:
 
@@ -912,7 +915,10 @@ sumOfSquares(20)
 
 ## Prototype Class Mechanism
 
-*Note: the following way to achieve class encapsulation is deprecated by ES6 syntax---skip to [the next section](#ecmascript-6-class-syntax) to see the modern way to do it.*
+<div class="alert-box alert-warning" markdown="1">
+**Deprecated**
+The following way to achieve class encapsulation is deprecated by ES6 syntax---skip to [the next section](#ecmascript-6-class-syntax) to see the modern way to do it.
+</div>
 
 In JavaScript you can also create functions as members of objects:
 
