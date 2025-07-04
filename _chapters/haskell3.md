@@ -355,7 +355,7 @@ instance Functor ((->) r) where
     fmap = (.)
 ```
 
-So the composition of functions `f` and `g`, `f . g`, is equivalent to ‘mapping’ `f` over `g`, e.g.  `f <$> g`.
+So the composition of functions `f` and `g`, `f . g`, is equivalent to “mapping” `f` over `g`, e.g.  `f <$> g`.
 
 ```haskell
 GHCi> f = (+1)
@@ -443,7 +443,7 @@ Node (Node (Leaf 3) 5 (Leaf 7)) 9 (Node (Leaf 11) 13 (Leaf 15))
 
 The typeclass `Applicative` introduces a new operator `<*>` (pronounced “apply”), which lets us apply functions inside a computational context.
 
-Applicative is a “subclass” of `Functor`, meaning that an instance of `Applicative` can be `fmap`ed over, but Applicatives also declare (at least) two additional functions, `pure` and `(<*>)` (pronounced ‘apply’—but I like calling it [“TIE Fighter”](https://en.wikipedia.org/wiki/TIE_fighter)):
+Applicative is a “subclass” of `Functor`, meaning that an instance of `Applicative` can be `fmap`ed over, but Applicatives also declare (at least) two additional functions, `pure` and `(<*>)` (pronounced “apply”—but I like calling it [“TIE Fighter”](https://en.wikipedia.org/wiki/TIE_fighter)):
 
 ```haskell
 GHCi> :i Applicative

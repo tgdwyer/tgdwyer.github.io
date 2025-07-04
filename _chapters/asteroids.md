@@ -122,7 +122,7 @@ And finally we’re done.  But it was surprisingly messy for what should be a re
 
 # Using Observable
 
-Observable (we’ll use the implementation from RxJS) wraps common asynchronous actions like user events and intervals in streams, that we can process with a chain of ‘operators’ applied to the chain through a `pipe`.
+Observable (we’ll use the implementation from RxJS) wraps common asynchronous actions like user events and intervals in streams, that we can process with a chain of “operators” applied to the chain through a `pipe`.
 
 We start more or less the same as before, inside a function applied on `window.onload` and we still need local variables for the ship visual and its position/angle:
 

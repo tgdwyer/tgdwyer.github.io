@@ -778,7 +778,7 @@ Again, we get the squiggly:
 
 ![Compile Error Screenshot](/assets/images/chapterImages/typescript1/readOnly.png)
 
-## Typing systems with different ‘degrees’ of strictness
+## Typing systems with different “degrees” of strictness
 
 C++ is considered a strongly typed language in the sense that all types of values and variables must match up on assignment or comparison.  Further, it is “statically” typed in that the compiler requires complete knowledge (at compile-time) of the type of every variable.  This can be overridden (type can be cast away and void pointers passed around) but the programmer has to go out of their way to do it (i.e. opt-out).
 

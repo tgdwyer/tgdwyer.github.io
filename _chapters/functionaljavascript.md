@@ -669,7 +669,7 @@ With just the above definition we can construct a list (the term cons dates back
 const list123 = cons(1, cons(2, cons(3, null)));
 ```
 
-The data element, and the reference to the next node in the list are stored in the closure returned by the `cons` function.  Created like this, the only side-effect of growing the list is creation of new cons closures.  Mutation of more complex structures such as trees can be managed in a similarly ‘pure’ way, and surprisingly efficiently, as we will see later in this course.
+The data element, and the reference to the next node in the list are stored in the closure returned by the `cons` function.  Created like this, the only side-effect of growing the list is creation of new cons closures.  Mutation of more complex structures such as trees can be managed in a similarly “pure” way, and surprisingly efficiently, as we will see later in this course.
 
 So `cons` is a function that takes two parameters `_head` and `_rest` (the `_` prefix is just to differentiate them from the functions I create below), and returns a function that itself takes a function (selector) as argument.  The selector function is then applied to `_head` and `_rest`.
 
