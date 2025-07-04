@@ -144,7 +144,7 @@ columns.pipe(
 
 ![Merge Map Example](/assets/images/chapterImages/functionalreactiveprogramming/mergeMap.gif)
 
-If we contrast `mergeMap` and `map`, map will produce an Observable of Observables, while mergeMap, will produce a single stream with all of the values. Contrast the animation for `map`, with the previous `mergeMap` animation.  `map` has three separate branches, where each one represents its own observable stream. The output of the `console.log`, is an instance of the Observable class itself, which is not very useful!
+If we contrast `mergeMap` and `map`, `map` will produce an Observable of Observables, while `mergeMap` will produce a single stream with all of the values. Contrast the animation for `map` with the previous `mergeMap` animation.  `map` has three separate branches, where each one represents its own observable stream. The output of the `console.log` is an instance of the Observable class itself, which is not very useful!
 
 ```javascript
 columns.pipe(
@@ -223,6 +223,26 @@ merge(key$.pipe(map(e=>e.key)),
 ```
 
 ![Keyboard Example](/assets/images/chapterImages/functionalreactiveprogramming/keyboardclick.gif)
+
+<div class="alert-box alert-warning" markdown="1">
+**Make sure you import the correct `merge`!**
+There are two `merge` functions in RxJS. The one we are using is the function imported from `'rxjs'` that merges multiple Observables and returns a new Observable. The other one is an operator imported from `'rxjs/operators'` that has been deprecated in favour of the new name `mergeWith`. The following pieces of code are equivalent:
+
+```typescript
+import { merge } from 'rxjs';
+
+const mergedObservable = merge(observable1, observable2, observable3);
+```
+
+```typescript
+import { mergeWith } from 'rxjs/operators';
+// Do not use the below deprecated import
+// import { merge } from 'rxjs/operators';
+
+const mergedObservable = observable1.pipe(mergeWith(observable2, observable3));
+```
+
+</div>
 
 <div class="cheatsheet" markdown="1">
 

@@ -406,16 +406,14 @@ reduceState = (s: State, action: Action) => action.apply(s);
 And finally we `merge` our different inputs and scan over `State`, and the final `subscribe` calls the `updateView`, once again, a self-contained function which does whatever is required to render the State.  We describe the updated `updateView` in the next section.
 
 ```typescript
-  interval(10)
-    .pipe(
-      map(elapsed=>new Tick(elapsed)),
-      merge(startLeftRotate,startRightRotate,stopLeftRotate,stopRightRotate),
-      merge(startThrust,stopThrust),
-      scan(reduceState, initialState))
+  merge(
+    interval(10).pipe(map(elapsed=>new Tick(elapsed))),
+    startLeftRotate, startRightRotate, stopLeftRotate, stopRightRotate,
+    startThrust, stopThrust,
+  )
+    .pipe(scan(reduceState, initialState))
     .subscribe(updateView);
 ```
-
-Note, there are two versions of `merge` in RxJS. One is a function which merges multiple Observables and returns a new Observable, it is imported from `'rxjs'`.  Here we are using the operator version of `merge` to merge additional Observables into the pipe, imported from `'rxjs/operators'`.
 
 # View
 
@@ -610,10 +608,11 @@ Note that bullets have a lifetime (presumably they are energy balls that fizzle 
 We merge the Shoot stream in as before:
 
 ```typescript
-  interval(10).pipe(
+  merge(
 ...
-    merge(shoot),
+    shoot,
 ...
+  )
 ```
 
 And we tack a bit onto `updateView` to draw and remove bullets:
@@ -816,13 +815,14 @@ _Note that we need to specify the types of values inside `o`, otherwise, we will
 The other thing happening at game over, is the call to `subscription.unsubscribe`.  This `subscription` is the object returned by the subscribe call on our main Observable:
 
 ```typescript
-  const subscription = interval(10).pipe(
-    map(elapsed=>new Tick(elapsed)),
-    merge(startLeftRotate,startRightRotate,stopLeftRotate,stopRightRotate),
-    merge(startThrust,stopThrust),
-    merge(shoot),
-    scan(reduceState, initialState)
-    ).subscribe(updateView);
+  const subscription = merge(
+    interval(10).pipe(map(elapsed=>new Tick(elapsed))),
+    startLeftRotate, startRightRotate, stopLeftRotate, stopRightRotate,
+    startThrust, stopThrust,
+    shoot
+  )
+    .pipe(scan(reduceState, initialState))
+    .subscribe(updateView);
 ```
 
 <div class="alert-box alert-info" markdown="1">
@@ -838,11 +838,12 @@ This section here is key to FRP, with four key ingredients:
 Any other game in FRP style, will likely involve an _almost_ identical skeleton of:
 
 ```typescript
-  const subscription = interval(FRAME_RATE).pipe(
-    map(elapsed=>new Tick(elapsed)),
-    merge(USER_INPUT_STREAMS),
-    scan(reduceState, INITIAL_GAME_STATE)
-    ).subscribe(updateView);
+  const subscription = merge(
+    interval(FRAME_RATE).pipe(map(elapsed=>new Tick(elapsed))),
+    USER_INPUT_STREAMS
+  )
+    .pipe(scan(reduceState, INITIAL_GAME_STATE))
+    .subscribe(updateView);
 ```
 
 The job of the programmer (e.g., you in Assignment 1) will be to create appropriate functions to handle modification of the state, view, and inputs to ensure correct behaviour of the chosen game.
