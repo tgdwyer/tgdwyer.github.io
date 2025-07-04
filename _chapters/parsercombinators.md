@@ -5,13 +5,13 @@ title: "Parser Combinators"
 
 ## Learning Outcomes
 
-- Understand that a parser is a program which extracts information from structured text
+- Understand that a parser is a program that extracts information from structured text
 - Apply what we have learned about Haskell typeclasses and other functional programming concepts to create solutions to real-world problems
 - In particular, we learn to use parser combinators and see how they are put together
 
 ## Introduction
 
-In this section we will see how the various Haskell language features we have explored allow us to solve real-world problems.  In particular, we will develop a simple but powerful library for building *parsers* that is compositional through [Functor](/haskell3/#functor), [Applicative](/haskell3/#applicative) and [Monad](/monad) interfaces.  Before this, though, we will learn the basics of parsing text, including a high-level understanding that parsers are *state-machines* which realise a *context-free grammar* over a textual language.
+In this section we will see how the various Haskell language features we have explored allow us to solve real-world problems.  In particular, we will develop a simple but powerful library for building *parsers* that is compositional through [Functor](/haskell3/#functor), [Applicative](/haskell3/#applicative) and [Monad](/monad) interfaces.  Before this, though, we will learn the basics of parsing text, including a high-level understanding that parsers are *state machines* which realise a *context-free grammar* over a textual language.
 
 Previously, [we glimpsed a very simplistic Applicative parser](/haskell3/#a-simple-applicative-functor-for-parsing).
 In this chapter, a *parser* is still simply a function which takes a string as input and produces some structure or computation as output, but now we extend the parser with monadic “bind” definitions, richer error handling and the ability to handle non-trivial grammars with alternative inputs.
@@ -19,15 +19,15 @@ In this chapter, a *parser* is still simply a function which takes a string as i
 Parsing has a long history and *parser combinators* are a relatively recent approach made popular by modern functional programming techniques.  
 A *parser combinator* is a [higher-order function](/higherorderfunctions) that accepts parsers as input and combines them somehow into a new parser.
 
-More traditional approaches to parsing typically involve special purpose programs called *parser generators*, which take as input a grammar defined in a special language (usually some derivation of BNF as described below) and generate the partial program in the desired programming language which must then be completed by the programmer to parse such input.  Parser combinators have the advantage that they are entirely written in the one language.  Parser combinators written in Haskell take advantage of the expressiveness of the Haskell language such that the finished parser can look a lot like a BNF grammar definition, as we shall see.
+More traditional approaches to parsing typically involve special-purpose programs called *parser generators*, which take as input a grammar defined in a special language (usually some derivation of BNF as described below) and generate the partial program in the desired programming language, which must then be completed by the programmer to parse such input.  Parser combinators have the advantage that they are entirely written in the one language.  Parser combinators written in Haskell take advantage of the expressiveness of the Haskell language such that the finished parser can look a lot like a BNF grammar definition, as we shall see.
 
 The parser combinator discussed here is based on one developed by Tony Morris and Mark Hibberd as part of their [“System F” Functional Programming Course](https://github.com/system-f/fp-course), which in turn is a simplified version of official Haskell parser combinators such as [parsec](https://hackage.haskell.org/package/parsec) by Daan Leijen.
 
-You can play with the example and the various parser bits and pieces in [this on-line playground](https://replit.com/@tgdwyer/Parser-Examples).
+You can play with the example and the various parser bits and pieces in [this online playground](https://replit.com/@tgdwyer/Parser-Examples).
 
 ## Context-free Grammars and BNF
 
-Fundamental to analysis of human natural language but also to the design of programming languages is the idea of a *grammar*, or a set of rules for how elements of the language may be composed.  A context-free grammar (CFG) is one in which the set of rules for what is produced for a given input (*production rules*) completely cover the set of possible input symbols (i.e. there is no additional context required to parse the input).  Backus-Naur Form (or BNF) is a notation that has become standard for writing CFGs since the 1960s.  We will use BNF notation from now on.  There are two types of symbols in a CFG: *terminal* and *non-terminal*.  In BNF non-terminal symbols are `<nameInsideAngleBrackets>` and can be converted into a mixture of terminals and/or nonterminals by production rules:
+Fundamental to the analysis of human natural language but also to the design of programming languages is the idea of a *grammar*, or a set of rules for how elements of the language may be composed.  A context-free grammar (CFG) is one in which the set of rules for what is produced for a given input (*production rules*) completely covers the set of possible input symbols (i.e. there is no additional context required to parse the input).  Backus-Naur Form (or BNF) is a notation that has become standard for writing CFGs since the 1960s.  We will use BNF notation from now on.  There are two types of symbols in a CFG: *terminal* and *non-terminal*.  In BNF non-terminal symbols are `<nameInsideAngleBrackets>` and can be converted into a mixture of terminals and/or nonterminals by production rules:
 
 ```haskell
 <nonterminal> ::= a mixture of terminals and <nonterminal>s, alternatives separated by |
@@ -35,7 +35,7 @@ Fundamental to analysis of human natural language but also to the design of prog
 
 Thus, *terminals* may only appear on the right-hand side of a production rule, *non-terminals* on either side.  In BNF each *non-terminal* symbol appears on the left-hand side of exactly one production rule, and there may be several possible alternatives for each *non-terminal* specified on the right-hand side.  These are separated by a `|` (in this regard they look a bit like the syntax for [algebraic data type definitions](/haskell2#algebraic-data-types)).
 
-Note that production rules of the form above are for context-free grammars.  As a definition by counter-example, *context sensitive grammars* allow terminals and more than one non-terminal on the left hand side.
+Note that production rules of the form above are for context-free grammars.  As a definition by counter-example, *context-sensitive grammars* allow terminals and more than one non-terminal on the left-hand side.
 
 Here’s an example BNF grammar for parsing Australian land-line phone numbers, which may optionally include a two-digit area code in brackets, and then two groups of four digits, with an arbitrary number of spaces separating each of these, e.g.:
 
@@ -56,7 +56,7 @@ Here’s the BNF grammar:
 
 So `"0"`-`"9"`, `"("`, `")"`, and `" "` are the full set of terminals.
 
-Now here’s a sneak peak at a simple parser for such phone numbers.  It succeeds for any input string which satisfies the above grammar, returning a 10-digit string for the full number without spaces and assumes “03” for the area code for numbers with none specified (i.e. it assumes they are local to Victoria).  Our [`Parser` type](/parsercombinators/#parser-type) provides a function `parse` which we call like so:
+Now here’s a sneak peek at a simple parser for such phone numbers.  It succeeds for any input string that satisfies the above grammar, returning a 10-digit string for the full number without spaces and assumes “03” for the area code for numbers with none specified (i.e. it assumes they are local to Victoria).  Our [`Parser` type](/parsercombinators/#parser-type) provides a function `parse` which we call like so:
 
 ```haskell
 GHCi> parse phoneNumber "(02)9583 1762"
@@ -110,7 +110,7 @@ type Input = String
 newtype Parser a = P { parse :: Input -> ParseResult a}
 ```
 
-We assume all `Input` is a `String`, i.e. Haskell’s basic builtin `String` which is a list of `Char`.
+We assume all `Input` is a `String`, i.e. Haskell’s basic built-in `String` which is a list of `Char`.
 
 Then the `Parser` type has one field `parse` which is a function of type `Input -> ParseResult a`.  So it parses strings and produces parse results, where a Parse result is:
 
@@ -184,7 +184,7 @@ instance Applicative Parser where
   (<*>) p q = p >>= (<$> q)
 ```
 
-The `Monad` instance’s bind function `(>>=)` we have already seen in use in the example above, allowing us to sequence `Parser`s in `do`-blocks to build up the implementation of the BNF grammar.
+The `Monad` instance’s bind function `(>>=)` that we have already seen in use in the example above allows us to sequence `Parser`s in `do`-blocks to build up the implementation of the BNF grammar.
 
 ```haskell
 instance Monad Parser where
@@ -197,7 +197,7 @@ instance Monad Parser where
 
 ## Parser Combinators
 
-The most atomic function for a parser of `String` is to pull a single character off the input.  The only thing that could go wrong is to find our input is empty.
+The most atomic function for a parser of `String` is to pull a single character off the input.  The only thing that could go wrong is if we find our input is empty.
 
 ```haskell
 character :: Parser Char
@@ -206,7 +206,7 @@ character = P parseit
         parseit (c:s) = Result s c
 ```
 
-The following is how we will report an error when we encounter a character we didn’t expect.  This is not the logic for recognising a character, that’s already happened and failed and the unrecognised character is now the parameter.  This is just error reporting, and since we have to do it from within the context of a `Parser`, we create one using the `P` constructor.  Then we set up the one field common to any `Parser`, a function which returns a `ParseResult` no matter the input, hence `const`.  The rest creates the right type of `Error` for the given `Char`.
+The following is how we will report an error when we encounter a character we didn’t expect.  This is not the logic for recognising a character: that’s already happened and failed and the unrecognised character is now the parameter.  This is just error reporting, and since we have to do it from within the context of a `Parser`, we create one using the `P` constructor.  Then we set up the one field common to any `Parser`, a function which returns a `ParseResult` no matter the input, hence `const`.  The rest creates the right type of `Error` for the given `Char`.
 
 ```haskell
 unexpectedCharParser :: Char -> Parser a
@@ -303,15 +303,15 @@ spaces = many (satisfy isSpace)
 
 ## A Parser that returns an ADT
 
-The return type of the phone number parser above was `[Char]` (equivalent to `String`).  A more typical use case for a parser though is to generate some data structure that we can then process in other ways.  In Haskell, this usually means a parser which returns an [Algebraic Data Type (ADT)](/haskell2#algebraic-data-types).  Here is a very simple example.
+The return type of the phone number parser above was `[Char]` (equivalent to `String`).  A more typical use case for a parser though is to generate some data structure that we can then process in other ways.  In Haskell, this usually means a parser that returns an [Algebraic Data Type (ADT)](/haskell2#algebraic-data-types).  Here is a very simple example.
 
-Let’s imagine we need to parse records from a vets office.  It treats only three types of animals.  As always, lets start with the BNF:
+Let’s imagine we need to parse records from a vet’s office.  It treats only three types of animals.  As always, let’s start with the BNF:
 
 ```haskell
 <Animal> ::= "cat" | "dog" | "camel"
 ```
 
-So our simple grammar consists of three terminals, each of which is a straightforward string *token* (a constant string that makes up a primitive word in our language).  To parse such a token, we’ll need a parser which succeeds if it finds the specified string next in its input.  We’ll use our `is` parser from above (which simply confirms a given character is next in its input).  The type of `is` was `Char -> Parser Char`.  Since `Parser` is an instance of `Applicative`, we can simply `traverse` the `is` parser across the given `String` (list of `Char`) to produce another `String` in the `Parser` applicative context.
+So our simple grammar consists of three terminals, each of which is a straightforward string *token* (a constant string that makes up a primitive word in our language).  To parse such a token, we’ll need a parser that succeeds if it finds the specified string next in its input.  We’ll use our `is` parser from above (which simply confirms a given character is next in its input).  The type of `is` was `Char -> Parser Char`.  Since `Parser` is an instance of `Applicative`, we can simply `traverse` the `is` parser across the given `String` (list of `Char`) to produce another `String` in the `Parser` applicative context.
 
 ```haskell
 string :: String -> Parser String
@@ -365,7 +365,7 @@ Result >< Dog
 Result >< Camel
 ```
 
-What’s really cool about this is that obviously the strings “cat” and “camel” overlap at the start.  Our alternative parser `(<|>)` effectively backtracks when the `cat` parser fails before eventually succeeding with the `camel` parser.  In an imperative style program this kind of logic would result in much messier code.
+What’s really cool about this is that obviously the strings “cat” and “camel” overlap at the start.  Our alternative parser `(<|>)` effectively backtracks when the `cat` parser fails before eventually succeeding with the `camel` parser.  In an imperative style program, this kind of logic would result in much messier code.
 
 ---
 
@@ -461,9 +461,9 @@ To start with, here is a BNF grammar for a simple calculator with three operatio
 
 An expression `<expr>` consists of one or more `<term>`s that may be combined with an `<addop>` (an addition operation, either `"+"` or `"-"`).  A `<term>` involves one or more numbers, multiplied together.
 
-The dependencies between the non-terminal expressions makes explicit the precedence of multiply operations needing to occur before add (and subtract).
+The dependencies between the non-terminal expressions make explicit the precedence of multiply operations needing to occur before add (and subtract).
 
-The data structure we will create uses the following Algebraic Datatype:
+The data structure we will create uses the following Algebraic Data Type:
 
 ```haskell
 data Expr = Plus Expr Expr
@@ -505,12 +505,12 @@ Minus
 
 ### Exercises
 
-- Make an instance of `show` for `Expr` which pretty prints such trees
-- Make a function which performs the calculation specified in an `Expr` tree like the one above.
+- Make an instance of `Show` for `Expr` which pretty prints such trees
+- Make a function that performs the calculation specified in an `Expr` tree like the one above.
 
 ---
 
-Obviously we are going to need to parse numbers, so let’s start with a simple parser which creates a `Number`.  
+Obviously we are going to need to parse numbers, so let’s start with a simple parser that creates a `Number`.  
 Note that whereas our previous parser had type `phoneNumber :: Parser [Char]`—i.e. it produced strings—this, and most of the parsers below, produces an `Expr`.
 
 ```haskell
@@ -518,11 +518,11 @@ number :: Parser Expr
 number = spaces >> Number . read . (:[]) <$> digit
 ```
 
-We keep things simple for now, make use of our existing `digit` parser, and limit our input to only single digit numbers.  
+We keep things simple for now, make use of our existing `digit` parser, and limit our input to only single-digit numbers.  
 The expression `Number . read . (:[])` is fmapped over the `Parser Char` returned by `digit`.  
 We use the Prelude function `read :: Read a => String -> a` to create the `Int` expected by `Number`.  Since `read` expects a string, we apply `(:[])` to turn the `Char` into `[Char]`, i.e. a `String`.
 
-Next, we’ll need a parser for the various operators (`*`,`+` and `-`).  There’s enough of them that we’ll make it a general purpose `Parser Char` parameterised by the character we expect:
+Next, we’ll need a parser for the various operators (`*`,`+` and `-`).  There’s enough of them that we’ll make it a general-purpose `Parser Char` parameterised by the character we expect:
 
 ```haskell
 op :: Char -> Parser Char -- parse a single char operator
@@ -582,7 +582,7 @@ Recursive calls: The recursive calls continue until there are no more operators 
 
 This gives us a way to parse expressions of the form “1+2+3+4+5” by parsing “1” initially, using `p` then repeatedly parsing something of the form “+2”, where `op` would parse the “+” and the `p` would then parse the “2”. These are combined using our `Plus` constructor to be of form `Plus 1 2`, this will then recursively apply the `p` and `op` parser over the rest of the string: “+3+4+5”.
 
-But, can we re-write this using a fold?
+But, can we rewrite this using a fold?
 
 ```haskell
 chain :: Parser a -> Parser (a -> a -> a) -> Parser a
@@ -609,7 +609,7 @@ chain p op = foldl applyOp <$> p <*> many (liftA2 (,) op p)
 
 ## Parsing Rock-Paper-Scissors
 
-A common use-case for parsing is deserialising data stored as a string.
+A common use case for parsing is deserialising data stored as a string.
 Of course, there are general data interchange formats such as JSON and XML for which most languages have parsers available.  However, sometimes you want to store data in your own format for compactness or readability, and when you do, deserialising the data requires a custom parser
 (this example is contributed by [Arthur Maheo](https://arthur.maheo.net/)).
 
@@ -626,7 +626,7 @@ play
   -> (RockPaperScissors, String) -- ^ (Choice, new memory)
 ```
 
-We will build a simple player which will keep track of the opponent’s previous choices and try to counter the most common one.
+We will build a simple player that will keep track of the opponent’s previous choices and try to counter the most common one.
 
 ### How to build a memory
 
@@ -716,7 +716,7 @@ Obviously, in a longer program you want to be handling this case better.
 
 ### Putting it all together
 
-The first round, our player will just pick a choice at random and return an empty memory.
+In the first round, our player will just pick a choice at random and return an empty memory.
 
 ``` haskell
 play Nothing = (Scissors, "") -- Chosen at random!
@@ -749,7 +749,7 @@ play (Just (_, opponent, mem)) = (winning whole, concatMap convert whole)
 ```
 
 *Note*: Here we can see the results directly because `RockPaperScissors` has an instance of `Show`.
-If you want to do the same with a datatype without `Show`, you would need to call `convert`.
+If you want to do the same with a data type without `Show`, you would need to call `convert`.
 
 ### Going further
 
@@ -764,7 +764,7 @@ Instead, we could keep track of the number of occurrences of each choice.
 
 ### Exercise
 
-Implement a memory for the following datatype.
+Implement a memory for the following data type.
 
 ``` haskell
 data Played = Played {rocks, papers, scissors :: Int}

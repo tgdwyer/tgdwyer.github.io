@@ -7,7 +7,7 @@ title: "FRP Asteroids"
 Functional Reactive Programming (specifically the Observable/Observer pattern) allows us to capture asynchronous actions like user interface events in streams.  These allow us to “linearise” the flow of control, avoid deeply nested loops, and process the stream with pure, referentially transparent functions.
 
 As an example we will build a little “Asteroids” game using FRP.  We’re going to use [RxJS](https://rxjs.dev/) as our Observable implementation, and we are going to render it in HTML using SVG.
-We’re also going to take some pains to make pure functional code (and lots of beautiful curried lambda (arrow) functions). We’ll use [typescript type annotations](https://www.typescriptlang.org/) to help us ensure that our data is indeed immutable and to guide us in plugging everything together without type errors into a nicely decoupled [Model-View-Controller (MVC) architecture](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller):
+We’re also going to take some pains to make pure functional code (and lots of beautiful curried lambda (arrow) functions). We’ll use [TypeScript type annotations](https://www.typescriptlang.org/) to help us ensure that our data is indeed immutable and to guide us in plugging everything together without type errors into a nicely decoupled [Model-View-Controller (MVC) architecture](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller):
 
 ![MVC Architecture](/assets/images/chapterImages/asteroids/generalMVC.png)
 
@@ -21,16 +21,16 @@ We’ll build it up in several steps.
   2. [abstracting away event handling with an Observable](#using-observable)
 
 * Then, we’ll [eliminate global mutable state using “Pure” Observable Streams](#pure-observable-streams)
-* Then, we’ll [add physics and handling more inputs](#adding-physics-and-handling-more-inputs)
+* Then, we’ll [add physics and handle more inputs](#adding-physics-and-handling-more-inputs)
 * We’ll [isolate the view](#view)
 * Next, we’ll [introduce other objects, starting with bullets](#additional-objects)
 * Finally, we’ll [deal with collisions](#collisions)
 
-Let’s start by making the svg with a simple polygon for the ship.  It will look like this:
+Let’s start by making the SVG with a simple polygon for the ship.  It will look like this:
 
 ![Ship](/assets/images/chapterImages/asteroids/ship.png)
 
-And here’s the snippet of html that creates the ship:
+And here’s the snippet of HTML that creates the ship:
 
 ```html
 <svg width="150" height="150" style="background-color:black">
@@ -46,7 +46,7 @@ Note that the ship is rendered inside a transform group `<g>`.  We will be chang
 
 ## Rotating the ship
 
-To begin with we’ll make it possible for the player to rotate the ship with the arrow keys.  First, by directly adding listeners to keyboard events.  Then, by using events via Observable streams.  Here’s a preview of what it’s going to look like ([or you can play with it in a live editor](https://stackblitz.com/edit/asteroids01)):
+To begin with, we’ll make it possible for the player to rotate the ship with the arrow keys.  First, by directly adding listeners to keyboard events.  Then, by using events via Observable streams.  Here’s a preview of what it’s going to look like ([or you can play with it in a live editor](https://stackblitz.com/edit/asteroids01)):
 
 [![Rotation animation](/assets/images/chapterImages/asteroids/asteroidsRotate.gif)](https://stackblitz.com/edit/asteroids01)
 
@@ -64,7 +64,7 @@ window.onload = function() {
   ...
 ```
 
-So `ship` will reference the SVG `<g>` whose transform attribute we will be manipulating to move it.  To apply an incremental movement, such as rotating the ship by a certain angle relative to its current orientation, we will need to store that current location.  We could read it out of the transform attribute stored in the SVG, but that requires some messy string parsing.  We’ll just store the state in a local object, which we will keep up to date as we move the ship.  For now, all we have is the ship’s position (x and y coordinates) and rotation angle:
+`ship` will reference the SVG `<g>` whose transform attribute we will be manipulating to move it.  To apply an incremental movement, such as rotating the ship by a certain angle relative to its current orientation, we will need to store that current location.  We could read it out of the transform attribute stored in the SVG, but that requires some messy string parsing.  We’ll just store the state in a local object, which we will keep up to date as we move the ship.  For now, all we have is the ship’s position (x and y coordinates) and rotation angle:
 
 ```javascript
 ...
@@ -90,7 +90,7 @@ Inside this function, we are only interested in left and right arrow keys.  If t
 ...
 ```
 
-Let’s say we want a left- or right-arrow keydown event to start the ship rotating, and we want to keep rotating until the key is released.  To achieve this, we use the builtin `setInterval(f,i)` function, which invokes the function `f` repeatedly with the specified interval `i` delay (in milliseconds) between each invocation.  `setInterval` returns a numeric handle which we need to store so that we can clear the interval behaviour later.
+Let’s say we want a left- or right-arrow keydown event to start the ship rotating, and we want to keep rotating until the key is released.  To achieve this, we use the built-in `setInterval(f,i)` function, which invokes the function `f` repeatedly with the specified interval `i` delay (in milliseconds) between each invocation.  `setInterval` returns a numeric handle which we need to store so that we can clear the interval behaviour later.
 
 ```typescript
       const handle = setInterval(function() {
@@ -100,7 +100,7 @@ Let’s say we want a left- or right-arrow keydown event to start the ship rotat
 ```
 
 So as promised, this function is setting the `transform` property on the ship, using the position and angle information stored in our local `state` object.  We compute the new position by deducting or removing 1 (degree) from the angle (for a left or right rotation respectively) and simultaneously update the state object with the new angle.
-Since we specify 10 milliseconds delay, the ship will rotate 100 times per second.
+Since we specify 10-millisecond delay, the ship will rotate 100 times per second.
 
 We’re not done yet.  We have to stop the rotation on keyup by calling `clearInterval`, for the specific interval we just created on keydown (using the `handle` we stored).  To do this, we’ll use `document.addEventListener` to specify a separate keyup handler for each keydown event, and since we will be creating a new keyup listener for each keydown event, we will also have to cleanup after ourselves or we’ll have a memory (event) leak:
 
@@ -124,7 +124,7 @@ And finally we’re done.  But it was surprisingly messy for what should be a re
 
 Observable (we’ll use the implementation from RxJS) wraps common asynchronous actions like user events and intervals in streams, that we can process with a chain of “operators” applied to the chain through a `pipe`.
 
-We start more or less the same as before, inside a function applied on `window.onload` and we still need local variables for the ship visual and its position/angle:
+We start more or less the same as before, inside a function applied on `window.onload`, and we still need local variables for the ship visual and its position/angle:
 
 ```typescript
 window.onload = function() {
@@ -140,7 +140,7 @@ But now we use the RxJS `fromEvent` function to create an Observable `keydown$` 
   const keydown$ = fromEvent<KeyboardEvent>(document, 'keydown');
 ```
 
-The objects coming through the stream are of type `KeyboardEvent`, meaning they have the `key` and `repeat` properties we used before.  We can create a new stream which filters these out:
+The objects coming through the stream are of type `KeyboardEvent`, meaning they have the `key` and `repeat` properties we used before.  We can create a new stream that filters these out:
 
 ```typescript
   const arrowKeys$ = keydown$.pipe(
@@ -148,7 +148,7 @@ The objects coming through the stream are of type `KeyboardEvent`, meaning they 
     filter(({repeat})=>!repeat));
 ```
 
-To duplicate the behaviour of our event driven version we need to rotate every 10ms.  We can make a stream which fires every 10ms using `interval(10)`, which we can “graft” onto our `arrowKeys$` stream using `mergeMap`.  We use `takeUntil` to terminate the interval on a `'keyup'`, filtered to ignore keys other than the one that initiated the `'keydown'`.  At the end of the `mergeMap` `pipe` we use `map` to return `d`, the original keydown `KeyboardEvent` object.  Back at the top-level `pipe` on arrowKeys$ we inspect this `KeyboardEvent` object to see whether we need a left or right rotation (positive or negative angle).  Thus, `angle$` is just a stream of `-1` and `1`.
+To duplicate the behaviour of our event-driven version we need to rotate every 10ms.  We can make a stream that fires every 10ms using `interval(10)`, which we can “graft” onto our `arrowKeys$` stream using `mergeMap`.  We use `takeUntil` to terminate the interval on a `'keyup'`, filtered to ignore keys other than the one that initiated the `'keydown'`.  At the end of the `mergeMap` `pipe` we use `map` to return `d`, the original keydown `KeyboardEvent` object.  Back at the top-level `pipe` on arrowKeys$ we inspect this `KeyboardEvent` object to see whether we need a left or right rotation (positive or negative angle).  Thus, `angle$` is just a stream of `-1` and `1`.
 
 ```typescript
   const angle$ = arrowKeys$.pipe(
@@ -179,7 +179,7 @@ Arguably, the Observable code has many advantages over the event handling code:
 
 ## Pure Observable Streams
 
-A weakness of the above implementation using Observable streams, is that we still have global mutable state.  Deep in the function passed to subscribe we alter the angle attribute on the `state` object.  Another Observable operator `scan`, allows us to capture this state transformation inside the stream, using a pure function to transform the state, i.e. a function that takes an input state object and---rather than altering it in-place---creates a new output state object with whatever change is required.
+A weakness of the above implementation using Observable streams is that we still have global mutable state.  Deep in the function passed to subscribe, we alter the angle attribute on the `state` object.  Another Observable operator `scan` allows us to capture this state transformation inside the stream, using a pure function to transform the state, i.e. a function that takes an input state object and---rather than altering it in-place---creates a new output state object with whatever change is required.
 
 We’ll start by altering the start of our code to define an `interface` for `State` with `readonly` members, and we’ll place our `initialState` in a `const` variable that matches this interface.  You can also [play with the code in a live editor](https://stackblitz.com/edit/asteroids02).
 
@@ -205,7 +205,7 @@ Now we’ll create a function that is a pure transformation of `State`:
 ...
 ```
 
-Next, we have another, completely self contained function to update the SVG for a given state:
+Next, we have another, completely self-contained function to update the SVG for a given state:
 
 ```typescript
 ...
@@ -254,7 +254,7 @@ Let’s start with adding “thrust” in response to up arrow.
 With the code above, adding more and more intervals triggered by key down events would get increasingly messy.
 Rather than have streams triggered by key events, for the purposes of simulation it makes sense that our main Observable be a stream of discrete timesteps.  Thus, we’ll be moving our `interval(10)` to the top of our pipe.
 
-Before we had just left and right rotations coming out of our stream.  Our new stream is going to have multiple types of actions as payload:
+Before, we had just left and right rotations coming out of our stream.  Our new stream is going to have multiple types of actions as payload:
 
 * `Tick` - a discrete timestep in our simulation, triggered by `interval`.
 * `Rotate` - a ship rotation triggered by left or right arrows keys
@@ -293,7 +293,7 @@ Now we have all the pieces to create a whole slew of input streams (the definiti
 
 # Vector Maths
 
-Since we’re going to start worrying about the physics of our simulation, we’re going to need some helper code. First, a handy dandy Vector class.  It’s just standard vector maths, so hopefully self explanatory.  In the spirit of being pure and declarative I’ve made it immutable, and all the functions (except `len` which returns a number) return new instances of `Vec` rather than changing its data in place.
+Since we’re going to start worrying about the physics of our simulation, we’re going to need some helper code. First, a handy dandy Vector class.  It’s just standard vector maths, so hopefully self-explanatory.  In the spirit of being pure and declarative I’ve made it immutable, and all the functions (except `len` which returns a number) return new instances of `Vec` rather than changing its data in place.
 
 ```typescript
 class Vec {
@@ -315,7 +315,7 @@ class Vec {
 ```
 
 To implement the toroidal topology of space, we’ll need to know the canvas size.
-For now, we’ll hard code it in a constant `CanvasSize`.  Alternately, we could query it from the svg element, or we could set the SVG size—maybe later.
+For now, we’ll hard-code it in a constant `CanvasSize`.  Alternately, we could query it from the SVG element, or we could set the SVG size—maybe later.
 The torus wrapping function will use the `CanvasSize` to determine the bounds and simply teleport any `Vec` which goes out of bounds to the opposite side.
 
 ```typescript
@@ -397,7 +397,7 @@ class Thrust implements Action {
 }
 ```
 
-And now our function to reduce state is very simple, taking advantage of sub-type polymorphism to apply the correct update to `State`:
+And now our function to reduce state is very simple, taking advantage of subtype polymorphism to apply the correct update to `State`:
 
 ```typescript
 reduceState = (s: State, action: Action) => action.apply(s);
@@ -605,7 +605,7 @@ class Tick implements Action {
 }
 ```
 
-Note that bullets have a life time (presumably they are energy balls that fizzle into space after a certain time).  When a bullet expires it is sent to `exit`.
+Note that bullets have a lifetime (presumably they are energy balls that fizzle into space after a certain time).  When a bullet expires it is sent to `exit`.
 
 We merge the Shoot stream in as before:
 
@@ -616,7 +616,7 @@ We merge the Shoot stream in as before:
 ...
 ```
 
-And we tack a bit on to `updateView` to draw and remove bullets:
+And we tack a bit onto `updateView` to draw and remove bullets:
 
 ```typescript
   function updateView(s: State) {
@@ -653,7 +653,7 @@ Finally, we make a quick addition to the CSS so that the bullets are a different
 
 ## Collisions
 
-So far the game we have built allows you to hoon around in a space-ship blasting the void with fireballs which is kind of fun, but not very challenging.  The Asteroids game doesn’t really become “Asteroids” until you actually have… asteroids.  Also, you should be able to break them up with your blaster and crashing into them should end the game.  Here’s a preview:
+So far the game we have built allows you to hoon around in a spaceship blasting the void with fireballs which is kind of fun, but not very challenging.  The Asteroids game doesn’t really become “Asteroids” until you actually have… asteroids.  Also, you should be able to break them up with your blaster and crashing into them should end the game.  Here’s a preview:
 
 [![Spaceship flying](/assets/images/chapterImages/asteroids/asteroidsComplete.gif)](https://stackblitz.com/edit/asteroids05?file=index.ts)
 
@@ -776,9 +776,9 @@ Our `tick` function is more or less the same as above, but it will apply one mor
 
 # Final View
 
-Finally, we need to update the `updateView` function.  Again, the view update is the one place in our program where we allow imperative style, effectful code.  Called only from the subscribe at the very end of our Observable chain, and not mutating any state that is read anywhere else in the Observable, we ensure that is not the source of any but the simplest display bugs, which we can hopefully diagnose with local inspection of this one function.
+Finally, we need to update the `updateView` function.  Again, the view update is the one place in our program where we allow imperative style, effectful code.  Called only from the subscribe at the very end of our Observable chain and not mutating any state that is read anywhere else in the Observable, we ensure that it is not the source of any but the simplest display bugs, which we can hopefully diagnose with local inspection of this one function.
 
-First, we need to update the visuals for each of the rocks, but these are the same as bullets.  The second, slightly bigger, change, is simply to display the text “Game Over” on `s.gameover` true.
+First, we need to update the visuals for each of the rocks, but these are the same as bullets.  The second, slightly bigger, change is simply to display the text “Game Over” on `s.gameover` true.
 
 ```typescript
   function updateView(s: State) {
@@ -825,7 +825,7 @@ The other thing happening at game over, is the call to `subscription.unsubscribe
     ).subscribe(updateView);
 ```
 
-This section here, is **key** to FRP, with four key ingredients:
+This section here is **key** to FRP, with four key ingredients:
 
 1. A constant rate _interval_ tick, to ensure consistent frame rate
 2. _Merged_ with Inputs from the user
@@ -857,7 +857,7 @@ Finally, we need to make a couple more additions to the CSS to display the rocks
 }
 ```
 
-At this point we have more-or-less all the elements of a game.  The implementation above could be extended quite a lot.  For example, we could add score, ability to restart the game, multiple lives, perhaps some more physics.  But generally, these are just extensions to the framework above: manipulation and then display of additional state.
+At this point we have more or less all the elements of a game.  The implementation above could be extended quite a lot.  For example, we could add score, ability to restart the game, multiple lives, perhaps some more physics.  But generally, these are just extensions to the framework above: manipulation and then display of additional state.
 
 The key thing is that the observable has allowed us to keep well separated state management (model), its input and manipulation (control) and the visuals (view).  Further extensions are just additions within each of these elements—and doing so should not add greatly to the complexity.
 

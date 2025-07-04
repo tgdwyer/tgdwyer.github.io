@@ -21,7 +21,7 @@ data ConsList = Nil | Cons Int ConsList
 
 The `|` operator looks rather like the union type operator in TypeScript, and indeed it serves a similar purpose.  Here, a `ConsList` is defined as being a composite type, composed of either `Nil` or a `Cons` of an `Int` value and another `ConsList`.  This is called an “algebraic data type” because `|` is like an “or”, or algebraic “sum” operation for combining elements of the type while separating them with a space is akin to “and” or a “product” operation.
 
-Note that neither `Nil` or `Cons` are built in.  They are simply labels for constructor functions for the different versions of a `ConsList` node.  You could equally well call them `EndOfList` and `MakeList` or anything else that’s meaningful to you. `Nil` is a function with no parameters, `Cons` is a function with two parameters.  `Int` is a built-in primitive type for limited-precision integers.
+Note that neither `Nil` or `Cons` are built-in.  They are simply labels for constructor functions for the different versions of a `ConsList` node.  You could equally well call them `EndOfList` and `MakeList` or anything else that’s meaningful to you. `Nil` is a function with no parameters, `Cons` is a function with two parameters.  `Int` is a built-in primitive type for limited-precision integers.
 
 Now we can create a small list like so:
 
@@ -51,7 +51,7 @@ The data keyword is used to define an algebraic data type (ADT). This allows for
 
 ## Pattern Matching
 
-In Haskell, we can define multiple versions of a function to handle the instances of an algebraic data types.  This is done by providing a *pattern* in the parameter list of the function definition, in the form of an expression beginning with the constructor of the data instance (e.g. `Cons` or `Nil`) and variable names which will be bound to the different fields of the data instance.
+In Haskell, we can define multiple versions of a function to handle the instances of an algebraic data type.  This is done by providing a *pattern* in the parameter list of the function definition, in the form of an expression beginning with the constructor of the data instance (e.g. `Cons` or `Nil`) and variable names which will be bound to the different fields of the data instance.
 
 For example, we can create a function to determine a `ConsList`’s length using *pattern matching*; to not only create different definitions of the function for each of the possible instances of a `ConsList`, but also to destructure the non-empty `Cons`:
 
@@ -73,7 +73,7 @@ intListLength (_:rest) = 1 + intListLength rest
 
 ## Type Parameters and Polymorphism
 
-Similar to TypeScript, Haskell provides *parametric polymorphism*.  That is, the type definitions for functions and data structures (defined with `data` like the `ConsList` above) can have type parameters (AKA type variables).  For example, the definition `intListLength` above is defined to only work with lists with `Int` elements.  This seems a silly restriction because in this function we don’t actually do anything with the elements themselves.  Below, we introduce the type parameter `a` so that the `length` function will able to work with lists of any type of elements.
+Similar to TypeScript, Haskell provides *parametric polymorphism*.  That is, the type definitions for functions and data structures (defined with `data` like the `ConsList` above) can have type parameters (AKA type variables).  For example, the definition `intListLength` above is defined to only work with lists with `Int` elements.  This seems a silly restriction because in this function we don’t actually do anything with the elements themselves.  Below, we introduce the type parameter `a` so that the `length` function will be able to work with lists of any type of elements.
 
 ```haskell
 length :: [a] -> Int -- a is a type parameter
@@ -83,7 +83,7 @@ length (_:rest) = 1 + length rest
 
 The following visual summary shows pair data structures with accessor functions `fst` and `sec` defined using [Record Syntax](#record-syntax) with varying degrees of type flexibility, and compared with the equivalent [TypeScript generic notation](/typescript1#generic-types):
 
-- Hard-coded for `Int` pairs only
+- hard-coded for `Int` pairs only
 - with one type parameter (by convention called `a` in Haskell, and `T` in TypeScript)
 - with two type parameters such that the two elements may be different types
 
@@ -95,7 +95,7 @@ GHCi allows you to use the `:kind` (or `:k`) command to interrogate the *Kind* o
 
 ![Polymorphism Summary](/assets/images/chapterImages/haskell2/kinds.png)
 
-Another sort of “kind” are for [type classes](#typeclasses) which we will introduce more properly in a moment.
+Another sort of “kind” is for [type classes](#typeclasses) which we will introduce more properly in a moment.
 For example, the “kind” for the `Ord` type class (the class of things that are Orderable and which we came across in [our simple  implementation of quicksort](/haskell1#functional-programming-in-haskell-versus-javascript)) is:
 
 ```haskell
@@ -181,11 +181,11 @@ instance Num Float -- Defined in `GHC.Float'
 instance Num Double -- Defined in `GHC.Float'
 ```
 
-The first line (beginning `class`) tells us that for a type to be an instance of the `Num` typeclass, it must provide the operators `+`, `*` and the functions `abs`, `signum` and `fromInteger`, and either `(-)` or `negate`.  The last is an option because a default definition exists for each in terms of the other.  The last five lines (beginning with “`instance`”) tell us which types have been declared as instances of `Num` and hence have definitions of the necessary functions.  These are `Word`, `Integer`, `Int`, `Float` and `Double`.  Obviously this is a much more finely grained set of types than JavaScript’s universal “`number`” type.  This granularity allows the type system to guard against improper use of numbers that might result in loss in precision or division by zero.
+The first line (beginning `class`) tells us that for a type to be an instance of the `Num` typeclass, it must provide the operators `+`, `*` and the functions `abs`, `signum` and `fromInteger`, and either `(-)` or `negate`.  The last is an option because a default definition exists for each in terms of the other.  The last five lines (beginning with “`instance`”) tell us which types have been declared as instances of `Num` and hence have definitions of the necessary functions.  These are `Word`, `Integer`, `Int`, `Float` and `Double`.  Obviously this is a much more finely grained set of types than JavaScript’s universal “`number`” type.  This granularity allows the type system to guard against improper use of numbers that might result in loss of precision or division by zero.
 
 The main numeric type we will use in this course is `Int`, i.e. fixed-precision integers.
 
-Note some obvious operations we would likely need to perform on numbers that are missing from the `Num` typeclass.  For example, equality checking.  This is defined in a separate type class `Eq`, that is also instanced by concrete numeric types like `Int`:
+Note some obvious operations we would likely need to perform on numbers that are missing from the `Num` typeclass.  For example, equality checking.  This is defined in a separate type class `Eq` that is also instanced by concrete numeric types like `Int`:
 
 ```haskell
 > :i Eq
@@ -198,7 +198,7 @@ instance Eq Int
 ...
 ```
 
-Note again that instances need implement only `==` or `/=` (not equal to), since each can be easily defined in terms of the other.  Still we are missing some obviously important operations, e.g., what about greater-than and less-than?  These are defined in the `Ord` type class:
+Note again that instances need only implement `==` or `/=` (not equal to), since each can be easily defined in terms of the other.  Still we are missing some obviously important operations, e.g., what about greater-than and less-than?  These are defined in the `Ord` type class:
 
 ```haskell
 > :i Ord
@@ -264,7 +264,7 @@ Another important built-in type is `Maybe`:
 data Maybe a = Nothing | Just a
 ```
 
-All the functions we have considered so far are assumed to be *total*.  That is, the function provides a mapping for every element in the input type to an element in the output type.  `Maybe` allows us to have a sensible return-type for *partial* functions, that is, functions which do not have a mapping for every input:
+All the functions we have considered so far are assumed to be *total*.  That is, the function provides a mapping for every element in the input type to an element in the output type.  `Maybe` allows us to have a sensible return type for *partial* functions, that is, functions which do not have a mapping for every input:
 
 ![Total and Partial Functions](/assets/images/chapterImages/haskell2/partialFunctions.png)
 
@@ -310,7 +310,7 @@ where
     _             -> print $ name ++ " not found in database"
 ````
 
-Here we use the wildcard `_` to match any other possible value, in this case, there is only one other value, `Nothing`.
+Here we use the wildcard `_` to match any other possible value; in this case, there is only one other value, `Nothing`.
 
 ## Glossary
 

@@ -10,19 +10,19 @@ title: "Lambda Calculus"
 
 ## Introduction
 
-The Lambda Calculus is a model of computation developed in the 1930s by the mathematician Alonzo Church.  You are probably aware of the more famous model for computation developed around the same time by Alan Turing: the Turing Machine.  However, while the Turing Machine is based on a hypothetical physical machine (involving tapes from which instructions are read and written) the Lambda Calculus was conceived as a set of rules and operations for function abstraction and application.  It has been proven that, as a model of computation, the Lambda Calculus is just as powerful as Turing Machines, that is, any computation that can be modelled with a Turing Machine can also be modeled with the Lambda Calculus.
+The Lambda Calculus is a model of computation developed in the 1930s by the mathematician Alonzo Church.  You are probably aware of the more famous model for computation developed around the same time by Alan Turing: the Turing Machine.  However, while the Turing Machine is based on a hypothetical physical machine (involving tapes from which instructions are read and written), the Lambda Calculus was conceived as a set of rules and operations for function abstraction and application.  It has been proven that, as a model of computation, the Lambda Calculus is just as powerful as Turing Machines, that is, any computation that can be modelled with a Turing Machine can also be modelled with the Lambda Calculus.
 
 The Lambda Calculus is also important to study as it is the basis of functional programming.  The operations we can apply to Lambda Calculus expressions to simplify (or reduce) them, or to prove equivalence, can also be applied to pure functions in a programming language that supports [higher-order functions](/higherorderfunctions).
 
 ## Lambda Expressions
 
-Lambda Calculus expressions are written with a standard system of notation.  It is worth looking at this notation before studying haskell-like languages because it was the inspiration for Haskell syntax.  Here is a simple Lambda Abstraction of a function:
+Lambda Calculus expressions are written with a standard system of notation.  It is worth looking at this notation before studying Haskell-like languages because it was the inspiration for Haskell syntax.  Here is a simple Lambda Abstraction of a function:
 
 ```lambdacalc
 λx.x
 ```
 
-The `λ` (Greek letter Lambda) simply denotes the start of a function expression. Then follows a list of parameters (in this case we have only a single parameter called `x`) terminated by `.`.  After the `.` is the function body, an expression returned by the function when it is applied. A variable like `x` that appears in the function body and also the parameter list is said to be *bound* to the parameter.  Variables that appear in the function body but not in the parameter list are said to be *free*.  The above lambda expression is equivalent to the JavaScript expression:
+The `λ` (Greek letter Lambda) simply denotes the start of a function expression. Then follows a list of parameters (in this case we have only a single parameter called `x`) terminated by `.`.  After the `.` is the function body, an expression returned by the function when it is applied. A variable like `x` that appears in the function body and also in the parameter list is said to be *bound* to the parameter.  Variables that appear in the function body but not in the parameter list are said to be *free*.  The above lambda expression is equivalent to the JavaScript expression:
 
 ```javascript
 x => x
@@ -42,8 +42,8 @@ It was the [I-combinator](/higherorderfunctions#identity-i-combinator).
 
 Some things to note about such lambda expressions:
 
-* A lambda expression has no name, it is anonymous.  Note that anonymous functions in languages like JavaScript and Python are also frequently called lambda expressions, or just lambdas.  Now you know why.
-* The only values that Lambda Calculus variables can take on is other functions (i.e. lambda expressions).  It’s lambdas all the way down!  However, to actually model and perform useful computations we say that certain expressions represent values.  See the discussion of [Church Encodings](#church-encodings), below, to see how this is done.
+* A lambda expression has no name; it is anonymous.  Note that anonymous functions in languages like JavaScript and Python are also frequently called lambda expressions, or just lambdas.  Now you know why.
+* The only values that Lambda Calculus variables can take on are other functions (i.e. lambda expressions).  It’s lambdas all the way down!  However, to actually model and perform useful computations, we say that certain expressions represent values.  See the discussion of [Church Encodings](#church-encodings), below, to see how this is done.
 * The names of variables bound to parameters in a lambda expression are only meaningful within the context of that expression.  Thus, `λx.x` is semantically equivalent (or *alpha* equivalent) to `λy.y` or any other possible renaming of the variable.
 * Lambda functions can have multiple parameters in the parameter list, e.g.: `λxy. x y`, but they are implicitly curried (e.g. a sequence of nested univariate functions).  Thus the following are all equivalent:
 
@@ -55,13 +55,13 @@ Some things to note about such lambda expressions:
 
 ## Combinators
 
-We have already discussed combinators in JavaScript, now we can give them a more formal definition:
+We have already discussed combinators in JavaScript. Now, we can give them a more formal definition:
 
 <div class="alert-box alert-info" markdown="1">
 A *combinator* is a lambda expression (function) with no free variables.
 </div>
 
-Thus, the expression `λx.x` is a combinator because the variable `x` is bound to the parameter.  The expression `λx.xy` is not a combinator, because `y` is not bound to any parameter, it is *free*.
+Thus, the expression `λx.x` is a combinator because the variable `x` is bound to the parameter.  The expression `λx.xy` is not a combinator because `y` is not bound to any parameter; it is *free*.
 
 The [`K` combinator](/higherorderfunctions/#k-combinator) which we wrote as `x=>y=>x` in JavaScript, is written `λxy.x`.
 
@@ -88,7 +88,7 @@ Now we perform the substitution in the body of the expression and throw away the
 y
 ```
 
-This first reduction rule, substituting the arguments of a function application to all occurrences of that parameter inside the function body, is called *beta reduction*.
+This first reduction rule, substituting the arguments of a function application into all occurrences of that parameter inside the function body, is called *beta reduction*.
 
 The next rule arises from the observation that, for some lambda term `M` that does not involve `x`:
 
@@ -96,7 +96,7 @@ The next rule arises from the observation that, for some lambda term `M` that do
 λx.Mx
 ```
 
-is just the same as M.  This last rule is called *eta conversion*.
+is just the same as `M`.  This last rule is called *eta conversion*.
 
 Function application is left-associative except where terms are grouped together by brackets.  This means that when a Lambda expression involves more than two terms, BETA reduction is applied left to right, i.e.,
 
@@ -209,7 +209,7 @@ Alonzo Church also demonstrated an encoding for natural numbers:
 2 = λfx.f (f x)
 ```
 
-In general a natural number `n` has two arguments `f` and `x`, and iterates `f` `n` times. The successor of a natural number `n` can also be computed:
+In general, a natural number `n` has two arguments `f` and `x`, and iterates `f` `n` times. The successor of a natural number `n` can also be computed:
 
 ```lambda
 SUCC = λnfx.f (n f x)
@@ -351,7 +351,7 @@ x x [x:= y. y y]
 ( λy . y  y) ( λy. y y)   - which is alpha equivalent to what we started with, so goto (1)
 ```
 
-Thus, the reduction would go on forever.  Such an expression is said to be divergent.  However, if a lambda function is not able to refer to itself it is still not obvious how recursion is possible.
+Thus, the reduction would go on forever.  Such an expression is said to be divergent.  However, if a lambda function is not able to refer to itself, it is still not obvious how recursion is possible.
 
 The answer is due to the American mathematician Haskell Curry and is called the fixed-point or Y combinator:
 
@@ -383,8 +383,8 @@ const Y = f=> (x => f(x(x)))(x=> f(x(x))) // warning infinite recursion ahead!
 
 So now `Y` is just a function which can be applied to another function, but what sort of function do we pass into `Y`?  If we are to respect the rules of the Lambda calculus we cannot have a function that calls itself directly.  That is, because Lambda expressions have no name, they can’t refer to themselves by name.
 
-Therefore, we need to wrap the recursive function in a lambda expression into which a reference to the recursive function itself can be passed as parameter.  We can then in the body of the function refer to the parameter function by name.
-It’s a bit weird, let me just give you a JavaScript function which fits the bill:
+Therefore, we need to wrap the recursive function in a lambda expression into which a reference to the recursive function itself can be passed as a parameter.  We can then in the body of the function refer to the parameter function by name.
+It’s a bit weird---let me just give you a JavaScript function which fits the bill:
 
 ```javascript
 // A function that recursively calculates “n!”
@@ -400,7 +400,7 @@ FAC(FAC(FAC(FAC(FAC(FAC())))))(6)
 
 > 720
 
-Because we gave FAC a stopping condition, we can call too many times and it will still terminate:
+Because we gave FAC a stopping condition, we can call it too many times and it will still terminate:
 
 ```js
 FAC(FAC(FAC(FAC(FAC(FAC(FAC(FAC(FAC()))))))))(6)
@@ -494,9 +494,9 @@ Z(FAC)(2)
 
 ## Conclusion
 
-If you want to dig deeper there is much [more written about Lambda Calculus encodings](https://www.seas.harvard.edu/courses/cs152/2015sp/lectures/lec07-encodings.pdf) of logical expressions, natural numbers, as well as the `Y` and `Z` combinators, and also [more about their implementation in JavaScript](https://benestudio.co/fixed-point-combinators-in-javascript/).
+If you want to dig deeper, there is much [more written about Lambda Calculus encodings](https://www.seas.harvard.edu/courses/cs152/2015sp/lectures/lec07-encodings.pdf) of logical expressions, natural numbers, as well as the `Y` and `Z` combinators, and also [more about their implementation in JavaScript](https://benestudio.co/fixed-point-combinators-in-javascript/).
 
-However, the above description should be enough to give you a working knowledge of how to apply the three operations to manipulate Lambda Calculus expressions, as well as an appreciation for how they can be used to reason about combinators in real-world functional style curried code.  The other important take away is that the Lambda Calculus is a turing-complete model of computation, with Church encodings demonstrating how beta-reduction can evaluate church-encoded logical and numerical expressions and the trick of the Y-combinator giving us a way to perform loops.
+However, the above description should be enough to give you a working knowledge of how to apply the three operations to manipulate Lambda Calculus expressions, as well as an appreciation for how they can be used to reason about combinators in real-world functional style curried code.  The other important takeaway is that the Lambda Calculus is a Turing-complete model of computation, with Church encodings demonstrating how beta-reduction can evaluate church-encoded logical and numerical expressions and the trick of the Y-combinator giving us a way to perform loops.
 
 ## Glossary
 

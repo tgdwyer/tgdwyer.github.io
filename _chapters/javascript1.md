@@ -6,24 +6,24 @@ title: "JavaScript Introduction"
 
 - Understand and use basic JavaScript coding concepts and features
 - Understand the difference between [mutable and immutable (const) variables](#declaring-variables)
-- Understand the difference between code [expressions versus statements](#expressions-versus-statements)
-- Explain the relationship between javascript [functions](#functions) and [objects](#objects)
-- Understand that the scope of variables is limited to [delineated code blocks](/javascript1/variable-scope) and within [functions](#functions)
+- Understand the difference between code [expressions and statements](#expressions-versus-statements)
+- Explain the relationship between JavaScript [functions](#functions) and [objects](#objects)
+- Understand that the scope of variables is limited to [delineated code blocks](#variable-scope) and within [functions](#functions)
 - Understand that a [closure](#closures) captures variables referenced within its scope
 - Create and apply [anonymous functions](#anonymous-functions) to fluent style code
 - Compare [arrow functions](#arrow-functions) and regular function syntax
-- Understand how JavaScripts built-in [array](#arrays) type and its [associated methods](#array-cheatsheet) can be used with arrow-functions to process data
+- Understand how JavaScripts built-in [array](#arrays) type and its [associated methods](#array-cheatsheet) can be used with arrow functions to process data
 - Explain JavaScript’s [prototype mechanism](#prototype-class-mechanism) for creating classes from functions
-- Create [ES6 style classes](#ecmascript-6-class-syntax) with constructors and getters
-- Compare object oriented [polymorphism](#polymorphism) to [dependency injection](#dependency-injection) through functions
+- Create [ES6-style classes](#ecmascript-6-class-syntax) with constructors and getters
+- Compare object-oriented [polymorphism](#polymorphism) to [dependency injection](#dependency-injection) through functions
 
 ## Introduction
 
-In the late 90s the mood was right for a language that was small and simple and with executable files small enough to be distributed over the web.  Originally Java was meant to be that language but, while it quickly gained traction as a language for building general purpose applications and server-side middleware, it never really took off in the browser.  Something even simpler, and better integrated with the Document Object Model (DOM) of HTML pages was required to add basic interaction to web pages.
+In the late 90s, the mood was right for a language that was small and simple and with executable files small enough to be distributed over the web.  Originally Java was meant to be that language but, while it quickly gained traction as a language for building general-purpose applications and server-side middleware, it never really took off in the browser.  Something even simpler, and better integrated with the Document Object Model (DOM) of HTML pages, was required to add basic interaction to web pages.
 
 Brendan Eich was hired by Netscape in 1995 to integrate a Scheme interpreter into their browser for this purpose.  No messy deployment of Java bytecode bundles—the browser would have been able to run Scheme scripts embedded directly into web pages.  This would have been awesome.  Unfortunately, for reasons that were largely political and marketing related, it was felt that something more superficially resembling Java was required.  Thus, Eich created a prototype scripting language in 2 weeks that eventually became JavaScript.  As we will see, it is syntactically familiar for Java developers.  Under the hood, however, it follows quite a different paradigm.
 
-The fact it was initially rushed to market, the fact that browser makers seemingly had difficulty early on making standards-compliant implementations, and a couple of regrettable decisions at first regarding things like scoping semantics, meant that JavaScript developed something of a bad name.  It’s also possible that there was some inherent snobbiness amongst computer science types that, since JavaScript was not a compiled language, it must inevitably lead to armageddon.  Somehow, however, it survived and began the “web 2.0” phenomenon of what we now refer to as rich, client-side “web apps”.  It has also matured and, with the EcmaScript 6 (ES6) and up versions, has actually become quite an elegant little multi paradigm language.
+The fact it was initially rushed to market, the fact that browser makers seemingly had difficulty early on making standards-compliant implementations, and a couple of regrettable decisions at first regarding things like scoping semantics, meant that JavaScript developed something of a bad name.  It’s also possible that there was some inherent snobbiness amongst computer science types that, since JavaScript was not a compiled language, it must inevitably lead to armageddon.  Somehow, however, it survived and began the “web 2.0” phenomenon of what we now refer to as rich, client-side “web apps”.  It has also matured and, with the ECMAScript 6 (ES6) and up versions, has actually become quite an elegant little multiparadigm language.
 
 The following introduction to JavaScript assumes a reasonable knowledge of programming in another imperative language such as Python or Java.
 
@@ -66,7 +66,7 @@ But fear not, `w` was assigned the correct value which you can confirm by typing
 Now if we assign a new value to w it succeeds:
 
 ```javascript
-> w = 2 // note that without a let or const keyword before it, this assignment an expression which returns a value:
+> w = 2 // note that without a let or const keyword before it, this assignment is an expression which returns a value:
 ⋖ 2
 ```
 
@@ -74,7 +74,7 @@ Now if we assign a new value to w it succeeds:
 
 ## Expressions versus Statements
 
-We refer to any JavaScript code which evaluates to a value as an *expression*.
+We refer to any JavaScript code that evaluates to a value as an *expression*.
 For example, the expression `1+1` evaluates to `2`.
 We can see in the Chrome console:
 
@@ -83,7 +83,7 @@ We can see in the Chrome console:
 ⋖ 2
 ```
 
-By contrast a *statement* performs computation without returning a value. More precisely, statements evaluate to `undefined`. For example, a variable declaration is a statement:
+By contrast, a *statement* performs computation without returning a value. More precisely, statements evaluate to `undefined`. For example, a variable declaration is a statement:
 
 ```javascript
 > const x = 1 + 1
@@ -104,7 +104,7 @@ Statements have to have some side effect to be useful (in this case creating a v
 
 Note that `4` is printed to the console by the `console.log` (a side effect of the statement), but the value returned by the code block is `undefined`.
 
-Unlike languages which use indentation to define code blocks and scopes (like Python and Haskell), JavaScript generally ignores multiple spaces, indentation and linebreaks.  So you can spread an expression across multiple lines and indent each line however you like:
+Unlike languages which use indentation to define code blocks and scopes (like Python and Haskell), JavaScript generally ignores multiple spaces, indentation and linebreaks.  So, you can spread an expression across multiple lines and indent each line however you like:
 
 ```javascript
 > 1 +
@@ -121,7 +121,7 @@ You can also put multiple statements on one line by separating them with '`;`':
 ⋖ undefined
 ```
 
-Of course, you should not abuse the ability to layout code in different ways and make unreadable code.  Rather, it is good practice to be consistent with formatting, use indentation to highlight nested scopes and spread things out as necessary for readability.
+Of course, you should not abuse the ability to lay out code in different ways and make unreadable code.  Rather, it is good practice to be consistent with formatting, use indentation to highlight nested scopes and spread things out as necessary for readability.
 
 ## JavaScript Types
 
@@ -175,7 +175,7 @@ x
 
 > Uncaught ReferenceError: x is not defined
 
-The above `console.log statement` successfully output the value of `x` because it was inside the same scope (the same set of curly braces).  The subsequent error occurs because we tried to look at x outside the scope of its definition.  Variables declared outside of any scope are said to be “global” and will be visible to any code loaded on the same page and could clobber or be clobbered by other global definitions---so take care!
+The above `console.log` statement successfully outputs the value of `x` because it was inside the same scope (the same set of curly braces).  The subsequent error occurs because we tried to look at x outside the scope of its definition.  Variables declared outside of any scope are said to be “global” and will be visible to any code loaded on the same page and could clobber or be clobbered by other global definitions---so take care!
 
 Be especially careful to always declare variables with either `let` or `const` keywords.  If you omit these keywords, a variable will be created at the global scope even though it is inside a `{ … }` delimited scope, like so:
 
@@ -191,7 +191,7 @@ Be especially careful to always declare variables with either `let` or `const` k
 
 ---
 
-We are going to start to use a few operators that may be familiar from C or Java, some are JS specific.  
+We are going to start to use a few operators that may be familiar from C or Java, some are JS-specific.  
 Here’s a cheatsheet:
 
 <div class="cheatsheet" markdown="1">
@@ -216,7 +216,7 @@ a | b   // bitwise or
 
 \* Loose (in)equality means type conversion may occur
 
-\+ Use strict (in)equality if type is expected to be same
+\+ Use strict (in)equality if type is expected to be the same
 
 ### Unary Operators
 
@@ -234,7 +234,7 @@ i--     // post-decrement
 <condition> ? <true result> : <false result>
 ```
 
-### In-place math operators
+### In-place Maths Operators
 
 ```javascript
 x += <expr>
@@ -250,9 +250,9 @@ Functions are declared with the `function` keyword.  You can give the function a
 
 ```javascript
 /**
-* define a function called “myFunction” with two parameters, x and y
-* which does some silly math, prints something and returns the result
-*/
+ * define a function called “myFunction” with two parameters, x and y
+ * which does some silly math, prints something and returns the result
+ */
 function myFunction(x, y) {
   let t = x + y; // t is mutable
   t += z;  // += adds the result of the expression on the right to the value of t
@@ -277,8 +277,8 @@ An `if-else` statement looks like so:
 
 ```javascript
 /**
-* get the greater of x and y
-*/
+ * get the greater of x and y
+ */
 function maxVal(x, y) {
    if (x >= y) {
        return x;
@@ -288,7 +288,7 @@ function maxVal(x, y) {
 }
 ```
 
-This is semantically equivalent to familiar Python if/else construct, however, using `{` rather than indentation rules to establish scoping rules:
+This is semantically equivalent to the familiar Python if/else construct, however, using `{` rather than indentation rules to establish scoping rules:
 
 ```python
 def maxVal(x, y):
@@ -310,11 +310,11 @@ We can loop with `while`:
 
 ```javascript
 /**
-* sum the numbers up to and including n
-*/
+ * sum the numbers up to and including n
+ */
 function sumTo(n) {
    let sum = 0;
-   while (n) { // when n is 0 this evaluates to false ending the loop
+   while (n) { // when n is 0 this evaluates to false, ending the loop
       // add n to sum then decrement n
       sum += n--; // see operator cheatsheet above
    }
@@ -337,7 +337,7 @@ function sumTo(n) {
 }
 ```
 
-This looks slightly different to a `for` loop in Python, since in Javascript we normally use 3 parts to our for loop definition (initialization, end, update)
+This looks slightly different to a `for` loop in Python, since in JavaScript we normally use 3 parts to our for loop definition (initialisation, end, update)
 
 ```python
 def sumTo(n):
@@ -369,8 +369,8 @@ We consider this recursive loop a more “declarative” coding style than the i
 It is closer to the *inductive definition* of sum than a series of steps for how to compute it.
 
 - No *mutable* variables used
-- Each expression in this code is *“pure”*: it has no *effects* outside the expression.  Thus, you could replace each element of code with something else that produces the same result for a given input (such as a simple look up of a precomputed cache) and it would work the same.
-- Therefore: this code has the property of *referential transparency*.
+- Each expression in this code is *“pure”*: it has no *effects* outside the expression.  Thus, you could replace each element of code with something else that produces the same result for a given input (such as a simple look up of a precomputed cache), and it would work the same.
+- Therefore, this code has the property of *referential transparency*.
 - The code succinctly states the *loop invariant*.
 
 ## Stack Overflow and Tail Recursion
@@ -385,9 +385,9 @@ sumTo(1000000)
 
 > Uncaught RangeError: Maximum call stack size exceeded
 
-However, functional languages (like Haskell) rely on recursion because they have no other way to create loops without mutable variables---so they must have a way to make this scale to real-world computations.  When a recursive function is written in a special way, such that the recursive call is in *tail position*, [a lot of modern compilers](https://en.wikipedia.org/wiki/Tail_call#Language_support) are able to transform the recursion into a loop with constant memory use (commonly a `while` loop)---this is called *tail call optimisation*.
+However, functional languages (like Haskell) rely on recursion because they have no other way to create loops without mutable variables, so they must have a way to make this scale to real-world computations.  When a recursive function is written in a special way, such that the recursive call is in *tail position*, [a lot of modern compilers](https://en.wikipedia.org/wiki/Tail_call#Language_support) are able to transform the recursion into a loop with constant memory use (commonly a `while` loop)---this is called *tail call optimisation*.
 
-Let’s see what a *tail recursive* version of the `sumTo` function looks like:
+Let’s see what a *tail-recursive* version of the `sumTo` function looks like:
 
 ```javascript
 function sumTo(n, sum = 0) {
@@ -418,10 +418,10 @@ function sumTo(n, f = x => x) {
 }
 ```
 
-Note that the new parameter `f` defaults to a simple function that directly returns its argument.  Thus, called without a second parameter sumTo has the same behavior as before:
+Note that the new parameter `f` defaults to a simple function that directly returns its argument.  Thus, called without a second parameter sumTo has the same behaviour as before:
 
 ```javascript
- sumTo(10)
+sumTo(10)
 ```
 
 > 55
@@ -460,7 +460,7 @@ console.log(myObj.aProperty);
 console.log(myObj['aProperty']);
 ```
 
-Note that when we declare an object with the `const` keyword as above, it is only *weakly immutable*.  This means that we cannot reassign `myObj` to refer to a different object, however, we can change the properties inside `myObj`.  Thus, the `myObj` variable is constant/immutable, but the object created by the declaration is mutable.  So, after making the above `const` declaration, if we try the following reassignment of `myObj` we receive an error:
+Note that when we declare an object with the `const` keyword as above, it is only *weakly immutable*.  This means that we cannot reassign `myObj` to refer to a different object; however, we can change the properties inside `myObj`.  Thus, the `myObj` variable is constant/immutable, but the object created by the declaration is mutable.  So, after making the above `const` declaration, if we try the following reassignment of `myObj` we receive an error:
 
 ```javascript
 myObj = {
@@ -547,7 +547,7 @@ Below, we see how [Anonymous Functions](#anonymous-functions) can be applied to 
 
 ## Dynamic Typing
 
-The members of `myObj` are implicitly typed as `number` and `string` respectively, and as we see in the `console.log`, conversion to string happens automatically.  JavaScript is interpreted by a JavaScript engine rather than compiled into a static executable format.  Originally, this had implications on execution speed, as interpreting the program line by line at run time could be slow.  Modern JavaScript engines, however, feature Just in Time (JIT) compilation and optimisation---and speed can sometimes be comparable to execution of C++ code that is compiled in advance to native machine code.  However, another implication remains.  JavaScript is not type checked by a compiler.  Thus, type errors cause run-time failures rather than being caught at compile time.  JavaScript is dynamically typed in that types are associated with values rather than variables.  That is, a variable that is initially bound to one type, can later be rebound to a different type, e.g.:
+The members of `myObj` are implicitly typed as `number` and `string` respectively, and as we see in the `console.log`, conversion to string happens automatically.  JavaScript is interpreted by a JavaScript engine rather than compiled into a static executable format.  Originally, this had implications for execution speed, as interpreting the program line by line at run time could be slow.  Modern JavaScript engines, however, feature Just in Time (JIT) compilation and optimisation---and speed can sometimes be comparable to execution of C++ code that is compiled in advance to native machine code.  However, another implication remains.  JavaScript is not type-checked by a compiler.  Thus, type errors cause run-time failures rather than being caught at compile time.  JavaScript is dynamically typed in that types are associated with values rather than variables.  That is, a variable that is initially bound to one type can later be rebound to a different type, e.g.:
 
 ```javascript
 let i = 123;    // a numeric literal has type number
@@ -613,7 +613,7 @@ or to pass as a parameter into another function. For example, `Array` objects ha
 > "hello sally"  
 > "hello anne"
 
-This pattern of passing functions as parameters to other functions is now so common in JavaScript that the EcmaScript 6 standard introduced some new arrow syntax (with slightly different semantics, as explained below) for anonymous functions:
+This pattern of passing functions as parameters to other functions is now so common in JavaScript that the ECMAScript 6 standard introduced some new arrow syntax (with slightly different semantics, as explained below) for anonymous functions:
 
 ```javascript
 ['tim', 'sally', 'anne'].forEach(person=> console.log('hello ' + person))
@@ -665,7 +665,7 @@ This is equivalent to using `lambda` in Python:
 greeting = lambda greeting, person: greeting + ' ' + person
 ```
 
-The body of the above functions are simple expressions.  If you need a more complex, multiline body (e.g. with local variables) you can do this but you need to surround the code block with curly braces `{}` and use an explicit `return` statement:
+The bodies of the above functions are simple expressions.  If you need a more complex, multiline body (e.g. with local variables) you can do this, but you need to surround the code block with curly braces `{}` and use an explicit `return` statement:
 
 ```javascript
 const greeting = (greeting, person)=> {
@@ -698,7 +698,7 @@ const all = (test, array) => array.reduce(
     true);
 ```
 
-We call `test` a predicate function, i.e., a function which returns true or false. Here the `accumulator` is a boolean with initial value `true`.  If an element of the array fails the test the `accumulator` becomes `false` and stays `false`, using the `&&` operator.
+We call `test` a predicate function, i.e., a function that returns true or false. Here the `accumulator` is a boolean with initial value `true`.  If an element of the array fails the test, the `accumulator` becomes `false` and stays `false` using the `&&` operator.
 
 ```javascript
 all(x => x < 5, [1, 2, 3]);
@@ -709,7 +709,7 @@ all(x => x < 5, [1, 3, 5]);
 
 > false
 
-Note: Instead of writing our own `all` function, we could have used the builtin `every` array method instead:
+Note: Instead of writing our own `all` function, we could have used the built-in `every` array method instead:
 
 ```javascript
 [1, 2, 3].every(x => x < 5);
@@ -720,7 +720,7 @@ Note: Instead of writing our own `all` function, we could have used the builtin 
 
 ### Exercise
 
-- Can you write a function `any` (without using the builtin `some` array method) that returns true if any of the tests pass?
+- Can you write a function `any` (without using the built-in `some` array method) that returns true if any of the tests pass?
 
 - What if we wanted to see how many times each word appears in a list?
 
@@ -748,7 +748,7 @@ const wordCount = (array) => array.reduce(
 )
 ```
 
-Here the `accumulator` is an object which is initially empty.  For each word in the list the word count is either updated or created in the `accumulator` object.  Note however that this implementation is not *pure*; the aggregator function modifies `accumulator` in place before returning it.
+Here the `accumulator` is an object which is initially empty.  For each word in the list, the word count is either updated or created in the `accumulator` object.  Note however that this implementation is not *pure*; the aggregator function modifies `accumulator` in place before returning it.
 
 ```javascript
 wordCount(['tim', 'sally', 'tim'])
@@ -864,7 +864,7 @@ add(1)(2)
 
 > 3
 
-Functions like `add`, which operate on multiple parameters but which split the parameters across multiple nested single parameter functions, are said to be [Curried](/higherorderfunctions#curried-functions).  Compare to a traditional function of two parameters:
+Functions like `add`, which operate on multiple parameters but split the parameters across multiple nested single parameter functions, are said to be [*curried*](/higherorderfunctions#curried-functions).  Compare to a traditional function of two parameters:
 
 ```javascript
 function plus(x,y) { return x + y }
@@ -939,7 +939,7 @@ sayHello(author.name)
 
 > "hello tim"
 
-You can also add method functions to the prototype, that are then available from any objects of that type:
+You can also add method functions to the prototype which are then available from any objects of that type:
 
 ```javascript
 Person.prototype.hello = function() { console.log("hello " + this.name) }
@@ -964,13 +964,13 @@ Array.prototype.range =
 
 > [3,4,5,6,7,8]
 
-Of course, if you do something like this in your JS library, and it pollutes the global namespace, and one day EcmaScript 9 introduces an actual `range` function with slightly different semantics, and someone else goes to use the `[].range` function expecting the official semantics---well, you may lose a friend or two.
+Of course, if you do something like this in your JS library, and it pollutes the global namespace, and one day ECMAScript 17 introduces an actual `range` function with slightly different semantics, and someone else goes to use the `[].range` function expecting the official semantics---well, you may lose a friend or two.
 
-Some notes about this implementation of range:
+Some notes about this implementation of `range`:
 
 - Although the `Array(n)` function allocates space for n elements, the result is still “empty” so `fill()` is necessary to actually create the entries.
-- The function passed to `map` is using an optional second argument which receives the index of the current element.  *See note in the [Array Cheatsheat](#array-cheatsheet) suggesting not to use this*.
-- The `_` is not special syntax, it’s a valid variable name. `_` is a common convention for a parameter that is not used. This is seen throughout various languages such as Python, Javascript and Haskell.
+- The function passed to `map` uses an optional second argument which receives the index of the current element.  *See note in the [Array Cheatsheet](#array-cheatsheet) suggesting not to use this*.
+- The `_` is not special syntax: it’s a valid variable name. `_` is a common convention for a parameter that is not used. This is seen throughout various languages such as Python, JavaScript and Haskell.
 
 ---
 
@@ -990,7 +990,7 @@ Array.prototype.range = (from, to) =>
     .map((_, i) => i + from);
 ```
 
-Adding a sum function on `Array.prototype` can be done using an old style anonymous function to access `this` which refers to the array instance:
+Adding a sum function on `Array.prototype` can be done using an old-style anonymous function to access `this`, which refers to the array instance:
 
 ```javascript
 Array.prototype.sum = function() {
@@ -998,7 +998,7 @@ Array.prototype.sum = function() {
 };
 ```
 
-Modifying built-in types, like adding functions to `Array.prototype`, can lead to several issues, e.g., compatibility issues---if future versions of JavaScript add a method with the same name but different behavior, it can break your or others' code unexpectedly, and conflicts---if different libraries try to modify the same prototype with different implementations, it can lead to conflicts that are hard to diagnose.
+Modifying built-in types, like adding functions to `Array.prototype`, can lead to several issues, e.g., compatibility issues---if future versions of JavaScript add a method with the same name but different behaviour, it can break your or others' code unexpectedly, and conflicts---if different libraries try to modify the same prototype with different implementations, it can lead to conflicts that are hard to diagnose.
 
 One possible implementation of a linked list, is storing two values in an array, the current value and the next value.
 
@@ -1025,7 +1025,7 @@ function map(f, list) {
 
 ---
 
-## EcmaScript 6 Class Syntax
+## ECMAScript 6 Class Syntax
 
 Consider another class created with a function and a method added to the prototype:
 
@@ -1120,7 +1120,7 @@ class Person:
         print(self.greeting)
 ```
 
-And Javascript classes support single-inheritance to achieve polymorphism:
+And JavaScript classes support single-inheritance to achieve polymorphism:
 
 ```javascript
 class LoudPerson extends Person {
@@ -1142,7 +1142,7 @@ tims.forEach(t => t.sayHello())
 
 ## Polymorphism
 
-According to Cartelli *et al.*, “Polymorphic types are types whose operations are applicable to values of more than one type.”  Thus, although `Person` and `LoudPerson` are different types, since `LoudPerson` is a sub-type of `Person`, they present a common `sayHello` method allowing operations like `forEach` to operate over an array of the base class.  In a traditional Object Oriented language like Java, the compiler enforces that objects must be instances of a common base class or interface to be treated as such.  This type of polymorphism is called *subtyping polymorphism*.
+According to Cartelli *et al.*, “Polymorphic types are types whose operations are applicable to values of more than one type.”  Thus, although `Person` and `LoudPerson` are different types, since `LoudPerson` is a subtype of `Person`, they present a common `sayHello` method, allowing operations like `forEach` to operate over an array of the base class.  In a traditional object-oriented language like Java, the compiler enforces that objects must be instances of a common base class or interface to be treated as such.  This type of polymorphism is called *subtyping polymorphism*.
 
 In JavaScript, with no compile-time typecheck, a kind of polymorphism is possible such that if two objects both present a similarly named method that is callable in the same way, of course there is nothing preventing you simply using that method on each object as if it is the same:
 
@@ -1162,7 +1162,7 @@ Informally, this type of polymorphism is called “Duck Typing” (i.e. “If it
   <figcaption class="figure-caption" style="text-align: center;">An example of a duck, typing.</figcaption>
 </figure>
 
-Another type of polymorphism which is key to strongly typed functional programming languages (like Haskell), but also a feature of many modern OO languages is *parametric polymorphism*.  We will see this in action when we introduce [TypeScript generics](/typescript1/#generic-types).
+Another type of polymorphism, which is key to strongly typed functional programming languages (like Haskell) but also a feature of many modern OO languages, is *parametric polymorphism*.  We will see this in action when we introduce [TypeScript generics](/typescript1/#generic-types).
 
 *Reference: Cardelli, Luca, and Peter Wegner. “On understanding types, data abstraction, and polymorphism.” ACM Computing Surveys (CSUR) 17.4 (1985): 471-523.*
 
@@ -1200,7 +1200,7 @@ This is a “lighter-weight” style of code reuse or specialisation.
 
 ## Glossary
 
-*Anonymous Function*: A function defined without a name, often used as an argument to other functions. Also known as lambda function.
+*Anonymous Function*: A function defined without a name, often used as an argument to other functions. Also known as a lambda function.
 
 *Closure*: A function and the set of variables it accesses from its enclosing scope.
 
@@ -1218,6 +1218,6 @@ This is a “lighter-weight” style of code reuse or specialisation.
 
 *Pure Function*: A function that always produces the same output for the same input and has no side effects.
 
-*Referential Transparency*: An expression that can be replaced with its value without changing the program's behavior, indicating no side effects and consistent results.
+*Referential Transparency*: An expression that can be replaced with its value without changing the program's behaviour, indicating no side effects and consistent results.
 
 *Side Effects*: Any state change that occurs outside of a function's local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.

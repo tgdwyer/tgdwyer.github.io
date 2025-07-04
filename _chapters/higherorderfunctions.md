@@ -6,8 +6,8 @@ title: "Higher-Order Functions"
 
 ## Learning Outcomes
 
-- Understand that [Higher-Order Functions](#higher-order-functions) are those which take other functions as input parameters or which return functions
-- Understand that [curried functions](#curried-functions) support partial application and therefore creation of functions that are partially specified for reuse scenarios.
+- Understand that [Higher-Order Functions](#higher-order-functions) are those that take other functions as input parameters or return functions
+- Understand that [curried functions](#curried-functions) support partial application and therefore creation of functions that are partially specified for reuse scenarios
 - Understand that a [Combinator](#combinators) is a higher-order function that uses only function application and earlier defined combinators to define a result from its arguments
 - Use simple Combinator functions to manipulate and compose other functions
 
@@ -20,10 +20,10 @@ The really exciting aspect of higher-order function support in languages like Ja
 ## Higher-Order Functions
 
 <div class="alert-box alert-info" markdown="1">
-Functions that [take other functions as parameters](/javascript1#functions-as-parameters-to-other-functions) or which [return functions](/javascript1#closures) are called *higher-order functions*. They are called “higher-order” because they are functions which operate on other functions.
+Functions that [take other functions as parameters](/javascript1#functions-as-parameters-to-other-functions) or [return functions](/javascript1#closures) are called *higher-order functions*. They are called “higher-order” because they are functions that operate on other functions.
 Higher-order functions are a very powerful feature and central to the functional programming paradigm.
 </div>
-We’ve seen many examples of functions which take functions as parameters, for example, operations on arrays:
+We’ve seen many examples of functions that take functions as parameters, for example, operations on arrays:
 
 ```javascript
 [1,2,3].map(x=>x*x)
@@ -31,9 +31,9 @@ We’ve seen many examples of functions which take functions as parameters, for 
 
 >[1,4,9]
 
-Being able to pass functions into other functions enables code customisability and reuse.  For example, a sort function which allows the caller to pass in a comparison function can easily be made to sort in increasing or decreasing order, or to sort data elements on an arbitrary attribute.
+Being able to pass functions into other functions enables code customisability and reuse.  For example, a sort function that allows the caller to pass in a comparison function can easily be made to sort in increasing or decreasing order, or to sort data elements on an arbitrary attribute.
 
-And we also saw a simple example of a function which returns a new function:
+We also saw a simple example of a function that returns a new function:
 
 ```javascript
 const add = x => y => x + y
@@ -50,7 +50,7 @@ Functions that can create new functions give rise to all sorts of emergent power
 
 ## Curried Functions
 
-Higher-order functions which take a single parameter and return another function operating on a single parameter are called *curried functions*.  The `add` function above is one example.  You can either call it twice immediately to operate on two parameters:
+Higher-order functions that take a single parameter and return another function operating on a single parameter are called *curried functions*.  The `add` function above is one example.  You can either call it twice immediately to operate on two parameters:
 
 ```javascript
 add(3)(2)
@@ -125,7 +125,7 @@ Or we can make it into a handy function to compute areas of circles:
 const circleArea = cylVol(1)
 ```
 
-Such functions are called *curried functions* and they are named after a mathematician named Haskell Curry.  This gives you a hint as to what functions look like in the Haskell programming language and its variants.
+Such functions are called *curried functions*, named after a mathematician named Haskell Curry.  This gives you a hint as to what functions look like in the Haskell programming language and its variants.
 We can also create a function to make curried versions of conventional multi-parameter JavaScript functions:
 
 ```typescript
@@ -143,7 +143,7 @@ add(3)(4)
 
 > 7
 
-We can also create curried versions of functions with more than two variables; but the TypeScript syntax for functions with arbitrary numbers of arguments gets a bit scary, requiring advanced use of [conditional types](https://www.typescriptlang.org/docs/handbook/2/conditional-types.html). This is one of the many reasons we will shortly [switch to Haskell](/haskell1/) for our exploration of more advanced functional programming topics.
+We can also create curried versions of functions with more than two variables, but the TypeScript syntax for functions with arbitrary numbers of arguments gets a bit scary, requiring advanced use of [conditional types](https://www.typescriptlang.org/docs/handbook/2/conditional-types.html). This is one of the many reasons we will shortly [switch to Haskell](/haskell1/) for our exploration of more advanced functional programming topics.
 
 ```javascript
 // A type for a regular Uncurried function with arbitrary number of arguments
@@ -176,7 +176,7 @@ const curriedWeirdAdd = curry(weirdAdd);
 
 ## Composition
 
-Consider the following function which takes two functions as input, note the way the types line up:
+Consider the following function which takes two functions as input. Note the way the types line up:
 
 ```javascript
 function compose<U,V,W>(f:(x:V)=>W,g:(x:U)=>V) {
@@ -204,15 +204,15 @@ grades.map(roundFloat)
 
 > [80, 100, 90, 99]
 
-Note that `compose` let us define `roundFloat` without any messing around with anonymous functions and explicit wiring-up of return values to parameters.  We call this *tacit* or *point-free* style programming.
+Note that `compose` lets us define `roundFloat` without any messing around with anonymous functions and explicit wiring-up of return values to parameters.  We call this *tacit* or *point-free* style programming.
 
 ---
 
 ## Exercise
 
-- Create a `compose` function in Javascript that takes a variable number of functions as arguments and composes (chains) them.  Using the spread operator (`...`) to take a variable number of arguments as an array and the `Array.prototype.reduce` method, the function should be very small.
+- Create a `compose` function in JavaScript that takes a variable number of functions as arguments and composes (chains) them.  Using the spread operator (`...`) to take a variable number of arguments as an array and the `Array.prototype.reduce` method, the function should be very small.
 
-- Create a `pipe` function which composes its arguments in the opposite order to the `compose` function above.  That is, left-to-right.  Note that in [RxJS](https://www.learnrxjs.io/), such a `pipe` function is an important way to create chains of operations (over Observable streams).
+- Create a `pipe` function that composes its arguments in the opposite order to the `compose` function above.  That is, left-to-right.  Note that in [RxJS](https://www.learnrxjs.io/), such a `pipe` function is an important way to create chains of operations (over Observable streams).
 
 ### Solutions
 
@@ -244,7 +244,7 @@ The pipe function is similar to the compose function, but it applies its functio
 
 ## Combinators
 
-Combinators are higher-order functions which perform pure operations on their arguments to perform a result.  They may seem very basic, but as their name suggests, they provide useful building blocks for manipulating and composing functions to create new functions.  The [`compose`](#composition) function is a combinator.  Some more examples follow.
+Combinators are higher-order functions that perform pure operations on their arguments to produce a result.  They may seem very basic, but as their name suggests, they provide useful building blocks for manipulating and composing functions to create new functions.  The [`compose`](#composition) function is a combinator.  Some more examples follow.
 
 ### Identity I-Combinator
 
@@ -258,7 +258,7 @@ function identity<T>(value: T): T {
 
 But it has some important applications:
 
-- Higher-order functions which take a user specified function to apply in some context ([such as our sumTo from earlier](/javascript1/#functions-as-parameters-to-other-functions)) can be passed `identity` to restore the default behaviour.
+- Higher-order functions that take a user-specified function to apply in some context ([such as our sumTo from earlier](/javascript1/#functions-as-parameters-to-other-functions)) can be passed `identity` to restore the default behaviour.
 - For extracting data from encapsulated types (e.g. by passing `identity` into map).
 - The above scenarios are also indicative of a useful way to test such higher-order functions, broadly: “does passing the `identity` operator really give us back what we started with?”.
 - For composition with other combinators, as below.
@@ -305,7 +305,7 @@ Where the expression in brackets above we notice is equivalent to `K`:
 K  ≡  x=> y=> x  ≡  h=> _=> h
 ```
 
-Of course, this definition is not unique to Javascript, we mainly use this language to explore this idea, but the equivalent can be completed in Python, with a slightly more verbose syntax
+Of course, this definition is not unique to JavaScript; we mainly use this language to explore this idea, but the equivalent can be completed in Python, with a slightly more verbose syntax:
 
 ```python
 K = lambda x : lambda y : x
@@ -347,9 +347,9 @@ Where `_=> r=> r  ≡  y=> i=> i` and therefore `tail ≡ l=>l(K(i))`.  QED!!!
 
 FYI it has been shown that simple combinators like K and I (at least one other is required) are sufficient to create languages as powerful as lambda calculus without the need for lambdas, e.g. see [SKI Combinator Calculus](https://en.wikipedia.org/wiki/SKI_combinator_calculus).
 
-In previous sections we have seen a number of versions of functions which transform lists (or other containers) into new lists like `map`, `filter` and so on.  We have also introduced the reduce function as a way to compute a single value over a list.  If we realise that the value we produce from reduce can also be a list, we can actually use reduce to implement all of the other lists transformations.  Instead of returning a value from a reduce, we could apply a function which produces only side effects, thus, performing a `forEach`.  We’ll use this as an example momentarily.
+In previous sections, we have seen a number of functions that transform lists (or other containers) into new lists like `map`, `filter` and so on.  We have also introduced the `reduce` function as a way to compute a single value over a list.  If we realise that the value we produce from `reduce` can also be a list, we can actually use `reduce` to implement all of the other list transformations.  Instead of returning a value from `reduce`, we could apply a function which produces only side effects, thus, performing a `forEach`.  We’ll use this as an example momentarily.
 
-First, here’s another implementation of `reduce` for the above formulation of cons lists - but we rename it `fold` (again, as our JavaScript becomes more and more Haskell like we are beginning to adopt Haskell terminology).
+First, here’s another implementation of `reduce` for the above formulation of cons lists - but we rename it `fold` (again, as our JavaScript becomes more and more Haskell-like we are beginning to adopt Haskell terminology).
 
 ```js
 const fold = f=> i=> l=> l ? fold(f)(f(i)(head(l)))(tail(l)) : i
@@ -365,7 +365,7 @@ Now, the function `f` takes one parameter and we don’t do anything with its re
 However, `fold` is expecting as its first argument a curried function of two parameters (the accumulator and the list element).  Since in `forEach` we are not actually accumulating a value, we can ignore the first parameter, hence we give `fold` the function `_=>v=>f(v)`, to apply `f` to each value `v` from the list.
 
 But note that `v=>f(v)` is precisely the same as just `f`.
-So we can simplify forEach a bit further:
+So we can simplify `forEach` a bit further:
 
 ```javascript
 const forEach = f=>l=>fold(_=>f)(null)(l)
@@ -379,7 +379,7 @@ K(f)  ≡  (x=> y=> x)(f) -- expand K
       ≡  _=> f          -- rename y to _
 ```
 
-Where, in the last line above, since y doesn’t appear anywhere in the body of the function we don’t care what it’s called anymore and rename it to `_`.
+where in the last line above, since `y` doesn’t appear anywhere in the body of the function, we don’t care what it’s called anymore and rename it to `_`.
 
 Therefore, we can use our `K` combinator to entirely avoid defining any functions in the body of `forEach`:
 
@@ -391,11 +391,11 @@ const forEach = f=>l=>fold(K(f))(null)(l)
 
 ### Fold Exercise
 
-- Write `map` and `filter` for the above cons list definition in terms of `fold`
+- Write `map` and `filter` for the above cons list definition in terms of `fold`.
 
 #### Solutions
 
-A naive implementation of map using fold, would be:
+A naive implementation of `map` using `fold` would be:
 
 ```javascript
 const map = f => l =>
@@ -413,7 +413,7 @@ forEach(console.log)(mappedList);
 >
 > 2
 
-This construct a new cons every time, applying the function `f` to the current item in `v`. However, this will reverse the list because fold processes the list from head to tail, and constructs the new list by *prepending* each element to the accumulator. Hence, reversing the list.
+This constructs a new cons every time, applying the function `f` to the current item in `v`. However, this will reverse the list because `fold` processes the list from head to tail, and constructs the new list by *prepending* each element to the accumulator.
 
 ```javascript
 const reverse = l =>
@@ -426,7 +426,7 @@ const filter = pred => l =>
   fold(acc => v => pred(v) ? cons(v)(acc) : acc)(null)(reverse(l));
 ```
 
-Therefore, we need to reverse the list, using a separate function, to ensure that we apply the functions in the correct order. However, the preferred way around this, would be to reduce in the other direction, e.g., using [reduceRight](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduceRight), to fold through the list tail to head.
+Therefore, we need to reverse the list using a separate function to ensure that we apply the functions in the correct order. However, the preferred way around this would be to reduce in the other direction, e.g., using [reduceRight](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduceRight), to fold through the list tail to head.
 
 ---
 
@@ -520,7 +520,7 @@ function fork<T, U, V, R>(join: (a: U, b: V) => R, f: (value: T) => U, g: (value
 Uncurried functions of two parameters can be called Binary functions.  Functions of only one parameter can therefore be called Unary functions.  Note that all of our curried functions are unary functions, which return other unary functions.
 We’ve seen situations now where curried functions are flexibly combined to be used in different situations.
 
-Note that in JavaScript you sometimes see casual calls to binary functions but with only one parameter specified.  Inside the called function the unspecified parameter will simply be `undefined` which is fine if the case of that parameter being `undefined` is handled in a way that does not cause an error or unexpected results, e.g.:
+Note that in JavaScript you sometimes see casual calls to binary functions but with only one parameter specified.  Inside the called function the unspecified parameter will simply be `undefined`, which is fine if the case of that parameter being `undefined` is handled in a way that does not cause an error or unexpected results, e.g.:
 
 ```javascript
 function binaryFunc(x,y) {console.log(`${x} ${y}`) }
@@ -531,7 +531,7 @@ binaryFunc("Hello")
 > Hello World  
 > Hello undefined
 
-Conversely, javascript allows additional parameters to be passed to unary functions which will then simply be unused, e.g.:
+Conversely, JavaScript allows additional parameters to be passed to unary functions which will then simply be unused, e.g.:
 
 ```javascript
 function unaryFunc(x) { console.log(x) }
