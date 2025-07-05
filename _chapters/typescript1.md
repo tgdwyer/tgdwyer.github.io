@@ -6,19 +6,19 @@ title: "TypeScript Introduction"
 
 ## Learning Outcomes
 
-- Create programs in TypeScript using types to ensure correctness at compile time.
-- Explain how TypeScript features like Interfaces, Union Types and Optional Properties allow us to model types in common JavaScript coding patterns with precision.
-- Explain how Generics allow us to create type safe but general and reusable code.
-- Compare and contrast strongly, dynamically and gradually typed languages.
-- Describe how compilers that support type inference assist us in writing type safe code.
+- Create programs in TypeScript using types to ensure correctness at compile time
+- Explain how TypeScript features like Interfaces, Union Types and Optional Properties allow us to model types in common JavaScript coding patterns with precision
+- Explain how Generics allow us to create type-safe but general and reusable code
+- Compare and contrast strongly, dynamically and gradually typed languages
+- Describe how compilers that support type inference assist us in writing type-safe code
 
 ## Introduction
 
-As the Web 2.0 revolution hit in 2000s web apps built on JavaScript grew increasingly complex and today, applications like GoogleDocs are as intricate as anything built over the decades in C++.  In the 90s I for one (though I don’t think I was alone) thought that this would be impossible in a dynamically typed language.  It is just too easy to make simple mistakes (as simple as typos) that won’t be caught until run time.  It’s likely only been made possible due to increased rigour in testing.  That is, instead of relying on a compiler to catch mistakes, you rely on a comprehensive suite of tests that evaluate running code before it goes live.
+As the Web 2.0 revolution hit in 2000s, web apps built on JavaScript grew increasingly complex, and today, applications like Google Docs are as intricate as anything built over the decades in C++.  In the 90s I for one (though I don’t think I was alone) thought that this would be impossible in a dynamically typed language.  It is just too easy to make simple mistakes (as simple as typos) that won’t be caught until run time.  It’s likely only been made possible due to increased rigour in testing.  That is, instead of relying on a compiler to catch mistakes, you rely on a comprehensive suite of tests that evaluate running code before it goes live.
 
 Part of the appeal of JavaScript is that being able to run the source code directly in a production environment gives an immediacy and attractive simplicity to software deployment.  However, in recent years more and more tools have been developed that introduce a build-chain into the web development stack.  Examples include: minifiers, which compact and obfuscate JavaScript code before it is deployed; bundlers, which merge different JavaScript files and libraries into a single file to (again) simplify deployment; and also, new languages that compile to JavaScript, which seek to fix the JavaScript language’s shortcomings and compatibility issues in different browsers (although modern ECMAScript has less of these issues).  Examples of languages that compile to JavaScript include CoffeeScript, ClojureScript and (more recently) PureScript (which we will visit later in this unit).  Right now, however, we will take a closer look at another language in this family called **TypeScript**.  See [the official TypeScript documentation](https://www.typescriptlang.org/docs/) for some tutorials and deeper reference.
 
-TypeScript is interesting because it forms a relatively minimal augmentation, or superset, of ECMAScript syntax that simply adds type annotations.  For the most part, the compilation process just performs validation on the declared types and strips away the type annotations rendering just the legal JavaScript ready for deployment.  This lightweight compilation into a language with a similar level of abstraction to the source is also known as transpiling (as opposed to C++ or Java where the compiled code is much closer to the machine execution model).
+TypeScript is interesting because it forms a relatively minimal augmentation, or superset, of ECMAScript syntax that simply adds type annotations.  For the most part, the compilation process just performs validation on the declared types and strips away the type annotations, rendering just the legal JavaScript ready for deployment.  This lightweight compilation into a language with a similar level of abstraction to the source is also known as transpiling (as opposed to C++ or Java where the compiled code is much closer to the machine execution model).
 
 The following is intended as a minimally sufficient intro to TypeScript features such that we can type some fairly rich data structures and higher-order functions.
 An excellent free resource for learning the TypeScript language in depth is the [TypeScript Deep-dive book](https://basarat.gitbooks.io/typescript/content/docs/getting-started.html).
@@ -67,7 +67,7 @@ x = "hello" // no problem now
 x = false; // type error!  only numbers or strings allowed.
 ```
 
-Function parameter types are declared similarly, the return type of the function goes after the `)` of the parameter list:
+Function parameter types are declared similarly. The return type of the function goes after the `)` of the parameter list:
 
 ```typescript
 function theFunction(x: number, y: number): number {
@@ -115,7 +115,7 @@ type ImmutableStudent = Readonly<{
 }>
 ```
 
-When type annotations get long and complex we can declare aliases for them using the `type` keyword:
+When type annotations get long and complex, we can declare aliases for them using the `type` keyword:
 
 ```typescript
 type CurriedFunc<U,V,W> = (x:U)=>(y:V)=>W
@@ -131,7 +131,7 @@ function curry<U,V,W>(f:(x:U,y:V)=>W): CurriedFunc<U,V,W> {
 
 Declaring types for variables, functions and their parameters, and so on, provides more information to the person reading and using the code, but also to the compiler, which will check that you are using them consistently and correctly.  This prevents a lot of errors.
 
-Consider that JavaScript is commonly used to manipulate HTML pages.  For example, I can get the top level headings in the current page, like so:
+Consider that JavaScript is commonly used to manipulate HTML pages.  For example, I can get the top-level headings in the current page, like so:
 
 ```javascript
 const headings = document.getElementsByTagName("h1")
@@ -139,7 +139,7 @@ const headings = document.getElementsByTagName("h1")
 
 In the browser, the global `document` variable always points to the currently loaded HTML document.  Its method `getElementsByTagName` returns a collection of elements with the specified tag, in this case `<h1>`.
 
-Let’s say I want to indent the first heading by 100 pixels, I could do this by manipulating the "style" attribute of the element:
+Let’s say I want to indent the first heading by 100 pixels. I could do this by manipulating the `style` attribute of the element:
 
 ```javascript
 headings[0].setAttribute("style","padding-left:100px")
@@ -187,9 +187,9 @@ This would cause a run-time error in the browser:
 
 > VM360:1 Uncaught TypeError: headings.setAttribute is not a function
 
-This is because headings is not an HTML Element but an HTMLCollection, with no method `setAttribute`.  Note that if I try to debug it, the error will be reported from a line of code inside the definition of `setLeftPadding`.  I don’t know if the problem is in the function itself or in my call.
+This is because `headings` is not an HTML Element but an `HTMLCollection`, with no method `setAttribute`.  Note that if I try to debug it, the error will be reported from a line of code inside the definition of `setLeftPadding`.  I don’t know if the problem is in the function itself or in my call.
 
-The same call inside a TypeScript program would trigger a compile-time error.  In a fancy editor with compiler services like VSCode I’d know about it immediately because the call would get a red squiggly underline immediately after I type it, I can hover over the squiggly to get a detailed error message, and certainly, the generated broken JavaScript would never make it into production.
+The same call inside a TypeScript program would trigger a compile-time error.  In a fancy editor with compiler services like VS Code I’d know about it immediately because the call would get a red squiggly underline immediately after I type it, I can hover over the squiggly to get a detailed error message, and certainly, the generated broken JavaScript would never make it into production.
 ![Compile Error Screenshot](/assets/images/chapterImages/typescript1/setLeftPaddingTypeScript.png)
 
 ## Union Types
@@ -208,13 +208,13 @@ function setLeftPadding(elem, value) {
 }
 ```
 
-So this function accepts either a string or a number for the `value` parameter—but to find that out we need to dig into the code.  The “Union Type” facility in TypeScript allows us to specify the multiple options directly in the function definition, with a list of types separated by `|`:
+This function accepts either a string or a number for the `value` parameter, but to find that out we need to dig into the code.  The “Union Type” facility in TypeScript allows us to specify the multiple options directly in the function definition, with a list of types separated by `|`:
 
 ```typescript
 function setLeftPadding(elem: Element, value: string | number) {...
 ```
 
-Going further, the following allows either a number, or a string, or a function that needs to be called to retrieve the `string`.  It uses `typeof` to query the type of the parameter and do the right thing in each case.
+Going further, the following allows either a number, a string, or a function that needs to be called to retrieve the `string`.  It uses `typeof` to query the type of the parameter and do the right thing in each case.
 
 ```typescript
 function setLeftPadding(elem: Element, value: number | string | (()=>string)) {
@@ -241,15 +241,15 @@ setLeftPadding(headings[0], () => "100px"); // This will call the function which
 
 ## Disambiguating Types Cheat Sheet
 
-It is common in TypeScript to have functions with union type parameters where each of the possible types need to be handled separately. There are several ways to test types of variables.
+It is common in TypeScript to have functions with union type parameters where each of the possible types needs to be handled separately. There are several ways to test the types of variables.
 
 **Primitive types:** `typeof v` gets the type of variable `v` as a string. This returns 'number', 'string' or 'boolean' (and a couple of others that we won't worry about) for the primitive types.  It can also differentiate objects and functions, e.g.:
 
 ```typescript
-const x = 1, 
-      s = "hello", 
-      b = true, 
-      o = {prop1:1, prop2:"hi"}, 
+const x = 1,
+      s = "hello",
+      b = true,
+      o = {prop1:1, prop2:"hi"},
       f = x=>x+1
 
 typeof x      // 'number'
@@ -262,8 +262,8 @@ typeof f      // 'function'
 **Object types:** null values and arrays are considered objects:
 
 ```typescript
-const o={prop1:1,prop2:"hi"}, 
-      n=null, 
+const o={prop1:1,prop2:"hi"},
+      n=null,
       a=[1,2,3]
 
 typeof o      // 'object'
@@ -280,7 +280,7 @@ a instanceof Array   // true
 
 </div>
 
-Union types can be quite complex.  Here is a type for JSON objects which can hold primitive values (`string`,`boolean`,`number`), or `null`, or Arrays containing elements of `JsonVal`, or an object with named properties, each of which is also a `JsonVal`.
+Union types can be quite complex.  Here is a type for JSON objects which can hold primitive values (`string`, `boolean`, `number`), or `null`, or Arrays containing elements of `JsonVal`, or an object with named properties, each of which is also a `JsonVal`.
 
 ```typescript
 type JsonVal =
@@ -303,7 +303,7 @@ const jsonToString = (json: JsonVal): string => {
     case 'number':
       return String(json)
   }
-  const [brackets, entries]  
+  const [brackets, entries]
     = json instanceof Array
       ? ['[]', json.map(jsonToString)]
       : ['{}', Object.entries(json)
@@ -320,7 +320,7 @@ Finally, don't be confused by the use of array destructuring (`[brackets,entries
 
 ## Interfaces
 
-In TypeScript you can declare an `interface` which defines the set of properties and their types, that I expect to be available for certain objects.
+In TypeScript, you can declare an `interface` that defines the set of properties and their types that I expect to be available for certain objects.
 
 For example, when tallying scores at the end of semester, I will need to work with collections of students that have a name, assignment and exam marks.  There might even be some special cases which require mark adjustments, the details of which I don’t particularly care about but that I will need to be able to access, e.g. through a function particular to that student.  The student objects would need to provide an interface that looks like this:
 
@@ -350,7 +350,7 @@ Other parts of my program might work with richer interfaces for the student data
 ## Generic Types
 
 Sometimes when we do marking we get lists of students indexed by their Student Number (a `number`).  Sometimes it’s by email address (a `string`).  You can see the concept of student numbers probably predates the existence of student emails (yes, universities often predate the internet!).
-What if one day our systems will use yet another identifier?  We can future proof a program that works with lists of students by deferring the decision of the particular type of the id:
+What if one day our systems will use yet another identifier?  We can future-proof a program that works with lists of students by deferring the decision of the particular type of the id:
 
 ```typescript
 interface Student<T> {
@@ -399,7 +399,7 @@ interface Box<T> {
 Now `Box<number>` means a box that holds a number, while `Box<string>` means one that holds a string.
 </div>
 
-Type parameters can have more descriptive names if you like, but they **must** start with a capital.  The convention though is to use rather terse single letter parameter names in the same vicinity of the alphabet as T.  This habit comes from C++, where T used to stand for “Template”, and the terseness stems from the fact that we don’t really care about the details of what it is.  
+Type parameters can have more descriptive names if you like, but they **must** start with a capital.  The convention though is to use rather terse single-letter parameter names in the same vicinity of the alphabet as T.  This habit comes from C++, where T used to stand for “Template”, and the terseness stems from the fact that we don’t really care about the details of what it is.
 
 As in function parameter lists, you can also have more than one type parameter:
 
@@ -412,9 +412,9 @@ interface Student<T,U> {
 }
 ```
 
-Formally, this is a kind of “parametric polymorphism”.  The `T` and `U` here may be referred to as *type parameters* or *type variables*. We say that the property `id` has *generic type*.  
+Formally, this is a kind of “parametric polymorphism”.  The `T` and `U` here may be referred to as *type parameters* or *type variables*. We say that the property `id` has *generic type*.
 
-You see generic types definitions used a lot in algorithm and data structure libraries, to give a type---to be specified by the calling code---for the data stored in the data structures.  For example, the following interface might be the basis of a linked list element:
+You see generic type definitions used a lot in algorithm and data structure libraries, to give a type---to be specified by the calling code---for the data stored in the data structures.  For example, the following interface might be the basis of a linked list element:
 
 ```typescript
 interface IListNode<T> {
@@ -425,7 +425,7 @@ interface IListNode<T> {
 
 The specific type of `T` will be resolved when `data` is assigned a specific type value. But, all values of this linked list must have the same type `T`!
 
-We can add type parameters to interfaces, ES6 classes, type aliases, and also functions.  Consider the function which performs a binary search over an array of numbers (it assumes the array is sorted):
+We can add type parameters to interfaces, ES6 classes, type aliases, and also functions.  Consider this function which performs a binary search over an array of numbers (it assumes the array is sorted):
 
 ```javascript
 function binarySearch1(arr:number[], key:number): number {
@@ -479,7 +479,7 @@ console.log(studentsByEmail[binarySearch2(stringIds,'harry@monash.edu')].name)
 
 > Harry Smith
 
-Why is this better than raw JavaScript with no type checking, or simply using TypeScript’s wildcard `any` type?  Well it ensures that we use the types *consistently*.
+Why is this better than raw JavaScript with no type checking, or simply using TypeScript’s wildcard `any` type?  Well, it ensures that we use the types *consistently*.
 For example:
 
 ```javascript
@@ -488,7 +488,7 @@ binarySearch(numberIds,"harry@monash.edu")
 
 > TYPE ERROR!
 
-The `binarySearch2` function above is usable with more types than `binarySearch1`, but it still requires that `T`` does something sensible with`<` and `>`.  
+The `binarySearch2` function above is usable with more types than `binarySearch1`, but it still requires that `T`` does something sensible with`<` and `>`.
 
 We can add a function to use for comparison, so now we can use it with students uniquely identified by some other weird thing that we don’t even know about yet:
 
@@ -540,8 +540,8 @@ const first = curry(prefix)
 first(3)("hello") // Error!
 ```
 
->Error: Argument of type 'number' is not assignable to parameter of type 'string'.  
->Error: Argument of type 'string' is not assignable to parameter of type 'number'.
+> Error: Argument of type 'number' is not assignable to parameter of type 'string'.  
+> Error: Argument of type 'string' is not assignable to parameter of type 'number'.
 
 So the error messages are similar to above, but now they list concrete types because the types for `U` and `V` have already been narrowed by the application of `curry` to `prefix`.
 
@@ -564,7 +564,7 @@ const map = (func, l) => {
     return []
   }
   else {
-    // Apply function to the first item, and 
+    // Apply function to the first item, and
     // recursively apply to the rest of the list
     return [func(l[0]), ...map(func, l.slice(1))];
   }
@@ -579,7 +579,7 @@ const map_num2str = (func: (x: number) => string, l: number[]): string[] => {
 }
 ```
 
-This would correctly typecheck, and we could use this function to convert between a number and a string, but this means we would have to create one of these for each possible type, and this would be time consuming and be a lot of code you would have to write and provide types for. This is where generic types come in handy! Instead of `func` converting between a `number` and a `string`, we will say `func` is some operation which inputs something of a generic type `T`, and returns another generic type `V`.
+This would correctly typecheck, and we could use this function to convert between a number and a string, but this means we would have to create one of these for each possible type, and this would be time-consuming and be a lot of code you would have to write and provide types for. This is where generic types come in handy! Instead of `func` converting between a `number` and a `string`, we will say `func` is some operation that takes as input something of a generic type `T` and returns another generic type `V`.
 
 ```typescript
 const map = <T, V>(func: (x: T) => V, l: T[]): V[] => {
@@ -589,18 +589,18 @@ const map = <T, V>(func: (x: T) => V, l: T[]): V[] => {
 
 The important part of this definition:
 
-- `<T, V>`: Here we define the type parameters which will be usable inside the type of our function. We can only use the generic types defined in this list. You can consider this analogous to defining variables in normal coding, and you only have access to variables which exist.
+- `<T, V>`: Here we define the type parameters which will be usable inside the type of our function. We can only use the generic types defined in this list. You can consider this analogous to defining variables in normal coding, and you only have access to variables that exist.
 - The generic type `T` is the type of the elements in the input array l.
 - The generic type `V` is the type of the elements in the output array, determined by the function `func`.
 - `func: (x: T) => V` specifies that `func` is a function that takes a parameter of type `T` and returns a value of type `V`.
 - `l: T[]` indicates that `l` is an array of elements of type `T`.
-- `V[]` is the return type of the function is an array of elements of type `V`.
+- `V[]` is the return type of the function: an array of elements of type `V`.
 
 All types defined by the generic parameters (`T` and `V`) are scoped within the function's definition. This means that within the function, every instance of `T` must be the same type, and every instance of `V` must be the same type, ensuring type consistency, e.g., all `T`'s can be a `string`, but a `T` cannot be both a `string` at one point, and then `number` at any other point in the type definition. `T` and `V` can be the same type (e.g., both `numbers`), but they can also be different (e.g., `T` could be `string` and `V` could be `number`). The generic function doesn't enforce any specific relationship between `T` and `V`, allowing for flexibility.
 
 #### Typing the Filter Function
 
-We have previously seen how useful the function `filter` is, which optionally removes item in a list.
+We have previously seen how useful the function `filter` is, which optionally removes items in a list.
 
 ```javascript
 const filter = (func, l) => {
@@ -614,7 +614,7 @@ const filter = (func, l) => {
     }
     else {
       // Skip the current item.
-      return filter(func, l.slice(1)); 
+      return filter(func, l.slice(1));
     }
   }
 }
@@ -626,7 +626,7 @@ If we have an array of numbers, and we wanted to keep only even numbers, we coul
 const isEven = num => num % 2 === 0
 ```
 
-If you do not know how to write an [isEven function](https://www.npmjs.com/package/is-even), luckily there are libraries for that. But, we know how to do it know.
+If you do not know how to write an `isEven` function, luckily there are [libraries](https://www.npmjs.com/package/is-even) for that. But, we know how to do it know.
 
 We can provide the type of our function as:
 
@@ -634,7 +634,7 @@ We can provide the type of our function as:
 const isEven = (num: number): boolean => num % 2 === 0;
 ```
 
-This specifies that our input, is of type `number` and it returns a `boolean`. We can write a specific filter operation, which operates directly on numbers, such as:
+This specifies that our input is of type `number` and it returns a `boolean`. We can write a specific filter operation, which operates directly on numbers, such as:
 
 ```typescript
 const filterNumbers = (func: (x: number) => boolean , l: number[]) : number[] => {
@@ -642,7 +642,7 @@ const filterNumbers = (func: (x: number) => boolean , l: number[]) : number[] =>
 }
 ```
 
-This runs in to the same issue as before, where we would need to write this for each possible type, where generic types can help us by allowing us to write a filter function which works over a generic type.
+This runs into the same issue as before, where we would need to write this for each possible type, where generic types can help us by allowing us to write a filter function which works over a generic type.
 
 ```typescript
 const filterNumbers = <T>(func: (x: T) => boolean , l: T[]) : T[] => {
@@ -652,9 +652,9 @@ const filterNumbers = <T>(func: (x: T) => boolean , l: T[]) : T[] => {
 
 The important part of this definition:
 
-- `<T>`: Here we define the type parameters which will be usable inside the type of our function. Compared to `map`, we only need a singular type parameter, as `filter` only keeps or remove items, and does not change any data.
+- `<T>`: Here we define the type parameters which will be usable inside the type of our function. Compared to `map`, we only need a singular type parameter, as `filter` only keeps or remove items and does not change any data.
 - The generic type `T` is the type of the elements in the input array l.
-- `func: (x: T) => boolean` specifies that `func` is a function that takes a parameter of type `T` and returns a value of type `boolean`. We **do not** use generic for the output type, as we should be as strict as possible, and we know that the function provided to filter should return a boolean
+- `func: (x: T) => boolean` specifies that `func` is a function that takes a parameter of type `T` and returns a value of type `boolean`. We **do not** use generic for the output type as we should be as strict as possible, and we know that the function provided to filter should return a boolean.
 - `l: T[]` indicates that `l` is an array of elements of type `T`.
 - `T[]` is the return type of the function is an array of elements of type `T`.
 
@@ -778,11 +778,11 @@ Again, we get the squiggly:
 
 ![Compile Error Screenshot](/assets/images/chapterImages/typescript1/readOnly.png)
 
-## Typing systems with different ‘degrees’ of strictness
+## Typing systems with different “degrees” of strictness
 
 C++ is considered a strongly typed language in the sense that all types of values and variables must match up on assignment or comparison.  Further, it is “statically” typed in that the compiler requires complete knowledge (at compile-time) of the type of every variable.  This can be overridden (type can be cast away and void pointers passed around) but the programmer has to go out of their way to do it (i.e. opt-out).
 
-JavaScript, by contrast, as we have already mentioned, is dynamically typed in that types are only checked at run time. Run-time type errors can occur and be caught by the interpreter on primitive types, for example the user tried to invoke an ordinary object like a function, or refer to an attribute that doesn’t exist, or to treat an array like a number.
+JavaScript, by contrast, as we have already mentioned, is dynamically typed in that types are only checked at run time. Run-time type errors can occur and be caught by the interpreter on primitive types, for example the user tried to invoke an ordinary object like a function, or refer to an attribute that doesn’t exist, or treat an array like a number.
 
 TypeScript represents a relatively new trend in being a gradually typed language.  Another way to think about this is that, by default, the type system is opt-in.  Unless declared otherwise, all variables have type `any`.  The `any` type is like a wild card that always matches, whether the `any` type is the target of the assignment:
 

@@ -7,9 +7,9 @@ title: "Functional Reactive Programming"
 ## Learning Outcomes
 
 - Understand that the Observable construct of Functional Reactive Programming is just another container of elements, but whose “push-based” architecture allows them to be used to capture asynchronous behaviour
-- Understand that Observables provide the benefits of functional programming: composability, reusability.
-- See that Observables structure complex stateful programs in a more linear and understandable way that maps more easily to the underlying state machine.
-- Use Observables to create simple UI programs in-place of asynchronous event handling.
+- Understand that Observables provide the benefits of functional programming: composability, reusability
+- See that Observables structure complex stateful programs in a more linear and understandable way that maps more easily to the underlying state machine
+- Use Observables to create simple UI programs in-place of asynchronous event handling
 
 ## Introduction
 
@@ -18,18 +18,18 @@ Functional Reactive Programming describes an approach to modelling complex, asyn
 - Applications of functions to elements of containers to transform to a new container (e.g. map, filter, reduce etc. over arrays).
 - Use of function composition and higher-order functions to define complex transformations from simple, reusable function elements.
 
-We will explore FRP through an implementation of the [Observable](#observable-streams) data structure in [the Reactive Extensions for JavaScript (RxJS) library](https://www.learnrxjs.io/).  We will then see it applied in application to a straight-forward [browser-based user interface problem](#a-user-interface-example).
+We will explore FRP through an implementation of the [Observable](#observable-streams) data structure in [the Reactive Extensions for JavaScript (RxJS) library](https://www.learnrxjs.io/).  We will then see it applied in application to a straightforward [browser-based user interface problem](#a-user-interface-example).
 
-To support the code examples, the streams are visualized using [rxviz](https://rxviz.com/)
+To support the code examples, the streams are visualised using [rxviz](https://rxviz.com/)
 
 ## Observable Streams
 
-We have seen a number of different ways of wrapping collections of things in containers: built-in JavaScript arrays, linked-list data structures, and also lazy sequences.  Now we’ll see that Observable is just another type of container with some simple examples, before demonstrating that it also easily applies to asynchronous streams.  
+We have seen a number of different ways of wrapping collections of things in containers: built-in JavaScript arrays, linked-list data structures, and also lazy sequences.  Now we’ll see that Observable is just another type of container with some simple examples, before demonstrating that it also easily applies to asynchronous streams.
 
 You can [also play with a live version of this code](https://stackblitz.com/edit/rxjs-introexamples?file=index.ts).  Note that the code in this live version begins with a pair of `import` statements, bringing the set of functions that we describe below into scope for this file from the `rxjs` libraries:
 
 ```typescript
-import { of, range, fromEvent, zip, merge } from 'rxjs'; 
+import { of, range, fromEvent, zip, merge } from 'rxjs';
 import { last,filter,scan,map,mergeMap,take,takeUntil } from 'rxjs/operators';
 ```
 
@@ -44,7 +44,7 @@ of(1,2,3,4)
 > 1  
 > 2  
 > 3  
-> 4  
+> 4
 
 ![Using Of](/assets/images/chapterImages/functionalreactiveprogramming/of1234.gif)
 
@@ -91,7 +91,7 @@ range(1000)
     filter(x=> x%3===0 || x%5===0),
     scan((a,v)=>a+v),
     last())
-  .subscribe(console.log); 
+  .subscribe(console.log);
 ```
 
 In the developer console, only one number will be printed:
@@ -122,7 +122,7 @@ zip(columns,rows)
 ![Zip Example](/assets/images/chapterImages/functionalreactiveprogramming/zip1.gif)
 
 If you like mathy vector speak, you can think of the above as an *inner product* of the two streams.  
-By contrast, the `mergeMap` operator gives the *cartesian product* of two streams.  That is, it gives us a way to take, for every element of a stream, a whole other stream, but flattened (or projected) together with the parent stream.  The following enumerates all the row/column indices of cells in a spreadsheet:
+By contrast, the `mergeMap` operator gives the *Cartesian product* of two streams.  That is, it gives us a way to take, for every element of a stream, a whole other stream, but flattened (or projected) together with the parent stream.  The following enumerates all the row/column indices of cells in a spreadsheet:
 
 ```javascript
 columns.pipe(
@@ -140,11 +140,11 @@ columns.pipe(
 > ["B", 2]  
 > ["C", 0]  
 > ["C", 1]  
-> ["C", 2]  
+> ["C", 2]
 
 ![Merge Map Example](/assets/images/chapterImages/functionalreactiveprogramming/mergeMap.gif)
 
-If we contrast `mergeMap` and `map`, map will produce an Observable of Observables, while mergeMap, will produce a single stream with all of the values. Contrast the animation for `map`, with the previous `mergeMap` animation.  `map` has three separate branches, where each one represents its own observable stream. The output of the `console.log`, is an instance of the Observable class itself, which is not very useful!
+If we contrast `mergeMap` and `map`, `map` will produce an Observable of Observables, while `mergeMap` will produce a single stream with all of the values. Contrast the animation for `map` with the previous `mergeMap` animation.  `map` has three separate branches, where each one represents its own observable stream. The output of the `console.log` is an instance of the Observable class itself, which is not very useful!
 
 ```javascript
 columns.pipe(
@@ -172,7 +172,7 @@ merge(columns,rows)
 > C  
 > 0  
 > 1  
-> 2  
+> 2
 
 ![Example of Merge](/assets/images/chapterImages/functionalreactiveprogramming/merge.gif)
 
@@ -196,7 +196,7 @@ key$.pipe(
 ).subscribe(console.log)
 ```
 
-The animation displays the stream as the user types in the best FIT unit in to the webpage
+The animation displays the stream as the user types in the best FIT unit in to the webpage:
 
 ![Key Down Example](/assets/images/chapterImages/functionalreactiveprogramming/keydown.gif)
 
@@ -223,6 +223,26 @@ merge(key$.pipe(map(e=>e.key)),
 ```
 
 ![Keyboard Example](/assets/images/chapterImages/functionalreactiveprogramming/keyboardclick.gif)
+
+<div class="alert-box alert-warning" markdown="1">
+**Make sure you import the correct `merge`!**
+There are two `merge` functions in RxJS. The one we are using is the function imported from `'rxjs'` that merges multiple Observables and returns a new Observable. The other one is an operator imported from `'rxjs/operators'` that has been deprecated in favour of the new name `mergeWith`. The following pieces of code are equivalent:
+
+```typescript
+import { merge } from 'rxjs';
+
+const mergedObservable = merge(observable1, observable2, observable3);
+```
+
+```typescript
+import { mergeWith } from 'rxjs/operators';
+// Do not use the below deprecated import
+// import { merge } from 'rxjs/operators';
+
+const mergedObservable = observable1.pipe(mergeWith(observable2, observable3));
+```
+
+</div>
 
 <div class="cheatsheet" markdown="1">
 
@@ -338,7 +358,7 @@ The state machine that models this behaviour is pretty simple:
 
 ![Mouse drag state machine](/assets/images/chapterImages/functionalreactiveprogramming/mouseDragStateMachine.png)
 
-There are only three transitions, each triggered by an event.  
+There are only three transitions, each triggered by an event.
 
 ### Turning a State-Machine into Code with Event Listeners
 
@@ -446,8 +466,8 @@ class Point {
 Now we create a subclass of `Point` with a constructor letting us instantiate it for a given (DOM) `MouseEvent` and an `abstract` (placeholder) definition for a function to apply the correct update action to the `State`:
 
 ```typescript
-abstract class MousePosEvent extends Point { 
-  constructor(e:MouseEvent) { super(e.clientX, e.clientY) } 
+abstract class MousePosEvent extends Point {
+  constructor(e:MouseEvent) { super(e.clientX, e.clientY) }
   abstract apply(s:State):State;
 }
 ```
@@ -476,7 +496,7 @@ const svg = document.getElementById("svgCanvas")!,
 But now we’ll capture initial position of the rectangle one time only in an immutable `Point` object outside of the stream logic.
 
 ```typescript
-const initialState: State = { 
+const initialState: State = {
   pos: new Point(
     Number(rect.getAttribute('x')),
     Number(rect.getAttribute('y')))
@@ -502,7 +522,7 @@ mousedown
  });
 ```
 
-Note that inside the `mergeMap` we use the `startWith` operator to force a `DownEvent` onto the start of the flattened stream.  Then the accumulator function passed to `scan` uses sub-type polymorphism to cause the correct behaviour for the different types of `MousePosEvent``.
+Note that inside the `mergeMap` we use the `startWith` operator to force a `DownEvent` onto the start of the flattened stream.  Then the accumulator function passed to `scan` uses subtype polymorphism to cause the correct behaviour for the different types of `MousePosEvent``.
 
 The advantage of this code is not brevity; with the introduced type definitions it’s longer than the previous implementations of the same logic.  Rather, the advantages of this pattern are:
 
@@ -513,7 +533,7 @@ As an example of *scalability* we will be using this same pattern to implement t
 
 ### MergeMap vs SwitchMap vs ConcatMap
 
-In RxJS, `mergeMap`, `switchMap`, and `concatMap` are operators used for transforming and flattening observables. Each has its own specific behavior in terms of how it handles incoming values and the resulting observable streams. Here's a breakdown of each:
+In RxJS, `mergeMap`, `switchMap`, and `concatMap` are operators used for transforming and flattening observables. Each has its own specific behaviour in terms of how it handles incoming values and the resulting observable streams. Here's a breakdown of each:
 
 Let's consider three almost identical pieces of code
 
@@ -525,15 +545,15 @@ fromEvent(document, "mousedown").pipe(concatMap(() => interval(200)))
 
 With `mergeMap`, each mousedown event triggers a new `interval(200)` observable. All these interval observables will run **concurrently**, meaning their emitted values will *interleave* in the output. In the animation, the `x2` occurs when two observables emit at approximately the same time, and the values overlap too much to show separately.
 
-![Merge Map Visualized](/assets/images/chapterImages/functionalreactiveprogramming/mergeMapMouseDown.gif)
+![Merge Map Visualised](/assets/images/chapterImages/functionalreactiveprogramming/mergeMapMouseDown.gif)
 
 With `switchMap`, each time a `mousedown` event occurs, it triggers an `interval(200)` observable. If another mousedown event occurs before the interval observable finishes (interval  doesn’t finish on its own), the previous interval observable is canceled, and a new one begins. This means only the most recent mousedown event's observable is active. This can be seen as the counter restarting every single time a click occurs (remember interval emits sequential numbers).
 
-![Switch Map Visualized](/assets/images/chapterImages/functionalreactiveprogramming/switchMap.gif)
+![Switch Map Visualised](/assets/images/chapterImages/functionalreactiveprogramming/switchMap.gif)
 
 With `concatMap`, each time a mousedown event occurs, it starts emitting values from the `interval(200)` observable. Importantly, if a second mousedown event occurs while the previous interval observable is still emitting, the new interval won't start until the previous one has completed. However, since interval is a never-ending observable, in practice, each mousedown event's observable will queue up and only start after the previous ones are manually stopped or canceled. Therefore, no matter how many times a click occurs, the next interval will never begin.
 
-![Concat Map Visualized](/assets/images/chapterImages/functionalreactiveprogramming/concatMap.gif)
+![Concat Map Visualised](/assets/images/chapterImages/functionalreactiveprogramming/concatMap.gif)
 
 We can make an adjustment to this, where, we stop the interval after four items.
 
@@ -541,7 +561,7 @@ We can make an adjustment to this, where, we stop the interval after four items.
 fromEvent(document, "mousedown").pipe(concatMap(() => interval(200).pipe(take(4))))
 ```
 
-![Concat Map Visualized w/ End](/assets/images/chapterImages/functionalreactiveprogramming/concatMap_take4.gif)
+![Concat Map Visualised w/ End](/assets/images/chapterImages/functionalreactiveprogramming/concatMap_take4.gif)
 
 Unlike the previous example with a never-ending interval, in this case, each interval observable completes after emitting four values, so the next mousedown event's observable will queue up and start automatically as soon as the previous one completes. This setup ensures that each click's sequence of interval emissions will be handled one after the other, with no overlap, maintaining the order of clicks and processing each one to completion before starting the next.
 

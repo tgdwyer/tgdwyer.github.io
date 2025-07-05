@@ -11,7 +11,7 @@
   definition: A way to define local bindings in Haskell, allowing variables or functions to be used within a function body.
   first_appeared: haskell1
 - term: Let Clauses
-  definition: A way to bind variables or functions within an expression in Haskell, allowing for more localized definitions.
+  definition: A way to bind variables or functions within an expression in Haskell, allowing for more localised definitions.
   first_appeared: haskell1
 - term: Hoogle
   definition: A Haskell API search engine that allows users to search for functions by name or by type signature.
@@ -35,19 +35,19 @@
   definition: The processes a computer follows when executing a program in a given language.
   first_appeared: levelsofabstraction
 - term: Imperative
-  definition: Imperative programs are a sequence of statements that change a programs state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembler to Python are built around this concept and most modern languages still allow you to program in this style.
+  definition: Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembler to Python are built around this concept and most modern languages still allow you to program in this style.
   first_appeared: levelsofabstraction
 - term: Procedural
   definition: Procedural languages are basically *imperative* in nature, but add the concept of named *procedures*, i.e. named subroutines that may be invoked from elsewhere in the program, with parameterised variables that may be passed in.
   first_appeared: levelsofabstraction
 - term: Object-oriented
-  definition: Object-oriented languages are built around the concept of *objects* where an objects captures the set of data (state) and behaviours (methods) associated with entities in the system.
+  definition: Object-oriented languages are built around the concept of *objects* where an object captures the set of data (state) and behaviours (methods) associated with entities in the system.
   first_appeared: levelsofabstraction
 - term: Declarative
   definition: Declarative languages focus on declaring *what* a procedure (or function) should do rather than *how* it should do it.
   first_appeared: levelsofabstraction
 - term: Functional
-  definition: Functional languages are built around the concept of composable functions.  Such languages support *higher order functions* which can take other functions as arguments or return new functions as their result, following the rules of the *Lambda Calculus*.
+  definition: Functional languages are built around the concept of composable functions.  Such languages support *higher-order functions* which can take other functions as arguments or return new functions as their result, following the rules of the *Lambda Calculus*.
   first_appeared: levelsofabstraction
 - term: Lambda Calculus
   definition: A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
@@ -59,7 +59,7 @@
   definition: A model of computation which is the basis for most modern computer architectures. Proposed by John von Neumann in 1945.
   first_appeared: levelsofabstraction
 - term: Anonymous Function
-  definition: A function defined without a name, often used as an argument to other functions. Also known as lambda function.
+  definition: A function defined without a name, often used as an argument to other functions. Also known as a lambda function.
   first_appeared: javascript1
 - term: Closure
   definition: A function and the set of variables it accesses from its enclosing scope.
@@ -86,7 +86,7 @@
   definition: A function that always produces the same output for the same input and has no side effects.
   first_appeared: javascript1
 - term: Referential Transparency
-  definition: An expression that can be replaced with its value without changing the program's behavior, indicating no side effects and consistent results.
+  definition: An expression that can be replaced with its value without changing the program's behaviour, indicating no side effects and consistent results.
   first_appeared: javascript1
 - term: Side Effects
   definition: Any state change that occurs outside of a function's local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
@@ -101,7 +101,7 @@
   definition: A type class for data structures that can be traversed, applying a function with an Applicative effect to each element. It extends both Foldable and Functor and includes functions like traverse and sequenceA.
   first_appeared: haskell4
 - term: Tail Call Optimisation
-  definition: A compiler feature that optimises tail-recursive functions to prevent additional stack frames from being created, effectively converting recursion into iteration.1
+  definition: A compiler feature that optimises tail-recursive functions to prevent additional stack frames from being created, effectively converting recursion into iteration.
   first_appeared: purescript
 - term: Asynchronous
   definition: Operations that occur independently of the main program flow, allowing the program to continue executing while waiting for the operation to complete.
@@ -205,6 +205,9 @@
 - term: Monadic Effects
   definition: Operations that produce side effects and are managed within a monadic context, ensuring that the effects are sequenced and controlled.
   first_appeared: monad
+- term: bind
+  definition: The defining function which all monads must implement.
+  first_appeared: monad
 - term: Point-free style
   definition: A way of defining functions without mentioning their arguments.
   first_appeared: higherorderfunctions
@@ -220,8 +223,8 @@
 - term: K-combinator
   definition: A combinator that takes two arguments and returns the first one.
   first_appeared: higherorderfunctions
-- term: Algebraic Data Types (ADTs)
-  definition: Custom data types in Haskell defined using the data keyword, allowing the combination of different types into one composite type using the | operator.
+- term: Algebraic Data Types (or ADTs)
+  definition: Custom data types in Haskell defined using the data keyword, allowing the combination of different types into one composite type using the \| operator.
   first_appeared: haskell2
 - term: Record Syntax
   definition: An alternate way to define data structures in Haskell with named fields, automatically creating accessor functions for those fields.
