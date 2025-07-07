@@ -3,6 +3,7 @@ layout: chapter
 title: "Monad"
 ---
 ## Learning Outcomes
+
 - Understand that Monad extends [Functor and Applicative](/haskell3) to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
 - Understand the operation of the monadic bind and join functions in the `Maybe`, `IO`, List and Function instances of Monad.
 - Be able to refactor monadic binds using [`do` notation](#do-notation).
@@ -10,9 +11,9 @@ title: "Monad"
 
 ## Introduction
 
-As with Functor and Applicative the name Monad comes from Category Theory.  Although the names sound mathematical they are abstractions of relatively simple concepts.  A Functor allowed unary functions to be applied (mapped/`fmap`ed) over a context.  Applicative allowed us to apply a function in a context to values in a context.  So too, Monad has a characteristic function called “bind”, which allows us to perform another type of function application over values in a context.
+As with Functor and Applicative, the name Monad comes from Category Theory.  Although the names sound mathematical, they are abstractions of relatively simple concepts.  A Functor allowed unary functions to be applied (mapped/`fmap`ed) over a context.  Applicative allowed us to apply a function in a context to values in a context.  So too, Monad has a characteristic function called “bind”, which allows us to perform another type of function application over values in a context.
 
-The special thing about bind is that it allows us to chain functions which have an effect without creating additional layers of nesting inside effect contexts.  People often try to describe Monads in metaphors, which are not always helpful.  The essence of Monad really is bind and there is no getting around looking at its type signature and seeing what it does in different instances, which we will get to shortly.  However, one analogy that resonated for me was the idea of bind as a [“programmable semicolon”](http://book.realworldhaskell.org/read/monads.html).  That is, imagine a language like JavaScript which uses semicolons (`;`) as a statement separator:
+The special thing about bind is that it allows us to chain functions that have an effect without creating additional layers of nesting inside effect contexts.  People often try to describe Monads in metaphors, which are not always helpful.  The essence of Monad really is bind and there is no getting around looking at its type signature and seeing what it does in different instances, which we will get to shortly.  However, one analogy that resonated for me was the idea of bind as a [“programmable semicolon”](http://book.realworldhaskell.org/read/monads.html).  That is, imagine a language like JavaScript which uses semicolons (`;`) as a statement separator:
 
 ```javascript
 // some javascript you can try in a browser console:
@@ -25,7 +26,7 @@ As we will see shortly, the Haskell bind operator `>>=` can also be used to sequ
 getLine >>= \x -> putStrLn("hello "++x)
 ```
 
-However, it not only separates the two expressions, it is safely handling the `IO` type within which all code with IO side-effects in Haskell must operate.  But as well as allowing us to chain effectful operations, bind is defined to do different and useful things for different Monad instances, as we shall see.
+However, it not only separates the two expressions, but also safely handles the `IO` type within which all code with IO side effects in Haskell must operate.  But as well as allowing us to chain effectful operations, bind is defined to do different and useful things for different Monad instances, as we shall see.
 
 ## The Monad Typeclass
 
@@ -47,7 +48,7 @@ instance Monad [] -- Defined in `GHC.Base'
 instance Monad Maybe -- Defined in `GHC.Base'
 instance Monad IO -- Defined in `GHC.Base'
 instance Monad ((->) r) -- Defined in `GHC.Base'
-instance Monoid a => Monad ((,) a) -- Defined in `GHC.Base' 
+instance Monoid a => Monad ((,) a) -- Defined in `GHC.Base'
 ```
 
 Things to notice:
@@ -61,7 +62,7 @@ Things to notice:
 There also exists a flipped version of bind:
 
 ```haskell
-(=<<) = flip (>>=) 
+(=<<) = flip (>>=)
 ```
 
 The type of the flipped bind `(=<<)` has a nice correspondence to the other operators we have already seen for function application in various contexts:
@@ -75,7 +76,7 @@ The type of the flipped bind `(=<<)` has a nice correspondence to the other oper
 
 So the bind function `(>>=)` (and equally its flipped version `(=<<)`) gives us another way to map functions over contexts—but why do we need another way?
 
-As an example we’ll consider computation using the `Maybe` type, which we said is useful for [partial functions](/haskell2/#maybe), that is functions which are not sensibly defined over all of their inputs.  A more complex example of such a function than we have seen before is the [quadratic formula](https://en.wikipedia.org/wiki/Quadratic_formula) which, for quadratic functions of the form:
+As an example we’ll consider computation using the `Maybe` type, which we said is useful for [partial functions](/haskell2/#maybe), that is, functions which are not sensibly defined over all of their inputs.  A more complex example of such a function than we have seen before is the [quadratic formula](https://en.wikipedia.org/wiki/Quadratic_formula) which, for quadratic functions of the form:
 
 $$ ax^2 + bx + c = 0 $$
 
@@ -90,7 +91,7 @@ This may fail in two ways:
   1. if *a* is 0 (divide by 0 is undefined);
   2. if the expression that square root is applied to is negative (and we insist on only real-valued solutions).
 
-Therefore, let’s define a little library of math functions which encapsulate the possibility of failure in a `Maybe`:
+Therefore, let’s define a little library of math functions that encapsulate the possibility of failure in a `Maybe`:
 
 ```haskell
 safeDiv :: Float -> Float -> Maybe Float
@@ -182,7 +183,7 @@ So that’s one instance of `Monad`; let’s look at some more…
 
 ### IO
 
-The Haskell type which captures Input/Output effects is called `IO`.  As we demonstrated with the `traverse` function, it is possible to perform `IO` actions using `fmap` (`<$>`) and applicative (`<*>`)—for example printing to the console. The challenge is taking values out of an `IO` context and using them to create further `IO` effects.
+The Haskell type that captures Input/Output effects is called `IO`.  As we demonstrated with the `traverse` function, it is possible to perform `IO` actions using `fmap` (`<$>`) and applicative (`<*>`)—for example printing to the console. The challenge is taking values out of an `IO` context and using them to create further `IO` effects.
 
 Here are some simple `IO` “actions”:
 
@@ -201,7 +202,7 @@ The following typechecks:
 main = greet <$> readName
 ```
 
-When you run it from either GHCi or an executable compiled with ghc, it will pause and wait for input, but you will not see the subsequent greeting.
+When you run it from either GHCi or an executable compiled with GHC, it will pause and wait for input, but you will not see the subsequent greeting.
 This is because the type of the expression is:
 
 ```haskell
@@ -245,7 +246,7 @@ main :: IO ()
 main = do
    sayHi
    name <- readName
-   greet name 
+   greet name
 ```
 
 Which is entirely equivalent to the above code, or more explicitly:
@@ -254,7 +255,7 @@ Which is entirely equivalent to the above code, or more explicitly:
 main =
    sayHi >>
    readName >>=
-   \name -> greet name 
+   \name -> greet name
 ```
 
 Note that although `<-` looks like assignment to a variable `name`, it actually expands to a parameter name for a lambda expression following the bind.  Thus, the way I read the line with the `<-` in the following do expression:
@@ -262,7 +263,7 @@ Note that although `<-` looks like assignment to a variable `name`, it actually 
 ```haskell
 do
   name <- readName
-  greet name 
+  greet name
 ```
 
 is:
@@ -281,7 +282,7 @@ do
 
 ### Join
 
-A function called “`join`” from `Control.Monad` also distills the essence of `Monad` nicely.  Its type and definition in terms of bind is:
+A function called `join` from `Control.Monad` also distils the essence of `Monad` nicely.  Its type and definition in terms of bind are:
 
 ```haskell
 join :: Monad m => m (m a) -> m a
@@ -310,8 +311,8 @@ Which will now execute as expected:
 join $ greet <$> readName
 ```
 
->Tim  
->Nice to meet you Tim!
+> Tim  
+> Nice to meet you Tim!
 
 ## List
 
@@ -322,7 +323,7 @@ instance Monad []  where
     xs >>= f = [y | x <- xs, y <- f x]
 ```
 
-Where `xs` is a list and `f` is a function which returns a list.  `f` is applied to each element of `xs` and the result concatenated.  Actually, list comprehensions are just syntactic sugar for the list monad `do` notation, for example, `[(i,j)|i<-['a'..'d'],j<-[1..4]]` is equivalent to:
+where `xs` is a list and `f` is a function that returns a list.  `f` is applied to each element of `xs` and the result is concatenated.  Actually, list comprehensions are just syntactic sugar for the list monad `do` notation, for example, `[(i,j)|i<-['a'..'d'],j<-[1..4]]` is equivalent to:
 
 ```haskell
 do
@@ -333,7 +334,7 @@ do
 
 > [('a',1),('a',2),('a',3),('a',4),('b',1),('b',2),('b',3),('b',4),('c',1),('c',2),('c',3),('c',4),('d',1),('d',2),('d',3),('d',4)]
 
-Which is itself syntactic sugar for:
+which is itself syntactic sugar for:
 
 ```haskell
 ['a'..'d'] >>= \i -> [1..4] >>= \j -> pure (i,j)
@@ -366,7 +367,7 @@ Our friend `join` in the list Monad is simply concatenation:
 [1,2,3,1,2]
 ```
 
-You can think of the way that results in the List monad are chained as being a logical extension of the way `Maybe` monad operations are chained. That is, a `Maybe` returns either zero or one result, while a list returns an arbitrary number of results. The results of two list operations chained with `(>>=)` is the cartesian product in a flat list. 
+You can think of the way that results in the List monad are chained as being a logical extension of the way `Maybe` monad operations are chained. That is, a `Maybe` returns either zero or one result, while a list returns an arbitrary number of results. The result of two list operations chained with `(>>=)` is the Cartesian product in a flat list.
 
 ## Function
 
@@ -402,12 +403,12 @@ signoff sofar linebreak = sofar ++ linebreak ++ "Your’s truly," ++ linebreak +
 putStrLn $ (greet >>= body >>= signoff) "\r\n"
 ```
 
->Dear Gentleperson,  
+> Dear Gentleperson,  
 >
->It has come to my attention that…  
+> It has come to my attention that…  
 >
->Your’s truly,  
->Tim
+> Your’s truly,  
+> Tim
 
 In the next example we use the argument `3` in three different functions without passing it directly to any of them.
 Note the pattern is that the right-most function is unary (taking only the specified argument), and subsequent functions in the chain are binary, their first argument being the result of the previous function application, and the second argument being the given `3`.
@@ -434,9 +435,9 @@ The `join` function passes one argument to a binary function twice which can be 
 6
 ```
 
-### Returning To Point Free
+### Returning To Point-Free
 
-The very observant reader may recognize above construct of passing one argument to a binary function twice. We previously called this `apply`, when discussing [Function instances for applicatives](/haskell3#applicative-exercises). This can be a very useful pattern when making code point free.
+The very observant reader may recognise the above construct of passing one argument to a binary function twice. We previously called this `apply`, when discussing [Function instances for applicatives](/haskell3#applicative-exercises). This can be a very useful pattern when making code point-free.
 
 We previously gave you an exercise, and labeled it as a *scary extension*, but now with more tools, we can make this much less scary:
 
@@ -444,7 +445,7 @@ We previously gave you an exercise, and labeled it as a *scary extension*, but n
 f a b = a*a + b*b
 ```
 
-First, lets use join to apply the binary function (`*`) to the same argument twice
+First, let’s use join to apply the binary function (`*`) to the same argument twice
 
 ```haskell
 f :: Num a => a -> a -> a
@@ -464,7 +465,7 @@ f a b = (+) ((join (*)) a) ((join (*)) b)
 f a b = on (+) (join (*)) a b
 ```
 
-We can now do two rounds of eta-conversion to make our code point free.
+We can now do two rounds of eta-conversion to make our code point-free.
 
 ```haskell
 f = on (+) (join (*))
@@ -483,7 +484,7 @@ This is quite a common pattern in Haskell code, where this code says we apply th
 
 There are also various functions in `Control.Monad` for looping functions with monadic effects (functions that return a result inside a Monad) over containers that are `Foldable` and `Traversable`.
 
-First there’s `mapM` which is effectively the same as `traverse` (but requires the function to have a monadic effect, not just applicative):
+First, there’s `mapM`, is effectively the same as `traverse` (but requires the function to have a monadic effect, not just applicative):
 
 ```haskell
 doubleIfNotBig n = if n < 3 then Just (n+n) else Nothing
@@ -528,11 +529,11 @@ Nothing
 
 ## Conclusion
 
-Monads really round out Haskell, making it a very powerful language with elegant ways to abstract common programming patterns. So far, we have looked at the `Maybe`, `IO`, and `List` monad instances. The `Maybe` monad allowed us to chain operations which may fail (in a more principled way than exception handling); `IO` allowed us to chain operations which perform input and output; and the `List` instance of monad allows us to sequence operations that may have multiple results (flattening the cartesian product of the results).
+Monads really round out Haskell, making it a very powerful language with elegant ways to abstract common programming patterns. So far, we have looked at the `Maybe`, `IO`, and `List` monad instances. The `Maybe` monad allowed us to chain operations which may fail (in a more principled way than exception handling); `IO` allowed us to chain operations which perform input and output; and the `List` instance of monad allows us to sequence operations that may have multiple results (flattening the Cartesian product of the results).
 
-We’ll see Monads at work again in the next chapter when we build more sophisticated [parser combinators](/parsercombinators). Additionally, here's a discussion about how to [thread state such as random seeds](/randmonad) through functions using a custom monadic context which serves as an introduction to the builtin `State` monad.
+We’ll see Monads at work again in the next chapter when we build more sophisticated [parser combinators](/parsercombinators). Additionally, here's a discussion about how to [thread state such as random seeds](/randmonad) through functions using a custom monadic context, which serves as an introduction to the built-in `State` monad.
 
-With everything we've covered so far you should now be empowered to go out and write real-world programs. A slightly more advanced topic which you would soon encounter in the wild would be working within multiple  monadic contexts at once. The most standard way to do this is using [Monad Transformers](https://en.wikibooks.org/wiki/Haskell/Monad_transformers), but there are other approaches emerging, such as [algebraic effects libraries](https://github.com/fused-effects/fused-effects).  We’ll leave these for future self exploration though.
+With everything we've covered so far you should now be empowered to go out and write real-world programs. A slightly more advanced topic which you would soon encounter in the wild would be working within multiple monadic contexts at once. The most standard way to do this is using [Monad Transformers](https://en.wikibooks.org/wiki/Haskell/Monad_transformers), but there are other approaches emerging, such as [algebraic effects libraries](https://github.com/fused-effects/fused-effects).  We’ll leave these for future self-exploration though.
 
 ## Glossary
 
@@ -542,4 +543,4 @@ With everything we've covered so far you should now be empowered to go out and w
 
 *Monadic Effects*: Operations that produce side effects and are managed within a monadic context, ensuring that the effects are sequenced and controlled.
 
-*bind*: the defining function which all monads must implement.
+*bind*: The defining function which all monads must implement.

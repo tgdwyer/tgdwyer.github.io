@@ -3,13 +3,15 @@ layout: chapter
 title: "Eithers"
 ---
 
-**Note** This is optional reading.
+<div class="alert-box alert-info" markdown="1">
+**This is optional reading.**
+</div>
 
 ## Learning Outcomes
 
-- Understand how the `Either` type handles values with two possibilities, typically used for error handling and success cases.
-- Apply the `Functor`, `Applicative`, and `Monad` type classes to the `Either` type, learning how to implement instances for each.
-- Recognize the power of monadic `do` blocks in simplifying code and handling complex workflows.
+- Understand how the `Either` type handles values with two possibilities, typically used for error handling and success cases
+- Apply the `Functor`, `Applicative`, and `Monad` type classes to the `Either` type, learning how to implement instances for each
+- Recognise the power of monadic `do` blocks in simplifying code and handling complex workflows
 
 ## Introduction to Eithers
 
@@ -19,13 +21,13 @@ In Haskell, the `Either` type is used to represent values with two possibilities
 data Either a b = Left a | Right b
 ```
 
-In Haskell’s `Either` type, convention ([and the official documentation](https://hackage.haskell.org/package/base-4.20.0.1/docs/Data-Either.html)) says errors go on the `Left` and successes on the `Right`. Why? Because if it is not right (correct) it must be left. This can be considered another example of bias against the left-handed people around the world, but alas, it is a [cruel world](https://www.youtube.com/watch?v=epvlvDzKfv8).
+In Haskell’s `Either` type, convention ([and the official documentation](https://hackage.haskell.org/package/base-4.20.0.1/docs/Data-Either.html)) says errors go on the `Left` and successes on the `Right`. Why? Because if it is not right (correct), it must be left. This can be considered another example of bias against the left-handed people around the world, but alas, it is a [cruel world](https://www.youtube.com/watch?v=epvlvDzKfv8).
 
-The `Left`/`Right` convention is also more general then a `Success`/`Error` naming, as `Left` does not always need to be an error, but it is the most common usage.
+The `Left`/`Right` convention is also more general than a `Success`/`Error` naming, as `Left` does not always need to be an error, but it is the most common usage.
 
 ## Usage of Either
 
-We can use `Either` to help us with error catching, similar to a `Maybe` type. However, since the error case, has a value, rather than `Nothing`, allowing to store an error message to give information to the programmer/user.
+We can use `Either` to help us with error catching, similar to a `Maybe` type. However, the error case has a value rather than `Nothing`, allowing to store an error message to give information to the programmer/user.
 
 ```haskell
 divide :: Double -> Double -> Either String Double
