@@ -29,8 +29,7 @@ We have seen a number of different ways of wrapping collections of things in con
 You can [also play with a live version of this code](https://stackblitz.com/edit/rxjs-introexamples?file=index.ts).  Note that the code in this live version begins with a pair of `import` statements, bringing the set of functions that we describe below into scope for this file from the `rxjs` libraries:
 
 ```typescript
-import { of, range, fromEvent, zip, merge } from 'rxjs';
-import { last,filter,scan,map,mergeMap,take,takeUntil } from 'rxjs/operators';
+import { of, range, fromEvent, zip, merge, last, filter, scan, map, mergeMap, take, takeUntil } from 'rxjs';
 ```
 
 Conceptually, the Observable data structure just wraps a collection of things in a container in a similar way to the data structures we have seen before.
@@ -223,26 +222,6 @@ merge(key$.pipe(map(e=>e.key)),
 ```
 
 ![Keyboard Example](/assets/images/chapterImages/functionalreactiveprogramming/keyboardclick.gif)
-
-<div class="alert-box alert-warning" markdown="1">
-**Make sure you import the correct `merge`!**
-There are two `merge` functions in RxJS. The one we are using is the function imported from `'rxjs'` that merges multiple Observables and returns a new Observable. The other one is an operator imported from `'rxjs/operators'` that has been deprecated in favour of the new name `mergeWith`. The following pieces of code are equivalent:
-
-```typescript
-import { merge } from 'rxjs';
-
-const mergedObservable = merge(observable1, observable2, observable3);
-```
-
-```typescript
-import { mergeWith } from 'rxjs/operators';
-// Do not use the below deprecated import
-// import { merge } from 'rxjs/operators';
-
-const mergedObservable = observable1.pipe(mergeWith(observable2, observable3));
-```
-
-</div>
 
 <div class="cheatsheet" markdown="1">
 
