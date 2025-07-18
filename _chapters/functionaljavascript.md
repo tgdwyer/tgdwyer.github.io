@@ -83,9 +83,9 @@ Consider the following *impure* function:
 
 ```javascript
    function impureSquares(a) {
-       let i = 0
+       let i = 0;
        while (i < a.length) {
-*         a[i] = a[i] * a[i++];
+*          a[i] = a[i] * a[i++];
        }
    }
 ```
@@ -136,13 +136,13 @@ An impure function typical of something you may see in OO code:
 ```javascript
 let messagesSent = 0;
 function send(message, recipient) {
-   let success = recipient.notify(message);
-   if (success) {
-       ++messagesSent;
-   } else {
-       console.log("send failed! " + message);
-   }
-   console.log("messages sent " + messagesSent);
+    let success = recipient.notify(message);
+    if (success) {
+        ++messagesSent;
+    } else {
+        console.log("send failed! " + message);
+    }
+    console.log("messages sent " + messagesSent);
 }
 ```
 
@@ -237,7 +237,7 @@ A typical for loop has four distinct places where it’s easy to make errors tha
 
 ```javascript
 for ([initialisation]; [condition]; [final-expression])
-   statement
+    statement
 ```
 
 * The **initialisation** can initialise to the wrong value (e.g. n instead of n-1, 1 instead of 0) or initialise the wrong variable.
@@ -656,9 +656,9 @@ We can chain calls to these functions like so:
 
 ```javascript
 take(2,
-   filter(x=> x%2 === 0,
-       map(x=> x+1, l)
-   )
+    filter(x=> x%2 === 0,
+        map(x=> x+1, l)
+    )
 )
 ```
 
