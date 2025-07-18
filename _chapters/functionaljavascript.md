@@ -504,10 +504,10 @@ We can rewrite basically any function to pass their result to a user-specified c
 
 ```javascript
 function simplePlus(a, b) {
-   return a + b;
+    return a + b;
 }
 function continuationPlus(a, b, done) {
-   done(a+b);
+    done(a + b);
 }
 ```
 
@@ -525,22 +525,80 @@ Consider a tail-recursive implementation of factorial:
 
 ```javascript
 function tailRecFactorial(a, n) {
-   return n<=1 ? a : tailRecFactorial(n*a, n-1);
+    return n <= 1 ? a : tailRecFactorial(n * a, n - 1);
 }
 ```
 
 The function `tailRecFactorial` is tail recursive because the final operation in the function is the recursive call to itself, with no additional computation after this call. We can convert this function into a continuation version by adding an extra parameter `finalAction`:
 
 ```javascript
-function continuationFactorial(
-a, n, finalAction=(result)=>{})
-{
-   if (n<=1) finalAction(a);
-   else continuationFactorial(n*a, n-1, finalAction);
+function continuationFactorial(a, n, finalAction) {
+    if (n <= 1) finalAction(a);
+    else continuationFactorial(n * a, n - 1, finalAction);
 }
 ```
 
-The `continuationFactorial` function uses a continuation by passing a `finalAction` callback that gets called with the result when the recursion reaches the base case `(n <= 1)`, allowing further actions to be specified and executed upon completion.
+The `continuationFactorial` function uses a continuation by passing a `finalAction` callback that gets called with the result when the recursion reaches the base case (`n <= 1`), allowing further actions to be specified and executed upon completion.
+
+```javascript
+continuationFactorial(1, 5, console.log);
+```
+
+> 120
+
+<div class="alert-box" markdown="1">
+**Optional reading: Making functions tail-recursive**
+
+Consider this non-tail-recursive version of factorial:
+
+```javascript
+function factorial(n) {
+    return n <= 1 ? 1 : n * factorial(n - 1);
+}
+```
+
+We can rewrite it to take in a continuation `done` continuation/callback function and to return the result of the callback:
+
+```javascript
+function factorialCPS(n, done) {
+    return n <= 1 ? done(1) : factorialCPS(n - 1, result => n * result);
+}
+```
+
+Functions written this way are said to be written in *continuation-passing style (CPS)*. Notice how `factorialCPS` is a tail-recursive function. We just got a tail-recursive function for free without having to rewrite the logic of the function or add an accumulator parameter!
+
+This might not seem that useful for `factorial`, but imagine you had a more complex recursive function, such as `fibonacci` which calculates the `n`th Fibonacci number (ignoring that there are more efficient ways of computing this without recursion):
+
+```javascript
+function fibonacci(n) {
+    if (n <= 1) {
+        // 0th Fibonacci number is 0
+        // 1st Fibonacci number is 1
+        return n;
+    }
+    const x = fibonacci(n - 1);
+    const y = fibonacci(n - 2);
+    return x + y;
+}
+```
+
+This is harder to convert to a tail-recursive function like we did with `tailRecFactorial` above. However, we can rewrite it with CPS to get a tail-recursive function for free:
+
+```javascript
+function fibonacciCPS(n, done) {
+    if (n <= 1) {
+        return done(n);
+    }
+    return fibonacciCPS(n - 1, x =>
+        fibonacciCPS(n - 2, y =>
+            done(x + y)));
+}
+```
+
+In languages that support [tail call optimisation](/purescript/#tail-call-optimisation), the compiler will be able to optimise the tail call `fibonacciCPS(n - 1, x => ...)` into a loop so that it doesn't add a frame to the call stack, avoiding stack overflow errors. However, it's important to note that CPS doesn't magically make a function use less space; even though a tail-call-optimised `fibonacciCPS` will use less space on the stack than `fibonacci`, it will instead use space on the heap due to the continuation functions/closures capturing their variables.
+
+If you are interested in learning more, [this article](https://www.gresearch.com/news/continuation-passing-style) goes through a more complex example.
+</div>
 
 Continuations are essential in asynchronous processing, which abounds in web programming.  For example, when an HTTP request is dispatched by a client to a server, there is no knowing precisely when the response will be returned (it depends on the speed of the server, the network between client and server, and load on that network).  However, we can be sure that it will not be instant and certainly not before the line of code following the dispatch is executed by the interpreter.  Thus, continuation-style callback functions are typically passed through to functions that trigger such asynchronous behaviour, for those callback functions to be invoked when the action is completed.  A simple example of an asynchronous function invocation is the built-in `setTimeout` function, which schedules an action to occur after a certain delay.  The `setTimeout` function itself returns immediately after dispatching the job, e.g. to the JavaScript event loop:
 
