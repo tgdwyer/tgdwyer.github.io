@@ -116,7 +116,7 @@ Unlike languages which use indentation to define code blocks and scopes (like Py
 You can also put multiple statements on one line by separating them with '`;`':
 
 ```javascript
-> const x = 1+1; const y = 2; console.log(x+y)
+> const x = 1+1; const y = 2; console.log(x+y);
 4
 ⋖ undefined
 ```
@@ -320,7 +320,7 @@ function sumTo(n) {
    }
    return sum;
 }
-sumTo(10)
+sumTo(10);
 ```
 
 > 55
@@ -380,7 +380,7 @@ Each time a function is invoked, the interpreter (or ultimately the CPU) will al
 Therefore, too many levels of recursion will cause a *stack overflow*.
 
 ```javascript
-sumTo(1000000)
+sumTo(1000000);
 ```
 
 > Uncaught RangeError: Maximum call stack size exceeded
@@ -399,7 +399,7 @@ function sumTo(n, sum = 0) {
 We have added a second parameter *sum* to store the computation as recursion proceeds.  Such parameters are called *accumulators*.  The `= 0` in the parameter definition provides a default value in case the caller does not specify an argument.  Thus, this new version can be called the same way as before:
 
 ```javascript
-sumTo(10)
+sumTo(10);
 ```
 
 > 55
@@ -421,7 +421,7 @@ function sumTo(n, f = x => x) {
 Note that the new parameter `f` defaults to a simple function that directly returns its argument.  Thus, called without a second parameter sumTo has the same behaviour as before:
 
 ```javascript
-sumTo(10)
+sumTo(10);
 ```
 
 > 55
@@ -437,7 +437,7 @@ function square(x) {
 can be passed into `sumTo` to compute a sum of squares:
 
 ```javascript
-sumTo(10, square)
+sumTo(10, square);
 > 385
 ```
 
@@ -616,13 +616,13 @@ or to pass as a parameter into another function. For example, `Array` objects ha
 This pattern of passing functions as parameters to other functions is now so common in JavaScript that the ECMAScript 6 standard introduced some new arrow syntax (with slightly different semantics, as explained below) for anonymous functions:
 
 ```javascript
-['tim', 'sally', 'anne'].forEach(person=> console.log('hello ' + person))
+['tim', 'sally', 'anne'].forEach(person=> console.log('hello ' + person));
 ```
 
 Note that whatever value the expression on the right-hand side of the arrow evaluates to is implicitly returned. Here, we use the `map` array method to create a new array from applying the provided function to each element:
 
 ```javascript
-['tim', 'sally', 'anne'].map(person=> "hello " + person)
+['tim', 'sally', 'anne'].map(person=> "hello " + person);
 ```
 
 > ["hello tim", "hello sally", "hello anne"]
@@ -656,7 +656,7 @@ const greeting = function(person) {
 You can also have functions with a list of arguments, just put the list in brackets as for usual function definitions:
 
 ```javascript
-const greeting = (greeting, person)=> greeting + ' ' + person
+const greeting = (greeting, person)=> greeting + ' ' + person;
 ```
 
 This is equivalent to using `lambda` in Python:
@@ -669,9 +669,9 @@ The bodies of the above functions are simple expressions.  If you need a more co
 
 ```javascript
 const greeting = (greeting, person)=> {
-    const msg = greeting + ' ' + person
-    console.log(msg)
-    return msg
+    const msg = greeting + ' ' + person;
+    console.log(msg);
+    return msg;
 };
 ```
 
@@ -680,7 +680,7 @@ const greeting = (greeting, person)=> {
 We can use multi-parameter anonymous functions with another nifty method on `Array` objects which allows us to `reduce` them to a single value.
 
 ```javascript
-[5,8,3,1,7,6,2].reduce((accumulator,x)=>accumulator+x,0)
+[5,8,3,1,7,6,2].reduce((accumulator,x)=>accumulator+x,0);
 ```
 
 > 32
@@ -738,20 +738,20 @@ const any = (test, array) => array.reduce(
 const wordCount = (array) => array.reduce(
     (accumulator, word) => {
         if (word in accumulator) {
-            accumulator[word] += 1
+            accumulator[word] += 1;
         } else {
-            accumulator[word] = 1
+            accumulator[word] = 1;
         }
-        return accumulator
+        return accumulator;
     },
     {}
-)
+);
 ```
 
 Here the `accumulator` is an object which is initially empty.  For each word in the list, the word count is either updated or created in the `accumulator` object.  Note however that this implementation is not *pure*; the aggregator function modifies `accumulator` in place before returning it.
 
 ```javascript
-wordCount(['tim', 'sally', 'tim'])
+wordCount(['tim', 'sally', 'tim']);
 ```
 
 > { tim: 2, sally: 1 }
@@ -845,8 +845,8 @@ function add(x) {
                      // the variable x from its enclosing scope
                      // - “a closure”
 }
-const addNine = add(9)
-addNine(10)
+const addNine = add(9);
+addNine(10);
 ```
 
 > 19
@@ -854,7 +854,7 @@ addNine(10)
 In the above example, the parameter `x` of the `add` function is captured by the anonymous function that is returned, which forms a closure.  Thus, the binding of `x` to a value *persists* beyond the scope of the `add` function itself.  Effectively, we have used the `add` function to create a new function: `y=>y+9`---without actually writing the code ourselves.
 
 ```javascript
-addNine(1)
+addNine(1);
 ```
 
 > 10
@@ -862,7 +862,7 @@ addNine(1)
 We can also call the add function with two arguments at once:
 
 ```javascript
-add(1)(2)
+add(1)(2);
 ```
 
 > 3
@@ -871,7 +871,7 @@ Functions like `add`, which operate on multiple parameters but split the paramet
 
 ```javascript
 function plus(x,y) { return x + y }
-plus(1,2)
+plus(1,2);
 ```
 
 > 3
@@ -883,32 +883,32 @@ Note that functions that are curried can be written in either arrow syntax or us
 ```javascript
 function add(x) {
   return function(y) {
-    return x+y
+    return x+y;
   }
 }
 
-const add = x=>y=>x+y
+const add = x=>y=>x+y;
 ```
 
 As another example, consider a curried wrapper for our `sumTo` from [before](#functions-as-parameters-to-other-functions):
 
 ```javascript
 function sumOf(f) {
-    return n => sumTo(n, f)
+    return n => sumTo(n, f);
 }
 ```
 
 Now, we can create custom functions that compute sums over arbitrary sequences:
 
 ```javascript
-const sumOfSquares = sumOf(square)
-sumOfSquares(10)
+const sumOfSquares = sumOf(square);
+sumOfSquares(10);
 ```
 
 > 385
 
 ```javascript
-sumOfSquares(20)
+sumOfSquares(20);
 ```
 
 > 2870
@@ -925,8 +925,8 @@ In JavaScript you can also create functions as members of objects:
 ```javascript
 const say = {
     hello: person => console.log('hello ' + person)
-}
-say.hello("tim")
+};
+say.hello("tim");
 ```
 
 > "hello tim"
@@ -939,8 +939,8 @@ function Person(name, surname) {
     this.name = name
     this.surname = surname
 }
-const author = new Person('tim', 'dwyer')
-sayHello(author.name)
+const author = new Person('tim', 'dwyer');
+sayHello(author.name);
 ```
 
 > "hello tim"
@@ -948,8 +948,8 @@ sayHello(author.name)
 You can also add method functions to the prototype which are then available from any objects of that type:
 
 ```javascript
-Person.prototype.hello = function() { console.log("hello " + this.name) }
-author.hello()
+Person.prototype.hello = function() { console.log("hello " + this.name) };
+author.hello();
 ```
 
 > "hello tim"
@@ -960,12 +960,12 @@ It’s very tempting to use the prototype editing mechanism for evil.  For examp
 
 ```javascript
 Array.prototype.range =
-  (from, to)=>Array(to)  // allocate space for an array of size `to`
-  .fill()                // populate the array (with `undefined`s)
-  .map((_,i)=>i)         // set each element of the array to its index
-  .filter(v=> v >= from) // filter out values below from
+  (from, to)=>Array(to)   // allocate space for an array of size `to`
+  .fill()                 // populate the array (with `undefined`s)
+  .map((_,i)=>i)          // set each element of the array to its index
+  .filter(v=> v >= from); // filter out values below from
 
-[].range(3,9)
+[].range(3,9);
 ```
 
 > [3,4,5,6,7,8]
@@ -1042,9 +1042,9 @@ function Person(name, occupation) {
 }
 Person.prototype.sayHello = function() {
    console.log(`Hi, my name’s ${this.name} and I ${this.occupation}!`)
-}
-const tim = new Person("Tim","lecture Programming Paradigms")
-tim.sayHello()
+};
+const tim = new Person("Tim","lecture Programming Paradigms");
+tim.sayHello();
 ```
 
 > Hi, my name’s Tim and I lecture Programming Paradigms!
@@ -1098,14 +1098,14 @@ There is also now syntax for “getter properties”: functions which can be inv
 ```javascript
 class Person {
    constructor(name, occupation) {
-       this.name = name
-       this.occupation = occupation
+       this.name = name;
+       this.occupation = occupation;
    }
    get greeting() {
-       return `Hi, my name’s ${this.name} and I ${this.occupation}!`
+       return `Hi, my name’s ${this.name} and I ${this.occupation}!`;
    }
    sayHello() {
-       console.log(this.greeting)
+       console.log(this.greeting);
    }
 }
 ```
@@ -1131,16 +1131,16 @@ And JavaScript classes support single-inheritance to achieve polymorphism:
 ```javascript
 class LoudPerson extends Person {
    sayHello() {
-       console.log(this.greeting.toUpperCase())
+       console.log(this.greeting.toUpperCase());
    }
 }
 
 const tims = [
    new Person("Tim","lecture Programming Paradigms"),
    new LoudPerson("Tim","shout about Programming Paradigms")
-]
+];
 
-tims.forEach(t => t.sayHello())
+tims.forEach(t => t.sayHello());
 ```
 
 > Hi, my name’s Tim and I lecture Programming Paradigms!  
@@ -1153,9 +1153,9 @@ According to Cartelli *et al.*, “Polymorphic types are types whose operations 
 In JavaScript, with no compile-time typecheck, a kind of polymorphism is possible such that if two objects both present a similarly named method that is callable in the same way, of course there is nothing preventing you simply using that method on each object as if it is the same:
 
 ```javascript
-const a = {f: ()=>console.log("a")}
-const b = {f: ()=>console.log("b")}
-[a,b].forEach(o=>o.f())
+const a = {f: ()=>console.log("a")};
+const b = {f: ()=>console.log("b")};
+[a,b].forEach(o=>o.f());
 ```
 
 > a  
@@ -1179,22 +1179,22 @@ It’s useful to compare the above style of polymorphism to a functional approac
 ```javascript
 class Person {
    constructor(name, occupation, voiceTransform = g => g) {
-       this.name = name
-       this.occupation = occupation
-       this.voiceTransform = voiceTransform
+       this.name = name;
+       this.occupation = occupation;
+       this.voiceTransform = voiceTransform;
    }
    get greeting() {
-       return `Hi, my name’s ${this.name} and I ${this.occupation}!`
+       return `Hi, my name’s ${this.name} and I ${this.occupation}!`;
    }
    sayHello() {
-       console.log(this.voiceTransform(this.greeting))
+       console.log(this.voiceTransform(this.greeting));
    }
 }
 const tims = [
    new Person("Tim", "lecture Programming Paradigms"),
    new Person("Tim", "shout about Programming Paradigms", g => g.toUpperCase())
-]
-tims.forEach(t => t.sayHello())
+];
+tims.forEach(t => t.sayHello());
 ```
 
 > Hi, my name’s Tim and I lecture Programming Paradigms!  
