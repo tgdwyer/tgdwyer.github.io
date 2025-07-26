@@ -870,7 +870,7 @@ add(1)(2);
 Functions like `add`, which operate on multiple parameters but split the parameters across multiple nested single parameter functions, are said to be [*curried*](/higherorderfunctions#curried-functions).  Compare to a traditional function of two parameters:
 
 ```javascript
-function plus(x,y) { return x + y }
+function plus(x,y) { return x + y };
 plus(1,2);
 ```
 
@@ -884,7 +884,7 @@ Note that functions that are curried can be written in either arrow syntax or us
 function add(x) {
   return function(y) {
     return x+y;
-  }
+  };
 }
 
 const add = x=>y=>x+y;
@@ -1037,11 +1037,11 @@ Consider another class created with a function and a method added to the prototy
 
 ```javascript
 function Person(name, occupation) {
-   this.name = name
-   this.occupation = occupation
+   this.name = name;
+   this.occupation = occupation;
 }
 Person.prototype.sayHello = function() {
-   console.log(`Hi, my name’s ${this.name} and I ${this.occupation}!`)
+   console.log(`Hi, my name’s ${this.name} and I ${this.occupation}!`);
 };
 const tim = new Person("Tim","lecture Programming Paradigms");
 tim.sayHello();
@@ -1054,11 +1054,11 @@ ES6 introduced a new syntax for classes that will be more familiar to Java progr
 ```javascript
 class Person {
    constructor(name, occupation) {
-       this.name = name
-       this.occupation = occupation
+       this.name = name;
+       this.occupation = occupation;
    }
    sayHello() {
-       console.log(`Hi, my name’s ${this.name} and I ${this.occupation}!`)
+       console.log(`Hi, my name’s ${this.name} and I ${this.occupation}!`);
    }
 }
 ```
