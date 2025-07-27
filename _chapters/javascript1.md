@@ -870,7 +870,7 @@ add(1)(2);
 Functions like `add`, which operate on multiple parameters but split the parameters across multiple nested single parameter functions, are said to be [*curried*](/higherorderfunctions#curried-functions).  Compare to a traditional function of two parameters:
 
 ```javascript
-function plus(x,y) { return x + y };
+function plus(x,y) { return x + y; }
 plus(1,2);
 ```
 
