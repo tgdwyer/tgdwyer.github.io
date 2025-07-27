@@ -948,7 +948,7 @@ sayHello(author.name);
 You can also add method functions to the prototype which are then available from any objects of that type:
 
 ```javascript
-Person.prototype.hello = function() { console.log("hello " + this.name) };
+Person.prototype.hello = function() { console.log("hello " + this.name); };
 author.hello();
 ```
 
