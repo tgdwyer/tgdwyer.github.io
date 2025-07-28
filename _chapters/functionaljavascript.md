@@ -561,7 +561,7 @@ We can rewrite it to take in a continuation `done` continuation/callback functio
 
 ```javascript
 function factorialCPS(n, done) {
-    return n <= 1 ? done(1) : factorialCPS(n - 1, result => n * result);
+    return n <= 1 ? done(1) : factorialCPS(n - 1, result => done(n * result));
 }
 ```
 
