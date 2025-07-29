@@ -119,7 +119,7 @@ These notes focus on introducing programmers who are familiar with the OO paradi
 | Unit of Composition  | [Functions](/javascript1/#functions)  |  [Objects](javascript1#objects) ([classes](/javascript1/#ecmascript-6-class-syntax)) |
 | Programming Style    | Declarative | Imperative |
 | Control Flow         |  [Functions, recursion](/javascript1/#functions) and [chaining](/functionaljavascript/#method-chaining) | [Loops and conditionals](/javascript1/) |
-|  [Polymorphism](Polymorphism)        | [Parametric](/typescript1/#generic-types) | [Sub-Typing](Polymorphism) |
+|  [Polymorphism](/javascript1/#polymorphism)        | [Parametric](/typescript1/#generic-types) | [Sub-Typing](/javascript1/#polymorphism) |
 | Data and Behaviour   | Loosely coupled through [pure](/functionaljavascript/#function-purity-and-referential-transparency), [generic](/typescript1/#generic-types) functions | Tightly coupled in [classes with methods](/javascript1/#ecmascript-6-class-syntax) |
 | State Management     | Treats objects as immutable | Favours mutation of objects through instance methods |
 |  Thread Safety       | Pure functions easily used concurrently | Can be difficult to manage |
