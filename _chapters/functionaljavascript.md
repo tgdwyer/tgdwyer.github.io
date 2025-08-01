@@ -861,6 +861,8 @@ We will see later how the [TypeScript compiler](/typescript1) allows us to creat
 
 You may wonder how pure functions can be efficient if the only way to mutate data structures is by returning a modified copy of the original.  There are two responses to such a question, one is: “purity helps us avoid errors in state management through wanton mutation effects---in modern programming correctness is often a bigger concern than efficiency”, the other is “properly structured data permits log(n) time copy-updates, which should be good enough for most purposes”.  We’ll explore what is meant by the latter in later sections of these notes.
 
+## Glossary
+
 *Callback*: A function passed as an argument to another function, to be executed after some event or action has occurred.
 
 *Chained Functions*: A programming pattern where multiple function calls are made sequentially, with each function returning an object that allows the next function to be called.
