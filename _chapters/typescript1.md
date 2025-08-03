@@ -488,7 +488,7 @@ binarySearch(numberIds,"harry@monash.edu")
 
 > TYPE ERROR!
 
-The `binarySearch2` function above is usable with more types than `binarySearch1`, but it still requires that `T`` does something sensible with`<` and `>`.
+The `binarySearch2` function above is usable with more types than `binarySearch1`, but it still requires that `T` does something sensible with`<` and `>`.
 
 We can add a function to use for comparison, so now we can use it with students uniquely identified by some other weird thing that we don’t even know about yet:
 
