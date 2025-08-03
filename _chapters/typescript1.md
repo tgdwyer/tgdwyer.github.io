@@ -483,7 +483,7 @@ Why is this better than raw JavaScript with no type checking, or simply using Ty
 For example:
 
 ```javascript
-binarySearch(numberIds,"harry@monash.edu")
+binarySearch2(numberIds,"harry@monash.edu")
 ```
 
 > TYPE ERROR!
