@@ -561,7 +561,7 @@ We can rewrite it to take in a continuation `done` continuation/callback functio
 
 ```javascript
 function factorialCPS(n, done) {
-    return n <= 1 ? done(1) : factorialCPS(n - 1, result => n * result);
+    return n <= 1 ? done(1) : factorialCPS(n - 1, result => done(n * result));
 }
 ```
 
@@ -860,6 +860,8 @@ studentVersion1.name = "Tom";
 We will see later how the [TypeScript compiler](/typescript1) allows us to create deeply immutable objects that will trigger compile errors if we try to change their properties.
 
 You may wonder how pure functions can be efficient if the only way to mutate data structures is by returning a modified copy of the original.  There are two responses to such a question, one is: “purity helps us avoid errors in state management through wanton mutation effects---in modern programming correctness is often a bigger concern than efficiency”, the other is “properly structured data permits log(n) time copy-updates, which should be good enough for most purposes”.  We’ll explore what is meant by the latter in later sections of these notes.
+
+## Glossary
 
 *Callback*: A function passed as an argument to another function, to be executed after some event or action has occurred.
 
