@@ -755,7 +755,7 @@ studentVersion2.name = "Tom"
 
 > Cannot assign to 'name' because it is a read-only property.ts(2540)
 
-The above is a singleton immutable Object.  However, more generally, if we need multiple instances of a deeply immutable object, we can
+The above is a singleton immutable Object.  However, more generally, if we need multiple instances of an immutable object with immutable properties, we can
 declare immutable types using the `Readonly` construct:
 
 ```javascript
@@ -777,6 +777,15 @@ studentVersion3.name = "Tom"
 Again, we get the squiggly:
 
 ![Compile Error Screenshot](/assets/images/chapterImages/typescript1/readOnly.png)
+
+Note that `as const` constructs a **deeply immutable** object, meaning that all levels of nested properties within the object are also immutable, but immutability of objects or types created with `ReadOnly` is restricted only to the direct properties of that object.  For example:
+
+```typescript
+const xReadonly: Readonly<{a: {b: number}}> = {a: {b: 1}}
+xReadonly.a.b = 2 // this is allowed
+const xAsConst = {a: {b: 1}} as const
+xAsConst.a.b = 2 // error: Cannot assign to 'b' because it is a read-only property
+```
 
 ## Typing systems with different “degrees” of strictness
 
