@@ -787,6 +787,13 @@ const xAsConst = {a: {b: 1}} as const
 xAsConst.a.b = 2 // error: Cannot assign to 'b' because it is a read-only property
 ```
 
+To declare deeply immutable types, we need to be explicit about every level:
+```typescript
+type DeepReadonly = Readonly<{a: Readonly<{b: number}>}>
+const dr: DeepReadonly = {a: {b: 1}}
+dr.a.b = 2 //error: Cannot assign to 'b' because it is a read-only property
+```
+
 ## Typing systems with different “degrees” of strictness
 
 C++ is considered a strongly typed language in the sense that all types of values and variables must match up on assignment or comparison.  Further, it is “statically” typed in that the compiler requires complete knowledge (at compile-time) of the type of every variable.  This can be overridden (type can be cast away and void pointers passed around) but the programmer has to go out of their way to do it (i.e. opt-out).
