@@ -78,7 +78,7 @@ Now, let’s add a rectangle `<rect>` element inside the SVG to represent the mo
 </svg>
 ```
 
-In this step, we’ve defined a rectangle with a starting position at coordinates (10, 10) and a width and height of 20 units each. The rectangle is filled with a blue colour.  Importantly, we’ve given the `<rect>` element a unique id `blueRectangle` by which we can refer to it elsewhere; below, we’ll demonstrate adding an animation behaviour to this rectangle using this id from CSS or JavaScript.
+In this step, we’ve defined a rectangle with a starting position at coordinates (10, 5) and a width and height of 20 units each. The rectangle is filled with a blue colour.  Importantly, we’ve given the `<rect>` element a unique id `blueRectangle` by which we can refer to it elsewhere; below, we’ll demonstrate adding an animation behaviour to this rectangle using this id from CSS or JavaScript.
 
 Most HTML elements, including SVG elements have certain attributes according to their documentation, which determine how they are rendered and behave in the browser. [MDN](https://developer.mozilla.org/en-US/docs/Web/SVG/Element/rect) is normally a good reference for what is available to use.
 
