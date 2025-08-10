@@ -53,12 +53,13 @@ You could think of our lazy sequences as being “pull-based” data structures,
 Just as we have done for various data structures (arrays and so on) in previous chapters, we can define a transform over an Observable to create a new Observable.  This transformation may have multiple steps the same way that we chained `filter` and `map` operations over arrays previously.  In RxJS’s Observable implementation, however, they’ve gone a little bit more functional, by insisting that such operations are composed (rather than chained) inside a `pipe`.  For example, here’s the squares of even numbers in the range [0,10):
 
 ```javascript
-const isEven = x=>x%2===0,
-      square = x=>x*x
+const isEven = x => x%2 === 0,
+      square = x => x*x
 range(10)
   .pipe(
     filter(isEven),
-    map(square))
+    map(square)
+  )
   .subscribe(console.log)
 ```
 
@@ -87,9 +88,10 @@ To solve the first Project Euler problem using RxJS, we generate a sequence of n
 ```javascript
 range(1000)
   .pipe(
-    filter(x=> x%3===0 || x%5===0),
-    scan((a,v)=>a+v),
-    last())
+    filter(x => x%3 === 0 || x%5 === 0),
+    scan((a,v) => a+v),
+    last()
+  )
   .subscribe(console.log);
 ```
 
@@ -125,8 +127,8 @@ By contrast, the `mergeMap` operator gives the *Cartesian product* of two stream
 
 ```javascript
 columns.pipe(
-  mergeMap(column=>rows.pipe(
-    map(row=>[column, row])
+  mergeMap(column => rows.pipe(
+    map(row => [column, row])
   ))
 ).subscribe(console.log)
 ```
@@ -147,8 +149,8 @@ If we contrast `mergeMap` and `map`, `map` will produce an Observable of Observa
 
 ```javascript
 columns.pipe(
-  map(column=>rows.pipe(
-    map(row=>[column, row])
+  map(column => rows.pipe(
+    map(row => [column, row])
   ))
 ).subscribe(console.log)
 ```
@@ -191,7 +193,7 @@ The following lets us see in the console the keys pressed as they come in, it wi
 
 ```javascript
 key$.pipe(
-  map(e=>e.key)
+  map(e => e.key)
 ).subscribe(console.log)
 ```
 
@@ -203,7 +205,7 @@ The following prints “!!” on every mousedown:
 
 ```javascript
 mouse$.pipe(
-  map(_=>"!!")
+  map(_ => "!!")
 ).subscribe(console.log)
 ```
 
@@ -216,8 +218,8 @@ Once again this will keep producing the message for every mouse click for as lon
 The following achieves the same thing with a single subscription using `merge`:
 
 ```javascript
-merge(key$.pipe(map(e=>e.key)),
-      mouse$.pipe(map(_=>"!!"))
+merge(key$.pipe(map(e => e.key)),
+      mouse$.pipe(map(_ => "!!"))
 ).subscribe(console.log)
 ```
 
@@ -266,7 +268,7 @@ Creating new Observable streams from existing streams
 merge<T, U...>(t: Observable<T>, u: Observable<U>, ...): Observable<T | U | ...>
 
 // create n-ary tuples (arrays) of the elements at the head of each of the incoming streams
-zip<T, U...>(t: Observable<T>, r: Observable<U>):Observable<[T, U, ...]>
+zip<T, U...>(t: Observable<T>, r: Observable<U>): Observable<[T, U, ...]>
 ```
 
 ### Observable methods
@@ -348,15 +350,15 @@ Here’s an event-driven code fragment that provides such dragging for some SVG 
 ```typescript
 const svg = document.getElementById("svgCanvas")!;
 const rect = document.getElementById("draggableRect")!;
-rect.addEventListener('mousedown',e => {
+rect.addEventListener('mousedown', e => {
     const
         xOffset = Number(rect.getAttribute('x')) - e.clientX,
         yOffset = Number(rect.getAttribute('y')) - e.clientY,
-        moveListener = (e:MouseEvent)=>{
-            rect.setAttribute('x',String(e.clientX + xOffset));
-            rect.setAttribute('y',String(e.clientY + yOffset));
+        moveListener = (e:MouseEvent) => {
+            rect.setAttribute('x', String(e.clientX + xOffset));
+            rect.setAttribute('y', String(e.clientY + yOffset));
         },
-        done = ()=>{
+        done = () => {
             svg.removeEventListener('mousemove', moveListener);
         };
     svg.addEventListener('mousemove', moveListener);
@@ -402,9 +404,9 @@ We now rewrite precisely the same behaviour using Observable FRP:
                 x: clientX + mouseDownXOffset,                      //   E
                 y: clientY + mouseDownYOffset                       //   N
               })))))                                                //   C
-    .subscribe(({x, y}) => {                                         //   Y
-      rect.setAttribute('x', String(x))  // >-----------------------------|
-      rect.setAttribute('y', String(y))  // >-----------------------------/
+    .subscribe(({x, y}) => {                                        //   Y
+      rect.setAttribute('x', String(x)) // >-----------------------------|
+      rect.setAttribute('y', String(y)) // >-----------------------------/
     });
 ```
 
@@ -427,8 +429,8 @@ the position of the top-left corner of the rectangle, and (optionally, since it�
 
 ```typescript
 type State = Readonly<{
-  pos:Point,
-  offset?:Point
+  pos: Point,
+  offset?: Point
 }>
 ```
 
@@ -436,9 +438,9 @@ We’ll introduce some types to model the objects coming through the stream and 
 
 ```typescript
 class Point {
-   constructor(public readonly x:number, public readonly y:number){}
-   add(p:Point) { return new Point(this.x+p.x,this.y+p.y) }
-   sub(p:Point) { return new Point(this.x-p.x,this.y-p.y) }
+   constructor(public readonly x: number, public readonly y: number) {}
+   add(p: Point) { return new Point(this.x + p.x,this.y + p.y) }
+   sub(p: Point) { return new Point(this.x - p.x,this.y - p.y) }
 }
 ```
 
@@ -446,8 +448,8 @@ Now we create a subclass of `Point` with a constructor letting us instantiate it
 
 ```typescript
 abstract class MousePosEvent extends Point {
-  constructor(e:MouseEvent) { super(e.clientX, e.clientY) }
-  abstract apply(s:State):State;
+  constructor(e: MouseEvent) { super(e.clientX, e.clientY) }
+  abstract apply(s: State): State;
 }
 ```
 
@@ -455,10 +457,10 @@ And now two further subclasses with concrete definitions for `apply`.
 
 ```typescript
   class DownEvent extends MousePosEvent {
-    apply(s:State) { return { pos: s.pos, offset: s.pos.sub(this) }}
+    apply(s: State) { return { pos: s.pos, offset: s.pos.sub(this) } }
   }
   class DragEvent extends MousePosEvent {
-    apply(s:State) { return { pos: this.add(s.offset), offset: s.offset }}
+    apply(s: State) { return { pos: this.add(s.offset), offset: s.offset } }
   }
 ```
 
@@ -478,7 +480,8 @@ But now we’ll capture initial position of the rectangle one time only in an im
 const initialState: State = {
   pos: new Point(
     Number(rect.getAttribute('x')),
-    Number(rect.getAttribute('y')))
+    Number(rect.getAttribute('y'))
+  )
 }
 ```
 
@@ -491,9 +494,10 @@ mousedown
     mergeMap(mouseDownEvent =>
       mousemove.pipe(
         takeUntil(mouseup),
-        map(mouseDragEvent=>new DragEvent(mouseDragEvent)),
+        map(mouseDragEvent => new DragEvent(mouseDragEvent)),
         startWith(new DownEvent(mouseDownEvent)))),
-      scan((s: State, e: MousePosEvent) => e.apply(s),
+      scan(
+        (s: State, e: MousePosEvent) => e.apply(s),
         initialState))
  .subscribe(e => {
    rect.setAttribute('x', String(e.rect.x))
