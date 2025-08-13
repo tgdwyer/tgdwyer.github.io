@@ -20,7 +20,7 @@ Functional Reactive Programming describes an approach to modelling complex, asyn
 
 We will explore FRP through an implementation of the [Observable](#observable-streams) data structure in [the Reactive Extensions for JavaScript (RxJS) library](https://www.learnrxjs.io/).  We will then see it applied in application to a straightforward [browser-based user interface problem](#a-user-interface-example).
 
-To support the code examples, the streams are visualised using [rxviz](https://rxviz.com/)
+To support the code examples, the streams are visualised using [rxviz](https://rx-viz.vercel.app/).
 
 ## Observable Streams
 
