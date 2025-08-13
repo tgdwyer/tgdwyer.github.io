@@ -4,8 +4,32 @@
         {%- assign default_paths = site.pages | map: "path" -%}
         {%- assign page_paths = site.header_pages | default: default_paths -%}
         {%- assign titles_size = site.pages | map: 'title' | join: '' | size -%}
-        <a class="site-title" rel="author" href="{{ "/" | relative_url }}">{{ site.title | escape }}</a>
+
+        <!-- Lambda icon and site title aligned left in a flex container -->
+        <div style="display: flex; align-items: center;">
+            <button id="play-theme-song" style="background:none;border:none;cursor:pointer;vertical-align:middle;margin-right:2px;" title="Play theme song">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" style="vertical-align:middle;">
+                    <text x="4" y="20" font-size="20" font-family="serif">λ</text>
+                </svg>
+            </button>
+            <a class="site-title" rel="author" href="{{ "/" | relative_url }}" style="margin:0;">{{ site.title | escape }}</a>
+        </div>
         <script src="{{ "/assets/js/hide_solutions.js" | relative_url }}" defer></script>
+        <audio id="theme-song" src="{{ "/assets/themesong.mp3" | relative_url }}"></audio>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var btn = document.getElementById('play-theme-song');
+                var audio = document.getElementById('theme-song');
+                btn.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play();
+                    } else {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                });
+            });
+        </script>
 
         {%- if titles_size > 0 -%}
         <nav class="site-nav">

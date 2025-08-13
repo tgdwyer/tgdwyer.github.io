@@ -64,7 +64,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.7-x64-mingw-ucrt)
       racc (~> 1.4)
-    nokogiri (1.18.8-x86_64-linux-gnu)
+    nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
     pathutil (0.16.2)
       forwardable-extended (~> 2.6)
@@ -86,6 +86,7 @@ GEM
     tzinfo-data (1.2024.1)
       tzinfo (>= 1.0.0)
     unicode-display_width (2.5.0)
+    wdm (0.1.1)
     webrick (1.8.2)
 
 PLATFORMS
@@ -102,6 +103,7 @@ DEPENDENCIES
   minima
   nokogiri
   tzinfo-data
+  wdm (~> 0.1.0)
   webrick
 
 BUNDLED WITH
