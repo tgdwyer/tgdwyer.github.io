@@ -3,26 +3,28 @@
   description: |
     - Understand the motivation for different programming paradigms: to abstract machine operation into human understandable and composable programs
     - Understand the difference between *syntax*, the textual symbols and grammatical rules of a program, and *semantics*, the meaning of what is computed
-    - Understand that there are different models of computation upon which different programming languages are based, including machine models such as Turing Machines and von Neumann architecture, and the Lambda Calculus based on mathematical functions.
-    - Compare the dominant paradigms of [Functional and Objected-Oriented Programming](/levelsofabstraction/#alternative-abstractions) in terms of how they abstract data and behaviour.
+    - Understand that there are different models of computation upon which different programming languages are based, including machine models such as Turing Machines and von Neumann architecture, and the Lambda Calculus based on mathematical functions
+    - Compare the dominant paradigms of [Functional and Objected-Oriented Programming](/levelsofabstraction/#alternative-abstractions) in terms of how they abstract data and behaviour
 - title: JavaScript Introduction
   url: /javascript1/
   description: |
     - Understand and use basic JavaScript coding concepts and features
     - Understand the difference between [mutable and immutable (const) variables](/javascript1#declaring-variables)
-    - Explain the relationship between javascript [functions](/javascript1#functions) and [objects](/javascript1#objects)
+    - Understand the difference between code [expressions and statements](/javascript1#expressions-versus-statements)
+    - Explain the relationship between JavaScript [functions](#functions) and [objects](/javascript1#objects)
     - Understand that the scope of variables is limited to [delineated code blocks](/javascript1#variable-scope) and within [functions](/javascript1#functions)
-    - Understand that a [closure](/javascript1#closures) captures variables referenced within its scope
+    - Understand that a [closure](#closures) captures variables referenced within its scope
     - Create and apply [anonymous functions](/javascript1#anonymous-functions) to fluent style code
     - Compare [arrow functions](/javascript1#arrow-functions) and regular function syntax
+    - Understand how JavaScripts built-in [array](/javascript1#arrays) type and its [associated methods](/javascript1#array-cheatsheet) can be used with arrow functions to process data
     - Explain JavaScript’s [prototype mechanism](/javascript1#prototype-class-mechanism) for creating classes from functions
-    - Create [ES6 style classes](/javascript1#ecmascript-6-class-syntax) with constructors and getters
-    - Compare object oriented [polymorphism](/javascript1#polymorphism) to [dependency injection](/javascript1#dependency-injection) through functions
+    - Create [ES6-style classes](/javascript1#ecmascript-6-class-syntax) with constructors and getters
+    - Compare object-oriented [polymorphism](/javascript1#polymorphism) to [dependency injection](/javascript1#dependency-injection) through functions
 - title: HTML as a Declarative Language
   url: /html/
   description: |
-    - Understand what makes HTML a declarative language and how it describes the structure and content of a web page.
-    - Comprehend the separation of concerns by differentiating structure (HTML), presentation (CSS), and custom behaviour (JavaScript).
+    - Understand what makes HTML a declarative language and how it describes the structure and content of a web page
+    - Comprehend the separation of concerns by differentiating structure (HTML), presentation (CSS), and custom behaviour (JavaScript)
     - Understand how to include and define a basic SVG element within an HTML document
     - Understand how an SVG element may be animated either declaratively through CSS or imperatively through JavaScript
     - Compare the dangers of imperative programs with hidden side effects versus the transparency of declarative style programs
@@ -30,17 +32,17 @@
   url: /functionaljavascript/
   description: |
     - Create programs in JavaScript in a functional style
-    - Understand the definitions of [Function Purity and Referential Transparency](/functionaljavascript#function-purity-and-referential-transparency)
+    - Understand the definitions of [function purity and referential transparency](/functionaljavascript#function-purity-and-referential-transparency)
     - Explain the role of pure functional programming style in managing side effects
     - See how pure functions can be used to [model sophisticated computation](/functionaljavascript#computation-with-pure-functions)
 - title: TypeScript Introduction
   url: /typescript1/
   description: |
-    - Create programs in TypeScript using types to ensure correctness at compile time.
-    - Explain how TypeScript features like Interfaces, Union Types and Optional Properties allow us to model types in common JavaScript coding patterns with precision.
-    - Explain how Generics allow us to create type safe but general and reusable code.
-    - Compare and contrast strongly, dynamically and gradually typed languages.
-    - Describe how compilers that support type inference assist us in writing type safe code.
+    - Create programs in TypeScript using types to ensure correctness at compile time
+    - Explain how TypeScript features like Interfaces, Union Types and Optional Properties allow us to model types in common JavaScript coding patterns with precision
+    - Explain how Generics allow us to create type-safe but general and reusable code
+    - Compare and contrast strongly, dynamically and gradually typed languages
+    - Describe how compilers that support type inference assist us in writing type-safe code
 - title: Lazy Evaluation
   url: /lazyevaluation/
   description: |
@@ -51,9 +53,9 @@
   url: /functionalreactiveprogramming/
   description: |
     - Understand that the Functional Reactive Programming Observable construct is just another container of elements, but whose “push-based” architecture allows them to be used to capture asynchronous behaviour
-    - Understand that Observables provide the benefits of functional programming: composability, reusability.
-    - See that Observables structure complex stateful programs in a more linear and understandable way that maps more easily to the underlying state machine.
-    - Use Observables to create simple UI programs in-place of asynchronous event handling.
+    - Understand that Observables provide the benefits of functional programming: composability, reusability
+    - See that Observables structure complex stateful programs in a more linear and understandable way that maps more easily to the underlying state machine
+    - Use Observables to create simple UI programs in-place of asynchronous event handling
 - title: FRP Asteroids
   url: /asteroids/
   description: |
@@ -61,8 +63,8 @@
 - title: Higher-Order Functions
   url: /higherorderfunctions/
   description: |
-    - Understand that [Higher-Order Functions](/higherorderfunctions/#higher-order-functions) are those which take other functions as input parameters or which return functions
-    - Understand that [curried functions](/higherorderfunctions/#curried-functions) support partial application and therefore creation of functions that are partially specified for reuse scenarios.
+    - Understand that [Higher-Order Functions](/higherorderfunctions/#higher-order-functions) are those that take other functions as input parameters or return functions
+    - Understand that [curried functions](/higherorderfunctions/#curried-functions) support partial application and therefore creation of functions that are partially specified for reuse scenarios
     - Understand that a [Combinator](/higherorderfunctions/#combinators) is a higher-order function that uses only function application and earlier defined combinators to define a result from its arguments
     - Use simple Combinator functions to manipulate and compose other functions
 - title: Lambda Calculus
@@ -74,7 +76,7 @@
 - title: From JavaScript to Haskell (via PureScript)
   url: /purescript/
   description: |
-    - Compare a lambda-calculus inspired Haskell-like language (PureScript) with the functional programming concepts explored earlier in JavaScript
+    - Compare a lambda-calculus-inspired Haskell-like language (PureScript) with the functional programming concepts explored earlier in JavaScript
     - Understand how tail call optimisation is applied in languages which support it
 - title: Creating and Running Haskell Programs
   url: /haskell1/
@@ -94,33 +96,39 @@
 - title: Functor and Applicative
   url: /haskell3/
   description: |
-    - Understand how [eta-conversion](/haskell3#eta-conversion), [operator sectioning](/haskell3#operator-sectioning) and [compose](/haskell3#compose), together provide the ability to transform code to achieve a composable [point free](/haskell3#point-free-code) form and use this technique to refactor code.
-    - Understand that in Haskell the ability to map over container structures is generalised into the [Functor](/haskell3#functor) typeclass, such that any type that is an instance of Functor has the `fmap` or `(<$>)` operation.
-    - Understand that the [Applicative Typeclass](/haskell3#applicative) extends Functor such that containers of functions may be applied (using the `(<*>)` operator) to containers of values.
-    - Understand that Functor and Applicative allow powerful composable types through exploring a [simple applicative functor for parsing](/haskell3#a-simple-applicative-functor-for-parsing).
+    - Understand how [eta-conversion](/haskell3#eta-conversion), [operator sectioning](/haskell3#operator-sectioning) and [compose](/haskell3#compose) together provide the ability to transform code to achieve a composable [point-free](/haskell3#point-free-code) form and use this technique to refactor code
+    - Understand that in Haskell the ability to map over container structures is generalised into the [Functor](/haskell3#functor) typeclass, such that any type that is an instance of Functor has the `fmap` or `(<$>)` operation
+    - Understand that the [Applicative Typeclass](/haskell3#applicative) extends Functor such that containers of functions may be applied (using the `(<*>)` operator) to containers of values
+    - Understand that Functor and Applicative allow powerful composable types through exploring a [simple applicative functor for parsing](/haskell3#a-simple-applicative-functor-for-parsing
 - title: Foldable and Traversable
   url: /haskell4/
   description: |
     - Understand that the “reduce” function we met for arrays and other data structures in JavaScript is referred to as [“folding”](/haskell4/#folds) in Haskell and there are two variants `foldl` and `foldr` for left and right folds respectively
     - Understand that the [Monoid](/haskell4#monoid) typeclass for things that have a predefined rule for aggregation (concatenation), making containers of `Monoid` values trivial to `fold`
     - Understand that [Foldable](/haskell4#foldable) generalises containers that may be folded (or reduced) into values
-    - Understand that [Traversable](/haskell4#traversable) generalises containers over which we can traverse applying a function with an Applicative effect
+    - Understand that [Traversable](/haskell4#traversable) generalises containers over which we can traverse, applying a function with an Applicative effect
 - title: Monad
   url: /monad/
   description: |
-    - Understand that Monad extends [Functor and Applicative](/haskell3/) to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect.
-    - Understand the operation of the monadic bind and join functions in the `Maybe`, `IO`, List and Function instances of Monad.
-    - Be able to refactor monadic binds using [`do` notation](/monad/#do-notation).
-    - [Loop with Monadic effects](/monad/#looping-with-monadic-effects).
+    - Understand that Monad extends [Functor and Applicative](/haskell3/) to provide a bind `(>>=)` operation which allows us to sequence effectful operations such that their effects are flattened or joined into a single effect
+    - Understand the operation of the monadic bind and join functions in the `Maybe`, `IO`, List and Function instances of Monad
+    - Be able to refactor monadic binds using [`do` notation](/monad/#do-notation)
+    - [Loop with Monadic effects](/monad/#looping-with-monadic-effects)
 - title: Eithers
   url: /eithers/
   description: |
-    - Understand how the `Either` type handles values with two possibilities, typically used for error handling and success cases.
-    - Apply the `Functor`, `Applicative`, and `Monad` type classes to the `Either` type, learning how to implement instances for each.
-    - Recognize the power of monadic `do` blocks in simplifying code and handling complex workflows.
+    - Understand how the `Either` type handles values with two possibilities, typically used for error handling and success cases
+    - Apply the `Functor`, `Applicative`, and `Monad` type classes to the `Either` type, learning how to implement instances for each
+    - Recognise the power of monadic `do` blocks in simplifying code and handling complex workflows
 - title: Parser Combinators
   url: /parsercombinators/
   description: |
-    - Understand that a parser is a program which extracts information from a structured text file
+    - Understand that a parser is a program that extracts information from a structured text file
     - Apply what we have learned about Haskell typeclasses and other functional programming concepts to create solutions to real-world problems
     - In particular, we learn to use Parser combinators and see how they are put together
+- title: State Monad
+  url: /statemonad/
+  description: |
+    - Develop a monad to thread an implicit state parameter through otherwise pure functions
+    - Understand that this monad is generalisable to threading any type of state through a sequence of operations
+    - Be aware of the related libraries: `System.Random` and `Control.Monad.State`

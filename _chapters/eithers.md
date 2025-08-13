@@ -3,11 +3,15 @@ layout: chapter
 title: "Eithers"
 ---
 
+<div class="alert-box alert-info" markdown="1">
+**This is optional reading.**
+</div>
+
 ## Learning Outcomes
 
-- Understand how the `Either` type handles values with two possibilities, typically used for error handling and success cases.
-- Apply the `Functor`, `Applicative`, and `Monad` type classes to the `Either` type, learning how to implement instances for each.
-- Recognize the power of monadic `do` blocks in simplifying code and handling complex workflows.
+- Understand how the `Either` type handles values with two possibilities, typically used for error handling and success cases
+- Apply the `Functor`, `Applicative`, and `Monad` type classes to the `Either` type, learning how to implement instances for each
+- Recognise the power of monadic `do` blocks in simplifying code and handling complex workflows
 
 ## Introduction to Eithers
 
@@ -17,13 +21,13 @@ In Haskell, the `Either` type is used to represent values with two possibilities
 data Either a b = Left a | Right b
 ```
 
-In Haskell’s `Either` type, convention ([and the official documentation](https://hackage.haskell.org/package/base-4.20.0.1/docs/Data-Either.html)) says errors go on the `Left` and successes on the `Right`. Why? Because if it is not right (correct) it must be left. This can be considered another example of bias against the left-handed people around the world, but alas, it is a [cruel world](https://www.youtube.com/watch?v=epvlvDzKfv8).
+In Haskell’s `Either` type, convention ([and the official documentation](https://hackage.haskell.org/package/base-4.20.0.1/docs/Data-Either.html)) says errors go on the `Left` and successes on the `Right`. Why? Because if it is not right (correct), it must be left. This can be considered another example of bias against the left-handed people around the world, but alas, it is a [cruel world](https://www.youtube.com/watch?v=epvlvDzKfv8).
 
-The `Left`/`Right` convention is also more general then a `Success`/`Error` naming, as `Left` does not always need to be an error, but it is the most common usage.
+The `Left`/`Right` convention is also more general than a `Success`/`Error` naming, as `Left` does not always need to be an error, but it is the most common usage.
 
 ## Usage of Either
 
-We can use `Either` to help us with error catching, similar to a `Maybe` type. However, since the error case, has a value, rather than `Nothing`, allowing to store an error message to give information to the programmer/user.
+We can use `Either` to help us with error catching, similar to a `Maybe` type. However, the error case has a value rather than `Nothing`, allowing to store an error message to give information to the programmer/user.
 
 ```haskell
 divide :: Double -> Double -> Either String Double
@@ -61,7 +65,7 @@ Before diving into the `Either` typeclass, let’s briefly recap what kinds are:
 
 The `Functor` type class expects a type of kind `* -> *`. For `Either`, this means partially applying the first type parameter, e.g., `instance Functor (Either a)`, where `a` will be the type of the `Left`.
 
-We can then define, `fmap` over either, considering `Left` as the error case, and applying the function, when we have a correct (`Right`) case.
+We can then define `fmap` over `Either`, considering `Left` as the error case, and applying the function when we have a correct (`Right`) case.
 
 ```haskell
 instance Functor (Either a) where
@@ -135,7 +139,7 @@ import Control.Exception (catch, IOException)
 
 readFileSafe :: FilePath -> IO (Either FileError String)
 -- catch any IOException, and use `handleError` on IOException
-readFileSafe path = catch (Right <$> (readFile path)) handleError
+readFileSafe path = catch (Right <$> readFile path) handleError
   where
     handleError :: IOException -> IO (Either FileError String)
     handleError _ = return $ Left FileReadError
@@ -148,7 +152,6 @@ readData :: String -> Either ReadError [String]
 readData content
     | null content = Left $ ReadError "Empty file content"
     | otherwise = Right $ lines content
-
 ```
 
 Define a function to transform the read data. It returns a `Right` with transformed data or a `Left` with a `TransformError`.
@@ -157,30 +160,29 @@ Define a function to transform the read data. It returns a `Right` with transfor
 transformData :: [String] -> Either TransformError [String]
 transformData lines
     | null lines = Left $ TransformError "No lines to transform"
-    -- Simple transformation, where, we reverse each line.
+    -- Simple transformation where we reverse each line.
     | otherwise = Right $ map reverse lines
 ```
 
-The outer `do` block, is using the `IO` monad, while the inner `do` block is using the `Either` monad. This code looks very much like imperative code, using the power of monad to allow for sequencing of operations. However, this is powerful, as it will allow the `Left` error to be threaded through the monadic `do` block, with the user not needing to handle the threading of the error state.
+The outer `do` block is using the `IO` monad, while the inner `do` block is using the `Either` monad. This code looks very much like imperative code, using the power of monads to allow for sequencing of operations. However, this is powerful, as it will allow the `Left` error to be threaded through the monadic `do` block, with the user not needing to handle the threading of the error state.
 
 ```haskell
 main :: IO ()
 main = do
     -- Attempt to read the file
     fileResult <- readFileSafe "example.txt"
-    
     let result = do
             -- Use monad instance to compute sequential operations
             content <- fileResult
             readData <- readData content
-            transformData readdData
+            transformData readData
     print result
 ```
 
 ## Glossary
 
-*Functor*: A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the fmap function, which applies a function to every element in a structure.
+*Functor*: A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the `fmap` function, which applies a function to every element in a structure.
 
-*Applicative*: A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions `pure` and (`<*>`).
+*Applicative*: A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions `pure` and `(<*>)`.
 
-*Monad*: A type class in Haskell that represents computations as a series of steps. It provides the bind operation (`>>=`) to chain operations and the return (or `pure`) function to inject values into the monadic context.
+*Monad*: A type class in Haskell that represents computations as a series of steps. It provides the bind operation `(>>=)` to chain operations and the `return` (or `pure`) function to inject values into the monadic context.
