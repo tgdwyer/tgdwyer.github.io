@@ -100,7 +100,7 @@ Let’s say we want a left- or right-arrow keydown event to start the ship rotat
 ```
 
 So as promised, this function is setting the `transform` property on the ship, using the position and angle information stored in our local `state` object.  We compute the new position by deducting or removing 1 (degree) from the angle (for a left or right rotation respectively) and simultaneously update the state object with the new angle.
-Since we specify 10-millisecond delay, the ship will rotate 100 times per second.
+Since we specify 10-millisecond delay, the ship will rotate 100 degrees per second.
 
 We’re not done yet.  We have to stop the rotation on keyup by calling `clearInterval`, for the specific interval we just created on keydown (using the `handle` we stored).  To do this, we’ll use `document.addEventListener` to specify a separate keyup handler for each keydown event, and since we will be creating a new keyup listener for each keydown event, we will also have to cleanup after ourselves or we’ll have a memory (event) leak:
 
