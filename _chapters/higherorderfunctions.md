@@ -462,26 +462,6 @@ Now we can try to find an id for each student, first from `class1` but fall back
 const ids = students.map(or(lookup(class1))(lookup(class2)))
 ```
 
-### Fork-Join Combinator
-
-The following is cute:
-
-```javascript
-function fork(join, f, g) {
-   return value => join(f(value), g(value));
-}
-```
-
-The `fork` function is a higher-order combinator that combines two functions, `f` and `g`, and then merges their results using a `join` function.
-
----
-
-### Fork-Join Exercise
-
-- Use the fork-join combinator to compute the average over a sequence of numeric values.
-
-- Add type annotations to the above definition of the fork function. How many distinct type variables do you need?
-
 #### Solutions
 
 We can use the fork-join combinator by considering the sum and count of the sequence as the two branches (`f` and `g`), and then using a join function to divide the sum by the count to compute the average.
