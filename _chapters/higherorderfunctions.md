@@ -462,38 +462,6 @@ Now we can try to find an id for each student, first from `class1` but fall back
 const ids = students.map(or(lookup(class1))(lookup(class2)))
 ```
 
-#### Solutions
-
-We can use the fork-join combinator by considering the sum and count of the sequence as the two branches (`f` and `g`), and then using a join function to divide the sum by the count to compute the average.
-
-```typescript
-const sum = arr => arr.reduce((acc, x) => acc + x, 0);
-const count = arr => arr.length;
-
-const average = (sum, count) => sum / count;
-
-// Create the average function using fork
-const computeAverage = fork(average, sum, count);
-
-const values = [1, 2, 3, 4, 5];
-console.log(computeAverage(values));
-```
-
-> 3
-
-We would need four distinct generic types for this function:
-
-```typescript
-function fork<T, U, V, R>(join: (a: U, b: V) => R, f: (value: T) => U, g: (value: T) => V): (value: T) => R {
-  return (value: T) => join(f(value), g(value));
-}
-```
-
-1. `T` for the type of the input value.
-2. `U` for the type of the result of function `f`.
-3. `V` for the type of the result of function `g`.
-4. `R` for the type of the result of the `join` function.
-
 ---
 
 ## End Note
