@@ -21,7 +21,7 @@ If you would like a more gradual introduction, [“Haskell Programming from Firs
 
 ## Starting with the GHCi REPL
 
-A good way to get started with Haskell is simply to experiment with the GHCi REPL (or Read Eval Print Loop).  You can install GHC from [here](https://www.haskell.org/ghcup/).
+A good way to get started with Haskell is simply to experiment with the GHCi REPL (or Read Eval Print Loop).
 
 Start by making a file: `fibs.hs`
 
@@ -34,8 +34,41 @@ fibs n = fibs (n-1) + fibs (n-2) -- recursive definition
 Then load it into GHCi like so:
 
 ```bash
-ghci fibs.hs
+stack ghci fibs.hs
 ```
+
+<div class="alert-box alert-warning" markdown="1">
+**`stack ghci` vs `ghci`**
+
+If you followed our [Haskell installation instructions](/haskell0), you will not have GHC installed globally, and will need to run `stack ghci` instead of just `ghci` on its own. This should work if you run the command from inside the folder for the applied exercises. If you run it outside of the folder, you might get this message:
+
+```none
+Writing the configuration file for the implicit global project to:
+/Users/username/.stack/global-project/stack.yaml. Note: You can change the snapshot via
+the snapshot key there.
+Using the latest snapshot lts-24.7.
+
+Error: [S-6362]
+       No compiler found, expected minor version match with ghc-9.10.2 (aarch64) (based
+       on the configuration in /Users/username/.stack/global-project/stack.yaml).
+
+       To install the correct version of GHC into the subdirectory for the specified
+       platform in Stack's directory for local tools
+       (/Users/username/.stack/programs/aarch64-osx/), try running stack setup or use
+       the --install-ghc flag. To use your system GHC installation, run stack config set
+       system-ghc --global true, or use the --system-ghc flag.
+```
+
+To fix this, edit the `global-project/stack.yaml` file specified in the message above, change `resolver` to
+
+```yml
+resolver: lts-23.25
+```
+
+and then run `stack setup`.
+
+If you are working in an Ed workspace (e.g. for workshops), Stack is not installed, so you will need to run `ghci` instead of `stack ghci`.
+</div>
 
 You’ll get a prompt that looks like:
 
