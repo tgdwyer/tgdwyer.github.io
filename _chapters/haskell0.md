@@ -176,15 +176,10 @@ These may take a while to install, so if you’re installing Haskell during your
   - Install with `stack install hlint`
   - Ensure the ‘Haskell › Plugin › Hlint: Diagnostics On’ (`haskell.plugin.hlint.diagnosticsOn`) setting in VS Code is enabled, which should be the default
 
-If you get an error relating to mismatched versions, try running the `stack install` commands inside the folder where `stack.yaml` is located. Alternatively, edit the file
+If you get an error relating to mismatched versions, try running this first:
 
-- Windows: `%AppData%\stack\global-project\stack.yaml`
-- Non-Windows: `~/.stack/global-project/stack.yaml`
-
-and change the `resolver` to
-
-```yml
-resolver: lts-23.25
+```sh
+stack config set snapshot lts-23.25
 ```
 
 ## Troubleshooting
@@ -256,7 +251,7 @@ If you are curious, here’s an explanation of the different Haskell build tools
 - [**GHC**](https://www.haskell.org/ghc): Glasgow Haskell Compiler, the most popular Haskell compiler.
 - [**Cabal**](https://www.haskell.org/cabal): a Haskell build tool that uses GHC to build Haskell packages, which are specified by a `.cabal` file.
 - [**Stack**](https://www.haskellstack.org): another Haskell build tool that wraps around Cabal. Configuration for Stack is in the `stack.yaml` file.
-  - Stack provides package sets---a collection of packages that compile together---to make managing dependencies less troublesome. The package set is specified by the `resolver` key in `stack.yaml`. For example, if your program depends on package A v1 and package B v1, but package A v1 depends on package B v2, your code won’t compile. A Stack package set might specify to use v2 of package A (which depends on package B v2) and v2 of package B v2, which work together. This way, you only need to say ‘I want package A and package B’, and Stack takes care of the rest.
+  - Stack provides package sets---a collection of packages that compile together---to make managing dependencies less troublesome. The package set is specified by the `snapshot` or `resolver` key in `stack.yaml`. For example, if your program depends on package A v1 and package B v1, but package A v1 depends on package B v2, your code won’t compile. A Stack package set might specify to use v2 of package A (which depends on package B v2) and v2 of package B v2, which work together. This way, you only need to say ‘I want package A and package B’, and Stack takes care of the rest.
   - Importantly, a package set also relies on a specific version of GHC. In this unit, we have set it up so that Stack manages this for you and installs the correct version of GHC for you.
   - Because `.cabal` files can be tedious to write by hand, Stack supports an alternative format, [**hpack**](https://github.com/sol/hpack), in a `package.yaml` file. When you run a Stack command, Stack will automatically generate a `.cabal` file from this.
 - [**HLS**](https://haskell-language-server.readthedocs.io/en/stable): Haskell Language Server. This is the program that editors (e.g. the VS Code Haskell extension) need to give you nice IDE features. Different versions of HLS work with different versions of GHC, which are indicated by `hls-powered` in `ghcup tui`.

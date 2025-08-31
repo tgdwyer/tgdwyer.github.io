@@ -59,10 +59,10 @@ Error: [S-6362]
        system-ghc --global true, or use the --system-ghc flag.
 ```
 
-To fix this, edit the `global-project/stack.yaml` file specified in the message above, change `resolver` to
+To fix this, run
 
-```yml
-resolver: lts-23.25
+```sh
+stack config set snapshot lts-23.25
 ```
 
 and then run `stack setup`.
