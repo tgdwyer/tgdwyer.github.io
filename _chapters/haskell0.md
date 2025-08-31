@@ -176,6 +176,17 @@ These may take a while to install, so if you’re installing Haskell during your
   - Install with `stack install hlint`
   - Ensure the ‘Haskell › Plugin › Hlint: Diagnostics On’ (`haskell.plugin.hlint.diagnosticsOn`) setting in VS Code is enabled, which should be the default
 
+If you get an error relating to mismatched versions, try running the `stack install` commands inside the folder where `stack.yaml` is located. Alternatively, edit the file
+
+- Windows: `%AppData%\stack\global-project\stack.yaml`
+- Non-Windows: `~/.stack/global-project/stack.yaml`
+
+and change the `resolver` to
+
+```yml
+resolver: lts-23.25
+```
+
 ## Troubleshooting
 
 ### Windows Issues
