@@ -98,8 +98,8 @@ We will be installing the following tools:
 To do this, run
 
 ``` sh
-ghcup install --set stack 3.7.1
-ghcup install --set hls 2.11.0.0
+ghcup install stack 3.7.1 --set
+ghcup install hls 2.11.0.0 --set
 ```
 
 Alternatively, GHCup comes with a convenient TUI (terminal user interface):
