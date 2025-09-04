@@ -63,6 +63,13 @@ to check that the installation has succeeded. You might need to restart your ter
 
 If you are on macOS and have Homebrew, you can install GHCup via Homebrew: `brew install ghcup`
 
+<div class="alert-box alert-warning" markdown="1">
+If you install GHCup via Homebrew, you need to add `$HOME/.ghcup/bin` to your `$PATH`. For example, if you use ZSH:
+```sh
+echo 'export PATH="$HOME/.ghcup/bin:$PATH"' >> ~/.zshrc
+```
+</div>
+
 If not, run this command in a terminal:
 
 ``` sh
