@@ -171,6 +171,12 @@ This may download any missing dependencies.
 
 Install the [Haskell extension](https://marketplace.visualstudio.com/items?itemName=haskell.haskell). This provides Haskell language support including language server, syntax highlighting, and linting.
 
+If you are asked
+
+> How do you want the extension to manage/discover HLS and the relevant toolchain?
+
+select the ‘Manually via PATH’ option. This corresponds to the ‘Haskell: Manage HLS’ option in VS Code, which should be set to `PATH` (`"haskell.manageHLS": "PATH"`).
+
 ### Optional Extras
 
 These may take a while to install, so if you’re installing Haskell during your applied class, it is worth getting started on your applied session work instead.
