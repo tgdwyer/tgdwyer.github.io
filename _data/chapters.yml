@@ -78,6 +78,10 @@
   description: |
     - Compare a lambda-calculus-inspired Haskell-like language (PureScript) with the functional programming concepts explored earlier in JavaScript
     - Understand how tail call optimisation is applied in languages which support it
+- title: Haskell Installation
+  url: /haskell0/
+  description: |
+    - Install Haskell via GHCup and Stack
 - title: Creating and Running Haskell Programs
   url: /haskell1/
   description: |

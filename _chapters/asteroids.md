@@ -851,7 +851,7 @@ The job of the programmer (e.g., you in Assignment 1) will be to create appropri
 
 Finally, we need to make a couple more additions to the CSS to display the rocks and game over text:
 
-```CSS
+```css
 .rock {
   fill: burlywood;
 }
