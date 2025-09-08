@@ -405,6 +405,21 @@ fibs n = case n of
 
 </div>
 
+## A lazy infinite sequence
+
+Let's briefly revisit fibonacci numbers and demonstrate a very idiomatic haskell construction for defining a lazy sequence.  In the following definition for `lazyFibs`, `zipWith` is a function which uses the specified function (in this case `(+)`) to pair the heads of two given lists.  In this case, we are zipping over recursive references to `lazyFibs` and `tail lazyFibs`.
+
+```haskell
+lazyFibs = 1 : 1 : zipWith (+) lazyFibs (tail lazyFibs)
+```
+We can then create as much of the list as we need:
+```haskell
+take 10 lazyFibs
+[1,1,2,3,5,8,13,21,34,55]
+```
+This is only possible because Haskell's lazy evaluation only forces evaluation of the heads of the lists as necessary, e.g. to output the result of `take 10`.
+![Deck Observable Visualised](/assets/images/chapterImages/haskell1/zip.gif)
+
 ## Glossary
 
 *GHCi REPL*: The interactive Read-Eval-Print Loop for GHC, the Glasgow Haskell Compiler, allowing users to test Haskell programs and expressions interactively.
