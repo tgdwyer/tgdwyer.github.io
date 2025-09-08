@@ -151,8 +151,7 @@ By the way, once you are in the `IO` monad, you can’t easily get rid of it.  A
 The `print` function is equivalent to the PureScript `log $ show`.  That is, it uses any available `show` function for the type of value being printed to convert it to a string, and it then prints that string.  Haskell defines show for many types in the Prelude, but print in this case invokes it for us.  The other difference here is that square brackets operators are defined in the prelude for linked lists.  In PureScript they were used for Arrays---which (in PureScript) don’t have the range operator (`..`) defined so I avoided them.  Speaking of List operators, here’s a summary:
 
 <div class="cheatsheet" markdown="1">
-
-## Basic List and Tuple Operator Cheatsheet
+**Basic List and Tuple Operator Cheatsheet**
 
 The default Haskell lists are cons lists (linked lists defined with a `cons` function), similar to [those we defined in JavaScript](/functionaljavascript/#computation-with-pure-functions).
 
@@ -450,7 +449,7 @@ fibs n = case n of
 ```
 
 </div>
-
+---
 ## Glossary
 
 *GHCi REPL*: The interactive Read-Eval-Print Loop for GHC, the Glasgow Haskell Compiler, allowing users to test Haskell programs and expressions interactively.

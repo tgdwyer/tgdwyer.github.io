@@ -29,7 +29,8 @@ Now we can create a small list like so:
 l = Cons 1 $ Cons 2 $ Cons 3 Nil
 ```
 
-### Aside: data vs newtype
+<div class="alert-box alert-info" markdown="1">
+**`data` vs `newtype`**
 
 We can construct a type `UserId` with one parameter, `Int`
 
@@ -45,9 +46,10 @@ student :: UserId
 student = UserId 1337
 ```
 
-The `newtype` keyword is used to define a type that has **exactly** one constructor with **exactly** one field. It is primarily used for creating a distinct type from an existing type with *zero runtime* overhead. This can be useful for adding type safety to your code by creating new types that are distinct from their underlying types or giving types a greater semantic meaning, e.g., a UserId compared to an Int.
+The `newtype` keyword is used to define a type that has *exactly* one constructor with *exactly* one field. It is primarily used for creating a distinct type from an existing type with *zero runtime* overhead. This can be useful for adding type safety to your code by creating new types that are distinct from their underlying types or giving types a greater semantic meaning, e.g., a UserId compared to an Int.
 
 The data keyword is used to define an algebraic data type (ADT). This allows for the creation of complex data structures that can have multiple constructors. Each constructor can take zero or more arguments, and these arguments can be of any type.
+</div>
 
 ## Pattern Matching
 
