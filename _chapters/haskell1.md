@@ -237,9 +237,23 @@ But there are definitely cons:
 - It can be hard to reason about runtime performance
 - Mixing up strict and lazy evaluation (which can happen inadvertently) can lead to (for example) O(n<sup>2</sup>) behaviour in what should be linear time processing.
 
----
+## Lazy infinite lists
 
-### A Side Note on the Y Combinator
+Note that our "Hello world!" function to recursively compute the $n^{th}$ Fibonacci number [above](#starting-with-the-ghci-repl) was not at all efficient (in fact $O(2^n)$).  We will now demonstrate a very idiomatic haskell construction for defining a lazy sequence of Fibonacci numbers that is linear time in the number of fibs required.  In the following definition for `lazyFibs`, `zipWith` is a function which uses the specified function (in this case `(+)`) to pair the heads of two given lists.  In this case, we are zipping over recursive references to `lazyFibs` and `tail lazyFibs`.
+
+```haskell
+lazyFibs = 1 : 1 : zipWith (+) lazyFibs (tail lazyFibs)
+```
+We can then create as much of the list as we need:
+```haskell
+take 10 lazyFibs
+[1,1,2,3,5,8,13,21,34,55]
+```
+This is only possible because Haskell's lazy evaluation only forces evaluation of the heads of the lists as necessary, e.g. to output the result of `take 10`.
+![Deck Observable Visualised](/assets/images/chapterImages/haskell1/zip.gif)
+
+<div class="alert-box alert-info" markdown="1">
+**A Side Note on the Y Combinator**
 
 The Haskell way of defining Lambda (anonymous) functions is heavily inspired by [Lambda Calculus](/lambdacalculus/), but also looks a bit reminiscent of the JavaScript arrow syntax:
 
@@ -269,7 +283,7 @@ y = \f -> (\x -> f (unsafeCoerce x x)) (\x -> f (unsafeCoerce x x))
 main = putStrLn $ y ("circular reasoning works because " ++)
 ```
 
----
+</div>
 
 ## Functional Programming in Haskell versus JavaScript
 
@@ -382,8 +396,7 @@ sort (pivot:rest) = let
 Note that where is only available in function declarations, not inside expressions and therefore is not available in a lambda.  However, `let`-`in` is part of the expression, and therefore available inside a lambda function.  A silly example would be:  `\i -> let f x = 2*x in f i`, which could also be spread across lines, but be careful to get the correct indentation.
 
 <div class="cheatsheet" markdown="1">
-
-## Conditional Code Constructs Cheatsheet
+**Conditional Code Constructs Cheatsheet**
 
 ### Pattern matching
 
@@ -437,21 +450,6 @@ fibs n = case n of
 ```
 
 </div>
-
-## A lazy infinite sequence
-
-Let's briefly revisit fibonacci numbers and demonstrate a very idiomatic haskell construction for defining a lazy sequence.  In the following definition for `lazyFibs`, `zipWith` is a function which uses the specified function (in this case `(+)`) to pair the heads of two given lists.  In this case, we are zipping over recursive references to `lazyFibs` and `tail lazyFibs`.
-
-```haskell
-lazyFibs = 1 : 1 : zipWith (+) lazyFibs (tail lazyFibs)
-```
-We can then create as much of the list as we need:
-```haskell
-take 10 lazyFibs
-[1,1,2,3,5,8,13,21,34,55]
-```
-This is only possible because Haskell's lazy evaluation only forces evaluation of the heads of the lists as necessary, e.g. to output the result of `take 10`.
-![Deck Observable Visualised](/assets/images/chapterImages/haskell1/zip.gif)
 
 ## Glossary
 
