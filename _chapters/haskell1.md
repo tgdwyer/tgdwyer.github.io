@@ -248,7 +248,7 @@ We can then create as much of the list as we need:
 take 10 lazyFibs
 [1,1,2,3,5,8,13,21,34,55]
 ```
-This is only possible because Haskell's lazy evaluation only forces evaluation of the heads of the lists as necessary, e.g. to output the result of `take 10`.
+This works (as opposed to the recursive definition of `lazyFibs` causing an infinite loop) because Haskell's lazy evaluation only forces evaluation of the heads of the lists as necessary, e.g. to output the result of `take 10`.
 ![Deck Observable Visualised](/assets/images/chapterImages/haskell1/zip.gif)
 
 <div class="alert-box alert-info" markdown="1">
