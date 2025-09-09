@@ -8,7 +8,7 @@ gem "jekyll"#, "~> 4.2.0"
 gem "jekyll-feed", "~> 0.12"
 gem "jekyll-sitemap", "~> 1.4"
 gem "jekyll-sass-converter", "~> 2.1"
-gem "nokogiri"
+gem "nokogiri", "~> 1.18.0"
 
 gem "webrick"  # Local server
 
