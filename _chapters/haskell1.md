@@ -234,11 +234,11 @@ However, lazy by default sets Haskell apart.  It has pros and cons; on the pro s
 But there are definitely cons:
 
 - It can be hard to reason about runtime performance
-- Mixing up strict and lazy evaluation (which can happen inadvertently) can lead to (for example) O(n<sup>2</sup>) behaviour in what should be linear time processing.
+- Mixing up strict and lazy evaluation (which can happen inadvertently) can lead to (for example) $\mathcal{O}(n^2)$ behaviour in what should be linear time processing.
 
 ## Lazy infinite lists
 
-Note that our "Hello world!" function to recursively compute the $n^{th}$ Fibonacci number [above](#starting-with-the-ghci-repl) was not at all efficient (in fact $O(2^n)$).  We will now demonstrate a very idiomatic haskell construction for defining a lazy sequence of Fibonacci numbers that is linear time in the number of fibs required.  In the following definition for `lazyFibs`, `zipWith` is a function which uses the specified function (in this case `(+)`) to pair the heads of two given lists.  In this case, we are zipping over recursive references to `lazyFibs` and `tail lazyFibs`.
+Note that our "Hello world!" function to recursively compute the $n^\text{th}$ Fibonacci number [above](#starting-with-the-ghci-repl) was not at all efficient (in fact $\mathcal{O}(2^n)$).  We will now demonstrate a very idiomatic haskell construction for defining a lazy sequence of Fibonacci numbers that is linear time in the number of fibs required.  In the following definition for `lazyFibs`, `zipWith` is a function which uses the specified function (in this case `(+)`) to pair the heads of two given lists.  In this case, we are zipping over recursive references to `lazyFibs` and `tail lazyFibs`.
 
 ```haskell
 lazyFibs = 1 : 1 : zipWith (+) lazyFibs (tail lazyFibs)
