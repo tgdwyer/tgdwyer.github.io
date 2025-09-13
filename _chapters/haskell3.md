@@ -433,7 +433,7 @@ Node (Node (Leaf 1) 2 (Leaf 3)) 4 (Node (Leaf 5) 6 (Leaf 7))
 Law of Composition:
 
 ```haskell
-> (+1) <$> (*2) <$> tree
+> (+1) <$> ((*2) <$> tree)
 Node (Node (Leaf 3) 5 (Leaf 7)) 9 (Node (Leaf 11) 13 (Leaf 15))
 > (+1).(*2) <$> tree
 Node (Node (Leaf 3) 5 (Leaf 7)) 9 (Node (Leaf 11) 13 (Leaf 15))
