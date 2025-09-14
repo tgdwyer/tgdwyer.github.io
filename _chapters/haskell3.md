@@ -242,7 +242,7 @@ map f (x:xs) = f x : map f xs
 
 It’s easy to generalise this pattern to any data structure that holds one or more values: mapping a function over a data structure creates a new data structure whose elements are the result of applying the function to the elements of the original data structure. We have seen examples of generalising the idea of mapping previously, for example, mapping over a `Tree`.
 
-In Haskell this pattern is captured in a type class called [`Functor`](/assets/functor.mp3), which defines a function called `fmap`.
+In Haskell this pattern is captured in a type class called [`Functor`](/assets/WhatTheFunctor.mp3), which defines a function called `fmap`.
 
 ```haskell
 Prelude> :i Functor
