@@ -372,11 +372,11 @@ We can formalise the definition of Functor with two laws:
 
 The law of ***identity***
 
-∀ x: (id <$> x) ≡ x
+∀ x: (id <\\$> x) ≡ x
 
 The law of ***composition***
 
-∀ f, g, x: (f ∘ g <$> x) ≡ (f <$> (g <$> x))
+∀ f, g, x: (f ∘ g <\\$> x) ≡ (f <\\$> (g <\\$> x))
 
 Note that these laws are not enforced by the compiler when you create your own instances of `Functor`.  You’ll need to test them for yourself.  Following these laws guarantees that general code (e.g. algorithms) using `fmap` will also work for your own instances of `Functor`.
 
