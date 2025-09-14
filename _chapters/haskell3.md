@@ -378,6 +378,8 @@ The law of ***composition***
 
 ∀ f, g, x: (f ∘ g <\\$> x) ≡ (f <\\$> (g <\\$> x))
 
+(∘ has higher precedence than <\\$>, so f ∘ g <\\$> x is equal to (f ∘ g) <\\$> x.)
+
 Note that these laws are not enforced by the compiler when you create your own instances of `Functor`.  You’ll need to test them for yourself.  Following these laws guarantees that general code (e.g. algorithms) using `fmap` will also work for your own instances of `Functor`.
 
 Let’s make a custom instance of `Functor` for a simple binary tree type and check that the laws hold.  Here’s a simple binary tree data type:
