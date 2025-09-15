@@ -1008,7 +1008,8 @@ is c = Parser $
     _ -> Nothing
 ```
 
-### Aside: How do we get to that parser?
+<div class="alert-box alert-info" markdown="1">
+**Aside: How do we get to that parser?**
 
 The `is` function constructs a parser that succeeds and consumes a character from the input string if it matches the specified character c, otherwise it fails.
 
@@ -1052,7 +1053,7 @@ is c = Parser $
     _ -> Nothing
 ```
 
----
+</div>
 
 By making `Parser` an instance of `Functor`, we will be able to map functions over the result of a parse. This is very useful! For example, consider the `int` parser, which parses a string to an `integer`, and if we want to apply a function to the result, such as adding 1 `(+1)`, we can fmap this over the parser.
 
@@ -1068,14 +1069,28 @@ The `fmap` function for the `Functor` instance of `Parser` needs to apply the pa
 ```haskell
 instance Functor Parser where
   fmap f (Parser p) = Parser $
-    \i -> case p i of
-      Just (rest, result) -> Just (rest, f result)
-      _ -> Nothing
+    \inputString -> 
+      case p inputString of
+        Just (rest, result) -> Just (rest, f result)
+        _ -> Nothing
+```
+These definition is a bit tedious.  We have to explicitly run the parser and unbox the result of the given parser (but only if it succeeds), in order to apply the function f to the result.
+
+If we take advantage of the fact that everything buried away inside the `Parser` is also an instance `Functor`, we can have a much simpler definition of `fmap` for `Parser`:
+
+```haskell
+instance Functor Parser where
+  fmap f (Parser p) = Parser $ f (fmap.fmap.fmap) p
 ```
 
-That definition may be difficult to understand on first look, but we take apply the parser `p` and apply the function `f` to the result of the parsing, i.e., we apply the parser `p` and if it succeeds (returns a `Just`) we apply the function `f` to the `result`.
+---
 
-However, we can take advantage of the fact that the `Tuple` returned by the parse function is also an instance of `Functor` to make the definition more succinct.  That is, we are applying the function `f` to the second item of a tuple—that is exactly what the `fmap` for the `Functor` instance of a `Tuple` does! So we can rewrite to use the `Tuple` `fmap`, or rather its alias `(<$>)`:
+**Exercise:** derive this short definition of `fmap` for `Parser`, from the previous longer version by introducing one nested `fmap` at a time.
+
+### Solutions
+
+**`fmap` over `Tuple`:**
+We can take advantage of the fact that the `Tuple` returned by the parse function is also an instance of `Functor`.  That is, we are applying the function `f` to the second item of a tuple—that is exactly what the `fmap` for the `Functor` instance of a `Tuple` does! So we can rewrite to use the `Tuple` `fmap`, or rather its alias `(<$>)`:
 
 ```haskell
 instance Functor Parser where
@@ -1085,6 +1100,7 @@ instance Functor Parser where
       _ -> Nothing
 ```
 
+**`fmap` over `Maybe`:**
 Carefully examining this, what we are doing is applying `(f <$>)` if the result is a `Just`, or ignoring if the result is `Nothing`. This is exactly what the `Maybe` instance of `Functor` does, so we can `fmap` over the `Maybe` also:
 
 ```haskell
@@ -1092,6 +1108,7 @@ instance Functor Parser where
   fmap f (Parser p) = Parser (\i -> (f <$>) <$> p i )
 ```
 
+**eta reduce:**
 Let’s try rearrange to make it point [point-free](/haskell3/#point-free-code), eliminating the lambda.
 First, let’s add some brackets, to make the evaluation order more explicit.
 
@@ -1114,6 +1131,7 @@ instance Functor Parser where
   fmap f (Parser p) = Parser (((f <$>) <$>) . p)
 ```
 
+**`fmap` over `Function`:**
 The last thing we notice is that the `Functor` instance for functions is defined as compose. Therefore, we have finally reached the end of our journey and can rewrite this as follows.
 
 ```haskell
@@ -1123,7 +1141,11 @@ instance Functor Parser where
   fmap f (Parser p) = Parser (((f <$>) <$>) <$> p)
 ```
 
-The whacky triple-nested application of `<$>` comes about because the result type `a` in our `Parser` type is nested inside a Tuple (`(,a)`), nested inside a `Maybe`, nested inside a function (`->r`).  So now we can map (or `fmap`, to be precise) a function over the value produced by a `Parser`.  For example:
+The whacky triple-nested application of `<$>` comes about because the result type `a` in our `Parser` type is nested inside a Tuple (`(,a)`), nested inside a `Maybe`, nested inside a function (`->r`).  
+
+---
+
+So now we can map (or `fmap`, to be precise) a function over the value produced by a `Parser`.  For example:
 
 ```haskell
 > parse ((+1)<$>int) "1bc"
