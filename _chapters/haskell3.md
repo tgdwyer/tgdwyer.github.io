@@ -242,7 +242,7 @@ map f (x:xs) = f x : map f xs
 
 It’s easy to generalise this pattern to any data structure that holds one or more values: mapping a function over a data structure creates a new data structure whose elements are the result of applying the function to the elements of the original data structure. We have seen examples of generalising the idea of mapping previously, for example, mapping over a `Tree`.
 
-In Haskell this pattern is captured in a type class called `Functor`, which defines a function called `fmap`.
+In Haskell this pattern is captured in a type class called [`Functor`](/assets/WhatTheFunctor.mp3), which defines a function called `fmap`.
 
 ```haskell
 Prelude> :i Functor
@@ -1324,7 +1324,7 @@ Therefore, after applying this parser, it will result in: `Just ("", (\a b -> a)
 
 *Point-Free Code*: A style of defining functions without mentioning their arguments explicitly. This often involves the use of function composition and other combinators.
 
-*Functor*: A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the fmap function, which applies a function to every element in a structure.
+*Functor*: A type class in Haskell that represents types that can be mapped over. Instances of [Functor](/assets/WhatTheFunctor.mp3) must define the fmap function, which applies a function to every element in a structure.
 
 *Applicative*: A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (<*>).
 

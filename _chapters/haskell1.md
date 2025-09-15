@@ -234,11 +234,11 @@ However, lazy by default sets Haskell apart.  It has pros and cons; on the pro s
 But there are definitely cons:
 
 - It can be hard to reason about runtime performance
-- Mixing up strict and lazy evaluation (which can happen inadvertently) can lead to (for example) O(n<sup>2</sup>) behaviour in what should be linear time processing.
+- Mixing up strict and lazy evaluation (which can happen inadvertently) can lead to (for example) $\mathcal{O}(n^2)$ behaviour in what should be linear time processing.
 
 ## Lazy infinite lists
 
-Note that our "Hello world!" function to recursively compute the $n^{th}$ Fibonacci number [above](#starting-with-the-ghci-repl) was not at all efficient (in fact $O(2^n)$).  We will now demonstrate a very idiomatic haskell construction for defining a lazy sequence of Fibonacci numbers that is linear time in the number of fibs required.  In the following definition for `lazyFibs`, `zipWith` is a function which uses the specified function (in this case `(+)`) to pair the heads of two given lists.  In this case, we are zipping over recursive references to `lazyFibs` and `tail lazyFibs`.
+Note that our "Hello world!" function to recursively compute the $n^\text{th}$ Fibonacci number [above](#starting-with-the-ghci-repl) was not at all efficient (in fact $\mathcal{O}(2^n)$).  We will now demonstrate a very idiomatic haskell construction for defining a lazy sequence of Fibonacci numbers that is linear time in the number of fibs required.  In the following definition for `lazyFibs`, `zipWith` is a function which uses the specified function (in this case `(+)`) to pair the heads of two given lists.  In this case, we are zipping over recursive references to `lazyFibs` and `tail lazyFibs`.
 
 ```haskell
 lazyFibs = 1 : 1 : zipWith (+) lazyFibs (tail lazyFibs)
@@ -248,7 +248,7 @@ We can then create as much of the list as we need:
 take 10 lazyFibs
 [1,1,2,3,5,8,13,21,34,55]
 ```
-This is only possible because Haskell's lazy evaluation only forces evaluation of the heads of the lists as necessary, e.g. to output the result of `take 10`.
+This works (as opposed to the recursive definition of `lazyFibs` causing an infinite loop) because Haskell's lazy evaluation only forces evaluation of as much of the list as absolutely necessary, e.g. to output the result of `take 10`.
 ![Deck Observable Visualised](/assets/images/chapterImages/haskell1/zip.gif)
 
 <div class="alert-box alert-info" markdown="1">
