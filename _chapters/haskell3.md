@@ -1324,7 +1324,7 @@ Therefore, after applying this parser, it will result in: `Just ("", (\a b -> a)
 
 *Point-Free Code*: A style of defining functions without mentioning their arguments explicitly. This often involves the use of function composition and other combinators.
 
-*Functor*: A type class in Haskell that represents types that can be mapped over. Instances of [Functor](/assets/WhatTheFunctor.mp3) must define the fmap function, which applies a function to every element in a structure.
+*Functor*: A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the fmap function, which applies a function to every element in a structure.
 
 *Applicative*: A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (<*>).
 
