@@ -28,7 +28,7 @@ module Jekyll
 
       site.data.glossary.each do |entry|
         term = entry['term'].downcase
-        definition = Kramdown::Document.new(entry['definition']).to_html.gsub(/<\/?p>/, '')
+        definition = Kramdown::Document.new(entry['definition']).to_html.gsub(/<\/?p>/, '').gsub(/<a.*?>(.+?)<\/a>/, '$1')
         first_appeared = entry['first_appeared']
 
         @@glossary_terms[term] = [definition, first_appeared]

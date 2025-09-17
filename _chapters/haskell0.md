@@ -197,6 +197,8 @@ stack config set snapshot lts-23.25
 
 ## Troubleshooting
 
+For further issues, see [GHCup’s Troubleshooting page](https://www.haskell.org/ghcup/guide/#troubleshooting).
+
 ### Windows Issues
 
 #### `invalid argument (invalid character)`
@@ -242,6 +244,10 @@ Add the following line to the bottom of the file:
 ``` yml
 local-programs-path: C:\stack-programs
 ```
+
+#### Script immediately exits
+
+If the script exits without installing anything, you might need to disable any third-party antivirus software.
 
 ### macOS Issues
 
