@@ -107,7 +107,7 @@ DEPENDENCIES
   jekyll-sass-converter (~> 2.1)
   jekyll-sitemap (~> 1.4)
   minima
-  nokogiri (~> 1.18.0)
+  nokogiri
   tzinfo-data
   wdm (~> 0.1.0)
   webrick
