@@ -35,7 +35,7 @@
   definition: The processes a computer follows when executing a program in a given language.
   first_appeared: levelsofabstraction
 - term: Imperative
-  definition: Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembler to Python are built around this concept and most modern languages still allow you to program in this style.
+  definition: Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
   first_appeared: levelsofabstraction
 - term: Procedural
   definition: Procedural languages are basically *imperative* in nature, but add the concept of named *procedures*, i.e. named subroutines that may be invoked from elsewhere in the program, with parameterised variables that may be passed in.
@@ -146,7 +146,7 @@
   definition: A TypeScript construct that allows a variable to hold values of multiple specified types, separated by the `|` symbol.
   first_appeared: typescript1
 - term: Functor
-  definition: A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the fmap function, which applies a function to every element in a structure.
+  definition: A type class in Haskell that represents types that can be mapped over. Instances of [Functor](/assets/WhatTheFunctor.mp3) must define the fmap function, which applies a function to every element in a structure.
   first_appeared: haskell3
 - term: Applicative
   definition: A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (<*>).
@@ -184,6 +184,15 @@
 - term: Lazy Evaluation
   definition: A strategy where expressions are not evaluated until their values are needed, allowing for the creation of infinite sequences and delayed computations.
   first_appeared: lazyevaluation
+- term: Callback
+  definition: A function passed as an argument to another function, to be executed after some event or action has occurred.
+  first_appeared: functionaljavascript
+- term: Chained Functions
+  definition: A programming pattern where multiple function calls are made sequentially, with each function returning an object that allows the next function to be called.
+  first_appeared: functionaljavascript
+- term: Fluent Interface
+  definition: A method chaining pattern where a sequence of method calls is made on the same object, with each method returning the object itself or another chainable object.
+  first_appeared: functionaljavascript
 - term: Operator Sectioning
   definition: The process of partially applying an infix operator in Haskell by specifying one of its arguments. For example, (+1) is a section of the addition operator with 1 as the second argument.
   first_appeared: haskell3
@@ -223,8 +232,8 @@
 - term: K-combinator
   definition: A combinator that takes two arguments and returns the first one.
   first_appeared: higherorderfunctions
-- term: Algebraic Data Types (or ADTs)
-  definition: Custom data types in Haskell defined using the data keyword, allowing the combination of different types into one composite type using the \| operator.
+- term: Algebraic Data Types
+  definition: (or ADTs) Custom data types in Haskell defined using the data keyword, allowing the combination of different types into one composite type using the \| operator.
   first_appeared: haskell2
 - term: Record Syntax
   definition: An alternate way to define data structures in Haskell with named fields, automatically creating accessor functions for those fields.
