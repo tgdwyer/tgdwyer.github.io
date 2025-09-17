@@ -11,9 +11,7 @@ GEM
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0)
     eventmachine (1.2.7)
-    ffi (1.17.2-arm64-darwin)
-    ffi (1.17.2-x64-mingw-ucrt)
-    ffi (1.17.2-x86_64-linux)
+    ffi (1.17.2)
     forwardable-extended (2.6.0)
     http_parser.rb (0.8.0)
     i18n (1.14.7)
@@ -62,12 +60,14 @@ GEM
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     mercenary (0.4.0)
+    mini_portile2 (2.8.9)
     minima (2.5.2)
       jekyll (>= 3.5, < 5.0)
       jekyll-feed (~> 0.9)
       jekyll-seo-tag (~> 2.1)
       racc (~> 1.4)
-      racc (~> 1.4)
+    nokogiri (1.18.10)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     pathutil (0.16.2)
       forwardable-extended (~> 2.6)
@@ -104,7 +104,7 @@ DEPENDENCIES
   jekyll-sass-converter (~> 2.1)
   jekyll-sitemap (~> 1.4)
   minima
-  nokogiri
+  nokogiri (~> 1.18.0)
   tzinfo-data
   wdm (~> 0.1.0)
   webrick
