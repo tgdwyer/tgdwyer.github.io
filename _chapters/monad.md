@@ -399,7 +399,7 @@ they all take a common parameter, e.g. a line break character.
 ```haskell
 greet linebreak = "Dear Gentleperson,"++linebreak 
 body sofar linebreak = sofar ++ linebreak ++ "It has come to my attention that… " ++ linebreak
-signoff sofar linebreak = sofar ++ linebreak ++ "Your’s truly," ++ linebreak ++ "Tim" ++ linebreak
+signoff sofar linebreak = sofar ++ linebreak ++ "Yours truly," ++ linebreak ++ "Tim" ++ linebreak
 putStrLn $ (greet >>= body >>= signoff) "\r\n"
 ```
 
