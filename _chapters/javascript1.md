@@ -1119,7 +1119,7 @@ class Person:
         self.occupation = occupation
 
     @property
-    def greeting():
+    def greeting(self):
        return f"Hi, my name's {self.name} and I {self.occupation}!"
 
     def say_hello(self):
