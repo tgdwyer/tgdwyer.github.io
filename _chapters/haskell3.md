@@ -888,7 +888,7 @@ class Applicative f => Alternative (f :: * -> *) where
   (<|>) :: f a -> f a -> f a
 ```
 
-`empty`: This function represents a computation with *no result or a failure*. It serves as the identity element. For different data types that are instances of Alternative, `empty` represents an empty container or a *failed computation*, depending on the context.
+`empty`: This function represents a computation with either *no result, or a failure*. It serves as the identity element. For different data types that are instances of Alternative, `empty` represents an empty container or a *failed computation*, depending on the context.
 
 `(<|>)`: The `<|>` operator combines two computations, and it’s used to express alternatives. It takes two computations of the same type and returns a computation that will produce a result from the first computation if it succeeds, or if it fails, it will produce a result from the second computation. This operator allows you to handle branching logic and alternative paths in your code.
 
