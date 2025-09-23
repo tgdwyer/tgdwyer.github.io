@@ -869,7 +869,7 @@ This will allow us to make more functions point-free
 
 ```haskell
 square :: Num a => a => a
-square = a * a
+square a = a * a
 ```
 
 ```haskell
