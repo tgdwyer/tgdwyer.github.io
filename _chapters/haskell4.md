@@ -104,7 +104,7 @@ Note that since the `(+)` operator is associative—a+(b+c) = (a+b)+c—`foldr` 
 
 ## Monoid
 
-In the example fold above, we provide the `(+)` function to tell `foldl` how to aggregate elements of the list.  There is also a typeclass for things that are “automatically aggregatable” or “concatenatable” called `Monoid` which declares a general function for `mappend` combining two `Monoid`s into one, a `mempty` value such that any Monoid `mappend`'ed with `mempty` is itself, and a concatenation function for lists of `Monoid` called `mconcat`.
+In the example fold above, we provide the `(+)` function to tell `foldl` how to aggregate elements of the list.  There is also a typeclass for things that are “automatically aggregable” or “concatenatable” called `Monoid` which declares a general function for `mappend` combining two `Monoid`s into one, a `mempty` value such that any Monoid `mappend`'ed with `mempty` is itself, and a concatenation function for lists of `Monoid` called `mconcat`.
 
 ```haskell
 Prelude> :i Monoid
@@ -133,7 +133,7 @@ Prelude Data.Monoid> getSum $ mconcat $ Sum <$> [5,8,3,1,7,6,2]
 
 > 32
 
-We make a data type aggregatable by instancing `Monoid` and providing definitions for the functions `mappend` and `mempty`.  For `Sum` these will be `(+)` and `0` respectively.
+We make a data type aggregable by instancing `Monoid` and providing definitions for the functions `mappend` and `mempty`.  For `Sum` these will be `(+)` and `0` respectively.
 Lists are also themselves Monoidal, with `mappend` defined as an alias for list concatenation `(++)`, and mempty as `[]`.  Thus, we can:
 
 ```haskell
