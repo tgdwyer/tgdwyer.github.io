@@ -1,0 +1,1189 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Parser Combinators | Good Times Paradigms</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="Parser Combinators">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Learning Outcomes">
+<meta property="og:description" content="Learning Outcomes">
+<meta property="og:site_name" content="Good Times Paradigms">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-09-30T03:56:06+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="Parser Combinators">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-30T03:56:06+00:00","datePublished":"2025-09-30T03:56:06+00:00","description":"Learning Outcomes","headline":"<span class="glossary-term" data-term="parser">Parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <span class="glossary-term" data-term="combinators">Combinators<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span>","mainEntityOfPage":{"@type":"WebPage","@id":"/parsercombinators/"},"url":"/parsercombinators/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Good Times Paradigms"><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-159840333-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159840333-1');
+</script><!-- MathJax v3 -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true }
+  };
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+  <script src="/assets/js/spoilers.js" defer=""></script></head>
+
+  <body><header class="site-header">
+
+    <div class="wrapper"><!-- Lambda icon and site title aligned left in a flex container -->
+        <div style="display: flex; align-items: center;">
+            <button id="play-theme-song" style="background:none;border:none;cursor:pointer;vertical-align:middle;margin-right:2px;" title="Play theme song">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="currentColor" viewBox="0 0 48 24" style="vertical-align:middle;">
+                    <text x="4" y="20" font-size="20" font-family="serif">ΓΤΠ</text>
+                    <!-- γτπ -->
+                </svg>
+            </button>
+            <a class="site-title" rel="author" href="/" style="margin:0;">Good Times Paradigms</a>
+        </div>
+        <script src="/assets/js/hide_solutions.js" defer=""></script>
+        <audio id="theme-song" src="/assets/themesong.mp3"></audio>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var btn = document.getElementById('play-theme-song');
+                var audio = document.getElementById('theme-song');
+                btn.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play();
+                    } else {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                });
+            });
+        </script><nav class="site-nav">
+            <input type="checkbox" id="nav-trigger" class="nav-trigger">
+            <label for="nav-trigger">
+                <span class="menu-icon">
+                </span>
+            </label>
+
+            <div class="nav-items"><a class="page-link nav-item" href="/about/">About</a><a class="page-link nav-item" href="/">Notes on Programming Paradigms</a><!-- Radio Switch -->
+                <div id="toggle-div" style="display: none;">
+                    <div class="solutions-toggle">
+                        <p class="page-link" style="margin-bottom: 0px;">Show Solutions?</p>
+                        <label class="switch" style="vertical-align: middle;">
+                            <input type="checkbox" id="toggle-switch">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/eithers/">&lt; Eithers</a>
+      
+      
+        
+        
+        <a id="right" href="/statemonad/">State <span class="glossary-term" data-term="monad">Monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span> &gt;</a>
+      
+    
+  
+    
+  
+</div>
+
+	<header class="post-header">
+		<h1 class="post-title">Parser Combinators</h1>
+	</header>
+	<p id="readingTime">
+
+  
+  43
+
+ min read</p>
+	<div class="post-content">
+		<h2 id="learning-outcomes">Learning Outcomes</h2>
+
+<ul>
+  <li>Understand that a <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> is a program that extracts information from structured text</li>
+  <li>Apply what we have learned about Haskell typeclasses and other <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming concepts to create solutions to real-world problems</li>
+  <li>In particular, we learn to use <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <span class="glossary-term" data-term="combinators">combinators<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span> and see how they are put together</li>
+</ul>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>In this section we will see how the various Haskell language features we have explored allow us to solve real-world problems.  In particular, we will develop a simple but powerful library for building <em><span class="glossary-term" data-term="parsers">parsers<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span></em> that is compositional through <a href="/haskell3/#functor"><span class="glossary-term" data-term="functor">Functor<span class="glossary-popup">A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the fmap function, which applies a function to every element in a structure.
+</span></span></a>, <a href="/haskell3/#applicative"><span class="glossary-term" data-term="applicative">Applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span></a> and <a href="/monad"><span class="glossary-term" data-term="monad">Monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span></a> <span class="glossary-term" data-term="interfaces">interfaces<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span>.  Before this, though, we will learn the basics of parsing text, including a high-level understanding that <span class="glossary-term" data-term="parsers">parsers<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> are <em>state machines</em> which realise a <em><span class="glossary-term" data-term="context-free grammar">context-free grammar<span class="glossary-popup">A type of formal grammar that is used to define the syntax of programming languages and data formats. CFGs consist of a set of production rules that define how terminals and non-terminals can be combined to produce strings in the language.
+</span></span></em> over a textual language.</p>
+
+<p>Previously, <a href="/haskell3/#a-simple-applicative-functor-for-parsing">we glimpsed a very simplistic <span class="glossary-term" data-term="applicative">Applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span></a>.
+In this chapter, a <em><span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span></em> is still simply a function which takes a string as input and produces some structure or computation as output, but now we extend the <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> with monadic “<span class="glossary-term" data-term="bind">bind<span class="glossary-popup">The defining function which all monads must implement.
+</span></span>” definitions, richer error handling and the ability to handle non-trivial grammars with <span class="glossary-term" data-term="alternative">alternative<span class="glossary-popup">A type class in Haskell that extends Applicative, introducing the empty and &lt;|&gt; functions for representing computations that can fail or have multiple outcomes.
+</span></span> inputs.</p>
+
+<p>Parsing has a long history and <em><span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <span class="glossary-term" data-term="combinators">combinators<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span></em> are a relatively recent approach made popular by modern <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming techniques.<br>
+A <em><span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <span class="glossary-term" data-term="combinator">combinator<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span></em> is a <a href="/higherorderfunctions"><span class="glossary-term" data-term="higher-order function">higher-order function<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span></a> that accepts <span class="glossary-term" data-term="parsers">parsers<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> as input and combines them somehow into a new <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span>.</p>
+
+<p>More traditional approaches to parsing typically involve special-purpose programs called <em><span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> generators</em>, which take as input a grammar defined in a special language (usually some derivation of BNF as described below) and generate the partial program in the desired programming language, which must then be completed by the programmer to parse such input.  <span class="glossary-term" data-term="parser">Parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <span class="glossary-term" data-term="combinators">combinators<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span> have the advantage that they are entirely written in the one language.  <span class="glossary-term" data-term="parser">Parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <span class="glossary-term" data-term="combinators">combinators<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span> written in Haskell take advantage of the expressiveness of the Haskell language such that the finished <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> can look a lot like a BNF grammar definition, as we shall see.</p>
+
+<p>The <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <span class="glossary-term" data-term="combinator">combinator<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span> discussed here is based on one developed by Tony Morris and Mark Hibberd as part of their <a href="https://github.com/system-f/fp-course">“System F” <span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> Programming Course</a>, which in turn is a simplified version of official Haskell <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <span class="glossary-term" data-term="combinators">combinators<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span> such as <a href="https://hackage.haskell.org/package/parsec">parsec</a> by Daan Leijen.</p>
+
+<p>You can play with the example and the various <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> bits and pieces in <a href="https://replit.com/@tgdwyer/Parser-Examples">this online playground</a>.</p>
+
+<h2 id="context-free-grammars-and-bnf">Context-free Grammars and BNF</h2>
+
+<p>Fundamental to the analysis of human natural language but also to the design of programming languages is the idea of a <em>grammar</em>, or a set of rules for how elements of the language may be composed.  A <span class="glossary-term" data-term="context-free grammar">context-free grammar<span class="glossary-popup">A type of formal grammar that is used to define the syntax of programming languages and data formats. CFGs consist of a set of production rules that define how terminals and non-terminals can be combined to produce strings in the language.
+</span></span> (CFG) is one in which the set of rules for what is produced for a given input (<em>production rules</em>) completely covers the set of possible input symbols (i.e. there is no additional context required to parse the input).  <span class="glossary-term" data-term="backus-naur form">Backus-Naur Form<span class="glossary-popup">A notation for expressing context-free grammars. It is used to formally describe the syntax of programming languages.
+</span></span> (or BNF) is a notation that has become standard for writing CFGs since the 1960s.  We will use BNF notation from now on.  There are two types of symbols in a CFG: <em><span class="glossary-term" data-term="terminal">terminal<span class="glossary-popup">In the context of grammars, a terminal is a symbol that appears in the strings generated by the grammar. Terminals are the actual characters or tokens of the language.
+</span></span></em> and <em><span class="glossary-term" data-term="non-terminal">non-terminal<span class="glossary-popup">A symbol in a grammar that can be replaced by a sequence of terminals and non-terminals according to the production rules of the grammar.
+</span></span></em>.  In BNF <span class="glossary-term" data-term="non-terminal">non-terminal<span class="glossary-popup">A symbol in a grammar that can be replaced by a sequence of terminals and non-terminals according to the production rules of the grammar.
+</span></span> symbols are <code class="language-plaintext highlighter-rouge">&lt;nameInsideAngleBrackets&gt;</code> and can be converted into a mixture of <span class="glossary-term" data-term="terminals">terminals<span class="glossary-popup">In the context of grammars, a terminal is a symbol that appears in the strings generated by the grammar. Terminals are the actual characters or tokens of the language.
+</span></span> and/or nonterminals by production rules:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="n">nonterminal</span><span class="o">&gt;</span> <span class="o">::=</span> <span class="n">a</span> <span class="n">mixture</span> <span class="kr">of</span> <span class="n">terminals</span> <span class="n">and</span> <span class="o">&lt;</span><span class="n">nonterminal</span><span class="o">&gt;</span><span class="n">s</span><span class="p">,</span> <span class="n">alternatives</span> <span class="n">separated</span> <span class="n">by</span> <span class="o">|</span>
+</code></pre></div></div>
+
+<p>Thus, <em><span class="glossary-term" data-term="terminals">terminals<span class="glossary-popup">In the context of grammars, a terminal is a symbol that appears in the strings generated by the grammar. Terminals are the actual characters or tokens of the language.
+</span></span></em> may only appear on the right-hand side of a production rule, <em><span class="glossary-term" data-term="non-terminals">non-terminals<span class="glossary-popup">A symbol in a grammar that can be replaced by a sequence of terminals and non-terminals according to the production rules of the grammar.
+</span></span></em> on either side.  In BNF each <em><span class="glossary-term" data-term="non-terminal">non-terminal<span class="glossary-popup">A symbol in a grammar that can be replaced by a sequence of terminals and non-terminals according to the production rules of the grammar.
+</span></span></em> symbol appears on the left-hand side of exactly one production rule, and there may be several possible <span class="glossary-term" data-term="alternatives">alternatives<span class="glossary-popup">A type class in Haskell that extends Applicative, introducing the empty and &lt;|&gt; functions for representing computations that can fail or have multiple outcomes.
+</span></span> for each <em><span class="glossary-term" data-term="non-terminal">non-terminal<span class="glossary-popup">A symbol in a grammar that can be replaced by a sequence of terminals and non-terminals according to the production rules of the grammar.
+</span></span></em> specified on the right-hand side.  These are separated by a <code class="language-plaintext highlighter-rouge">|</code> (in this regard they look a bit like the <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> for <a href="/haskell2#algebraic-data-types">algebraic data type definitions</a>).</p>
+
+<p>Note that production rules of the form above are for <span class="glossary-term" data-term="context-free grammars">context-free grammars<span class="glossary-popup">A type of formal grammar that is used to define the syntax of programming languages and data formats. CFGs consist of a set of production rules that define how terminals and non-terminals can be combined to produce strings in the language.
+</span></span>.  As a definition by counter-example, <em>context-sensitive grammars</em> allow <span class="glossary-term" data-term="terminals">terminals<span class="glossary-popup">In the context of grammars, a terminal is a symbol that appears in the strings generated by the grammar. Terminals are the actual characters or tokens of the language.
+</span></span> and more than one <span class="glossary-term" data-term="non-terminal">non-terminal<span class="glossary-popup">A symbol in a grammar that can be replaced by a sequence of terminals and non-terminals according to the production rules of the grammar.
+</span></span> on the left-hand side.</p>
+
+<p>Here’s an example BNF grammar for parsing Australian land-line phone numbers, which may optionally include a two-digit area code in brackets, and then two groups of four digits, with an arbitrary number of spaces separating each of these, e.g.:</p>
+
+<blockquote>
+  <p>(03) 9583 1762<br>
+9583 1762</p>
+</blockquote>
+
+<p>Here’s the BNF grammar:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="n">phoneNumber</span><span class="o">&gt;</span> <span class="o">::=</span> <span class="o">&lt;</span><span class="n">fullNumber</span><span class="o">&gt;</span> <span class="o">|</span> <span class="o">&lt;</span><span class="n">basicNumber</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">fullNumber</span><span class="o">&gt;</span> <span class="o">::=</span> <span class="o">&lt;</span><span class="n">areaCode</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">basicNumber</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">basicNumber</span><span class="o">&gt;</span> <span class="o">::=</span> <span class="o">&lt;</span><span class="n">spaces</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">fourDigits</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">spaces</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">fourDigits</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">fourDigits</span><span class="o">&gt;</span> <span class="o">::=</span> <span class="o">&lt;</span><span class="n">digit</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">digit</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">digit</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">digit</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">areaCode</span><span class="o">&gt;</span> <span class="o">::=</span> <span class="s">"("</span> <span class="o">&lt;</span><span class="n">digit</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">digit</span><span class="o">&gt;</span> <span class="s">")"</span>
+<span class="o">&lt;</span><span class="n">digit</span><span class="o">&gt;</span> <span class="o">::=</span> <span class="s">"0"</span> <span class="o">|</span> <span class="s">"1"</span> <span class="o">|</span> <span class="s">"2"</span> <span class="o">|</span> <span class="s">"3"</span> <span class="o">|</span> <span class="s">"4"</span> <span class="o">|</span> <span class="s">"5"</span> <span class="o">|</span> <span class="s">"6"</span> <span class="o">|</span> <span class="s">"7"</span> <span class="o">|</span> <span class="s">"8"</span> <span class="o">|</span> <span class="s">"9"</span>
+<span class="o">&lt;</span><span class="n">spaces</span><span class="o">&gt;</span> <span class="o">::=</span> <span class="s">" "</span> <span class="o">&lt;</span><span class="n">spaces</span><span class="o">&gt;</span> <span class="o">|</span> <span class="s">""</span>
+</code></pre></div></div>
+
+<p>So <code class="language-plaintext highlighter-rouge">"0"</code>-<code class="language-plaintext highlighter-rouge">"9"</code>, <code class="language-plaintext highlighter-rouge">"("</code>, <code class="language-plaintext highlighter-rouge">")"</code>, and <code class="language-plaintext highlighter-rouge">" "</code> are the full set of <span class="glossary-term" data-term="terminals">terminals<span class="glossary-popup">In the context of grammars, a terminal is a symbol that appears in the strings generated by the grammar. Terminals are the actual characters or tokens of the language.
+</span></span>.</p>
+
+<p>Now here’s a sneak peek at a simple <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> for such phone numbers.  It succeeds for any input string that satisfies the above grammar, returning a 10-digit string for the full number without spaces and assumes “03” for the area code for numbers with none specified (i.e. it assumes they are local to Victoria).  Our <a href="/parsercombinators/#parser-type"><code class="language-plaintext highlighter-rouge">Parser</code> type</a> provides a function <code class="language-plaintext highlighter-rouge">parse</code> which we call like so:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">GHCi</span><span class="o">&gt;</span> <span class="n">parse</span> <span class="n">phoneNumber</span> <span class="s">"(02)9583 1762"</span>
+<span class="kt">Result</span> <span class="o">&gt;&lt;</span> <span class="s">"0295831762"</span>
+
+<span class="kt">GHCi</span><span class="o">&gt;</span> <span class="n">parse</span> <span class="n">phoneNumber</span> <span class="s">"9583  1762"</span>
+<span class="kt">Result</span> <span class="o">&gt;&lt;</span> <span class="s">"0395831762"</span>
+
+<span class="kt">GHCi</span><span class="o">&gt;</span> <span class="n">parse</span> <span class="n">phoneNumber</span> <span class="s">"9583-1762"</span>
+<span class="kt">Unexpected</span> <span class="n">character</span><span class="o">:</span> <span class="s">"-"</span>
+</code></pre></div></div>
+
+<p>We haven’t bothered to show the types for each of the functions in the code below, as they are all <code class="language-plaintext highlighter-rouge">::Parser [Char]</code> - meaning a <span class="glossary-term" data-term="parser">Parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> that returns a string.  We’ll explain all the types and functions used in due course.  For now, just notice how similar the code is to the BNF grammar definition:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">phoneNumber</span> <span class="o">=</span> <span class="n">fullNumber</span> <span class="o">&lt;|&gt;</span> <span class="p">((</span><span class="s">"03"</span><span class="o">++</span><span class="p">)</span> <span class="o">&lt;$&gt;</span> <span class="n">basicNumber</span><span class="p">)</span>
+
+<span class="n">fullNumber</span> <span class="o">=</span> <span class="kr">do</span>
+   <span class="n">ac</span> <span class="o">&lt;-</span> <span class="n">areaCode</span>
+   <span class="n">n</span> <span class="o">&lt;-</span> <span class="n">basicNumber</span>
+   <span class="n">pure</span> <span class="p">(</span><span class="n">ac</span> <span class="o">++</span> <span class="n">n</span><span class="p">)</span>
+
+<span class="n">basicNumber</span> <span class="o">=</span> <span class="kr">do</span>
+   <span class="n">spaces</span>
+   <span class="n">first</span> <span class="o">&lt;-</span> <span class="n">fourDigits</span>
+   <span class="n">spaces</span>
+   <span class="n">second</span> <span class="o">&lt;-</span> <span class="n">fourDigits</span>
+   <span class="n">pure</span> <span class="p">(</span><span class="n">first</span> <span class="o">++</span> <span class="n">second</span><span class="p">)</span>
+
+<span class="n">fourDigits</span> <span class="o">=</span> <span class="kr">do</span>
+  <span class="n">a</span> <span class="o">&lt;-</span> <span class="n">digit</span>
+  <span class="n">b</span> <span class="o">&lt;-</span> <span class="n">digit</span>
+  <span class="n">c</span> <span class="o">&lt;-</span> <span class="n">digit</span>
+  <span class="n">d</span> <span class="o">&lt;-</span> <span class="n">digit</span>
+  <span class="n">pure</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span><span class="p">]</span>
+
+<span class="n">areaCode</span> <span class="o">=</span> <span class="kr">do</span>
+  <span class="n">is</span> <span class="sc">'('</span>
+  <span class="n">a</span> <span class="o">&lt;-</span> <span class="n">digit</span>
+  <span class="n">b</span> <span class="o">&lt;-</span> <span class="n">digit</span>
+  <span class="n">is</span> <span class="sc">')'</span>
+  <span class="n">pure</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h2 id="parser-type">Parser Type</h2>
+
+<p>In essence, our <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> is going to be summed up by a couple of types:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">type</span> <span class="kt">Input</span> <span class="o">=</span> <span class="kt">String</span>
+<span class="kr">newtype</span> <span class="kt">Parser</span> <span class="n">a</span> <span class="o">=</span> <span class="kt">P</span> <span class="p">{</span> <span class="n">parse</span> <span class="o">::</span> <span class="kt">Input</span> <span class="o">-&gt;</span> <span class="kt">ParseResult</span> <span class="n">a</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>We assume all <code class="language-plaintext highlighter-rouge">Input</code> is a <code class="language-plaintext highlighter-rouge">String</code>, i.e. Haskell’s basic built-in <code class="language-plaintext highlighter-rouge">String</code> which is a list of <code class="language-plaintext highlighter-rouge">Char</code>.</p>
+
+<p>Then the <code class="language-plaintext highlighter-rouge">Parser</code> type has one field <code class="language-plaintext highlighter-rouge">parse</code> which is a function of type <code class="language-plaintext highlighter-rouge">Input -&gt; ParseResult a</code>.  So it parses strings and produces parse results, where a Parse result is:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kr">data</span> <span class="kt">ParseResult</span> <span class="n">a</span> <span class="o">=</span> <span class="kt">Error</span> <span class="kt">ParseError</span>
+                    <span class="o">|</span> <span class="kt">Result</span> <span class="kt">Input</span> <span class="n">a</span>
+  <span class="kr">deriving</span> <span class="kt">Eq</span>
+</code></pre></div></div>
+
+<p>We’ll come back to the <code class="language-plaintext highlighter-rouge">ParseError</code> type - which will be returned in the case of unexpected input, but we can see that a successful Parse is going to produce a <code class="language-plaintext highlighter-rouge">Result</code> which has two fields—more <code class="language-plaintext highlighter-rouge">Input</code> (the part of the input remaining after we took a bit off and parsed it), and an <code class="language-plaintext highlighter-rouge">a</code>, a <span class="glossary-term" data-term="type parameter">type parameter<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> that we may specify for concrete <code class="language-plaintext highlighter-rouge">Parser</code> instances.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">Parser</code> and the <code class="language-plaintext highlighter-rouge">ParseResult</code> types are pretty abstract.  They say nothing about what precise <code class="language-plaintext highlighter-rouge">Input</code> string we are going to parse, or what type <code class="language-plaintext highlighter-rouge">a</code> we are going to return in the result.  This is the strength of the <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span>, allowing us to build up sophisticated <span class="glossary-term" data-term="parsers">parsers<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> for different input grammars through composition using <a href="/parsercombinators/#instances">instances of <span class="glossary-term" data-term="functor">Functor<span class="glossary-popup">A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the fmap function, which applies a function to every element in a structure.
+</span></span>, <span class="glossary-term" data-term="applicative">Applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> and <span class="glossary-term" data-term="monad">Monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span></a>, and the <code class="language-plaintext highlighter-rouge">ParseResult</code> parameter <code class="language-plaintext highlighter-rouge">a</code> allows us to produce whatever we want from the <span class="glossary-term" data-term="parsers">parsers<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> we create.</p>
+
+<h2 id="error-handling">Error Handling</h2>
+
+<p>Error handling is a very important part of any real-world <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span>.  Decent error reporting allows us to quickly diagnose problems in our input.
+As we saw above a <code class="language-plaintext highlighter-rouge">ParseResult</code> may be either a successful <code class="language-plaintext highlighter-rouge">Result</code> or an <code class="language-plaintext highlighter-rouge">Error</code>, the latter containing information in a <code class="language-plaintext highlighter-rouge">ParseError</code> data structure about the nature of the error.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">ParseError</span> <span class="o">=</span>
+    <span class="kt">UnexpectedEof</span> <span class="c1">-- hit end of file when we expected more input</span>
+  <span class="o">|</span> <span class="kt">ExpectedEof</span> <span class="kt">Input</span> <span class="c1">-- should have successfully parsed everything but there’s more!</span>
+  <span class="o">|</span> <span class="kt">UnexpectedChar</span> <span class="kt">Char</span>
+  <span class="o">|</span> <span class="kt">UnexpectedString</span> <span class="kt">String</span>
+  <span class="kr">deriving</span> <span class="p">(</span><span class="kt">Eq</span><span class="p">,</span> <span class="kt">Show</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Naturally it needs to be <code class="language-plaintext highlighter-rouge">Show</code>able, and we’ll throw in an <code class="language-plaintext highlighter-rouge">Eq</code> for good measure.
+<!-- was “but also `Eq`uality testable so that we can pattern match `ParseResult` to handle particular types of errors.”. This may be misleading because pattern matching works even without Eq! --></p>
+
+<h2 id="instances">Instances</h2>
+
+<p>First an instance of <code class="language-plaintext highlighter-rouge">Show</code> to pretty print the <code class="language-plaintext highlighter-rouge">ParseResult</code>s:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Show</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="kt">Show</span> <span class="p">(</span><span class="kt">ParseResult</span> <span class="n">a</span><span class="p">)</span> <span class="kr">where</span>
+  <span class="n">show</span> <span class="p">(</span><span class="kt">Result</span> <span class="n">i</span> <span class="n">a</span><span class="p">)</span>                 <span class="o">=</span> <span class="s">"Result &gt;"</span> <span class="o">++</span> <span class="n">i</span> <span class="o">++</span> <span class="s">"&lt; "</span> <span class="o">++</span> <span class="n">show</span> <span class="n">a</span>
+  <span class="n">show</span> <span class="p">(</span><span class="kt">Error</span> <span class="kt">UnexpectedEof</span><span class="p">)</span>        <span class="o">=</span> <span class="s">"Unexpected end of stream"</span>
+  <span class="n">show</span> <span class="p">(</span><span class="kt">Error</span> <span class="p">(</span><span class="kt">UnexpectedChar</span> <span class="n">c</span><span class="p">))</span>   <span class="o">=</span> <span class="s">"Unexpected character: "</span> <span class="o">++</span> <span class="n">show</span> <span class="p">[</span><span class="n">c</span><span class="p">]</span>
+  <span class="n">show</span> <span class="p">(</span><span class="kt">Error</span> <span class="p">(</span><span class="kt">UnexpectedString</span> <span class="n">s</span><span class="p">))</span> <span class="o">=</span> <span class="s">"Unexpected string: "</span> <span class="o">++</span> <span class="n">show</span> <span class="n">s</span>
+  <span class="n">show</span> <span class="p">(</span><span class="kt">Error</span> <span class="p">(</span><span class="kt">ExpectedEof</span> <span class="n">i</span><span class="p">))</span>      <span class="o">=</span>
+    <span class="s">"Expected end of stream, but got &gt;"</span> <span class="o">++</span> <span class="n">show</span> <span class="n">i</span> <span class="o">++</span> <span class="s">"&lt;"</span>
+</code></pre></div></div>
+
+<p>And <code class="language-plaintext highlighter-rouge">ParseResult</code> is also an instance of <code class="language-plaintext highlighter-rouge">Functor</code> so that we can map functions over the output of a successful parse—or do nothing if the result is an <code class="language-plaintext highlighter-rouge">Error</code>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Functor</span> <span class="kt">ParseResult</span> <span class="kr">where</span>
+  <span class="n">fmap</span> <span class="n">f</span> <span class="p">(</span><span class="kt">Result</span> <span class="n">i</span> <span class="n">a</span><span class="p">)</span> <span class="o">=</span> <span class="kt">Result</span> <span class="n">i</span> <span class="p">(</span><span class="n">f</span> <span class="n">a</span><span class="p">)</span>
+  <span class="n">fmap</span> <span class="kr">_</span> <span class="p">(</span><span class="kt">Error</span> <span class="n">e</span><span class="p">)</span>    <span class="o">=</span> <span class="kt">Error</span> <span class="n">e</span>
+</code></pre></div></div>
+
+<p>A <code class="language-plaintext highlighter-rouge">Parser</code> itself is also a <code class="language-plaintext highlighter-rouge">Functor</code>.  This allows us to create a new <code class="language-plaintext highlighter-rouge">Parser</code> by composing functionality onto the <code class="language-plaintext highlighter-rouge">parse</code> function for a given <code class="language-plaintext highlighter-rouge">Parser</code>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Functor</span> <span class="kt">Parser</span> <span class="kr">where</span>
+  <span class="n">fmap</span> <span class="o">::</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="n">b</span>
+  <span class="n">fmap</span> <span class="n">f</span> <span class="p">(</span><span class="kt">P</span> <span class="n">p</span><span class="p">)</span> <span class="o">=</span> <span class="kt">P</span> <span class="p">(</span><span class="n">fmap</span> <span class="n">f</span> <span class="o">.</span> <span class="n">p</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The <span class="glossary-term" data-term="applicative">applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> <code class="language-plaintext highlighter-rouge">pure</code> creates a <code class="language-plaintext highlighter-rouge">Parser</code> that always succeeds with the given input, and thus forms a basis for composition.  We saw it being used in the above example to return the results of a parse back into the <code class="language-plaintext highlighter-rouge">Parser</code> at the end of a <code class="language-plaintext highlighter-rouge">do</code> block.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">(&lt;*&gt;)</code> allows us to map functions in the <code class="language-plaintext highlighter-rouge">Parser</code> over another <code class="language-plaintext highlighter-rouge">Parser</code>.  As with other <code class="language-plaintext highlighter-rouge">Applicative</code> instances, a common use case would be composition with a <code class="language-plaintext highlighter-rouge">Parser</code> that returns a data constructor as we will see in <a href="/parsercombinators/#creating-a-parse-tree">the next example</a>.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Applicative</span> <span class="kt">Parser</span> <span class="kr">where</span>
+  <span class="n">pure</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="n">a</span>
+  <span class="n">pure</span> <span class="n">x</span> <span class="o">=</span> <span class="kt">P</span> <span class="p">(`</span><span class="kt">Result</span><span class="p">`</span> <span class="n">x</span><span class="p">)</span>
+
+  <span class="p">(</span><span class="o">&lt;*&gt;</span><span class="p">)</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="n">b</span>
+  <span class="p">(</span><span class="o">&lt;*&gt;</span><span class="p">)</span> <span class="n">p</span> <span class="n">q</span> <span class="o">=</span> <span class="n">p</span> <span class="o">&gt;&gt;=</span> <span class="p">(</span><span class="o">&lt;$&gt;</span> <span class="n">q</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">Monad</code> instance’s <span class="glossary-term" data-term="bind">bind<span class="glossary-popup">The defining function which all monads must implement.
+</span></span> function <code class="language-plaintext highlighter-rouge">(&gt;&gt;=)</code> that we have already seen in use in the example above allows us to sequence <code class="language-plaintext highlighter-rouge">Parser</code>s in <code class="language-plaintext highlighter-rouge">do</code>-blocks to build up the implementation of the BNF grammar.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Monad</span> <span class="kt">Parser</span> <span class="kr">where</span>
+  <span class="p">(</span><span class="o">&gt;&gt;=</span><span class="p">)</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="n">b</span>
+  <span class="p">(</span><span class="o">&gt;&gt;=</span><span class="p">)</span> <span class="p">(</span><span class="kt">P</span> <span class="n">p</span><span class="p">)</span> <span class="n">f</span> <span class="o">=</span> <span class="kt">P</span> <span class="p">(</span>
+    <span class="nf">\</span><span class="n">i</span> <span class="o">-&gt;</span> <span class="kr">case</span> <span class="n">p</span> <span class="n">i</span> <span class="kr">of</span>
+      <span class="kt">Result</span> <span class="n">rest</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="n">parse</span> <span class="p">(</span><span class="n">f</span> <span class="n">x</span><span class="p">)</span> <span class="n">rest</span>
+      <span class="kt">Error</span> <span class="n">e</span> <span class="o">-&gt;</span> <span class="kt">Error</span> <span class="n">e</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="parser-combinators">Parser Combinators</h2>
+
+<p>The most atomic function for a <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> of <code class="language-plaintext highlighter-rouge">String</code> is to pull a single character off the input.  The only thing that could go wrong is if we find our input is empty.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">character</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="kt">Char</span>
+<span class="n">character</span> <span class="o">=</span> <span class="kt">P</span> <span class="n">parseit</span>
+  <span class="kr">where</span> <span class="n">parseit</span> <span class="s">""</span> <span class="o">=</span> <span class="kt">Error</span> <span class="kt">UnexpectedEof</span>
+        <span class="n">parseit</span> <span class="p">(</span><span class="n">c</span><span class="o">:</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="kt">Result</span> <span class="n">s</span> <span class="n">c</span>
+</code></pre></div></div>
+
+<p>The following is how we will report an error when we encounter a character we didn’t expect.  This is not the logic for recognising a character: that’s already happened and failed and the unrecognised character is now the parameter.  This is just error reporting, and since we have to do it from within the context of a <code class="language-plaintext highlighter-rouge">Parser</code>, we create one using the <code class="language-plaintext highlighter-rouge">P</code> constructor.  Then we set up the one field common to any <code class="language-plaintext highlighter-rouge">Parser</code>, a function which returns a <code class="language-plaintext highlighter-rouge">ParseResult</code> no matter the input, hence <code class="language-plaintext highlighter-rouge">const</code>.  The rest creates the right type of <code class="language-plaintext highlighter-rouge">Error</code> for the given <code class="language-plaintext highlighter-rouge">Char</code>.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">unexpectedCharParser</span> <span class="o">::</span> <span class="kt">Char</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="n">a</span>
+<span class="n">unexpectedCharParser</span> <span class="o">=</span> <span class="kt">P</span> <span class="o">.</span> <span class="n">const</span> <span class="o">.</span> <span class="kt">Error</span> <span class="o">.</span> <span class="kt">UnexpectedChar</span>
+</code></pre></div></div>
+
+<p>Now a <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> that insists on a certain character being the next one on the input.  It’s using the <code class="language-plaintext highlighter-rouge">Parser</code> instance of <code class="language-plaintext highlighter-rouge">Monad</code>’s <span class="glossary-term" data-term="bind">bind<span class="glossary-popup">The defining function which all monads must implement.
+</span></span> function (implicitly in <a href="/monad/#do-notation">a <code class="language-plaintext highlighter-rouge">do</code> block</a>) to sequence first the <code class="language-plaintext highlighter-rouge">character</code> <code class="language-plaintext highlighter-rouge">Parser</code>, then either return the correct character in the <code class="language-plaintext highlighter-rouge">Parser</code>, or the <code class="language-plaintext highlighter-rouge">Error</code> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span>.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">is</span> <span class="o">::</span> <span class="kt">Char</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="kt">Char</span>
+<span class="n">is</span> <span class="n">c</span> <span class="o">=</span> <span class="kr">do</span>
+  <span class="n">v</span> <span class="o">&lt;-</span> <span class="n">character</span>
+  <span class="kr">let</span> <span class="n">next</span> <span class="o">=</span> <span class="kr">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">c</span>
+             <span class="kr">then</span> <span class="n">pure</span>
+             <span class="kr">else</span> <span class="n">const</span> <span class="o">$</span> <span class="n">unexpectedCharParser</span> <span class="n">v</span>
+  <span class="n">next</span> <span class="n">c</span>
+</code></pre></div></div>
+
+<p>And finally we introduce the <code class="language-plaintext highlighter-rouge">Alternative</code> typeclass for our <code class="language-plaintext highlighter-rouge">Parser</code> for trying to apply a first <code class="language-plaintext highlighter-rouge">Parser</code>, and then an alternate <code class="language-plaintext highlighter-rouge">Parser</code> if the first fails.  This allows us to encode the <span class="glossary-term" data-term="alternatives">alternatives<span class="glossary-popup">A type class in Haskell that extends Applicative, introducing the empty and &lt;|&gt; functions for representing computations that can fail or have multiple outcomes.
+</span></span> in our BNF grammar rules.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Alternative</span> <span class="kt">Parser</span> <span class="kr">where</span>
+  <span class="n">empty</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="n">a</span>
+  <span class="n">empty</span> <span class="o">=</span> <span class="kt">Parser</span> <span class="o">$</span> <span class="n">const</span> <span class="p">(</span><span class="kt">Error</span> <span class="kt">UnexpectedEof</span><span class="p">)</span>
+
+  <span class="n">p1</span> <span class="o">&lt;|&gt;</span> <span class="n">p2</span> <span class="o">=</span> <span class="kt">P</span> <span class="p">(</span><span class="nf">\</span><span class="n">i</span> <span class="o">-&gt;</span> <span class="kr">let</span> <span class="n">f</span> <span class="p">(</span><span class="kt">Error</span> <span class="kr">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">parse</span> <span class="n">p2</span> <span class="n">i</span>
+                         <span class="n">f</span> <span class="n">r</span> <span class="o">=</span> <span class="n">r</span>
+                     <span class="kr">in</span> <span class="n">f</span> <span class="o">$</span> <span class="n">parse</span> <span class="n">p1</span> <span class="n">i</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="nitty-gritty">Nitty gritty</h2>
+
+<p>The last two pieces of our Phone Numbers grammar we also implement fairly straightforwardly from the BNF. In a real <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <span class="glossary-term" data-term="combinator">combinator<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span> library you’d do it differently, as per our exercises below.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="n">digit</span><span class="o">&gt;</span> <span class="o">::=</span> <span class="s">"0"</span> <span class="o">|</span> <span class="s">"1"</span> <span class="o">|</span> <span class="s">"2"</span> <span class="o">|</span> <span class="s">"3"</span> <span class="o">|</span> <span class="s">"4"</span> <span class="o">|</span> <span class="s">"5"</span> <span class="o">|</span> <span class="s">"6"</span> <span class="o">|</span> <span class="s">"7"</span> <span class="o">|</span> <span class="s">"8"</span> <span class="o">|</span> <span class="s">"9"</span>
+<span class="o">&lt;</span><span class="n">spaces</span><span class="o">&gt;</span> <span class="o">::=</span> <span class="s">" "</span> <span class="o">&lt;</span><span class="n">spaces</span><span class="o">&gt;</span> <span class="o">|</span> <span class="s">""</span>
+</code></pre></div></div>
+
+<p>Here’s a trivial adaptation of <code class="language-plaintext highlighter-rouge">digit</code>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">digit</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="kt">Char</span>
+<span class="n">digit</span> <span class="o">=</span> <span class="n">is</span> <span class="sc">'0'</span> <span class="o">&lt;|&gt;</span> <span class="n">is</span> <span class="sc">'1'</span> <span class="o">&lt;|&gt;</span> <span class="n">is</span> <span class="sc">'2'</span> <span class="o">&lt;|&gt;</span> <span class="n">is</span> <span class="sc">'3'</span> <span class="o">&lt;|&gt;</span> <span class="n">is</span> <span class="sc">'4'</span> <span class="o">&lt;|&gt;</span> <span class="n">is</span> <span class="sc">'5'</span> <span class="o">&lt;|&gt;</span> <span class="n">is</span> <span class="sc">'6'</span> <span class="o">&lt;|&gt;</span> <span class="n">is</span> <span class="sc">'7'</span> <span class="o">&lt;|&gt;</span> <span class="n">is</span> <span class="sc">'8'</span> <span class="o">&lt;|&gt;</span> <span class="n">is</span> <span class="sc">'9'</span>
+</code></pre></div></div>
+
+<p>Spaces is a bit more interesting because it’s recursive, but still almost identical to the BNF:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">spaces</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="nb">()</span>
+<span class="n">spaces</span> <span class="o">=</span> <span class="p">(</span><span class="n">is</span> <span class="sc">' '</span> <span class="o">&gt;&gt;</span> <span class="n">spaces</span><span class="p">)</span> <span class="o">&lt;|&gt;</span> <span class="n">pure</span> <span class="nb">()</span>
+</code></pre></div></div>
+
+<hr>
+
+<h3 id="exercises">Exercises</h3>
+
+<ul>
+  <li>
+    <p>Make a less repetitive <code class="language-plaintext highlighter-rouge">digit</code> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> by creating a function <code class="language-plaintext highlighter-rouge">satisfy :: (Char -&gt; Bool) -&gt; Parser Char</code> which returns a <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> that produces a character but fails if the input is empty or the character does not satisfy the given predicate. You can use the <code class="language-plaintext highlighter-rouge">isDigit</code> function from <code class="language-plaintext highlighter-rouge">Data.Char</code> as the predicate.</p>
+  </li>
+  <li>
+    <p>Change the type of <code class="language-plaintext highlighter-rouge">spaces</code> to <code class="language-plaintext highlighter-rouge">Parser [Char]</code> and have it return the appropriately sized string of only spaces.</p>
+  </li>
+</ul>
+
+<div class="solutions">
+    
+<h4 id="solutions">Solutions</h4>
+
+<p>We can generalise the <code class="language-plaintext highlighter-rouge">is</code> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> to handle a predicate</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">satisfy</span> <span class="o">::</span> <span class="p">(</span><span class="kt">Char</span> <span class="o">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="kt">Char</span>
+<span class="n">satisfy</span> <span class="n">predicate</span> <span class="o">=</span> <span class="kr">do</span>
+  <span class="n">c</span> <span class="o">&lt;-</span> <span class="n">character</span>
+  <span class="kr">let</span> <span class="n">next</span> <span class="o">=</span> <span class="kr">if</span> <span class="n">predicate</span> <span class="n">c</span> <span class="kr">then</span> <span class="n">pure</span> <span class="kr">else</span> <span class="n">unexpectedCharParser</span>
+  <span class="n">next</span> <span class="n">c</span>
+
+<span class="n">digit</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="kt">Char</span>
+<span class="n">digit</span> <span class="o">=</span> <span class="n">satisfy</span> <span class="n">isDigit</span>
+</code></pre></div></div>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">spaces</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="p">[</span><span class="kt">Char</span><span class="p">]</span>
+<span class="n">spaces</span> <span class="o">=</span> <span class="p">(</span><span class="kr">do</span>
+    <span class="kr">_</span> <span class="o">&lt;-</span> <span class="n">is</span> <span class="sc">' '</span>
+    <span class="n">rest</span> <span class="o">&lt;-</span> <span class="n">spaces</span>
+    <span class="n">pure</span> <span class="p">(</span><span class="sc">' '</span> <span class="o">:</span> <span class="n">rest</span><span class="p">)</span>
+  <span class="p">)</span> <span class="o">&lt;|&gt;</span> <span class="n">pure</span> <span class="kt">[]</span>
+</code></pre></div></div>
+
+<p>We can do this recursively, by trying to parse as many as possible, or we can use the many function to parse many spaces.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">spaces</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="p">[</span><span class="kt">Char</span><span class="p">]</span>
+<span class="n">spaces</span> <span class="o">=</span> <span class="n">many</span> <span class="p">(</span><span class="n">satisfy</span> <span class="n">isSpace</span><span class="p">)</span>
+</code></pre></div></div>
+
+
+</div>
+
+<hr>
+
+<h2 id="a-parser-that-returns-an-adt">A Parser that returns an ADT</h2>
+
+<p>The return type of the phone number <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> above was <code class="language-plaintext highlighter-rouge">[Char]</code> (equivalent to <code class="language-plaintext highlighter-rouge">String</code>).  A more typical use case for a <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> though is to generate some data structure that we can then process in other ways.  In Haskell, this usually means a <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> that returns an <a href="/haskell2#algebraic-data-types">Algebraic Data Type (ADT)</a>.  Here is a very simple example.</p>
+
+<p>Let’s imagine we need to parse records from a vet’s office.  It treats only three types of animals.  As always, let’s start with the BNF:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="kt">Animal</span><span class="o">&gt;</span> <span class="o">::=</span> <span class="s">"cat"</span> <span class="o">|</span> <span class="s">"dog"</span> <span class="o">|</span> <span class="s">"camel"</span>
+</code></pre></div></div>
+
+<p>So our simple grammar consists of three <span class="glossary-term" data-term="terminals">terminals<span class="glossary-popup">In the context of grammars, a terminal is a symbol that appears in the strings generated by the grammar. Terminals are the actual characters or tokens of the language.
+</span></span>, each of which is a straightforward string <em>token</em> (a constant string that makes up a primitive word in our language).  To parse such a token, we’ll need a <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> that succeeds if it finds the specified string next in its input.  We’ll use our <code class="language-plaintext highlighter-rouge">is</code> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> from above (which simply confirms a given character is next in its input).  The type of <code class="language-plaintext highlighter-rouge">is</code> was <code class="language-plaintext highlighter-rouge">Char -&gt; Parser Char</code>.  Since <code class="language-plaintext highlighter-rouge">Parser</code> is an instance of <code class="language-plaintext highlighter-rouge">Applicative</code>, we can simply <code class="language-plaintext highlighter-rouge">traverse</code> the <code class="language-plaintext highlighter-rouge">is</code> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> across the given <code class="language-plaintext highlighter-rouge">String</code> (list of <code class="language-plaintext highlighter-rouge">Char</code>) to produce another <code class="language-plaintext highlighter-rouge">String</code> in the <code class="language-plaintext highlighter-rouge">Parser</code> <span class="glossary-term" data-term="applicative">applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> context.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="o">::</span> <span class="kt">String</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="kt">String</span>
+<span class="n">string</span> <span class="o">=</span> <span class="n">traverse</span> <span class="n">is</span>
+</code></pre></div></div>
+
+<p>Now let’s define an ADT for animals:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">Animal</span> <span class="o">=</span> <span class="kt">Cat</span> <span class="o">|</span> <span class="kt">Dog</span> <span class="o">|</span> <span class="kt">Camel</span>
+  <span class="kr">deriving</span> <span class="kt">Show</span>
+</code></pre></div></div>
+
+<p>A <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> for “cat” is rather simple.  If we find the string <code class="language-plaintext highlighter-rouge">"cat"</code> we produce a <code class="language-plaintext highlighter-rouge">Cat</code>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cat</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="kt">Animal</span>
+<span class="n">cat</span> <span class="o">=</span> <span class="n">string</span> <span class="s">"cat"</span> <span class="o">&gt;&gt;</span> <span class="n">pure</span> <span class="kt">Cat</span>
+</code></pre></div></div>
+
+<p>Let’s test it:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="n">parse</span> <span class="n">cat</span> <span class="s">"cat"</span>
+<span class="kt">Result</span> <span class="o">&gt;&lt;</span> <span class="kt">Cat</span>
+</code></pre></div></div>
+
+<p>Ditto dogs and camels:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dog</span><span class="p">,</span> <span class="n">camel</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="kt">Animal</span>
+<span class="n">dog</span> <span class="o">=</span> <span class="n">string</span> <span class="s">"dog"</span> <span class="o">&gt;&gt;</span> <span class="n">pure</span> <span class="kt">Dog</span>
+<span class="n">camel</span> <span class="o">=</span> <span class="n">string</span> <span class="s">"camel"</span> <span class="o">&gt;&gt;</span> <span class="n">pure</span> <span class="kt">Camel</span>
+</code></pre></div></div>
+
+<p>And now a <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> for our full grammar:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">animal</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="kt">Animal</span>
+<span class="n">animal</span> <span class="o">=</span> <span class="n">cat</span> <span class="o">&lt;|&gt;</span> <span class="n">dog</span> <span class="o">&lt;|&gt;</span> <span class="n">camel</span>
+</code></pre></div></div>
+
+<p>Some tests:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="n">parse</span> <span class="n">animal</span> <span class="s">"cat"</span>
+<span class="kt">Result</span> <span class="o">&gt;&lt;</span> <span class="kt">Cat</span>
+<span class="o">&gt;</span> <span class="n">parse</span> <span class="n">animal</span> <span class="s">"dog"</span>
+<span class="kt">Result</span> <span class="o">&gt;&lt;</span> <span class="kt">Dog</span>
+<span class="o">&gt;</span> <span class="n">parse</span> <span class="n">animal</span> <span class="s">"camel"</span>
+<span class="kt">Result</span> <span class="o">&gt;&lt;</span> <span class="kt">Camel</span>
+</code></pre></div></div>
+
+<p>What’s really cool about this is that obviously the strings “cat” and “camel” overlap at the start.  Our <span class="glossary-term" data-term="alternative">alternative<span class="glossary-popup">A type class in Haskell that extends Applicative, introducing the empty and &lt;|&gt; functions for representing computations that can fail or have multiple outcomes.
+</span></span> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <code class="language-plaintext highlighter-rouge">(&lt;|&gt;)</code> effectively backtracks when the <code class="language-plaintext highlighter-rouge">cat</code> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> fails before eventually succeeding with the <code class="language-plaintext highlighter-rouge">camel</code> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span>.  In an <span class="glossary-term" data-term="imperative">imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span> style program, this kind of logic would result in much messier code.</p>
+
+<hr>
+
+<h2 id="exercises-1">Exercises</h2>
+
+<ul>
+  <li>Make a <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <code class="language-plaintext highlighter-rouge">stringTok</code> which uses the <code class="language-plaintext highlighter-rouge">string</code> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> to parse a given string, but ignores any <code class="language-plaintext highlighter-rouge">spaces</code> before or after the token.</li>
+  <li>Write some messy <span class="glossary-term" data-term="imperative">imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span>-style JavaScript (no <span class="glossary-term" data-term="higher-order functions">higher-order functions<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span> allowed) to parse cat, dog or camel and construct a different class instance for each.</li>
+  <li>Now add “dolphin” to the grammar, and use a stopwatch to time yourself extending your messy <span class="glossary-term" data-term="imperative">imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span> code.  I bet it takes longer than extending the <code class="language-plaintext highlighter-rouge">animal</code> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <span class="glossary-term" data-term="combinator">combinator<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span>.</li>
+  <li>Modify the grammar and the ADT to have some extra data fields for each of the animal types, e.g. <code class="language-plaintext highlighter-rouge">humpCount</code>, <code class="language-plaintext highlighter-rouge">remainingLives</code>, <code class="language-plaintext highlighter-rouge">barkstyle</code>, etc.</li>
+  <li>Extend your <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> to produce these records.</li>
+</ul>
+
+<div class="solutions">
+    
+<h3 id="solutions">Solutions</h3>
+
+<ul>
+  <li>To create <code class="language-plaintext highlighter-rouge">stringTok</code>, we can make use of <code class="language-plaintext highlighter-rouge">&lt;&lt;</code> or <code class="language-plaintext highlighter-rouge">&gt;&gt;</code> to ignore parts of the result:</li>
+</ul>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">stringTok</span> <span class="o">::</span> <span class="kt">String</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="kt">String</span>
+<span class="n">stringTok</span> <span class="n">s</span> <span class="o">=</span> <span class="n">spaces</span> <span class="o">&gt;&gt;</span> <span class="n">string</span> <span class="n">s</span> <span class="o">&lt;&lt;</span> <span class="n">spaces</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Messy <span class="glossary-term" data-term="imperative">imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span> JavaScript to parse animals and construct appropriate class instances:</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Define the classes for Cat, Dog, and Camel</span>
+<span class="kd">class</span> <span class="nc">Cat</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">Cat</span><span class="dl">'</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">Dog</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">Dog</span><span class="dl">'</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">Camel</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">Camel</span><span class="dl">'</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">Dolphin</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">Dolphin</span><span class="dl">'</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Imperative parser function</span>
+<span class="kd">function</span> <span class="nf">parseAnimal</span><span class="p">(</span><span class="nx">input</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">animal</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+  <span class="k">if </span><span class="p">(</span><span class="nx">input</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">cat</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">animal</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Cat</span><span class="p">();</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if </span><span class="p">(</span><span class="nx">input</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">dog</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">animal</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Dog</span><span class="p">();</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if </span><span class="p">(</span><span class="nx">input</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">dolphin</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">animal</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Dolphin</span><span class="p">();</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if </span><span class="p">(</span><span class="nx">input</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">camel</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">animal</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Camel</span><span class="p">();</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nc">Error</span><span class="p">(</span><span class="dl">'</span><span class="s1">Invalid input</span><span class="dl">'</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="nx">animal</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Example usage</span>
+<span class="k">try</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">animal1</span> <span class="o">=</span> <span class="nf">parseAnimal</span><span class="p">(</span><span class="dl">'</span><span class="s1">cat</span><span class="dl">'</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">animal1</span><span class="p">);</span> <span class="c1">// Cat { type: 'Cat' }</span>
+
+  <span class="kd">const</span> <span class="nx">animal2</span> <span class="o">=</span> <span class="nf">parseAnimal</span><span class="p">(</span><span class="dl">'</span><span class="s1">dog</span><span class="dl">'</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">animal2</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+
+</div>
+
+<hr>
+
+<h2 id="creating-a-parse-tree">Creating a Parse Tree</h2>
+
+<p>Programs are usually parsed into a tree structure called an <em><span class="glossary-term" data-term="abstract syntax tree">Abstract Syntax Tree<span class="glossary-popup">A tree representation of the abstract syntactic structure of a string of text. Each node in the tree represents a construct occurring in the text.
+</span></span></em> (AST), more generally known as a <em>parse tree</em>.  Further processing ultimately into an object file in the appropriate format (whether it’s some sort of machine code directly executable on the machine architecture or some sort of intermediate format—e.g. Java bytecode) then essentially boils down to traversal of this tree to evaluate the statements and expressions there in the appropriate order.</p>
+
+<p>We will not implement a <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> for a full programming language, but to at least demonstrate what this concept looks like in Haskell we will create a simple <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> for simple arithmetic expressions.  The <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> generates a tree structure capturing the order of operations, which we may then traverse to perform a calculation.</p>
+
+<p>To start with, here is a BNF grammar for a simple calculator with three operations <code class="language-plaintext highlighter-rouge">*</code>, <code class="language-plaintext highlighter-rouge">+</code> and <code class="language-plaintext highlighter-rouge">-</code>, with <code class="language-plaintext highlighter-rouge">*</code> having higher precedence than <code class="language-plaintext highlighter-rouge">+</code> or <code class="language-plaintext highlighter-rouge">-</code>:</p>
+
+<pre><code class="language-lambdacalc">&lt;expr&gt; ::= &lt;term&gt; | &lt;expr&gt; &lt;addop&gt; &lt;term&gt;
+&lt;term&gt; ::= &lt;number&gt; | &lt;number&gt; "*" &lt;number&gt;
+&lt;addop&gt; ::= "+" | "-"
+</code></pre>
+
+<p>An expression <code class="language-plaintext highlighter-rouge">&lt;expr&gt;</code> consists of one or more <code class="language-plaintext highlighter-rouge">&lt;term&gt;</code>s that may be combined with an <code class="language-plaintext highlighter-rouge">&lt;addop&gt;</code> (an addition operation, either <code class="language-plaintext highlighter-rouge">"+"</code> or <code class="language-plaintext highlighter-rouge">"-"</code>).  A <code class="language-plaintext highlighter-rouge">&lt;term&gt;</code> involves one or more numbers, multiplied together.</p>
+
+<p>The dependencies between the <span class="glossary-term" data-term="non-terminal">non-terminal<span class="glossary-popup">A symbol in a grammar that can be replaced by a sequence of terminals and non-terminals according to the production rules of the grammar.
+</span></span> expressions make explicit the precedence of multiply operations needing to occur before add (and subtract).</p>
+
+<p>The data structure we will create uses the following Algebraic Data Type:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">Expr</span> <span class="o">=</span> <span class="kt">Plus</span> <span class="kt">Expr</span> <span class="kt">Expr</span>
+          <span class="o">|</span> <span class="kt">Minus</span> <span class="kt">Expr</span> <span class="kt">Expr</span>
+          <span class="o">|</span> <span class="kt">Times</span> <span class="kt">Expr</span> <span class="kt">Expr</span>
+          <span class="o">|</span> <span class="kt">Number</span> <span class="kt">Integer</span>
+  <span class="kr">deriving</span> <span class="kt">Show</span>
+</code></pre></div></div>
+
+<p>Our top-level function will be called <code class="language-plaintext highlighter-rouge">parseCalc</code>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">parseCalc</span> <span class="o">::</span> <span class="kt">String</span> <span class="o">-&gt;</span> <span class="kt">ParseResult</span> <span class="kt">Expr</span>
+<span class="n">parseCalc</span> <span class="o">=</span> <span class="n">parse</span> <span class="n">expr</span>
+</code></pre></div></div>
+
+<p>And an example use might look like:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="n">parseCalc</span> <span class="s">" 6 *4 + 3- 8 *  2"</span>
+<span class="kt">Result</span> <span class="o">&gt;&lt;</span> <span class="kt">Minus</span> <span class="p">(</span><span class="kt">Plus</span> <span class="p">(</span><span class="kt">Times</span> <span class="p">(</span><span class="kt">Number</span> <span class="mi">6</span><span class="p">)</span> <span class="p">(</span><span class="kt">Number</span> <span class="mi">4</span><span class="p">))</span> <span class="p">(</span><span class="kt">Number</span> <span class="mi">3</span><span class="p">))</span> <span class="p">(</span><span class="kt">Times</span> <span class="p">(</span><span class="kt">Number</span> <span class="mi">8</span><span class="p">)</span> <span class="p">(</span><span class="kt">Number</span> <span class="mi">2</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>Here’s some ASCII art to make the tree structure of the <code class="language-plaintext highlighter-rouge">ParseResult Expr</code> more clear:</p>
+
+<pre><code class="language-lambdacalc">Minus
+ ├──Plus
+ |   ├──Times
+ |   |   ├──Number 6
+ |   |   └──Number 4
+ |   └──Number 3
+ └──Times
+     ├──Number 8
+     └──Number 2
+</code></pre>
+
+<hr>
+
+<h3 id="exercises-2">Exercises</h3>
+
+<ul>
+  <li>Make an instance of <code class="language-plaintext highlighter-rouge">Show</code> for <code class="language-plaintext highlighter-rouge">Expr</code> which pretty prints such trees</li>
+  <li>Make a function that performs the calculation specified in an <code class="language-plaintext highlighter-rouge">Expr</code> tree like the one above.</li>
+</ul>
+
+<hr>
+
+<p>Obviously we are going to need to parse numbers, so let’s start with a simple <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> that creates a <code class="language-plaintext highlighter-rouge">Number</code>.<br>
+Note that whereas our previous <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> had type <code class="language-plaintext highlighter-rouge">phoneNumber :: Parser [Char]</code>—i.e. it produced strings—this, and most of the <span class="glossary-term" data-term="parsers">parsers<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> below, produces an <code class="language-plaintext highlighter-rouge">Expr</code>.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">number</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="kt">Expr</span>
+<span class="n">number</span> <span class="o">=</span> <span class="n">spaces</span> <span class="o">&gt;&gt;</span> <span class="kt">Number</span> <span class="o">.</span> <span class="n">read</span> <span class="o">.</span> <span class="p">(</span><span class="o">:</span><span class="kt">[]</span><span class="p">)</span> <span class="o">&lt;$&gt;</span> <span class="n">digit</span>
+</code></pre></div></div>
+
+<p>We keep things simple for now, make use of our existing <code class="language-plaintext highlighter-rouge">digit</code> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span>, and limit our input to only single-digit numbers.<br>
+The expression <code class="language-plaintext highlighter-rouge">Number . read . (:[])</code> is fmapped over the <code class="language-plaintext highlighter-rouge">Parser Char</code> returned by <code class="language-plaintext highlighter-rouge">digit</code>.<br>
+We use the <span class="glossary-term" data-term="prelude">Prelude<span class="glossary-popup">The default library loaded in Haskell that includes basic functions and operators.
+</span></span> function <code class="language-plaintext highlighter-rouge">read :: Read a =&gt; String -&gt; a</code> to create the <code class="language-plaintext highlighter-rouge">Int</code> expected by <code class="language-plaintext highlighter-rouge">Number</code>.  Since <code class="language-plaintext highlighter-rouge">read</code> expects a string, we apply <code class="language-plaintext highlighter-rouge">(:[])</code> to turn the <code class="language-plaintext highlighter-rouge">Char</code> into <code class="language-plaintext highlighter-rouge">[Char]</code>, i.e. a <code class="language-plaintext highlighter-rouge">String</code>.</p>
+
+<p>Next, we’ll need a <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> for the various operators (<code class="language-plaintext highlighter-rouge">*</code>,<code class="language-plaintext highlighter-rouge">+</code> and <code class="language-plaintext highlighter-rouge">-</code>).  There’s enough of them that we’ll make it a general-purpose <code class="language-plaintext highlighter-rouge">Parser Char</code> parameterised by the character we expect:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">op</span> <span class="o">::</span> <span class="kt">Char</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="kt">Char</span> <span class="c1">-- parse a single char operator</span>
+<span class="n">op</span> <span class="n">c</span> <span class="o">=</span> <span class="kr">do</span>
+   <span class="n">spaces</span>
+   <span class="n">is</span> <span class="n">c</span>
+   <span class="n">pure</span> <span class="n">c</span>
+</code></pre></div></div>
+
+<p>As before, <code class="language-plaintext highlighter-rouge">spaces</code> ignores any number of <code class="language-plaintext highlighter-rouge">' '</code> characters.</p>
+
+<p>Here’s how we use <code class="language-plaintext highlighter-rouge">op</code> for <code class="language-plaintext highlighter-rouge">*</code>; note that it returns only the <code class="language-plaintext highlighter-rouge">Times</code> constructor.  Thus, our return type is an as-yet unapplied binary function (and we see now why <code class="language-plaintext highlighter-rouge">(&lt;*&gt;)</code> is going to be useful).</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">times</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="p">(</span><span class="kt">Expr</span> <span class="o">-&gt;</span> <span class="kt">Expr</span> <span class="o">-&gt;</span> <span class="kt">Expr</span><span class="p">)</span>
+<span class="n">times</span> <span class="o">=</span> <span class="n">op</span> <span class="sc">'*'</span> <span class="o">&gt;&gt;</span> <span class="n">pure</span> <span class="kt">Times</span>
+</code></pre></div></div>
+
+<p>And for <code class="language-plaintext highlighter-rouge">+</code> and <code class="language-plaintext highlighter-rouge">-</code> a straightforward implementation of the <code class="language-plaintext highlighter-rouge">&lt;addop&gt;</code> <span class="glossary-term" data-term="non-terminal">non-terminal<span class="glossary-popup">A symbol in a grammar that can be replaced by a sequence of terminals and non-terminals according to the production rules of the grammar.
+</span></span> from our grammar:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">addop</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="p">(</span><span class="kt">Expr</span> <span class="o">-&gt;</span> <span class="kt">Expr</span> <span class="o">-&gt;</span> <span class="kt">Expr</span><span class="p">)</span>
+<span class="n">addop</span> <span class="o">=</span> <span class="p">(</span><span class="n">op</span> <span class="sc">'+'</span> <span class="o">&gt;&gt;</span> <span class="n">pure</span> <span class="kt">Plus</span><span class="p">)</span> <span class="o">&lt;|&gt;</span> <span class="p">(</span><span class="n">op</span> <span class="sc">'-'</span> <span class="o">&gt;&gt;</span> <span class="n">pure</span> <span class="kt">Minus</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>And some more <span class="glossary-term" data-term="non-terminals">non-terminals<span class="glossary-popup">A symbol in a grammar that can be replaced by a sequence of terminals and non-terminals according to the production rules of the grammar.
+</span></span>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">expr</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="kt">Expr</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">chain</span> <span class="n">term</span> <span class="n">addop</span>
+
+<span class="n">term</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="kt">Expr</span>
+<span class="n">term</span> <span class="o">=</span> <span class="n">chain</span> <span class="n">number</span> <span class="n">times</span>
+</code></pre></div></div>
+
+<p>These use the <code class="language-plaintext highlighter-rouge">chain</code> function to handle repeated chains of operators (<code class="language-plaintext highlighter-rouge">*</code>, <code class="language-plaintext highlighter-rouge">-</code>, <code class="language-plaintext highlighter-rouge">+</code>) of unknown length.  We could make each of these functions recursive with a <code class="language-plaintext highlighter-rouge">&lt;|&gt;</code> to provide an <span class="glossary-term" data-term="alternative">alternative<span class="glossary-popup">A type class in Haskell that extends Applicative, introducing the empty and &lt;|&gt; functions for representing computations that can fail or have multiple outcomes.
+</span></span> for the base case end-of-chain (as we did for <code class="language-plaintext highlighter-rouge">spaces</code>, above), but we can factor the pattern out into a reusable function, like so:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">chain</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="n">a</span>
+<span class="n">chain</span> <span class="n">p</span> <span class="n">op</span> <span class="o">=</span> <span class="n">p</span> <span class="o">&gt;&gt;=</span> <span class="n">rest</span>
+   <span class="kr">where</span>
+   <span class="n">rest</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="n">a</span>
+   <span class="n">rest</span> <span class="n">a</span> <span class="o">=</span> <span class="p">(</span><span class="kr">do</span>
+               <span class="n">f</span> <span class="o">&lt;-</span> <span class="n">op</span>
+               <span class="n">b</span> <span class="o">&lt;-</span> <span class="n">p</span>
+               <span class="n">rest</span> <span class="p">(</span><span class="n">f</span> <span class="n">a</span> <span class="n">b</span><span class="p">)</span>
+            <span class="p">)</span> <span class="o">&lt;|&gt;</span> <span class="n">pure</span> <span class="n">a</span>
+</code></pre></div></div>
+
+<p>But, how does <code class="language-plaintext highlighter-rouge">chain</code> work?</p>
+
+<p><code class="language-plaintext highlighter-rouge">p &gt;&gt;= rest</code>: The <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <code class="language-plaintext highlighter-rouge">p</code> is applied, and we pass this parsed value, to the function called <code class="language-plaintext highlighter-rouge">rest</code>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">rest a</code>: Within the <code class="language-plaintext highlighter-rouge">rest</code> function, the <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <code class="language-plaintext highlighter-rouge">op</code> is applied to parse an operator <code class="language-plaintext highlighter-rouge">f</code>, and the <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <code class="language-plaintext highlighter-rouge">p</code> is applied again to parse another value <code class="language-plaintext highlighter-rouge">b</code>. The result is then combined using the function <code class="language-plaintext highlighter-rouge">f</code> applied to both <code class="language-plaintext highlighter-rouge">a</code> and <code class="language-plaintext highlighter-rouge">b</code> to form a new value. The <code class="language-plaintext highlighter-rouge">rest</code> function is then called recursively, with this new value.</p>
+
+<p>Recursive calls: The recursive calls continue until there are no more operators <code class="language-plaintext highlighter-rouge">op</code> to parse, at which point the <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> returns the last value <code class="language-plaintext highlighter-rouge">a</code>. This is achieved using the <code class="language-plaintext highlighter-rouge">pure a</code> expression. This makes the function <em>tail recursive</em>.</p>
+
+<p>This gives us a way to parse expressions of the form “1+2+3+4+5” by parsing “1” initially, using <code class="language-plaintext highlighter-rouge">p</code> then repeatedly parsing something of the form “+2”, where <code class="language-plaintext highlighter-rouge">op</code> would parse the “+” and the <code class="language-plaintext highlighter-rouge">p</code> would then parse the “2”. These are combined using our <code class="language-plaintext highlighter-rouge">Plus</code> constructor to be of form <code class="language-plaintext highlighter-rouge">Plus 1 2</code>, this will then recursively apply the <code class="language-plaintext highlighter-rouge">p</code> and <code class="language-plaintext highlighter-rouge">op</code> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> over the rest of the string: “+3+4+5”.</p>
+
+<p>But, can we rewrite this using a fold?</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">chain</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="n">a</span>
+<span class="n">chain</span> <span class="n">p</span> <span class="n">op</span> <span class="o">=</span> <span class="n">foldl</span> <span class="n">applyOp</span> <span class="o">&lt;$&gt;</span> <span class="n">p</span> <span class="o">&lt;*&gt;</span> <span class="n">many</span> <span class="p">(</span><span class="n">liftA2</span> <span class="p">(,)</span> <span class="n">op</span> <span class="n">p</span><span class="p">)</span>
+  <span class="kr">where</span>
+    <span class="n">applyOp</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">a</span><span class="o">-&gt;</span><span class="n">a</span><span class="o">-&gt;</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">a</span>
+    <span class="n">applyOp</span> <span class="n">x</span> <span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">=</span> <span class="n">op</span> <span class="n">x</span> <span class="n">y</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">foldl applyOp &lt;$&gt; p</code>: This part uses the <span class="glossary-term" data-term="functor">Functor<span class="glossary-popup">A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the fmap function, which applies a function to every element in a structure.
+</span></span> instances to combine the parsed values and apply the operators in a left-associative manner. <code class="language-plaintext highlighter-rouge">foldl applyOp</code> is partially applied to <code class="language-plaintext highlighter-rouge">p</code>, creating a <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> that parses an initial value (<code class="language-plaintext highlighter-rouge">p</code>) and then applies the left-associative chain of operators and values.</p>
+
+<p><code class="language-plaintext highlighter-rouge">many (liftA2 (,) op p)</code>: This part represents the repetition of pairs <code class="language-plaintext highlighter-rouge">(op, p)</code> using the <code class="language-plaintext highlighter-rouge">many</code> <span class="glossary-term" data-term="combinator">combinator<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span>. The tuple structure here just allows us to store the pairs of <code class="language-plaintext highlighter-rouge">op</code> and <code class="language-plaintext highlighter-rouge">p</code>. We use <code class="language-plaintext highlighter-rouge">liftA2</code> to lift both parse results into the tuple constructor. We run this many times, to parse many pairs of <code class="language-plaintext highlighter-rouge">op</code> and <code class="language-plaintext highlighter-rouge">p</code>, and create a list of tuples. As a result, it creates a <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> that parses an operator (<code class="language-plaintext highlighter-rouge">op</code>) followed by a value (<code class="language-plaintext highlighter-rouge">p</code>) and repeats this zero or more times.</p>
+
+<p><code class="language-plaintext highlighter-rouge">applyOp x (op, y)</code>: This function is used by <code class="language-plaintext highlighter-rouge">foldl</code> to combine the parsed values and operators. It takes an accumulated value <code class="language-plaintext highlighter-rouge">x</code>, an operator <code class="language-plaintext highlighter-rouge">op</code>, and a new value <code class="language-plaintext highlighter-rouge">y</code>, and applies the operator to the accumulated value and the new value.</p>
+
+<hr>
+
+<h3 id="exercises-3">Exercises</h3>
+
+<ul>
+  <li>Similar to <code class="language-plaintext highlighter-rouge">chain</code>, factor out the recursion of <code class="language-plaintext highlighter-rouge">spaces</code> into a function which returns a <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> that continues producing a list of values from a given <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span>, i.e.
+ <code class="language-plaintext highlighter-rouge">list :: Parser a -&gt; Parser [a]</code>.</li>
+</ul>
+
+<hr>
+
+<h2 id="parsing-rock-paper-scissors">Parsing Rock-Paper-Scissors</h2>
+
+<p>A common use case for parsing is deserialising data stored as a string.
+Of course, there are general data interchange formats such as JSON and XML for which most languages have <span class="glossary-term" data-term="parsers">parsers<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> available.  However, sometimes you want to store data in your own format for compactness or readability, and when you do, deserialising the data requires a custom <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span>
+(this example is contributed by <a href="https://arthur.maheo.net/">Arthur Maheo</a>).</p>
+
+<p>We will explore a small game of Rock-Paper-Scissors using a memory.
+The play function will have the following type:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">RockPaperScissors</span> <span class="o">=</span> <span class="kt">Rock</span> <span class="o">|</span> <span class="kt">Paper</span> <span class="o">|</span> <span class="kt">Scissors</span>
+
+<span class="cd">-- | Play a round of RPS given the result of the previous round.</span>
+<span class="n">play</span>
+  <span class="o">::</span> <span class="kt">Maybe</span> <span class="p">(</span><span class="kt">RockPaperScissors</span><span class="p">,</span> <span class="kt">RockPaperScissors</span><span class="p">,</span> <span class="kt">String</span><span class="p">)</span>
+  <span class="c1">-- ^ Result of the previous round as: (your choice, opponent choice, your memory)</span>
+  <span class="o">-&gt;</span> <span class="p">(</span><span class="kt">RockPaperScissors</span><span class="p">,</span> <span class="kt">String</span><span class="p">)</span> <span class="c1">-- ^ (Choice, new memory)</span>
+</code></pre></div></div>
+
+<p>We will build a simple player that will keep track of the opponent’s previous choices and try to counter the most common one.</p>
+
+<h3 id="how-to-build-a-memory">How to build a memory</h3>
+
+<p>We will convert to string using a simple <code class="language-plaintext highlighter-rouge">Show</code> instance:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Show</span> <span class="kt">RockPaperScissors</span> <span class="kr">where</span>
+  <span class="n">show</span> <span class="o">::</span> <span class="kt">RockPaperScissors</span> <span class="o">-&gt;</span> <span class="kt">String</span>
+  <span class="n">show</span> <span class="kt">Rock</span> <span class="o">=</span> <span class="s">"R"</span>
+  <span class="n">show</span> <span class="kt">Paper</span> <span class="o">=</span> <span class="s">"P"</span>
+  <span class="n">show</span> <span class="kt">Scissors</span> <span class="o">=</span> <span class="s">"S"</span>
+</code></pre></div></div>
+
+<p>(Note, we could also define a <code class="language-plaintext highlighter-rouge">Read</code> instance to deserialise such a simple type but we are going to define a <code class="language-plaintext highlighter-rouge">ParserCombinator</code> for interest and extensibility to much more complex scenarios).</p>
+
+<p>The straightforward way to create the memory is to just store a list of all the choices made by the opponent.
+So, for example, if the results from the previous three rounds were:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="kt">Rock</span><span class="p">,</span> <span class="kt">Paper</span><span class="p">),</span> <span class="p">(</span><span class="kt">Rock</span><span class="p">,</span> <span class="kt">Scissors</span><span class="p">),</span> <span class="p">(</span><span class="kt">Paper</span><span class="p">,</span> <span class="kt">Scissors</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Then, a compact memory representation will be: <code class="language-plaintext highlighter-rouge">"PSS"</code>.</p>
+
+<p><em>Note</em>: We only store single characters, so we do not need separators, but if you have more complex data, you will want separators.</p>
+
+<h3 id="reading-the-memory">Reading the memory</h3>
+
+<p>Now, we want to define a <code class="language-plaintext highlighter-rouge">Parser RockPaperScissors</code> which will turn a string into a choice.
+First, we will define a <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> for each of the three choices:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rock</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="kt">RockPaperScissors</span>
+<span class="n">rock</span> <span class="o">=</span> <span class="n">is</span> <span class="sc">'R'</span> <span class="o">&gt;&gt;</span> <span class="n">pure</span> <span class="kt">Rock</span>
+
+<span class="n">scissors</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="kt">RockPaperScissors</span>
+<span class="n">scissors</span> <span class="o">=</span> <span class="n">is</span> <span class="sc">'S'</span> <span class="o">&gt;&gt;</span> <span class="n">pure</span> <span class="kt">Scissors</span>
+
+<span class="n">paper</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="kt">RockPaperScissors</span>
+<span class="n">paper</span> <span class="o">=</span> <span class="n">is</span> <span class="sc">'P'</span> <span class="o">&gt;&gt;</span> <span class="n">pure</span> <span class="kt">Paper</span>
+</code></pre></div></div>
+
+<p>This will give:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">parse</span> <span class="n">rock</span> <span class="s">"R"</span>
+<span class="kt">Result</span> <span class="o">&gt;&lt;</span> <span class="kt">R</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">parse</span> <span class="n">rock</span> <span class="s">"RR"</span>
+<span class="kt">Result</span> <span class="o">&gt;</span><span class="kt">R</span><span class="o">&lt;</span> <span class="kt">R</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">parse</span> <span class="n">rock</span> <span class="s">"P"</span>
+<span class="kt">Unexpected</span> <span class="n">character</span><span class="o">:</span> <span class="s">"P"</span>
+</code></pre></div></div>
+
+<p>To combine those <span class="glossary-term" data-term="parsers">parsers<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span>, we will use the <em>option <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span></em> <code class="language-plaintext highlighter-rouge">(&lt;|&gt;)</code>.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">choice</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="kt">RockPaperScissors</span>
+<span class="n">choice</span> <span class="o">=</span> <span class="n">rock</span> <span class="o">&lt;|&gt;</span> <span class="n">paper</span> <span class="o">&lt;|&gt;</span> <span class="n">scissors</span>
+</code></pre></div></div>
+
+<p>And, to be able to read a list of choices, we need to use the <code class="language-plaintext highlighter-rouge">list</code> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">parse</span> <span class="n">choice</span> <span class="s">"PSS"</span>
+<span class="kt">Result</span> <span class="o">&gt;</span><span class="kt">SS</span><span class="o">&lt;</span> <span class="kt">P</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">parse</span> <span class="p">(</span><span class="n">list</span> <span class="n">choice</span><span class="p">)</span> <span class="s">"PSCS"</span>
+<span class="kt">Result</span> <span class="o">&gt;</span><span class="kt">CS</span><span class="o">&lt;</span> <span class="p">[</span><span class="kt">P</span><span class="p">,</span><span class="kt">S</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">parse</span> <span class="p">(</span><span class="n">list</span> <span class="n">choice</span><span class="p">)</span> <span class="s">"PSS"</span>
+<span class="kt">Result</span> <span class="o">&gt;&lt;</span> <span class="p">[</span><span class="kt">P</span><span class="p">,</span><span class="kt">S</span><span class="p">,</span><span class="kt">S</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h3 id="playing-the-game">Playing the game</h3>
+
+<p>Our decision function will take a list of <code class="language-plaintext highlighter-rouge">RockPaperScissors</code> and return the move that would win against most of them.
+One question remains: how do we get the memory <em>out</em> of the <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span>?
+The answer is: pattern-matching.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">getMem</span> <span class="o">::</span> <span class="kt">ParseResult</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span>
+<span class="n">getMem</span> <span class="p">(</span><span class="kt">Result</span> <span class="kr">_</span> <span class="n">cs</span><span class="p">)</span> <span class="o">=</span> <span class="n">cs</span>
+<span class="n">getMem</span> <span class="p">(</span><span class="kt">Error</span> <span class="kr">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">error</span> <span class="s">"You should not do that!"</span>
+</code></pre></div></div>
+
+<p>Obviously, in a longer program you want to be handling this case better.</p>
+
+<p><em>Hint</em>: If your <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> returns a list of elements, the empty list <code class="language-plaintext highlighter-rouge">[]</code> is a good default case.</p>
+
+<h3 id="putting-it-all-together">Putting it all together</h3>
+
+<p>In the first round, our player will just pick a choice at random and return an empty memory.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">play</span> <span class="kt">Nothing</span> <span class="o">=</span> <span class="p">(</span><span class="kt">Scissors</span><span class="p">,</span> <span class="s">""</span><span class="p">)</span> <span class="c1">-- Chosen at random!</span>
+</code></pre></div></div>
+
+<p>Now, we need to write a couple functions:</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">winAgainst</code> that determines which choice wins against a given one.</li>
+  <li><code class="language-plaintext highlighter-rouge">mostCommon</code> which finds the most common occurrence in a list.</li>
+</ol>
+
+<p>With that, we have a full <code class="language-plaintext highlighter-rouge">play</code> function:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">play</span> <span class="p">(</span><span class="kt">Just</span> <span class="p">(</span><span class="kr">_</span><span class="p">,</span> <span class="n">opponent</span><span class="p">,</span> <span class="n">mem</span><span class="p">))</span> <span class="o">=</span> <span class="p">(</span><span class="n">winning</span> <span class="n">whole</span><span class="p">,</span> <span class="n">concatMap</span> <span class="n">convert</span> <span class="n">whole</span><span class="p">)</span>
+  <span class="kr">where</span>
+    <span class="c1">-- Convert the memory to a list of different choices</span>
+    <span class="n">as_choices</span> <span class="o">=</span> <span class="n">getMem</span> <span class="o">.</span> <span class="n">parse</span> <span class="p">(</span><span class="n">list</span> <span class="n">choice</span><span class="p">)</span>
+    <span class="c1">-- Get the whole set of moves—all the prev. rounds + last one</span>
+    <span class="n">whole</span> <span class="o">=</span> <span class="n">opponent</span> <span class="o">:</span> <span class="n">as_choices</span> <span class="n">mem</span>
+    <span class="n">winning</span> <span class="o">=</span> <span class="n">winAgainst</span> <span class="o">.</span> <span class="n">mostCommon</span>
+</code></pre></div></div>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">play</span> <span class="kt">Nothing</span>
+<span class="p">(</span><span class="kt">S</span><span class="p">,</span><span class="s">""</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">play</span> <span class="p">(</span><span class="kt">Just</span> <span class="p">(</span><span class="kt">Scissors</span><span class="p">,</span> <span class="kt">Scissors</span><span class="p">,</span> <span class="s">""</span><span class="p">))</span>
+<span class="p">(</span><span class="kt">R</span><span class="p">,</span><span class="s">"S"</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">play</span> <span class="p">(</span><span class="kt">Just</span> <span class="p">(</span><span class="kt">Scissors</span><span class="p">,</span> <span class="kt">Scissors</span><span class="p">,</span> <span class="s">"RRP"</span><span class="p">))</span>
+<span class="p">(</span><span class="kt">P</span><span class="p">,</span><span class="s">"SRRP"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><em>Note</em>: Here we can see the results directly because <code class="language-plaintext highlighter-rouge">RockPaperScissors</code> has an instance of <code class="language-plaintext highlighter-rouge">Show</code>.
+If you want to do the same with a data type without <code class="language-plaintext highlighter-rouge">Show</code>, you would need to call <code class="language-plaintext highlighter-rouge">convert</code>.</p>
+
+<h3 id="going-further">Going further</h3>
+
+<p>Now, this is a simplistic view of storing information.
+We are only concatenating characters because our data is so small.
+However, there are better ways to store that data.</p>
+
+<p>One issue with this approach is that we need to process the memory sequentially at each round.
+Instead, we could keep track of the number of occurrences of each choice.</p>
+
+<hr>
+
+<h3 id="exercise">Exercise</h3>
+
+<p>Implement a memory for the following data type.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">Played</span> <span class="o">=</span> <span class="kt">Played</span> <span class="p">{</span><span class="n">rocks</span><span class="p">,</span> <span class="n">papers</span><span class="p">,</span> <span class="n">scissors</span> <span class="o">::</span> <span class="kt">Int</span><span class="p">}</span>
+
+<span class="cd">-- | Store a @Played@ as a string in format: @nC@, with @n@ the number of</span>
+<span class="c1">-- occurrences and @C@ the choice.</span>
+<span class="n">convert'</span> <span class="o">::</span> <span class="kt">Played</span> <span class="o">-&gt;</span> <span class="kt">String</span>
+<span class="n">convert'</span> <span class="kt">Played</span> <span class="p">{</span><span class="n">rocks</span><span class="p">,</span> <span class="n">papers</span><span class="p">,</span> <span class="n">scissors</span><span class="p">}</span> <span class="o">=</span>
+  <span class="n">show</span> <span class="n">rocks</span> <span class="o">++</span> <span class="s">"R"</span> <span class="o">++</span> <span class="n">show</span> <span class="n">papers</span> <span class="o">++</span> <span class="s">"P"</span> <span class="o">++</span> <span class="n">show</span> <span class="n">scissors</span> <span class="o">++</span> <span class="s">"S"</span>
+</code></pre></div></div>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">play</span> <span class="kt">Nothing</span>
+<span class="p">(</span><span class="kt">S</span><span class="p">,</span><span class="s">"0R0P0S"</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">play</span> <span class="p">(</span><span class="kt">Just</span> <span class="p">(</span><span class="kt">Scissors</span><span class="p">,</span> <span class="kt">Scissors</span><span class="p">,</span> <span class="s">"0R0P0S"</span><span class="p">))</span>
+<span class="p">(</span><span class="kt">R</span><span class="p">,</span><span class="s">"0R0P1S"</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">play</span> <span class="p">(</span><span class="kt">Just</span> <span class="p">(</span><span class="kt">Scissors</span><span class="p">,</span> <span class="kt">Scissors</span><span class="p">,</span> <span class="s">"2R1P0S"</span><span class="p">))</span>
+<span class="p">(</span><span class="kt">P</span><span class="p">,</span><span class="s">"2R1P1S"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr>
+
+<div class="glossary">
+  <h2 id="glossary">Glossary</h2>
+
+  <p><em>Parser</em>: A program that processes a string of text to extract structured information from it. Parsers are used in interpreting programming languages, data formats, and other structured text formats.</p>
+
+  <p><em>Context-Free Grammar</em>: A type of formal grammar that is used to define the syntax of programming languages and data formats. CFGs consist of a set of production rules that define how terminals and non-terminals can be combined to produce strings in the language.</p>
+
+  <p><em>Backus-Naur Form</em>: A notation for expressing context-free grammars. It is used to formally describe the syntax of programming languages.</p>
+
+  <p><em>Terminal</em>: In the context of grammars, a terminal is a symbol that appears in the strings generated by the grammar. Terminals are the actual characters or tokens of the language.</p>
+
+  <p><em>Non-Terminal</em>: A symbol in a grammar that can be replaced by a sequence of terminals and non-terminals according to the production rules of the grammar.</p>
+
+  <p><em>Parser Combinator</em>: A higher-order function that takes parsers as input and combines them to create new parsers. Parser combinators are used to build complex parsers in a modular and compositional way.</p>
+
+  <p><em>Abstract Syntax Tree</em>: A tree representation of the abstract syntactic structure of a string of text. Each node in the tree represents a construct occurring in the text.</p>
+
+</div>
+
+	</div>
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/eithers/">&lt; Eithers</a>
+      
+      
+        
+        
+        <a id="right" href="/statemonad/">State <span class="glossary-term" data-term="monad">Monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span> &gt;</a>
+      
+    
+  
+    
+  
+</div>
+
+</article>
+
+      </div>
+    </main><link id="fa-stylesheet" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css">
+<footer class="site-footer h-card">
+    <data class="u-url" href="/"></data>
+
+    <div class="wrapper">
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col">
+                <!-- <p class="feed-subscribe">
+                <a href="/feed.xml">
+                    <svg class="svg-icon orange">
+                        <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+                    </svg><span>Subscribe</span>
+                </a>
+                </p> -->
+        </div>
+        <div class="footer-col">
+            <p>Examples and tutorials for various programming paradigms.</p>
+        </div>
+    </div>
+
+    <!-- <div class="social-links"><ul class="social-media-list"><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li>
+  <li>
+    <a href="/feed.xml" target="_blank" title="Subscribe to syndication feed">
+      <svg class="svg-icon grey" viewbox="0 0 16 16">
+        <path d="M12.8 16C12.8 8.978 7.022 3.2 0 3.2V0c8.777 0 16 7.223 16 16h-3.2zM2.194
+          11.61c1.21 0 2.195.985 2.195 2.196 0 1.21-.99 2.194-2.2 2.194C.98 16 0 15.017 0
+          13.806c0-1.21.983-2.195 2.194-2.195zM10.606
+          16h-3.11c0-4.113-3.383-7.497-7.496-7.497v-3.11c5.818 0 10.606 4.79 10.606 10.607z"
+        />
+      </svg>
+    </a>
+  </li>
+</ul>
+</div> -->
+
+    </div>
+
+</footer>
+
+
+
+</body></html>

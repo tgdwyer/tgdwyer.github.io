@@ -1,0 +1,908 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Functional Reactive Programming | Good Times Paradigms</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="Functional Reactive Programming">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Learning Outcomes">
+<meta property="og:description" content="Learning Outcomes">
+<meta property="og:site_name" content="Good Times Paradigms">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-09-30T03:56:06+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="Functional Reactive Programming">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-30T03:56:06+00:00","datePublished":"2025-09-30T03:56:06+00:00","description":"Learning Outcomes","headline":"<span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> Reactive Programming","mainEntityOfPage":{"@type":"WebPage","@id":"/functionalreactiveprogramming/"},"url":"/functionalreactiveprogramming/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Good Times Paradigms"><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-159840333-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159840333-1');
+</script><!-- MathJax v3 -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true }
+  };
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+  <script src="/assets/js/spoilers.js" defer=""></script></head>
+
+  <body><header class="site-header">
+
+    <div class="wrapper"><!-- Lambda icon and site title aligned left in a flex container -->
+        <div style="display: flex; align-items: center;">
+            <button id="play-theme-song" style="background:none;border:none;cursor:pointer;vertical-align:middle;margin-right:2px;" title="Play theme song">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="currentColor" viewBox="0 0 48 24" style="vertical-align:middle;">
+                    <text x="4" y="20" font-size="20" font-family="serif">ΓΤΠ</text>
+                    <!-- γτπ -->
+                </svg>
+            </button>
+            <a class="site-title" rel="author" href="/" style="margin:0;">Good Times Paradigms</a>
+        </div>
+        <script src="/assets/js/hide_solutions.js" defer=""></script>
+        <audio id="theme-song" src="/assets/themesong.mp3"></audio>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var btn = document.getElementById('play-theme-song');
+                var audio = document.getElementById('theme-song');
+                btn.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play();
+                    } else {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                });
+            });
+        </script><nav class="site-nav">
+            <input type="checkbox" id="nav-trigger" class="nav-trigger">
+            <label for="nav-trigger">
+                <span class="menu-icon">
+                </span>
+            </label>
+
+            <div class="nav-items"><a class="page-link nav-item" href="/about/">About</a><a class="page-link nav-item" href="/">Notes on Programming Paradigms</a><!-- Radio Switch -->
+                <div id="toggle-div" style="display: none;">
+                    <div class="solutions-toggle">
+                        <p class="page-link" style="margin-bottom: 0px;">Show Solutions?</p>
+                        <label class="switch" style="vertical-align: middle;">
+                            <input type="checkbox" id="toggle-switch">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/lazyevaluation/">&lt; <span class="glossary-term" data-term="lazy evaluation">Lazy Evaluation<span class="glossary-popup">A strategy where expressions are not evaluated until their values are needed, allowing for the creation of infinite sequences and delayed computations.
+</span></span></a>
+      
+      
+        
+        
+        <a id="right" href="/asteroids/">FRP Asteroids &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+	<header class="post-header">
+		<h1 class="post-title">Functional Reactive Programming</h1>
+	</header>
+	<p id="readingTime">
+
+  
+  32
+
+ min read</p>
+	<div class="post-content">
+		<h2 id="learning-outcomes">Learning Outcomes</h2>
+
+<ul>
+  <li>Understand that the <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> construct of <span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> Reactive Programming is just another container of elements, but whose “push-based” architecture allows them to be used to capture <span class="glossary-term" data-term="asynchronous">asynchronous<span class="glossary-popup">Operations that occur independently of the main program flow, allowing the program to continue executing while waiting for the operation to complete.
+</span></span> behaviour</li>
+  <li>Understand that <span class="glossary-term" data-term="observables">Observables<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> provide the benefits of <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming: composability, reusability</li>
+  <li>See that <span class="glossary-term" data-term="observables">Observables<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> structure complex stateful programs in a more linear and understandable way that maps more easily to the underlying state machine</li>
+  <li>Use <span class="glossary-term" data-term="observables">Observables<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> to create simple UI programs in-place of <span class="glossary-term" data-term="asynchronous">asynchronous<span class="glossary-popup">Operations that occur independently of the main program flow, allowing the program to continue executing while waiting for the operation to complete.
+</span></span> event handling</li>
+</ul>
+
+<h2 id="introduction">Introduction</h2>
+
+<p><span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> Reactive Programming describes an approach to modelling complex, <span class="glossary-term" data-term="asynchronous">asynchronous<span class="glossary-popup">Operations that occur independently of the main program flow, allowing the program to continue executing while waiting for the operation to complete.
+</span></span> behaviours that uses many of the <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming principles we have already explored.  In particular:</p>
+
+<ul>
+  <li>Applications of functions to elements of containers to transform to a new container (e.g. map, filter, reduce etc. over arrays).</li>
+  <li>Use of function composition and <span class="glossary-term" data-term="higher-order functions">higher-order functions<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span> to define complex transformations from simple, reusable function elements.</li>
+</ul>
+
+<p>We will explore FRP through an implementation of the <a href="#observable-streams"><span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span></a> data structure in <a href="https://www.learnrxjs.io/">the Reactive Extensions for JavaScript (RxJS) library</a>.  We will then see it applied in application to a straightforward <a href="#a-user-interface-example">browser-based user <span class="glossary-term" data-term="interface">interface<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span> problem</a>.</p>
+
+<p>To support the code examples, the streams are visualised using <a href="https://rx-viz.vercel.app/">rxviz</a>.</p>
+
+<h2 id="observable-streams">Observable Streams</h2>
+
+<p>We have seen a number of different ways of wrapping collections of things in containers: built-in JavaScript arrays, linked-list data structures, and also lazy sequences.  Now we’ll see that <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> is just another type of container with some simple examples, before demonstrating that it also easily applies to <span class="glossary-term" data-term="asynchronous">asynchronous<span class="glossary-popup">Operations that occur independently of the main program flow, allowing the program to continue executing while waiting for the operation to complete.
+</span></span> streams.</p>
+
+<p>You can <a href="https://stackblitz.com/edit/rxjs-introexamples?file=index.ts">also play with a live version of this code</a>.  Note that the code in this live version begins with a pair of <code class="language-plaintext highlighter-rouge">import</code> statements, bringing the set of functions that we describe below into scope for this file from the <code class="language-plaintext highlighter-rouge">rxjs</code> libraries:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="k">of</span><span class="p">,</span> <span class="nx">range</span><span class="p">,</span> <span class="nx">fromEvent</span><span class="p">,</span> <span class="nx">zip</span><span class="p">,</span> <span class="nx">merge</span><span class="p">,</span> <span class="nx">last</span><span class="p">,</span> <span class="nx">filter</span><span class="p">,</span> <span class="nx">scan</span><span class="p">,</span> <span class="nx">map</span><span class="p">,</span> <span class="nx">mergeMap</span><span class="p">,</span> <span class="nx">take</span><span class="p">,</span> <span class="nx">takeUntil</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">rxjs</span><span class="dl">'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Conceptually, the <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> data structure just wraps a collection of things in a container in a similar way to the data structures we have seen before.
+The function <code class="language-plaintext highlighter-rouge">of</code> creates an <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> that will emit the specified elements in its parameter list in order.  However, nothing actually happens until we initialise the stream.  We do this by “subscribing” to the <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span>, passing in an “effectful” function that is applied to each of the elements in the stream.  For example, we could print the elements out with <code class="language-plaintext highlighter-rouge">console.log</code>:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">of</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+  <span class="p">.</span><span class="nf">subscribe</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>1<br>
+2<br>
+3<br>
+4</p>
+</blockquote>
+
+<p><img src="/assets/images/chapterImages/functionalreactiveprogramming/of1234.gif" alt="Using Of"></p>
+
+<p>The requirement to invoke <code class="language-plaintext highlighter-rouge">subscribe</code> before anything is produced by the <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> is conceptually similar to the <a href="lazyevaluation">lazy sequence</a>, where nothing happened until we started calling <code class="language-plaintext highlighter-rouge">next</code>.  But there is also a difference.
+You could think of our lazy sequences as being “pull-based” data structures, because we had to “pull” the values out one at a time by calling the <code class="language-plaintext highlighter-rouge">next</code> function as many times as we wanted elements of the list.  <span class="glossary-term" data-term="observables">Observables<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> are a bit different.  They are used to handle “streams” of things, such as <span class="glossary-term" data-term="asynchronous">asynchronous<span class="glossary-popup">Operations that occur independently of the main program flow, allowing the program to continue executing while waiting for the operation to complete.
+</span></span> UI (e.g. mouse clicks on an element of a web page) or communication events (e.g. responses from a web service).  These things are <span class="glossary-term" data-term="asynchronous">asynchronous<span class="glossary-popup">Operations that occur independently of the main program flow, allowing the program to continue executing while waiting for the operation to complete.
+</span></span> in the sense that we do not know when they will occur.</p>
+
+<p>Just as we have done for various data structures (arrays and so on) in previous chapters, we can define a transform over an <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> to create a new <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span>.  This transformation may have multiple steps the same way that we chained <code class="language-plaintext highlighter-rouge">filter</code> and <code class="language-plaintext highlighter-rouge">map</code> operations over arrays previously.  In RxJS’s <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> implementation, however, they’ve gone a little bit more <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span>, by insisting that such operations are composed (rather than chained) inside a <code class="language-plaintext highlighter-rouge">pipe</code>.  For example, here’s the squares of even numbers in the range [0,10):</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">isEven</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span><span class="o">%</span><span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nx">square</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span><span class="o">*</span><span class="nx">x</span>
+<span class="nf">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+  <span class="p">.</span><span class="nf">pipe</span><span class="p">(</span>
+    <span class="nf">filter</span><span class="p">(</span><span class="nx">isEven</span><span class="p">),</span>
+    <span class="nf">map</span><span class="p">(</span><span class="nx">square</span><span class="p">)</span>
+  <span class="p">)</span>
+  <span class="p">.</span><span class="nf">subscribe</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>0<br>
+4<br>
+16<br>
+36<br>
+64</p>
+</blockquote>
+
+<p>The three animations represent the creation (<code class="language-plaintext highlighter-rouge">range</code>) and the two transformations (<code class="language-plaintext highlighter-rouge">filter</code> and <code class="language-plaintext highlighter-rouge">map</code>), respectively.</p>
+
+<p><img src="/assets/images/chapterImages/functionalreactiveprogramming/even.gif" alt="Even Numbers"></p>
+
+<p>We can relate this to similar operations on arrays which we have seen before:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">range</span> <span class="o">=</span> <span class="nx">n</span> <span class="o">=&gt;</span> <span class="nc">Array</span><span class="p">(</span><span class="nx">n</span><span class="p">).</span><span class="nf">fill</span><span class="p">().</span><span class="nf">map</span><span class="p">((</span><span class="nx">_</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">i</span><span class="p">)</span>
+<span class="nf">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+  <span class="p">.</span><span class="nf">filter</span><span class="p">(</span><span class="nx">isEven</span><span class="p">)</span>
+  <span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="nx">square</span><span class="p">)</span>
+  <span class="p">.</span><span class="nf">forEach</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>To solve the first Project Euler problem using RxJS, we generate a sequence of numbers from 0 to 999 with <code class="language-plaintext highlighter-rouge">range(1000)</code>. We then use the <code class="language-plaintext highlighter-rouge">filter</code> operator to select numbers divisible by 3 or 5. We then use he <code class="language-plaintext highlighter-rouge">scan</code> operator, akin to reduce, accumulates the sum of these filtered numbers over time, and the <code class="language-plaintext highlighter-rouge">last</code> operator emits only the final accumulated sum. Finally, we subscribe to the <span class="glossary-term" data-term="observable">observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> and log the result to the console. Here’s the complete code:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+  <span class="p">.</span><span class="nf">pipe</span><span class="p">(</span>
+    <span class="nf">filter</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span><span class="o">%</span><span class="mi">3</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">x</span><span class="o">%</span><span class="mi">5</span> <span class="o">===</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="nf">scan</span><span class="p">((</span><span class="nx">a</span><span class="p">,</span><span class="nx">v</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span><span class="o">+</span><span class="nx">v</span><span class="p">),</span>
+    <span class="nf">last</span><span class="p">()</span>
+  <span class="p">)</span>
+  <span class="p">.</span><span class="nf">subscribe</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>In the developer console, only one number will be printed:</p>
+
+<blockquote>
+  <p>233168</p>
+</blockquote>
+
+<p>We can see the values changes as they move further and further down the stream. The four animations represent the creation (<code class="language-plaintext highlighter-rouge">range</code>) and the three transformations (<code class="language-plaintext highlighter-rouge">filter</code>, <code class="language-plaintext highlighter-rouge">scan</code> and <code class="language-plaintext highlighter-rouge">last</code>), respectively. The <code class="language-plaintext highlighter-rouge">last</code> animation is empty, since we only emit the <em>last</em> value, which will be off screen.</p>
+
+<p><img src="/assets/images/chapterImages/functionalreactiveprogramming/euler.gif" alt="Euler Example"></p>
+
+<p>Scan is very much like the <code class="language-plaintext highlighter-rouge">reduce</code> function on Array in that it applies an accumulator function to the elements coming through the <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span>, except instead of just outputting a single value (as <code class="language-plaintext highlighter-rouge">reduce</code> does), it emits a stream of the running accumulation (in this case, the sum so far).  Thus, we use the <code class="language-plaintext highlighter-rouge">last</code> function to produce an <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> with just the final value.</p>
+
+<p>There are also functions for combining <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> streams.  The <code class="language-plaintext highlighter-rouge">zip</code> function lets you pair the values from two streams into an array:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span>
+  <span class="nx">columns</span> <span class="o">=</span> <span class="k">of</span><span class="p">(</span><span class="dl">'</span><span class="s1">A</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">B</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">C</span><span class="dl">'</span><span class="p">),</span>
+  <span class="nx">rows</span> <span class="o">=</span> <span class="nf">range</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+
+<span class="nf">zip</span><span class="p">(</span><span class="nx">columns</span><span class="p">,</span><span class="nx">rows</span><span class="p">)</span>
+  <span class="p">.</span><span class="nf">subscribe</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[“A”,0]<br>
+[“B”,1]<br>
+[“C”,2]</p>
+</blockquote>
+
+<p><img src="/assets/images/chapterImages/functionalreactiveprogramming/zip1.gif" alt="Zip Example"></p>
+
+<p>If you like mathy vector speak, you can think of the above as an <em>inner product</em> of the two streams.<br>
+By contrast, the <code class="language-plaintext highlighter-rouge">mergeMap</code> operator gives the <em>Cartesian product</em> of two streams.  That is, it gives us a way to take, for every element of a stream, a whole other stream, but flattened (or projected) together with the parent stream.  The following enumerates all the row/column indices of cells in a spreadsheet:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">columns</span><span class="p">.</span><span class="nf">pipe</span><span class="p">(</span>
+  <span class="nf">mergeMap</span><span class="p">(</span><span class="nx">column</span> <span class="o">=&gt;</span> <span class="nx">rows</span><span class="p">.</span><span class="nf">pipe</span><span class="p">(</span>
+    <span class="nf">map</span><span class="p">(</span><span class="nx">row</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nx">column</span><span class="p">,</span> <span class="nx">row</span><span class="p">])</span>
+  <span class="p">))</span>
+<span class="p">).</span><span class="nf">subscribe</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[“A”, 0]<br>
+[“A”, 1]<br>
+[“A”, 2]<br>
+[“B”, 0]<br>
+[“B”, 1]<br>
+[“B”, 2]<br>
+[“C”, 0]<br>
+[“C”, 1]<br>
+[“C”, 2]</p>
+</blockquote>
+
+<p><img src="/assets/images/chapterImages/functionalreactiveprogramming/mergeMap.gif" alt="Merge Map Example"></p>
+
+<p>If we contrast <code class="language-plaintext highlighter-rouge">mergeMap</code> and <code class="language-plaintext highlighter-rouge">map</code>, <code class="language-plaintext highlighter-rouge">map</code> will produce an <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> of <span class="glossary-term" data-term="observables">Observables<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span>, while <code class="language-plaintext highlighter-rouge">mergeMap</code> will produce a single stream with all of the values. Contrast the animation for <code class="language-plaintext highlighter-rouge">map</code> with the previous <code class="language-plaintext highlighter-rouge">mergeMap</code> animation.  <code class="language-plaintext highlighter-rouge">map</code> has three separate branches, where each one represents its own <span class="glossary-term" data-term="observable">observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> stream. The output of the <code class="language-plaintext highlighter-rouge">console.log</code> is an instance of the <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> class itself, which is not very useful!</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">columns</span><span class="p">.</span><span class="nf">pipe</span><span class="p">(</span>
+  <span class="nf">map</span><span class="p">(</span><span class="nx">column</span> <span class="o">=&gt;</span> <span class="nx">rows</span><span class="p">.</span><span class="nf">pipe</span><span class="p">(</span>
+    <span class="nf">map</span><span class="p">(</span><span class="nx">row</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="nx">column</span><span class="p">,</span> <span class="nx">row</span><span class="p">])</span>
+  <span class="p">))</span>
+<span class="p">).</span><span class="nf">subscribe</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Observable<br>
+Observable<br>
+Observable</p>
+</blockquote>
+
+<p><img src="/assets/images/chapterImages/functionalreactiveprogramming/mapmap.gif" alt="Map Map Example"></p>
+
+<p>Another way to combine streams is <code class="language-plaintext highlighter-rouge">merge</code>.  Streams that are generated with <code class="language-plaintext highlighter-rouge">of</code> and <code class="language-plaintext highlighter-rouge">range</code> have all their elements available immediately, so the result of a merge is not very interesting, just the elements of one followed by the elements of the other:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">merge</span><span class="p">(</span><span class="nx">columns</span><span class="p">,</span><span class="nx">rows</span><span class="p">)</span>
+  <span class="p">.</span><span class="nf">subscribe</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>A<br>
+B<br>
+C<br>
+0<br>
+1<br>
+2</p>
+</blockquote>
+
+<p><img src="/assets/images/chapterImages/functionalreactiveprogramming/merge.gif" alt="Example of Merge"></p>
+
+<p>However, <code class="language-plaintext highlighter-rouge">merge</code> when applied to <span class="glossary-term" data-term="asynchronous">asynchronous<span class="glossary-popup">Operations that occur independently of the main program flow, allowing the program to continue executing while waiting for the operation to complete.
+</span></span> streams will merge the elements in the order that they arrive in the stream.  For example, a stream of key-down and mouse-down events from a web-page:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span>
+  <span class="nx">key$</span> <span class="o">=</span> <span class="nx">fromEvent</span><span class="o">&lt;</span><span class="nx">KeyboardEvent</span><span class="o">&gt;</span><span class="p">(</span><span class="nb">document</span><span class="p">,</span><span class="dl">"</span><span class="s2">keydown</span><span class="dl">"</span><span class="p">),</span>
+  <span class="nx">mouse$</span> <span class="o">=</span> <span class="nx">fromEvent</span><span class="o">&lt;</span><span class="nx">MouseEvent</span><span class="o">&gt;</span><span class="p">(</span><span class="nb">document</span><span class="p">,</span><span class="dl">"</span><span class="s2">mousedown</span><span class="dl">"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>It’s a convention to end variable names referring to <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> streams with a <code class="language-plaintext highlighter-rouge">$</code> (I like to think it’s short for “$tream”, or implies a plurality of the things in the stream, or maybe it’s just because <a href="https://www.youtube.com/watch?v=PBwAxmrE194">cash rules everything around me</a>).</p>
+
+<p>We can analogously think of <code class="language-plaintext highlighter-rouge">mouse$</code> as an array of <code class="language-plaintext highlighter-rouge">MouseEvent</code> objects, e.g., <code class="language-plaintext highlighter-rouge">[MouseEvent, MouseEvent, MouseEvent, MouseEvent, MouseEvent]</code>, and then we can perform operations on this array just as we would with a typical array of values. However, rather than being a fixed array of <code class="language-plaintext highlighter-rouge">MouseEvent</code>, they are an ongoing stream of <code class="language-plaintext highlighter-rouge">MouseEvent</code> objects that occur over time. Therefore, instead of being a static collection of events that you can iterate over all at once, the <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> <code class="language-plaintext highlighter-rouge">mouse$</code> represents a dynamic, potentially infinite sequence of events that are emitted as they happen in real-time.</p>
+
+<p>The following lets us see in the console the keys pressed as they come in, it will keep running for as long as the web page is open:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">key$</span><span class="p">.</span><span class="nf">pipe</span><span class="p">(</span>
+  <span class="nf">map</span><span class="p">(</span><span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">key</span><span class="p">)</span>
+<span class="p">).</span><span class="nf">subscribe</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The animation displays the stream as the user types in the best FIT unit in to the webpage:</p>
+
+<p><img src="/assets/images/chapterImages/functionalreactiveprogramming/keydown.gif" alt="Key Down Example"></p>
+
+<p>The following prints “!!” on every mousedown:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">mouse$</span><span class="p">.</span><span class="nf">pipe</span><span class="p">(</span>
+  <span class="nf">map</span><span class="p">(</span><span class="nx">_</span> <span class="o">=&gt;</span> <span class="dl">"</span><span class="s2">!!</span><span class="dl">"</span><span class="p">)</span>
+<span class="p">).</span><span class="nf">subscribe</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The yellow highlight signifies when the mouse is clicked!</p>
+
+<p><img src="/assets/images/chapterImages/functionalreactiveprogramming/click.gif" alt="Click Example"></p>
+
+<p>Once again this will keep producing the message for every mouse click for as long as the page is open.  Note that the subscribes do not “block”, so the above two subscriptions will run in parallel.  That is, we will receive messages on the console for either key or mouse downs whenever they occur.</p>
+
+<p>The following achieves the same thing with a single subscription using <code class="language-plaintext highlighter-rouge">merge</code>:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">merge</span><span class="p">(</span><span class="nx">key$</span><span class="p">.</span><span class="nf">pipe</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nx">e</span> <span class="o">=&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">key</span><span class="p">)),</span>
+      <span class="nx">mouse$</span><span class="p">.</span><span class="nf">pipe</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nx">_</span> <span class="o">=&gt;</span> <span class="dl">"</span><span class="s2">!!</span><span class="dl">"</span><span class="p">))</span>
+<span class="p">).</span><span class="nf">subscribe</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/chapterImages/functionalreactiveprogramming/keyboardclick.gif" alt="Keyboard Example"></p>
+
+<div class="cheatsheet">
+
+  <h2 id="observable-cheatsheet">Observable Cheatsheet</h2>
+
+  <p>The following is a very small (but sufficiently useful) subset of the functionality available for <a href="https://www.learnrxjs.io/">RxJS</a>.
+I’ve simplified the types rather greatly for readability and not always included all the optional arguments.</p>
+
+  <h3 id="creation">Creation</h3>
+
+  <p>The following functions create <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> streams from various sources.</p>
+
+  <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// produces the list of arguments as elements of the stream</span>
+<span class="k">of</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(...</span><span class="nx">args</span><span class="p">:</span> <span class="nx">T</span><span class="p">[]):</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span>
+
+<span class="c1">// produces a stream of numbers from “start” until “count” been emitted</span>
+<span class="nf">range</span><span class="p">(</span><span class="nx">start</span><span class="p">?:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">count</span><span class="p">?:</span> <span class="kr">number</span><span class="p">):</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="kr">number</span><span class="o">&gt;</span>
+
+<span class="c1">// produces a stream for the specified event, element type depends on</span>
+<span class="c1">// event type and should be specified by the type parameter, e.g.: MouseEvent, KeyboardEvent</span>
+<span class="nx">fromEvent</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">target</span><span class="p">:</span> <span class="nx">FromEventTarget</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="nx">eventName</span><span class="p">:</span> <span class="kr">string</span><span class="p">):</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span>
+
+<span class="c1">// produces a stream of increasing numbers, emitted every “period” milliseconds</span>
+<span class="c1">// emits the first event immediately</span>
+<span class="nf">interval</span><span class="p">(</span><span class="nx">period</span><span class="p">?:</span> <span class="kr">number</span><span class="p">):</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="kr">number</span><span class="o">&gt;</span>
+
+<span class="c1">// after given initial delay, emit numbers in sequence every specified duration</span>
+<span class="nf">timer</span><span class="p">(</span><span class="nx">initialDelay</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">period</span><span class="p">?:</span> <span class="kr">number</span><span class="p">):</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="kr">number</span><span class="o">&gt;</span>
+
+</code></pre></div>  </div>
+
+  <h3 id="combination">Combination</h3>
+
+  <p>Creating new <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> streams from existing streams</p>
+
+  <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// create a new Observable stream from the merge of multiple Observable streams.</span>
+<span class="c1">// The resulting stream will have elements of Union type.</span>
+<span class="c1">// i.e. the type of the elements will be the Union of the types of each of the merged streams</span>
+<span class="c1">// Note: there is also an operator version.</span>
+<span class="nx">merge</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">U</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">t</span><span class="p">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="nx">u</span><span class="p">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">U</span><span class="o">&gt;</span><span class="p">,</span> <span class="p">...):</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">T</span> <span class="o">|</span> <span class="nx">U</span> <span class="o">|</span> <span class="p">...</span><span class="o">&gt;</span>
+
+<span class="c1">// create n-ary tuples (arrays) of the elements at the head of each of the incoming streams</span>
+<span class="nx">zip</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">U</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">t</span><span class="p">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">,</span> <span class="nx">r</span><span class="p">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">U</span><span class="o">&gt;</span><span class="p">):</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="p">[</span><span class="nx">T</span><span class="p">,</span> <span class="nx">U</span><span class="p">,</span> <span class="p">...]</span><span class="o">&gt;</span>
+</code></pre></div>  </div>
+
+  <h3 id="observable-methods">Observable methods</h3>
+
+  <p>Methods on the <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> object itself that may be chained.</p>
+
+  <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// composes together a sequence of operators (see below) that are applied to transform the stream</span>
+<span class="nx">pipe</span><span class="o">&lt;</span><span class="nx">A</span><span class="o">&gt;</span><span class="p">(...</span><span class="nx">op1</span><span class="p">:</span> <span class="nx">OperatorFunction</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">A</span><span class="o">&gt;</span><span class="p">):</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">A</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="c1">// {next} is a function applied to each element of the stream</span>
+<span class="c1">// {error} is a function applied in case of error (only really applicable for communications)</span>
+<span class="c1">// {complete} is a function applied on completion of the stream (e.g. cleanup)</span>
+<span class="c1">// @return {Subscription} returns an object whose “unsubscribe” method may be called to cleanup</span>
+<span class="c1">//              e.g. unsubscribe could be called to cancel an ongoing Observable</span>
+<span class="nf">subscribe</span><span class="p">(</span><span class="nx">next</span><span class="p">?:</span> <span class="p">(</span><span class="nx">value</span><span class="p">:</span> <span class="nx">T</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="k">void</span><span class="p">,</span> <span class="nx">error</span><span class="p">?:</span> <span class="p">(</span><span class="nx">error</span><span class="p">:</span> <span class="kr">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="k">void</span><span class="p">,</span> <span class="nx">complete</span><span class="p">?:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="k">void</span><span class="p">):</span> <span class="nx">Subscription</span><span class="p">;</span>
+</code></pre></div>  </div>
+
+  <h3 id="operators">Operators</h3>
+
+  <p>Operators are passed to <code class="language-plaintext highlighter-rouge">pipe</code>.  They all return an <code class="language-plaintext highlighter-rouge">OperatorFunction</code> which is used by <code class="language-plaintext highlighter-rouge">pipe</code>.</p>
+
+  <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// transform the elements of the input stream using the “project” function</span>
+<span class="nx">map</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">R</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">project</span><span class="p">:</span> <span class="p">(</span><span class="nx">value</span><span class="p">:</span> <span class="nx">T</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">R</span><span class="p">)</span>
+
+<span class="c1">// only take elements which satisfy the predicate</span>
+<span class="nx">filter</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">predicate</span><span class="p">:</span> <span class="p">(</span><span class="nx">value</span><span class="p">:</span> <span class="nx">T</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">boolean</span><span class="p">)</span>
+
+<span class="c1">// take “n” elements</span>
+<span class="nx">take</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">)</span>
+
+<span class="c1">// take the last element</span>
+<span class="nx">last</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">()</span>
+
+<span class="c1">// AKA flatMap: produces an Observable&lt;R&gt; for every input stream element T</span>
+<span class="nx">mergeMap</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">R</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">project</span><span class="p">:</span> <span class="p">(</span><span class="nx">value</span><span class="p">:</span> <span class="nx">T</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">R</span><span class="o">&gt;</span><span class="p">)</span>
+
+<span class="c1">// accumulates values from the stream</span>
+<span class="nx">scan</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">R</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">accumulator</span><span class="p">:</span> <span class="p">(</span><span class="nx">acc</span><span class="p">:</span> <span class="nx">R</span><span class="p">,</span> <span class="nx">value</span><span class="p">:</span> <span class="nx">T</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">R</span><span class="p">,</span> <span class="nx">seed</span><span class="p">?:</span> <span class="nx">R</span><span class="p">)</span>
+
+<span class="c1">// push an arbitrary object on to the start/end of the stream</span>
+<span class="nx">startWith</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">o</span><span class="p">:</span> <span class="nx">T</span><span class="p">)</span>
+<span class="nx">endWith</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">o</span><span class="p">:</span> <span class="nx">T</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+</div>
+
+<h2 id="a-user-interface-example">A User Interface Example</h2>
+
+<p>Modern computer systems often have to deal with <span class="glossary-term" data-term="asynchronous">asynchronous<span class="glossary-popup">Operations that occur independently of the main program flow, allowing the program to continue executing while waiting for the operation to complete.
+</span></span> processing.  Examples abound:</p>
+
+<ul>
+  <li>In RESTful web services, where a client sends a non-blocking request (e.g. GET) with no guarantee of when the server will send a response.</li>
+  <li>In user <span class="glossary-term" data-term="interfaces">interfaces<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span>, events are triggered by user interaction with different parts of the <span class="glossary-term" data-term="interface">interface<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span>, which may happen at any time.</li>
+  <li>Robotics and other systems with sensors, the system must respond to events in the world.</li>
+</ul>
+
+<p>Under the hood, most of these systems work on an event model, a kind of single-threaded multitasking where the program (after initialisation) polls a FIFO (First-In-First-Out) queue for incoming events in the so-called event loop.  When an event is popped from the queue, any subscribed actions for the event will be applied.</p>
+
+<p>In JavaScript the first event loop you are likely to encounter is the browser’s.  Every object in the DOM (Document Object Model - the tree data structure behind every webpage) has events that can be subscribed to, by passing in a <span class="glossary-term" data-term="callback">callback<span class="glossary-popup">A function passed as an argument to another function, to be executed after some event or action has occurred.
+</span></span> function which implements the desired action.  We saw a basic click handler earlier.</p>
+
+<p>Handling a single event in such a way is pretty straightforward.  Difficulties arise when events have to be nested to handle a (potentially bifurcating) sequence of possible events.</p>
+
+<p>A simple example that begins to show the problem is implementing a UI to allow a user to drag an object on (e.g.) an <span class="glossary-term" data-term="svg">SVG<span class="glossary-popup">Scalable Vector Graphics - another part of the HTML standard for specifying images declaratively as sets of shapes and paths.
+</span></span> canvas (<a href="https://stackblitz.com/edit/frpmousedrag?file=index.ts">play with it here!</a>).  We illustrate the desired behaviour below.  When the user presses and holds the left mouse button we need to initiate dragging of the blue rectangle.  The rectangle should move with the mouse cursor such that the x and y offsets of the cursor position from the top-left corner of the rectangle remain constant.</p>
+
+<p><img src="/assets/images/chapterImages/functionalreactiveprogramming/mouseDragGeometry.png" alt="Mouse drag geometry"></p>
+
+<p>The state machine that models this behaviour is pretty simple:</p>
+
+<p><img src="/assets/images/chapterImages/functionalreactiveprogramming/mouseDragStateMachine.png" alt="Mouse drag state machine"></p>
+
+<p>There are only three transitions, each triggered by an event.</p>
+
+<h3 id="turning-a-state-machine-into-code-with-event-listeners">Turning a State-Machine into Code with Event Listeners</h3>
+
+<p>The typical way to add interaction to web-pages and other UIs has historically been by adding Event Listeners to the UI elements for which we want interactive behaviour.  In software engineering terms it’s typically referred to as the <a href="https://en.wikipedia.org/wiki/Observer_pattern">Observer Pattern</a> (not to be confused with the “<span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span>” FRP abstraction we have been discussing).</p>
+
+<p>Here’s an event-driven code fragment that provides such dragging for some <span class="glossary-term" data-term="svg">SVG<span class="glossary-popup">Scalable Vector Graphics - another part of the HTML standard for specifying images declaratively as sets of shapes and paths.
+</span></span> element <code class="language-plaintext highlighter-rouge">draggableRect</code> that is a child of an <span class="glossary-term" data-term="svg">SVG<span class="glossary-popup">Scalable Vector Graphics - another part of the HTML standard for specifying images declaratively as sets of shapes and paths.
+</span></span> canvas element referred to by the variable <code class="language-plaintext highlighter-rouge">svg</code>:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">svg</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">svgCanvas</span><span class="dl">"</span><span class="p">)</span><span class="o">!</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">rect</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">draggableRect</span><span class="dl">"</span><span class="p">)</span><span class="o">!</span><span class="p">;</span>
+<span class="nx">rect</span><span class="p">.</span><span class="nf">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">mousedown</span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span>
+        <span class="nx">xOffset</span> <span class="o">=</span> <span class="nc">Number</span><span class="p">(</span><span class="nx">rect</span><span class="p">.</span><span class="nf">getAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">x</span><span class="dl">'</span><span class="p">))</span> <span class="o">-</span> <span class="nx">e</span><span class="p">.</span><span class="nx">clientX</span><span class="p">,</span>
+        <span class="nx">yOffset</span> <span class="o">=</span> <span class="nc">Number</span><span class="p">(</span><span class="nx">rect</span><span class="p">.</span><span class="nf">getAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">y</span><span class="dl">'</span><span class="p">))</span> <span class="o">-</span> <span class="nx">e</span><span class="p">.</span><span class="nx">clientY</span><span class="p">,</span>
+        <span class="nx">moveListener</span> <span class="o">=</span> <span class="p">(</span><span class="na">e</span><span class="p">:</span><span class="nx">MouseEvent</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="nx">rect</span><span class="p">.</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">x</span><span class="dl">'</span><span class="p">,</span> <span class="nc">String</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">clientX</span> <span class="o">+</span> <span class="nx">xOffset</span><span class="p">));</span>
+            <span class="nx">rect</span><span class="p">.</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">y</span><span class="dl">'</span><span class="p">,</span> <span class="nc">String</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">clientY</span> <span class="o">+</span> <span class="nx">yOffset</span><span class="p">));</span>
+        <span class="p">},</span>
+        <span class="nx">done</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+            <span class="nx">svg</span><span class="p">.</span><span class="nf">removeEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">mousemove</span><span class="dl">'</span><span class="p">,</span> <span class="nx">moveListener</span><span class="p">);</span>
+        <span class="p">};</span>
+    <span class="nx">svg</span><span class="p">.</span><span class="nf">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">mousemove</span><span class="dl">'</span><span class="p">,</span> <span class="nx">moveListener</span><span class="p">);</span>
+    <span class="nx">svg</span><span class="p">.</span><span class="nf">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">mouseup</span><span class="dl">'</span><span class="p">,</span> <span class="nx">done</span><span class="p">);</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<p>We add “event listeners” to the <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> elements, which invoke the specified functions when the event fires.  There are some awkward dependencies.  The <code class="language-plaintext highlighter-rouge">moveListener</code> function needs access to the mouse coordinates from the mousedown event, the <code class="language-plaintext highlighter-rouge">done</code> function which ends the drag on a <code class="language-plaintext highlighter-rouge">mouseup</code> event needs a reference to the <code class="language-plaintext highlighter-rouge">moveListener</code> function so that it can clean it up.</p>
+
+<p>It’s all a bit amorphous:</p>
+
+<ul>
+  <li>the flow of control is not very linear or clear;</li>
+  <li>we’re declaring <span class="glossary-term" data-term="callback">callback<span class="glossary-popup">A function passed as an argument to another function, to be executed after some event or action has occurred.
+</span></span> functions inside of <span class="glossary-term" data-term="callback">callback<span class="glossary-popup">A function passed as an argument to another function, to be executed after some event or action has occurred.
+</span></span> functions and the side effect of the program (that is, the change of state to the underlying web page by moving the rectangle) is hidden in the deepest nested part of the program;</li>
+  <li>we have to manually unsubscribe from events when we’re done with them by calling <code class="language-plaintext highlighter-rouge">removeEventListener</code> (or potentially deal with weird behaviour when unwanted zombie events fire).</li>
+</ul>
+
+<p>The last issue is not unlike the kind of resource cleanup that <a href="https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization">RAII</a> is meant to deal with.
+Generally speaking, nothing about this function resembles the state machine diagram.<br>
+The code sequencing has little sensible flow. The problem gets a lot worse in highly interactive web pages with lots of different possible interactions all requiring their own event handlers and cleanup code.</p>
+
+<h3 id="impure-frp-solution">Impure FRP Solution</h3>
+
+<p>We now rewrite precisely the same behaviour using <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> FRP:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">const</span> <span class="nx">svg</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">svgCanvas</span><span class="dl">"</span><span class="p">)</span><span class="o">!</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">rect</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">draggableRect</span><span class="dl">"</span><span class="p">)</span><span class="o">!</span><span class="p">;</span>
+
+  <span class="kd">const</span> <span class="nx">mousedown</span> <span class="o">=</span> <span class="nx">fromEvent</span><span class="o">&lt;</span><span class="nx">MouseEvent</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">rect</span><span class="p">,</span><span class="dl">'</span><span class="s1">mousedown</span><span class="dl">'</span><span class="p">),</span>
+        <span class="nx">mousemove</span> <span class="o">=</span> <span class="nx">fromEvent</span><span class="o">&lt;</span><span class="nx">MouseEvent</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">svg</span><span class="p">,</span><span class="dl">'</span><span class="s1">mousemove</span><span class="dl">'</span><span class="p">),</span>
+        <span class="nx">mouseup</span> <span class="o">=</span> <span class="nx">fromEvent</span><span class="o">&lt;</span><span class="nx">MouseEvent</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">svg</span><span class="p">,</span><span class="dl">'</span><span class="s1">mouseup</span><span class="dl">'</span><span class="p">);</span>
+
+  <span class="nx">mousedown</span>
+    <span class="p">.</span><span class="nf">pipe</span><span class="p">(</span>
+      <span class="nf">map</span><span class="p">(({</span><span class="nx">clientX</span><span class="p">,</span> <span class="nx">clientY</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">({</span>
+        <span class="na">mouseDownXOffset</span><span class="p">:</span> <span class="nc">Number</span><span class="p">(</span><span class="nx">rect</span><span class="p">.</span><span class="nf">getAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">x</span><span class="dl">'</span><span class="p">))</span> <span class="o">-</span> <span class="nx">clientX</span><span class="p">,</span> <span class="c1">// &lt;-\</span>
+        <span class="na">mouseDownYOffset</span><span class="p">:</span> <span class="nc">Number</span><span class="p">(</span><span class="nx">rect</span><span class="p">.</span><span class="nf">getAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">y</span><span class="dl">'</span><span class="p">))</span> <span class="o">-</span> <span class="nx">clientY</span>  <span class="c1">// &lt;-|</span>
+      <span class="p">})),</span>                                                          <span class="c1">//   D</span>
+      <span class="nf">mergeMap</span><span class="p">(({</span><span class="nx">mouseDownXOffset</span><span class="p">,</span> <span class="nx">mouseDownYOffset</span><span class="p">})</span> <span class="o">=&gt;</span>            <span class="c1">//   E</span>
+        <span class="nx">mousemove</span>                                                   <span class="c1">//   P</span>
+          <span class="p">.</span><span class="nf">pipe</span><span class="p">(</span>                                                    <span class="c1">//   E</span>
+            <span class="nf">takeUntil</span><span class="p">(</span><span class="nx">mouseup</span><span class="p">),</span>                                     <span class="c1">//   N</span>
+            <span class="nf">map</span><span class="p">(({</span><span class="nx">clientX</span><span class="p">,</span> <span class="nx">clientY</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">({</span>                          <span class="c1">//   D</span>
+                <span class="na">x</span><span class="p">:</span> <span class="nx">clientX</span> <span class="o">+</span> <span class="nx">mouseDownXOffset</span><span class="p">,</span>                      <span class="c1">//   E</span>
+                <span class="na">y</span><span class="p">:</span> <span class="nx">clientY</span> <span class="o">+</span> <span class="nx">mouseDownYOffset</span>                       <span class="c1">//   N</span>
+              <span class="p">})))))</span>                                                <span class="c1">//   C</span>
+    <span class="p">.</span><span class="nf">subscribe</span><span class="p">(({</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>                                        <span class="c1">//   Y</span>
+      <span class="nx">rect</span><span class="p">.</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">x</span><span class="dl">'</span><span class="p">,</span> <span class="nc">String</span><span class="p">(</span><span class="nx">x</span><span class="p">))</span> <span class="c1">// &gt;-----------------------------|</span>
+      <span class="nx">rect</span><span class="p">.</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">y</span><span class="dl">'</span><span class="p">,</span> <span class="nc">String</span><span class="p">(</span><span class="nx">y</span><span class="p">))</span> <span class="c1">// &gt;-----------------------------/</span>
+    <span class="p">});</span>
+</code></pre></div></div>
+
+<p>The <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span>’s mousedown, mousemove and mouseup are like streams which we can transform with familiar operators like map and takeUntil.   The mergeMap operator “flattens” the inner  mousemove  <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> stream back to the top level, then subscribe will apply a final action before doing whatever cleanup is necessary for the stream.</p>
+
+<p>Compared to our state machine diagram above:</p>
+
+<ul>
+  <li>we have modelled each of the possible transition triggers as streams;</li>
+  <li>the flow of data is from top to bottom, with the cycling branch handled by the mergeMap operation;</li>
+  <li>the only <span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span> (the movement of the rectangle) occur in the function passed to the subscribe;</li>
+  <li>the cleanup of subscriptions to the mousemove and mouseup events is handled automatically by the <code class="language-plaintext highlighter-rouge">takeUntil</code> function when it closes the streams.</li>
+</ul>
+
+<p>However, there is still something not very elegant about this version.  As indicated by my crude ASCII art in the comment above, there is a dependency in the function applied to the stream by the first <code class="language-plaintext highlighter-rouge">map</code>, on the DOM element being repositioned in the function applied by subscribe.  This dependency on mutable state outside the function scope makes this solution impure.</p>
+
+<h3 id="pure-frp-solution">Pure FRP Solution</h3>
+
+<p>We can remove this dependency on mutable state, making our event stream a pure “closed system”, by introducing a <code class="language-plaintext highlighter-rouge">scan</code> operator on the stream to accumulate the state using a <span class="glossary-term" data-term="pure function">pure function<span class="glossary-popup">A function that always produces the same output for the same input and has no side effects.
+</span></span>.
+First, let’s define a type for the state that will be accumulated by the <code class="language-plaintext highlighter-rouge">scan</code> operator. We are concerned with
+the position of the top-left corner of the rectangle, and (optionally, since it’s only relevant during mouse-down dragging) the offset of the click position from the top-left of the rectangle:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">type</span> <span class="nx">State</span> <span class="o">=</span> <span class="nb">Readonly</span><span class="o">&lt;</span><span class="p">{</span>
+  <span class="na">pos</span><span class="p">:</span> <span class="nx">Point</span><span class="p">,</span>
+  <span class="nx">offset</span><span class="p">?:</span> <span class="nx">Point</span>
+<span class="p">}</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>We’ll introduce some types to model the objects coming through the stream and the effects they have when applied to a <code class="language-plaintext highlighter-rouge">State</code> object in the <code class="language-plaintext highlighter-rouge">scan</code>.  First, all the events we care about have a position on the <span class="glossary-term" data-term="svg">SVG<span class="glossary-popup">Scalable Vector Graphics - another part of the HTML standard for specifying images declaratively as sets of shapes and paths.
+</span></span> canvas associated with them, so we’ll have a simple immutable <code class="language-plaintext highlighter-rouge">Point</code> <span class="glossary-term" data-term="interface">interface<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span> with <code class="language-plaintext highlighter-rouge">x</code> and <code class="language-plaintext highlighter-rouge">y</code> positions and a couple of handy vector math methods (note that these create a new <code class="language-plaintext highlighter-rouge">Point</code> rather than mutating any existing state within the <code class="language-plaintext highlighter-rouge">Point</code>):</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Point</span> <span class="p">{</span>
+   <span class="nf">constructor</span><span class="p">(</span><span class="k">public</span> <span class="k">readonly</span> <span class="nx">x</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="k">public</span> <span class="k">readonly</span> <span class="nx">y</span><span class="p">:</span> <span class="kr">number</span><span class="p">)</span> <span class="p">{}</span>
+   <span class="nf">add</span><span class="p">(</span><span class="nx">p</span><span class="p">:</span> <span class="nx">Point</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="k">new</span> <span class="nc">Point</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">p</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">p</span><span class="p">.</span><span class="nx">y</span><span class="p">)</span> <span class="p">}</span>
+   <span class="nf">sub</span><span class="p">(</span><span class="nx">p</span><span class="p">:</span> <span class="nx">Point</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="k">new</span> <span class="nc">Point</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">p</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">p</span><span class="p">.</span><span class="nx">y</span><span class="p">)</span> <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Now we create a subclass of <code class="language-plaintext highlighter-rouge">Point</code> with a constructor letting us instantiate it for a given (DOM) <code class="language-plaintext highlighter-rouge">MouseEvent</code> and an <code class="language-plaintext highlighter-rouge">abstract</code> (placeholder) definition for a function to apply the correct update action to the <code class="language-plaintext highlighter-rouge">State</code>:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">MousePosEvent</span> <span class="kd">extends</span> <span class="nc">Point</span> <span class="p">{</span>
+  <span class="nf">constructor</span><span class="p">(</span><span class="nx">e</span><span class="p">:</span> <span class="nx">MouseEvent</span><span class="p">)</span> <span class="p">{</span> <span class="k">super</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">clientX</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">clientY</span><span class="p">)</span> <span class="p">}</span>
+  <span class="kd">abstract</span> <span class="nf">apply</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="nx">State</span><span class="p">):</span> <span class="nx">State</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>And now two further subclasses with concrete definitions for <code class="language-plaintext highlighter-rouge">apply</code>.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">class</span> <span class="nc">DownEvent</span> <span class="kd">extends</span> <span class="nc">MousePosEvent</span> <span class="p">{</span>
+    <span class="nf">apply</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="nx">State</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="p">{</span> <span class="na">pos</span><span class="p">:</span> <span class="nx">s</span><span class="p">.</span><span class="nx">pos</span><span class="p">,</span> <span class="na">offset</span><span class="p">:</span> <span class="nx">s</span><span class="p">.</span><span class="nx">pos</span><span class="p">.</span><span class="nf">sub</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="p">}</span> <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="kd">class</span> <span class="nc">DragEvent</span> <span class="kd">extends</span> <span class="nc">MousePosEvent</span> <span class="p">{</span>
+    <span class="nf">apply</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="nx">State</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="p">{</span> <span class="na">pos</span><span class="p">:</span> <span class="k">this</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">offset</span><span class="p">),</span> <span class="na">offset</span><span class="p">:</span> <span class="nx">s</span><span class="p">.</span><span class="nx">offset</span> <span class="p">}</span> <span class="p">}</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Setup of the streams is as before:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">svg</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">svgCanvas</span><span class="dl">"</span><span class="p">)</span><span class="o">!</span><span class="p">,</span>
+      <span class="nx">rect</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">draggableRect</span><span class="dl">"</span><span class="p">)</span><span class="o">!</span><span class="p">,</span>
+      <span class="nx">mousedown</span> <span class="o">=</span> <span class="nx">fromEvent</span><span class="o">&lt;</span><span class="nx">MouseEvent</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">rect</span><span class="p">,</span><span class="dl">'</span><span class="s1">mousedown</span><span class="dl">'</span><span class="p">),</span>
+      <span class="nx">mousemove</span> <span class="o">=</span> <span class="nx">fromEvent</span><span class="o">&lt;</span><span class="nx">MouseEvent</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">svg</span><span class="p">,</span><span class="dl">'</span><span class="s1">mousemove</span><span class="dl">'</span><span class="p">),</span>
+      <span class="nx">mouseup</span> <span class="o">=</span> <span class="nx">fromEvent</span><span class="o">&lt;</span><span class="nx">MouseEvent</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">svg</span><span class="p">,</span><span class="dl">'</span><span class="s1">mouseup</span><span class="dl">'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>But now we’ll capture initial position of the rectangle one time only in an immutable <code class="language-plaintext highlighter-rouge">Point</code> object outside of the stream logic.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">initialState</span><span class="p">:</span> <span class="nx">State</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">pos</span><span class="p">:</span> <span class="k">new</span> <span class="nc">Point</span><span class="p">(</span>
+    <span class="nc">Number</span><span class="p">(</span><span class="nx">rect</span><span class="p">.</span><span class="nf">getAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">x</span><span class="dl">'</span><span class="p">)),</span>
+    <span class="nc">Number</span><span class="p">(</span><span class="nx">rect</span><span class="p">.</span><span class="nf">getAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">y</span><span class="dl">'</span><span class="p">))</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Now we will be able to implement the <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> stream logic, using a function passed to <code class="language-plaintext highlighter-rouge">scan</code> to manage state.
+Since we use only <span class="glossary-term" data-term="pure functions">pure functions<span class="glossary-popup">A function that always produces the same output for the same input and has no side effects.
+</span></span> we have a strong guarantee that the logic is self-contained, with no dependency on the state of the outside world!</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">mousedown</span>
+  <span class="p">.</span><span class="nf">pipe</span><span class="p">(</span>
+    <span class="nf">mergeMap</span><span class="p">(</span><span class="nx">mouseDownEvent</span> <span class="o">=&gt;</span>
+      <span class="nx">mousemove</span><span class="p">.</span><span class="nf">pipe</span><span class="p">(</span>
+        <span class="nf">takeUntil</span><span class="p">(</span><span class="nx">mouseup</span><span class="p">),</span>
+        <span class="nf">map</span><span class="p">(</span><span class="nx">mouseDragEvent</span> <span class="o">=&gt;</span> <span class="k">new</span> <span class="nc">DragEvent</span><span class="p">(</span><span class="nx">mouseDragEvent</span><span class="p">)),</span>
+        <span class="nf">startWith</span><span class="p">(</span><span class="k">new</span> <span class="nc">DownEvent</span><span class="p">(</span><span class="nx">mouseDownEvent</span><span class="p">)))),</span>
+      <span class="nf">scan</span><span class="p">(</span>
+        <span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="nx">State</span><span class="p">,</span> <span class="nx">e</span><span class="p">:</span> <span class="nx">MousePosEvent</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nf">apply</span><span class="p">(</span><span class="nx">s</span><span class="p">),</span>
+        <span class="nx">initialState</span><span class="p">))</span>
+ <span class="p">.</span><span class="nf">subscribe</span><span class="p">(</span><span class="nx">e</span> <span class="o">=&gt;</span> <span class="p">{</span>
+   <span class="nx">rect</span><span class="p">.</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">x</span><span class="dl">'</span><span class="p">,</span> <span class="nc">String</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">rect</span><span class="p">.</span><span class="nx">x</span><span class="p">))</span>
+   <span class="nx">rect</span><span class="p">.</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">y</span><span class="dl">'</span><span class="p">,</span> <span class="nc">String</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">rect</span><span class="p">.</span><span class="nx">y</span><span class="p">))</span>
+ <span class="p">});</span>
+</code></pre></div></div>
+
+<p>Note that inside the <code class="language-plaintext highlighter-rouge">mergeMap</code> we use the <code class="language-plaintext highlighter-rouge">startWith</code> operator to force a <code class="language-plaintext highlighter-rouge">DownEvent</code> onto the start of the flattened stream.  Then the accumulator function passed to <code class="language-plaintext highlighter-rouge">scan</code> uses subtype polymorphism to cause the correct behaviour for the different types of <code class="language-plaintext highlighter-rouge">MousePosEvent</code>`.</p>
+
+<p>The advantage of this code is not brevity; with the introduced type definitions it’s longer than the previous implementations of the same logic.  Rather, the advantages of this pattern are:</p>
+
+<ul>
+  <li><em>maintainability</em>: we have separated setup code and state management code and importantly, separate the <span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span> to only be in <code class="language-plaintext highlighter-rouge">subscribe</code>;</li>
+  <li><em>scalability</em>: we can extend this code pattern to handle more complicated state machines. We can easily <code class="language-plaintext highlighter-rouge">merge</code> in more input streams, adding Event types to handle their <code class="language-plaintext highlighter-rouge">State</code> updates, and the only place we have to worry about effects visible to the outside world is in the function passed to <code class="language-plaintext highlighter-rouge">subscribe</code>.</li>
+</ul>
+
+<p>As an example of <em>scalability</em> we will be using this same pattern to implement the logic of an asteroids arcade game in the <a href="/asteroids">next chapter</a>.</p>
+
+<h3 id="mergemap-vs-switchmap-vs-concatmap">MergeMap vs SwitchMap vs ConcatMap</h3>
+
+<p>In RxJS, <code class="language-plaintext highlighter-rouge">mergeMap</code>, <code class="language-plaintext highlighter-rouge">switchMap</code>, and <code class="language-plaintext highlighter-rouge">concatMap</code> are operators used for transforming and flattening <span class="glossary-term" data-term="observables">observables<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span>. Each has its own specific behaviour in terms of how it handles incoming values and the resulting <span class="glossary-term" data-term="observable">observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> streams. Here’s a breakdown of each:</p>
+
+<p>Let’s consider three almost identical pieces of code</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">fromEvent</span><span class="p">(</span><span class="nb">document</span><span class="p">,</span> <span class="dl">"</span><span class="s2">mousedown</span><span class="dl">"</span><span class="p">).</span><span class="nf">pipe</span><span class="p">(</span><span class="nf">mergeMap</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nf">interval</span><span class="p">(</span><span class="mi">200</span><span class="p">)))</span>
+<span class="nf">fromEvent</span><span class="p">(</span><span class="nb">document</span><span class="p">,</span> <span class="dl">"</span><span class="s2">mousedown</span><span class="dl">"</span><span class="p">).</span><span class="nf">pipe</span><span class="p">(</span><span class="nf">switchMap</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nf">interval</span><span class="p">(</span><span class="mi">200</span><span class="p">)))</span>
+<span class="nf">fromEvent</span><span class="p">(</span><span class="nb">document</span><span class="p">,</span> <span class="dl">"</span><span class="s2">mousedown</span><span class="dl">"</span><span class="p">).</span><span class="nf">pipe</span><span class="p">(</span><span class="nf">concatMap</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nf">interval</span><span class="p">(</span><span class="mi">200</span><span class="p">)))</span>
+</code></pre></div></div>
+
+<p>With <code class="language-plaintext highlighter-rouge">mergeMap</code>, each mousedown event triggers a new <code class="language-plaintext highlighter-rouge">interval(200)</code> <span class="glossary-term" data-term="observable">observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span>. All these interval <span class="glossary-term" data-term="observables">observables<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> will run <strong>concurrently</strong>, meaning their emitted values will <em>interleave</em> in the output. In the animation, the <code class="language-plaintext highlighter-rouge">x2</code> occurs when two <span class="glossary-term" data-term="observables">observables<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> emit at approximately the same time, and the values overlap too much to show separately.</p>
+
+<p><img src="/assets/images/chapterImages/functionalreactiveprogramming/mergeMapMouseDown.gif" alt="Merge Map Visualised"></p>
+
+<p>With <code class="language-plaintext highlighter-rouge">switchMap</code>, each time a <code class="language-plaintext highlighter-rouge">mousedown</code> event occurs, it triggers an <code class="language-plaintext highlighter-rouge">interval(200)</code> <span class="glossary-term" data-term="observable">observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span>. If another mousedown event occurs before the interval <span class="glossary-term" data-term="observable">observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> finishes (interval  doesn’t finish on its own), the previous interval <span class="glossary-term" data-term="observable">observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> is canceled, and a new one begins. This means only the most recent mousedown event’s <span class="glossary-term" data-term="observable">observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> is active. This can be seen as the counter restarting every single time a click occurs (remember interval emits sequential numbers).</p>
+
+<p><img src="/assets/images/chapterImages/functionalreactiveprogramming/switchMap.gif" alt="Switch Map Visualised"></p>
+
+<p>With <code class="language-plaintext highlighter-rouge">concatMap</code>, each time a mousedown event occurs, it starts emitting values from the <code class="language-plaintext highlighter-rouge">interval(200)</code> <span class="glossary-term" data-term="observable">observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span>. Importantly, if a second mousedown event occurs while the previous interval <span class="glossary-term" data-term="observable">observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> is still emitting, the new interval won’t start until the previous one has completed. However, since interval is a never-ending <span class="glossary-term" data-term="observable">observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span>, in practice, each mousedown event’s <span class="glossary-term" data-term="observable">observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> will queue up and only start after the previous ones are manually stopped or canceled. Therefore, no matter how many times a click occurs, the next interval will never begin.</p>
+
+<p><img src="/assets/images/chapterImages/functionalreactiveprogramming/concatMap.gif" alt="Concat Map Visualised"></p>
+
+<p>We can make an adjustment to this, where, we stop the interval after four items.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">fromEvent</span><span class="p">(</span><span class="nb">document</span><span class="p">,</span> <span class="dl">"</span><span class="s2">mousedown</span><span class="dl">"</span><span class="p">).</span><span class="nf">pipe</span><span class="p">(</span><span class="nf">concatMap</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nf">interval</span><span class="p">(</span><span class="mi">200</span><span class="p">).</span><span class="nf">pipe</span><span class="p">(</span><span class="nf">take</span><span class="p">(</span><span class="mi">4</span><span class="p">))))</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/chapterImages/functionalreactiveprogramming/concatMap_take4.gif" alt="Concat Map Visualised w/ End"></p>
+
+<p>Unlike the previous example with a never-ending interval, in this case, each interval <span class="glossary-term" data-term="observable">observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> completes after emitting four values, so the next mousedown event’s <span class="glossary-term" data-term="observable">observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> will queue up and start automatically as soon as the previous one completes. This setup ensures that each click’s sequence of interval emissions will be handled one after the other, with no overlap, maintaining the order of clicks and processing each one to completion before starting the next.</p>
+
+<div class="glossary">
+  <h2 id="glossary">Glossary</h2>
+
+  <p><em>Asynchronous</em>: Operations that occur independently of the main program flow, allowing the program to continue executing while waiting for the operation to complete.</p>
+
+  <p><em>Functional Reactive Programming (FRP)</em>: A programming paradigm that combines functional and reactive programming to handle asynchronous data streams and event-driven systems.</p>
+
+  <p><em>Observable</em>: A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.</p>
+
+</div>
+
+	</div>
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/lazyevaluation/">&lt; <span class="glossary-term" data-term="lazy evaluation">Lazy Evaluation<span class="glossary-popup">A strategy where expressions are not evaluated until their values are needed, allowing for the creation of infinite sequences and delayed computations.
+</span></span></a>
+      
+      
+        
+        
+        <a id="right" href="/asteroids/">FRP Asteroids &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+</article>
+
+      </div>
+    </main><link id="fa-stylesheet" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css">
+<footer class="site-footer h-card">
+    <data class="u-url" href="/"></data>
+
+    <div class="wrapper">
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col">
+                <!-- <p class="feed-subscribe">
+                <a href="/feed.xml">
+                    <svg class="svg-icon orange">
+                        <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+                    </svg><span>Subscribe</span>
+                </a>
+                </p> -->
+        </div>
+        <div class="footer-col">
+            <p>Examples and tutorials for various programming paradigms.</p>
+        </div>
+    </div>
+
+    <!-- <div class="social-links"><ul class="social-media-list"><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li>
+  <li>
+    <a href="/feed.xml" target="_blank" title="Subscribe to syndication feed">
+      <svg class="svg-icon grey" viewbox="0 0 16 16">
+        <path d="M12.8 16C12.8 8.978 7.022 3.2 0 3.2V0c8.777 0 16 7.223 16 16h-3.2zM2.194
+          11.61c1.21 0 2.195.985 2.195 2.196 0 1.21-.99 2.194-2.2 2.194C.98 16 0 15.017 0
+          13.806c0-1.21.983-2.195 2.194-2.195zM10.606
+          16h-3.11c0-4.113-3.383-7.497-7.496-7.497v-3.11c5.818 0 10.606 4.79 10.606 10.607z"
+        />
+      </svg>
+    </a>
+  </li>
+</ul>
+</div> -->
+
+    </div>
+
+</footer>
+
+
+
+</body></html>

@@ -1,0 +1,568 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Haskell Installation | Good Times Paradigms</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="Haskell Installation">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Learning Outcomes">
+<meta property="og:description" content="Learning Outcomes">
+<meta property="og:site_name" content="Good Times Paradigms">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-09-30T03:56:06+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="Haskell Installation">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-30T03:56:06+00:00","datePublished":"2025-09-30T03:56:06+00:00","description":"Learning Outcomes","headline":"Haskell Installation","mainEntityOfPage":{"@type":"WebPage","@id":"/haskell0/"},"url":"/haskell0/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Good Times Paradigms"><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-159840333-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159840333-1');
+</script><!-- MathJax v3 -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true }
+  };
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+  <script src="/assets/js/spoilers.js" defer=""></script></head>
+
+  <body><header class="site-header">
+
+    <div class="wrapper"><!-- Lambda icon and site title aligned left in a flex container -->
+        <div style="display: flex; align-items: center;">
+            <button id="play-theme-song" style="background:none;border:none;cursor:pointer;vertical-align:middle;margin-right:2px;" title="Play theme song">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="currentColor" viewBox="0 0 48 24" style="vertical-align:middle;">
+                    <text x="4" y="20" font-size="20" font-family="serif">ΓΤΠ</text>
+                    <!-- γτπ -->
+                </svg>
+            </button>
+            <a class="site-title" rel="author" href="/" style="margin:0;">Good Times Paradigms</a>
+        </div>
+        <script src="/assets/js/hide_solutions.js" defer=""></script>
+        <audio id="theme-song" src="/assets/themesong.mp3"></audio>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var btn = document.getElementById('play-theme-song');
+                var audio = document.getElementById('theme-song');
+                btn.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play();
+                    } else {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                });
+            });
+        </script><nav class="site-nav">
+            <input type="checkbox" id="nav-trigger" class="nav-trigger">
+            <label for="nav-trigger">
+                <span class="menu-icon">
+                </span>
+            </label>
+
+            <div class="nav-items"><a class="page-link nav-item" href="/about/">About</a><a class="page-link nav-item" href="/">Notes on Programming Paradigms</a><!-- Radio Switch -->
+                <div id="toggle-div" style="display: none;">
+                    <div class="solutions-toggle">
+                        <p class="page-link" style="margin-bottom: 0px;">Show Solutions?</p>
+                        <label class="switch" style="vertical-align: middle;">
+                            <input type="checkbox" id="toggle-switch">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/purescript/">&lt; From JavaScript to Haskell (via PureScript)</a>
+      
+      
+        
+        
+        <a id="right" href="/haskell1/">Creating and Running Haskell Programs &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+	<header class="post-header">
+		<h1 class="post-title">Haskell Installation</h1>
+	</header>
+	<p id="readingTime">
+
+  
+  10
+
+ min read</p>
+	<div class="post-content">
+		<h2 id="learning-outcomes">Learning Outcomes</h2>
+
+<ul>
+  <li>Install Haskell via GHCup and Stack</li>
+</ul>
+
+<h2 id="install-ghcup">Install GHCup</h2>
+
+<p>We will use <a href="https://www.haskell.org/ghcup/">GHCup</a> to install and manage our tooling. The commands we will use to install GHCup differ slightly from the <a href="https://www.haskell.org/ghcup/install">official installation instructions</a> in order to speed up the installation process.<sup id="fnref:1"><a href="#fn:1" class="footnote" rel="footnote" role="doc-noteref">1</a></sup></p>
+
+<ul>
+  <li>
+    <p><a href="#windows">Windows Instructions</a></p>
+  </li>
+  <li>
+    <p><a href="#non-windows">Non-Windows Instructions</a></p>
+  </li>
+</ul>
+
+<h3 id="windows">Windows</h3>
+
+<p>Run this command in a PowerShell session:</p>
+
+<pre><code class="language-ps1">Set-ExecutionPolicy Bypass -Scope Process -Force;[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; try { &amp; ([ScriptBlock]::Create((Invoke-WebRequest https://www.haskell.org/ghcup/sh/bootstrap-haskell.ps1 -UseBasicParsing))) -Interactive -DisableCurl -Minimal } catch { Write-Error $_ }
+</code></pre>
+
+<p>In the installation process, select the following options (you might not be asked the first question if you do not have Chocolatey):</p>
+
+<pre><code class="language-none">Chocolatey was detected on your system...
+Continue with GHCup installation?
+[C] Continue  [A] Abort  [?] Help (default is "C"): C
+
+Where to install to (this should be a short Path, preferably a Drive like 'C:\')?
+If you accept this path, binaries will be installed into 'C:\ghcup\bin' and msys2 into 'C:\ghcup\msys64'.
+Press enter to accept the default [C:\]: (Enter)
+
+Specify Cabal directory (this is where haskell packages end up)
+Press enter to accept the default [C:\\cabal]: (Enter)
+
+Do you want to install the haskell-language-server (HLS) for development purposes as
+well?
+[Y] Yes  [N] No  [A] Abort  [?] Help (default is "N"): N
+
+Do you want to install stack as well?
+[Y] Yes  [N] No  [A] Abort  [?] Help (default is "N"): N
+
+Do you want to create convenience desktop shortcuts (e.g. for uninstallation and mysys2 shell)?
+[Y] Yes  [N] No  [A] Abort  [?] Help (default is "Y"): N
+
+Do you want GHCup to install a default MSys2 toolchain (recommended)?
+[Y] Yes  [N] No  [?] Help (default is "Y"): Y
+</code></pre>
+
+<p>Run</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ghcup <span class="nt">--version</span>
+</code></pre></div></div>
+
+<p>to check that the installation has succeeded. You might need to restart your terminal first.</p>
+
+<h3 id="non-windows">Non-Windows</h3>
+
+<p>If you are on macOS and have Homebrew, you can install GHCup via Homebrew: <code class="language-plaintext highlighter-rouge">brew install ghcup</code></p>
+
+<div class="alert-box alert-warning">
+  <p>If you install GHCup via Homebrew, you need to add <code class="language-plaintext highlighter-rouge">$HOME/.ghcup/bin</code> to your <code class="language-plaintext highlighter-rouge">$PATH</code>. For example, if you use ZSH:</p>
+  <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s1">'export PATH="$HOME/.ghcup/bin:$PATH"'</span> <span class="o">&gt;&gt;</span> ~/.zshrc
+</code></pre></div>  </div>
+</div>
+
+<p>If not, run this command in a terminal:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">BOOTSTRAP_HASKELL_MINIMAL</span><span class="o">=</span>1 <span class="o">&amp;&amp;</span> curl <span class="nt">--proto</span> <span class="s1">'=https'</span> <span class="nt">--tlsv1</span>.2 <span class="nt">-sSf</span> https://get-ghcup.haskell.org | sh
+</code></pre></div></div>
+
+<p>In the installation process, select the following options:</p>
+
+<pre><code class="language-none">Do you want ghcup to automatically add the required PATH variable to "..."?
+
+[P] Yes, prepend  [A] Yes, append  [N] No  [?] Help (default is "P").
+
+A
+</code></pre>
+
+<p>Run</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ghcup <span class="nt">--version</span>
+</code></pre></div></div>
+
+<p>to check that the installation has succeeded. You might need to restart
+your terminal first.</p>
+
+<h2 id="install-tools-using-ghcup">Install tools using GHCup</h2>
+
+<p>We will be installing the following tools:</p>
+
+<ul>
+  <li>Stack: 3.7.1</li>
+  <li>HLS: 2.11.0.0</li>
+</ul>
+
+<p>To do this, run</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ghcup <span class="nb">install </span>stack 3.7.1 <span class="nt">--set</span>
+ghcup <span class="nb">install </span>hls 2.11.0.0 <span class="nt">--set</span>
+</code></pre></div></div>
+
+<p>Alternatively, GHCup comes with a convenient TUI (terminal user <span class="glossary-term" data-term="interface">interface<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span>):</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ghcup tui
+</code></pre></div></div>
+
+<p>Follow the instructions of the TUI to install (<code class="language-plaintext highlighter-rouge">i</code>) Stack and HLS and
+set (<code class="language-plaintext highlighter-rouge">s</code>) their versions to 3.7.1 and 2.11.0.0 respectively. Once this
+is done, you should see something like</p>
+
+<pre><code class="language-none">┌──────────────────────────────────GHCup──────────────────────────────────┐
+│    Tool  Version         Tags                          Notes            │
+│─────────────────────────────────────────────────────────────────────────│
+│✔✔  GHCup 0.1.50.2    latest,recommended                                 │
+│─────────────────────────────────────────────────────────────────────────│
+│✔✔  Stack 3.7.1       latest                                             │
+│✗   Stack 3.5.1                                                          │
+│✗   Stack 3.3.1       recommended                                        │
+│✗   Stack 3.1.1                                                          │
+│✗   Stack 2.15.7                                                         │
+│─────────────────────────────────────────────────────────────────────────│
+│✔✔  HLS   2.11.0.0    latest                                             │
+│✗   HLS   2.10.0.0    recommended                                        │
+│✗   HLS   2.9.0.1                                                        │
+│✗   HLS   2.9.0.0                                                        │
+│✗   HLS   2.8.0.0                                                        │
+│✗   HLS   2.7.0.0                                                        │
+│✗   HLS   2.6.0.0                                                        │
+│─────────────────────────────────────────────────────────────────────────│
+</code></pre>
+
+<p>If you only see 1 tick <code class="language-plaintext highlighter-rouge">✔</code> instead of 2 ticks <code class="language-plaintext highlighter-rouge">✔✔</code>, that means you have installed the tool but it is not set as your current/active version of that tool. To fix this, select the version and press <code class="language-plaintext highlighter-rouge">s</code> to set it.</p>
+
+<h2 id="check-installation">Check installation</h2>
+
+<p>Open the Haskell code bundle and run the following:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>stack setup
+</code></pre></div></div>
+
+<p>This normally takes a long time as Stack has to install GHC (the Haskell compiler). This command only needs to be run once in this unit: there’s no need to re-run it for each week’s applied exercises.</p>
+
+<p>Once this is done, you can run the following to verify everything is installed correctly:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>stack ghc <span class="nt">--</span> <span class="nt">--version</span>
+</code></pre></div></div>
+
+<p>which should output</p>
+
+<pre><code class="language-none">The Glorious Glasgow Haskell Compilation System, version 9.8.4
+</code></pre>
+
+<p>This may download any missing dependencies.</p>
+
+<h2 id="vs-code-setup">VS Code Setup</h2>
+
+<p>Install the <a href="https://marketplace.visualstudio.com/items?itemName=haskell.haskell">Haskell extension</a>. This provides Haskell language support including language server, <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> highlighting, and linting.</p>
+
+<p>If you are asked</p>
+
+<blockquote>
+  <p>How do you want the extension to manage/discover HLS and the relevant toolchain?</p>
+</blockquote>
+
+<p>select the ‘Manually via PATH’ option. This corresponds to the ‘Haskell: Manage HLS’ option in VS Code, which should be set to <code class="language-plaintext highlighter-rouge">PATH</code> (<code class="language-plaintext highlighter-rouge">"haskell.manageHLS": "PATH"</code>).</p>
+
+<h3 id="optional-extras">Optional Extras</h3>
+
+<p>These may take a while to install, so if you’re installing Haskell during your applied class, it is worth getting started on your applied session work instead.</p>
+
+<ul>
+  <li>Formatter: <a href="https://github.com/fourmolu/fourmolu">Fourmolu</a>
+    <ul>
+      <li>Install with <code class="language-plaintext highlighter-rouge">stack install fourmolu</code></li>
+      <li>Set the ‘Haskell: Formatting Provider’ (<code class="language-plaintext highlighter-rouge">haskell.formattingProvider</code>) setting in VS Code to ‘fourmolu’</li>
+    </ul>
+  </li>
+  <li>Linter: <a href="https://github.com/ndmitchell/hlint">hlint</a>
+    <ul>
+      <li>Install with <code class="language-plaintext highlighter-rouge">stack install hlint</code></li>
+      <li>Ensure the ‘Haskell › Plugin › Hlint: Diagnostics On’ (<code class="language-plaintext highlighter-rouge">haskell.plugin.hlint.diagnosticsOn</code>) setting in VS Code is enabled, which should be the default</li>
+    </ul>
+  </li>
+</ul>
+
+<p>If you get an error relating to mismatched versions, try running this first:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>stack config <span class="nb">set </span>snapshot lts-23.25
+</code></pre></div></div>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+
+<p>For further issues, see <a href="https://www.haskell.org/ghcup/guide/#troubleshooting">GHCup’s Troubleshooting page</a>.</p>
+
+<h3 id="windows-issues">Windows Issues</h3>
+
+<h4 id="invalid-argument-invalid-character"><code class="language-plaintext highlighter-rouge">invalid argument (invalid character)</code></h4>
+
+<p>If you get an error like this:</p>
+
+<pre><code class="language-none">Error: [S-7282]
+       Stack failed to execute the build plan.
+
+       While executing the build plan, Stack encountered the following errors:
+
+       &lt;stderr&gt;: commitAndReleaseBuffer: invalid argument (invalid character)
+</code></pre>
+
+<p>Go to Settings → Time and Language → Language and Region → Administrative language Settings → Change System Locale… → and check ‘Use Unicode UTF-8’. You might need to restart your computer.</p>
+
+<h4 id="spaces-or-special-characters-in-username">Spaces or special characters in username</h4>
+
+<p>If you get an error that looks like this:</p>
+
+<pre><code class="language-none">Warning: [S-8432]
+          Stack's 'programs' path is C:\Users\Your Name\AppData\Local\Programs\stack\. It contains a space character. This will prevent building with GHC 9.4.1 or later.
+
+          To avoid sucn problems, use the local-programs-path non-project specific configuration option to specify an alternative path without those characteristics.
+</code></pre>
+
+<p>or if it says</p>
+
+<pre><code class="language-none">It contains at least one non-ISO/IEC 8859-1 (Latin-1) character (Unicode code point &gt; 255). This will cause problems with packages that build using the hsc2hs tool with its default template template-hsc.h.
+</code></pre>
+
+<p>you need to change the <code class="language-plaintext highlighter-rouge">local-programs-path</code> Stack configuration option. To do this, edit <code class="language-plaintext highlighter-rouge">%AppData%\stack\config.yaml</code> (by default it will be something like <code class="language-plaintext highlighter-rouge">C:\Users\Your Name\AppData\Roaming\stack\config.yaml</code>).  You can also do this by running the command</p>
+
+<pre><code class="language-ps1">notepad.exe $(stack path --global-config)
+</code></pre>
+
+<p>Add the following line to the bottom of the file:</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">local-programs-path</span><span class="pi">:</span> <span class="s">C:\stack-programs</span>
+</code></pre></div></div>
+
+<h4 id="script-immediately-exits">Script immediately exits</h4>
+
+<p>If the script exits without installing anything, you might need to disable any third-party antivirus software.</p>
+
+<h3 id="macos-issues">macOS Issues</h3>
+
+<p>If you get an error that looks something like <code class="language-plaintext highlighter-rouge">fatal error: 'ffi.h'</code>, it may be because you do not have the Xcode command line tools installed.  (These are a collection of command line utilities and other developer tools that many programs rely on.) You can install them by running the following command in your terminal:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xcode-select <span class="nt">--install</span>
+</code></pre></div></div>
+
+<p>If you have an existing (possibly broken) installation, you might need to get rid of it first:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo rm</span> <span class="nt">-rf</span> /Library/Developer/CommandLineTools
+</code></pre></div></div>
+
+<h2 id="appendix-what-are-all-these-different-tools">Appendix: What are all these different tools?</h2>
+
+<p>If you are curious, here’s an explanation of the different Haskell build tools you may come across or hear about. (You do not need to know this.)</p>
+
+<ul>
+  <li><a href="https://www.haskell.org/ghc"><strong>GHC</strong></a>: Glasgow Haskell Compiler, the most popular Haskell compiler.</li>
+  <li><a href="https://www.haskell.org/cabal"><strong>Cabal</strong></a>: a Haskell build tool that uses GHC to build Haskell packages, which are specified by a <code class="language-plaintext highlighter-rouge">.cabal</code> file.</li>
+  <li><a href="https://www.haskellstack.org"><strong>Stack</strong></a>: another Haskell build tool that wraps around Cabal. Configuration for Stack is in the <code class="language-plaintext highlighter-rouge">stack.yaml</code> file.
+    <ul>
+      <li>Stack provides package sets—a collection of packages that compile together—to make managing dependencies less troublesome. The package set is specified by the <code class="language-plaintext highlighter-rouge">snapshot</code> or <code class="language-plaintext highlighter-rouge">resolver</code> key in <code class="language-plaintext highlighter-rouge">stack.yaml</code>. For example, if your program depends on package A v1 and package B v1, but package A v1 depends on package B v2, your code won’t compile. A Stack package set might specify to use v2 of package A (which depends on package B v2) and v2 of package B v2, which work together. This way, you only need to say ‘I want package A and package B’, and Stack takes care of the rest.</li>
+      <li>Importantly, a package set also relies on a specific version of GHC. In this unit, we have set it up so that Stack manages this for you and installs the correct version of GHC for you.</li>
+      <li>Because <code class="language-plaintext highlighter-rouge">.cabal</code> files can be tedious to write by hand, Stack supports an alternative format, <a href="https://github.com/sol/hpack"><strong>hpack</strong></a>, in a <code class="language-plaintext highlighter-rouge">package.yaml</code> file. When you run a Stack command, Stack will automatically generate a <code class="language-plaintext highlighter-rouge">.cabal</code> file from this.</li>
+    </ul>
+  </li>
+  <li><a href="https://haskell-language-server.readthedocs.io/en/stable"><strong>HLS</strong></a>: Haskell Language Server. This is the program that editors (e.g. the VS Code Haskell extension) need to give you nice IDE features. Different versions of HLS work with different versions of GHC, which are indicated by <code class="language-plaintext highlighter-rouge">hls-powered</code> in <code class="language-plaintext highlighter-rouge">ghcup tui</code>.
+    <ul>
+      <li>You might have noticed a <code class="language-plaintext highlighter-rouge">hie.yaml</code> file in the applied code bundles. This is <a href="https://github.com/haskell/hie-bios"><strong>hie-bios</strong></a>, a way to tell editors information about the workspace so that the language server works.</li>
+    </ul>
+  </li>
+  <li><a href="https://www.haskell.org/ghcup"><strong>GHCup</strong></a>: a tool that helps you install specific versions of GHC, Cabal, Stack, and HLS.</li>
+</ul>
+
+<p>You may have noticed these instructions do not get you to install GHC directly via GHCup. This is because as mentioned above, we have set it up so that Stack installs the correct version of GHC for you. This means that if you want to run GHCi for example, you need to run <code class="language-plaintext highlighter-rouge">stack ghci</code> instead of just <code class="language-plaintext highlighter-rouge">ghci</code>.</p>
+
+<p>(It is possible to install GHC globally so you can run <code class="language-plaintext highlighter-rouge">ghci</code> without having to put <code class="language-plaintext highlighter-rouge">stack</code> in front of it; however, by default, this will mean you have two copies of GHC installed on your machine! This is why we modified the GHCup installation process slightly from the official instructions so that it doesn’t automatically install GHC and other tools we don’t need. There is a way around this by setting <a href="https://docs.haskellstack.org/en/stable/configure/yaml/non-project/#system-ghc"><code class="language-plaintext highlighter-rouge">system-ghc: true</code></a> in Stack, but you must ensure that the version of GHC you have installed matches the Stack package set for your project.)</p>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1">
+      <p>The only difference from the official installation script is that we stop GHCup from installing GHC (by adding the <code class="language-plaintext highlighter-rouge">-Minimal</code> flag to the Windows install script or by setting the environment variable <code class="language-plaintext highlighter-rouge">BOOTSTRAP_HASKELL_MINIMAL=1</code> on Unix), which can take a long time. Instead, we will install GHC via Stack, which will ensure we always have the correct version of GHC needed.&nbsp;<a href="#fnref:1" class="reversefootnote" role="doc-backlink">↩</a></p>
+    </li>
+  </ol>
+</div>
+
+	</div>
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/purescript/">&lt; From JavaScript to Haskell (via PureScript)</a>
+      
+      
+        
+        
+        <a id="right" href="/haskell1/">Creating and Running Haskell Programs &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+</article>
+
+      </div>
+    </main><link id="fa-stylesheet" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css">
+<footer class="site-footer h-card">
+    <data class="u-url" href="/"></data>
+
+    <div class="wrapper">
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col">
+                <!-- <p class="feed-subscribe">
+                <a href="/feed.xml">
+                    <svg class="svg-icon orange">
+                        <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+                    </svg><span>Subscribe</span>
+                </a>
+                </p> -->
+        </div>
+        <div class="footer-col">
+            <p>Examples and tutorials for various programming paradigms.</p>
+        </div>
+    </div>
+
+    <!-- <div class="social-links"><ul class="social-media-list"><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li>
+  <li>
+    <a href="/feed.xml" target="_blank" title="Subscribe to syndication feed">
+      <svg class="svg-icon grey" viewbox="0 0 16 16">
+        <path d="M12.8 16C12.8 8.978 7.022 3.2 0 3.2V0c8.777 0 16 7.223 16 16h-3.2zM2.194
+          11.61c1.21 0 2.195.985 2.195 2.196 0 1.21-.99 2.194-2.2 2.194C.98 16 0 15.017 0
+          13.806c0-1.21.983-2.195 2.194-2.195zM10.606
+          16h-3.11c0-4.113-3.383-7.497-7.496-7.497v-3.11c5.818 0 10.606 4.79 10.606 10.607z"
+        />
+      </svg>
+    </a>
+  </li>
+</ul>
+</div> -->
+
+    </div>
+
+</footer>
+
+
+
+</body></html>

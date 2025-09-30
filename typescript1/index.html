@@ -1,0 +1,1127 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>TypeScript Introduction | Good Times Paradigms</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="TypeScript Introduction">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Learning Outcomes">
+<meta property="og:description" content="Learning Outcomes">
+<meta property="og:site_name" content="Good Times Paradigms">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-09-30T03:56:06+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="TypeScript Introduction">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-30T03:56:06+00:00","datePublished":"2025-09-30T03:56:06+00:00","description":"Learning Outcomes","headline":"TypeScript Introduction","mainEntityOfPage":{"@type":"WebPage","@id":"/typescript1/"},"url":"/typescript1/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Good Times Paradigms"><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-159840333-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159840333-1');
+</script><!-- MathJax v3 -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true }
+  };
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+  <script src="/assets/js/spoilers.js" defer=""></script></head>
+
+  <body><header class="site-header">
+
+    <div class="wrapper"><!-- Lambda icon and site title aligned left in a flex container -->
+        <div style="display: flex; align-items: center;">
+            <button id="play-theme-song" style="background:none;border:none;cursor:pointer;vertical-align:middle;margin-right:2px;" title="Play theme song">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="currentColor" viewBox="0 0 48 24" style="vertical-align:middle;">
+                    <text x="4" y="20" font-size="20" font-family="serif">ΓΤΠ</text>
+                    <!-- γτπ -->
+                </svg>
+            </button>
+            <a class="site-title" rel="author" href="/" style="margin:0;">Good Times Paradigms</a>
+        </div>
+        <script src="/assets/js/hide_solutions.js" defer=""></script>
+        <audio id="theme-song" src="/assets/themesong.mp3"></audio>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var btn = document.getElementById('play-theme-song');
+                var audio = document.getElementById('theme-song');
+                btn.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play();
+                    } else {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                });
+            });
+        </script><nav class="site-nav">
+            <input type="checkbox" id="nav-trigger" class="nav-trigger">
+            <label for="nav-trigger">
+                <span class="menu-icon">
+                </span>
+            </label>
+
+            <div class="nav-items"><a class="page-link nav-item" href="/about/">About</a><a class="page-link nav-item" href="/">Notes on Programming Paradigms</a><!-- Radio Switch -->
+                <div id="toggle-div" style="display: none;">
+                    <div class="solutions-toggle">
+                        <p class="page-link" style="margin-bottom: 0px;">Show Solutions?</p>
+                        <label class="switch" style="vertical-align: middle;">
+                            <input type="checkbox" id="toggle-switch">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/functionaljavascript/">&lt; <span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> Programming in JavaScript</a>
+      
+      
+        
+        
+        <a id="right" href="/lazyevaluation/">Lazy Evaluation &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+	<header class="post-header">
+		<h1 class="post-title">TypeScript Introduction</h1>
+	</header>
+	<p id="readingTime">
+
+  
+  46
+
+ min read</p>
+	<div class="post-content">
+		<h2 id="learning-outcomes">Learning Outcomes</h2>
+
+<ul>
+  <li>Create programs in TypeScript using types to ensure correctness at compile time</li>
+  <li>Explain how TypeScript features like <span class="glossary-term" data-term="interfaces">Interfaces<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span>, <span class="glossary-term" data-term="union types">Union Types<span class="glossary-popup">A TypeScript construct that allows a variable to hold values of multiple specified types, separated by the <code>|</code> symbol.
+</span></span> and Optional Properties allow us to model types in common JavaScript coding patterns with precision</li>
+  <li>Explain how Generics allow us to create type-safe but general and reusable code</li>
+  <li>Compare and contrast strongly, dynamically and gradually typed languages</li>
+  <li>Describe how compilers that support type inference assist us in writing type-safe code</li>
+</ul>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>As the Web 2.0 revolution hit in 2000s, web apps built on JavaScript grew increasingly complex, and today, applications like Google Docs are as intricate as anything built over the decades in C++.  In the 90s I for one (though I don’t think I was alone) thought that this would be impossible in a dynamically typed language.  It is just too easy to make simple mistakes (as simple as typos) that won’t be caught until run time.  It’s likely only been made possible due to increased rigour in testing.  That is, instead of relying on a compiler to catch mistakes, you rely on a comprehensive suite of tests that evaluate running code before it goes live.</p>
+
+<p>Part of the appeal of JavaScript is that being able to run the source code directly in a production environment gives an immediacy and attractive simplicity to software deployment.  However, in recent years more and more tools have been developed that introduce a build-chain into the web development stack.  Examples include: minifiers, which compact and obfuscate JavaScript code before it is deployed; bundlers, which merge different JavaScript files and libraries into a single file to (again) simplify deployment; and also, new languages that compile to JavaScript, which seek to fix the JavaScript language’s shortcomings and compatibility issues in different browsers (although modern ECMAScript has less of these issues).  Examples of languages that compile to JavaScript include CoffeeScript, ClojureScript and (more recently) PureScript (which we will visit later in this unit).  Right now, however, we will take a closer look at another language in this family called <strong>TypeScript</strong>.  See <a href="https://www.typescriptlang.org/docs/">the official TypeScript documentation</a> for some tutorials and deeper reference.</p>
+
+<p>TypeScript is interesting because it forms a relatively minimal augmentation, or superset, of ECMAScript <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> that simply adds <span class="glossary-term" data-term="type annotations">type annotations<span class="glossary-popup">A syntax in TypeScript where types are explicitly specified for variables, function parameters, and return types to ensure type safety and correctness.
+</span></span>.  For the most part, the compilation process just performs validation on the declared types and strips away the <span class="glossary-term" data-term="type annotations">type annotations<span class="glossary-popup">A syntax in TypeScript where types are explicitly specified for variables, function parameters, and return types to ensure type safety and correctness.
+</span></span>, rendering just the legal JavaScript ready for deployment.  This lightweight compilation into a language with a similar level of abstraction to the source is also known as <span class="glossary-term" data-term="transpiling">transpiling<span class="glossary-popup">A process where source code in one programming language is translated into another language with a similar level of abstraction, typically preserving the original code’s structure and functionality.
+</span></span> (as opposed to C++ or Java where the compiled code is much closer to the machine execution model).</p>
+
+<p>The following is intended as a minimally sufficient intro to TypeScript features such that we can type some fairly rich data structures and <span class="glossary-term" data-term="higher-order functions">higher-order functions<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span>.
+An excellent free resource for learning the TypeScript language in depth is the <a href="https://basarat.gitbooks.io/typescript/content/docs/getting-started.html">TypeScript Deep-dive book</a>.</p>
+
+<h2 id="type-annotations">Type annotations</h2>
+
+<p><span class="glossary-term" data-term="type annotations">Type annotations<span class="glossary-popup">A syntax in TypeScript where types are explicitly specified for variables, function parameters, and return types to ensure type safety and correctness.
+</span></span> in TypeScript come after the variable name’s declaration, like so:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">i</span><span class="p">:</span> <span class="nx">number</span> <span class="o">=</span> <span class="mi">123</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Actually, in this case the <span class="glossary-term" data-term="type annotation">type annotation<span class="glossary-popup">A syntax in TypeScript where types are explicitly specified for variables, function parameters, and return types to ensure type safety and correctness.
+</span></span> is completely redundant. The TypeScript compiler features sophisticated type inference. In this case it can trivially infer the type from the type of the literal.</p>
+
+<p>Previously, we showed how rebinding such a variable to a string in JavaScript is perfectly fine by the JavaScript interpreter. However, such a change of type in a variable is a dangerous pattern that is likely an error on the programmer’s part. The TypeScript compiler will generate an error:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">123</span><span class="p">;</span>
+<span class="nx">i</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">hello!</span><span class="dl">'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[TS compiler says] Type ‘string’ is not assignable to type ‘number’.</p>
+</blockquote>
+
+<div class="cheatsheet">
+
+  <h2 id="type-annotations-cheat-sheet">Type Annotations Cheat Sheet</h2>
+
+  <p>(Each of these features is described in more detail in subsequent sections—this is just a summary and roadmap)</p>
+
+  <p>A <span class="glossary-term" data-term="type annotation">type annotation<span class="glossary-popup">A syntax in TypeScript where types are explicitly specified for variables, function parameters, and return types to ensure type safety and correctness.
+</span></span> begins with <code class="language-plaintext highlighter-rouge">:</code> and goes after the variable name, but before any assignment.
+Primitive types include <code class="language-plaintext highlighter-rouge">number</code>, <code class="language-plaintext highlighter-rouge">string</code>, <code class="language-plaintext highlighter-rouge">boolean</code>.</p>
+
+  <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">x</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">b</span><span class="p">:</span> <span class="nx">boolean</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+<span class="nx">x</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">hello</span><span class="dl">"</span> <span class="c1">// type error: x can only be assigned numbers!</span>
+</code></pre></div>  </div>
+
+  <p><em>Note:</em> the primitive types begin with a lower-case letter and are not to be mistaken for <code class="language-plaintext highlighter-rouge">Number</code>, <code class="language-plaintext highlighter-rouge">String</code> and <code class="language-plaintext highlighter-rouge">Boolean</code> which are not types at all but Object wrappers with some handy properties and methods. Don’t try to use these Object wrappers in your type definitions.</p>
+
+  <p><a href="#union-types"><span class="glossary-term" data-term="union types">Union types<span class="glossary-popup">A TypeScript construct that allows a variable to hold values of multiple specified types, separated by the <code>|</code> symbol.
+</span></span></a> allow more than one option for the type of value that can be assigned to a variable:</p>
+
+  <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">x</span><span class="p">:</span> <span class="kr">number</span> <span class="o">|</span> <span class="kr">string</span><span class="p">;</span>
+<span class="nx">x</span> <span class="o">=</span> <span class="mi">123</span><span class="p">;</span>
+<span class="nx">x</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">hello</span><span class="dl">"</span> <span class="c1">// no problem now</span>
+<span class="nx">x</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// type error!  only numbers or strings allowed.</span>
+</code></pre></div>  </div>
+
+  <p>Function parameter types are declared similarly. The return type of the function goes after the <code class="language-plaintext highlighter-rouge">)</code> of the parameter list:</p>
+
+  <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">theFunction</span><span class="p">(</span><span class="nx">x</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">y</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">x</span> <span class="o">+</span> <span class="nx">y</span><span class="p">;</span> <span class="c1">// returns a number</span>
+<span class="p">}</span>
+</code></pre></div>  </div>
+
+  <p>When working with <a href="/functionaljavascript#higher-order-functions"><span class="glossary-term" data-term="higher-order functions">higher-order functions<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span></a> you’ll need to pass functions into and/or return them from other functions.  Function types use the fat-arrow <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span>:</p>
+
+  <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">curry</span><span class="p">(</span><span class="nx">f</span><span class="p">:</span> <span class="p">(</span><span class="nx">x</span><span class="p">:</span><span class="kr">number</span><span class="p">,</span> <span class="nx">y</span><span class="p">:</span><span class="kr">number</span><span class="p">)</span><span class="o">=&gt;</span><span class="kr">number</span><span class="p">):</span> <span class="p">(</span><span class="nx">x</span><span class="p">:</span><span class="kr">number</span><span class="p">)</span><span class="o">=&gt;</span><span class="p">(</span><span class="nx">y</span><span class="p">:</span><span class="kr">number</span><span class="p">)</span><span class="o">=&gt;</span><span class="kr">number</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">x</span><span class="o">=&gt;</span><span class="nx">y</span><span class="o">=&gt;</span><span class="nf">f</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>  </div>
+
+  <p>The <a href="/functionaljavascript#curried-functions"><code class="language-plaintext highlighter-rouge">curry</code></a> function above only works for functions that are operations on two numbers.  We can make it <a href="#generic-types"><em>generic</em></a> by parameterising the argument types.</p>
+
+  <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">curry</span><span class="o">&lt;</span><span class="nx">U</span><span class="p">,</span><span class="nx">V</span><span class="p">,</span><span class="nx">W</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">f</span><span class="p">:(</span><span class="nx">x</span><span class="p">:</span><span class="nx">U</span><span class="p">,</span><span class="nx">y</span><span class="p">:</span><span class="nx">V</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">W</span><span class="p">):</span> <span class="p">(</span><span class="nx">x</span><span class="p">:</span><span class="nx">U</span><span class="p">)</span><span class="o">=&gt;</span><span class="p">(</span><span class="nx">y</span><span class="p">:</span><span class="nx">V</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">W</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">x</span><span class="o">=&gt;</span><span class="nx">y</span><span class="o">=&gt;</span><span class="nf">f</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>  </div>
+
+  <p>We can declare types for objects with multiple properties using <a href="#interfaces"><span class="glossary-term" data-term="interfaces">interfaces<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span></a></p>
+
+  <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">Student</span> <span class="p">{</span>
+  <span class="nl">name</span><span class="p">:</span> <span class="kr">string</span>
+  <span class="nx">mark</span><span class="p">:</span> <span class="kr">number</span>
+<span class="p">}</span>
+</code></pre></div>  </div>
+
+  <p>We can use the <code class="language-plaintext highlighter-rouge">Readonly</code> type to make <a href="#using-the-compiler-to-ensure-immutability">immutable</a> <span class="glossary-term" data-term="interfaces">interfaces<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span>, either by passing an existing <span class="glossary-term" data-term="interface">interface<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span> as the <span class="glossary-term" data-term="type parameter">type parameter<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span>:</p>
+
+  <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">type</span> <span class="nx">ImmutableStudent</span> <span class="o">=</span> <span class="nb">Readonly</span><span class="o">&lt;</span><span class="nx">Student</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div>  </div>
+
+  <p>or all in one:</p>
+
+  <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">type</span> <span class="nx">ImmutableStudent</span> <span class="o">=</span> <span class="nb">Readonly</span><span class="o">&lt;</span><span class="p">{</span>
+  <span class="na">name</span><span class="p">:</span> <span class="kr">string</span>
+  <span class="na">mark</span><span class="p">:</span> <span class="kr">number</span>
+<span class="p">}</span><span class="o">&gt;</span>
+</code></pre></div>  </div>
+
+  <p>When <span class="glossary-term" data-term="type annotations">type annotations<span class="glossary-popup">A syntax in TypeScript where types are explicitly specified for variables, function parameters, and return types to ensure type safety and correctness.
+</span></span> get long and complex, we can declare aliases for them using the <code class="language-plaintext highlighter-rouge">type</code> keyword:</p>
+
+  <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">type</span> <span class="nx">CurriedFunc</span><span class="o">&lt;</span><span class="nx">U</span><span class="p">,</span><span class="nx">V</span><span class="p">,</span><span class="nx">W</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">(</span><span class="nx">x</span><span class="p">:</span><span class="nx">U</span><span class="p">)</span><span class="o">=&gt;</span><span class="p">(</span><span class="nx">y</span><span class="p">:</span><span class="nx">V</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">W</span>
+
+<span class="kd">function</span> <span class="nf">curry</span><span class="o">&lt;</span><span class="nx">U</span><span class="p">,</span><span class="nx">V</span><span class="p">,</span><span class="nx">W</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">f</span><span class="p">:(</span><span class="nx">x</span><span class="p">:</span><span class="nx">U</span><span class="p">,</span><span class="nx">y</span><span class="p">:</span><span class="nx">V</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">W</span><span class="p">):</span> <span class="nx">CurriedFunc</span><span class="o">&lt;</span><span class="nx">U</span><span class="p">,</span><span class="nx">V</span><span class="p">,</span><span class="nx">W</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">x</span><span class="o">=&gt;</span><span class="nx">y</span><span class="o">=&gt;</span><span class="nf">f</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>  </div>
+
+</div>
+
+<h2 id="why-should-we-declare-types">Why should we declare types?</h2>
+
+<p>Declaring types for variables, functions and their parameters, and so on, provides more information to the person reading and using the code, but also to the compiler, which will check that you are using them consistently and correctly.  This prevents a lot of errors.</p>
+
+<p>Consider that JavaScript is commonly used to manipulate <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> pages.  For example, I can get the top-level headings in the current page, like so:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">headings</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementsByTagName</span><span class="p">(</span><span class="dl">"</span><span class="s2">h1</span><span class="dl">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>In the browser, the global <code class="language-plaintext highlighter-rouge">document</code> variable always points to the currently loaded <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> document.  Its method <code class="language-plaintext highlighter-rouge">getElementsByTagName</code> returns a collection of elements with the specified tag, in this case <code class="language-plaintext highlighter-rouge">&lt;h1&gt;</code>.</p>
+
+<p>Let’s say I want to indent the first heading by 100 pixels. I could do this by manipulating the <code class="language-plaintext highlighter-rouge">style</code> attribute of the element:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">headings</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">"</span><span class="s2">style</span><span class="dl">"</span><span class="p">,</span><span class="dl">"</span><span class="s2">padding-left:100px</span><span class="dl">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Now let’s say I do a lot of indenting and I want to build a library function to simplify manipulating padding of <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> elements.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">setLeftPadding</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">elem</span><span class="p">.</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">"</span><span class="s2">style</span><span class="dl">"</span><span class="p">,</span> <span class="s2">`padding-left:</span><span class="p">${</span><span class="nx">value</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">setLeftPadding</span><span class="p">(</span><span class="nx">headings</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="dl">"</span><span class="s2">100px</span><span class="dl">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>But how will a user of this function (other than myself, or myself in three weeks when I can’t remember how I wrote this code) know what to pass in as parameters? <code class="language-plaintext highlighter-rouge">elem</code> is a pretty good clue that it needs to be an instance of an <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> element, but is value a number or a string?</p>
+
+<p>In TypeScript we can make the expectation explicit:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">setLeftPadding</span><span class="p">(</span><span class="nx">elem</span><span class="p">:</span> <span class="nx">Element</span><span class="p">,</span> <span class="nx">value</span><span class="p">:</span> <span class="kr">string</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">elem</span><span class="p">.</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">"</span><span class="s2">style</span><span class="dl">"</span><span class="p">,</span> <span class="s2">`padding-left:</span><span class="p">${</span><span class="nx">value</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>If I try to pass something else in, the TypeScript compiler will complain:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">setLeftPadding</span><span class="p">(</span><span class="nx">headings</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">100</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Argument of type ‘100’ is not assignable to parameter of type ‘string’.ts(2345)</p>
+</blockquote>
+
+<p>In JavaScript, the interpreter would silently convert the number to a string and set <code class="language-plaintext highlighter-rouge">padding-left:100</code>—which wouldn’t actually cause the element to be indented because <span class="glossary-term" data-term="css">CSS<span class="glossary-popup">Cascading Style Sheets - another declarative (part of the HTML5 standard) for specifying reusable styles for web page rendering.
+</span></span> expects <code class="language-plaintext highlighter-rouge">px</code> (short for pixel) at the end of the value.</p>
+
+<p>Potentially worse, I might forget to add the index after headings:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">setLeftPadding</span><span class="p">(</span><span class="nx">headings</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This would cause a run-time error in the browser:</p>
+
+<blockquote>
+  <p>VM360:1 Uncaught TypeError: headings.setAttribute is not a function</p>
+</blockquote>
+
+<p>This is because <code class="language-plaintext highlighter-rouge">headings</code> is not an <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> Element but an <code class="language-plaintext highlighter-rouge">HTMLCollection</code>, with no method <code class="language-plaintext highlighter-rouge">setAttribute</code>.  Note that if I try to debug it, the error will be reported from a line of code inside the definition of <code class="language-plaintext highlighter-rouge">setLeftPadding</code>.  I don’t know if the problem is in the function itself or in my call.</p>
+
+<p>The same call inside a TypeScript program would trigger a compile-time error.  In a fancy editor with compiler services like VS Code I’d know about it immediately because the call would get a red squiggly underline immediately after I type it, I can hover over the squiggly to get a detailed error message, and certainly, the generated broken JavaScript would never make it into production.
+<img src="/assets/images/chapterImages/typescript1/setLeftPaddingTypeScript.png" alt="Compile Error Screenshot"></p>
+
+<h2 id="union-types">Union Types</h2>
+
+<p>Above we see how TypeScript prevents a variable from being assigned values of different types.
+However, it is a fairly common practice in JavaScript to implicitly create overloaded functions by accepting arguments of different types and resolving them at run-time.</p>
+
+<p>The following will append the “px” after the value if a number is passed in, or simply use the given string (assuming the user added their own “px”) otherwise.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">setLeftPadding</span><span class="p">(</span><span class="nx">elem</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">number</span><span class="dl">"</span><span class="p">)</span>
+        <span class="nx">elem</span><span class="p">.</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">"</span><span class="s2">style</span><span class="dl">"</span><span class="p">,</span> <span class="s2">`padding-left:</span><span class="p">${</span><span class="nx">value</span><span class="p">}</span><span class="s2">px`</span><span class="p">)</span>
+    <span class="k">else</span>
+        <span class="nx">elem</span><span class="p">.</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">"</span><span class="s2">style</span><span class="dl">"</span><span class="p">,</span> <span class="s2">`padding-left:</span><span class="p">${</span><span class="nx">value</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This function accepts either a string or a number for the <code class="language-plaintext highlighter-rouge">value</code> parameter, but to find that out we need to dig into the code.  The “<span class="glossary-term" data-term="union type">Union Type<span class="glossary-popup">A TypeScript construct that allows a variable to hold values of multiple specified types, separated by the <code>|</code> symbol.
+</span></span>” facility in TypeScript allows us to specify the multiple options directly in the function definition, with a list of types separated by <code class="language-plaintext highlighter-rouge">|</code>:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">setLeftPadding</span><span class="p">(</span><span class="nx">elem</span><span class="p">:</span> <span class="nx">Element</span><span class="p">,</span> <span class="nx">value</span><span class="p">:</span> <span class="kr">string</span> <span class="o">|</span> <span class="kr">number</span><span class="p">)</span> <span class="p">{...</span>
+</code></pre></div></div>
+
+<p>Going further, the following allows either a number, a string, or a function that needs to be called to retrieve the <code class="language-plaintext highlighter-rouge">string</code>.  It uses <code class="language-plaintext highlighter-rouge">typeof</code> to query the type of the parameter and do the right thing in each case.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">setLeftPadding</span><span class="p">(</span><span class="nx">elem</span><span class="p">:</span> <span class="nx">Element</span><span class="p">,</span> <span class="nx">value</span><span class="p">:</span> <span class="kr">number</span> <span class="o">|</span> <span class="kr">string</span> <span class="o">|</span> <span class="p">(()</span><span class="o">=&gt;</span><span class="kr">string</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">number</span><span class="dl">"</span><span class="p">)</span>
+        <span class="nx">elem</span><span class="p">.</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">"</span><span class="s2">style</span><span class="dl">"</span><span class="p">,</span> <span class="s2">`padding-left:</span><span class="p">${</span><span class="nx">value</span><span class="p">}</span><span class="s2">px`</span><span class="p">)</span>
+    <span class="k">else</span> <span class="k">if </span><span class="p">(</span><span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">function</span><span class="dl">"</span><span class="p">)</span>
+        <span class="nx">elem</span><span class="p">.</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">"</span><span class="s2">style</span><span class="dl">"</span><span class="p">,</span> <span class="s2">`padding-left:</span><span class="p">${</span><span class="nf">value</span><span class="p">()}</span><span class="s2">`</span><span class="p">)</span>
+    <span class="k">else</span>
+        <span class="nx">elem</span><span class="p">.</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">"</span><span class="s2">style</span><span class="dl">"</span><span class="p">,</span> <span class="s2">`padding-left:</span><span class="p">${</span><span class="nx">value</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The TypeScript typechecker also knows about typeof expressions (as used above) and will also typecheck the different clauses of if statements that use them for consistency with the expected types.</p>
+
+<p>We can now use this function to indent our heading in various ways:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">setLeftPadding</span><span class="p">(</span><span class="nx">headings</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">100</span><span class="p">);</span> <span class="c1">// This will be converted to 100px</span>
+<span class="nf">setLeftPadding</span><span class="p">(</span><span class="nx">headings</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="dl">"</span><span class="s2">100px</span><span class="dl">"</span><span class="p">);</span> <span class="c1">// This will be used directly</span>
+<span class="nf">setLeftPadding</span><span class="p">(</span><span class="nx">headings</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="dl">"</span><span class="s2">100px</span><span class="dl">"</span><span class="p">);</span> <span class="c1">// This will call the function which returns 100px</span>
+</code></pre></div></div>
+
+<div class="cheatsheet">
+
+  <h2 id="disambiguating-types-cheat-sheet">Disambiguating Types Cheat Sheet</h2>
+
+  <p>It is common in TypeScript to have functions with <span class="glossary-term" data-term="union type">union type<span class="glossary-popup">A TypeScript construct that allows a variable to hold values of multiple specified types, separated by the <code>|</code> symbol.
+</span></span> parameters where each of the possible types needs to be handled separately. There are several ways to test the types of variables.</p>
+
+  <p><strong>Primitive types:</strong> <code class="language-plaintext highlighter-rouge">typeof v</code> gets the type of variable <code class="language-plaintext highlighter-rouge">v</code> as a string. This returns ‘number’, ‘string’ or ‘boolean’ (and a couple of others that we won’t worry about) for the primitive types.  It can also differentiate objects and functions, e.g.:</p>
+
+  <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="nx">s</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">hello</span><span class="dl">"</span><span class="p">,</span>
+      <span class="nx">b</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span><span class="na">prop1</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="na">prop2</span><span class="p">:</span><span class="dl">"</span><span class="s2">hi</span><span class="dl">"</span><span class="p">},</span>
+      <span class="nx">f</span> <span class="o">=</span> <span class="nx">x</span><span class="o">=&gt;</span><span class="nx">x</span><span class="o">+</span><span class="mi">1</span>
+
+<span class="k">typeof</span> <span class="nx">x</span>      <span class="c1">// 'number'</span>
+<span class="k">typeof</span> <span class="nx">s</span>      <span class="c1">// 'string'</span>
+<span class="k">typeof</span> <span class="nx">b</span>      <span class="c1">// 'boolean'</span>
+<span class="k">typeof</span> <span class="nx">o</span>      <span class="c1">// 'object'</span>
+<span class="k">typeof</span> <span class="nx">f</span>      <span class="c1">// 'function'</span>
+</code></pre></div>  </div>
+
+  <p><strong>Object types:</strong> null values and arrays are considered objects:</p>
+
+  <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">o</span><span class="o">=</span><span class="p">{</span><span class="na">prop1</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="na">prop2</span><span class="p">:</span><span class="dl">"</span><span class="s2">hi</span><span class="dl">"</span><span class="p">},</span>
+      <span class="nx">n</span><span class="o">=</span><span class="kc">null</span><span class="p">,</span>
+      <span class="nx">a</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+
+<span class="k">typeof</span> <span class="nx">o</span>      <span class="c1">// 'object'</span>
+<span class="k">typeof</span> <span class="nx">n</span>      <span class="c1">// 'object'</span>
+<span class="k">typeof</span> <span class="nx">a</span>      <span class="c1">// 'object'</span>
+</code></pre></div>  </div>
+
+  <p>To differentiate null and arrays from other objects, we need different tests:</p>
+
+  <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">n</span><span class="o">===</span><span class="kc">null</span>             <span class="c1">// true</span>
+<span class="nx">a</span> <span class="k">instanceof</span> <span class="nb">Array</span>   <span class="c1">// true</span>
+</code></pre></div>  </div>
+
+</div>
+
+<p><span class="glossary-term" data-term="union types">Union types<span class="glossary-popup">A TypeScript construct that allows a variable to hold values of multiple specified types, separated by the <code>|</code> symbol.
+</span></span> can be quite complex.  Here is a type for JSON objects which can hold primitive values (<code class="language-plaintext highlighter-rouge">string</code>, <code class="language-plaintext highlighter-rouge">boolean</code>, <code class="language-plaintext highlighter-rouge">number</code>), or <code class="language-plaintext highlighter-rouge">null</code>, or Arrays containing elements of <code class="language-plaintext highlighter-rouge">JsonVal</code>, or an object with named properties, each of which is also a <code class="language-plaintext highlighter-rouge">JsonVal</code>.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">type</span> <span class="nx">JsonVal</span> <span class="o">=</span>
+  <span class="o">|</span> <span class="kr">string</span>
+  <span class="o">|</span> <span class="nx">boolean</span>
+  <span class="o">|</span> <span class="kr">number</span>
+  <span class="o">|</span> <span class="kc">null</span>
+  <span class="o">|</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="nx">JsonVal</span><span class="o">&gt;</span>
+  <span class="o">|</span> <span class="p">{</span> <span class="p">[</span><span class="na">key</span><span class="p">:</span> <span class="kr">string</span><span class="p">]:</span> <span class="nx">JsonVal</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Given such a <span class="glossary-term" data-term="union type">union type<span class="glossary-popup">A TypeScript construct that allows a variable to hold values of multiple specified types, separated by the <code>|</code> symbol.
+</span></span>, we can differentiate types using the above tests in <code class="language-plaintext highlighter-rouge">if</code> or <code class="language-plaintext highlighter-rouge">switch</code> statements or ternary if-else expressions (<code class="language-plaintext highlighter-rouge">?:</code>), for example to convert a <code class="language-plaintext highlighter-rouge">JsonVal</code> to string:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">jsonToString</span> <span class="o">=</span> <span class="p">(</span><span class="nx">json</span><span class="p">:</span> <span class="nx">JsonVal</span><span class="p">):</span> <span class="kr">string</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">json</span><span class="o">===</span><span class="kc">null</span><span class="p">)</span> <span class="k">return</span> <span class="dl">'</span><span class="s1">null</span><span class="dl">'</span><span class="p">;</span>
+  <span class="k">switch</span><span class="p">(</span><span class="k">typeof</span> <span class="nx">json</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="dl">'</span><span class="s1">string</span><span class="dl">'</span><span class="p">:</span>
+    <span class="k">case</span> <span class="dl">'</span><span class="s1">boolean</span><span class="dl">'</span><span class="p">:</span>
+    <span class="k">case</span> <span class="dl">'</span><span class="s1">number</span><span class="dl">'</span><span class="p">:</span>
+      <span class="k">return</span> <span class="nc">String</span><span class="p">(</span><span class="nx">json</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="kd">const</span> <span class="p">[</span><span class="nx">brackets</span><span class="p">,</span> <span class="nx">entries</span><span class="p">]</span>
+    <span class="o">=</span> <span class="nx">json</span> <span class="k">instanceof</span> <span class="nb">Array</span>
+      <span class="p">?</span> <span class="p">[</span><span class="dl">'</span><span class="s1">[]</span><span class="dl">'</span><span class="p">,</span> <span class="nx">json</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="nx">jsonToString</span><span class="p">)]</span>
+      <span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">{}</span><span class="dl">'</span><span class="p">,</span> <span class="nb">Object</span><span class="p">.</span><span class="nf">entries</span><span class="p">(</span><span class="nx">json</span><span class="p">)</span>
+                    <span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="cm">/* exercise: what goes here? */</span><span class="p">)];</span>
+  <span class="k">return</span> <span class="s2">`</span><span class="p">${</span><span class="nx">brackets</span><span class="p">[</span><span class="mi">0</span><span class="p">]}</span><span class="s2"> </span><span class="p">${</span><span class="nx">entries</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="dl">'</span><span class="s1">, </span><span class="dl">'</span><span class="p">)}</span><span class="s2"> </span><span class="p">${</span><span class="nx">brackets</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span><span class="s2">`</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Notice in the final ternary if expression (<code class="language-plaintext highlighter-rouge">?:</code>), by the time we have determined that <code class="language-plaintext highlighter-rouge">json</code> is not an Array, the only thing left that it could be is an Object with <code class="language-plaintext highlighter-rouge">[key,value]</code> pairs that we can iterate over using <code class="language-plaintext highlighter-rouge">Object.entries(json)</code>.</p>
+
+<p>Note also that TypeScript is smart about checking types inside these kinds of conditional statements. So, for example, inside the last if expression, where we know <code class="language-plaintext highlighter-rouge">json instanceof Array</code> is <code class="language-plaintext highlighter-rouge">true</code>, we can immediately treat <code class="language-plaintext highlighter-rouge">json</code> as an array and call its <code class="language-plaintext highlighter-rouge">map</code> method.</p>
+
+<p>Finally, don’t be confused by the use of array destructuring (<code class="language-plaintext highlighter-rouge">[brackets,entries] = ...</code>) to get more than one value as the result of an expression. In this case we get the correct set of brackets to enclose elements of arrays <code class="language-plaintext highlighter-rouge">[...]</code> versus objects <code class="language-plaintext highlighter-rouge">{...}</code>.  This avoids having more conditional logic than necessary. Like for-loops, ifs are easy to mess up, so less is generally safer.</p>
+
+<h2 id="interfaces">Interfaces</h2>
+
+<p>In TypeScript, you can declare an <code class="language-plaintext highlighter-rouge">interface</code> that defines the set of properties and their types that I expect to be available for certain objects.</p>
+
+<p>For example, when tallying scores at the end of semester, I will need to work with collections of students that have a name, assignment and exam marks.  There might even be some special cases which require mark adjustments, the details of which I don’t particularly care about but that I will need to be able to access, e.g. through a function particular to that student.  The student objects would need to provide an <span class="glossary-term" data-term="interface">interface<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span> that looks like this:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">Student</span> <span class="p">{</span>
+  <span class="nl">name</span><span class="p">:</span> <span class="kr">string</span>
+  <span class="nx">assignmentMark</span><span class="p">:</span> <span class="kr">number</span>
+  <span class="nx">examMark</span><span class="p">:</span> <span class="kr">number</span>
+  <span class="nf">markAdjustment</span><span class="p">():</span> <span class="kr">number</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Note that this <span class="glossary-term" data-term="interface">interface<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span> guarantees that there is a function returning a number called <code class="language-plaintext highlighter-rouge">markAdjustment</code> available on any object implementing the <code class="language-plaintext highlighter-rouge">Student</code> <span class="glossary-term" data-term="interface">interface<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span>, but it says nothing about how the adjustment is calculated.  Software engineers like to talk about <a href="https://en.wikipedia.org/wiki/Separation_of_concerns">Separation of Concerns (SoC)</a>.  To me, the implementation of <code class="language-plaintext highlighter-rouge">markAdjustment</code> is Someone Else’s Problem (SEP).</p>
+
+<p>Now I can define functions which work with students, for example to calculate the average score for the class:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">averageScore</span><span class="p">(</span><span class="nx">students</span><span class="p">:</span> <span class="nx">Student</span><span class="p">[]):</span> <span class="kr">number</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">students</span><span class="p">.</span><span class="nf">reduce</span><span class="p">((</span><span class="nx">total</span><span class="p">,</span> <span class="nx">s</span><span class="p">)</span> <span class="o">=&gt;</span>
+    <span class="nx">total</span> <span class="o">+</span> <span class="nx">s</span><span class="p">.</span><span class="nx">assignmentMark</span> <span class="o">+</span> <span class="nx">s</span><span class="p">.</span><span class="nx">examMark</span> <span class="o">+</span> <span class="nx">s</span><span class="p">.</span><span class="nf">markAdjustment</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="o">/</span> <span class="nx">students</span><span class="p">.</span><span class="nx">length</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Other parts of my program might work with richer <span class="glossary-term" data-term="interfaces">interfaces<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span> for the student database—with all sorts of other properties and functions available—but for the purposes of computing the average class score, the above is sufficient.</p>
+
+<h2 id="generic-types">Generic Types</h2>
+
+<p>Sometimes when we do marking we get lists of students indexed by their Student Number (a <code class="language-plaintext highlighter-rouge">number</code>).  Sometimes it’s by email address (a <code class="language-plaintext highlighter-rouge">string</code>).  You can see the concept of student numbers probably predates the existence of student emails (yes, universities often predate the internet!).
+What if one day our systems will use yet another identifier?  We can future-proof a program that works with lists of students by deferring the decision of the particular type of the id:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">Student</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="na">id</span><span class="p">:</span> <span class="nx">T</span><span class="p">;</span>
+  <span class="nl">name</span><span class="p">:</span> <span class="kr">string</span><span class="p">;</span>
+  <span class="p">...</span> <span class="c1">// other properties such as marks etc…</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Here <code class="language-plaintext highlighter-rouge">T</code> is the <em><span class="glossary-term" data-term="type parameter">type parameter<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span></em>, and the compiler will infer its type when it is used.  It could be <code class="language-plaintext highlighter-rouge">number</code>, or it could be a <code class="language-plaintext highlighter-rouge">string</code> (e.g. if it’s an email), or it could be something else.</p>
+
+<p>For example, we could define a student, using a <code class="language-plaintext highlighter-rouge">number</code> as the <span class="glossary-term" data-term="type parameter">type parameter<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> <code class="language-plaintext highlighter-rouge">T</code></p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">exampleStudent</span><span class="p">:</span> <span class="nx">Student</span><span class="o">&lt;</span><span class="kr">number</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">id</span><span class="p">:</span> <span class="mi">12345</span><span class="p">,</span>
+  <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">John Doe</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">...</span> <span class="c1">// other properties</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>We could also define a student, using a <code class="language-plaintext highlighter-rouge">string</code> as the <span class="glossary-term" data-term="type parameter">type parameter<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> <code class="language-plaintext highlighter-rouge">T</code></p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">exampleStudent</span><span class="p">:</span> <span class="nx">Student</span><span class="o">&lt;</span><span class="kr">string</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">id</span><span class="p">:</span> <span class="dl">"</span><span class="s2">jdoe0001@student.university.edu</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">John Doe</span><span class="dl">"</span><span class="p">,</span>
+  <span class="p">...</span> <span class="c1">// other properties</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="alert-box alert-info">
+
+  <p><strong>What is a Generic Type?</strong>
+A generic type is a type that is defined with a placeholder (called a <em><span class="glossary-term" data-term="type parameter">type parameter<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span></em>) instead of specifying a concrete type up front. This allows code to be written once and used with different data types without losing type safety.
+Think of it as a template: the exact type gets “filled in” when the code is used.</p>
+
+  <p>In TypeScript, we use angle brackets <t> to introduce a <span class="glossary-term" data-term="type parameter">type parameter<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span>, like this:</t></p>
+
+  <div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">Box</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="na">value</span><span class="p">:</span> <span class="nx">T</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>  </div>
+
+  <p>Now <code class="language-plaintext highlighter-rouge">Box&lt;number&gt;</code> means a box that holds a number, while <code class="language-plaintext highlighter-rouge">Box&lt;string&gt;</code> means one that holds a string.</p>
+</div>
+
+<p><span class="glossary-term" data-term="type parameters">Type parameters<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> can have more descriptive names if you like, but they <strong>must</strong> start with a capital.  The convention though is to use rather terse single-letter parameter names in the same vicinity of the alphabet as T.  This habit comes from C++, where T used to stand for “Template”, and the terseness stems from the fact that we don’t really care about the details of what it is.</p>
+
+<p>As in function parameter lists, you can also have more than one <span class="glossary-term" data-term="type parameter">type parameter<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span>:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">Student</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span><span class="nx">U</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="na">id</span><span class="p">:</span> <span class="nx">T</span><span class="p">;</span>
+  <span class="nl">name</span><span class="p">:</span> <span class="kr">string</span><span class="p">;</span>
+  <span class="nl">someOtherThingThatWeDontCareMuchAbout</span><span class="p">:</span> <span class="nx">U</span>
+  <span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Formally, this is a kind of “<span class="glossary-term" data-term="parametric polymorphism">parametric polymorphism<span class="glossary-popup">A type of polymorphism where functions or data types can be written generically so that they can handle values uniformly without depending on their type.
+</span></span>”.  The <code class="language-plaintext highlighter-rouge">T</code> and <code class="language-plaintext highlighter-rouge">U</code> here may be referred to as <em><span class="glossary-term" data-term="type parameters">type parameters<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span></em> or <em>type variables</em>. We say that the property <code class="language-plaintext highlighter-rouge">id</code> has <em>generic type</em>.</p>
+
+<p>You see generic type definitions used a lot in algorithm and data structure libraries, to give a type—to be specified by the calling code—for the data stored in the data structures.  For example, the following <span class="glossary-term" data-term="interface">interface<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span> might be the basis of a linked list element:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">IListNode</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="na">data</span><span class="p">:</span> <span class="nx">T</span><span class="p">;</span>
+    <span class="nl">next</span><span class="p">?:</span> <span class="nx">IListNode</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The specific type of <code class="language-plaintext highlighter-rouge">T</code> will be resolved when <code class="language-plaintext highlighter-rouge">data</code> is assigned a specific type value. But, all values of this linked list must have the same type <code class="language-plaintext highlighter-rouge">T</code>!</p>
+
+<p>We can add <span class="glossary-term" data-term="type parameters">type parameters<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> to <span class="glossary-term" data-term="interfaces">interfaces<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span>, ES6 classes, type aliases, and also functions.  Consider this function which performs a binary search over an array of numbers (it assumes the array is sorted):</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">binarySearch1</span><span class="p">(</span><span class="nx">arr</span><span class="p">:</span><span class="nx">number</span><span class="p">[],</span> <span class="nx">key</span><span class="p">:</span><span class="nx">number</span><span class="p">):</span> <span class="nx">number</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nf">bs</span><span class="p">(</span><span class="nx">start</span><span class="p">:</span><span class="nx">number</span><span class="p">,</span> <span class="nx">end</span><span class="p">:</span><span class="nx">number</span><span class="p">):</span> <span class="nx">number</span> <span class="p">{</span>
+        <span class="c1">// Base case: search range is empty</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">start</span> <span class="o">&gt;=</span> <span class="nx">end</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="c1">// Find midpoint index</span>
+        <span class="kd">const</span> <span class="nx">mid</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nf">floor</span><span class="p">((</span><span class="nx">start</span> <span class="o">+</span> <span class="nx">end</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+        <span class="c1">// Compare the key with the middle element</span>
+        <span class="k">if </span><span class="p">(</span><span class="nx">key</span> <span class="o">&gt;</span> <span class="nx">arr</span><span class="p">[</span><span class="nx">mid</span><span class="p">])</span> <span class="k">return</span> <span class="nf">bs</span><span class="p">(</span><span class="nx">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">end</span><span class="p">);</span>  <span class="c1">// Search right half</span>
+        <span class="k">if </span><span class="p">(</span><span class="nx">key</span> <span class="o">&lt;</span> <span class="nx">arr</span><span class="p">[</span><span class="nx">mid</span><span class="p">])</span> <span class="k">return</span> <span class="nf">bs</span><span class="p">(</span><span class="nx">start</span><span class="p">,</span> <span class="nx">mid</span><span class="p">);</span>    <span class="c1">// Search left half</span>
+        <span class="k">return</span> <span class="nx">mid</span><span class="p">;</span> <span class="c1">// Key found</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nf">bs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">arr</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">studentsById</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span><span class="na">id</span><span class="p">:</span> <span class="mi">123</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Harry Smith</span><span class="dl">"</span><span class="p">},</span>
+  <span class="p">{</span><span class="na">id</span><span class="p">:</span> <span class="mi">125</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Cindy Wu</span><span class="dl">"</span><span class="p">},</span>
+  <span class="p">...</span>
+<span class="p">]</span>
+<span class="kd">const</span> <span class="nx">numberIds</span> <span class="o">=</span> <span class="nx">studentsById</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="nx">s</span><span class="o">=&gt;</span><span class="nx">s</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">studentsById</span><span class="p">[</span><span class="nf">binarySearch1</span><span class="p">(</span><span class="nx">numberIds</span><span class="p">,</span><span class="mi">125</span><span class="p">)].</span><span class="nx">name</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Cindy Wu</p>
+</blockquote>
+
+<p>If we parameterise the type of elements in the array, we can search on sorted arrays of strings as well as numbers:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">binarySearch2</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">arr</span><span class="p">:</span><span class="nx">T</span><span class="p">[],</span> <span class="nx">key</span><span class="p">:</span><span class="nx">T</span><span class="p">):</span> <span class="nx">number</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nf">bs</span><span class="p">(</span><span class="nx">start</span><span class="p">:</span><span class="nx">number</span><span class="p">,</span> <span class="nx">end</span><span class="p">:</span><span class="nx">number</span><span class="p">):</span> <span class="nx">number</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">start</span> <span class="o">&gt;=</span> <span class="nx">end</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">mid</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nf">floor</span><span class="p">((</span><span class="nx">start</span> <span class="o">+</span> <span class="nx">end</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">key</span> <span class="o">&gt;</span> <span class="nx">arr</span><span class="p">[</span><span class="nx">mid</span><span class="p">])</span> <span class="k">return</span> <span class="nf">bs</span><span class="p">(</span><span class="nx">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">end</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">key</span> <span class="o">&lt;</span> <span class="nx">arr</span><span class="p">[</span><span class="nx">mid</span><span class="p">])</span> <span class="k">return</span> <span class="nf">bs</span><span class="p">(</span><span class="nx">start</span><span class="p">,</span> <span class="nx">mid</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">mid</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nf">bs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">arr</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">studentsByEmail</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span><span class="na">id</span><span class="p">:</span> <span class="dl">"</span><span class="s2">cindy@monash.edu</span><span class="dl">"</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Cindy Wu</span><span class="dl">"</span><span class="p">},</span>
+  <span class="p">{</span><span class="na">id</span><span class="p">:</span> <span class="dl">"</span><span class="s2">harry@monash.edu</span><span class="dl">"</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Harry Smith</span><span class="dl">"</span><span class="p">},</span>
+  <span class="p">...</span>
+<span class="p">]</span>
+
+<span class="kd">const</span> <span class="nx">stringIds</span> <span class="o">=</span> <span class="nx">studentsByEmail</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="nx">s</span><span class="o">=&gt;</span><span class="nx">s</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">studentsByEmail</span><span class="p">[</span><span class="nf">binarySearch2</span><span class="p">(</span><span class="nx">stringIds</span><span class="p">,</span><span class="dl">'</span><span class="s1">harry@monash.edu</span><span class="dl">'</span><span class="p">)].</span><span class="nx">name</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Harry Smith</p>
+</blockquote>
+
+<p>Why is this better than raw JavaScript with no type checking, or simply using TypeScript’s wildcard <code class="language-plaintext highlighter-rouge">any</code> type?  Well, it ensures that we use the types <em>consistently</em>.
+For example:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">binarySearch2</span><span class="p">(</span><span class="nx">numberIds</span><span class="p">,</span><span class="dl">"</span><span class="s2">harry@monash.edu</span><span class="dl">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>TYPE ERROR!</p>
+</blockquote>
+
+<p>The <code class="language-plaintext highlighter-rouge">binarySearch2</code> function above is usable with more types than <code class="language-plaintext highlighter-rouge">binarySearch1</code>, but it still requires that <code class="language-plaintext highlighter-rouge">T</code> does something sensible with<code class="language-plaintext highlighter-rouge">&lt;</code> and <code class="language-plaintext highlighter-rouge">&gt;</code>.</p>
+
+<p>We can add a function to use for comparison, so now we can use it with students uniquely identified by some other weird thing that we don’t even know about yet:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">binarySearch3</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">arr</span><span class="p">:</span><span class="nx">T</span><span class="p">[],</span> <span class="nx">key</span><span class="p">:</span><span class="nx">T</span><span class="p">,</span> <span class="nx">compare</span><span class="p">:</span> <span class="p">(</span><span class="nx">a</span><span class="p">:</span><span class="nx">T</span><span class="p">,</span><span class="nx">b</span><span class="p">:</span><span class="nx">T</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">number</span><span class="p">):</span> <span class="nx">number</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nf">bs</span><span class="p">(</span><span class="nx">start</span><span class="p">:</span><span class="nx">number</span><span class="p">,</span> <span class="nx">end</span><span class="p">:</span><span class="nx">number</span><span class="p">):</span> <span class="nx">number</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">start</span> <span class="o">&gt;=</span> <span class="nx">end</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="kd">const</span> <span class="nx">mid</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nf">floor</span><span class="p">((</span><span class="nx">start</span> <span class="o">+</span> <span class="nx">end</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span>
+              <span class="nx">comp</span> <span class="o">=</span> <span class="nf">compare</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span><span class="nx">arr</span><span class="p">[</span><span class="nx">mid</span><span class="p">]);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">comp</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="nf">bs</span><span class="p">(</span><span class="nx">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">end</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">comp</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="nf">bs</span><span class="p">(</span><span class="nx">start</span><span class="p">,</span> <span class="nx">mid</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">mid</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nf">bs</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">arr</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Elsewhere in our program where we know how students are sorted, we can specify the appropriate compare function:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">binarySearch3</span><span class="p">(</span><span class="nx">students</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">)</span><span class="o">=&gt;</span><span class="cm">/* return 1 if a is greater than b, 0 if they are the same, -1 otherwise */</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>We can also have multiple <span class="glossary-term" data-term="type parameters">type parameters<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> for a single function.
+The following version of <a href="/higher-order-functions#curried-functions"><code class="language-plaintext highlighter-rouge">curry</code></a> uses <span class="glossary-term" data-term="type parameters">type parameters<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> to catch errors without loss of generality:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">curry</span><span class="o">&lt;</span><span class="nx">U</span><span class="p">,</span><span class="nx">V</span><span class="p">,</span><span class="nx">W</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">f</span><span class="p">:(</span><span class="nx">x</span><span class="p">:</span><span class="nx">U</span><span class="p">,</span><span class="nx">y</span><span class="p">:</span><span class="nx">V</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">W</span><span class="p">):</span> <span class="p">(</span><span class="nx">x</span><span class="p">:</span><span class="nx">U</span><span class="p">)</span><span class="o">=&gt;</span><span class="p">(</span><span class="nx">y</span><span class="p">:</span><span class="nx">V</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">W</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">x</span><span class="o">=&gt;</span><span class="nx">y</span><span class="o">=&gt;</span><span class="nf">f</span><span class="p">(</span><span class="nx">y</span><span class="p">,</span><span class="nx">x</span><span class="p">)</span> <span class="c1">// error!</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The TypeScript compiler underlines <code class="language-plaintext highlighter-rouge">y,x</code> and says:</p>
+<blockquote>
+  <p>Error: Argument of type ‘V’ is not assignable to parameter of type ‘U’. ‘U’ could be instantiated with an arbitrary type which could be unrelated to ‘V’.</p>
+</blockquote>
+
+<p>So it’s complaining that our use of a <code class="language-plaintext highlighter-rouge">y:V</code> into a parameter that should be a <code class="language-plaintext highlighter-rouge">U</code> and vice-versa for <code class="language-plaintext highlighter-rouge">x</code>.  We flip them back and we are good again… but TypeScript helps us make sure we use the function consistently too:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">curry</span><span class="o">&lt;</span><span class="nx">U</span><span class="p">,</span><span class="nx">V</span><span class="p">,</span><span class="nx">W</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">f</span><span class="p">:(</span><span class="nx">x</span><span class="p">:</span><span class="nx">U</span><span class="p">,</span><span class="nx">y</span><span class="p">:</span><span class="nx">V</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">W</span><span class="p">):</span> <span class="p">(</span><span class="nx">x</span><span class="p">:</span><span class="nx">U</span><span class="p">)</span><span class="o">=&gt;</span><span class="p">(</span><span class="nx">y</span><span class="p">:</span><span class="nx">V</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">W</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">x</span><span class="o">=&gt;</span><span class="nx">y</span><span class="o">=&gt;</span><span class="nf">f</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">)</span> <span class="c1">// good now!</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nf">prefix</span><span class="p">(</span><span class="nx">s</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">s</span><span class="p">.</span><span class="nf">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">n</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">first</span> <span class="o">=</span> <span class="nf">curry</span><span class="p">(</span><span class="nx">prefix</span><span class="p">)</span>
+
+<span class="nf">first</span><span class="p">(</span><span class="mi">3</span><span class="p">)(</span><span class="dl">"</span><span class="s2">hello</span><span class="dl">"</span><span class="p">)</span> <span class="c1">// Error!</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Error: Argument of type ‘number’ is not assignable to parameter of type ‘string’.<br>
+Error: Argument of type ‘string’ is not assignable to parameter of type ‘number’.</p>
+</blockquote>
+
+<p>So the error messages are similar to above, but now they list concrete types because the types for <code class="language-plaintext highlighter-rouge">U</code> and <code class="language-plaintext highlighter-rouge">V</code> have already been narrowed by the application of <code class="language-plaintext highlighter-rouge">curry</code> to <code class="language-plaintext highlighter-rouge">prefix</code>.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">first</span><span class="p">(</span><span class="dl">"</span><span class="s2">hello</span><span class="dl">"</span><span class="p">)(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">// good now!</span>
+</code></pre></div></div>
+
+<p>So type checking helps us to create functions correctly, but also to use them correctly.
+You begin to appreciate type checking more and more as your programs grow larger and the error messages appear further from their definitions.  However, the most important thing is that these errors are being caught at <em>compile time</em> rather than at <em>run time</em>, when it might be too late!</p>
+
+<h3 id="more-examples-of-generic-types">More Examples of Generic Types</h3>
+
+<h4 id="typing-the-map-function">Typing the Map Function</h4>
+
+<p>We have previously seen how useful the function <code class="language-plaintext highlighter-rouge">map</code> is, which applies a function to every item in an array.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">map</span> <span class="o">=</span> <span class="p">(</span><span class="nx">func</span><span class="p">,</span> <span class="nx">l</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">l</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">[]</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// Apply function to the first item, and</span>
+    <span class="c1">// recursively apply to the rest of the list</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nf">func</span><span class="p">(</span><span class="nx">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="p">...</span><span class="nf">map</span><span class="p">(</span><span class="nx">func</span><span class="p">,</span> <span class="nx">l</span><span class="p">.</span><span class="nf">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">))];</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>If we wanted to provide types for this, we could consider a specific use case, for example converting a <code class="language-plaintext highlighter-rouge">number</code> to a <code class="language-plaintext highlighter-rouge">string</code></p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">map_num2str</span> <span class="o">=</span> <span class="p">(</span><span class="nx">func</span><span class="p">:</span> <span class="p">(</span><span class="nx">x</span><span class="p">:</span> <span class="kr">number</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">l</span><span class="p">:</span> <span class="kr">number</span><span class="p">[]):</span> <span class="kr">string</span><span class="p">[]</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// same as above...</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This would correctly typecheck, and we could use this function to convert between a number and a string, but this means we would have to create one of these for each possible type, and this would be time-consuming and be a lot of code you would have to write and provide types for. This is where generic types come in handy! Instead of <code class="language-plaintext highlighter-rouge">func</code> converting between a <code class="language-plaintext highlighter-rouge">number</code> and a <code class="language-plaintext highlighter-rouge">string</code>, we will say <code class="language-plaintext highlighter-rouge">func</code> is some operation that takes as input something of a generic type <code class="language-plaintext highlighter-rouge">T</code> and returns another generic type <code class="language-plaintext highlighter-rouge">V</code>.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">map</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">V</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">func</span><span class="p">:</span> <span class="p">(</span><span class="nx">x</span><span class="p">:</span> <span class="nx">T</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">V</span><span class="p">,</span> <span class="nx">l</span><span class="p">:</span> <span class="nx">T</span><span class="p">[]):</span> <span class="nx">V</span><span class="p">[]</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// same as above...</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The important part of this definition:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">&lt;T, V&gt;</code>: Here we define the <span class="glossary-term" data-term="type parameters">type parameters<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> which will be usable inside the type of our function. We can only use the generic types defined in this list. You can consider this analogous to defining variables in normal coding, and you only have access to variables that exist.</li>
+  <li>The generic type <code class="language-plaintext highlighter-rouge">T</code> is the type of the elements in the input array l.</li>
+  <li>The generic type <code class="language-plaintext highlighter-rouge">V</code> is the type of the elements in the output array, determined by the function <code class="language-plaintext highlighter-rouge">func</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">func: (x: T) =&gt; V</code> specifies that <code class="language-plaintext highlighter-rouge">func</code> is a function that takes a parameter of type <code class="language-plaintext highlighter-rouge">T</code> and returns a value of type <code class="language-plaintext highlighter-rouge">V</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">l: T[]</code> indicates that <code class="language-plaintext highlighter-rouge">l</code> is an array of elements of type <code class="language-plaintext highlighter-rouge">T</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">V[]</code> is the return type of the function: an array of elements of type <code class="language-plaintext highlighter-rouge">V</code>.</li>
+</ul>
+
+<p>All types defined by the generic parameters (<code class="language-plaintext highlighter-rouge">T</code> and <code class="language-plaintext highlighter-rouge">V</code>) are scoped within the function’s definition. This means that within the function, every instance of <code class="language-plaintext highlighter-rouge">T</code> must be the same type, and every instance of <code class="language-plaintext highlighter-rouge">V</code> must be the same type, ensuring type consistency, e.g., all <code class="language-plaintext highlighter-rouge">T</code>’s can be a <code class="language-plaintext highlighter-rouge">string</code>, but a <code class="language-plaintext highlighter-rouge">T</code> cannot be both a <code class="language-plaintext highlighter-rouge">string</code> at one point, and then <code class="language-plaintext highlighter-rouge">number</code> at any other point in the type definition. <code class="language-plaintext highlighter-rouge">T</code> and <code class="language-plaintext highlighter-rouge">V</code> can be the same type (e.g., both <code class="language-plaintext highlighter-rouge">numbers</code>), but they can also be different (e.g., <code class="language-plaintext highlighter-rouge">T</code> could be <code class="language-plaintext highlighter-rouge">string</code> and <code class="language-plaintext highlighter-rouge">V</code> could be <code class="language-plaintext highlighter-rouge">number</code>). The generic function doesn’t enforce any specific relationship between <code class="language-plaintext highlighter-rouge">T</code> and <code class="language-plaintext highlighter-rouge">V</code>, allowing for flexibility.</p>
+
+<h4 id="typing-the-filter-function">Typing the Filter Function</h4>
+
+<p>We have previously seen how useful the function <code class="language-plaintext highlighter-rouge">filter</code> is, which optionally removes items in a list.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">filter</span> <span class="o">=</span> <span class="p">(</span><span class="nx">func</span><span class="p">,</span> <span class="nx">l</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">l</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">[]</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="nf">func</span><span class="p">(</span><span class="nx">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="p">{</span>
+      <span class="c1">// Keep the current value</span>
+      <span class="k">return</span> <span class="p">[</span><span class="nx">l</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">...</span><span class="nf">filter</span><span class="p">(</span><span class="nx">func</span><span class="p">,</span> <span class="nx">l</span><span class="p">.</span><span class="nf">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">))];</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+      <span class="c1">// Skip the current item.</span>
+      <span class="k">return</span> <span class="nf">filter</span><span class="p">(</span><span class="nx">func</span><span class="p">,</span> <span class="nx">l</span><span class="p">.</span><span class="nf">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>If we have an array of numbers, and we wanted to keep only even numbers, we could define a helper function such as:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">isEven</span> <span class="o">=</span> <span class="nx">num</span> <span class="o">=&gt;</span> <span class="nx">num</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span>
+</code></pre></div></div>
+
+<p>If you do not know how to write an <code class="language-plaintext highlighter-rouge">isEven</code> function, luckily there are <a href="https://www.npmjs.com/package/is-even">libraries</a> for that. But, we know how to do it know.</p>
+
+<p>We can provide the type of our function as:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">isEven</span> <span class="o">=</span> <span class="p">(</span><span class="nx">num</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="nx">boolean</span> <span class="o">=&gt;</span> <span class="nx">num</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>This specifies that our input is of type <code class="language-plaintext highlighter-rouge">number</code> and it returns a <code class="language-plaintext highlighter-rouge">boolean</code>. We can write a specific filter operation, which operates directly on numbers, such as:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">filterNumbers</span> <span class="o">=</span> <span class="p">(</span><span class="nx">func</span><span class="p">:</span> <span class="p">(</span><span class="nx">x</span><span class="p">:</span> <span class="kr">number</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">boolean</span> <span class="p">,</span> <span class="nx">l</span><span class="p">:</span> <span class="kr">number</span><span class="p">[])</span> <span class="p">:</span> <span class="kr">number</span><span class="p">[]</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// same as above</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This runs into the same issue as before, where we would need to write this for each possible type, where generic types can help us by allowing us to write a filter function which works over a generic type.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">filterNumbers</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">func</span><span class="p">:</span> <span class="p">(</span><span class="nx">x</span><span class="p">:</span> <span class="nx">T</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">boolean</span> <span class="p">,</span> <span class="nx">l</span><span class="p">:</span> <span class="nx">T</span><span class="p">[])</span> <span class="p">:</span> <span class="nx">T</span><span class="p">[]</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="c1">// same as above</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The important part of this definition:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">&lt;T&gt;</code>: Here we define the <span class="glossary-term" data-term="type parameters">type parameters<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> which will be usable inside the type of our function. Compared to <code class="language-plaintext highlighter-rouge">map</code>, we only need a singular <span class="glossary-term" data-term="type parameter">type parameter<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span>, as <code class="language-plaintext highlighter-rouge">filter</code> only keeps or remove items and does not change any data.</li>
+  <li>The generic type <code class="language-plaintext highlighter-rouge">T</code> is the type of the elements in the input array l.</li>
+  <li><code class="language-plaintext highlighter-rouge">func: (x: T) =&gt; boolean</code> specifies that <code class="language-plaintext highlighter-rouge">func</code> is a function that takes a parameter of type <code class="language-plaintext highlighter-rouge">T</code> and returns a value of type <code class="language-plaintext highlighter-rouge">boolean</code>. We <strong>do not</strong> use generic for the output type as we should be as strict as possible, and we know that the function provided to filter should return a boolean.</li>
+  <li><code class="language-plaintext highlighter-rouge">l: T[]</code> indicates that <code class="language-plaintext highlighter-rouge">l</code> is an array of elements of type <code class="language-plaintext highlighter-rouge">T</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">T[]</code> is the return type of the function is an array of elements of type <code class="language-plaintext highlighter-rouge">T</code>.</li>
+</ul>
+
+<h2 id="optional-properties">Optional Properties</h2>
+
+<p>Look again at the <code class="language-plaintext highlighter-rouge">next</code> property of <code class="language-plaintext highlighter-rouge">IListNode</code>:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nx">next</span><span class="p">?:</span> <span class="nx">IListNode</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">?</code> after the <code class="language-plaintext highlighter-rouge">next</code> property means that this property is optional.  Thus, if <code class="language-plaintext highlighter-rouge">node</code> is an instance of <code class="language-plaintext highlighter-rouge">IListNode&lt;T&gt;</code>, we can test if it has any following nodes:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typeof</span> <span class="nx">node</span><span class="p">.</span><span class="nx">next</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">undefined</span><span class="dl">'</span>
+</code></pre></div></div>
+
+<p>or simply:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">!</span><span class="nx">node</span><span class="p">.</span><span class="nx">next</span>
+</code></pre></div></div>
+
+<p>In either case, if these expressions are <code class="language-plaintext highlighter-rouge">true</code>, it would indicate the end of the list.</p>
+
+<p>A concrete implementation of a class for <code class="language-plaintext highlighter-rouge">IListNode&lt;T&gt;</code> can provide a constructor:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">ListNode</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="kr">implements</span> <span class="nx">IListNode</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="p">{</span>
+   <span class="nf">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="na">data</span><span class="p">:</span> <span class="nx">T</span><span class="p">,</span> <span class="kr">public</span> <span class="nx">next</span><span class="p">?:</span> <span class="nx">IListNode</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Then we can construct a list like so:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ListNode</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="k">new</span> <span class="nc">ListNode</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="k">new</span> <span class="nc">ListNode</span><span class="p">(</span><span class="mi">3</span><span class="p">)));</span>
+</code></pre></div></div>
+
+<hr>
+
+<h2 id="exercises">Exercises</h2>
+
+<ul>
+  <li>Implement a class <code class="language-plaintext highlighter-rouge">List&lt;T&gt;</code> whose constructor takes an array parameter and creates a linked list of ListNode<t>.</t></li>
+  <li>Add methods to your <code class="language-plaintext highlighter-rouge">List&lt;T&gt;</code> class for:</li>
+</ul>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">forEach</span><span class="p">(</span><span class="nx">f</span><span class="p">:</span> <span class="p">(</span><span class="nx">_</span><span class="p">:</span><span class="nx">T</span><span class="p">)</span><span class="o">=&gt;</span> <span class="k">void</span><span class="p">):</span> <span class="nx">List</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span>
+<span class="nf">filter</span><span class="p">(</span><span class="nx">f</span><span class="p">:</span> <span class="p">(</span><span class="nx">_</span><span class="p">:</span><span class="nx">T</span><span class="p">)</span><span class="o">=&gt;</span> <span class="nx">boolean</span><span class="p">):</span> <span class="nx">List</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span>
+<span class="nx">map</span><span class="o">&lt;</span><span class="nx">V</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">f</span><span class="p">:</span> <span class="p">(</span><span class="nx">_</span><span class="p">:</span><span class="nx">T</span><span class="p">)</span><span class="o">=&gt;</span> <span class="nx">V</span><span class="p">):</span> <span class="nx">List</span><span class="o">&lt;</span><span class="nx">V</span><span class="o">&gt;</span>
+<span class="nx">reduce</span><span class="o">&lt;</span><span class="nx">V</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">f</span><span class="p">:</span> <span class="p">(</span><span class="nx">accumulator</span><span class="p">:</span><span class="nx">V</span><span class="p">,</span> <span class="nx">t</span><span class="p">:</span><span class="nx">T</span><span class="p">)</span><span class="o">=&gt;</span> <span class="nx">V</span><span class="p">,</span> <span class="nx">initialValue</span><span class="p">:</span> <span class="nx">V</span><span class="p">):</span> <span class="nx">V</span>
+</code></pre></div></div>
+
+<p>Note that each of these functions returns a list, so that we can chain the operations, e.g.:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">list</span><span class="p">.</span><span class="nf">filter</span><span class="p">(</span><span class="nx">x</span><span class="o">=&gt;</span><span class="nx">x</span><span class="o">%</span><span class="mi">2</span><span class="o">===</span><span class="mi">0</span><span class="p">).</span><span class="nf">reduce</span><span class="p">((</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">x</span><span class="o">+</span><span class="nx">y</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="solutions">
+    
+<h3 id="solutions">Solutions</h3>
+
+<p><a href="https://stackblitz.com/edit/typescript-nszdpm?file=index.ts">Solutions to this exercise can be found here.</a></p>
+
+
+</div>
+
+<hr>
+
+<h2 id="using-the-compiler-to-ensure-immutability">Using the compiler to ensure immutability</h2>
+
+<p>We saw <a href="../functionaljavascript">earlier</a> that while an object reference can be declared const:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">studentVersion1</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Tim</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">assignmentMark</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+  <span class="na">examMark</span><span class="p">:</span> <span class="mi">15</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>which prevents reassigning <code class="language-plaintext highlighter-rouge">studentVersion1</code> to any other object, the <code class="language-plaintext highlighter-rouge">const</code> declaration does not prevent properties of the object from being changed:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">studentVersion1</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Tom</span><span class="dl">"</span>
+</code></pre></div></div>
+
+<p>The TypeScript compiler will not complain about the above assignment at all.
+However, TypeScript does give us the possibility to add an <code class="language-plaintext highlighter-rouge">as const</code> after creating an object to make it deeply immutable:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">studentVersion2</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Tim</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">assignmentMark</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+  <span class="na">examMark</span><span class="p">:</span> <span class="mi">15</span>
+<span class="p">}</span> <span class="kd">as const</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">studentVersion2</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Tom</span><span class="dl">"</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Cannot assign to ‘name’ because it is a read-only property.ts(2540)</p>
+</blockquote>
+
+<p>The above is a singleton immutable Object.  However, more generally, if we need multiple instances of an immutable object with immutable properties, we can
+declare immutable types using the <code class="language-plaintext highlighter-rouge">Readonly</code> construct:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">type</span> <span class="nx">ImmutableStudent</span> <span class="o">=</span> <span class="nx">Readonly</span><span class="o">&lt;</span><span class="p">{</span>
+  <span class="na">name</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">assignmentMark</span><span class="p">:</span> <span class="nx">number</span><span class="p">;</span>
+  <span class="nl">examMark</span><span class="p">:</span> <span class="nx">number</span><span class="p">;</span>
+<span class="p">}</span><span class="o">&gt;</span>
+
+<span class="kd">const</span> <span class="nx">studentVersion3</span><span class="p">:</span> <span class="nx">ImmutableStudent</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Tim</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">assignmentMark</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+  <span class="na">examMark</span><span class="p">:</span> <span class="mi">15</span>
+<span class="p">}</span>
+
+<span class="nx">studentVersion3</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Tom</span><span class="dl">"</span>
+</code></pre></div></div>
+
+<p>Again, we get the squiggly:</p>
+
+<p><img src="/assets/images/chapterImages/typescript1/readOnly.png" alt="Compile Error Screenshot"></p>
+
+<p>Note that <code class="language-plaintext highlighter-rouge">as const</code> constructs a <strong>deeply immutable</strong> object, meaning that all levels of nested properties within the object are also immutable, but immutability of objects or types created with <code class="language-plaintext highlighter-rouge">ReadOnly</code> is restricted only to the direct properties of that object.  For example:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">xReadonly</span><span class="p">:</span> <span class="nb">Readonly</span><span class="o">&lt;</span><span class="p">{</span><span class="na">a</span><span class="p">:</span> <span class="p">{</span><span class="na">b</span><span class="p">:</span> <span class="kr">number</span><span class="p">}}</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">{</span><span class="na">a</span><span class="p">:</span> <span class="p">{</span><span class="na">b</span><span class="p">:</span> <span class="mi">1</span><span class="p">}}</span>
+<span class="nx">xReadonly</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">b</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1">// this is allowed</span>
+<span class="kd">const</span> <span class="nx">xAsConst</span> <span class="o">=</span> <span class="p">{</span><span class="na">a</span><span class="p">:</span> <span class="p">{</span><span class="na">b</span><span class="p">:</span> <span class="mi">1</span><span class="p">}}</span> <span class="kd">as const</span>
+<span class="nx">xAsConst</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">b</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1">// error: Cannot assign to 'b' because it is a read-only property</span>
+</code></pre></div></div>
+
+<p>To declare deeply immutable types, we need to be explicit about every level:</p>
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">type</span> <span class="nx">DeepReadonly</span> <span class="o">=</span> <span class="nb">Readonly</span><span class="o">&lt;</span><span class="p">{</span><span class="na">a</span><span class="p">:</span> <span class="nb">Readonly</span><span class="o">&lt;</span><span class="p">{</span><span class="na">b</span><span class="p">:</span> <span class="kr">number</span><span class="p">}</span><span class="o">&gt;</span><span class="p">}</span><span class="o">&gt;</span>
+<span class="kd">const</span> <span class="nx">dr</span><span class="p">:</span> <span class="nx">DeepReadonly</span> <span class="o">=</span> <span class="p">{</span><span class="na">a</span><span class="p">:</span> <span class="p">{</span><span class="na">b</span><span class="p">:</span> <span class="mi">1</span><span class="p">}}</span>
+<span class="nx">dr</span><span class="p">.</span><span class="nx">a</span><span class="p">.</span><span class="nx">b</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1">//error: Cannot assign to 'b' because it is a read-only property</span>
+</code></pre></div></div>
+
+<h2 id="typing-systems-with-different-degrees-of-strictness">Typing systems with different “degrees” of strictness</h2>
+
+<p>C++ is considered a strongly typed language in the sense that all types of values and variables must match up on assignment or comparison.  Further, it is “statically” typed in that the compiler requires complete knowledge (at compile-time) of the type of every variable.  This can be overridden (type can be cast away and void pointers passed around) but the programmer has to go out of their way to do it (i.e. opt-out).</p>
+
+<p>JavaScript, by contrast, as we have already mentioned, is dynamically typed in that types are only checked at run time. Run-time type errors can occur and be caught by the interpreter on primitive types, for example the user tried to invoke an ordinary object like a function, or refer to an attribute that doesn’t exist, or treat an array like a number.</p>
+
+<p>TypeScript represents a relatively new trend in being a gradually typed language.  Another way to think about this is that, by default, the type system is opt-in.  Unless declared otherwise, all variables have type <code class="language-plaintext highlighter-rouge">any</code>.  The <code class="language-plaintext highlighter-rouge">any</code> type is like a wild card that always matches, whether the <code class="language-plaintext highlighter-rouge">any</code> type is the target of the assignment:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">value</span><span class="p">;</span> <span class="c1">// has implicit &lt;any&gt; type</span>
+<span class="nx">value</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">hello</span><span class="dl">"</span><span class="p">;</span>
+<span class="nx">value</span> <span class="o">=</span> <span class="mi">123</span><span class="p">;</span>
+<span class="c1">// no error.</span>
+</code></pre></div></div>
+
+<p>Or the source (r-value) of the assignment:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">value</span><span class="p">:</span> <span class="nx">number</span><span class="p">;</span>
+<span class="nx">value</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">hello</span><span class="dl">"</span><span class="p">;</span>
+<span class="c1">//[ts] Type '"hello"' is not assignable to type 'number'.</span>
+<span class="nx">value</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span><span class="dl">"</span><span class="s2">hello</span><span class="dl">"</span>
+<span class="c1">// no error.</span>
+</code></pre></div></div>
+
+<p>While leaving off <span class="glossary-term" data-term="type annotations">type annotations<span class="glossary-popup">A syntax in TypeScript where types are explicitly specified for variables, function parameters, and return types to ensure type safety and correctness.
+</span></span> and forcing types with <code class="language-plaintext highlighter-rouge">any</code> may be convenient, for example, to quickly port legacy JavaScript into a TypeScript program, generally speaking it is good practice to use types wherever possible, and can actually be enforced with the <code class="language-plaintext highlighter-rouge">--noImplicitAny</code> compiler flag. This flag will be on by <em>default</em> in the applied classes and assignments. The compiler’s type checker is a sophisticated constraint satisfaction system and the correctness checks it applies are usually worth the extra effort—especially in modern compilers like TypeScript where type inference does most of the work for you.</p>
+
+<div class="glossary">
+  <h2 id="glossary">Glossary</h2>
+
+  <p><em>Generic Types:</em> A way to create reusable and type-safe components, functions, or classes by parameterising types. These types are specified when the function or class is used.</p>
+
+  <p><em>Immutable Object:</em> An object whose state cannot be modified after it is created. In TypeScript, immutability can be enforced using Readonly or as const.</p>
+
+  <p><em>Interface</em>: A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.</p>
+
+  <p><em>Transpiling</em>: A process where source code in one programming language is translated into another language with a similar level of abstraction, typically preserving the original code’s structure and functionality.</p>
+
+  <p><em>Type Annotation</em>: A syntax in TypeScript where types are explicitly specified for variables, function parameters, and return types to ensure type safety and correctness.</p>
+
+  <p><em>Type Parameter</em>: A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.</p>
+
+  <p><em>Union Type</em>: A TypeScript construct that allows a variable to hold values of multiple specified types, separated by the <code class="language-plaintext highlighter-rouge">|</code> symbol.</p>
+
+</div>
+
+	</div>
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/functionaljavascript/">&lt; <span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> Programming in JavaScript</a>
+      
+      
+        
+        
+        <a id="right" href="/lazyevaluation/">Lazy Evaluation &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+</article>
+
+      </div>
+    </main><link id="fa-stylesheet" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css">
+<footer class="site-footer h-card">
+    <data class="u-url" href="/"></data>
+
+    <div class="wrapper">
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col">
+                <!-- <p class="feed-subscribe">
+                <a href="/feed.xml">
+                    <svg class="svg-icon orange">
+                        <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+                    </svg><span>Subscribe</span>
+                </a>
+                </p> -->
+        </div>
+        <div class="footer-col">
+            <p>Examples and tutorials for various programming paradigms.</p>
+        </div>
+    </div>
+
+    <!-- <div class="social-links"><ul class="social-media-list"><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li>
+  <li>
+    <a href="/feed.xml" target="_blank" title="Subscribe to syndication feed">
+      <svg class="svg-icon grey" viewbox="0 0 16 16">
+        <path d="M12.8 16C12.8 8.978 7.022 3.2 0 3.2V0c8.777 0 16 7.223 16 16h-3.2zM2.194
+          11.61c1.21 0 2.195.985 2.195 2.196 0 1.21-.99 2.194-2.2 2.194C.98 16 0 15.017 0
+          13.806c0-1.21.983-2.195 2.194-2.195zM10.606
+          16h-3.11c0-4.113-3.383-7.497-7.496-7.497v-3.11c5.818 0 10.606 4.79 10.606 10.607z"
+        />
+      </svg>
+    </a>
+  </li>
+</ul>
+</div> -->
+
+    </div>
+
+</footer>
+
+
+
+</body></html>

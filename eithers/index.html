@@ -1,0 +1,474 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Eithers | Good Times Paradigms</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="Eithers">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="This is optional reading.">
+<meta property="og:description" content="This is optional reading.">
+<meta property="og:site_name" content="Good Times Paradigms">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-09-30T03:56:06+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="Eithers">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-30T03:56:06+00:00","datePublished":"2025-09-30T03:56:06+00:00","description":"This is optional reading.","headline":"Eithers","mainEntityOfPage":{"@type":"WebPage","@id":"/eithers/"},"url":"/eithers/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Good Times Paradigms"><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-159840333-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159840333-1');
+</script><!-- MathJax v3 -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true }
+  };
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+  <script src="/assets/js/spoilers.js" defer=""></script></head>
+
+  <body><header class="site-header">
+
+    <div class="wrapper"><!-- Lambda icon and site title aligned left in a flex container -->
+        <div style="display: flex; align-items: center;">
+            <button id="play-theme-song" style="background:none;border:none;cursor:pointer;vertical-align:middle;margin-right:2px;" title="Play theme song">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="currentColor" viewBox="0 0 48 24" style="vertical-align:middle;">
+                    <text x="4" y="20" font-size="20" font-family="serif">ΓΤΠ</text>
+                    <!-- γτπ -->
+                </svg>
+            </button>
+            <a class="site-title" rel="author" href="/" style="margin:0;">Good Times Paradigms</a>
+        </div>
+        <script src="/assets/js/hide_solutions.js" defer=""></script>
+        <audio id="theme-song" src="/assets/themesong.mp3"></audio>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var btn = document.getElementById('play-theme-song');
+                var audio = document.getElementById('theme-song');
+                btn.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play();
+                    } else {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                });
+            });
+        </script><nav class="site-nav">
+            <input type="checkbox" id="nav-trigger" class="nav-trigger">
+            <label for="nav-trigger">
+                <span class="menu-icon">
+                </span>
+            </label>
+
+            <div class="nav-items"><a class="page-link nav-item" href="/about/">About</a><a class="page-link nav-item" href="/">Notes on Programming Paradigms</a><!-- Radio Switch -->
+                <div id="toggle-div" style="display: none;">
+                    <div class="solutions-toggle">
+                        <p class="page-link" style="margin-bottom: 0px;">Show Solutions?</p>
+                        <label class="switch" style="vertical-align: middle;">
+                            <input type="checkbox" id="toggle-switch">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/monad/">&lt; <span class="glossary-term" data-term="monad">Monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span></a>
+      
+      
+        
+        
+        <a id="right" href="/parsercombinators/"><span class="glossary-term" data-term="parser">Parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <span class="glossary-term" data-term="combinators">Combinators<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span> &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+</div>
+
+	<header class="post-header">
+		<h1 class="post-title">Eithers</h1>
+	</header>
+	<p id="readingTime">
+
+  
+  10
+
+ min read</p>
+	<div class="post-content">
+		<div class="alert-box alert-info">
+  <p><strong>This is optional reading.</strong></p>
+</div>
+
+<h2 id="learning-outcomes">Learning Outcomes</h2>
+
+<ul>
+  <li>Understand how the <code class="language-plaintext highlighter-rouge">Either</code> type handles values with two possibilities, typically used for error handling and success cases</li>
+  <li>Apply the <code class="language-plaintext highlighter-rouge">Functor</code>, <code class="language-plaintext highlighter-rouge">Applicative</code>, and <code class="language-plaintext highlighter-rouge">Monad</code> <span class="glossary-term" data-term="type classes">type classes<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span> to the <code class="language-plaintext highlighter-rouge">Either</code> type, learning how to implement instances for each</li>
+  <li>Recognise the power of monadic <code class="language-plaintext highlighter-rouge">do</code> blocks in simplifying code and handling complex workflows</li>
+</ul>
+
+<h2 id="introduction-to-eithers">Introduction to Eithers</h2>
+
+<p>In Haskell, the <code class="language-plaintext highlighter-rouge">Either</code> type is used to represent values with two possibilities: a value of type <code class="language-plaintext highlighter-rouge">Either a b</code> is either <code class="language-plaintext highlighter-rouge">Left a</code> or <code class="language-plaintext highlighter-rouge">Right b</code>. By convention, <code class="language-plaintext highlighter-rouge">Left</code> is used to hold an error or exceptional value, while <code class="language-plaintext highlighter-rouge">Right</code> is used to hold a correct or expected value. This is particularly useful for error handling.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">Either</span> <span class="n">a</span> <span class="n">b</span> <span class="o">=</span> <span class="kt">Left</span> <span class="n">a</span> <span class="o">|</span> <span class="kt">Right</span> <span class="n">b</span>
+</code></pre></div></div>
+
+<p>In Haskell’s <code class="language-plaintext highlighter-rouge">Either</code> type, convention (<a href="https://hackage.haskell.org/package/base-4.20.0.1/docs/Data-Either.html">and the official documentation</a>) says errors go on the <code class="language-plaintext highlighter-rouge">Left</code> and successes on the <code class="language-plaintext highlighter-rouge">Right</code>. Why? Because if it is not right (correct), it must be left. This can be considered another example of bias against the left-handed people around the world, but alas, it is a <a href="https://www.youtube.com/watch?v=epvlvDzKfv8">cruel world</a>.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">Left</code>/<code class="language-plaintext highlighter-rouge">Right</code> convention is also more general than a <code class="language-plaintext highlighter-rouge">Success</code>/<code class="language-plaintext highlighter-rouge">Error</code> naming, as <code class="language-plaintext highlighter-rouge">Left</code> does not always need to be an error, but it is the most common usage.</p>
+
+<h2 id="usage-of-either">Usage of Either</h2>
+
+<p>We can use <code class="language-plaintext highlighter-rouge">Either</code> to help us with error catching, similar to a <code class="language-plaintext highlighter-rouge">Maybe</code> type. However, the error case has a value rather than <code class="language-plaintext highlighter-rouge">Nothing</code>, allowing to store an error message to give information to the programmer/user.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">divide</span> <span class="o">::</span> <span class="kt">Double</span> <span class="o">-&gt;</span> <span class="kt">Double</span> <span class="o">-&gt;</span> <span class="kt">Either</span> <span class="kt">String</span> <span class="kt">Double</span>
+<span class="n">divide</span> <span class="kr">_</span> <span class="mi">0</span> <span class="o">=</span> <span class="kt">Left</span> <span class="s">"Division by zero error"</span>
+<span class="n">divide</span> <span class="n">x</span> <span class="n">y</span> <span class="o">=</span> <span class="kt">Right</span> <span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="n">y</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Similar to <code class="language-plaintext highlighter-rouge">Maybe</code>s, we can also use <span class="glossary-term" data-term="pattern matching">pattern matching<span class="glossary-popup">A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
+</span></span> against <code class="language-plaintext highlighter-rouge">Either</code>s in a function.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">handleResult</span> <span class="o">::</span> <span class="kt">Either</span> <span class="kt">String</span> <span class="kt">Double</span> <span class="o">-&gt;</span> <span class="kt">String</span>
+<span class="n">handleResult</span> <span class="p">(</span><span class="kt">Left</span> <span class="n">err</span><span class="p">)</span> <span class="o">=</span> <span class="s">"Error: "</span> <span class="o">++</span> <span class="n">err</span>
+<span class="n">handleResult</span> <span class="p">(</span><span class="kt">Right</span> <span class="n">val</span><span class="p">)</span> <span class="o">=</span> <span class="s">"Success: "</span> <span class="o">++</span> <span class="n">show</span> <span class="n">val</span>
+</code></pre></div></div>
+
+<h2 id="the-kind-of-either">The Kind of Either</h2>
+
+<p>The <code class="language-plaintext highlighter-rouge">Either</code> type constructor has the kind <code class="language-plaintext highlighter-rouge">* -&gt; * -&gt; *</code>. This means that <code class="language-plaintext highlighter-rouge">Either</code> takes two <span class="glossary-term" data-term="type parameters">type parameters<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> and returns a concrete type.</p>
+
+<p><code class="language-plaintext highlighter-rouge">Either String Int</code> is a concrete type. It has the kind <code class="language-plaintext highlighter-rouge">*</code> because both <span class="glossary-term" data-term="type parameters">type parameters<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> (<code class="language-plaintext highlighter-rouge">String</code> and <code class="language-plaintext highlighter-rouge">Int</code>) are concrete types.</p>
+
+<h3 id="recap-kinds-in-haskell">Recap: Kinds in Haskell</h3>
+
+<p>In Haskell, types are classified into different kinds. A kind can be thought of as a type of a type, describing the number of <span class="glossary-term" data-term="type parameters">type parameters<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> a type constructor takes and how they are applied. The <code class="language-plaintext highlighter-rouge">Either</code> type has an interesting kind, which we’ll explore in detail.</p>
+
+<p>Before diving into the <code class="language-plaintext highlighter-rouge">Either</code> typeclass, let’s briefly recap what kinds are:</p>
+
+<p><code class="language-plaintext highlighter-rouge">*</code> (pronounced “star”) represents the kind of all concrete types. For example, <code class="language-plaintext highlighter-rouge">Int</code> and <code class="language-plaintext highlighter-rouge">Bool</code> have the kind <code class="language-plaintext highlighter-rouge">*</code>.
+<code class="language-plaintext highlighter-rouge">* -&gt; *</code> represents the kind of type constructors that take one <span class="glossary-term" data-term="type parameter">type parameter<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> and return a concrete type. For example, <code class="language-plaintext highlighter-rouge">Maybe</code> and <code class="language-plaintext highlighter-rouge">[]</code> (the list type constructor) have the kind <code class="language-plaintext highlighter-rouge">* -&gt; *</code>.
+<code class="language-plaintext highlighter-rouge">* -&gt; * -&gt; *</code> represents the kind of type constructors that take two <span class="glossary-term" data-term="type parameters">type parameters<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> and return a concrete type. For example, <code class="language-plaintext highlighter-rouge">Either</code> and <code class="language-plaintext highlighter-rouge">(,)</code> (the tuple type constructor) have the kind <code class="language-plaintext highlighter-rouge">* -&gt; * -&gt; *</code>.</p>
+
+<h2 id="typeclasses-functor-applicative-and-monad">Typeclasses: Functor, Applicative, and Monad</h2>
+
+<h3 id="functor">Functor</h3>
+
+<p>The <code class="language-plaintext highlighter-rouge">Functor</code> <span class="glossary-term" data-term="type class">type class<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span> expects a type of kind <code class="language-plaintext highlighter-rouge">* -&gt; *</code>. For <code class="language-plaintext highlighter-rouge">Either</code>, this means partially applying the first <span class="glossary-term" data-term="type parameter">type parameter<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span>, e.g., <code class="language-plaintext highlighter-rouge">instance Functor (Either a)</code>, where <code class="language-plaintext highlighter-rouge">a</code> will be the type of the <code class="language-plaintext highlighter-rouge">Left</code>.</p>
+
+<p>We can then define <code class="language-plaintext highlighter-rouge">fmap</code> over <code class="language-plaintext highlighter-rouge">Either</code>, considering <code class="language-plaintext highlighter-rouge">Left</code> as the error case, and applying the function when we have a correct (<code class="language-plaintext highlighter-rouge">Right</code>) case.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Functor</span> <span class="p">(</span><span class="kt">Either</span> <span class="n">a</span><span class="p">)</span> <span class="kr">where</span>
+    <span class="n">fmap</span> <span class="kr">_</span> <span class="p">(</span><span class="kt">Left</span> <span class="n">x</span><span class="p">)</span>  <span class="o">=</span> <span class="kt">Left</span> <span class="n">x</span>
+    <span class="n">fmap</span> <span class="n">f</span> <span class="p">(</span><span class="kt">Right</span> <span class="n">y</span><span class="p">)</span> <span class="o">=</span> <span class="kt">Right</span> <span class="p">(</span><span class="n">f</span> <span class="n">y</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>An example of using this will be:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fmap</span> <span class="p">(</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="p">(</span><span class="kt">Right</span> <span class="mi">2</span><span class="p">)</span> <span class="c1">-- Result: Right 3</span>
+<span class="p">(</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;$&gt;</span> <span class="p">(</span><span class="kt">Right</span> <span class="mi">2</span><span class="p">)</span> <span class="c1">-- or using infix &lt;$&gt;</span>
+<span class="n">fmap</span> <span class="p">(</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="p">(</span><span class="kt">Left</span> <span class="s">"Error"</span><span class="p">)</span> <span class="c1">-- Result: Left "Error"</span>
+</code></pre></div></div>
+
+<h3 id="applicative">Applicative</h3>
+
+<p>The <span class="glossary-term" data-term="applicative">Applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> <span class="glossary-term" data-term="type class">type class<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span> allows for function application lifted over wrapped values.</p>
+
+<p>In this instance, <code class="language-plaintext highlighter-rouge">pure</code> wraps a value in <code class="language-plaintext highlighter-rouge">Right</code>, and <code class="language-plaintext highlighter-rouge">&lt;*&gt;</code> applies the function inside a <code class="language-plaintext highlighter-rouge">Right</code> to another <code class="language-plaintext highlighter-rouge">Right</code>, propagating <code class="language-plaintext highlighter-rouge">Left</code> values unchanged.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Applicative</span> <span class="p">(</span><span class="kt">Either</span> <span class="n">a</span><span class="p">)</span> <span class="kr">where</span>
+    <span class="n">pure</span> <span class="o">=</span> <span class="kt">Right</span>
+    <span class="kt">Left</span> <span class="n">x</span> <span class="o">&lt;*&gt;</span> <span class="kr">_</span> <span class="o">=</span> <span class="kt">Left</span> <span class="n">x</span>
+    <span class="kt">Right</span> <span class="n">f</span> <span class="o">&lt;*&gt;</span> <span class="n">r</span> <span class="o">=</span> <span class="n">fmap</span> <span class="n">f</span> <span class="n">r</span>
+</code></pre></div></div>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pure</span> <span class="p">(</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;*&gt;</span> <span class="kt">Right</span> <span class="mi">2</span> <span class="c1">-- Result: Right 3</span>
+<span class="n">pure</span> <span class="p">(</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;*&gt;</span> <span class="kt">Left</span> <span class="s">"Error"</span> <span class="c1">-- Result: Left "Error"</span>
+<span class="kt">Right</span> <span class="p">(</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;*&gt;</span> <span class="kt">Right</span> <span class="mi">2</span> <span class="c1">-- Result: Right 3</span>
+<span class="kt">Right</span> <span class="p">(</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;*&gt;</span> <span class="kt">Left</span> <span class="s">"Error"</span> <span class="c1">-- Result: Left "Error"</span>
+<span class="kt">Left</span> <span class="s">"Error"</span> <span class="o">&lt;*&gt;</span> <span class="kt">Right</span> <span class="mi">2</span> <span class="c1">-- Result: Left "Error"</span>
+</code></pre></div></div>
+
+<h3 id="monad">Monad</h3>
+
+<p>The <span class="glossary-term" data-term="monad">Monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span> <span class="glossary-term" data-term="type class">type class<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span> allows for chaining operations that produce wrapped values.</p>
+
+<p>This involves defining the methods <code class="language-plaintext highlighter-rouge">return</code> (which should be identical to <code class="language-plaintext highlighter-rouge">pure</code>) and <code class="language-plaintext highlighter-rouge">&gt;&gt;=</code> (<span class="glossary-term" data-term="bind">bind<span class="glossary-popup">The defining function which all monads must implement.
+</span></span>).</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Monad</span> <span class="p">(</span><span class="kt">Either</span> <span class="n">a</span><span class="p">)</span> <span class="kr">where</span>
+    <span class="n">return</span> <span class="o">=</span> <span class="kt">Right</span>
+    <span class="p">(</span><span class="o">&gt;&gt;=</span><span class="p">)</span> <span class="p">(</span><span class="kt">Left</span> <span class="n">x</span><span class="p">)</span> <span class="kr">_</span> <span class="o">=</span> <span class="kt">Left</span> <span class="n">x</span>
+    <span class="p">(</span><span class="o">&gt;&gt;=</span><span class="p">)</span> <span class="p">(</span><span class="kt">Right</span> <span class="n">y</span><span class="p">)</span> <span class="n">f</span> <span class="o">=</span> <span class="n">f</span> <span class="n">y</span>
+</code></pre></div></div>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Right</span> <span class="mi">3</span> <span class="o">&gt;&gt;=</span> <span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="kt">Right</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="c1">-- Result: Right 4</span>
+<span class="kt">Left</span> <span class="s">"Error"</span> <span class="o">&gt;&gt;=</span> <span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="kt">Right</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="c1">-- Result: Left "Error"</span>
+<span class="kt">Right</span> <span class="mi">3</span> <span class="o">&gt;&gt;=</span> <span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="kt">Left</span> <span class="s">"Something went wrong"</span><span class="p">)</span> <span class="c1">-- Result: Left "Something went wrong"</span>
+</code></pre></div></div>
+
+<h2 id="example">Example</h2>
+
+<p>First, we’ll define custom error types to represent possible failures at each stage.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">FileError</span> <span class="o">=</span> <span class="kt">FileNotFound</span> <span class="o">|</span> <span class="kt">FileReadError</span> <span class="kr">deriving</span> <span class="p">(</span><span class="kt">Show</span><span class="p">)</span>
+<span class="kr">data</span> <span class="kt">ReadError</span> <span class="o">=</span> <span class="kt">ReadError</span> <span class="kt">String</span> <span class="kr">deriving</span> <span class="p">(</span><span class="kt">Show</span><span class="p">)</span>
+<span class="kr">data</span> <span class="kt">TransformError</span> <span class="o">=</span> <span class="kt">TransformError</span> <span class="kt">String</span> <span class="kr">deriving</span> <span class="p">(</span><span class="kt">Show</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Define a function to read data from a file. If reading succeeds, it returns a <code class="language-plaintext highlighter-rouge">Right</code> with the file contents, otherwise, it returns a <code class="language-plaintext highlighter-rouge">Left</code> with a <code class="language-plaintext highlighter-rouge">FileError</code>.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">import</span> <span class="nn">System.IO</span> <span class="p">(</span><span class="nf">readFile</span><span class="p">)</span>
+<span class="kr">import</span> <span class="nn">Control.Exception</span> <span class="p">(</span><span class="nf">catch</span><span class="p">,</span> <span class="kt">IOException</span><span class="p">)</span>
+
+<span class="n">readFileSafe</span> <span class="o">::</span> <span class="kt">FilePath</span> <span class="o">-&gt;</span> <span class="kt">IO</span> <span class="p">(</span><span class="kt">Either</span> <span class="kt">FileError</span> <span class="kt">String</span><span class="p">)</span>
+<span class="c1">-- catch any IOException, and use `handleError` on IOException</span>
+<span class="n">readFileSafe</span> <span class="n">path</span> <span class="o">=</span> <span class="n">catch</span> <span class="p">(</span><span class="kt">Right</span> <span class="o">&lt;$&gt;</span> <span class="n">readFile</span> <span class="n">path</span><span class="p">)</span> <span class="n">handleError</span>
+  <span class="kr">where</span>
+    <span class="n">handleError</span> <span class="o">::</span> <span class="kt">IOException</span> <span class="o">-&gt;</span> <span class="kt">IO</span> <span class="p">(</span><span class="kt">Either</span> <span class="kt">FileError</span> <span class="kt">String</span><span class="p">)</span>
+    <span class="n">handleError</span> <span class="kr">_</span> <span class="o">=</span> <span class="n">return</span> <span class="o">$</span> <span class="kt">Left</span> <span class="kt">FileReadError</span>
+</code></pre></div></div>
+
+<p>Define a function to split the file content in to separate lines, if it exists. It returns a <code class="language-plaintext highlighter-rouge">Right</code> with the read data or a <code class="language-plaintext highlighter-rouge">Left</code> with a <code class="language-plaintext highlighter-rouge">ReadError</code>.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">readData</span> <span class="o">::</span> <span class="kt">String</span> <span class="o">-&gt;</span> <span class="kt">Either</span> <span class="kt">ReadError</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span>
+<span class="n">readData</span> <span class="n">content</span>
+    <span class="o">|</span> <span class="n">null</span> <span class="n">content</span> <span class="o">=</span> <span class="kt">Left</span> <span class="o">$</span> <span class="kt">ReadError</span> <span class="s">"Empty file content"</span>
+    <span class="o">|</span> <span class="n">otherwise</span> <span class="o">=</span> <span class="kt">Right</span> <span class="o">$</span> <span class="n">lines</span> <span class="n">content</span>
+</code></pre></div></div>
+
+<p>Define a function to transform the read data. It returns a <code class="language-plaintext highlighter-rouge">Right</code> with transformed data or a <code class="language-plaintext highlighter-rouge">Left</code> with a <code class="language-plaintext highlighter-rouge">TransformError</code>.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">transformData</span> <span class="o">::</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="kt">Either</span> <span class="kt">TransformError</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span>
+<span class="n">transformData</span> <span class="n">lines</span>
+    <span class="o">|</span> <span class="n">null</span> <span class="n">lines</span> <span class="o">=</span> <span class="kt">Left</span> <span class="o">$</span> <span class="kt">TransformError</span> <span class="s">"No lines to transform"</span>
+    <span class="c1">-- Simple transformation where we reverse each line.</span>
+    <span class="o">|</span> <span class="n">otherwise</span> <span class="o">=</span> <span class="kt">Right</span> <span class="o">$</span> <span class="n">map</span> <span class="n">reverse</span> <span class="n">lines</span>
+</code></pre></div></div>
+
+<p>The outer <code class="language-plaintext highlighter-rouge">do</code> block is using the <code class="language-plaintext highlighter-rouge">IO</code> <span class="glossary-term" data-term="monad">monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span>, while the inner <code class="language-plaintext highlighter-rouge">do</code> block is using the <code class="language-plaintext highlighter-rouge">Either</code> <span class="glossary-term" data-term="monad">monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span>. This code looks very much like <span class="glossary-term" data-term="imperative">imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span> code, using the power of <span class="glossary-term" data-term="monads">monads<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span> to allow for sequencing of operations. However, this is powerful, as it will allow the <code class="language-plaintext highlighter-rouge">Left</code> error to be threaded through the monadic <code class="language-plaintext highlighter-rouge">do</code> block, with the user not needing to handle the threading of the error state.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">main</span> <span class="o">::</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="n">main</span> <span class="o">=</span> <span class="kr">do</span>
+    <span class="c1">-- Attempt to read the file</span>
+    <span class="n">fileResult</span> <span class="o">&lt;-</span> <span class="n">readFileSafe</span> <span class="s">"example.txt"</span>
+    <span class="kr">let</span> <span class="n">result</span> <span class="o">=</span> <span class="kr">do</span>
+            <span class="c1">-- Use monad instance to compute sequential operations</span>
+            <span class="n">content</span> <span class="o">&lt;-</span> <span class="n">fileResult</span>
+            <span class="n">readData</span> <span class="o">&lt;-</span> <span class="n">readData</span> <span class="n">content</span>
+            <span class="n">transformData</span> <span class="n">readData</span>
+    <span class="n">print</span> <span class="n">result</span>
+</code></pre></div></div>
+
+<div class="glossary">
+  <h2 id="glossary">Glossary</h2>
+
+  <p><em>Functor</em>: A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the <code class="language-plaintext highlighter-rouge">fmap</code> function, which applies a function to every element in a structure.</p>
+
+  <p><em>Applicative</em>: A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions <code class="language-plaintext highlighter-rouge">pure</code> and <code class="language-plaintext highlighter-rouge">(&lt;*&gt;)</code>.</p>
+
+  <p><em>Monad</em>: A type class in Haskell that represents computations as a series of steps. It provides the bind operation <code class="language-plaintext highlighter-rouge">(&gt;&gt;=)</code> to chain operations and the <code class="language-plaintext highlighter-rouge">return</code> (or <code class="language-plaintext highlighter-rouge">pure</code>) function to inject values into the monadic context.</p>
+
+</div>
+
+	</div>
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/monad/">&lt; <span class="glossary-term" data-term="monad">Monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span></a>
+      
+      
+        
+        
+        <a id="right" href="/parsercombinators/"><span class="glossary-term" data-term="parser">Parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <span class="glossary-term" data-term="combinators">Combinators<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span> &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+</div>
+
+</article>
+
+      </div>
+    </main><link id="fa-stylesheet" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css">
+<footer class="site-footer h-card">
+    <data class="u-url" href="/"></data>
+
+    <div class="wrapper">
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col">
+                <!-- <p class="feed-subscribe">
+                <a href="/feed.xml">
+                    <svg class="svg-icon orange">
+                        <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+                    </svg><span>Subscribe</span>
+                </a>
+                </p> -->
+        </div>
+        <div class="footer-col">
+            <p>Examples and tutorials for various programming paradigms.</p>
+        </div>
+    </div>
+
+    <!-- <div class="social-links"><ul class="social-media-list"><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li>
+  <li>
+    <a href="/feed.xml" target="_blank" title="Subscribe to syndication feed">
+      <svg class="svg-icon grey" viewbox="0 0 16 16">
+        <path d="M12.8 16C12.8 8.978 7.022 3.2 0 3.2V0c8.777 0 16 7.223 16 16h-3.2zM2.194
+          11.61c1.21 0 2.195.985 2.195 2.196 0 1.21-.99 2.194-2.2 2.194C.98 16 0 15.017 0
+          13.806c0-1.21.983-2.195 2.194-2.195zM10.606
+          16h-3.11c0-4.113-3.383-7.497-7.496-7.497v-3.11c5.818 0 10.606 4.79 10.606 10.607z"
+        />
+      </svg>
+    </a>
+  </li>
+</ul>
+</div> -->
+
+    </div>
+
+</footer>
+
+
+
+</body></html>

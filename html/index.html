@@ -1,0 +1,584 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>HTML as a Declarative Language | Good Times Paradigms</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="HTML as a Declarative Language">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Learning Outcomes">
+<meta property="og:description" content="Learning Outcomes">
+<meta property="og:site_name" content="Good Times Paradigms">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-09-30T03:56:06+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="HTML as a Declarative Language">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-30T03:56:06+00:00","datePublished":"2025-09-30T03:56:06+00:00","description":"Learning Outcomes","headline":"<span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> as a <span class="glossary-term" data-term="declarative">Declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span> Language","mainEntityOfPage":{"@type":"WebPage","@id":"/<span class="glossary-term" data-term="html">html<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span>/"},"url":"/<span class="glossary-term" data-term="html">html<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span>/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Good Times Paradigms"><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-159840333-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159840333-1');
+</script><!-- MathJax v3 -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true }
+  };
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+  <script src="/assets/js/spoilers.js" defer=""></script></head>
+
+  <body><header class="site-header">
+
+    <div class="wrapper"><!-- Lambda icon and site title aligned left in a flex container -->
+        <div style="display: flex; align-items: center;">
+            <button id="play-theme-song" style="background:none;border:none;cursor:pointer;vertical-align:middle;margin-right:2px;" title="Play theme song">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="currentColor" viewBox="0 0 48 24" style="vertical-align:middle;">
+                    <text x="4" y="20" font-size="20" font-family="serif">ΓΤΠ</text>
+                    <!-- γτπ -->
+                </svg>
+            </button>
+            <a class="site-title" rel="author" href="/" style="margin:0;">Good Times Paradigms</a>
+        </div>
+        <script src="/assets/js/hide_solutions.js" defer=""></script>
+        <audio id="theme-song" src="/assets/themesong.mp3"></audio>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var btn = document.getElementById('play-theme-song');
+                var audio = document.getElementById('theme-song');
+                btn.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play();
+                    } else {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                });
+            });
+        </script><nav class="site-nav">
+            <input type="checkbox" id="nav-trigger" class="nav-trigger">
+            <label for="nav-trigger">
+                <span class="menu-icon">
+                </span>
+            </label>
+
+            <div class="nav-items"><a class="page-link nav-item" href="/about/">About</a><a class="page-link nav-item" href="/">Notes on Programming Paradigms</a><!-- Radio Switch -->
+                <div id="toggle-div" style="display: none;">
+                    <div class="solutions-toggle">
+                        <p class="page-link" style="margin-bottom: 0px;">Show Solutions?</p>
+                        <label class="switch" style="vertical-align: middle;">
+                            <input type="checkbox" id="toggle-switch">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/javascript1/">&lt; JavaScript Introduction</a>
+      
+      
+        
+        
+        <a id="right" href="/functionaljavascript/"><span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> Programming in JavaScript &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+	<header class="post-header">
+		<h1 class="post-title">HTML as a Declarative Language</h1>
+	</header>
+	<p id="readingTime">
+
+  
+  12
+
+ min read</p>
+	<div class="post-content">
+		<h2 id="learning-outcomes">Learning Outcomes</h2>
+
+<ul>
+  <li>Understand what makes <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> a <span class="glossary-term" data-term="declarative">declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span> language and how it describes the structure and content of a web page</li>
+  <li>Comprehend the separation of concerns by differentiating structure (<span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span>), presentation (<span class="glossary-term" data-term="css">CSS<span class="glossary-popup">Cascading Style Sheets - another declarative (part of the HTML5 standard) for specifying reusable styles for web page rendering.
+</span></span>), and custom behaviour (JavaScript)</li>
+  <li>Understand how to include and define a basic <span class="glossary-term" data-term="svg">SVG<span class="glossary-popup">Scalable Vector Graphics - another part of the HTML standard for specifying images declaratively as sets of shapes and paths.
+</span></span> element within an <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> document</li>
+  <li>Understand how an <span class="glossary-term" data-term="svg">SVG<span class="glossary-popup">Scalable Vector Graphics - another part of the HTML standard for specifying images declaratively as sets of shapes and paths.
+</span></span> element may be animated either declaratively through <span class="glossary-term" data-term="css">CSS<span class="glossary-popup">Cascading Style Sheets - another declarative (part of the HTML5 standard) for specifying reusable styles for web page rendering.
+</span></span> or imperatively through JavaScript</li>
+  <li>Compare the dangers of <span class="glossary-term" data-term="imperative">imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span> programs with hidden <span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span> versus the transparency of <span class="glossary-term" data-term="declarative">declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span> style programs</li>
+</ul>
+
+<h2 id="what-is-html">What is HTML?</h2>
+
+<p><span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span>, or HyperText Markup Language, is the standard markup language used to create and design web pages. It provides the structure and content of a web page by using a system of markup tags and attributes. <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> documents are interpreted by web browsers to render the content visually for users.</p>
+
+<h2 id="declarative-nature-of-html">Declarative Nature of HTML</h2>
+
+<p><span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> is considered a <span class="glossary-term" data-term="declarative">declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span> language because it focuses on describing the structure and content of a web page without specifying how to achieve it. Instead of giving step-by-step instructions for rendering elements, <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> allows developers to declare the desired structure and let the browser handle the rendering process.</p>
+
+<h2 id="key-aspects-of-htmls-declarative-nature">Key Aspects of HTML’s Declarative Nature</h2>
+
+<ol>
+  <li>
+    <p>Descriptive Tags: <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> tags are descriptive elements that define the purpose and meaning of content. For example, <code class="language-plaintext highlighter-rouge">&lt;p&gt;</code> tags indicate a paragraph, <code class="language-plaintext highlighter-rouge">&lt;h1&gt;</code> to <code class="language-plaintext highlighter-rouge">&lt;h6&gt;</code> tags denote headings of varying levels, <code class="language-plaintext highlighter-rouge">&lt;ul&gt;</code> and <code class="language-plaintext highlighter-rouge">&lt;ol&gt;</code> represent unordered and ordered lists respectively. These tags describe the content they enclose rather than instructing how it should be displayed.  Pairs of opening and closing <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> tags (e.g. <code class="language-plaintext highlighter-rouge">&lt;h1&gt;</code> defines the start of a heading, <code class="language-plaintext highlighter-rouge">&lt;/h1&gt;</code> marks the end) define <em>elements</em> in a Document Object Model (DOM).  Elements can be nested within each other such that the DOM is a hierarchical (tree) structure.</p>
+  </li>
+  <li>
+    <p>Attribute-Based: <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> elements can have attributes that provide additional information or functionality. Attributes like class, id, src, href, etc., provide hooks for styling, scripting, or specifying behaviour. However, these attributes do not dictate how elements are displayed; they simply provide metadata or instructions to browsers.</p>
+  </li>
+  <li>
+    <p>Separation of Concerns: Modern HTML5 is actually a suite of languages which encourages a separation of concerns by delineating structure (<span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span>), presentation (<span class="glossary-term" data-term="css">CSS<span class="glossary-popup">Cascading Style Sheets - another declarative (part of the HTML5 standard) for specifying reusable styles for web page rendering.
+</span></span>), and behaviour (JavaScript). This promotes maintainability and scalability by allowing each aspect of web development to be managed independently.</p>
+  </li>
+  <li>
+    <p>Browser Interpretation: <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> documents are interpreted by web browsers, which render the content based on the instructions provided in the markup. Browsers apply default styles and layout algorithms to <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> elements, ensuring consistency across different platforms and devices.</p>
+  </li>
+</ol>
+
+<h2 id="an-animated-rectangle-using-svg-in-html">An Animated Rectangle Using SVG in HTML</h2>
+
+<p>A <a href="https://stackblitz.com/edit/stackblitz-starters-6m6cfd?file=index.html">live version of the following code is available together with an online editor</a> for you to experiment with.  Or you can create the files locally on your computer, all in the same directory, and drag-and-drop the <code class="language-plaintext highlighter-rouge">index.html</code> file into your browser to see the animation.
+We are going to build an <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> page that looks something like this:
+<img src="/assets/images/chapterImages/html/animatedrects.gif" alt="Animated Rectangles Screenshot"></p>
+
+<h3 id="step-1-setting-up-the-html-document">Step 1: Setting Up the HTML Document</h3>
+
+<p>First, create a new <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> file (name it <code class="language-plaintext highlighter-rouge">index.html</code>) and define the basic structure of the document:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+  <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;title&gt;</span>Moving Rectangle Tutorial<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>In this step, we’ve set up the basic <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> structure with a <code class="language-plaintext highlighter-rouge">&lt;!DOCTYPE&gt;</code> declaration, <code class="language-plaintext highlighter-rouge">&lt;html&gt;</code>, <code class="language-plaintext highlighter-rouge">&lt;head&gt;</code>, and <code class="language-plaintext highlighter-rouge">&lt;body&gt;</code> tags. We’ve also included meta tags for character encoding and viewport settings, as well as a title for the page.</p>
+
+<h3 id="step-2-adding-an-svg-element">Step 2: Adding an SVG Element</h3>
+
+<p>Next, let’s add an <span class="glossary-term" data-term="svg">SVG<span class="glossary-popup">Scalable Vector Graphics - another part of the HTML standard for specifying images declaratively as sets of shapes and paths.
+</span></span> element to the body of our <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> document. This <span class="glossary-term" data-term="svg">SVG<span class="glossary-popup">Scalable Vector Graphics - another part of the HTML standard for specifying images declaratively as sets of shapes and paths.
+</span></span> element will contain the rectangle that we’ll animate later:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;svg</span> <span class="na">width=</span><span class="s">"100"</span> <span class="na">height=</span><span class="s">"30"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- SVG content will go here --&gt;</span>
+  <span class="nt">&lt;/svg&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</code></pre></div></div>
+
+<p>We’ve added an <span class="glossary-term" data-term="svg">SVG<span class="glossary-popup">Scalable Vector Graphics - another part of the HTML standard for specifying images declaratively as sets of shapes and paths.
+</span></span> element with a width and height of 100 units each. This provides a canvas for our <span class="glossary-term" data-term="svg">SVG<span class="glossary-popup">Scalable Vector Graphics - another part of the HTML standard for specifying images declaratively as sets of shapes and paths.
+</span></span> graphics.</p>
+
+<h3 id="step-3-adding-a-rectangle-to-the-svg">Step 3: Adding a Rectangle to the SVG</h3>
+
+<p>Now, let’s add a rectangle <code class="language-plaintext highlighter-rouge">&lt;rect&gt;</code> element inside the <span class="glossary-term" data-term="svg">SVG<span class="glossary-popup">Scalable Vector Graphics - another part of the HTML standard for specifying images declaratively as sets of shapes and paths.
+</span></span> to represent the moving rectangle:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;svg</span> <span class="na">width=</span><span class="s">"100"</span> <span class="na">height=</span><span class="s">"30"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;rect</span> <span class="na">id=</span><span class="s">"blueRectangle"</span> <span class="na">x=</span><span class="s">"10"</span> <span class="na">y=</span><span class="s">"5"</span> <span class="na">width=</span><span class="s">"20"</span> <span class="na">height=</span><span class="s">"20"</span> <span class="na">fill=</span><span class="s">"blue"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/svg&gt;</span>
+</code></pre></div></div>
+
+<p>In this step, we’ve defined a rectangle with a starting position at coordinates (10, 5) and a width and height of 20 units each. The rectangle is filled with a blue colour.  Importantly, we’ve given the <code class="language-plaintext highlighter-rouge">&lt;rect&gt;</code> element a unique id <code class="language-plaintext highlighter-rouge">blueRectangle</code> by which we can refer to it elsewhere; below, we’ll demonstrate adding an animation behaviour to this rectangle using this id from <span class="glossary-term" data-term="css">CSS<span class="glossary-popup">Cascading Style Sheets - another declarative (part of the HTML5 standard) for specifying reusable styles for web page rendering.
+</span></span> or JavaScript.</p>
+
+<p>Most <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> elements, including <span class="glossary-term" data-term="svg">SVG<span class="glossary-popup">Scalable Vector Graphics - another part of the HTML standard for specifying images declaratively as sets of shapes and paths.
+</span></span> elements have certain attributes according to their documentation, which determine how they are rendered and behave in the browser. <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/rect">MDN</a> is normally a good reference for what is available to use.</p>
+
+<h3 id="step-4-adding-animation-declaratively-using-css">Step 4: Adding Animation declaratively using CSS</h3>
+
+<p>There are many ways to achieve the same thing in <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span>. We will now look at how an animation may be added <em>declaratively</em> to our <span class="glossary-term" data-term="svg">SVG<span class="glossary-popup">Scalable Vector Graphics - another part of the HTML standard for specifying images declaratively as sets of shapes and paths.
+</span></span> rectangle using <span class="glossary-term" data-term="css">CSS<span class="glossary-popup">Cascading Style Sheets - another declarative (part of the HTML5 standard) for specifying reusable styles for web page rendering.
+</span></span>.  First, we need to tell the browser where to find our <span class="glossary-term" data-term="css">CSS<span class="glossary-popup">Cascading Style Sheets - another declarative (part of the HTML5 standard) for specifying reusable styles for web page rendering.
+</span></span> file from the (<code class="language-plaintext highlighter-rouge">&lt;head&gt;</code>) element of our <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span>.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;head&gt;</span>
+...
+  <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"style.css"</span> <span class="nt">&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+</code></pre></div></div>
+
+<p>Now we create the <code class="language-plaintext highlighter-rouge">style.css</code> file as follows:</p>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">#blueRectangle</span> <span class="p">{</span>
+  <span class="nl">animation-name</span><span class="p">:</span> <span class="n">moveX</span><span class="p">;</span>
+  <span class="nl">animation-duration</span><span class="p">:</span> <span class="m">5s</span><span class="p">;</span>
+  <span class="nl">animation-timing-function</span><span class="p">:</span> <span class="nb">linear</span><span class="p">;</span>
+  <span class="nl">animation-fill-mode</span><span class="p">:</span> <span class="nb">forwards</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">@keyframes</span> <span class="n">moveX</span> <span class="p">{</span>
+  <span class="m">0%</span> <span class="p">{</span>
+    <span class="py">x</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="m">100%</span> <span class="p">{</span>
+    <span class="py">x</span><span class="p">:</span> <span class="m">370</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This first clause <em>selects</em> the rectangle by the unique id we gave it: <code class="language-plaintext highlighter-rouge">blueRectangle</code>, and then declares some style attributes for animation that specify:</p>
+
+<ul>
+  <li>an id for the animation: <code class="language-plaintext highlighter-rouge">moveX</code>;</li>
+  <li>a duration of 5 seconds;</li>
+  <li>that the animation should be interpolated linearly (as opposed to something non-linear like ease-in-out);</li>
+  <li>and that it should play forwards as opposed to a gamut of other options.</li>
+</ul>
+
+<p>In the <code class="language-plaintext highlighter-rouge">keyframes</code> declaration we declare style properties that should be applied at different percentages of completion of the <code class="language-plaintext highlighter-rouge">moveX</code> animation. The browser will interpolate between them according to the other style settings we specified.  In this case, we have simply set an initial and final <code class="language-plaintext highlighter-rouge">x</code> position for the rectangle.</p>
+
+<p>This is a program of sorts (in that it causes a lot of computation to happen in the browser with outputs that we can see on our webpage), but it’s <span class="glossary-term" data-term="declarative">declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span> in the sense that we did not tell the browser <em>how</em> to perform the animation.  Rather, we <em>declared</em> what we wanted the rectangle to look like at the start and end of the animation and let the browser figure out how to perform the transition.</p>
+
+<h3 id="alternate-step-4-adding-a-custom-animation-from-an-imperative-javascript-program">Alternate Step 4: Adding a custom animation from an imperative JavaScript program</h3>
+
+<p>By contrast, we can create an <em><span class="glossary-term" data-term="imperative">imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span></em> JavaScript program that explicitly gives the list of instructions for <em>how</em> to move the rectangle.
+We’ll create another rectangle with the id <code class="language-plaintext highlighter-rouge">redRectangle</code> which we can manipulate from JavaScript by including a reference to JavaScript file, e.g., <code class="language-plaintext highlighter-rouge">script.js</code>:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;body&gt;</span>
+  ...
+  <span class="nt">&lt;svg</span> <span class="na">width=</span><span class="s">"100"</span> <span class="na">height=</span><span class="s">"30"</span> <span class="na">id=</span><span class="s">"svg"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;rect</span> <span class="na">id=</span><span class="s">"redRectangle"</span> <span class="na">x=</span><span class="s">"10"</span> <span class="na">y=</span><span class="s">"5"</span> <span class="na">width=</span><span class="s">"20"</span> <span class="na">height=</span><span class="s">"20"</span> <span class="na">fill=</span><span class="s">"red"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/svg&gt;</span>
+  <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"script.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</code></pre></div></div>
+
+<p>We now create a function that encodes the precise steps to animate the rectangle at 60 FPS (the <code class="language-plaintext highlighter-rouge">setTimeout</code> call queues up each successive frame of animation). If you have experience with other languages like Python, hopefully this will be understandable even if the <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> looks a bit unfamiliar.  If it’s not completely clear yet, don’t worry. We’ll point out the things that are important to note for now below, but you can refer to our <a href="javascript1">intro to JavaScript</a> for the basics.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Define an animation function</span>
+<span class="kd">function</span> <span class="nf">animate</span><span class="p">(</span><span class="nx">rect</span><span class="p">,</span> <span class="nx">startX</span><span class="p">,</span> <span class="nx">finalX</span><span class="p">,</span> <span class="nx">duration</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">const</span>
+      <span class="nx">startTime</span> <span class="o">=</span> <span class="nx">performance</span><span class="p">.</span><span class="nf">now</span><span class="p">(),</span>
+      <span class="nx">endTime</span> <span class="o">=</span> <span class="nx">startTime</span> <span class="o">+</span> <span class="nx">duration</span><span class="p">;</span>
+    <span class="kd">function</span> <span class="nf">nextFrame</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// Calculate elapsed time</span>
+        <span class="kd">const</span>
+          <span class="nx">currentTime</span> <span class="o">=</span> <span class="nx">performance</span><span class="p">.</span><span class="nf">now</span><span class="p">(),</span>
+          <span class="nx">elapsedTime</span> <span class="o">=</span> <span class="nx">currentTime</span> <span class="o">-</span> <span class="nx">startTime</span><span class="p">;</span>
+
+        <span class="c1">// Check if animation duration has elapsed</span>
+        <span class="k">if </span><span class="p">(</span><span class="nx">elapsedTime</span> <span class="o">&gt;=</span> <span class="nx">duration</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// Set the final position of the rectangle.</span>
+            <span class="c1">// We can use `setAttribute` to modify the HTML Element. In this case, we are changing the x attribute.</span>
+            <span class="nx">rect</span><span class="p">.</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">x</span><span class="dl">'</span><span class="p">,</span> <span class="nx">finalX</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span> <span class="c1">// Stop the animation</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Calculate position based on elapsed time</span>
+        <span class="kd">const</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">startX</span> <span class="o">+</span> <span class="p">(</span><span class="nx">finalX</span> <span class="o">-</span> <span class="nx">startX</span><span class="p">)</span> <span class="o">*</span> <span class="nx">elapsedTime</span> <span class="o">/</span> <span class="nx">duration</span><span class="p">;</span>
+
+        <span class="c1">// Set the intermediate position of the rectangle.</span>
+        <span class="nx">rect</span><span class="p">.</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">'</span><span class="s1">x</span><span class="dl">'</span><span class="p">,</span> <span class="nx">x</span><span class="p">);</span>
+
+        <span class="c1">// Call the nextFrame function again after a delay of 1000/60 milliseconds</span>
+        <span class="nf">setTimeout</span><span class="p">(</span><span class="nx">nextFrame</span><span class="p">,</span> <span class="mi">1000</span> <span class="o">/</span> <span class="mi">60</span><span class="p">);</span> <span class="c1">// 60 FPS</span>
+    <span class="p">}</span>
+    <span class="nf">nextFrame</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">rectangle</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">redRectangle</span><span class="dl">'</span><span class="p">)</span>
+<span class="kd">const</span> <span class="nx">duration</span> <span class="o">=</span> <span class="mi">5000</span><span class="p">;</span> <span class="c1">// 5 seconds in milliseconds</span>
+<span class="nf">animate</span><span class="p">(</span><span class="nx">rectangle</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">370</span><span class="p">,</span> <span class="nx">duration</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>However, there are some serious issues with this code.</p>
+
+<ul>
+  <li>Obviously, it’s more complex and requires more code than using the built-in <span class="glossary-term" data-term="css">CSS<span class="glossary-popup">Cascading Style Sheets - another declarative (part of the HTML5 standard) for specifying reusable styles for web page rendering.
+</span></span> animation feature.</li>
+  <li>The <code class="language-plaintext highlighter-rouge">animate</code> function updates the state of the DOM (the <code class="language-plaintext highlighter-rouge">x</code> position of the rectangle) from deep inside its logic. Normally, we look for outputs of functions in the value that they <code class="language-plaintext highlighter-rouge">return</code>, but this function has no explicit return value.  To see what it does, we have to carefully inspect the code to identify the line that causes the <em>side effect</em> of moving the rectangle (the <code class="language-plaintext highlighter-rouge">rect.setAttribute</code> calls).</li>
+  <li>Another hidden complexity is the asynchronous (or delayed) behaviour due to the use of  <code class="language-plaintext highlighter-rouge">setTimeout</code> to queue up the successive frames of animation. Such hidden <span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span> and complexity are the opposite of the intention of <span class="glossary-term" data-term="declarative">declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span>-style programming.</li>
+</ul>
+
+<p>Later, we will see how <a href="/functionalreactiveprogramming"><span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> reactive programming</a> techniques can be used to separate code with such <span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span> on global state from code that implements behavioural logic in interactive web pages.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>We saw that the philosophy of <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> programming is primarily <em><span class="glossary-term" data-term="declarative">declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span></em> in the sense that the programmer/designer tells the browser what they want to see and relies on the browser’s sophisticated rendering engine to figure out how to display the content.  This extends to adding dynamic behaviours such as animation declaratively through <span class="glossary-term" data-term="css">CSS<span class="glossary-popup">Cascading Style Sheets - another declarative (part of the HTML5 standard) for specifying reusable styles for web page rendering.
+</span></span>.</p>
+
+<p>By contrast, we saw a different <em><span class="glossary-term" data-term="imperative">imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span></em> approach to adding an animation to our web page using JavaScript. There are pros and cons to each:</p>
+
+<!-- markdownlint-disable MD036 -->
+
+<p><em><span class="glossary-term" data-term="declarative">Declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span></em></p>
+
+<ul>
+  <li>Easier and faster to code, easier to read</li>
+  <li>Less likely to be buggy</li>
+  <li>We spend less time trying to figure out <em>how</em> to do things and focus on <em>what</em> we want</li>
+</ul>
+
+<p><em><span class="glossary-term" data-term="imperative">Imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span></em></p>
+
+<ul>
+  <li>Greater control than the pure <span class="glossary-term" data-term="declarative">declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span> <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span>/<span class="glossary-term" data-term="css">CSS<span class="glossary-popup">Cascading Style Sheets - another declarative (part of the HTML5 standard) for specifying reusable styles for web page rendering.
+</span></span> approach</li>
+  <li>We can create richer interaction</li>
+</ul>
+
+<p>A major theme of this course will be seeing how <em>pure <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming</em> techniques give us a coding style that:</p>
+
+<ul>
+  <li>is as powerful as <span class="glossary-term" data-term="imperative">imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span> programming</li>
+  <li>but is more <span class="glossary-term" data-term="declarative">declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span> (through functions that clearly declare their inputs and outputs)</li>
+  <li>and forces us to clearly distinguish code with <span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span> from pure computation.
+<!-- markdownlint-enable MD036 --></li>
+</ul>
+
+<h2 id="exercises">Exercises</h2>
+
+<ul>
+  <li>Modify Rectangle Properties: Experiment with changing the attributes of the rectangle such as width, height, fill colour, and position. See how these changes affect the appearance of the rectangle on the screen.</li>
+  <li>Animate Different Shapes: Besides rectangles, try animating other <span class="glossary-term" data-term="svg">SVG<span class="glossary-popup">Scalable Vector Graphics - another part of the HTML standard for specifying images declaratively as sets of shapes and paths.
+</span></span> shapes such as circles, ellipses, or polygons. Explore how the animation function can be adapted to work with different types of shapes.</li>
+  <li>Create a Mini Game: Challenge yourself by creating a simple game using <span class="glossary-term" data-term="svg">SVG<span class="glossary-popup">Scalable Vector Graphics - another part of the HTML standard for specifying images declaratively as sets of shapes and paths.
+</span></span> shapes and animation. For example, you could create a game where the player controls a character (represented by a shape) to avoid obstacles (other shapes) moving across the screen.</li>
+</ul>
+
+<div class="glossary">
+  <h2 id="glossary">Glossary</h2>
+
+  <p><em>HTML</em>: Hyper-Text Markup Language - the declarative language for specifying web page content.</p>
+
+  <p><em>CSS</em>: Cascading Style Sheets - another declarative (part of the HTML5 standard) for specifying reusable styles for web page rendering.</p>
+
+  <p><em>SVG</em>: Scalable Vector Graphics - another part of the HTML standard for specifying images declaratively as sets of shapes and paths.</p>
+
+</div>
+
+	</div>
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/javascript1/">&lt; JavaScript Introduction</a>
+      
+      
+        
+        
+        <a id="right" href="/functionaljavascript/"><span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> Programming in JavaScript &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+</article>
+
+      </div>
+    </main><link id="fa-stylesheet" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css">
+<footer class="site-footer h-card">
+    <data class="u-url" href="/"></data>
+
+    <div class="wrapper">
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col">
+                <!-- <p class="feed-subscribe">
+                <a href="/feed.xml">
+                    <svg class="svg-icon orange">
+                        <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+                    </svg><span>Subscribe</span>
+                </a>
+                </p> -->
+        </div>
+        <div class="footer-col">
+            <p>Examples and tutorials for various programming paradigms.</p>
+        </div>
+    </div>
+
+    <!-- <div class="social-links"><ul class="social-media-list"><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li>
+  <li>
+    <a href="/feed.xml" target="_blank" title="Subscribe to syndication feed">
+      <svg class="svg-icon grey" viewbox="0 0 16 16">
+        <path d="M12.8 16C12.8 8.978 7.022 3.2 0 3.2V0c8.777 0 16 7.223 16 16h-3.2zM2.194
+          11.61c1.21 0 2.195.985 2.195 2.196 0 1.21-.99 2.194-2.2 2.194C.98 16 0 15.017 0
+          13.806c0-1.21.983-2.195 2.194-2.195zM10.606
+          16h-3.11c0-4.113-3.383-7.497-7.496-7.497v-3.11c5.818 0 10.606 4.79 10.606 10.607z"
+        />
+      </svg>
+    </a>
+  </li>
+</ul>
+</div> -->
+
+    </div>
+
+</footer>
+
+
+
+</body></html>

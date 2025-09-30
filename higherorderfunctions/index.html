@@ -1,0 +1,915 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Higher-Order Functions | Good Times Paradigms</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="Higher-Order Functions">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Learning Outcomes">
+<meta property="og:description" content="Learning Outcomes">
+<meta property="og:site_name" content="Good Times Paradigms">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-09-30T03:56:06+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="Higher-Order Functions">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-30T03:56:06+00:00","datePublished":"2025-09-30T03:56:06+00:00","description":"Learning Outcomes","headline":"<span class="glossary-term" data-term="higher-order functions">Higher-Order Functions<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span>","mainEntityOfPage":{"@type":"WebPage","@id":"/higherorderfunctions/"},"url":"/higherorderfunctions/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Good Times Paradigms"><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-159840333-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159840333-1');
+</script><!-- MathJax v3 -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true }
+  };
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+  <script src="/assets/js/spoilers.js" defer=""></script></head>
+
+  <body><header class="site-header">
+
+    <div class="wrapper"><!-- Lambda icon and site title aligned left in a flex container -->
+        <div style="display: flex; align-items: center;">
+            <button id="play-theme-song" style="background:none;border:none;cursor:pointer;vertical-align:middle;margin-right:2px;" title="Play theme song">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="currentColor" viewBox="0 0 48 24" style="vertical-align:middle;">
+                    <text x="4" y="20" font-size="20" font-family="serif">ΓΤΠ</text>
+                    <!-- γτπ -->
+                </svg>
+            </button>
+            <a class="site-title" rel="author" href="/" style="margin:0;">Good Times Paradigms</a>
+        </div>
+        <script src="/assets/js/hide_solutions.js" defer=""></script>
+        <audio id="theme-song" src="/assets/themesong.mp3"></audio>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var btn = document.getElementById('play-theme-song');
+                var audio = document.getElementById('theme-song');
+                btn.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play();
+                    } else {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                });
+            });
+        </script><nav class="site-nav">
+            <input type="checkbox" id="nav-trigger" class="nav-trigger">
+            <label for="nav-trigger">
+                <span class="menu-icon">
+                </span>
+            </label>
+
+            <div class="nav-items"><a class="page-link nav-item" href="/about/">About</a><a class="page-link nav-item" href="/">Notes on Programming Paradigms</a><!-- Radio Switch -->
+                <div id="toggle-div" style="display: none;">
+                    <div class="solutions-toggle">
+                        <p class="page-link" style="margin-bottom: 0px;">Show Solutions?</p>
+                        <label class="switch" style="vertical-align: middle;">
+                            <input type="checkbox" id="toggle-switch">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/asteroids/">&lt; FRP Asteroids</a>
+      
+      
+        
+        
+        <a id="right" href="/lambdacalculus/"><span class="glossary-term" data-term="lambda calculus">Lambda Calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span> &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+	<header class="post-header">
+		<h1 class="post-title">Higher-Order Functions</h1>
+	</header>
+	<p id="readingTime">
+
+  
+  30
+
+ min read</p>
+	<div class="post-content">
+		<h2 id="learning-outcomes">Learning Outcomes</h2>
+
+<ul>
+  <li>Understand that <a href="#higher-order-functions"><span class="glossary-term" data-term="higher-order functions">Higher-Order Functions<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span></a> are those that take other functions as input parameters or return functions</li>
+  <li>Understand that <a href="#curried-functions"><span class="glossary-term" data-term="curried functions">curried functions<span class="glossary-popup">Functions that take multiple arguments one at a time and return a series of functions.
+</span></span></a> support <span class="glossary-term" data-term="partial application">partial application<span class="glossary-popup">The process of fixing a number of arguments to a function, producing another function of smaller arity.
+</span></span> and therefore creation of functions that are partially specified for reuse scenarios</li>
+  <li>Understand that a <a href="#combinators"><span class="glossary-term" data-term="combinator">Combinator<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span></a> is a <span class="glossary-term" data-term="higher-order function">higher-order function<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span> that uses only function application and earlier defined <span class="glossary-term" data-term="combinators">combinators<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span> to define a result from its arguments</li>
+  <li>Use simple <span class="glossary-term" data-term="combinator">Combinator<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span> functions to manipulate and compose other functions</li>
+</ul>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>The really exciting aspect of <span class="glossary-term" data-term="higher-order function">higher-order function<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span> support in languages like JavaScript is that it allows us to combine simple reusable functions in sophisticated ways.  We’ve already seen how functions like map, filter and reduce can be chained to flatten the control flow of data processing.  In this section we will look at some tricks that allow us to use functions that work with other functions in convenient ways.</p>
+
+<div class="alert-box alert-info">
+  <p><strong><span class="glossary-term" data-term="type annotations">Type annotations<span class="glossary-popup">A syntax in TypeScript where types are explicitly specified for variables, function parameters, and return types to ensure type safety and correctness.
+</span></span> in this section</strong>
+If you are following the reading order given by the <a href="/">index for these notes</a>, then you have already read our <a href="/typescript1/">introduction to TypeScript</a>.  Therefore, below we frequently use TypeScript <span class="glossary-term" data-term="type annotations">type annotations<span class="glossary-popup">A syntax in TypeScript where types are explicitly specified for variables, function parameters, and return types to ensure type safety and correctness.
+</span></span> to be precise about the intended use of the functions.  However, as we start to rely more and more heavily on curried <span class="glossary-term" data-term="higher-order functions">higher-order functions<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span> in this chapter, TypeScript <span class="glossary-term" data-term="type annotations">type annotations<span class="glossary-popup">A syntax in TypeScript where types are explicitly specified for variables, function parameters, and return types to ensure type safety and correctness.
+</span></span> start to become a bit cumbersome, and for the purposes of concisely representing use of <span class="glossary-term" data-term="combinators">combinators<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span> to create new functions, we abandon them entirely.  As an exercise, you may like to think about what the TypeScript annotations for some of these functions should be.  This is one of the reasons why we later in these notes move away from JavaScript and TypeScript entirely to instead focus on a real <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> language, <a href="/haskell1/">Haskell</a>.</p>
+</div>
+
+<h2 id="higher-order-functions">Higher-Order Functions</h2>
+
+<div class="alert-box alert-info">
+  <p>Functions that <a href="/javascript1#functions-as-parameters-to-other-functions">take other functions as parameters</a> or <a href="/javascript1#closures">return functions</a> are called <em><span class="glossary-term" data-term="higher-order functions">higher-order functions<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span></em>. They are called “higher-order” because they are functions that operate on other functions.
+<span class="glossary-term" data-term="higher-order functions">Higher-order functions<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span> are a very powerful feature and central to the <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming paradigm.</p>
+</div>
+<p>We’ve seen many examples of functions that take functions as parameters, for example, operations on arrays:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">].</span><span class="nf">map</span><span class="p">(</span><span class="nx">x</span><span class="o">=&gt;</span><span class="nx">x</span><span class="o">*</span><span class="nx">x</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[1,4,9]</p>
+</blockquote>
+
+<p>Being able to pass functions into other functions enables code customisability and reuse.  For example, a sort function that allows the caller to pass in a comparison function can easily be made to sort in increasing or decreasing order, or to sort data elements on an arbitrary attribute.</p>
+
+<p>We also saw a simple example of a function that returns a new function:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">add</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">y</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">+</span> <span class="nx">y</span>
+<span class="kd">const</span> <span class="nx">add9</span> <span class="o">=</span> <span class="nf">add</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+
+<span class="nf">add9</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="nf">add9</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>12<br>
+10</p>
+</blockquote>
+
+<p>Functions that can create new functions give rise to all sorts of emergent power, such as the ability to customise, compose and combine functions in very useful ways.  We will see this later when we look at <a href="/higherorderfunctions#composition">function composition</a> and <a href="/higherorderfunctions#combinators"><span class="glossary-term" data-term="combinators">combinators<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span></a>.</p>
+
+<h2 id="curried-functions">Curried Functions</h2>
+
+<p><span class="glossary-term" data-term="higher-order functions">Higher-order functions<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span> that take a single parameter and return another function operating on a single parameter are called <em><span class="glossary-term" data-term="curried functions">curried functions<span class="glossary-popup">Functions that take multiple arguments one at a time and return a series of functions.
+</span></span></em>.  The <code class="language-plaintext highlighter-rouge">add</code> function above is one example.  You can either call it twice immediately to operate on two parameters:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">add</span><span class="p">(</span><span class="mi">3</span><span class="p">)(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>5</p>
+</blockquote>
+
+<p>or call it once, leaving one parameter left unspecified, to create a reusable function, like <code class="language-plaintext highlighter-rouge">add9</code> above.
+Such use of a curried function with only a subset of its parameters is called <em><span class="glossary-term" data-term="partial application">partial application<span class="glossary-popup">The process of fixing a number of arguments to a function, producing another function of smaller arity.
+</span></span></em>.  <span class="glossary-term" data-term="partial application">Partial application<span class="glossary-popup">The process of fixing a number of arguments to a function, producing another function of smaller arity.
+</span></span> returns a function for which further parameters must be supplied before the body of the function can finally be evaluated, e.g.:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">add9</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>10</p>
+</blockquote>
+
+<p>Here’s a practical example of a curried function. Let’s say we want a function for computing the volume of cylinders, parameterised by the approximation for π that we plan to use:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">cylinderVolume</span><span class="p">(</span><span class="nx">pi</span><span class="p">:</span> <span class="nx">number</span><span class="p">,</span> <span class="nx">height</span><span class="p">:</span> <span class="nx">number</span><span class="p">,</span> <span class="nx">radius</span><span class="p">:</span> <span class="nx">number</span><span class="p">):</span> <span class="nx">number</span> <span class="p">{</span>
+   <span class="k">return</span> <span class="nx">pi</span> <span class="o">*</span> <span class="nx">radius</span> <span class="o">*</span> <span class="nx">radius</span> <span class="o">*</span> <span class="nx">height</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>And we invoke it like so:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">cylinderVolume</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Now consider another version of the same function:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">cylinderVolume</span><span class="p">(</span><span class="nx">pi</span><span class="p">:</span> <span class="nx">number</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">height</span><span class="p">:</span> <span class="nx">number</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">radius</span><span class="p">:</span> <span class="nx">number</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">pi</span> <span class="o">*</span> <span class="nx">radius</span> <span class="o">*</span> <span class="nx">radius</span> <span class="o">*</span> <span class="nx">height</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This one, we can invoke like so:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">cylinderVolume</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="p">)(</span><span class="mi">4</span><span class="p">)(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>But we have some other options too.  For example, we are unlikely to change our minds about what precision approximation of PI we are going to use between function calls. So let’s make a local function that fixes PI:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">cylVol</span> <span class="o">=</span> <span class="nf">cylinderVolume</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Which we can invoke when we are ready like so:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">cylVol</span><span class="p">(</span><span class="mi">4</span><span class="p">)(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>What if we want to compute volumes for a whole batch of cylinders of fixed height of varying radii?</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">radii</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.2</span><span class="p">,</span><span class="mf">3.1</span><span class="p">,</span><span class="mf">4.5</span><span class="p">,</span> <span class="p">...</span> <span class="p">],</span>
+      <span class="nx">makeHeight5Cylinder</span> <span class="o">=</span> <span class="nf">cylVol</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
+      <span class="nx">cylinders</span> <span class="o">=</span> <span class="nx">radii</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="nx">makeHeight5Cylinder</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>Or we can make it into a handy function to compute areas of circles:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">circleArea</span> <span class="o">=</span> <span class="nf">cylVol</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Such functions are called <em><span class="glossary-term" data-term="curried functions">curried functions<span class="glossary-popup">Functions that take multiple arguments one at a time and return a series of functions.
+</span></span></em>, named after a mathematician named Haskell Curry.  This gives you a hint as to what functions look like in the Haskell programming language and its variants.
+We can also create a function to make curried versions of conventional multi-parameter JavaScript functions:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">curry2</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span><span class="nx">U</span><span class="p">,</span><span class="nx">V</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">f</span><span class="p">:</span> <span class="p">(</span><span class="nx">x</span><span class="p">:</span><span class="nx">T</span><span class="p">,</span> <span class="nx">y</span><span class="p">:</span><span class="nx">U</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">V</span><span class="p">):</span> <span class="p">(</span><span class="nx">x</span><span class="p">:</span><span class="nx">T</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">y</span><span class="p">:</span><span class="nx">U</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">V</span> <span class="p">{</span>
+   <span class="k">return</span> <span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">y</span> <span class="o">=&gt;</span> <span class="nf">f</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Now, given a function like <code class="language-plaintext highlighter-rouge">plus = (x,y) =&gt; x + y</code>, we can create the curried add function above, like so:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">add</span> <span class="o">=</span> <span class="nf">curry2</span><span class="p">(</span><span class="nx">plus</span><span class="p">)</span>
+<span class="nf">add</span><span class="p">(</span><span class="mi">3</span><span class="p">)(</span><span class="mi">4</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>7</p>
+</blockquote>
+
+<p>We can also create curried versions of functions with more than two variables, but the TypeScript <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> for functions with arbitrary numbers of arguments gets a bit scary, requiring advanced use of <a href="https://www.typescriptlang.org/docs/handbook/2/conditional-types.html">conditional types</a>. This is one of the many reasons we will shortly <a href="/haskell1/">switch to Haskell</a> for our exploration of more advanced <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming topics.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// A type for a regular Uncurried function with arbitrary number of arguments</span>
+<span class="nx">type</span> <span class="nx">Uncurried</span> <span class="o">=</span> <span class="p">(...</span><span class="nx">args</span><span class="p">:</span> <span class="nx">any</span><span class="p">[])</span> <span class="o">=&gt;</span> <span class="nx">any</span><span class="p">;</span>
+
+<span class="c1">// Warning - advanced TypeScript types!</span>
+<span class="c1">// A type for curried functions with arbitrary numbers of arguments.</span>
+<span class="c1">// Full disclosure: I needed ChatGPT to help figure this out.</span>
+<span class="nx">type</span> <span class="nx">Curried</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nx">T</span> <span class="nf">extends </span><span class="p">(...</span><span class="nx">args</span><span class="p">:</span> <span class="nx">infer</span> <span class="nx">Args</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">infer</span> <span class="nx">R</span>
+  <span class="p">?</span> <span class="nx">Args</span> <span class="kd">extends</span> <span class="p">[</span><span class="nx">infer</span> <span class="nx">First</span><span class="p">,</span> <span class="p">...</span><span class="nx">infer</span> <span class="nx">Rest</span><span class="p">]</span>
+    <span class="p">?</span> <span class="p">(</span><span class="nx">arg</span><span class="p">:</span> <span class="nx">First</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">Curried</span><span class="o">&lt;</span><span class="p">(...</span><span class="nx">args</span><span class="p">:</span> <span class="nx">Rest</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">R</span><span class="o">&gt;</span>
+    <span class="p">:</span> <span class="nx">R</span>
+  <span class="p">:</span> <span class="nx">never</span><span class="p">;</span>
+
+<span class="c1">// now the curry function returns a function which, when called in curried style,</span>
+<span class="c1">// will build the argument list until it has enough arguments to call the original fn</span>
+<span class="kd">function</span> <span class="nf">curry</span><span class="o">&lt;</span><span class="nx">T</span> <span class="kd">extends</span> <span class="nx">Uncurried</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">fn</span><span class="p">:</span> <span class="nx">T</span><span class="p">):</span> <span class="nx">Curried</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">curried</span> <span class="o">=</span> <span class="p">(...</span><span class="na">args</span><span class="p">:</span> <span class="nx">any</span><span class="p">[]):</span> <span class="nx">any</span> <span class="o">=&gt;</span>
+    <span class="nx">args</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;=</span> <span class="nx">fn</span><span class="p">.</span><span class="nx">length</span> <span class="p">?</span> <span class="nf">fn</span><span class="p">(...</span><span class="nx">args</span><span class="p">)</span>
+                             <span class="p">:</span> <span class="p">(...</span><span class="na">moreArgs</span><span class="p">:</span> <span class="nx">any</span><span class="p">[])</span> <span class="o">=&gt;</span> <span class="nf">curried</span><span class="p">(...</span><span class="nx">args</span><span class="p">,</span> <span class="p">...</span><span class="nx">moreArgs</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">curried</span> <span class="nx">as</span> <span class="nx">Curried</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">weirdAdd</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span><span class="p">:</span><span class="nx">number</span><span class="p">,</span><span class="nx">b</span><span class="p">:</span><span class="nx">boolean</span><span class="p">,</span><span class="nx">c</span><span class="p">:</span><span class="nx">string</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">a</span> <span class="o">+</span> <span class="p">(</span><span class="nx">b</span><span class="p">?</span><span class="mi">1</span><span class="p">:</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="nf">parseInt</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
+
+<span class="c1">// type of curriedWeirdAdd is:</span>
+<span class="c1">//  (arg: number) =&gt; (arg: boolean) =&gt; (arg: string) =&gt; number</span>
+<span class="kd">const</span> <span class="nx">curriedWeirdAdd</span> <span class="o">=</span> <span class="nf">curry</span><span class="p">(</span><span class="nx">weirdAdd</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="composition">Composition</h2>
+
+<p>Consider the following function which takes two functions as input. Note the way the types line up:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">compose</span><span class="o">&lt;</span><span class="nx">U</span><span class="p">,</span><span class="nx">V</span><span class="p">,</span><span class="nx">W</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">f</span><span class="p">:(</span><span class="nx">x</span><span class="p">:</span><span class="nx">V</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">W</span><span class="p">,</span><span class="nx">g</span><span class="p">:(</span><span class="nx">x</span><span class="p">:</span><span class="nx">U</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">V</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return </span><span class="p">(</span><span class="nx">x</span><span class="p">:</span><span class="nx">U</span><span class="p">)</span><span class="o">=&gt;</span> <span class="nf">f</span><span class="p">(</span><span class="nf">g</span><span class="p">(</span><span class="nx">x</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This function lets us combine two functions into a new reusable function.  For example, given a messy list of strings representing numbers of various precision:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">grades</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">80.4</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">100.000</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">90</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">99.25</span><span class="dl">'</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>We can define a function to parse these strings into numbers and then round them to the nearest whole number purely through composition of two existing functions:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">roundFloat</span> <span class="o">=</span> <span class="nf">compose</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">,</span> <span class="nb">Number</span><span class="p">.</span><span class="nb">parseFloat</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>And then apply it to the whole set:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">grades</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="nx">roundFloat</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[80, 100, 90, 99]</p>
+</blockquote>
+
+<p>Note that <code class="language-plaintext highlighter-rouge">compose</code> lets us define <code class="language-plaintext highlighter-rouge">roundFloat</code> without any messing around with <span class="glossary-term" data-term="anonymous functions">anonymous functions<span class="glossary-popup">A function defined without a name, often used as an argument to other functions. Also known as a lambda function.
+</span></span> and explicit wiring-up of return values to parameters.  We call this <em>tacit</em> or <em>point-free</em> style programming.</p>
+
+<hr>
+
+<h2 id="exercise">Exercise</h2>
+
+<ul>
+  <li>
+    <p>Create a <code class="language-plaintext highlighter-rouge">compose</code> function in JavaScript that takes a variable number of functions as arguments and composes (chains) them.  Using the spread operator (<code class="language-plaintext highlighter-rouge">...</code>) to take a variable number of arguments as an array and the <code class="language-plaintext highlighter-rouge">Array.prototype.reduce</code> method, the function should be very small.</p>
+  </li>
+  <li>
+    <p>Create a <code class="language-plaintext highlighter-rouge">pipe</code> function that composes its arguments in the opposite order to the <code class="language-plaintext highlighter-rouge">compose</code> function above.  That is, left-to-right.  Note that in <a href="https://www.learnrxjs.io/">RxJS</a>, such a <code class="language-plaintext highlighter-rouge">pipe</code> function is an important way to create chains of operations (over <span class="glossary-term" data-term="observable">Observable<span class="glossary-popup">A data structure that represents a collection of future values or events, allowing for asynchronous data handling and reactive programming.
+</span></span> streams).</p>
+  </li>
+</ul>
+
+<div class="solutions">
+    
+<h3 id="solutions">Solutions</h3>
+
+<p>The <code class="language-plaintext highlighter-rouge">compose</code> function takes multiple functions and returns a new function that applies these functions from right to left to an initial argument using <code class="language-plaintext highlighter-rouge">reduceRight</code>. In the example, <code class="language-plaintext highlighter-rouge">add1</code> adds 1 to a number, and <code class="language-plaintext highlighter-rouge">double</code> multiplies a number by 2. <code class="language-plaintext highlighter-rouge">compose(double, add1)</code> creates a function that first adds 1 and then doubles the result. Calling this function with 5 results in 12.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">compose</span> <span class="o">=</span> <span class="p">(...</span><span class="nx">funcs</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">initialArg</span><span class="p">)</span> <span class="o">=&gt;</span>
+  <span class="nx">funcs</span><span class="p">.</span><span class="nf">reduceRight</span><span class="p">((</span><span class="nx">arg</span><span class="p">,</span> <span class="nx">fn</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nf">fn</span><span class="p">(</span><span class="nx">arg</span><span class="p">),</span> <span class="nx">initialArg</span><span class="p">);</span>
+
+<span class="c1">// Example usage</span>
+<span class="kd">const</span> <span class="nx">add1</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">double</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">add1ThenDouble</span> <span class="o">=</span> <span class="nf">compose</span><span class="p">(</span><span class="nx">double</span><span class="p">,</span> <span class="nx">add1</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nf">add1ThenDouble</span><span class="p">(</span><span class="mi">5</span><span class="p">));</span> <span class="c1">// Output: 12</span>
+</code></pre></div></div>
+
+<p>Using TypeScript to create a flexible compose function requires accommodating varying input and output types for each function in the chain. To achieve this flexibility without losing type safety, we need to ensure that the output type of one function matches the input type of the next function. However, if we try to type this correctly without using any, we face significant complexity with the lack of expressiveness in typescripts type system. <code class="language-plaintext highlighter-rouge">pipe</code> in RxJS solves this issue by <a href="https://rxjs.dev/api/index/function/pipe">hardcoding up to 9 functions inside the pipe</a>, any functions larger then this will not be typed correctly.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">pipe</span> <span class="o">=</span> <span class="p">(...</span><span class="nx">funcs</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nx">initialArg</span><span class="p">)</span> <span class="o">=&gt;</span>
+  <span class="nx">funcs</span><span class="p">.</span><span class="nf">reduce</span><span class="p">((</span><span class="nx">arg</span><span class="p">,</span> <span class="nx">fn</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nf">fn</span><span class="p">(</span><span class="nx">arg</span><span class="p">),</span> <span class="nx">initialArg</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>The pipe function is similar to the compose function, but it applies its functions in the opposite order—from left to right.</p>
+
+
+</div>
+
+<hr>
+
+<h2 id="combinators">Combinators</h2>
+
+<p><span class="glossary-term" data-term="combinators">Combinators<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span> are <span class="glossary-term" data-term="higher-order functions">higher-order functions<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span> that perform pure operations on their arguments to produce a result.  They may seem very basic, but as their name suggests, they provide useful building blocks for manipulating and composing functions to create new functions.  The <a href="#composition"><code class="language-plaintext highlighter-rouge">compose</code></a> function is a <span class="glossary-term" data-term="combinator">combinator<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span>.  Some more examples follow.</p>
+
+<h3 id="identity-i-combinator">Identity I-Combinator</h3>
+
+<p>The following may seem trivial:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">identity</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">value</span><span class="p">:</span> <span class="nx">T</span><span class="p">):</span> <span class="nx">T</span> <span class="p">{</span>
+   <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>But it has some important applications:</p>
+
+<ul>
+  <li><span class="glossary-term" data-term="higher-order functions">Higher-order functions<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span> that take a user-specified function to apply in some context (<a href="/javascript1/#functions-as-parameters-to-other-functions">such as our sumTo from earlier</a>) can be passed <code class="language-plaintext highlighter-rouge">identity</code> to restore the default behaviour.</li>
+  <li>For extracting data from encapsulated types (e.g. by passing <code class="language-plaintext highlighter-rouge">identity</code> into map).</li>
+  <li>The above scenarios are also indicative of a useful way to test such <span class="glossary-term" data-term="higher-order functions">higher-order functions<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span>, broadly: “does passing the <code class="language-plaintext highlighter-rouge">identity</code> operator really give us back what we started with?”.</li>
+  <li>For composition with other <span class="glossary-term" data-term="combinators">combinators<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span>, as below.</li>
+</ul>
+
+<h3 id="k-combinator">K-Combinator</h3>
+
+<p>The curried <span class="glossary-term" data-term="k-combinator">K-Combinator<span class="glossary-popup">A combinator that takes two arguments and returns the first one.
+</span></span> looks like:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">K</span> <span class="o">=</span> <span class="nx">x</span><span class="o">=&gt;</span> <span class="nx">y</span><span class="o">=&gt;</span> <span class="nx">x</span>
+</code></pre></div></div>
+
+<p>So it is a function that ignores its second argument and returns its first argument directly.  Note the similarity to the <code class="language-plaintext highlighter-rouge">head</code> function of our <a href="/functionaljavascript#computation-with-pure-functions">cons list</a>.  In fact, we can derive curried versions of both the <code class="language-plaintext highlighter-rouge">head</code> and <code class="language-plaintext highlighter-rouge">rest</code> functions used earlier from <code class="language-plaintext highlighter-rouge">K</code> and <code class="language-plaintext highlighter-rouge">I</code> <span class="glossary-term" data-term="combinators">combinators<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span> (renaming <code class="language-plaintext highlighter-rouge">rest</code> to <code class="language-plaintext highlighter-rouge">tail</code>; see below):</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span>
+   <span class="nx">K</span> <span class="o">=</span> <span class="nx">x</span><span class="o">=&gt;</span> <span class="nx">y</span><span class="o">=&gt;</span> <span class="nx">x</span><span class="p">,</span>
+   <span class="nx">I</span> <span class="o">=</span> <span class="nx">x</span><span class="o">=&gt;</span> <span class="nx">x</span><span class="p">,</span>
+   <span class="nx">cons</span> <span class="o">=</span> <span class="nx">x</span><span class="o">=&gt;</span> <span class="nx">y</span><span class="o">=&gt;</span> <span class="nx">f</span><span class="o">=&gt;</span> <span class="nf">f</span><span class="p">(</span><span class="nx">x</span><span class="p">)(</span><span class="nx">y</span><span class="p">),</span>
+   <span class="nx">head</span> <span class="o">=</span> <span class="nx">l</span><span class="o">=&gt;</span> <span class="nf">l</span><span class="p">(</span><span class="nx">K</span><span class="p">),</span>
+   <span class="nx">tail</span> <span class="o">=</span> <span class="nx">l</span><span class="o">=&gt;</span> <span class="nf">l</span><span class="p">(</span><span class="nc">K</span><span class="p">(</span><span class="nx">I</span><span class="p">)),</span>
+   <span class="nx">forEach</span> <span class="o">=</span> <span class="nx">f</span><span class="o">=&gt;</span> <span class="nx">l</span><span class="o">=&gt;</span> <span class="nx">l</span><span class="p">?(</span><span class="nf">f</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="nx">l</span><span class="p">)),</span><span class="nf">forEach</span><span class="p">(</span><span class="nx">f</span><span class="p">)(</span><span class="nf">tail</span><span class="p">(</span><span class="nx">l</span><span class="p">))):</span><span class="kc">null</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">l</span> <span class="o">=</span> <span class="nf">cons</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="nf">cons</span><span class="p">(</span><span class="mi">2</span><span class="p">)(</span><span class="nf">cons</span><span class="p">(</span><span class="mi">3</span><span class="p">)(</span><span class="kc">null</span><span class="p">)));</span>
+
+<span class="nf">forEach</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)(</span><span class="nx">l</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>1<br>
+2<br>
+3</p>
+</blockquote>
+
+<p>The definition of <code class="language-plaintext highlighter-rouge">head</code> is by straightforward, like-for-like substitution of <code class="language-plaintext highlighter-rouge">K</code> into a curried version of our previous definition for <code class="language-plaintext highlighter-rouge">head</code>.  Note, the following is not code, just statements of equivalence (≡):</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">head</span> <span class="err">≡</span> <span class="nx">l</span><span class="o">=&gt;</span><span class="nf">l</span><span class="p">((</span><span class="nx">h</span><span class="p">,</span><span class="nx">_</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">h</span><span class="p">)</span> <span class="o">--</span> <span class="nx">previous</span> <span class="nx">uncurried</span> <span class="nx">definition</span> <span class="k">of</span> <span class="nx">head</span>
+     <span class="err">≡</span> <span class="nx">l</span><span class="o">=&gt;</span><span class="nf">l</span><span class="p">(</span><span class="nf">curry2</span><span class="p">((</span><span class="nx">h</span><span class="p">,</span><span class="nx">_</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">h</span><span class="p">))</span>
+     <span class="err">≡</span> <span class="nx">l</span><span class="o">=&gt;</span><span class="nf">l</span><span class="p">(</span><span class="nx">h</span><span class="o">=&gt;</span><span class="nx">_</span><span class="o">=&gt;</span><span class="nx">h</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Where the expression in brackets above we notice is equivalent to <code class="language-plaintext highlighter-rouge">K</code>:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">K</span>  <span class="err">≡</span>  <span class="nx">x</span><span class="o">=&gt;</span> <span class="nx">y</span><span class="o">=&gt;</span> <span class="nx">x</span>  <span class="err">≡</span>  <span class="nx">h</span><span class="o">=&gt;</span> <span class="nx">_</span><span class="o">=&gt;</span> <span class="nx">h</span>
+</code></pre></div></div>
+
+<p>Of course, this definition is not unique to JavaScript; we mainly use this language to explore this idea, but the equivalent can be completed in Python, with a slightly more verbose <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">K</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="k">lambda</span> <span class="n">y</span> <span class="p">:</span> <span class="n">x</span>
+<span class="n">I</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="n">x</span>
+<span class="n">cons</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">y</span> <span class="p">:</span> <span class="k">lambda</span> <span class="n">f</span> <span class="p">:</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">)(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">head</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">l</span> <span class="p">:</span> <span class="nf">l</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
+<span class="n">tail</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">l</span> <span class="p">:</span> <span class="nf">l</span><span class="p">(</span><span class="nc">K</span><span class="p">(</span><span class="n">I</span><span class="p">))</span>
+<span class="n">forEach</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">f</span> <span class="p">:</span> <span class="k">lambda</span> <span class="n">l</span> <span class="p">:</span> <span class="p">(</span><span class="nf">f</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="n">l</span><span class="p">)),</span><span class="nf">forEach</span><span class="p">(</span><span class="n">f</span><span class="p">)(</span><span class="nf">tail</span><span class="p">(</span><span class="n">l</span><span class="p">)))</span> <span class="k">if</span> <span class="n">l</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">None</span>
+<span class="n">l</span> <span class="o">=</span> <span class="nf">cons</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="nf">cons</span><span class="p">(</span><span class="mi">2</span><span class="p">)(</span><span class="nf">cons</span><span class="p">(</span><span class="mi">3</span><span class="p">)(</span><span class="bp">None</span><span class="p">)))</span>
+
+<span class="nf">forEach</span><span class="p">(</span><span class="k">print</span><span class="p">)(</span><span class="n">l</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>1
+2
+3</p>
+</blockquote>
+
+<p>In the context of the <a href="/lambdacalculus"><span class="glossary-term" data-term="lambda calculus">Lambda Calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span></a>, we will see that such a renaming is called <em>Alpha Conversion</em>.</p>
+
+<p>We are gradually changing our terminology to be more Haskell-like, so we have named the curried version of <code class="language-plaintext highlighter-rouge">rest</code> to <code class="language-plaintext highlighter-rouge">tail</code>.  The new definition of <code class="language-plaintext highlighter-rouge">tail</code>, compared to our previous definition of <code class="language-plaintext highlighter-rouge">rest</code>, is derived as follows:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">K</span><span class="p">(</span><span class="nx">I</span><span class="p">)</span>  <span class="err">≡</span>  <span class="nc">K</span><span class="p">(</span><span class="nx">i</span><span class="o">=&gt;</span> <span class="nx">i</span><span class="p">)</span>             <span class="o">--</span> <span class="nx">expand</span> <span class="nx">I</span> <span class="p">:</span><span class="o">=</span> <span class="nx">i</span><span class="o">=&gt;</span> <span class="nx">i</span>
+      <span class="err">≡</span>  <span class="p">(</span><span class="nx">x</span><span class="o">=&gt;</span> <span class="nx">y</span><span class="o">=&gt;</span> <span class="nx">x</span><span class="p">)(</span><span class="nx">i</span><span class="o">=&gt;</span> <span class="nx">i</span><span class="p">)</span>   <span class="o">--</span> <span class="nx">expand</span> <span class="nx">K</span> <span class="p">:</span><span class="o">=</span> <span class="nx">x</span><span class="o">=&gt;</span> <span class="nx">y</span><span class="o">=&gt;</span> <span class="nx">x</span>
+      <span class="err">≡</span>  <span class="nx">y</span><span class="o">=&gt;</span> <span class="nx">i</span><span class="o">=&gt;</span> <span class="nx">i</span>
+</code></pre></div></div>
+
+<p>Where the last line above is the result of applying <code class="language-plaintext highlighter-rouge">x=&gt;y=&gt;x</code> to <code class="language-plaintext highlighter-rouge">i=&gt;i</code>.  Thus, we substitute <code class="language-plaintext highlighter-rouge">x:=i=&gt;i</code> in the body of the first function (the expansion of <code class="language-plaintext highlighter-rouge">K</code>).  When we explore the <a href="/lambdacalculus"><span class="glossary-term" data-term="lambda calculus">Lambda Calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span></a>, we will see that this operation (simple evaluation of function application by substitution of expressions) is called <em>Beta reduction</em>.</p>
+
+<p>Now we could derive <code class="language-plaintext highlighter-rouge">tail</code> from <code class="language-plaintext highlighter-rouge">rest</code> using our <code class="language-plaintext highlighter-rouge">curry2</code> function:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">rest</span> <span class="err">≡</span> <span class="nx">l</span><span class="o">=&gt;</span><span class="nf">l</span><span class="p">((</span><span class="nx">_</span><span class="p">,</span><span class="nx">r</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">r</span><span class="p">)</span>
+<span class="nx">tail</span> <span class="err">≡</span> <span class="nx">l</span><span class="o">=&gt;</span><span class="nf">l</span><span class="p">(</span><span class="nf">curry2</span><span class="p">((</span><span class="nx">_</span><span class="p">,</span><span class="nx">r</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">r</span><span class="p">))</span>
+     <span class="err">≡</span> <span class="nx">l</span><span class="o">=&gt;</span><span class="nf">l</span><span class="p">(</span><span class="nx">_</span><span class="o">=&gt;</span><span class="nx">r</span><span class="o">=&gt;</span><span class="nx">r</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Where <code class="language-plaintext highlighter-rouge">_=&gt; r=&gt; r  ≡  y=&gt; i=&gt; i</code> and therefore <code class="language-plaintext highlighter-rouge">tail ≡ l=&gt;l(K(i))</code>.  QED!!!</p>
+
+<p>FYI it has been shown that simple <span class="glossary-term" data-term="combinators">combinators<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span> like K and I (at least one other is required) are sufficient to create languages as powerful as <span class="glossary-term" data-term="lambda calculus">lambda calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span> without the need for lambdas, e.g. see <a href="https://en.wikipedia.org/wiki/SKI_combinator_calculus">SKI <span class="glossary-term" data-term="combinator">Combinator<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span> Calculus</a>.</p>
+
+<p>In previous sections, we have seen a number of functions that transform lists (or other containers) into new lists like <code class="language-plaintext highlighter-rouge">map</code>, <code class="language-plaintext highlighter-rouge">filter</code> and so on.  We have also introduced the <code class="language-plaintext highlighter-rouge">reduce</code> function as a way to compute a single value over a list.  If we realise that the value we produce from <code class="language-plaintext highlighter-rouge">reduce</code> can also be a list, we can actually use <code class="language-plaintext highlighter-rouge">reduce</code> to implement all of the other list transformations.  Instead of returning a value from <code class="language-plaintext highlighter-rouge">reduce</code>, we could apply a function which produces only <span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span>, thus, performing a <code class="language-plaintext highlighter-rouge">forEach</code>.  We’ll use this as an example momentarily.</p>
+
+<p>First, here’s another implementation of <code class="language-plaintext highlighter-rouge">reduce</code> for the above formulation of cons lists - but we rename it <code class="language-plaintext highlighter-rouge">fold</code> (again, as our JavaScript becomes more and more Haskell-like we are beginning to adopt Haskell terminology).</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">fold</span> <span class="o">=</span> <span class="nx">f</span><span class="o">=&gt;</span> <span class="nx">i</span><span class="o">=&gt;</span> <span class="nx">l</span><span class="o">=&gt;</span> <span class="nx">l</span> <span class="p">?</span> <span class="nf">fold</span><span class="p">(</span><span class="nx">f</span><span class="p">)(</span><span class="nf">f</span><span class="p">(</span><span class="nx">i</span><span class="p">)(</span><span class="nf">head</span><span class="p">(</span><span class="nx">l</span><span class="p">)))(</span><span class="nf">tail</span><span class="p">(</span><span class="nx">l</span><span class="p">))</span> <span class="p">:</span> <span class="nx">i</span>
+</code></pre></div></div>
+
+<p>Now, for example, we can define <code class="language-plaintext highlighter-rouge">forEach</code> in terms of <code class="language-plaintext highlighter-rouge">fold</code>:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">forEach</span> <span class="o">=</span> <span class="nx">f</span><span class="o">=&gt;</span><span class="nx">l</span><span class="o">=&gt;</span><span class="nf">fold</span><span class="p">(</span><span class="nx">_</span><span class="o">=&gt;</span><span class="nx">v</span><span class="o">=&gt;</span><span class="nf">f</span><span class="p">(</span><span class="nx">v</span><span class="p">))(</span><span class="kc">null</span><span class="p">)(</span><span class="nx">l</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Now, the function <code class="language-plaintext highlighter-rouge">f</code> takes one parameter and we don’t do anything with its return type (in TypeScript we could enforce the return type to be <code class="language-plaintext highlighter-rouge">void</code>).
+However, <code class="language-plaintext highlighter-rouge">fold</code> is expecting as its first argument a curried function of two parameters (the accumulator and the list element).  Since in <code class="language-plaintext highlighter-rouge">forEach</code> we are not actually accumulating a value, we can ignore the first parameter, hence we give <code class="language-plaintext highlighter-rouge">fold</code> the function <code class="language-plaintext highlighter-rouge">_=&gt;v=&gt;f(v)</code>, to apply <code class="language-plaintext highlighter-rouge">f</code> to each value <code class="language-plaintext highlighter-rouge">v</code> from the list.</p>
+
+<p>But note that <code class="language-plaintext highlighter-rouge">v=&gt;f(v)</code> is precisely the same as just <code class="language-plaintext highlighter-rouge">f</code>.
+So we can simplify <code class="language-plaintext highlighter-rouge">forEach</code> a bit further:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">forEach</span> <span class="o">=</span> <span class="nx">f</span><span class="o">=&gt;</span><span class="nx">l</span><span class="o">=&gt;</span><span class="nf">fold</span><span class="p">(</span><span class="nx">_</span><span class="o">=&gt;</span><span class="nx">f</span><span class="p">)(</span><span class="kc">null</span><span class="p">)(</span><span class="nx">l</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>But check out these equivalences:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">K</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>  <span class="err">≡</span>  <span class="p">(</span><span class="nx">x</span><span class="o">=&gt;</span> <span class="nx">y</span><span class="o">=&gt;</span> <span class="nx">x</span><span class="p">)(</span><span class="nx">f</span><span class="p">)</span> <span class="o">--</span> <span class="nx">expand</span> <span class="nx">K</span>
+      <span class="err">≡</span>  <span class="nx">y</span><span class="o">=&gt;</span> <span class="nx">f</span>          <span class="o">--</span> <span class="nx">apply</span> <span class="nx">the</span> <span class="nx">outer</span> <span class="kd">function</span> <span class="nf">to</span> <span class="nx">f</span><span class="p">,</span> <span class="nx">hence</span> <span class="nx">we</span> <span class="nx">substitute</span> <span class="nx">x</span><span class="p">:</span><span class="o">=</span> <span class="nx">f</span>
+      <span class="err">≡</span>  <span class="nx">_</span><span class="o">=&gt;</span> <span class="nx">f</span>          <span class="o">--</span> <span class="nx">rename</span> <span class="nx">y</span> <span class="nx">to</span> <span class="nx">_</span>
+</code></pre></div></div>
+
+<p>where in the last line above, since <code class="language-plaintext highlighter-rouge">y</code> doesn’t appear anywhere in the body of the function, we don’t care what it’s called anymore and rename it to <code class="language-plaintext highlighter-rouge">_</code>.</p>
+
+<p>Therefore, we can use our <code class="language-plaintext highlighter-rouge">K</code> <span class="glossary-term" data-term="combinator">combinator<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span> to entirely avoid defining any functions in the body of <code class="language-plaintext highlighter-rouge">forEach</code>:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">forEach</span> <span class="o">=</span> <span class="nx">f</span><span class="o">=&gt;</span><span class="nx">l</span><span class="o">=&gt;</span><span class="nf">fold</span><span class="p">(</span><span class="nc">K</span><span class="p">(</span><span class="nx">f</span><span class="p">))(</span><span class="kc">null</span><span class="p">)(</span><span class="nx">l</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr>
+
+<h3 id="fold-exercise">Fold Exercise</h3>
+
+<ul>
+  <li>Write <code class="language-plaintext highlighter-rouge">map</code> and <code class="language-plaintext highlighter-rouge">filter</code> for the above cons list definition in terms of <code class="language-plaintext highlighter-rouge">fold</code>.</li>
+</ul>
+
+<div class="solutions">
+    
+<h4 id="solutions">Solutions</h4>
+
+<p>A naive implementation of <code class="language-plaintext highlighter-rouge">map</code> using <code class="language-plaintext highlighter-rouge">fold</code> would be:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">map</span> <span class="o">=</span> <span class="nx">f</span> <span class="o">=&gt;</span> <span class="nx">l</span> <span class="o">=&gt;</span>
+  <span class="nf">fold</span><span class="p">(</span><span class="nx">acc</span> <span class="o">=&gt;</span> <span class="nx">v</span> <span class="o">=&gt;</span> <span class="nf">cons</span><span class="p">(</span><span class="nf">f</span><span class="p">(</span><span class="nx">v</span><span class="p">))(</span><span class="nx">acc</span><span class="p">))(</span><span class="kc">null</span><span class="p">)(</span><span class="nx">l</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">l</span> <span class="o">=</span> <span class="nf">cons</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="nf">cons</span><span class="p">(</span><span class="mi">2</span><span class="p">)(</span><span class="nf">cons</span><span class="p">(</span><span class="mi">3</span><span class="p">)(</span><span class="kc">null</span><span class="p">)));</span>
+<span class="kd">const</span> <span class="nx">mappedList</span> <span class="o">=</span> <span class="nf">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)(</span><span class="nx">l</span><span class="p">);</span>
+<span class="nf">forEach</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)(</span><span class="nx">mappedList</span><span class="p">);</span>
+
+</code></pre></div></div>
+
+<blockquote>
+  <p>6</p>
+
+  <p>4</p>
+
+  <p>2</p>
+</blockquote>
+
+<p>This constructs a new cons every time, applying the function <code class="language-plaintext highlighter-rouge">f</code> to the current item in <code class="language-plaintext highlighter-rouge">v</code>. However, this will reverse the list because <code class="language-plaintext highlighter-rouge">fold</code> processes the list from head to tail, and constructs the new list by <em>prepending</em> each element to the accumulator.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">reverse</span> <span class="o">=</span> <span class="nx">l</span> <span class="o">=&gt;</span>
+  <span class="nf">fold</span><span class="p">(</span><span class="nx">acc</span> <span class="o">=&gt;</span> <span class="nx">v</span> <span class="o">=&gt;</span> <span class="nf">cons</span><span class="p">(</span><span class="nx">v</span><span class="p">)(</span><span class="nx">acc</span><span class="p">))(</span><span class="kc">null</span><span class="p">)(</span><span class="nx">l</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">map</span> <span class="o">=</span> <span class="nx">f</span> <span class="o">=&gt;</span> <span class="nx">l</span> <span class="o">=&gt;</span>
+  <span class="nf">fold</span><span class="p">(</span><span class="nx">acc</span> <span class="o">=&gt;</span> <span class="nx">v</span> <span class="o">=&gt;</span> <span class="nf">cons</span><span class="p">(</span><span class="nf">f</span><span class="p">(</span><span class="nx">v</span><span class="p">))(</span><span class="nx">acc</span><span class="p">))(</span><span class="kc">null</span><span class="p">)(</span><span class="nf">reverse</span><span class="p">(</span><span class="nx">l</span><span class="p">));</span>
+
+<span class="kd">const</span> <span class="nx">filter</span> <span class="o">=</span> <span class="nx">pred</span> <span class="o">=&gt;</span> <span class="nx">l</span> <span class="o">=&gt;</span>
+  <span class="nf">fold</span><span class="p">(</span><span class="nx">acc</span> <span class="o">=&gt;</span> <span class="nx">v</span> <span class="o">=&gt;</span> <span class="nf">pred</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span> <span class="p">?</span> <span class="nf">cons</span><span class="p">(</span><span class="nx">v</span><span class="p">)(</span><span class="nx">acc</span><span class="p">)</span> <span class="p">:</span> <span class="nx">acc</span><span class="p">)(</span><span class="kc">null</span><span class="p">)(</span><span class="nf">reverse</span><span class="p">(</span><span class="nx">l</span><span class="p">));</span>
+</code></pre></div></div>
+
+<p>Therefore, we need to reverse the list using a separate function to ensure that we apply the functions in the correct order. However, the preferred way around this would be to reduce in the other direction, e.g., using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduceRight">reduceRight</a>, to fold through the list tail to head.</p>
+
+
+</div>
+
+<hr>
+
+<h3 id="alternation-or-combinator">Alternation (OR-Combinator)</h3>
+
+<p>A function that applies a first function.  If the first function fails (returns undefined, false or null), it applies the second function.  The result is the first function that succeeded.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">or</span> <span class="o">=</span> <span class="nx">f</span><span class="o">=&gt;</span> <span class="nx">g</span><span class="o">=&gt;</span> <span class="nx">v</span><span class="o">=&gt;</span> <span class="nf">f</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span> <span class="o">||</span> <span class="nf">g</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Basically, it’s a curried if-then-else function with continuations. Imagine something like the following data for student names in a unit, then a dictionary of the ids of students in each class:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">students</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">tim</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">sally</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">sam</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">cindy</span><span class="dl">'</span><span class="p">],</span>
+      <span class="nx">class1</span> <span class="o">=</span> <span class="p">{</span> <span class="dl">'</span><span class="s1">tim</span><span class="dl">'</span><span class="p">:</span><span class="mi">123</span><span class="p">,</span> <span class="dl">'</span><span class="s1">cindy</span><span class="dl">'</span><span class="p">:</span><span class="mi">456</span><span class="p">},</span>
+      <span class="nx">class2</span> <span class="o">=</span> <span class="p">{</span> <span class="dl">'</span><span class="s1">sally</span><span class="dl">'</span><span class="p">:</span><span class="mi">234</span><span class="p">,</span> <span class="dl">'</span><span class="s1">sam</span><span class="dl">'</span><span class="p">:</span><span class="mi">345</span><span class="p">};</span>
+</code></pre></div></div>
+
+<p>We have a function that lets us lookup the id for a student in a particular class:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 'class' is a reserved keyword in JavaScript</span>
+<span class="kd">const</span> <span class="nx">lookup</span> <span class="o">=</span> <span class="nx">class_</span><span class="o">=&gt;</span> <span class="nx">name</span><span class="o">=&gt;</span> <span class="nx">class_</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Now we can try to find an id for each student, first from <code class="language-plaintext highlighter-rouge">class1</code> but fall back to <code class="language-plaintext highlighter-rouge">class2</code> if it isn’t there:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">ids</span> <span class="o">=</span> <span class="nx">students</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="nf">or</span><span class="p">(</span><span class="nf">lookup</span><span class="p">(</span><span class="nx">class1</span><span class="p">))(</span><span class="nf">lookup</span><span class="p">(</span><span class="nx">class2</span><span class="p">)))</span>
+</code></pre></div></div>
+
+<hr>
+
+<h2 id="end-note">End Note</h2>
+
+<h3 id="unary-versus-binary-functions-in-javascript">Unary versus Binary Functions in JavaScript</h3>
+
+<p>Uncurried functions of two parameters can be called Binary functions.  Functions of only one parameter can therefore be called Unary functions.  Note that all of our <span class="glossary-term" data-term="curried functions">curried functions<span class="glossary-popup">Functions that take multiple arguments one at a time and return a series of functions.
+</span></span> are unary functions, which return other unary functions.
+We’ve seen situations now where <span class="glossary-term" data-term="curried functions">curried functions<span class="glossary-popup">Functions that take multiple arguments one at a time and return a series of functions.
+</span></span> are flexibly combined to be used in different situations.</p>
+
+<p>Note that in JavaScript you sometimes see casual calls to binary functions but with only one parameter specified.  Inside the called function the unspecified parameter will simply be <code class="language-plaintext highlighter-rouge">undefined</code>, which is fine if the case of that parameter being <code class="language-plaintext highlighter-rouge">undefined</code> is handled in a way that does not cause an error or unexpected results, e.g.:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">binaryFunc</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">)</span> <span class="p">{</span><span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">x</span><span class="p">}</span><span class="s2"> </span><span class="p">${</span><span class="nx">y</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span> <span class="p">}</span>
+<span class="nf">binaryFunc</span><span class="p">(</span><span class="dl">"</span><span class="s2">Hello</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">World</span><span class="dl">"</span><span class="p">)</span>
+<span class="nf">binaryFunc</span><span class="p">(</span><span class="dl">"</span><span class="s2">Hello</span><span class="dl">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Hello World<br>
+Hello undefined</p>
+</blockquote>
+
+<p>Conversely, JavaScript allows additional parameters to be passed to unary functions which will then simply be unused, e.g.:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">unaryFunc</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span> <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">}</span>
+<span class="nf">unaryFunc</span><span class="p">(</span><span class="dl">"</span><span class="s2">Hello</span><span class="dl">"</span><span class="p">)</span>
+<span class="nf">unaryFunc</span><span class="p">(</span><span class="dl">"</span><span class="s2">Hello</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">World</span><span class="dl">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Hello<br>
+Hello</p>
+</blockquote>
+
+<p>But, here’s an interesting example where mixing up unary and binary functions in JavaScript’s very forgiving environment can go wrong.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="dl">'</span><span class="s1">1</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">2</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">3</span><span class="dl">'</span><span class="p">].</span><span class="nf">map</span><span class="p">(</span><span class="nb">parseInt</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>We are converting an array of strings into an array of int.  The output will be <code class="language-plaintext highlighter-rouge">[1,2,3]</code> right?  WRONG!</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="dl">'</span><span class="s1">1</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">2</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">3</span><span class="dl">'</span><span class="p">].</span><span class="nf">map</span><span class="p">(</span><span class="nb">parseInt</span><span class="p">);</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>[1, NaN, NaN]</p>
+</blockquote>
+
+<p>What the …!</p>
+
+<p>But:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">parseInt</span><span class="p">(</span><span class="dl">'</span><span class="s1">2</span><span class="dl">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>2</p>
+</blockquote>
+
+<p>What’s going on?
+HINT: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt">parseInt is not actually a unary function</a>.</p>
+
+<p>The point of this demonstration is that <span class="glossary-term" data-term="curried functions">curried functions<span class="glossary-popup">Functions that take multiple arguments one at a time and return a series of functions.
+</span></span> are a more principled way to support partial function application, and also much safer and easier to use when the types guard against improper use.  Thus, this is about as sophisticated as we are going to try to get with <span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> Programming in JavaScript, and we will pick up our discussion further exploring the power of FP in the context of the <a href="/haskell1/">Haskell <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming language</a>.  However, libraries do exist that provide quite flexible <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming abstractions in JavaScript.  For example, you might like to investigate <a href="http://ramdajs.com">Ramda</a>.</p>
+
+<hr>
+
+<h2 id="exercises">Exercises</h2>
+
+<ol>
+  <li>From the docs for <code class="language-plaintext highlighter-rouge">Array.map</code> and <code class="language-plaintext highlighter-rouge">parseInt</code>  can you figure out why the above is happening?</li>
+  <li>Write a function called unary that takes a binary function and a value to bind to its first argument, and returns a unary function.  What is its fully specified TypeScript type signature?</li>
+  <li>Flip - e.g. applied to <code class="language-plaintext highlighter-rouge">map(Iterable,fn)</code> to create <code class="language-plaintext highlighter-rouge">mapApplyFn(Iterable)</code>.</li>
+</ol>
+
+<div class="solutions">
+    
+<h3 id="solutions">Solutions</h3>
+
+<ol>
+  <li>
+    <p>When <code class="language-plaintext highlighter-rouge">parseInt</code> is used as the <span class="glossary-term" data-term="callback">callback<span class="glossary-popup">A function passed as an argument to another function, to be executed after some event or action has occurred.
+</span></span> for <code class="language-plaintext highlighter-rouge">map</code>, it is called with <strong>three</strong> arguments: currentValue, index, and array. <code class="language-plaintext highlighter-rouge">parseInt</code> expects the second argument to be the radix, but <code class="language-plaintext highlighter-rouge">map</code> provides the index of the current element as the second argument. This leads to incorrect parsing.</p>
+  </li>
+  <li>
+    <p>The unary function is defined as:</p>
+  </li>
+</ol>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">unary</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">U</span><span class="p">,</span> <span class="nx">V</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">binaryFunc</span><span class="p">:</span> <span class="p">(</span><span class="nx">arg1</span><span class="p">:</span> <span class="nx">T</span><span class="p">,</span> <span class="nx">arg2</span><span class="p">:</span> <span class="nx">U</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">V</span><span class="p">,</span> <span class="nx">boundValue</span><span class="p">:</span> <span class="nx">T</span><span class="p">):</span> <span class="p">(</span><span class="nx">arg2</span><span class="p">:</span> <span class="nx">U</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">V</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">secondValue</span><span class="p">:</span> <span class="nx">U</span><span class="p">):</span> <span class="nx">V</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">binaryFunc</span><span class="p">(</span><span class="nx">boundValue</span><span class="p">,</span> <span class="nx">secondValue</span><span class="p">);</span>
+    <span class="p">};</span>
+  <span class="p">}</span>
+</code></pre></div></div>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">T</code>: Type of the first argument of the binary function (the value to bind).</li>
+  <li><code class="language-plaintext highlighter-rouge">U</code>: Type of the second argument of the binary function.</li>
+  <li><code class="language-plaintext highlighter-rouge">V</code>: Return type of the binary function.</li>
+</ol>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">flip</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">U</span><span class="p">,</span> <span class="nx">V</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">binaryFunc</span><span class="p">:</span> <span class="p">(</span><span class="nx">arg1</span><span class="p">:</span> <span class="nx">T</span><span class="p">,</span> <span class="nx">arg2</span><span class="p">:</span> <span class="nx">U</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">V</span><span class="p">):</span> <span class="p">(</span><span class="nx">arg2</span><span class="p">:</span> <span class="nx">U</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">:</span> <span class="nx">T</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">V</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">arg2</span><span class="p">:</span> <span class="nx">U</span><span class="p">,</span> <span class="nx">arg1</span><span class="p">:</span> <span class="nx">T</span><span class="p">):</span> <span class="nx">V</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nf">binaryFunc</span><span class="p">(</span><span class="nx">arg1</span><span class="p">,</span> <span class="nx">arg2</span><span class="p">);</span>
+  <span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+
+</div>
+
+<hr>
+
+<div class="glossary">
+  <h2 id="glossary">Glossary</h2>
+
+  <p><em>Combinator</em>: A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.</p>
+
+  <p><em>Function composition:</em> The process of combining two or more functions to produce a new function.</p>
+
+  <p><em>Point-free style</em>: A way of defining functions without mentioning their arguments.</p>
+
+  <p><em>Curried functions</em>: Functions that take multiple arguments one at a time and return a series of functions.</p>
+
+  <p><em>Partial application</em>: The process of fixing a number of arguments to a function, producing another function of smaller arity.</p>
+
+  <p><em>Identity function (I-combinator)</em>: A function that returns its argument unchanged.</p>
+
+  <p><em>K-combinator</em>: A combinator that takes two arguments and returns the first one.</p>
+
+</div>
+
+	</div>
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/asteroids/">&lt; FRP Asteroids</a>
+      
+      
+        
+        
+        <a id="right" href="/lambdacalculus/"><span class="glossary-term" data-term="lambda calculus">Lambda Calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span> &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+</article>
+
+      </div>
+    </main><link id="fa-stylesheet" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css">
+<footer class="site-footer h-card">
+    <data class="u-url" href="/"></data>
+
+    <div class="wrapper">
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col">
+                <!-- <p class="feed-subscribe">
+                <a href="/feed.xml">
+                    <svg class="svg-icon orange">
+                        <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+                    </svg><span>Subscribe</span>
+                </a>
+                </p> -->
+        </div>
+        <div class="footer-col">
+            <p>Examples and tutorials for various programming paradigms.</p>
+        </div>
+    </div>
+
+    <!-- <div class="social-links"><ul class="social-media-list"><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li>
+  <li>
+    <a href="/feed.xml" target="_blank" title="Subscribe to syndication feed">
+      <svg class="svg-icon grey" viewbox="0 0 16 16">
+        <path d="M12.8 16C12.8 8.978 7.022 3.2 0 3.2V0c8.777 0 16 7.223 16 16h-3.2zM2.194
+          11.61c1.21 0 2.195.985 2.195 2.196 0 1.21-.99 2.194-2.2 2.194C.98 16 0 15.017 0
+          13.806c0-1.21.983-2.195 2.194-2.195zM10.606
+          16h-3.11c0-4.113-3.383-7.497-7.496-7.497v-3.11c5.818 0 10.606 4.79 10.606 10.607z"
+        />
+      </svg>
+    </a>
+  </li>
+</ul>
+</div> -->
+
+    </div>
+
+</footer>
+
+
+
+</body></html>

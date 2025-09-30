@@ -1,0 +1,796 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Creating and Running Haskell Programs | Good Times Paradigms</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="Creating and Running Haskell Programs">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Learning Outcomes">
+<meta property="og:description" content="Learning Outcomes">
+<meta property="og:site_name" content="Good Times Paradigms">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-09-30T03:56:06+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="Creating and Running Haskell Programs">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-30T03:56:06+00:00","datePublished":"2025-09-30T03:56:06+00:00","description":"Learning Outcomes","headline":"Creating and Running Haskell Programs","mainEntityOfPage":{"@type":"WebPage","@id":"/haskell1/"},"url":"/haskell1/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Good Times Paradigms"><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-159840333-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159840333-1');
+</script><!-- MathJax v3 -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true }
+  };
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+  <script src="/assets/js/spoilers.js" defer=""></script></head>
+
+  <body><header class="site-header">
+
+    <div class="wrapper"><!-- Lambda icon and site title aligned left in a flex container -->
+        <div style="display: flex; align-items: center;">
+            <button id="play-theme-song" style="background:none;border:none;cursor:pointer;vertical-align:middle;margin-right:2px;" title="Play theme song">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="currentColor" viewBox="0 0 48 24" style="vertical-align:middle;">
+                    <text x="4" y="20" font-size="20" font-family="serif">ΓΤΠ</text>
+                    <!-- γτπ -->
+                </svg>
+            </button>
+            <a class="site-title" rel="author" href="/" style="margin:0;">Good Times Paradigms</a>
+        </div>
+        <script src="/assets/js/hide_solutions.js" defer=""></script>
+        <audio id="theme-song" src="/assets/themesong.mp3"></audio>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var btn = document.getElementById('play-theme-song');
+                var audio = document.getElementById('theme-song');
+                btn.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play();
+                    } else {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                });
+            });
+        </script><nav class="site-nav">
+            <input type="checkbox" id="nav-trigger" class="nav-trigger">
+            <label for="nav-trigger">
+                <span class="menu-icon">
+                </span>
+            </label>
+
+            <div class="nav-items"><a class="page-link nav-item" href="/about/">About</a><a class="page-link nav-item" href="/">Notes on Programming Paradigms</a><!-- Radio Switch -->
+                <div id="toggle-div" style="display: none;">
+                    <div class="solutions-toggle">
+                        <p class="page-link" style="margin-bottom: 0px;">Show Solutions?</p>
+                        <label class="switch" style="vertical-align: middle;">
+                            <input type="checkbox" id="toggle-switch">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/haskell0/">&lt; Haskell Installation</a>
+      
+      
+        
+        
+        <a id="right" href="/haskell2/">Data Types and <span class="glossary-term" data-term="type classes">Type Classes<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span> &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+	<header class="post-header">
+		<h1 class="post-title">Creating and Running Haskell Programs</h1>
+	</header>
+	<p id="readingTime">
+
+  
+  27
+
+ min read</p>
+	<div class="post-content">
+		<h2 id="learning-outcomes">Learning Outcomes</h2>
+
+<ul>
+  <li>Use the <span class="glossary-term" data-term="ghci repl">GHCi REPL<span class="glossary-popup">The interactive Read-Eval-Print Loop for GHC, the Glasgow Haskell Compiler, allowing users to test Haskell programs and expressions interactively.
+</span></span> to test Haskell programs and expressions</li>
+  <li>Compare the <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> of Haskell programs to <span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span>-style code in JavaScript</li>
+  <li>Understand that by default Haskell uses a <span class="glossary-term" data-term="lazy evaluation">lazy evaluation<span class="glossary-popup">A strategy where expressions are not evaluated until their values are needed, allowing for the creation of infinite sequences and delayed computations.
+</span></span> strategy</li>
+  <li>Create and use Haskell lists and tuples</li>
+  <li>Create Haskell functions using <em>pattern-matching</em>, <em><span class="glossary-term" data-term="guards">guards<span class="glossary-popup">A feature in Haskell used to test boolean expressions. They provide a way to conditionally execute code based on the results of boolean expressions.
+</span></span></em>, and local definitions using <code class="language-plaintext highlighter-rouge">where</code> and <code class="language-plaintext highlighter-rouge">let</code> clauses.</li>
+</ul>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>This section is not your usual “First Introduction To Haskell” because it assumes you have arrived here having already studied some reasonably sophisticated <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming concepts in JavaScript, basic parametric polymorphic types in <a href="/typescript/">TypeScript</a>, and <a href="/lambdacalculus"><span class="glossary-term" data-term="lambda calculus">Lambda Calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span></a>.  Familiarity with <a href="/higherorderfunctions/">higher-order</a> and <a href="/functionaljavascript/"><span class="glossary-term" data-term="curried functions">curried functions<span class="glossary-popup">Functions that take multiple arguments one at a time and return a series of functions.
+</span></span></a> is assumed.</p>
+
+<p>I try to summarise the <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> we use with “cheatsheets” throughout, but <a href="https://hackage.haskell.org/package/CheatSheet-1.10/src/CheatSheet.pdf">the official CheatSheet</a> will be a useful reference.  The other reference every Haskell programmer needs is the official library docs on <a href="https://hackage.haskell.org/">Hackage</a> which is searchable by the excellent <a href="https://hoogle.haskell.org/"><span class="glossary-term" data-term="hoogle">Hoogle<span class="glossary-popup">A Haskell API search engine that allows users to search for functions by name or by type signature.
+</span></span></a> search engine, which lets you search by types as well as function keywords.</p>
+
+<p>If you would like a more gradual introduction, <a href="http://haskellbook.com/">“Haskell Programming from First Principles” by Allen and Moronuki</a> is a recent and excellent introduction to Haskell that is quite compatible with the goals of this course.  The ebook is not too expensive, but unfortunately, it is independently published and hence not available from our library.  There are a few copies of <a href="https://monash.hosted.exlibrisgroup.com/permalink/f/31uhmh/catau21316253770001751">Programming Haskell by Hutton</a> which is an excellent academic textbook, but it’s expensive to buy.  <a href="https://learnyouahaskell.github.io/">“Learn you a Haskell” by Miran Lipovaca</a> is a freely available alternative that is also a useful introduction.</p>
+
+<h2 id="starting-with-the-ghci-repl">Starting with the GHCi REPL</h2>
+
+<p>A good way to get started with Haskell is simply to experiment with the <span class="glossary-term" data-term="ghci repl">GHCi REPL<span class="glossary-popup">The interactive Read-Eval-Print Loop for GHC, the Glasgow Haskell Compiler, allowing users to test Haskell programs and expressions interactively.
+</span></span> (or Read Eval Print Loop).</p>
+
+<p>Start by making a file: <code class="language-plaintext highlighter-rouge">fibs.hs</code></p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fibs</span> <span class="mi">0</span> <span class="o">=</span> <span class="mi">1</span>                       <span class="c1">-- two base cases,</span>
+<span class="n">fibs</span> <span class="mi">1</span> <span class="o">=</span> <span class="mi">1</span>                       <span class="c1">-- resolved by pattern matching</span>
+<span class="n">fibs</span> <span class="n">n</span> <span class="o">=</span> <span class="n">fibs</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fibs</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="c1">-- recursive definition</span>
+</code></pre></div></div>
+
+<p>Then load it into GHCi like so:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>stack ghci fibs.hs
+</code></pre></div></div>
+
+<div class="alert-box alert-warning">
+  <p><strong><code class="language-plaintext highlighter-rouge">stack ghci</code> vs <code class="language-plaintext highlighter-rouge">ghci</code></strong></p>
+
+  <p>If you followed our <a href="/haskell0">Haskell installation instructions</a>, you will not have GHC installed globally, and will need to run <code class="language-plaintext highlighter-rouge">stack ghci</code> instead of just <code class="language-plaintext highlighter-rouge">ghci</code> on its own. This should work if you run the command from inside the folder for the applied exercises. If you run it outside of the folder, you might get this message:</p>
+
+  <pre><code class="language-none">Writing the configuration file for the implicit global project to:
+/Users/username/.stack/global-project/stack.yaml. Note: You can change the snapshot via
+the snapshot key there.
+Using the latest snapshot lts-24.7.
+
+Error: [S-6362]
+       No compiler found, expected minor version match with ghc-9.10.2 (aarch64) (based
+       on the configuration in /Users/username/.stack/global-project/stack.yaml).
+
+       To install the correct version of GHC into the subdirectory for the specified
+       platform in Stack's directory for local tools
+       (/Users/username/.stack/programs/aarch64-osx/), try running stack setup or use
+       the --install-ghc flag. To use your system GHC installation, run stack config set
+       system-ghc --global true, or use the --system-ghc flag.
+</code></pre>
+
+  <p>To fix this, run</p>
+
+  <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>stack config <span class="nb">set </span>snapshot lts-23.25
+</code></pre></div>  </div>
+
+  <p>and then run <code class="language-plaintext highlighter-rouge">stack setup</code>.</p>
+
+  <p>If you are working in an Ed workspace (e.g. for workshops), Stack is not installed, so you will need to run <code class="language-plaintext highlighter-rouge">ghci</code> instead of <code class="language-plaintext highlighter-rouge">stack ghci</code>.</p>
+</div>
+
+<p>You’ll get a prompt that looks like:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ghci</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>You can enter Haskell expressions directly at the prompt:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ghci</span><span class="o">&gt;</span> <span class="n">fibs</span> <span class="mi">6</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>13</p>
+</blockquote>
+
+<p>I’m going to stop showing the prompt now, but you can enter all of the following directly at the prompt and you will see similar results printed to those indicated below.</p>
+
+<p>Basic logic operators are similar to C/Java/etc: <code class="language-plaintext highlighter-rouge">==</code>, <code class="language-plaintext highlighter-rouge">&amp;&amp;</code>, <code class="language-plaintext highlighter-rouge">||</code>.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fibs</span> <span class="mi">6</span> <span class="o">==</span> <span class="mi">13</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>True</p>
+</blockquote>
+
+<p>An exception is “not-equal”, whose operator is <code class="language-plaintext highlighter-rouge">/=</code> (Haskell tends to prefer more “mathy” <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> whenever possible).</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fibs</span> <span class="mi">6</span> <span class="o">/=</span> <span class="mi">13</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>False</p>
+</blockquote>
+
+<p>If-then-else expressions return a result (like JavaScript’s ternary <code class="language-plaintext highlighter-rouge">? :</code>)</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">if</span> <span class="n">fibs</span> <span class="mi">6</span> <span class="o">==</span> <span class="mi">13</span> <span class="kr">then</span> <span class="s">"yes"</span> <span class="kr">else</span> <span class="s">"no"</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>“yes”</p>
+</blockquote>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">if</span> <span class="n">fibs</span> <span class="mi">6</span> <span class="o">==</span> <span class="mi">13</span> <span class="o">&amp;&amp;</span> <span class="n">fibs</span> <span class="mi">7</span> <span class="o">==</span> <span class="mi">12</span> <span class="kr">then</span> <span class="s">"yes"</span> <span class="kr">else</span> <span class="s">"no"</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>“no”</p>
+</blockquote>
+
+<p>GHCi also has a number of non-Haskell commands you can enter from the prompt, which are prefixed by <code class="language-plaintext highlighter-rouge">:</code>.
+You can reload your .hs file into GHCi after an edit with <code class="language-plaintext highlighter-rouge">:r</code>.  Type <code class="language-plaintext highlighter-rouge">:h</code> for help.</p>
+
+<p>You can declare local variables in the REPL:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>7</p>
+</blockquote>
+
+<p>One of Haskell’s distinguishing features from other languages is that its variables are strictly immutable (i.e. not variable at all really).  This is similar to variables declared with JavaScript’s <code class="language-plaintext highlighter-rouge">const</code> keyword - but everything in Haskell is deeply immutable by default.</p>
+
+<p>However, in the <span class="glossary-term" data-term="ghci repl">GHCi REPL<span class="glossary-popup">The interactive Read-Eval-Print Loop for GHC, the Glasgow Haskell Compiler, allowing users to test Haskell programs and expressions interactively.
+</span></span>, you can redefine variables and Haskell will not complain.</p>
+
+<h2 id="creating-a-runnable-haskell-program">Creating a Runnable Haskell Program</h2>
+
+<p>Both the simplest and tail-recursive versions of our PureScript fibs code are also perfectly legal Haskell code.  The main function will be a little different, however:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">main</span> <span class="o">::</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="n">main</span> <span class="o">=</span> <span class="n">print</span> <span class="o">$</span> <span class="n">map</span> <span class="n">fibs</span> <span class="p">[</span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>I’ve included the type signature for main although it’s not absolutely necessary (the compiler can usually infer the type of such functions automatically, as it did for our fibs function definition above), but it is good practice to define types for all top-level functions (functions that are not nested inside other functions) and also the <code class="language-plaintext highlighter-rouge">IO</code> type is interesting, and will be discussed at length later.  The main function takes no inputs (no need for <code class="language-plaintext highlighter-rouge">-&gt;</code> with something on the left) and it returns something in the <code class="language-plaintext highlighter-rouge">IO</code> monad.  Without getting into it too much, yet, monads are special types that can also wrap some other value.  In this case, the main function just does output, so there is no wrapped value and hence the <code class="language-plaintext highlighter-rouge">()</code> (called <span class="glossary-term" data-term="unit">unit<span class="glossary-popup">A type with exactly one value, (), used to indicate the absence of meaningful return value, similar to void in other languages.
+</span></span>) indicates this.  You can think of it as being similar to the void type in C, Java or TypeScript.</p>
+
+<p>What this tells us is that the main function produces an IO side effect.  This mechanism is what allows Haskell to be a pure <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming language while still allowing you to get useful stuff done.  <span class="glossary-term" data-term="side effects">Side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span> can happen, but when they do occur they must be neatly bundled up and declared to the type system, in this case through the <code class="language-plaintext highlighter-rouge">IO</code> monad.  For functions without <span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span>, we have strong, compiler-checked guarantees that this is indeed so (that they are <em>pure</em>).</p>
+
+<p>By the way, once you are in the <code class="language-plaintext highlighter-rouge">IO</code> monad, you can’t easily get rid of it.  Any function that calls a function that returns an <code class="language-plaintext highlighter-rouge">IO</code> monad, must have <code class="language-plaintext highlighter-rouge">IO</code> in its return type.  Thus, effectful code is possible, but the type system ensures we are aware of it and can limit its taint.  The general strategy is to use <span class="glossary-term" data-term="pure functions">pure functions<span class="glossary-popup">A function that always produces the same output for the same input and has no side effects.
+</span></span> wherever possible, and push the effectful code as high in your call hierarchy as possible—that is, limit the size and scope of impure code as much as possible.  <span class="glossary-term" data-term="pure functions">Pure functions<span class="glossary-popup">A function that always produces the same output for the same input and has no side effects.
+</span></span> are much more easily reusable in different contexts.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">print</code> function is equivalent to the PureScript <code class="language-plaintext highlighter-rouge">log $ show</code>.  That is, it uses any available <code class="language-plaintext highlighter-rouge">show</code> function for the type of value being printed to convert it to a string, and it then prints that string.  Haskell defines show for many types in the <span class="glossary-term" data-term="prelude">Prelude<span class="glossary-popup">The default library loaded in Haskell that includes basic functions and operators.
+</span></span>, but print in this case invokes it for us.  The other difference here is that square brackets operators are defined in the <span class="glossary-term" data-term="prelude">prelude<span class="glossary-popup">The default library loaded in Haskell that includes basic functions and operators.
+</span></span> for linked lists.  In PureScript they were used for Arrays—which (in PureScript) don’t have the range operator (<code class="language-plaintext highlighter-rouge">..</code>) defined so I avoided them.  Speaking of List operators, here’s a summary:</p>
+
+<div class="cheatsheet">
+  <p><strong>Basic List and Tuple Operator Cheatsheet</strong></p>
+
+  <p>The default Haskell lists are cons lists (linked lists defined with a <code class="language-plaintext highlighter-rouge">cons</code> function), similar to <a href="/functionaljavascript/#computation-with-pure-functions">those we defined in JavaScript</a>.</p>
+
+  <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">[]</span>           <span class="c1">-- an empty list</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>    <span class="c1">-- a simple lists of values</span>
+<span class="p">[</span><span class="mi">1</span><span class="o">..</span><span class="mi">4</span><span class="p">]</span>       <span class="c1">-- ==[1,2,3,4] (..) is range operator</span>
+<span class="mi">1</span><span class="o">:</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>    <span class="c1">-- ==[1,2,3,4], use `:` to “cons” an element to the start of a list</span>
+<span class="mi">1</span><span class="o">:</span><span class="mi">2</span><span class="o">:</span><span class="mi">3</span><span class="o">:</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>    <span class="c1">-- ==[1,2,3,4], you can chain `:`</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="o">++</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span> <span class="c1">-- ==[1,2,3,4], i.e. (++) is concat</span>
+
+<span class="c1">-- You can use `:` to pattern match lists in function definitions.</span>
+<span class="c1">-- Note the enclosing `()` to delimit the pattern for the parameter.</span>
+<span class="n">length</span> <span class="kt">[]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">length</span> <span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">xs</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">length</span> <span class="n">xs</span> <span class="c1">-- x is bound to the head of the list and xs the tail</span>
+<span class="c1">-- (although you don’t need to define `length`, it’s already loaded by the prelude)</span>
+
+<span class="n">length</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+</code></pre></div>  </div>
+
+  <blockquote>
+    <p>3</p>
+  </blockquote>
+
+  <p>Some other useful functions for dealing with lists:</p>
+
+  <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">head</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="c1">-- 1</span>
+<span class="n">tail</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="c1">-- [2,3]</span>
+
+<span class="n">sum</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="c1">-- 6 (but only applicable for lists of things that can be summed)</span>
+<span class="n">minimum</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="c1">-- 1 (but only for Ordinal types)</span>
+<span class="n">maximum</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="c1">-- 3</span>
+
+<span class="n">map</span> <span class="n">f</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="c1">-- maps the function f over the elements of the list returning the result in another list</span>
+</code></pre></div>  </div>
+
+  <p>Tuples are fixed-length collections of values that may not necessarily be of the same type.  They are enclosed in <code class="language-plaintext highlighter-rouge">()</code></p>
+
+  <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="s">"hello"</span><span class="p">)</span> <span class="c1">-- define variable t to a tuple of an Int and a String.</span>
+<span class="n">fst</span> <span class="n">t</span>
+</code></pre></div>  </div>
+
+  <blockquote>
+    <p>1</p>
+  </blockquote>
+
+  <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">snd</span> <span class="n">t</span>
+</code></pre></div>  </div>
+
+  <blockquote>
+    <p>“hello”</p>
+  </blockquote>
+
+  <p>And you can destructure and pattern match tuples:</p>
+
+  <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="o">=</span> <span class="n">t</span>
+<span class="n">a</span>
+</code></pre></div>  </div>
+
+  <blockquote>
+    <p>1</p>
+  </blockquote>
+
+  <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">b</span>
+</code></pre></div>  </div>
+
+  <blockquote>
+    <p>“hello”</p>
+  </blockquote>
+
+  <p>Note that we created tuples in JavaScript using <code class="language-plaintext highlighter-rouge">[]</code>—actually they were fixed-length arrays, don’t confuse them for Haskell lists or tuples.</p>
+</div>
+
+<h2 id="lazy-by-default">Lazy by Default</h2>
+
+<p>Haskell’s strategy for evaluating expressions is lazy by default—that is it defers evaluation of expressions until it absolutely must produce a value.  Laziness is of course possible in other languages (<a href="/lazyevaluation/">as we have seen in JavaScript</a>), and there are many lazy data structures defined and available for PureScript (and most other <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> languages).
+Conversely, Haskell can be <a href="https://wiki.haskell.org/Performance/Strictness">forced to use strict evaluation</a> and has libraries of data structures with strict <span class="glossary-term" data-term="semantics">semantics<span class="glossary-popup">The processes a computer follows when executing a program in a given language.
+</span></span> if you need them.</p>
+
+<p>However, lazy by default sets Haskell apart.  It has pros and cons; on the pro side:</p>
+
+<ul>
+  <li>It can make certain operations more efficient, for example, we have already seen in JavaScript how it can make streaming of large data efficient</li>
+  <li>It can enable infinite sequences to be defined and used efficiently (this is a significant semantic difference)</li>
+  <li>It opens up possibilities for the compiler to be really quite smart about its optimisations.</li>
+</ul>
+
+<p>But there are definitely cons:</p>
+
+<ul>
+  <li>It can be hard to reason about runtime performance</li>
+  <li>Mixing up strict and <span class="glossary-term" data-term="lazy evaluation">lazy evaluation<span class="glossary-popup">A strategy where expressions are not evaluated until their values are needed, allowing for the creation of infinite sequences and delayed computations.
+</span></span> (which can happen inadvertently) can lead to (for example) $\mathcal{O}(n^2)$ behaviour in what should be linear time processing.</li>
+</ul>
+
+<h2 id="lazy-infinite-lists">Lazy infinite lists</h2>
+
+<p>Note that our “Hello world!” function to recursively compute the $n^\text{th}$ Fibonacci number <a href="#starting-with-the-ghci-repl">above</a> was not at all efficient (in fact $\mathcal{O}(2^n)$).  We will now demonstrate a very idiomatic haskell construction for defining a lazy sequence of Fibonacci numbers that is linear time in the number of fibs required.  In the following definition for <code class="language-plaintext highlighter-rouge">lazyFibs</code>, <code class="language-plaintext highlighter-rouge">zipWith</code> is a function which uses the specified function (in this case <code class="language-plaintext highlighter-rouge">(+)</code>) to pair the heads of two given lists.  In this case, we are zipping over recursive references to <code class="language-plaintext highlighter-rouge">lazyFibs</code> and <code class="language-plaintext highlighter-rouge">tail lazyFibs</code>.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">lazyFibs</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">1</span> <span class="o">:</span> <span class="n">zipWith</span> <span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="n">lazyFibs</span> <span class="p">(</span><span class="n">tail</span> <span class="n">lazyFibs</span><span class="p">)</span>
+</code></pre></div></div>
+<p>We can then create as much of the list as we need:</p>
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">take</span> <span class="mi">10</span> <span class="n">lazyFibs</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">21</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">55</span><span class="p">]</span>
+</code></pre></div></div>
+<p>This works (as opposed to the recursive definition of <code class="language-plaintext highlighter-rouge">lazyFibs</code> causing an infinite loop) because Haskell’s <span class="glossary-term" data-term="lazy evaluation">lazy evaluation<span class="glossary-popup">A strategy where expressions are not evaluated until their values are needed, allowing for the creation of infinite sequences and delayed computations.
+</span></span> only forces evaluation of as much of the list as absolutely necessary, e.g. to output the result of <code class="language-plaintext highlighter-rouge">take 10</code>.
+<img src="/assets/images/chapterImages/haskell1/zip.gif" alt="Deck Observable Visualised"></p>
+
+<div class="alert-box alert-info">
+  <p><strong>A Side Note on the Y <span class="glossary-term" data-term="combinator">Combinator<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span></strong></p>
+
+  <p>The Haskell way of defining Lambda (anonymous) functions is heavily inspired by <a href="/lambdacalculus/"><span class="glossary-term" data-term="lambda calculus">Lambda Calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span></a>, but also looks a bit reminiscent of the JavaScript arrow <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span>:</p>
+
+  <pre><code class="language-none">Lambda Calculus
+λx. x
+
+JavaScript
+x =&gt; x
+
+Haskell
+\x -&gt; x
+</code></pre>
+
+  <p>Since it’s lazy-by-default, it’s possible to transfer the version of the <a href="/lambdacalculus/#divergent-lambda-expressions">Y-<span class="glossary-term" data-term="combinator">combinator<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span> we explored in <span class="glossary-term" data-term="lambda calculus">Lambda Calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span></a> into Haskell code almost as it appears in <span class="glossary-term" data-term="lambda calculus">Lambda Calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span>:</p>
+
+  <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">y</span> <span class="o">=</span> <span class="nf">\</span><span class="n">f</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="p">(</span><span class="n">x</span> <span class="n">x</span><span class="p">))</span> <span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="p">(</span><span class="n">x</span> <span class="n">x</span><span class="p">))</span>
+</code></pre></div>  </div>
+
+  <p>However, to get it to type-check, one has to either write some gnarly type definitions or force the compiler to do some unsafe type coercion.  The following (along with versions of the Y-<span class="glossary-term" data-term="combinator">Combinator<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span> that do type check in Haskell) are from an excellent <a href="https://stackoverflow.com/questions/4273413/y-combinator-in-haskell">Stack Overflow post</a>:</p>
+
+  <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">import</span> <span class="nn">Unsafe.Coerce</span>
+<span class="n">y</span> <span class="o">::</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">a</span>
+<span class="n">y</span> <span class="o">=</span> <span class="nf">\</span><span class="n">f</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="p">(</span><span class="n">unsafeCoerce</span> <span class="n">x</span> <span class="n">x</span><span class="p">))</span> <span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="p">(</span><span class="n">unsafeCoerce</span> <span class="n">x</span> <span class="n">x</span><span class="p">))</span>
+<span class="n">main</span> <span class="o">=</span> <span class="n">putStrLn</span> <span class="o">$</span> <span class="n">y</span> <span class="p">(</span><span class="s">"circular reasoning works because "</span> <span class="o">++</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+</div>
+
+<h2 id="functional-programming-in-haskell-versus-javascript">Functional Programming in Haskell versus JavaScript</h2>
+
+<p>Consider the following pseudocode for a simple recursive definition of the Quick Sort algorithm:</p>
+
+<pre><code class="language-none">QuickSort list:
+  Take head of list as a pivot
+  Take tail of list as rest
+  return
+QuickSort( elements of rest &lt; pivot ) ++ (pivot : QuickSort( elements of rest &gt;= pivot ))
+</code></pre>
+
+<p>We’ve added a bit of notation here: <code class="language-plaintext highlighter-rouge">a : l</code> inserts a (“cons”es) to the front of a list <code class="language-plaintext highlighter-rouge">l</code> ; <code class="language-plaintext highlighter-rouge">l1 ++ l2</code> is the concatenation of lists <code class="language-plaintext highlighter-rouge">l1</code> and <code class="language-plaintext highlighter-rouge">l2</code>.</p>
+
+<p>In JavaScript the fact that we have <span class="glossary-term" data-term="anonymous functions">anonymous functions<span class="glossary-popup">A function defined without a name, often used as an argument to other functions. Also known as a lambda function.
+</span></span> through compact arrow <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> and expression <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> if (with <code class="language-plaintext highlighter-rouge">? :</code>) means that we can write <span class="glossary-term" data-term="pure functions">pure functions<span class="glossary-popup">A function that always produces the same output for the same input and has no side effects.
+</span></span> that implement this recursive algorithm in a very <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span>, fully-curried style.  However, the language <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> really doesn’t do us any favours!</p>
+
+<p>For example,</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span>
+  <span class="nx">sort</span> <span class="o">=</span> <span class="nx">lessThan</span><span class="o">=&gt;</span>
+    <span class="nx">list</span><span class="o">=&gt;</span> <span class="o">!</span><span class="nx">list</span> <span class="p">?</span> <span class="kc">null</span> <span class="p">:</span>
+      <span class="p">(</span><span class="nx">pivot</span><span class="o">=&gt;</span><span class="nx">rest</span><span class="o">=&gt;</span>
+        <span class="p">(</span><span class="nx">lesser</span><span class="o">=&gt;</span><span class="nx">greater</span><span class="o">=&gt;</span>
+          <span class="nf">concat</span><span class="p">(</span><span class="nf">sort</span><span class="p">(</span><span class="nx">lessThan</span><span class="p">)(</span><span class="nx">lesser</span><span class="p">))</span>
+                <span class="p">(</span><span class="nf">cons</span><span class="p">(</span><span class="nx">pivot</span><span class="p">)(</span><span class="nf">sort</span><span class="p">(</span><span class="nx">lessThan</span><span class="p">)(</span><span class="nx">greater</span><span class="p">)))</span>
+        <span class="p">)(</span><span class="nf">filter</span><span class="p">(</span><span class="nx">a</span><span class="o">=&gt;</span> <span class="nf">lessThan</span><span class="p">(</span><span class="nx">a</span><span class="p">)(</span><span class="nx">pivot</span><span class="p">))(</span><span class="nx">rest</span><span class="p">))</span>
+         <span class="p">(</span><span class="nf">filter</span><span class="p">(</span><span class="nx">a</span><span class="o">=&gt;</span> <span class="o">!</span><span class="nf">lessThan</span><span class="p">(</span><span class="nx">a</span><span class="p">)(</span><span class="nx">pivot</span><span class="p">))(</span><span class="nx">rest</span><span class="p">))</span>
+      <span class="p">)(</span><span class="nf">head</span><span class="p">(</span><span class="nx">list</span><span class="p">))(</span><span class="nf">tail</span><span class="p">(</span><span class="nx">list</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>Consider the following, more-or-less equivalent Haskell implementation:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sort</span> <span class="kt">[]</span> <span class="o">=</span> <span class="kt">[]</span>
+<span class="n">sort</span> <span class="p">(</span><span class="n">pivot</span><span class="o">:</span><span class="n">rest</span><span class="p">)</span> <span class="o">=</span> <span class="n">lesser</span> <span class="o">++</span> <span class="p">[</span><span class="n">pivot</span><span class="p">]</span> <span class="o">++</span> <span class="n">greater</span>
+  <span class="kr">where</span>
+    <span class="n">lesser</span> <span class="o">=</span> <span class="n">sort</span> <span class="o">$</span> <span class="n">filter</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">pivot</span><span class="p">)</span> <span class="n">rest</span>
+    <span class="n">greater</span> <span class="o">=</span> <span class="n">sort</span> <span class="o">$</span> <span class="n">filter</span> <span class="p">(</span><span class="o">&gt;=</span><span class="n">pivot</span><span class="p">)</span> <span class="n">rest</span>
+</code></pre></div></div>
+
+<p>An essential thing to know before trying to type in the above function is that Haskell delimits the scope of multi-line function definitions (and all multiline expressions) with indentation (<a href="https://en.wikibooks.org/wiki/Haskell/Indentation">complete indentation rules reference here</a>). The <code class="language-plaintext highlighter-rouge">where</code> keyword lets us create multiple function definitions that are visible within the scope of the parent function, but they must all be left-aligned with each other and to the right of the start of the line containing the <code class="language-plaintext highlighter-rouge">where</code> keyword.</p>
+
+<p>Haskell also helps with a number of other language features.<br>
+The first is <span class="glossary-term" data-term="pattern matching">pattern matching<span class="glossary-popup">A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
+</span></span>.  <span class="glossary-term" data-term="pattern matching">Pattern matching<span class="glossary-popup">A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
+</span></span> is like function overloading that you may be familiar with from languages like Java or C++ - where the compiler matches the version of the function to invoke for a given call by matching the type of the parameters to the type of the call - except in Haskell the compiler goes a bit deeper to inspect the values of the parameters.</p>
+
+<p>There are two declarations of the sort function above.  The first handles the base case of an empty list.  The second handles the general case, and <span class="glossary-term" data-term="pattern matching">pattern matching<span class="glossary-popup">A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
+</span></span> is again used to destructure the lead cons expression into the pivot and rest variables.  No explicit call to head and tail functions is required.</p>
+
+<p>The next big difference between our Haskell quicksort and our previous JavaScript definition is the Haskell style of function application—which has more in common with <span class="glossary-term" data-term="lambda calculus">lambda calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span> than JavaScript.  The expression <code class="language-plaintext highlighter-rouge">f x</code> is application of the function <code class="language-plaintext highlighter-rouge">f</code> to whatever <code class="language-plaintext highlighter-rouge">x</code> is.</p>
+
+<p>Another thing that helps with readability is infix operators.  For example, <code class="language-plaintext highlighter-rouge">++</code> is an infix binary operator for list concatenation. The <code class="language-plaintext highlighter-rouge">:</code> operator for cons is another.  There is also the aforementioned <code class="language-plaintext highlighter-rouge">$</code> which gives us another trick for removing brackets, and finally, the <code class="language-plaintext highlighter-rouge">&lt;</code> and <code class="language-plaintext highlighter-rouge">&gt;=</code> operators.  Note that infix operators can also be curried and left only partially applied as in <code class="language-plaintext highlighter-rouge">(&lt;pivot)</code>.</p>
+
+<p>Next, we have the <code class="language-plaintext highlighter-rouge">where</code> which lets us create locally scoped variables within the function declaration without the need for the trick I used in the JavaScript version of using the parameters of <span class="glossary-term" data-term="anonymous functions">anonymous functions<span class="glossary-popup">A function defined without a name, often used as an argument to other functions. Also known as a lambda function.
+</span></span> as locally scoped variables.</p>
+
+<p>Finally, you’ll notice that the Haskell version of <code class="language-plaintext highlighter-rouge">sort</code> appears to be missing a parameterisation of the order function.  Does this mean it is limited to number types?  In fact, no—from our use of <code class="language-plaintext highlighter-rouge">&lt;</code> and <code class="language-plaintext highlighter-rouge">&gt;=</code>, the compiler has inferred that it is applicable to any ordered type.  More specifically, to any type in the <span class="glossary-term" data-term="type class">type class<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span> <code class="language-plaintext highlighter-rouge">Ord</code>.</p>
+
+<p>I deliberately avoided the type declaration for the above function because: (1) we haven’t really talked about types properly yet, and (2) I wanted to show off how clever Haskell type inference is.  However, it is actually good practice to include the type signature.  If one were to load the above code, without type definition, into GHCi (the Haskell REPL), one could interrogate the type like so:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="o">:</span><span class="n">t</span> <span class="n">sort</span>
+<span class="n">sort</span> <span class="o">::</span> <span class="kt">Ord</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">t</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Thus, the function <code class="language-plaintext highlighter-rouge">sort</code> has a generic <span class="glossary-term" data-term="type parameter">type parameter<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> <code class="language-plaintext highlighter-rouge">t</code> (we’ll talk more about such <a href="/haskell2/#type-parameters-and-polymorphism"><span class="glossary-term" data-term="parametric polymorphism">parametric polymorphism<span class="glossary-popup">A type of polymorphism where functions or data types can be written generically so that they can handle values uniformly without depending on their type.
+</span></span> in haskell</a> later) which is constrained to be in the <code class="language-plaintext highlighter-rouge">Ord</code> <span class="glossary-term" data-term="type class">type class<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span> (anything that is orderable - we’ll talk more about <a href="/haskell2/#typeclasses"><span class="glossary-term" data-term="type classes">type classes<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span></a> too).  Its input parameter is a list of <code class="language-plaintext highlighter-rouge">t</code>, as is its return type.  This is also precisely the <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> that one would use to declare the type explicitly.  Usually, for all top-level functions in a Haskell file, it is good practice to explicitly give the type declaration.  Although it is not always necessary, it can avoid ambiguity in many situations and once you get good at reading Haskell types it becomes useful documentation.</p>
+
+<p>Here’s another refactoring of the quick-sort code.  This time with type declaration because I just said it was the right thing to do:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sort</span> <span class="o">::</span> <span class="kt">Ord</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">t</span><span class="p">]</span>
+<span class="n">sort</span> <span class="kt">[]</span> <span class="o">=</span> <span class="kt">[]</span>
+<span class="n">sort</span> <span class="p">(</span><span class="n">pivot</span><span class="o">:</span><span class="n">rest</span><span class="p">)</span> <span class="o">=</span> <span class="n">below</span> <span class="n">pivot</span> <span class="n">rest</span> <span class="o">++</span> <span class="p">[</span><span class="n">pivot</span><span class="p">]</span> <span class="o">++</span> <span class="n">above</span> <span class="n">pivot</span> <span class="n">rest</span>
+ <span class="kr">where</span>
+   <span class="n">below</span> <span class="n">p</span> <span class="o">=</span> <span class="n">partition</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">p</span><span class="p">)</span>
+   <span class="n">above</span> <span class="n">p</span> <span class="o">=</span> <span class="n">partition</span> <span class="p">(</span><span class="o">&gt;=</span><span class="n">p</span><span class="p">)</span>
+   <span class="n">partition</span> <span class="n">comparison</span> <span class="o">=</span> <span class="n">sort</span> <span class="o">.</span> <span class="n">filter</span> <span class="n">comparison</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">list</code> parameter for <code class="language-plaintext highlighter-rouge">below</code> and <code class="language-plaintext highlighter-rouge">above</code> has been eta-reduced away just as we were able to <a href="/lambdacalculus/#lambda-calculus-cheatsheet">eta-reduce <span class="glossary-term" data-term="lambda calculus">lambda calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span> expressions</a>.  The definition of the <code class="language-plaintext highlighter-rouge">partition</code> function in this version uses the <code class="language-plaintext highlighter-rouge">.</code> operator for <a href="/higherorderfunctions/#composition">function composition</a>.  That is, <code class="language-plaintext highlighter-rouge">partition comparison</code> is the composition of <code class="language-plaintext highlighter-rouge">sort</code> and <code class="language-plaintext highlighter-rouge">filter comparison</code> and again the <code class="language-plaintext highlighter-rouge">list</code> parameter is eta-reduced away.</p>
+
+<p>Although it looks like the comparison parameter could also go away here with <span class="glossary-term" data-term="eta conversion">eta conversion<span class="glossary-popup">Substituting functions that simply apply another expression to their argument with the expression in their body. This is a technique in Haskell and Lambda Calculus where a function f x is simplified to f, removing the explicit mention of the parameter when it is not needed.
+</span></span>, actually the low precedence of the <code class="language-plaintext highlighter-rouge">.</code> operator means there is (effectively) implicit parentheses around filter comparison.  We will see how to <a href="/haskell3/#point-free-code">more aggressively refactor code to be point-free later</a>.</p>
+
+<p>The idea of refactoring our code into the above form was to demonstrate the freedom that Haskell gives us to express logic
+in a way that makes sense to us.  This version reads almost like a natural language <span class="glossary-term" data-term="declarative">declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span> definition of the algorithm.  That is, you can read:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sort</span> <span class="p">(</span><span class="n">pivot</span><span class="o">:</span><span class="n">rest</span><span class="p">)</span> <span class="o">=</span> <span class="n">below</span> <span class="n">pivot</span> <span class="n">rest</span> <span class="o">++</span> <span class="p">[</span><span class="n">pivot</span><span class="p">]</span> <span class="o">++</span> <span class="n">above</span> <span class="n">pivot</span> <span class="n">rest</span>
+</code></pre></div></div>
+
+<p>as:</p>
+<blockquote>
+  <p>the sort of a list where we take the first element as the “pivot” and everything after as “rest” is
+everything that is below pivot in rest,<br>
+concatenated with a list containing just the pivot,<br>
+concatenated with everything that is above pivot in rest.</p>
+</blockquote>
+
+<p>Haskell has a number of features that allow us to express ourselves in different ways.  Above we used a <code class="language-plaintext highlighter-rouge">where</code> clause to give a post-hoc, locally-scoped declaration of the below and above functions.  Alternately, we could define them at the start of the function body with <code class="language-plaintext highlighter-rouge">let &lt;variable declaration expression&gt; in &lt;body&gt;</code>.  Or we can use <code class="language-plaintext highlighter-rouge">let</code>, <code class="language-plaintext highlighter-rouge">in</code> and <code class="language-plaintext highlighter-rouge">where</code> all together, like so:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sort</span> <span class="o">::</span> <span class="kt">Ord</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">t</span><span class="p">]</span>
+<span class="n">sort</span> <span class="kt">[]</span> <span class="o">=</span> <span class="kt">[]</span>
+<span class="n">sort</span> <span class="p">(</span><span class="n">pivot</span><span class="o">:</span><span class="n">rest</span><span class="p">)</span> <span class="o">=</span> <span class="kr">let</span>
+   <span class="n">below</span> <span class="n">p</span> <span class="o">=</span> <span class="n">partition</span> <span class="p">(</span><span class="o">&lt;</span><span class="n">p</span><span class="p">)</span>
+   <span class="n">above</span> <span class="n">p</span> <span class="o">=</span> <span class="n">partition</span> <span class="p">(</span><span class="o">&gt;=</span><span class="n">p</span><span class="p">)</span>
+ <span class="kr">in</span>
+   <span class="n">below</span> <span class="n">pivot</span> <span class="n">rest</span> <span class="o">++</span> <span class="p">[</span><span class="n">pivot</span><span class="p">]</span> <span class="o">++</span> <span class="n">above</span> <span class="n">pivot</span> <span class="n">rest</span>
+ <span class="kr">where</span>
+   <span class="n">partition</span> <span class="n">comparison</span> <span class="o">=</span> <span class="n">sort</span> <span class="o">.</span> <span class="n">filter</span> <span class="n">comparison</span>
+</code></pre></div></div>
+
+<p>Note that where is only available in function declarations, not inside expressions and therefore is not available in a lambda.  However, <code class="language-plaintext highlighter-rouge">let</code>-<code class="language-plaintext highlighter-rouge">in</code> is part of the expression, and therefore available inside a lambda function.  A silly example would be:  <code class="language-plaintext highlighter-rouge">\i -&gt; let f x = 2*x in f i</code>, which could also be spread across lines, but be careful to get the correct indentation.</p>
+
+<div class="cheatsheet">
+  <p><strong>Conditional Code Constructs Cheatsheet</strong></p>
+
+  <h3 id="pattern-matching">Pattern matching</h3>
+
+  <p>Provides alternative cases for function definitions matching different values or possible destructurings of the function arguments (<a href="/haskell2#pattern-matching">more detail</a>).  As per examples above and:</p>
+
+  <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fibs</span> <span class="mi">0</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">fibs</span> <span class="mi">1</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">fibs</span> <span class="n">n</span> <span class="o">=</span> <span class="n">fibs</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fibs</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <h3 id="if-then-else">if-then-else</h3>
+
+  <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">if</span> <span class="o">&lt;</span><span class="n">condition</span><span class="o">&gt;</span> <span class="kr">then</span> <span class="o">&lt;</span><span class="kr">case</span> <span class="mi">1</span><span class="o">&gt;</span> <span class="kr">else</span> <span class="o">&lt;</span><span class="kr">case</span> <span class="mi">2</span><span class="o">&gt;</span>
+</code></pre></div>  </div>
+
+  <p>just like JavaScript’s ternary if operator: <code class="language-plaintext highlighter-rouge">&lt;condition&gt; ? &lt;case 1&gt; : &lt;case 3&gt;</code></p>
+
+  <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fibs</span> <span class="n">n</span> <span class="o">=</span> <span class="kr">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="kr">then</span> <span class="mi">1</span> <span class="kr">else</span> <span class="kr">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span> <span class="kr">then</span> <span class="mi">1</span> <span class="kr">else</span> <span class="n">fibs</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fibs</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <h3 id="guards">Guards</h3>
+
+  <p>Can test <code class="language-plaintext highlighter-rouge">Bool</code> expressions (i.e. not just values matching as in <span class="glossary-term" data-term="pattern matching">pattern matching<span class="glossary-popup">A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
+</span></span>)</p>
+
+  <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fibs</span> <span class="n">n</span>
+  <span class="o">|</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">=</span> <span class="mi">1</span>
+  <span class="o">|</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">=</span> <span class="mi">1</span>
+  <span class="o">|</span> <span class="n">otherwise</span> <span class="o">=</span> <span class="n">fibs</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fibs</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+  <h3 id="case">case</h3>
+
+  <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">case</span> <span class="o">&lt;</span><span class="n">expression</span><span class="o">&gt;</span> <span class="kr">of</span>
+  <span class="o">&lt;</span><span class="n">pattern1</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="o">&lt;</span><span class="n">result</span> <span class="kr">if</span> <span class="n">pattern1</span> <span class="n">matches</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">pattern2</span><span class="o">&gt;</span> <span class="o">-&gt;</span> <span class="o">&lt;</span><span class="n">result</span> <span class="kr">if</span> <span class="n">pattern2</span> <span class="n">matches</span><span class="o">&gt;</span>
+  <span class="kr">_</span> <span class="o">-&gt;</span> <span class="o">&lt;</span><span class="n">result</span> <span class="kr">if</span> <span class="n">no</span> <span class="n">pattern</span> <span class="n">above</span> <span class="n">matches</span><span class="o">&gt;</span>
+</code></pre></div>  </div>
+
+  <p>For example:</p>
+
+  <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fibs</span> <span class="n">n</span> <span class="o">=</span> <span class="kr">case</span> <span class="n">n</span> <span class="kr">of</span>
+  <span class="mi">0</span> <span class="o">-&gt;</span> <span class="mi">1</span>
+  <span class="mi">1</span> <span class="o">-&gt;</span> <span class="mi">1</span>
+  <span class="kr">_</span> <span class="o">-&gt;</span> <span class="n">fibs</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fibs</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>  </div>
+
+</div>
+<hr>
+<div class="glossary">
+  <h2 id="glossary">Glossary</h2>
+
+  <p><em>GHCi REPL</em>: The interactive Read-Eval-Print Loop for GHC, the Glasgow Haskell Compiler, allowing users to test Haskell programs and expressions interactively.</p>
+
+  <p><em>Pattern Matching</em>: A mechanism in Haskell that checks a value against a pattern. It is used to simplify code by specifying different actions for different input patterns.</p>
+
+  <p><em>Guards</em>: A feature in Haskell used to test boolean expressions. They provide a way to conditionally execute code based on the results of boolean expressions.</p>
+
+  <p><em>Where Clauses</em>: A way to define local bindings in Haskell, allowing variables or functions to be used within a function body.</p>
+
+  <p><em>Let Clauses</em>: A way to bind variables or functions within an expression in Haskell, allowing for more localised definitions.</p>
+
+  <p><em>Hoogle</em>: A Haskell API search engine that allows users to search for functions by name or by type signature.</p>
+
+  <p><em>Prelude</em>: The default library loaded in Haskell that includes basic functions and operators.</p>
+
+  <p><em>Case Expressions</em>: A way to perform pattern matching in Haskell that allows for more complex conditional logic within expressions.</p>
+
+  <p><em>Type Class</em>: A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.</p>
+
+  <p><em>Unit</em>: A type with exactly one value, (), used to indicate the absence of meaningful return value, similar to void in other languages.</p>
+
+</div>
+
+	</div>
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/haskell0/">&lt; Haskell Installation</a>
+      
+      
+        
+        
+        <a id="right" href="/haskell2/">Data Types and <span class="glossary-term" data-term="type classes">Type Classes<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span> &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+</article>
+
+      </div>
+    </main><link id="fa-stylesheet" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css">
+<footer class="site-footer h-card">
+    <data class="u-url" href="/"></data>
+
+    <div class="wrapper">
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col">
+                <!-- <p class="feed-subscribe">
+                <a href="/feed.xml">
+                    <svg class="svg-icon orange">
+                        <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+                    </svg><span>Subscribe</span>
+                </a>
+                </p> -->
+        </div>
+        <div class="footer-col">
+            <p>Examples and tutorials for various programming paradigms.</p>
+        </div>
+    </div>
+
+    <!-- <div class="social-links"><ul class="social-media-list"><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li>
+  <li>
+    <a href="/feed.xml" target="_blank" title="Subscribe to syndication feed">
+      <svg class="svg-icon grey" viewbox="0 0 16 16">
+        <path d="M12.8 16C12.8 8.978 7.022 3.2 0 3.2V0c8.777 0 16 7.223 16 16h-3.2zM2.194
+          11.61c1.21 0 2.195.985 2.195 2.196 0 1.21-.99 2.194-2.2 2.194C.98 16 0 15.017 0
+          13.806c0-1.21.983-2.195 2.194-2.195zM10.606
+          16h-3.11c0-4.113-3.383-7.497-7.496-7.497v-3.11c5.818 0 10.606 4.79 10.606 10.607z"
+        />
+      </svg>
+    </a>
+  </li>
+</ul>
+</div> -->
+
+    </div>
+
+</footer>
+
+
+
+</body></html>

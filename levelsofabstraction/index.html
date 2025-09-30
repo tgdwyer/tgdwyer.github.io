@@ -1,0 +1,534 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Levels of Abstraction | Good Times Paradigms</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="Levels of Abstraction">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Learning Outcomes">
+<meta property="og:description" content="Learning Outcomes">
+<meta property="og:site_name" content="Good Times Paradigms">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-09-30T03:56:06+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="Levels of Abstraction">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-30T03:56:06+00:00","datePublished":"2025-09-30T03:56:06+00:00","description":"Learning Outcomes","headline":"Levels of Abstraction","mainEntityOfPage":{"@type":"WebPage","@id":"/levelsofabstraction/"},"url":"/levelsofabstraction/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Good Times Paradigms"><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-159840333-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159840333-1');
+</script><!-- MathJax v3 -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true }
+  };
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+  <script src="/assets/js/spoilers.js" defer=""></script></head>
+
+  <body><header class="site-header">
+
+    <div class="wrapper"><!-- Lambda icon and site title aligned left in a flex container -->
+        <div style="display: flex; align-items: center;">
+            <button id="play-theme-song" style="background:none;border:none;cursor:pointer;vertical-align:middle;margin-right:2px;" title="Play theme song">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="currentColor" viewBox="0 0 48 24" style="vertical-align:middle;">
+                    <text x="4" y="20" font-size="20" font-family="serif">ΓΤΠ</text>
+                    <!-- γτπ -->
+                </svg>
+            </button>
+            <a class="site-title" rel="author" href="/" style="margin:0;">Good Times Paradigms</a>
+        </div>
+        <script src="/assets/js/hide_solutions.js" defer=""></script>
+        <audio id="theme-song" src="/assets/themesong.mp3"></audio>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var btn = document.getElementById('play-theme-song');
+                var audio = document.getElementById('theme-song');
+                btn.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play();
+                    } else {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                });
+            });
+        </script><nav class="site-nav">
+            <input type="checkbox" id="nav-trigger" class="nav-trigger">
+            <label for="nav-trigger">
+                <span class="menu-icon">
+                </span>
+            </label>
+
+            <div class="nav-items"><a class="page-link nav-item" href="/about/">About</a><a class="page-link nav-item" href="/">Notes on Programming Paradigms</a><!-- Radio Switch -->
+                <div id="toggle-div" style="display: none;">
+                    <div class="solutions-toggle">
+                        <p class="page-link" style="margin-bottom: 0px;">Show Solutions?</p>
+                        <label class="switch" style="vertical-align: middle;">
+                            <input type="checkbox" id="toggle-switch">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+      
+      
+        
+        
+        <a id="right" href="/javascript1/">JavaScript Introduction &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+	<header class="post-header">
+		<h1 class="post-title">Levels of Abstraction</h1>
+	</header>
+	<p id="readingTime">
+
+  
+  15
+
+ min read</p>
+	<div class="post-content">
+		<h2 id="learning-outcomes">Learning Outcomes</h2>
+
+<ul>
+  <li>Understand the motivation for different programming paradigms: from abstract machine operation to human-understandable and composable programs</li>
+  <li>Understand the difference between <em><span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span></em> (the textual symbols and grammatical rules of a program) and <em><span class="glossary-term" data-term="semantics">semantics<span class="glossary-popup">The processes a computer follows when executing a program in a given language.
+</span></span></em> (the meaning of what is computed)</li>
+  <li>Understand that there are different models of computation upon which different programming languages are based, including machine models such as <span class="glossary-term" data-term="turing machines">Turing Machines<span class="glossary-popup">A model of computation based on a hypothetical machine reading or writing instructions on a tape, which decides how to proceed based on the symbols it reads from the tape.
+</span></span> and von Neumann architecture, and the <span class="glossary-term" data-term="lambda calculus">Lambda Calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span> based on mathematical functions</li>
+</ul>
+
+<h2 id="syntax-versus-semantics">Syntax versus Semantics</h2>
+
+<p>As a branch of Computer Science, the theory and practice of programming has grown from a very practical need: to create tools to help us get computers to perform useful and often complex tasks.  Programming languages are tools that are designed and built by people to make life easier in this endeavour.  Furthermore, they are rapidly evolving tools that have grown in subtlety and complexity over the many decades to take advantage of changing computer hardware and to take advantage of different ways to model computation.</p>
+
+<p>An important distinction to make when considering different programming languages is between <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> and <span class="glossary-term" data-term="semantics">semantics<span class="glossary-popup">The processes a computer follows when executing a program in a given language.
+</span></span>. The <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> of a programming language is the set of symbols and rules for combining them (the grammar) into a correctly structured program.  These rules are often arbitrary and chosen for historical reasons, ease of implementation or even aesthetics.  An example of a syntactic design choice is the use of indentation to denote block structure or symbols such as “BEGIN” and “END” or “{” and “}”.</p>
+
+<p>Example: functions in Python and C that are syntactically different, but semantically identical:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># python code
+</span><span class="k">def</span> <span class="nf">sumTo</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+   <span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span>
+   <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+   <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+       <span class="nb">sum</span> <span class="o">+=</span> <span class="n">i</span>
+       <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+   <span class="k">return</span> <span class="nb">sum</span>
+</code></pre></div></div>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// C code:</span>
+<span class="kt">int</span> <span class="nf">sumTo</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+   <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+   <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+       <span class="n">sum</span> <span class="o">+=</span> <span class="n">i</span><span class="p">;</span>
+   <span class="p">}</span>
+   <span class="k">return</span> <span class="n">sum</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>By contrast, the “<span class="glossary-term" data-term="semantics">semantics<span class="glossary-popup">The processes a computer follows when executing a program in a given language.
+</span></span>” of a programming language relate to the meaning of a program: how does it structure data?  How does it execute or evaluate?</p>
+
+<p>In this course we will certainly be studying the <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> of the different languages we encounter.  It is necessary to understand <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> in order to correctly compose programs that a compiler or interpreter can make sense of.  The syntactic choices made by language designers are also often interesting in their own right and can have significant impact on the ease with which we can create or read programs.  However, arguably the more profound learning outcome from this course should be an appreciation for the <span class="glossary-term" data-term="semantics">semantics<span class="glossary-popup">The processes a computer follows when executing a program in a given language.
+</span></span> of programming and how different languages lend themselves to fundamentally different approaches to programming, with different abstractions for modelling problems and different ways of executing and evaluating.  Hence, we will be considering several languages that support quite different programming paradigms.</p>
+
+<p>For example, as we move forward we will see that C programs vary from the underlying machine language mostly syntactically.  C abstracts certain details and particulars of the machine architecture and has much more efficient <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> than Assembly language, but the <span class="glossary-term" data-term="semantics">semantics<span class="glossary-popup">The processes a computer follows when executing a program in a given language.
+</span></span> of C are not so far removed from Assembly - especially modern assembly that supports procedures and conveniences for dealing with arrays.</p>
+
+<p>By contrast, Haskell and MiniZinc (which we will be exploring in the second half of this course) represent quite different paradigms where the underlying machine architecture, and even the mode of execution, is significantly abstracted away.  MiniZinc, in particular, is completely <span class="glossary-term" data-term="declarative">declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span> in the sense that the programmer’s job is to define and model the constraints of a problem.  The approach to finding the solution, in fact any algorithmic details, is completely hidden.</p>
+
+<p>One other important concept that we try to convey in this course is that while some languages are engineered to support particular paradigms (such as <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming or logic programming), the ideas can be brought to many different programming languages.  For example, we begin learning about <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming in JavaScript (actually TypeScript and ECMAScript 2017), and we will demonstrate that <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming style is not only possible in this language, but brings with it a number of benefits.</p>
+
+<p>Later, we will pivot from JavaScript (briefly) to PureScript, a Haskell-like language that compiles to JavaScript.  We will see that, while PureScript <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> is very different to JavaScript, the JavaScript generated by the PureScript compiler is not so different to the way we implemented <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> paradigms manually in JavaScript.</p>
+
+<p>Then we will dive a little more deeply into a language that more completely “buys into” the <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> paradigm: Haskell.  As well as having a <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> that makes <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming very clean, the Haskell compiler strictly enforces purity and makes the interesting choice of being lazy by default.</p>
+
+<p>In summary, the languages we will study (in varying degrees of depth) will be Assembly, C/C++, JavaScript (ES2017 and TypeScript), PureScript, Haskell and MiniZinc, with JavaScript/TypeScript and Haskell being the main languages explored in problem sets and assignments.  Thus, this course will be a tour through programming paradigms that represent different levels of abstraction from the underlying machine architecture.  To begin, we spend just a little time at the level of least abstraction: the hardware itself.</p>
+
+<h2 id="the-machine-level">The Machine Level</h2>
+
+<p>Conceptually, modern computer architecture deviates little from the <span class="glossary-term" data-term="von neumann model">von Neumann model<span class="glossary-popup">A model of computation which is the basis for most modern computer architectures. Proposed by John von Neumann in 1945.
+</span></span> proposed in 1945 by Hungarian-American computer scientist John von Neumann.<br>
+The von Neumann architecture was among the first to unify the concepts of data and programs.  That is, in a von Neumann architecture, a program is just data that can be loaded into memory.  A program is a list of instructions that read data from memory, manipulate it, and then write it back to memory.  This is much more flexible than previous computer designs which had stored the programs separately in a fixed (read-only) manner.</p>
+
+<p>The classic <span class="glossary-term" data-term="von neumann model">von Neumann model<span class="glossary-popup">A model of computation which is the basis for most modern computer architectures. Proposed by John von Neumann in 1945.
+</span></span> looks like so:</p>
+
+<p><img src="/assets/images/chapterImages/levelsofabstraction/vonNeumann.png" alt="von Neumann Architecture"></p>
+
+<p>At a high level, standard modern computer architecture still fits within this model:</p>
+
+<p><img src="/assets/images/chapterImages/levelsofabstraction/computerArchiture.png" alt="Modern Computer Architecture"></p>
+
+<p>Programs run on an x86 machine according to the Instruction Execution Cycle:</p>
+
+<ul>
+  <li>CPU fetches instruction from instruction queue, increments instruction pointer</li>
+  <li>CPU decodes instruction and decides if it has operands</li>
+  <li>If necessary, CPU fetches operands from registers or memory</li>
+  <li>CPU executes the instruction</li>
+  <li>If necessary, CPU stores result, sets status flags, etc.</li>
+</ul>
+
+<p>Registers are locations on the CPU with very low-latency access due to their physical proximity to the execution engine.  Modern x86 processors also have 2 or 3 levels of cache memory physically on-board the CPU.  Accessing cache memory is slower than accessing registers (with all sorts of very complicated special cases) but still many times faster than accessing main memory.  The CPU handles the movement of instructions and data between levels of cache memory and main memory automatically, cleverly and—for the most part—transparently.  To cut a long story short, it can be very difficult to predict how long a particular memory access will take.  Probably, accessing small amounts of memory repeatedly will be cached at a high level and therefore fast.</p>
+
+<h2 id="other-models-of-computation">Other Models of Computation</h2>
+
+<p><span class="glossary-term" data-term="turing machines">Turing Machines<span class="glossary-popup">A model of computation based on a hypothetical machine reading or writing instructions on a tape, which decides how to proceed based on the symbols it reads from the tape.
+</span></span> are a conceptual model of computation based on a physical analogy of tapes being written to and read from as they feed through a machine.  The operations written on the tape determine the machine’s operation.  The <span class="glossary-term" data-term="von neumann model">von Neumann model<span class="glossary-popup">A model of computation which is the basis for most modern computer architectures. Proposed by John von Neumann in 1945.
+</span></span> of computation has in common with <span class="glossary-term" data-term="turing machines">Turing Machines<span class="glossary-popup">A model of computation based on a hypothetical machine reading or writing instructions on a tape, which decides how to proceed based on the symbols it reads from the tape.
+</span></span> that it follows an <em><span class="glossary-term" data-term="imperative">imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span></em> paradigm of sequential instruction execution, but it is a practical model upon which most modern computers base their architecture.</p>
+
+<p>There are other models of computation that are also useful.  In particular, we will look at the <a href="/lambdacalculus"><span class="glossary-term" data-term="lambda calculus">Lambda Calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span></a>, which was roughly a contemporary of these other models but based on mathematical functions, their application and composition.  We will see that while <span class="glossary-term" data-term="imperative">imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span> programming languages are roughly abstractions of machine architecture, <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming languages provide an alternative abstraction built upon the rules of the <span class="glossary-term" data-term="lambda calculus">lambda calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span>.</p>
+
+<h2 id="alternative-abstractions">Alternative Abstractions</h2>
+
+<p>Humans think about programs in a different way from machines.
+Machines can read thousands or millions of instructions per second and execute them tirelessly and with precision.
+Humans need to understand programs at a higher level and relate the elements of the program back to the <span class="glossary-term" data-term="semantics">semantics<span class="glossary-popup">The processes a computer follows when executing a program in a given language.
+</span></span> of the task and the ultimate goal.
+There is a clear and overwhelmingly agreed-upon need to create human-readable and writable languages that abstract away the details of the underlying computation into chunks that people can reason about.  However, there are many ways to create these abstractions.</p>
+
+<h3 id="comparing-the-dominant-programming-paradigms">Comparing the Dominant Programming Paradigms</h3>
+
+<p>First, some definitions that help to describe the different families of programming languages that we will be considering in this course.  It is assumed that the reader already has experience with the first three paradigms (<em><span class="glossary-term" data-term="imperative">imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span></em>, <em><span class="glossary-term" data-term="procedural">procedural<span class="glossary-popup">Procedural languages are basically <em>imperative</em> in nature, but add the concept of named <em>procedures</em>, i.e. named subroutines that may be invoked from elsewhere in the program, with parameterised variables that may be passed in.
+</span></span></em> and <em><span class="glossary-term" data-term="object-oriented">object-oriented<span class="glossary-popup">Object-oriented languages are built around the concept of <em>objects</em> where an object captures the set of data (state) and behaviours (methods) associated with entities in the system.
+</span></span></em>) since these are taught in most introductory programming courses.  The rest are discussed further in later chapters in these notes.</p>
+
+<ul>
+  <li><strong><span class="glossary-term" data-term="imperative">Imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span></strong> programs are <a href="https://en.wikipedia.org/wiki/Imperative_programming">a sequence of statements that change a program’s state</a>.  They follow the <span class="glossary-term" data-term="turing machine">Turing machine<span class="glossary-popup">A model of computation based on a hypothetical machine reading or writing instructions on a tape, which decides how to proceed based on the symbols it reads from the tape.
+</span></span> model described above.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.</li>
+  <li><strong><span class="glossary-term" data-term="procedural">Procedural<span class="glossary-popup">Procedural languages are basically <em>imperative</em> in nature, but add the concept of named <em>procedures</em>, i.e. named subroutines that may be invoked from elsewhere in the program, with parameterised variables that may be passed in.
+</span></span></strong> languages are basically <em><span class="glossary-term" data-term="imperative">imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span></em> in nature, but add the concept of named <em>procedures</em>, i.e. named subroutines that may be invoked from elsewhere in the program, with parameterised variables that may be passed in.  The result of the procedure may be returned as an explicit return value, or the procedure may <em>mutate</em> (change) the value of variables referenced elsewhere in the program (such a mutation is called a <em>side effect</em>).  Again, most modern languages support the definition of such procedures.  Sometimes, the term <em>function</em> is used synonymously with procedure.  Some languages (e.g. Pascal) make a distinction between procedures that mutate state without an explicit return value, while a <em>function</em> has an explicit return value.  Note that the latter is closer to the definition of <em>function</em> in mathematics.</li>
+  <li><strong><span class="glossary-term" data-term="object-oriented">Object-oriented<span class="glossary-popup">Object-oriented languages are built around the concept of <em>objects</em> where an object captures the set of data (state) and behaviours (methods) associated with entities in the system.
+</span></span></strong> languages are built around the concept of <em>objects</em>, where an object captures the set of data (state) and behaviours (methods) associated with entities in the system.  We assume most readers have already studied the basics of <em><span class="glossary-term" data-term="object-oriented">object-oriented<span class="glossary-popup">Object-oriented languages are built around the concept of <em>objects</em> where an object captures the set of data (state) and behaviours (methods) associated with entities in the system.
+</span></span></em> programming, such as defining classes of objects, inheritance and encapsulation.</li>
+  <li><strong><span class="glossary-term" data-term="declarative">Declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span></strong> languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.  Classic examples of <span class="glossary-term" data-term="declarative">declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span> languages are SQL, HTML and Prolog.
+    <ul>
+      <li>SQL precisely describes a relational database query (i.e. what should be returned) without having to tell the database <em>how</em> the computation should be performed (e.g. the sequence of steps to carry out to perform the query).</li>
+      <li>HTML describes what a web page should look like without specifying how to render it. SQL and HTML both avoid defining the <em>how</em> by relying on an engine that already knows how to do the task (i.e. the database system (SQL) or the browser (HTML)).</li>
+      <li>By contrast, Prolog is an example of a language that is <span class="glossary-term" data-term="declarative">declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span> but also a complete programming language (being able to perform any computation that a <span class="glossary-term" data-term="turing machine">Turing machine<span class="glossary-popup">A model of computation based on a hypothetical machine reading or writing instructions on a tape, which decides how to proceed based on the symbols it reads from the tape.
+</span></span> can compute, i.e. Turing Complete).  <span class="glossary-term" data-term="declarative">Declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span> languages like Prolog manage to perform arbitrarily complex computations (e.g. with loops and evolving state) through recursive definitions.</li>
+    </ul>
+  </li>
+  <li><strong><span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span></strong> languages are built around the concept of composable functions.  Such languages support <a href="/higherorderfunctions/#higher-order-functions"><em>higher-order functions</em></a> which can take other functions as arguments or return new functions as their result, following the rules of the <em><span class="glossary-term" data-term="lambda calculus">Lambda Calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span></em> (which we will <a href="/lambdacalculus/">explore in some depth later</a>).  <span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> languages such as <em>Haskell</em> (which we are going to <a href="/purescript/">explore later</a>) adhere closely to the mathematical definition of functions that are <em>pure</em>, i.e. that do not have side effects but whose only result is an explicit return value.  Pure <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programs tend to be closer to a <em><span class="glossary-term" data-term="declarative">declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span></em> definition of the solution since their manipulation of state is made explicit from the function parameter and return types rather than hidden in side effects (this is a quality which we will see through many examples later). Many modern languages support a mixture of <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> (i.e. by supporting higher-order functions) and <span class="glossary-term" data-term="imperative">imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span> style programming (by allowing mutable variables and side effects from functions).</li>
+</ul>
+
+<p>Until relatively recently, there was a fairly clear distinction between languages which followed the <span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> Programming (FP) paradigm versus the <span class="glossary-term" data-term="object-oriented">Object-Oriented<span class="glossary-popup">Object-oriented languages are built around the concept of <em>objects</em> where an object captures the set of data (state) and behaviours (methods) associated with entities in the system.
+</span></span> (OO) paradigm.  From the 1990s to… well it still is… <span class="glossary-term" data-term="object-oriented">Object-Oriented<span class="glossary-popup">Object-oriented languages are built around the concept of <em>objects</em> where an object captures the set of data (state) and behaviours (methods) associated with entities in the system.
+</span></span> programming has been arguably the dominant paradigm.  Programmers and system architects have found organising their programs and data into class hierarchies a natural way to model everything from simulations, to games, to business rules.  But this focus on creating rigid structures around data is a static view of the world which becomes messy when dealing with dynamic state.  <span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming, however, focuses on functions as <em>transformations</em> of data.  These two alternatives, <span class="glossary-term" data-term="object-oriented">Object-Oriented<span class="glossary-popup">Object-oriented languages are built around the concept of <em>objects</em> where an object captures the set of data (state) and behaviours (methods) associated with entities in the system.
+</span></span> versus <span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span>, have been described as <a href="http://steve-yegge.blogspot.com/2006/03/execution-in-kingdom-of-nouns.html">a Kingdom of Nouns versus a Kingdom of Verbs</a>, respectively, where nouns are descriptions of data and verbs are functions.</p>
+
+<p>Historically these were seen as competing paradigms, leading to quite different languages such as C++ and Haskell.  However, modern languages like TypeScript, Scala, C++17, Java &gt;8, Swift, Rust, Python3 etc, provide facilities for both paradigms for you to use (or abuse) as you please.</p>
+
+<p>Thus, these are no longer competing paradigms. Rather, they are complementary, or at least they can be depending on the skill of the programmer (we hope you come away with the skill to recognise the advantages of both paradigms). They provide programmers with a choice of abstractions to apply as necessary to better manage complexity and achieve robust, reusable, scalable and maintainable code.</p>
+
+<p>Furthermore, the use of <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> style code has become more commonplace throughout both industry and academia, and it is important you become literate in understanding this style of coding and how you can use it as a tool to make your code more robust.</p>
+
+<p>These notes focus on introducing programmers who are familiar with the OO paradigm to FP concepts via the ubiquitous multiparadigm language of JavaScript.  The following table functions as a summary and also an overview of the contents of these notes with links to relevant sections.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>&nbsp;</th>
+      <th><span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span></th>
+      <th><span class="glossary-term" data-term="object-oriented">Object-Oriented<span class="glossary-popup">Object-oriented languages are built around the concept of <em>objects</em> where an object captures the set of data (state) and behaviours (methods) associated with entities in the system.
+</span></span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Unit of Composition</td>
+      <td><a href="/javascript1/#functions">Functions</a></td>
+      <td><a href="javascript1#objects">Objects</a> (<a href="/javascript1/#ecmascript-6-class-syntax">classes</a>)</td>
+    </tr>
+    <tr>
+      <td>Programming Style</td>
+      <td><span class="glossary-term" data-term="declarative">Declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span></td>
+      <td><span class="glossary-term" data-term="imperative">Imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span></td>
+    </tr>
+    <tr>
+      <td>Control Flow</td>
+      <td><a href="/javascript1/#functions">Functions, recursion</a> and <a href="/functionaljavascript/#method-chaining">chaining</a></td>
+      <td><a href="/javascript1/">Loops and conditionals</a></td>
+    </tr>
+    <tr>
+      <td><a href="/javascript1/#polymorphism">Polymorphism</a></td>
+      <td><a href="/typescript1/#generic-types">Parametric</a></td>
+      <td><a href="/javascript1/#polymorphism">Sub-Typing</a></td>
+    </tr>
+    <tr>
+      <td>Data and Behaviour</td>
+      <td>Loosely coupled through <a href="/functionaljavascript/#function-purity-and-referential-transparency">pure</a>, <a href="/typescript1/#generic-types">generic</a> functions</td>
+      <td>Tightly coupled in <a href="/javascript1/#ecmascript-6-class-syntax">classes with methods</a></td>
+    </tr>
+    <tr>
+      <td>State Management</td>
+      <td>Treats objects as immutable</td>
+      <td>Favours mutation of objects through instance methods</td>
+    </tr>
+    <tr>
+      <td>Thread Safety</td>
+      <td>Pure functions easily used concurrently</td>
+      <td>Can be difficult to manage</td>
+    </tr>
+    <tr>
+      <td>Encapsulation</td>
+      <td>Less essential</td>
+      <td>Needed to protect data integrity</td>
+    </tr>
+    <tr>
+      <td>Model of Computation</td>
+      <td><a href="/lambdacalculus/"><span class="glossary-term" data-term="lambda calculus">Lambda Calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span></a></td>
+      <td><span class="glossary-term" data-term="imperative">Imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span> (von Neumann/Turing)</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="glossary">
+  <h2 id="glossary">Glossary</h2>
+
+  <p><em>Syntax</em>: The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.</p>
+
+  <p><em>Semantics</em>: The processes a computer follows when executing a program in a given language.</p>
+
+  <p><em>Imperative</em>: Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.</p>
+
+  <p><em>Procedural</em>: Procedural languages are basically <em>imperative</em> in nature, but add the concept of named <em>procedures</em>, i.e. named subroutines that may be invoked from elsewhere in the program, with parameterised variables that may be passed in.</p>
+
+  <p><em>Object-oriented</em>: Object-oriented languages are built around the concept of <em>objects</em> where an object captures the set of data (state) and behaviours (methods) associated with entities in the system.</p>
+
+  <p><em>Declarative</em>: Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.</p>
+
+  <p><em>Functional</em>: Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.</p>
+
+  <p><em>Lambda Calculus</em>: A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.</p>
+
+  <p><em>Turing Machine</em>: A model of computation based on a hypothetical machine reading or writing instructions on a tape, which decides how to proceed based on the symbols it reads from the tape.</p>
+
+  <p><em>von Neumann model</em>: A model of computation which is the basis for most modern computer architectures. Proposed by John von Neumann in 1945.</p>
+
+</div>
+
+	</div>
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+      
+      
+        
+        
+        <a id="right" href="/javascript1/">JavaScript Introduction &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+</article>
+
+      </div>
+    </main><link id="fa-stylesheet" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css">
+<footer class="site-footer h-card">
+    <data class="u-url" href="/"></data>
+
+    <div class="wrapper">
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col">
+                <!-- <p class="feed-subscribe">
+                <a href="/feed.xml">
+                    <svg class="svg-icon orange">
+                        <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+                    </svg><span>Subscribe</span>
+                </a>
+                </p> -->
+        </div>
+        <div class="footer-col">
+            <p>Examples and tutorials for various programming paradigms.</p>
+        </div>
+    </div>
+
+    <!-- <div class="social-links"><ul class="social-media-list"><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li>
+  <li>
+    <a href="/feed.xml" target="_blank" title="Subscribe to syndication feed">
+      <svg class="svg-icon grey" viewbox="0 0 16 16">
+        <path d="M12.8 16C12.8 8.978 7.022 3.2 0 3.2V0c8.777 0 16 7.223 16 16h-3.2zM2.194
+          11.61c1.21 0 2.195.985 2.195 2.196 0 1.21-.99 2.194-2.2 2.194C.98 16 0 15.017 0
+          13.806c0-1.21.983-2.195 2.194-2.195zM10.606
+          16h-3.11c0-4.113-3.383-7.497-7.496-7.497v-3.11c5.818 0 10.606 4.79 10.606 10.607z"
+        />
+      </svg>
+    </a>
+  </li>
+</ul>
+</div> -->
+
+    </div>
+
+</footer>
+
+
+
+</body></html>

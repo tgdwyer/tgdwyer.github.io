@@ -1,0 +1,607 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>State Monad | Good Times Paradigms</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="State Monad">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Learning Outcomes">
+<meta property="og:description" content="Learning Outcomes">
+<meta property="og:site_name" content="Good Times Paradigms">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-09-30T03:56:06+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="State Monad">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-30T03:56:06+00:00","datePublished":"2025-09-30T03:56:06+00:00","description":"Learning Outcomes","headline":"State <span class="glossary-term" data-term="monad">Monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span>","mainEntityOfPage":{"@type":"WebPage","@id":"/statemonad/"},"url":"/statemonad/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Good Times Paradigms"><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-159840333-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159840333-1');
+</script><!-- MathJax v3 -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true }
+  };
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+  <script src="/assets/js/spoilers.js" defer=""></script></head>
+
+  <body><header class="site-header">
+
+    <div class="wrapper"><!-- Lambda icon and site title aligned left in a flex container -->
+        <div style="display: flex; align-items: center;">
+            <button id="play-theme-song" style="background:none;border:none;cursor:pointer;vertical-align:middle;margin-right:2px;" title="Play theme song">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="currentColor" viewBox="0 0 48 24" style="vertical-align:middle;">
+                    <text x="4" y="20" font-size="20" font-family="serif">ΓΤΠ</text>
+                    <!-- γτπ -->
+                </svg>
+            </button>
+            <a class="site-title" rel="author" href="/" style="margin:0;">Good Times Paradigms</a>
+        </div>
+        <script src="/assets/js/hide_solutions.js" defer=""></script>
+        <audio id="theme-song" src="/assets/themesong.mp3"></audio>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var btn = document.getElementById('play-theme-song');
+                var audio = document.getElementById('theme-song');
+                btn.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play();
+                    } else {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                });
+            });
+        </script><nav class="site-nav">
+            <input type="checkbox" id="nav-trigger" class="nav-trigger">
+            <label for="nav-trigger">
+                <span class="menu-icon">
+                </span>
+            </label>
+
+            <div class="nav-items"><a class="page-link nav-item" href="/about/">About</a><a class="page-link nav-item" href="/">Notes on Programming Paradigms</a><!-- Radio Switch -->
+                <div id="toggle-div" style="display: none;">
+                    <div class="solutions-toggle">
+                        <p class="page-link" style="margin-bottom: 0px;">Show Solutions?</p>
+                        <label class="switch" style="vertical-align: middle;">
+                            <input type="checkbox" id="toggle-switch">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/parsercombinators/">&lt; <span class="glossary-term" data-term="parser">Parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <span class="glossary-term" data-term="combinators">Combinators<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span></a>
+      
+      
+    
+  
+</div>
+
+	<header class="post-header">
+		<h1 class="post-title">State Monad</h1>
+	</header>
+	<p id="readingTime">
+
+  
+  15
+
+ min read</p>
+	<div class="post-content">
+		<h2 id="learning-outcomes">Learning Outcomes</h2>
+
+<ul>
+  <li>Develop a <span class="glossary-term" data-term="monad">monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span> to thread an implicit state parameter through otherwise <span class="glossary-term" data-term="pure functions">pure functions<span class="glossary-popup">A function that always produces the same output for the same input and has no side effects.
+</span></span></li>
+  <li>Understand that this <span class="glossary-term" data-term="monad">monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span> is generalisable to threading any type of state through a sequence of operations</li>
+  <li>Be aware of the related libraries: <code class="language-plaintext highlighter-rouge">System.Random</code> and <code class="language-plaintext highlighter-rouge">Control.Monad.State</code>.</li>
+</ul>
+
+<h2 id="pseudo-random-number-sequences">Pseudo Random Number Sequences</h2>
+
+<p>Pseudorandom number generators create a sequence of unpredictable numbers.
+The following function generates the next element in a pseudorandom sequence from a previous seed.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">type</span> <span class="kt">Seed</span> <span class="o">=</span> <span class="kt">Int</span>
+
+<span class="n">nextSeed</span> <span class="o">::</span> <span class="kt">Seed</span> <span class="o">-&gt;</span> <span class="kt">Seed</span>
+<span class="n">nextSeed</span> <span class="n">prevSeed</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="n">prevSeed</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span> <span class="p">`</span><span class="n">mod</span><span class="p">`</span> <span class="n">m</span>
+  <span class="kr">where</span> <span class="c1">-- Parameters for linear congruential RNG.</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">1664525</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="mi">1013904223</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="mi">2</span><span class="o">^</span><span class="mi">32</span>
+</code></pre></div></div>
+
+<p>From a given seed in the pseudorandom sequence we can generate a number in a specified range.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cd">-- | Generate a number between `l` and `u`, inclusive.</span>
+<span class="n">genRand</span> <span class="o">::</span> <span class="kt">Int</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="o">-&gt;</span> <span class="kt">Seed</span> <span class="o">-&gt;</span> <span class="kt">Int</span>
+<span class="n">genRand</span> <span class="n">l</span> <span class="n">u</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span> <span class="p">`</span><span class="n">mod</span><span class="p">`</span> <span class="p">(</span><span class="n">u</span><span class="o">-</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">l</span>
+</code></pre></div></div>
+
+<p>For example:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cd">-- | Roll a six-sided die once.</span>
+<span class="c1">-- &gt;&gt;&gt; rollDie1 123</span>
+<span class="c1">-- (5,1218640798)</span>
+<span class="c1">-- &gt;&gt;&gt; rollDie1 1218640798</span>
+<span class="c1">-- (4,1868869221)</span>
+<span class="c1">-- &gt;&gt;&gt; rollDie1 1868869221</span>
+<span class="c1">-- (1,166005888)</span>
+<span class="n">rollDie1</span> <span class="o">::</span> <span class="kt">Seed</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="kt">Seed</span><span class="p">,</span> <span class="kt">Int</span><span class="p">)</span>
+<span class="n">rollDie1</span> <span class="n">s</span> <span class="o">=</span>
+  <span class="kr">let</span> <span class="n">s'</span> <span class="o">=</span> <span class="n">nextSeed</span> <span class="n">s</span>
+      <span class="n">n</span> <span class="o">=</span> <span class="n">genRand</span> <span class="mi">1</span> <span class="mi">6</span> <span class="n">s'</span>
+  <span class="kr">in</span> <span class="p">(</span><span class="n">s'</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>And if we want a sequence of dice rolls:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cd">-- | Roll a six-sided die `n` times.</span>
+<span class="c1">-- &gt;&gt;&gt; diceRolls1 3 123</span>
+<span class="c1">-- ([5,4,1],166005888)</span>
+<span class="n">diceRolls1</span> <span class="o">::</span> <span class="kt">Int</span> <span class="o">-&gt;</span> <span class="kt">Seed</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="kt">Seed</span><span class="p">,</span> <span class="p">[</span><span class="kt">Int</span><span class="p">])</span>
+<span class="n">diceRolls1</span> <span class="mi">0</span> <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="kt">[]</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+<span class="n">diceRolls1</span> <span class="n">n</span> <span class="n">s</span> <span class="o">=</span>
+  <span class="kr">let</span> <span class="p">(</span><span class="n">s'</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="o">=</span> <span class="n">rollDie1</span> <span class="n">s</span>
+      <span class="p">(</span><span class="n">s''</span><span class="p">,</span> <span class="n">rolls</span><span class="p">)</span> <span class="o">=</span> <span class="n">diceRolls1</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="n">s'</span>
+  <span class="kr">in</span> <span class="p">(</span><span class="n">s''</span><span class="p">,</span> <span class="n">r</span><span class="o">:</span><span class="n">rolls</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>But keeping track of the various seeds (<code class="language-plaintext highlighter-rouge">s</code>,<code class="language-plaintext highlighter-rouge">s'</code>,<code class="language-plaintext highlighter-rouge">s''</code>) is tedious and error prone.  Let’s invent a <span class="glossary-term" data-term="monad">monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span> which manages the seed for us.  The seed will be threaded through all of our functions implicitly in the monadic return type.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">newtype</span> <span class="kt">Rand</span> <span class="n">a</span> <span class="o">=</span> <span class="kt">Rand</span> <span class="p">{</span> <span class="n">next</span> <span class="o">::</span> <span class="kt">Seed</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="kt">Seed</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">Rand</code> is a <code class="language-plaintext highlighter-rouge">newtype</code> wrapper around a function with type <code class="language-plaintext highlighter-rouge">Seed -&gt; (Seed, a)</code>.
+It represents a computation that, given a starting Seed, produces:</p>
+
+<ol>
+  <li>A new updated <code class="language-plaintext highlighter-rouge">Seed</code>.</li>
+  <li>A value of type <code class="language-plaintext highlighter-rouge">a</code>.</li>
+</ol>
+
+<p>Here it is in pictures sloppily edited from adit.io’s excellent <a href="https://www.adit.io/posts/2013-04-17-functors,_applicatives,_and_monads_in_pictures.html"><span class="glossary-term" data-term="functors">Functors<span class="glossary-popup">A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the fmap function, which applies a function to every element in a structure.
+</span></span>, <span class="glossary-term" data-term="applicatives">Applicatives<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> and <span class="glossary-term" data-term="monads">Monads<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span> in Pictures</a>.
+<img src="/assets/images/chapterImages/randmonad/randMonad.png" alt="Rand Monad"></p>
+
+<h2 id="functor">Functor</h2>
+
+<p>Definition of <code class="language-plaintext highlighter-rouge">Functor</code>. The <code class="language-plaintext highlighter-rouge">Functor</code> instance for <code class="language-plaintext highlighter-rouge">Rand</code> allows you to map a function over the result of a random computation.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Functor</span> <span class="kt">Rand</span> <span class="kr">where</span>
+  <span class="n">fmap</span> <span class="o">::</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Rand</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Rand</span> <span class="n">b</span>
+  <span class="n">fmap</span> <span class="n">f</span> <span class="p">(</span><span class="kt">Rand</span> <span class="n">g</span><span class="p">)</span> <span class="o">=</span> <span class="kt">Rand</span> <span class="n">h</span>
+    <span class="kr">where</span>
+      <span class="c1">-- The function inside rand</span>
+      <span class="c1">-- Apply f to the `value` a</span>
+      <span class="n">h</span> <span class="n">seed</span> <span class="o">=</span> <span class="p">(</span><span class="n">newSeed</span><span class="p">,</span> <span class="n">f</span> <span class="n">a</span><span class="p">)</span>
+        <span class="kr">where</span>
+          <span class="p">(</span><span class="n">newSeed</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="o">=</span> <span class="n">g</span> <span class="n">seed</span>
+</code></pre></div></div>
+
+<p>fmap constructs a new Rand value, Rand h, by:</p>
+
+<ol>
+  <li>Taking a function <code class="language-plaintext highlighter-rouge">f</code> and a random computation <code class="language-plaintext highlighter-rouge">Rand g</code>.</li>
+  <li>Defining a new function <code class="language-plaintext highlighter-rouge">h</code> that, given an initial Seed, runs <code class="language-plaintext highlighter-rouge">g</code> to get <code class="language-plaintext highlighter-rouge">(newSeed, a)</code>.</li>
+  <li>Returning <code class="language-plaintext highlighter-rouge">(newSeed, f a)</code>, where <code class="language-plaintext highlighter-rouge">f a</code> is the transformed value.</li>
+</ol>
+
+<p>After applying <code class="language-plaintext highlighter-rouge">fmap f</code>, we have a new random computation that takes the same Seed as input and produces a transformed value <code class="language-plaintext highlighter-rouge">(f a)</code>, while maintaining the same mechanics of randomness (i.e., correctly passing and updating the Seed state).</p>
+
+<p>We can also be a bit more succinct, by making use of <code class="language-plaintext highlighter-rouge">fmap</code> instances</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fmap</span> <span class="o">::</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Rand</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Rand</span> <span class="n">b</span>
+<span class="n">fmap</span> <span class="n">f</span> <span class="n">r</span> <span class="o">=</span> <span class="kt">Rand</span> <span class="o">$</span> <span class="p">(</span><span class="n">f</span> <span class="o">&lt;$&gt;</span><span class="p">)</span><span class="o">&lt;$&gt;</span> <span class="n">next</span> <span class="n">r</span>
+</code></pre></div></div>
+
+<h2 id="applicative">Applicative</h2>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pure</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Rand</span> <span class="n">a</span>
+<span class="n">pure</span> <span class="n">x</span> <span class="o">=</span> <span class="kt">Rand</span> <span class="p">(,</span><span class="n">x</span><span class="p">)</span> <span class="c1">-- Return the input seed and the value</span>
+
+
+<span class="p">(</span><span class="o">&lt;*&gt;</span><span class="p">)</span> <span class="o">::</span> <span class="kt">Rand</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Rand</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Rand</span> <span class="n">b</span>
+<span class="n">left</span> <span class="o">&lt;*&gt;</span> <span class="n">right</span> <span class="o">=</span> <span class="kt">Rand</span> <span class="n">h</span>
+<span class="kr">where</span>
+    <span class="n">h</span> <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="n">s''</span><span class="p">,</span> <span class="n">f</span> <span class="n">v</span><span class="p">)</span> <span class="c1">-- Need to return a function of type (Seed -&gt; (Seed, Value))</span>
+    <span class="kr">where</span>
+        <span class="p">(</span><span class="n">s'</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="o">=</span> <span class="n">next</span> <span class="n">left</span> <span class="n">s</span>   <span class="c1">-- Get the next seed and function from the left Rand</span>
+        <span class="p">(</span><span class="n">s''</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">=</span> <span class="n">next</span> <span class="n">right</span> <span class="n">s'</span> <span class="c1">-- Get the next seed and value from the right Rand</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">&lt;*&gt;</code> constructs a new Rand value Rand h by:</p>
+
+<ol>
+  <li>Extracting a function <code class="language-plaintext highlighter-rouge">f</code> from the left computation using the initial seed.</li>
+  <li>Using the new seed to extract a value <code class="language-plaintext highlighter-rouge">v</code> from the right computation.</li>
+  <li>Returning a new seed and the result of applying <code class="language-plaintext highlighter-rouge">f</code> to <code class="language-plaintext highlighter-rouge">v</code>.</li>
+  <li>This allows us to apply a random function to a random value in a sequence while maintaining proper state management of the Seed.</li>
+</ol>
+
+<h2 id="monad">Monad</h2>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Monad</span> <span class="kt">Rand</span> <span class="kr">where</span>
+  <span class="p">(</span><span class="o">&gt;&gt;=</span><span class="p">)</span> <span class="o">::</span> <span class="kt">Rand</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Rand</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Rand</span> <span class="n">b</span>
+  <span class="n">r</span> <span class="o">&gt;&gt;=</span> <span class="n">f</span> <span class="o">=</span> <span class="kt">Rand</span> <span class="o">$</span> <span class="nf">\</span><span class="n">s</span> <span class="o">-&gt;</span>
+    <span class="kr">let</span> <span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="o">=</span> <span class="n">next</span> <span class="n">r</span> <span class="n">s</span>
+    <span class="kr">in</span> <span class="n">next</span> <span class="p">(</span><span class="n">f</span> <span class="n">val</span><span class="p">)</span> <span class="n">s1</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">r &gt;&gt;= f</code> creates a new Rand computation by:</p>
+
+<ol>
+  <li>Running the first computation <code class="language-plaintext highlighter-rouge">r</code> with the initial seed <code class="language-plaintext highlighter-rouge">s</code>.</li>
+  <li>Extracting the value <code class="language-plaintext highlighter-rouge">val</code> and the new seed <code class="language-plaintext highlighter-rouge">s1</code>.</li>
+  <li>Using <code class="language-plaintext highlighter-rouge">val</code> to determine the next random computation <code class="language-plaintext highlighter-rouge">f val</code>.</li>
+  <li>Running <code class="language-plaintext highlighter-rouge">f val</code> with the updated seed <code class="language-plaintext highlighter-rouge">s1</code> to produce the final result.</li>
+</ol>
+
+<p><img src="/assets/images/chapterImages/randmonad/bind.png" alt="Bind"></p>
+
+<h2 id="get-and-put"><code class="language-plaintext highlighter-rouge">Get</code> and <code class="language-plaintext highlighter-rouge">Put</code></h2>
+
+<p><code class="language-plaintext highlighter-rouge">put</code> is used to set the internal state (the <code class="language-plaintext highlighter-rouge">Seed</code>) of the <code class="language-plaintext highlighter-rouge">Rand</code> <span class="glossary-term" data-term="monad">monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span>. There is no value yet, hence we use the <span class="glossary-term" data-term="unit">unit<span class="glossary-popup">A type with exactly one value, (), used to indicate the absence of meaningful return value, similar to void in other languages.
+</span></span> (<code class="language-plaintext highlighter-rouge">()</code>)</p>
+
+<p><code class="language-plaintext highlighter-rouge">put</code> allows us to <strong>modify</strong> the internal state (Seed) of a random computation.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">put</span> <span class="o">::</span> <span class="kt">Seed</span> <span class="o">-&gt;</span> <span class="kt">Rand</span> <span class="nb">()</span>
+<span class="n">put</span> <span class="n">newSeed</span> <span class="o">=</span> <span class="kt">Rand</span> <span class="o">$</span> <span class="nf">\</span><span class="kr">_</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">newSeed</span><span class="p">,</span> <span class="nb">()</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">get</code> is used to retrieve the current state (the <code class="language-plaintext highlighter-rouge">Seed</code>) from the <code class="language-plaintext highlighter-rouge">Rand</code> <span class="glossary-term" data-term="monad">monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span>.
+It <strong>does not modify</strong> the state but instead returns the current seed as the result. This is achieved by putting the current seed in to the value part of the tuple.</p>
+
+<p>Since, when we apply transformation on the tuple, we apply the transformation according to the value!</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">get</span> <span class="o">::</span> <span class="kt">Rand</span> <span class="kt">Seed</span>
+<span class="n">get</span> <span class="o">=</span> <span class="kt">Rand</span> <span class="o">$</span> <span class="nf">\</span><span class="n">s</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Using <code class="language-plaintext highlighter-rouge">get</code> and the <span class="glossary-term" data-term="monad">monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span> instance, we can make a function to increase the seed by one.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">incrementSeed'</span> <span class="o">::</span> <span class="kt">Rand</span> <span class="kt">Seed</span>
+<span class="n">incrementSeed'</span> <span class="o">=</span> <span class="n">get</span> <span class="o">&gt;&gt;=</span> <span class="nf">\</span><span class="n">s</span> <span class="o">-&gt;</span> <span class="n">pure</span> <span class="p">(</span><span class="n">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">incrementSeed</span> <span class="o">::</span> <span class="kt">Rand</span> <span class="kt">Seed</span>
+<span class="n">incrementSeed</span> <span class="o">=</span> <span class="kr">do</span>
+  <span class="n">seed</span> <span class="o">&lt;-</span> <span class="n">get</span>  <span class="c1">-- This gets the current seed</span>
+  <span class="n">return</span> <span class="p">(</span><span class="n">seed</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1">-- Increment the seed and put it in the 'state', we can do anything with the seed!</span>
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> next incrementSeed<span class="s1">' 123
+(123, 124)
+</span></code></pre></div></div>
+
+<h2 id="modifying-a-seed">Modifying a seed</h2>
+
+<p>We want to modify the seed, assuming there is no value. This will simply apply a function <code class="language-plaintext highlighter-rouge">f</code> to the current seed.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">modify</span> <span class="o">::</span> <span class="p">(</span><span class="kt">Seed</span> <span class="o">-&gt;</span> <span class="kt">Seed</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Rand</span> <span class="nb">()</span>
+<span class="n">modify</span> <span class="n">f</span> <span class="o">=</span> <span class="kt">Rand</span> <span class="o">$</span> <span class="nf">\</span><span class="n">s</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">f</span> <span class="n">s</span><span class="p">,</span> <span class="nb">()</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>We can also write this using our <code class="language-plaintext highlighter-rouge">get</code> and <code class="language-plaintext highlighter-rouge">put</code></p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">modify</span> <span class="o">::</span> <span class="p">(</span><span class="kt">Seed</span> <span class="o">-&gt;</span> <span class="kt">Seed</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Rand</span> <span class="nb">()</span>
+<span class="n">modify</span> <span class="n">f</span> <span class="o">=</span> <span class="n">get</span> <span class="o">&gt;&gt;=</span> <span class="nf">\</span><span class="n">s</span> <span class="o">-&gt;</span> <span class="n">put</span> <span class="p">(</span><span class="n">f</span> <span class="n">s</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This function:</p>
+
+<ol>
+  <li>First retrieves the current seed (<code class="language-plaintext highlighter-rouge">get</code>).</li>
+  <li>Applies the function <code class="language-plaintext highlighter-rouge">f</code> to modify the seed.</li>
+  <li>Updates the internal state with <code class="language-plaintext highlighter-rouge">put</code>.</li>
+</ol>
+
+<p>This computation returns () as its result, indicating that its purpose is to update the state, not to produce a value.</p>
+
+<p>We can now write our <code class="language-plaintext highlighter-rouge">incrementSeed</code> in terms of modify</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">incrementSeed</span> <span class="o">::</span> <span class="kt">Rand</span> <span class="kt">Seed</span>
+<span class="n">incrementSeed</span> <span class="o">=</span> <span class="kr">do</span>
+  <span class="n">modify</span> <span class="p">(</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>   <span class="c1">-- Use `modify` to increment the seed by 1</span>
+  <span class="n">get</span>           <span class="c1">-- Return the updated seed</span>
+</code></pre></div></div>
+
+<h2 id="rolling-a-dice">Rolling A Dice</h2>
+
+<p>Let’s revisit the dice rolling example, but use the <code class="language-plaintext highlighter-rouge">Rand</code> <span class="glossary-term" data-term="monad">monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span> to thread the seed through all of our functions without us having to pass it around as a separate parameter.  First recall our <code class="language-plaintext highlighter-rouge">nextSeed</code> and <code class="language-plaintext highlighter-rouge">genRand</code> functions:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">nextSeed</span> <span class="o">::</span> <span class="kt">Seed</span> <span class="o">-&gt;</span> <span class="kt">Seed</span>
+<span class="n">nextSeed</span> <span class="n">prevSeed</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="n">prevSeed</span> <span class="o">+</span> <span class="n">c</span><span class="p">)</span> <span class="p">`</span><span class="n">mod</span><span class="p">`</span> <span class="n">m</span>
+  <span class="kr">where</span> <span class="c1">-- Parameters for linear congruential RNG.</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">1664525</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="mi">1013904223</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="mi">2</span><span class="o">^</span><span class="mi">32</span>
+
+<span class="cd">-- | Generate a number between `l` and `u`.</span>
+<span class="n">genRand</span> <span class="o">::</span> <span class="kt">Int</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="o">-&gt;</span> <span class="kt">Seed</span> <span class="o">-&gt;</span> <span class="kt">Int</span>
+<span class="n">genRand</span> <span class="n">l</span> <span class="n">u</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span> <span class="p">`</span><span class="n">mod</span><span class="p">`</span> <span class="p">(</span><span class="n">u</span><span class="o">-</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">l</span>
+</code></pre></div></div>
+
+<p>Using the above two functions and our knowledge, we can make a function which rolls a dice. This will require 3 parts.</p>
+
+<ol>
+  <li>Using <code class="language-plaintext highlighter-rouge">nextSeed</code> to update the current seed</li>
+  <li>Get the seed from the state</li>
+  <li>Call <code class="language-plaintext highlighter-rouge">genRand</code> to get the integer.</li>
+</ol>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rollDie</span> <span class="o">::</span> <span class="kt">Rand</span> <span class="kt">Int</span>
+<span class="n">rollDie</span> <span class="o">=</span> <span class="kr">do</span>
+  <span class="n">modify</span> <span class="n">nextSeed</span> <span class="c1">-- update the current seed</span>
+  <span class="n">s</span> <span class="o">&lt;-</span> <span class="n">get</span> <span class="c1">-- get retrieves the updated seed value s from the Rand monad's state.</span>
+  <span class="n">pure</span> <span class="p">(</span><span class="n">genRand</span> <span class="mi">1</span> <span class="mi">6</span> <span class="n">s</span><span class="p">)</span> <span class="c1">-- computes a random number and puts back in the context</span>
+</code></pre></div></div>
+
+<p>We can also write this using <span class="glossary-term" data-term="bind">bind<span class="glossary-popup">The defining function which all monads must implement.
+</span></span> notation, where we <code class="language-plaintext highlighter-rouge">modify nextSeed</code> to update the seed. We then use <code class="language-plaintext highlighter-rouge">&gt;&gt;</code> to ignore the result (i.e., the <code class="language-plaintext highlighter-rouge">()</code>). We use get to put the seed as the value, which is then binded on to <code class="language-plaintext highlighter-rouge">s</code> and used to generate a random number. We then use pure to update the value, the seed updating is handled by our <span class="glossary-term" data-term="bind">bind<span class="glossary-popup">The defining function which all monads must implement.
+</span></span>!</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rollDie</span> <span class="o">::</span> <span class="kt">Rand</span> <span class="kt">Int</span>
+<span class="n">rollDie</span> <span class="o">=</span> <span class="n">modify</span> <span class="n">nextSeed</span> <span class="o">&gt;&gt;</span> <span class="n">get</span> <span class="o">&gt;&gt;=</span> <span class="nf">\</span><span class="n">s</span> <span class="o">-&gt;</span> <span class="n">pure</span> <span class="p">(</span><span class="n">genRand</span> <span class="mi">1</span> <span class="mi">6</span> <span class="n">s</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Finally, how we can use this?</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> next rollDie 123
+<span class="o">(</span>1218640798,5<span class="o">)</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">next</code> is used on <code class="language-plaintext highlighter-rouge">rollDie</code> to get the function of type <code class="language-plaintext highlighter-rouge">Seed -&gt; (Seed, a)</code>. We then call this function with a seed value of <code class="language-plaintext highlighter-rouge">123</code>, to get a new seed and a dice roll.</p>
+
+<p>Now, here’s how we get a list of dice rolls using a direct adaptation of our previous code, but trusting the <code class="language-plaintext highlighter-rouge">Rand</code> <span class="glossary-term" data-term="monad">monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span> to thread the <code class="language-plaintext highlighter-rouge">Seed</code> through for us.  No more messy wiring up of parameters and inventing arbitrary variable names.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cd">-- | Roll a six-sided die `n` times.</span>
+<span class="c1">-- &gt;&gt;&gt; runState (diceRolls 3) 123</span>
+<span class="c1">-- ([5,4,1],166005888)</span>
+<span class="n">diceRolls</span> <span class="o">::</span> <span class="kt">Int</span> <span class="o">-&gt;</span> <span class="kt">Rand</span> <span class="p">[</span><span class="kt">Int</span><span class="p">]</span>
+<span class="n">diceRolls</span> <span class="mi">0</span> <span class="o">=</span> <span class="n">pure</span> <span class="kt">[]</span>
+<span class="n">diceRolls</span> <span class="n">n</span> <span class="o">=</span> <span class="kr">do</span>
+  <span class="n">r</span> <span class="o">&lt;-</span> <span class="n">rollDie</span>
+  <span class="n">rest</span> <span class="o">&lt;-</span> <span class="n">diceRolls</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+  <span class="n">pure</span> <span class="p">(</span><span class="n">r</span><span class="o">:</span><span class="n">rest</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="state-monad">State Monad</h2>
+
+<p>Of course, Haskell libraries are extensive, and if you can think of useful code that’s generalisable, there’s probably a version of it already in the libraries somewhere.</p>
+
+<p>Actually, we’ll use two libraries.</p>
+
+<p>From <code class="language-plaintext highlighter-rouge">System.Random</code>, we’ll replace our <code class="language-plaintext highlighter-rouge">Seed</code> type with <code class="language-plaintext highlighter-rouge">StdGen</code> and <code class="language-plaintext highlighter-rouge">nextSeed</code>/<code class="language-plaintext highlighter-rouge">genRand</code> with <code class="language-plaintext highlighter-rouge">randomR</code>.</p>
+
+<p>We’ll use <code class="language-plaintext highlighter-rouge">Control.Monad.State</code> to replace our <code class="language-plaintext highlighter-rouge">Rand</code> <span class="glossary-term" data-term="monad">monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span>. The <code class="language-plaintext highlighter-rouge">State</code> <span class="glossary-term" data-term="monad">monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span> provides a context in-which data can be threaded through function calls without additional parameters. Similar to our <code class="language-plaintext highlighter-rouge">Rand</code> <span class="glossary-term" data-term="monad">monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span> the data can be accessed with a <code class="language-plaintext highlighter-rouge">get</code> function, replaced with <code class="language-plaintext highlighter-rouge">put</code>, or updated with <code class="language-plaintext highlighter-rouge">modify</code>.</p>
+
+<p>In <code class="language-plaintext highlighter-rouge">diceRolls</code>, we’ll also replace the recursive list construction, with <code class="language-plaintext highlighter-rouge">replicateM</code>, which just runs a function with a monadic effect <code class="language-plaintext highlighter-rouge">n</code> times, placing the results in a list.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">module</span> <span class="nn">StateDie</span>
+<span class="kr">where</span>
+
+<span class="kr">import</span> <span class="nn">System.Random</span>
+<span class="kr">import</span> <span class="nn">Control.Monad.State</span>
+
+<span class="cd">-- | Here's a starting seed for our tests.</span>
+<span class="c1">-- In System.Random seeds have type StdGen.</span>
+<span class="n">seed</span> <span class="o">::</span> <span class="kt">StdGen</span>
+<span class="n">seed</span> <span class="o">=</span> <span class="n">mkStdGen</span> <span class="mi">123</span>
+
+<span class="cd">-- | Remake the Rand monad, but using the State monad to store the seed</span>
+<span class="kr">type</span> <span class="kt">Rand</span> <span class="n">a</span> <span class="o">=</span> <span class="kt">State</span> <span class="kt">StdGen</span> <span class="n">a</span>
+
+<span class="cd">-- | A function that simulates rolling a six-sided dice</span>
+<span class="c1">-- &gt;&gt;&gt; runState rollDie seed</span>
+<span class="c1">-- (1,StdGen ...)</span>
+<span class="n">rollDie</span> <span class="o">::</span> <span class="kt">Rand</span> <span class="kt">Int</span>
+<span class="n">rollDie</span> <span class="o">=</span> <span class="n">state</span> <span class="p">(</span><span class="n">randomR</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+
+<span class="cd">-- | Roll a six-sided die `n` times.</span>
+<span class="c1">-- &gt;&gt;&gt; runState (diceRolls 3) seed</span>
+<span class="c1">-- ([1,5,6],StdGen ...)</span>
+<span class="n">diceRolls</span> <span class="o">::</span> <span class="kt">Int</span> <span class="o">-&gt;</span> <span class="kt">Rand</span> <span class="p">[</span><span class="kt">Int</span><span class="p">]</span>
+<span class="n">diceRolls</span> <span class="n">n</span> <span class="o">=</span> <span class="n">replicateM</span> <span class="n">n</span> <span class="n">rollDie</span>
+</code></pre></div></div>
+
+<p>As you can see, there is now very little custom code required for this functionality. Note that there is also a readonly version of the <code class="language-plaintext highlighter-rouge">State</code> <span class="glossary-term" data-term="monad">monad<span class="glossary-popup">A type class in Haskell that represents computations as a series of steps. It provides the bind operation (»=) to chain operations and the return (or pure) function to inject values into the monadic context.
+</span></span>, called <code class="language-plaintext highlighter-rouge">Reader</code>, as well as a write-only version (e.g. for tasks like logging) called <code class="language-plaintext highlighter-rouge">Writer</code>.</p>
+
+	</div>
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/parsercombinators/">&lt; <span class="glossary-term" data-term="parser">Parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <span class="glossary-term" data-term="combinators">Combinators<span class="glossary-popup">A higher-order function that uses only function application and earlier defined combinators to define a result from its arguments.
+</span></span></a>
+      
+      
+    
+  
+</div>
+
+</article>
+
+      </div>
+    </main><link id="fa-stylesheet" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css">
+<footer class="site-footer h-card">
+    <data class="u-url" href="/"></data>
+
+    <div class="wrapper">
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col">
+                <!-- <p class="feed-subscribe">
+                <a href="/feed.xml">
+                    <svg class="svg-icon orange">
+                        <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+                    </svg><span>Subscribe</span>
+                </a>
+                </p> -->
+        </div>
+        <div class="footer-col">
+            <p>Examples and tutorials for various programming paradigms.</p>
+        </div>
+    </div>
+
+    <!-- <div class="social-links"><ul class="social-media-list"><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li>
+  <li>
+    <a href="/feed.xml" target="_blank" title="Subscribe to syndication feed">
+      <svg class="svg-icon grey" viewbox="0 0 16 16">
+        <path d="M12.8 16C12.8 8.978 7.022 3.2 0 3.2V0c8.777 0 16 7.223 16 16h-3.2zM2.194
+          11.61c1.21 0 2.195.985 2.195 2.196 0 1.21-.99 2.194-2.2 2.194C.98 16 0 15.017 0
+          13.806c0-1.21.983-2.195 2.194-2.195zM10.606
+          16h-3.11c0-4.113-3.383-7.497-7.496-7.497v-3.11c5.818 0 10.606 4.79 10.606 10.607z"
+        />
+      </svg>
+    </a>
+  </li>
+</ul>
+</div> -->
+
+    </div>
+
+</footer>
+
+
+
+</body></html>

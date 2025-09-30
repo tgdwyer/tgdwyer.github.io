@@ -1,0 +1,508 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>From JavaScript to Haskell (via PureScript) | Good Times Paradigms</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="From JavaScript to Haskell (via PureScript)">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Learning Outcomes">
+<meta property="og:description" content="Learning Outcomes">
+<meta property="og:site_name" content="Good Times Paradigms">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-09-30T03:56:06+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="From JavaScript to Haskell (via PureScript)">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-30T03:56:06+00:00","datePublished":"2025-09-30T03:56:06+00:00","description":"Learning Outcomes","headline":"From JavaScript to Haskell (via PureScript)","mainEntityOfPage":{"@type":"WebPage","@id":"/purescript/"},"url":"/purescript/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Good Times Paradigms"><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-159840333-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159840333-1');
+</script><!-- MathJax v3 -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true }
+  };
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+  <script src="/assets/js/spoilers.js" defer=""></script></head>
+
+  <body><header class="site-header">
+
+    <div class="wrapper"><!-- Lambda icon and site title aligned left in a flex container -->
+        <div style="display: flex; align-items: center;">
+            <button id="play-theme-song" style="background:none;border:none;cursor:pointer;vertical-align:middle;margin-right:2px;" title="Play theme song">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="currentColor" viewBox="0 0 48 24" style="vertical-align:middle;">
+                    <text x="4" y="20" font-size="20" font-family="serif">ΓΤΠ</text>
+                    <!-- γτπ -->
+                </svg>
+            </button>
+            <a class="site-title" rel="author" href="/" style="margin:0;">Good Times Paradigms</a>
+        </div>
+        <script src="/assets/js/hide_solutions.js" defer=""></script>
+        <audio id="theme-song" src="/assets/themesong.mp3"></audio>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var btn = document.getElementById('play-theme-song');
+                var audio = document.getElementById('theme-song');
+                btn.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play();
+                    } else {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                });
+            });
+        </script><nav class="site-nav">
+            <input type="checkbox" id="nav-trigger" class="nav-trigger">
+            <label for="nav-trigger">
+                <span class="menu-icon">
+                </span>
+            </label>
+
+            <div class="nav-items"><a class="page-link nav-item" href="/about/">About</a><a class="page-link nav-item" href="/">Notes on Programming Paradigms</a><!-- Radio Switch -->
+                <div id="toggle-div" style="display: none;">
+                    <div class="solutions-toggle">
+                        <p class="page-link" style="margin-bottom: 0px;">Show Solutions?</p>
+                        <label class="switch" style="vertical-align: middle;">
+                            <input type="checkbox" id="toggle-switch">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/lambdacalculus/">&lt; <span class="glossary-term" data-term="lambda calculus">Lambda Calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span></a>
+      
+      
+        
+        
+        <a id="right" href="/haskell0/">Haskell Installation &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+	<header class="post-header">
+		<h1 class="post-title">From JavaScript to Haskell (via PureScript)</h1>
+	</header>
+	<p id="readingTime">
+
+  
+  15
+
+ min read</p>
+	<div class="post-content">
+		<h2 id="learning-outcomes">Learning Outcomes</h2>
+
+<ul>
+  <li>Compare a lambda-calculus inspired-Haskell-like language (PureScript) with the <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming concepts explored earlier in JavaScript</li>
+  <li>Understand how <span class="glossary-term" data-term="tail call optimisation">tail call optimisation<span class="glossary-popup">A compiler feature that optimises tail-recursive functions to prevent additional stack frames from being created, effectively converting recursion into iteration.
+</span></span> is applied in languages which support it</li>
+</ul>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>JavaScript is a multiparadigm language that—due to its support for functions as objects, <span class="glossary-term" data-term="closures">closures<span class="glossary-popup">A function and the set of variables it accesses from its enclosing scope.
+</span></span> and, therefore, <span class="glossary-term" data-term="higher-order functions">higher-order functions<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span>—is able to be used in a <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming style.  However, if you are really enamoured with <span class="glossary-term" data-term="currying">currying<span class="glossary-popup">The process of transforming a function that takes multiple arguments into a sequence of functions that each take a single argument.
+</span></span> and combining <span class="glossary-term" data-term="higher-order functions">higher-order functions<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span>, then it really makes a lot of sense to use a language that is actually designed for it.</p>
+
+<p>There are a number of purpose-built <span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> Programming languages.  Lisp (as we have already discussed) is the original, but there are many others.  <a href="https://www.scheme.com/tspl4/">Scheme</a> is a Lisp derivative, as is (more recently) <a href="https://clojure.org/">Clojure</a>.  SML and its derivatives (e.g. <a href="https://ocaml.org/">OCaml</a>, <a href="https://fsharp.org/">F#</a>, etc.) form another family of <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming languages.  However, the strongest effort to build a language that holds to the principles of lambda-calculus-inspired <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming such as immutability (purity) is the Haskell family.</p>
+
+<p>There are a number of efforts to bring Haskell-like purity to web programming, inspired by the potential benefits the <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> style holds for managing complex state in <span class="glossary-term" data-term="asynchronous">asynchronous<span class="glossary-popup">Operations that occur independently of the main program flow, allowing the program to continue executing while waiting for the operation to complete.
+</span></span> and distributed applications.  Firstly, it is possible to compile Haskell code directly to JavaScript (using <a href="https://github.com/ghcjs/ghcjs">GHCJS</a>) although the generated code is opaque and requires a runtime.  Another promising and increasingly popular Haskell-inspired language for client-side web development is <a href="https://elm-lang.org/">Elm</a>, although this again requires a runtime.  Also, Elm is rather specialised for creating interactive web apps.</p>
+
+<p>The JavaScript-targeting Haskell derivative we are going to look at now is <a href="https://www.purescript.org/">PureScript</a>.  The reason for this choice is that PureScript generates standalone and surprisingly readable JavaScript.  For a full introduction to the language, <a href="https://leanpub.com/purescript/read">the PureScript Book</a>, written by the language’s creator, is available for free.  However, in this unit we will only make a brief foray into PureScript as a segue from JavaScript to Haskell.  To avoid overwhelming ourselves with minor syntactic differences we will also endeavour to stick to a subset of PureScript that is syntactically the same as Haskell.</p>
+
+<h2 id="hello-functional-language">Hello Functional Language</h2>
+
+<p>Without further ado, here is some PureScript code.  Fibonacci number computation is often called the “hello world!” of <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fibs</span> <span class="o">::</span> <span class="kt">Int</span> <span class="o">-&gt;</span> <span class="kt">Int</span>
+<span class="n">fibs</span> <span class="mi">0</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">fibs</span> <span class="mi">1</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">fibs</span> <span class="n">n</span> <span class="o">=</span> <span class="n">fibs</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fibs</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Woah!  A function for Fibonacci numbers that is about as minimal as you can get!  And the top line, which just declares the type of the function, is often optional—depending on whether the compiler can infer it from the context.  Having said that, it’s good practice to include a type declaration, especially for top-level functions (functions defined without indentation and therefore in-scope everywhere in the file).  This function takes an <code class="language-plaintext highlighter-rouge">Int</code> (integer) parameter and returns an <code class="language-plaintext highlighter-rouge">Int</code>.  Note that the arrow shorthand for the function type definition is highly reminiscent of the JavaScript fat-arrow (<code class="language-plaintext highlighter-rouge">=&gt;</code>) though skinnier.</p>
+
+<p>The next three lines define the actual logic of the function, which very simply gives a recursive definition for the <code class="language-plaintext highlighter-rouge">n</code>th Fibonacci number.  This definition uses a feature common to many <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming languages: <em><span class="glossary-term" data-term="pattern matching">pattern matching<span class="glossary-popup">A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
+</span></span></em>.  That is, we define the <code class="language-plaintext highlighter-rouge">fibs</code> function three times, with the first two definitions handling the base cases.  It says, literally: “the 0th and 1st fibs are both 1”.  The last line defines the general case, that the remaining Fibonacci numbers are each the sum of their two predecessors.  Note, this definition is not perfect.  Calling:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fibs</span> <span class="o">-</span><span class="mi">1</span>
+</code></pre></div></div>
+
+<p>would be a bad idea.  Good practice would be to add some exceptions for incorrect input to our function.  In a perfect world we would have a compiler that would check types dependent on values (actually, languages that support dependent types exist, e.g. the <a href="https://www.idris-lang.org/">Idris</a> language is an interesting possible successor to Haskell in this space).</p>
+
+<p>Python3.10+ has taken inspiration from this pattern, and has its own alternative to <span class="glossary-term" data-term="pattern matching">pattern matching<span class="glossary-popup">A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
+</span></span>, with a slightly more verbose <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span>. This is semantically identical to the PureScript definition, where we use <span class="glossary-term" data-term="pattern matching">pattern matching<span class="glossary-popup">A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
+</span></span> against the inputs. For completeness, all functions should aim to provide the type definition, similar to what we did in the PureScript example.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fibs</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">match</span> <span class="n">n</span><span class="p">:</span>
+        <span class="k">case</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">case</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nf">fibs</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nf">fibs</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="nf">fibs</span><span class="p">(</span><span class="mi">12</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>One thing you will have noticed by now is that Haskell-like languages are light on <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span>: this is obvious when compared next to the Python alternative.  Especially, use of brackets is minimal, and typically to be avoided when evaluation order can be inferred correctly by the compiler’s application of lambda-calculus-inspired precedence rules for function and operator application.</p>
+
+<p>We can define a <code class="language-plaintext highlighter-rouge">main</code> function for our program, that maps the <code class="language-plaintext highlighter-rouge">fibs</code> function to a (<code class="language-plaintext highlighter-rouge">Nil</code>-terminated) linked-list of numbers and displays them to the console like so:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">main</span> <span class="o">=</span> <span class="n">log</span> <span class="o">$</span> <span class="n">show</span> <span class="o">$</span> <span class="n">map</span> <span class="n">fibs</span> <span class="o">$</span> <span class="mi">1</span><span class="o">..</span><span class="mi">10</span>
+</code></pre></div></div>
+
+<p>and here’s the output when you run it from the command line:</p>
+
+<blockquote>
+  <p>(1 : 2 : 3 : 5 : 8 : 13 : 21 : 34 : 55 : 89 : Nil)</p>
+</blockquote>
+
+<p>I’m omitting the type declaration for <code class="language-plaintext highlighter-rouge">main</code> because the type for functions that have input-output <span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span> is a little more complicated, differs from Haskell—and the compiler doesn’t strictly need it yet anyway.</p>
+
+<p>The above definition for <code class="language-plaintext highlighter-rouge">main</code> is a chain of functions and the order of evaluation (and hence how you should read it) is right-to-left.  The <code class="language-plaintext highlighter-rouge">$</code> symbol is actually shorthand for brackets around everything to the symbol’s right.  In other words, the above definition for <code class="language-plaintext highlighter-rouge">main</code> is equivalent to:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">main</span> <span class="o">=</span> <span class="n">log</span> <span class="p">(</span> <span class="n">show</span> <span class="p">(</span> <span class="n">map</span> <span class="n">fibs</span> <span class="p">(</span> <span class="mi">1</span><span class="o">..</span><span class="mi">10</span> <span class="p">)))</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">$</code> is not special <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> (i.e. it is not a keyword in the language definition).  Rather, it is an operator defined in the PureScript Prelude like so:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">infixr</span> <span class="mi">0</span> <span class="n">apply</span> <span class="n">as</span> <span class="o">$</span>
+</code></pre></div></div>
+
+<p>That is, <code class="language-plaintext highlighter-rouge">$</code> is an infix, right-associative operator with binding precedence 0 (the lowest) that invokes the apply function:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">apply</span> <span class="n">f</span> <span class="n">x</span> <span class="o">=</span> <span class="n">f</span> <span class="n">x</span>
+</code></pre></div></div>
+
+<p>Woah!  What is <code class="language-plaintext highlighter-rouge">f</code> and what is <code class="language-plaintext highlighter-rouge">x</code>?  Well, in PureScript functions are generic by default—but we (and the compiler) can infer, since <code class="language-plaintext highlighter-rouge">f x</code>  is a function call with argument <code class="language-plaintext highlighter-rouge">x</code>, that <code class="language-plaintext highlighter-rouge">f</code> is a function and <code class="language-plaintext highlighter-rouge">x</code> is… anything.  So <code class="language-plaintext highlighter-rouge">apply</code> literally applies the function <code class="language-plaintext highlighter-rouge">f</code> to the argument <code class="language-plaintext highlighter-rouge">x</code>.  Since the binding precedence of the <code class="language-plaintext highlighter-rouge">$</code> operator is so low compared to most things that could be placed to its right, brackets are (usually) unnecessary.</p>
+
+<hr>
+
+<h3 id="exercise">Exercise</h3>
+
+<ul>
+  <li>If one didn’t happen to like the fact that function chaining with the <code class="language-plaintext highlighter-rouge">$</code> operator reads right to left, how would one go about creating an operator that chains left to right?  (Hint: <code class="language-plaintext highlighter-rouge">infixl</code> is a thing and you will need to make a slightly different <code class="language-plaintext highlighter-rouge">apply</code> function also).</li>
+</ul>
+
+<hr>
+
+<p>So anyway, back to the chain of functions in <code class="language-plaintext highlighter-rouge">main</code>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">main</span> <span class="o">=</span> <span class="n">log</span> <span class="o">$</span> <span class="n">show</span> <span class="o">$</span> <span class="n">map</span> <span class="n">fibs</span> <span class="o">$</span> <span class="mi">1</span><span class="o">..</span><span class="mi">10</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">log</code> is a function that wraps JavaScript’s <code class="language-plaintext highlighter-rouge">console.log</code>
+<code class="language-plaintext highlighter-rouge">show</code> is a function that is overloaded to convert various types to strings.  In this case, we’ll be showing a <code class="language-plaintext highlighter-rouge">List</code> of <code class="language-plaintext highlighter-rouge">Int</code>.
+<code class="language-plaintext highlighter-rouge">map</code> is (equivalent to our old friend from our JavaScript exercises) a function that applies a function to stuff inside a… let’s call it a container for now… in this case our container is a <code class="language-plaintext highlighter-rouge">List</code>.
+<code class="language-plaintext highlighter-rouge">1..10</code> uses the <code class="language-plaintext highlighter-rouge">..</code> (range) infix operator to create a List of Int between 1 and 10.</p>
+
+<h2 id="peeking-under-the-hood">Peeking under the hood</h2>
+
+<p>So all this may seem pretty foreign, but actually, since we’ve already covered many of the <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming fundamentals in JavaScript, let’s take a look at the JavaScript code that the PureScript compiler generates for <code class="language-plaintext highlighter-rouge">fibs</code> and <code class="language-plaintext highlighter-rouge">main</code> and see if anything looks familiar.  Here’s <code class="language-plaintext highlighter-rouge">fibs</code>, exactly as it comes out of the compiler:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">fibs</span> <span class="o">=</span> <span class="nf">function </span><span class="p">(</span><span class="nx">v</span><span class="p">)</span> <span class="p">{</span>
+   <span class="k">if </span><span class="p">(</span><span class="nx">v</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+       <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+   <span class="p">};</span>
+   <span class="k">if </span><span class="p">(</span><span class="nx">v</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+       <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+   <span class="p">};</span>
+   <span class="k">return</span> <span class="nf">fibs</span><span class="p">(</span><span class="nx">v</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="nf">fibs</span><span class="p">(</span><span class="nx">v</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">|</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>Woah!  It’s pretty much the way a savvy JavaScript programmer would write it.  The one part that may look a bit unusual are the expressions like <code class="language-plaintext highlighter-rouge">v - 1 | 0</code>.  Of course, JavaScript has no <code class="language-plaintext highlighter-rouge">Int</code> type, so this is PureScript trying to sensibly convert to the all-purpose JavaScript <code class="language-plaintext highlighter-rouge">number</code> type.  The <code class="language-plaintext highlighter-rouge">|</code> is a bitwise OR, so <code class="language-plaintext highlighter-rouge">|0</code> ensures that the resulting expression is an integer, which is both <a href="https://stackoverflow.com/questions/44778826/why-does-the-purescript-compiler-generate-lots-of-0">a safety measure and a potential optimisation</a>.  It’s a situation where the declared types give the PureScript compiler more information about the intent of the code than would otherwise be present in JavaScript, and which it’s able to use to good effect.</p>
+
+<p>At first glance, the code generated for <code class="language-plaintext highlighter-rouge">main</code> is a bit denser.  Here it is, again as generated by the compiler but I’ve inserted some line breaks so we can see it a little more clearly:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">main</span> <span class="o">=</span> <span class="nx">Control_Monad_Eff_Console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span>
+  <span class="nx">Data_Show</span><span class="p">.</span><span class="nf">show</span><span class="p">(</span>
+    <span class="nx">Data_List_Types</span><span class="p">.</span><span class="nf">showList</span><span class="p">(</span><span class="nx">Data_Show</span><span class="p">.</span><span class="nx">showInt</span><span class="p">)</span>
+  <span class="p">)(</span>
+    <span class="nx">Data_Functor</span><span class="p">.</span><span class="nx">map</span>
+     <span class="p">(</span><span class="nx">Data_List_Types</span><span class="p">.</span><span class="nx">functorList</span><span class="p">)(</span><span class="nx">fibs</span><span class="p">)(</span><span class="nx">Data_List</span><span class="p">.</span><span class="nf">range</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="mi">10</span><span class="p">))</span>
+  <span class="p">)</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<p>Each of the functions lives in an object that encapsulates the module where it is defined.  That’s pretty standard JavaScript practice.  The rest is just function calls (application).  The call to the range function is interesting:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">Data_List</span><span class="p">.</span><span class="nf">range</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Woah! It’s a curried function!  <code class="language-plaintext highlighter-rouge">Data_List.range(1)</code> returns a function that creates lists of numbers starting from 1.  The second call specifies the upper bound.</p>
+
+<hr>
+
+<h3 id="exercise-1">Exercise</h3>
+
+<ul>
+  <li>What other functions called in the JavaScript code generated for the above definition of <code class="language-plaintext highlighter-rouge">main</code> are curried?  Why?</li>
+</ul>
+
+<hr>
+
+<h2 id="tail-call-optimisation">Tail Call Optimisation</h2>
+
+<p>Our definition for <code class="language-plaintext highlighter-rouge">fibs</code> was recursive.  This has a nice <span class="glossary-term" data-term="declarative">declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span> style about it.  The definition is very close to a mathematical definition.  But at some point in your training for <span class="glossary-term" data-term="imperative">imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span> programming, you will have most likely been told that recursion is evil and inefficient.  Indeed, we’ve seen at the start of this course that there is overhead due to creating new stack frames for each function call.  Looping recursively creates a new stack frame for each iteration and so our (finite) stack memory will be consumed linearly with the number of iterations.  However, there are certain patterns of recursive function calls that our compiler can easily recognise and replace with an iterative loop.  We can see this happening directly in PureScript if we reconfigure our <code class="language-plaintext highlighter-rouge">fibs</code> definition to use a tail call.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">fibs</span> <span class="n">n</span> <span class="o">=</span> <span class="n">f</span> <span class="n">n</span> <span class="mi">0</span> <span class="mi">1</span>
+  <span class="kr">where</span>
+    <span class="n">f</span> <span class="mi">0</span> <span class="kr">_</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+    <span class="n">f</span> <span class="n">i</span> <span class="n">a</span> <span class="n">b</span> <span class="o">=</span> <span class="n">f</span> <span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="n">b</span> <span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>In general, as we have seen with <code class="language-plaintext highlighter-rouge">$</code>, PureScript (and Haskell) have relatively few keywords, instead preferring functions and operators built with the language itself in the Prelude (the base library functions that are available by default).  The <code class="language-plaintext highlighter-rouge">where</code> keyword, however, is one of the exceptions.  It allows us to make some local definitions inside the scope of the function.  Here we define <code class="language-plaintext highlighter-rouge">f</code> whose first parameter is an iteration counter, whose base case is <code class="language-plaintext highlighter-rouge">0</code>.  The key feature of <code class="language-plaintext highlighter-rouge">f</code> is that its recursive call is the very last thing to happen in the function body.  That is, it is in the tail position.</p>
+
+<p>The other important aspect of PureScript that we are encountering for the first time in the above definition is that indentation is used to determine scope (as in Python).</p>
+
+<p>Here’s the JavaScript that is generated this time:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">fibs</span> <span class="o">=</span> <span class="nf">function </span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+   <span class="kd">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="nf">function </span><span class="p">(</span><span class="nx">$copy_v</span><span class="p">)</span> <span class="p">{</span>
+       <span class="k">return</span> <span class="nf">function </span><span class="p">(</span><span class="nx">$copy_v1</span><span class="p">)</span> <span class="p">{</span>
+           <span class="k">return</span> <span class="nf">function </span><span class="p">(</span><span class="nx">$copy_b</span><span class="p">)</span> <span class="p">{</span>
+               <span class="kd">var</span> <span class="nx">$tco_var_v</span> <span class="o">=</span> <span class="nx">$copy_v</span><span class="p">;</span>
+               <span class="kd">var</span> <span class="nx">$tco_var_v1</span> <span class="o">=</span> <span class="nx">$copy_v1</span><span class="p">;</span>
+               <span class="kd">var</span> <span class="nx">$tco_done</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+               <span class="kd">var</span> <span class="nx">$tco_result</span><span class="p">;</span>
+               <span class="kd">function</span> <span class="nf">$tco_loop</span><span class="p">(</span><span class="nx">v</span><span class="p">,</span> <span class="nx">v1</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+                   <span class="k">if </span><span class="p">(</span><span class="nx">v</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                       <span class="nx">$tco_done</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+                       <span class="k">return</span> <span class="nx">b</span><span class="p">;</span>
+                   <span class="p">};</span>
+                   <span class="nx">$tco_var_v</span> <span class="o">=</span> <span class="nx">v</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">0</span><span class="p">;</span>
+                   <span class="nx">$tco_var_v1</span> <span class="o">=</span> <span class="nx">b</span><span class="p">;</span>
+                   <span class="nx">$copy_b</span> <span class="o">=</span> <span class="nx">v1</span> <span class="o">+</span> <span class="nx">b</span> <span class="o">|</span> <span class="mi">0</span><span class="p">;</span>
+                   <span class="k">return</span><span class="p">;</span>
+               <span class="p">};</span>
+               <span class="k">while </span><span class="p">(</span><span class="o">!</span><span class="nx">$tco_done</span><span class="p">)</span> <span class="p">{</span>
+                   <span class="nx">$tco_result</span> <span class="o">=</span> <span class="nf">$tco_loop</span><span class="p">(</span><span class="nx">$tco_var_v</span><span class="p">,</span> <span class="nx">$tco_var_v1</span><span class="p">,</span> <span class="nx">$copy_b</span><span class="p">);</span>
+               <span class="p">};</span>
+               <span class="k">return</span> <span class="nx">$tco_result</span><span class="p">;</span>
+           <span class="p">};</span>
+       <span class="p">};</span>
+   <span class="p">};</span>
+   <span class="k">return</span> <span class="nf">f</span><span class="p">(</span><span class="nx">n</span><span class="p">)(</span><span class="mi">0</span><span class="p">)(</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>Obviously, it’s a less direct translation than was generated for our previous version of <code class="language-plaintext highlighter-rouge">fibs</code>.  However, you can fairly easily understand it still.  Hint, the <code class="language-plaintext highlighter-rouge">tco_</code> prefix in many of the generated variable names stands for “<span class="glossary-term" data-term="tail call optimisation">Tail Call Optimisation<span class="glossary-popup">A compiler feature that optimises tail-recursive functions to prevent additional stack frames from being created, effectively converting recursion into iteration.
+</span></span>” and the local function <code class="language-plaintext highlighter-rouge">f</code> is a curried function, as are all functions of more than one argument in PureScript.  The important thing is that the recursive call is gone, replaced by a while loop.</p>
+
+<p>We have seen all we need for now of PureScript.  It’s a small but nicely put-together language.  It takes the best features of Haskell and reinterprets some of them quite cleverly to achieve relatively seamless interop with JavaScript.  However, it’s still a bit niche.  For the remainder of this unit <a href="/haskell1/">we’ll dive more deeply into Haskell</a>, which has a long history and is supported by a very large and active community across academia and industry.</p>
+
+<div class="glossary">
+  <h2 id="glossary">Glossary</h2>
+
+  <p><em>Pattern Matching</em>: A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.</p>
+
+  <p><em>Tail Call Optimisation</em>: A compiler feature that optimises tail-recursive functions to prevent additional stack frames from being created, effectively converting recursion into iteration.</p>
+
+</div>
+
+	</div>
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/lambdacalculus/">&lt; <span class="glossary-term" data-term="lambda calculus">Lambda Calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span></a>
+      
+      
+        
+        
+        <a id="right" href="/haskell0/">Haskell Installation &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+</article>
+
+      </div>
+    </main><link id="fa-stylesheet" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css">
+<footer class="site-footer h-card">
+    <data class="u-url" href="/"></data>
+
+    <div class="wrapper">
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col">
+                <!-- <p class="feed-subscribe">
+                <a href="/feed.xml">
+                    <svg class="svg-icon orange">
+                        <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+                    </svg><span>Subscribe</span>
+                </a>
+                </p> -->
+        </div>
+        <div class="footer-col">
+            <p>Examples and tutorials for various programming paradigms.</p>
+        </div>
+    </div>
+
+    <!-- <div class="social-links"><ul class="social-media-list"><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li>
+  <li>
+    <a href="/feed.xml" target="_blank" title="Subscribe to syndication feed">
+      <svg class="svg-icon grey" viewbox="0 0 16 16">
+        <path d="M12.8 16C12.8 8.978 7.022 3.2 0 3.2V0c8.777 0 16 7.223 16 16h-3.2zM2.194
+          11.61c1.21 0 2.195.985 2.195 2.196 0 1.21-.99 2.194-2.2 2.194C.98 16 0 15.017 0
+          13.806c0-1.21.983-2.195 2.194-2.195zM10.606
+          16h-3.11c0-4.113-3.383-7.497-7.496-7.497v-3.11c5.818 0 10.606 4.79 10.606 10.607z"
+        />
+      </svg>
+    </a>
+  </li>
+</ul>
+</div> -->
+
+    </div>
+
+</footer>
+
+
+
+</body></html>

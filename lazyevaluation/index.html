@@ -1,0 +1,476 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Lazy Evaluation | Good Times Paradigms</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="Lazy Evaluation">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Learning Outcomes">
+<meta property="og:description" content="Learning Outcomes">
+<meta property="og:site_name" content="Good Times Paradigms">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-09-30T03:56:06+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="Lazy Evaluation">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-30T03:56:06+00:00","datePublished":"2025-09-30T03:56:06+00:00","description":"Learning Outcomes","headline":"<span class="glossary-term" data-term="lazy evaluation">Lazy Evaluation<span class="glossary-popup">A strategy where expressions are not evaluated until their values are needed, allowing for the creation of infinite sequences and delayed computations.
+</span></span>","mainEntityOfPage":{"@type":"WebPage","@id":"/lazyevaluation/"},"url":"/lazyevaluation/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Good Times Paradigms"><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-159840333-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159840333-1');
+</script><!-- MathJax v3 -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true }
+  };
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+  <script src="/assets/js/spoilers.js" defer=""></script></head>
+
+  <body><header class="site-header">
+
+    <div class="wrapper"><!-- Lambda icon and site title aligned left in a flex container -->
+        <div style="display: flex; align-items: center;">
+            <button id="play-theme-song" style="background:none;border:none;cursor:pointer;vertical-align:middle;margin-right:2px;" title="Play theme song">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="currentColor" viewBox="0 0 48 24" style="vertical-align:middle;">
+                    <text x="4" y="20" font-size="20" font-family="serif">ΓΤΠ</text>
+                    <!-- γτπ -->
+                </svg>
+            </button>
+            <a class="site-title" rel="author" href="/" style="margin:0;">Good Times Paradigms</a>
+        </div>
+        <script src="/assets/js/hide_solutions.js" defer=""></script>
+        <audio id="theme-song" src="/assets/themesong.mp3"></audio>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var btn = document.getElementById('play-theme-song');
+                var audio = document.getElementById('theme-song');
+                btn.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play();
+                    } else {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                });
+            });
+        </script><nav class="site-nav">
+            <input type="checkbox" id="nav-trigger" class="nav-trigger">
+            <label for="nav-trigger">
+                <span class="menu-icon">
+                </span>
+            </label>
+
+            <div class="nav-items"><a class="page-link nav-item" href="/about/">About</a><a class="page-link nav-item" href="/">Notes on Programming Paradigms</a><!-- Radio Switch -->
+                <div id="toggle-div" style="display: none;">
+                    <div class="solutions-toggle">
+                        <p class="page-link" style="margin-bottom: 0px;">Show Solutions?</p>
+                        <label class="switch" style="vertical-align: middle;">
+                            <input type="checkbox" id="toggle-switch">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/typescript1/">&lt; TypeScript Introduction</a>
+      
+      
+        
+        
+        <a id="right" href="/functionalreactiveprogramming/"><span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> Reactive Programming &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+	<header class="post-header">
+		<h1 class="post-title">Lazy Evaluation</h1>
+	</header>
+	<p id="readingTime">
+
+  
+  9
+
+ min read</p>
+	<div class="post-content">
+		<h2 id="learning-outcomes">Learning Outcomes</h2>
+
+<ul>
+  <li>Understand how functions can be used to delay evaluation of code until the result is actually required</li>
+  <li>Understand how this <em>lazy</em> evaluation allows for the definition of <em>infinite sequences</em></li>
+  <li>Code and use lazily evaluated infinite number sequences</li>
+</ul>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Usually, expressions in <span class="glossary-term" data-term="imperative">imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span> languages are fully evaluated, each step immediately after the previous step.  This is called <em>strict</em> or <em>eager</em> evaluation.  Functions, however, give us a way to execute code (or evaluate expressions) only when they are really required.  This is called <em>lazy</em> evaluation.  As an <em>eager</em> student at Monash University you will be unfamiliar with the concept of laziness, since you always do all your work as soon as possible because you love it so much.  This is obviously the best strategy for most things in life (and definitely for studying for this course), but laziness as a programming paradigm can sometimes enable different ways to model problems.  Early in our introduction to TypeScript, we created a function <code class="language-plaintext highlighter-rouge">setLeftPadding</code> that took as an argument either an immediate value or a function that returns a value (simplifying a bit):</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">setLeftPadding</span><span class="p">(</span><span class="nx">elem</span><span class="p">:</span> <span class="nx">Element</span><span class="p">,</span> <span class="nx">value</span><span class="p">:</span> <span class="kr">string</span> <span class="o">|</span> <span class="p">(()</span><span class="o">=&gt;</span><span class="kr">string</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="k">typeof</span> <span class="nx">value</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span><span class="p">)</span>
+        <span class="nx">elem</span><span class="p">.</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">"</span><span class="s2">style</span><span class="dl">"</span><span class="p">,</span> <span class="s2">`padding-left:</span><span class="p">${</span><span class="nx">value</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
+    <span class="k">else</span> <span class="c1">// value must be a function</span>
+        <span class="nx">elem</span><span class="p">.</span><span class="nf">setAttribute</span><span class="p">(</span><span class="dl">"</span><span class="s2">style</span><span class="dl">"</span><span class="p">,</span> <span class="s2">`padding-left:</span><span class="p">${</span><span class="nf">value</span><span class="p">()}</span><span class="s2">`</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>We didn’t discuss this much at the time, but this potentially lets us delay the evaluation of an expression.  We don’t have to have the value ready at the time of the function call; rather, we can provide a computation to obtain the value at a later time.</p>
+
+<p>This is the essence of how <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> languages can elevate laziness to a whole paradigm, and it is a powerful concept.  For one thing, it allows us to define <em>infinite lists</em>.  Previously we defined an <span class="glossary-term" data-term="interface">interface<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span> for list nodes:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">IListNode</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="na">data</span><span class="p">:</span> <span class="nx">T</span><span class="p">;</span>
+    <span class="nx">next</span><span class="p">?:</span> <span class="nx">IListNode</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Compare the following definition that uses a function to access the next element in the list instead of a simple property:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">LazySequence</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="p">{</span>
+   <span class="na">value</span><span class="p">:</span> <span class="nx">T</span><span class="p">;</span>
+   <span class="nf">next</span><span class="p">():</span><span class="nx">LazySequence</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Now we can define infinite sequences:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">naturalNumbers</span><span class="p">()</span> <span class="p">{</span>
+   <span class="k">return</span> <span class="kd">function</span> <span class="nf">_next</span><span class="p">(</span><span class="nx">v</span><span class="p">:</span><span class="kr">number</span><span class="p">):</span><span class="nx">LazySequence</span><span class="o">&lt;</span><span class="kr">number</span><span class="o">&gt;</span> <span class="p">{</span>
+       <span class="k">return</span> <span class="p">{</span>
+           <span class="na">value</span><span class="p">:</span> <span class="nx">v</span><span class="p">,</span>
+           <span class="na">next</span><span class="p">:</span> <span class="p">()</span><span class="o">=&gt;</span><span class="nf">_next</span><span class="p">(</span><span class="nx">v</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+       <span class="p">}</span>
+   <span class="p">}(</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Note that <code class="language-plaintext highlighter-rouge">_next</code> is immediately invoked in the return.  If you are like me, you will need to look at this for a little to get your head around it.  To summarise: we are defining a function in a returned expression and immediately invoking it with 1 as the starting value.  This pattern is used so often in JavaScript it has an acronym: <strong>IIFE</strong> or <em>Immediately Invoked Function Expression</em>.  It was one way of achieving encapsulation before ES6 introduced proper classes.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">n</span> <span class="o">=</span> <span class="nf">naturalNumbers</span><span class="p">();</span>
+<span class="nx">n</span><span class="p">.</span><span class="nx">value</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>1</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">n</span><span class="p">.</span><span class="nf">next</span><span class="p">().</span><span class="nx">value</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>2</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">n</span><span class="p">.</span><span class="nf">next</span><span class="p">().</span><span class="nf">next</span><span class="p">().</span><span class="nx">value</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>3</p>
+</blockquote>
+
+<hr>
+
+<h2 id="exercise">Exercise</h2>
+
+<ul>
+  <li>Create a function <code class="language-plaintext highlighter-rouge">take(n,seq)</code> which returns a <code class="language-plaintext highlighter-rouge">LazySequence</code> of the first <code class="language-plaintext highlighter-rouge">n</code> elements of an infinite <code class="language-plaintext highlighter-rouge">LazySequence</code> of the sort generated by <code class="language-plaintext highlighter-rouge">naturalNumbers</code>.  After returning the <code class="language-plaintext highlighter-rouge">n</code>th element, <code class="language-plaintext highlighter-rouge">take</code> should return <code class="language-plaintext highlighter-rouge">undefined</code> to indicate the end.</li>
+  <li>Create <code class="language-plaintext highlighter-rouge">map</code>, <code class="language-plaintext highlighter-rouge">filter</code> and <code class="language-plaintext highlighter-rouge">reduce</code> functions (similar to those defined on <code class="language-plaintext highlighter-rouge">Array.prototype</code>) for such a sequence and use them along with <code class="language-plaintext highlighter-rouge">take</code> to create a solution for Project Euler Problem 1 (encountered earlier): sum of first n natural numbers divisible by 3 or 5.</li>
+  <li>Make a general-purpose infinite sequence initialisation function that creates infinite lazy sequences.  It will take as a parameter a function to compute the next value from the current value.  In other words, it should be a “factory” for functions like <code class="language-plaintext highlighter-rouge">naturalNumbers</code>.  Thus, if we call our function <code class="language-plaintext highlighter-rouge">initSequence</code>, then <code class="language-plaintext highlighter-rouge">initSequence(n=&gt;n+1)</code> will return a function equivalent to <code class="language-plaintext highlighter-rouge">naturalNumbers</code>.</li>
+  <li>Use your general-purpose sequence generator to generate Fibonacci numbers.</li>
+</ul>
+
+<div class="solutions">
+    
+<h3 id="solutions">Solutions</h3>
+
+<p><a href="https://stackblitz.com/edit/typescript-45wfky?file=index.ts">A live version of the solutions can be accessed here</a>. However, let’s walk through it. Consider the definition of a <code class="language-plaintext highlighter-rouge">LazySequence</code></p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">interface</span> <span class="nx">LazySequence</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="p">{</span>
+   <span class="na">value</span><span class="p">:</span> <span class="nx">T</span><span class="p">;</span>
+   <span class="nf">next</span><span class="p">():</span><span class="nx">LazySequence</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The take function creates a LazySequence of the first <code class="language-plaintext highlighter-rouge">n</code> elements by returning the current value and recursively calling itself with <code class="language-plaintext highlighter-rouge">n</code> decremented and the next element of the sequence until <code class="language-plaintext highlighter-rouge">n</code> reaches 0, at which point it returns <code class="language-plaintext highlighter-rouge">undefined</code> to signify the end.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">take</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">,</span> <span class="nx">seq</span><span class="p">:</span> <span class="nx">LazySequence</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">):</span> <span class="nx">LazySequence</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="o">|</span> <span class="kc">undefined</span> <span class="p">{</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span>
+      <span class="na">value</span><span class="p">:</span> <span class="nx">seq</span><span class="p">.</span><span class="nx">value</span><span class="p">,</span>
+      <span class="na">next</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nf">take</span><span class="p">(</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">seq</span><span class="p">.</span><span class="nf">next</span><span class="p">()),</span>
+    <span class="p">}</span> <span class="kd">as </span><span class="nx">LazySequence</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="kc">undefined</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>We can define the three map/filter/reduce functions with similar logic.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">map</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">U</span><span class="o">&gt;</span><span class="p">(</span>
+  <span class="nx">f</span><span class="p">:</span> <span class="p">(</span><span class="nx">value</span><span class="p">:</span> <span class="nx">T</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">U</span><span class="p">,</span>
+  <span class="nx">seq</span><span class="p">:</span> <span class="nx">LazySequence</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="o">|</span> <span class="kc">undefined</span>
+<span class="p">):</span> <span class="nx">LazySequence</span><span class="o">&lt;</span><span class="nx">U</span><span class="o">&gt;</span> <span class="o">|</span> <span class="kc">undefined</span> <span class="p">{</span>
+  <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">seq</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kc">undefined</span><span class="p">;</span> <span class="c1">// If the sequence is undefined, return undefined</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="na">value</span><span class="p">:</span> <span class="nf">f</span><span class="p">(</span><span class="nx">seq</span><span class="p">.</span><span class="nx">value</span><span class="p">),</span> <span class="c1">// Apply the function to the current value</span>
+    <span class="na">next</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nf">map</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="nx">seq</span><span class="p">.</span><span class="nf">next</span><span class="p">()),</span> <span class="c1">// Recursively apply the function to the next elements</span>
+  <span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">filter</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span>
+  <span class="nx">predicate</span><span class="p">:</span> <span class="p">(</span><span class="nx">value</span><span class="p">:</span> <span class="nx">T</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">boolean</span><span class="p">,</span>
+  <span class="nx">seq</span><span class="p">:</span> <span class="nx">LazySequence</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="o">|</span> <span class="kc">undefined</span>
+<span class="p">):</span> <span class="nx">LazySequence</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="o">|</span> <span class="kc">undefined</span> <span class="p">{</span>
+  <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">seq</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kc">undefined</span><span class="p">;</span> <span class="c1">// If the sequence is undefined, return undefined</span>
+  <span class="p">}</span>
+  <span class="k">if </span><span class="p">(</span><span class="nf">predicate</span><span class="p">(</span><span class="nx">seq</span><span class="p">.</span><span class="nx">value</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span>
+      <span class="na">value</span><span class="p">:</span> <span class="nx">seq</span><span class="p">.</span><span class="nx">value</span><span class="p">,</span> <span class="c1">// If the current value matches the predicate, include it</span>
+      <span class="na">next</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nf">filter</span><span class="p">(</span><span class="nx">predicate</span><span class="p">,</span> <span class="nx">seq</span><span class="p">.</span><span class="nf">next</span><span class="p">()),</span> <span class="c1">// Recursively filter the next elements</span>
+    <span class="p">};</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nf">filter</span><span class="p">(</span><span class="nx">predicate</span><span class="p">,</span> <span class="nx">seq</span><span class="p">.</span><span class="nf">next</span><span class="p">());</span> <span class="c1">// Skip the current value and filter the next elements</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">reduce</span><span class="o">&lt;</span><span class="nx">T</span><span class="p">,</span> <span class="nx">U</span><span class="o">&gt;</span><span class="p">(</span>
+  <span class="nx">f</span><span class="p">:</span> <span class="p">(</span><span class="nx">accumulator</span><span class="p">:</span> <span class="nx">U</span><span class="p">,</span> <span class="nx">value</span><span class="p">:</span> <span class="nx">T</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">U</span><span class="p">,</span>
+  <span class="nx">seq</span><span class="p">:</span> <span class="nx">LazySequence</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="o">|</span> <span class="kc">undefined</span><span class="p">,</span>
+  <span class="nx">initialValue</span><span class="p">:</span> <span class="nx">U</span>
+<span class="p">):</span> <span class="nx">U</span> <span class="p">{</span>
+  <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">seq</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">initialValue</span><span class="p">;</span> <span class="c1">// If the sequence is undefined, return the initial value</span>
+  <span class="p">}</span>
+  <span class="c1">// Recursively apply the accumulator function to the next elements and the current value</span>
+  <span class="k">return</span> <span class="nf">reduce</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="nx">seq</span><span class="p">.</span><span class="nf">next</span><span class="p">(),</span> <span class="nf">f</span><span class="p">(</span><span class="nx">initialValue</span><span class="p">,</span> <span class="nx">seq</span><span class="p">.</span><span class="nx">value</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Using this code, we can solve the <a href="https://projecteuler.net/problem=1">first Euler problem</a>:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">sumOfFirstNNaturalsNotDivisibleBy3Or5</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span> <span class="kr">number</span><span class="p">):</span> <span class="kr">number</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">naturals</span> <span class="o">=</span> <span class="nf">naturalNumbers</span><span class="p">();</span> <span class="c1">// Generate the natural numbers sequence</span>
+  <span class="c1">// Take the first n elements and filter out those not divisible by 3 or 5</span>
+  <span class="kd">const</span> <span class="nx">filtered</span> <span class="o">=</span> <span class="nf">filter</span><span class="p">(</span>
+    <span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">3</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">===</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="nf">take</span><span class="p">(</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">naturals</span><span class="p">)</span>
+  <span class="p">);</span>
+
+  <span class="c1">// Sum the remaining elements using reduce</span>
+  <span class="k">return</span> <span class="nf">reduce</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span> <span class="nx">x</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">acc</span> <span class="o">+</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">filtered</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Example usage</span>
+<span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nf">sumOfFirstNNaturalsNotDivisibleBy3Or5</span><span class="p">(</span><span class="mi">1000</span><span class="p">));</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>233168</p>
+</blockquote>
+
+
+</div>
+
+<hr>
+
+<div class="glossary">
+  <h2 id="glossary">Glossary</h2>
+
+  <p><em>Eager Evaluation</em>: A strategy where expressions are evaluated immediately as they are bound to variables.</p>
+
+  <p><em>IIFE (Immediately Invoked Function Expression)</em>: A JavaScript function that runs as soon as it is defined, used to create local scopes and encapsulate code.</p>
+
+  <p><em>Lazy Evaluation</em>: A strategy where expressions are not evaluated until their values are needed, allowing for the creation of infinite sequences and delayed computations.</p>
+
+</div>
+
+	</div>
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/typescript1/">&lt; TypeScript Introduction</a>
+      
+      
+        
+        
+        <a id="right" href="/functionalreactiveprogramming/"><span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> Reactive Programming &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+</article>
+
+      </div>
+    </main><link id="fa-stylesheet" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css">
+<footer class="site-footer h-card">
+    <data class="u-url" href="/"></data>
+
+    <div class="wrapper">
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col">
+                <!-- <p class="feed-subscribe">
+                <a href="/feed.xml">
+                    <svg class="svg-icon orange">
+                        <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+                    </svg><span>Subscribe</span>
+                </a>
+                </p> -->
+        </div>
+        <div class="footer-col">
+            <p>Examples and tutorials for various programming paradigms.</p>
+        </div>
+    </div>
+
+    <!-- <div class="social-links"><ul class="social-media-list"><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li>
+  <li>
+    <a href="/feed.xml" target="_blank" title="Subscribe to syndication feed">
+      <svg class="svg-icon grey" viewbox="0 0 16 16">
+        <path d="M12.8 16C12.8 8.978 7.022 3.2 0 3.2V0c8.777 0 16 7.223 16 16h-3.2zM2.194
+          11.61c1.21 0 2.195.985 2.195 2.196 0 1.21-.99 2.194-2.2 2.194C.98 16 0 15.017 0
+          13.806c0-1.21.983-2.195 2.194-2.195zM10.606
+          16h-3.11c0-4.113-3.383-7.497-7.496-7.497v-3.11c5.818 0 10.606 4.79 10.606 10.607z"
+        />
+      </svg>
+    </a>
+  </li>
+</ul>
+</div> -->
+
+    </div>
+
+</footer>
+
+
+
+</body></html>

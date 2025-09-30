@@ -1,0 +1,1265 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Functional Programming in JavaScript | Good Times Paradigms</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="Functional Programming in JavaScript">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Learning Outcomes">
+<meta property="og:description" content="Learning Outcomes">
+<meta property="og:site_name" content="Good Times Paradigms">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-09-30T03:56:06+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="Functional Programming in JavaScript">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-30T03:56:06+00:00","datePublished":"2025-09-30T03:56:06+00:00","description":"Learning Outcomes","headline":"<span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> Programming in JavaScript","mainEntityOfPage":{"@type":"WebPage","@id":"/functionaljavascript/"},"url":"/functionaljavascript/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Good Times Paradigms"><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-159840333-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159840333-1');
+</script><!-- MathJax v3 -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true }
+  };
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+  <script src="/assets/js/spoilers.js" defer=""></script></head>
+
+  <body><header class="site-header">
+
+    <div class="wrapper"><!-- Lambda icon and site title aligned left in a flex container -->
+        <div style="display: flex; align-items: center;">
+            <button id="play-theme-song" style="background:none;border:none;cursor:pointer;vertical-align:middle;margin-right:2px;" title="Play theme song">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="currentColor" viewBox="0 0 48 24" style="vertical-align:middle;">
+                    <text x="4" y="20" font-size="20" font-family="serif">ΓΤΠ</text>
+                    <!-- γτπ -->
+                </svg>
+            </button>
+            <a class="site-title" rel="author" href="/" style="margin:0;">Good Times Paradigms</a>
+        </div>
+        <script src="/assets/js/hide_solutions.js" defer=""></script>
+        <audio id="theme-song" src="/assets/themesong.mp3"></audio>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var btn = document.getElementById('play-theme-song');
+                var audio = document.getElementById('theme-song');
+                btn.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play();
+                    } else {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                });
+            });
+        </script><nav class="site-nav">
+            <input type="checkbox" id="nav-trigger" class="nav-trigger">
+            <label for="nav-trigger">
+                <span class="menu-icon">
+                </span>
+            </label>
+
+            <div class="nav-items"><a class="page-link nav-item" href="/about/">About</a><a class="page-link nav-item" href="/">Notes on Programming Paradigms</a><!-- Radio Switch -->
+                <div id="toggle-div" style="display: none;">
+                    <div class="solutions-toggle">
+                        <p class="page-link" style="margin-bottom: 0px;">Show Solutions?</p>
+                        <label class="switch" style="vertical-align: middle;">
+                            <input type="checkbox" id="toggle-switch">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/html/">&lt; <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> as a <span class="glossary-term" data-term="declarative">Declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span> Language</a>
+      
+      
+        
+        
+        <a id="right" href="/typescript1/">TypeScript Introduction &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+	<header class="post-header">
+		<h1 class="post-title">Functional Programming in JavaScript</h1>
+	</header>
+	<p id="readingTime">
+
+  
+  45
+
+ min read</p>
+	<div class="post-content">
+		<h3 id="learning-outcomes">Learning Outcomes</h3>
+
+<ul>
+  <li>Create programs in JavaScript in a <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> style</li>
+  <li>Understand the definitions of <a href="#function-purity-and-referential-transparency">function purity and <span class="glossary-term" data-term="referential transparency">referential transparency<span class="glossary-popup">An expression that can be replaced with its value without changing the program’s behaviour, indicating no side effects and consistent results.
+</span></span></a></li>
+  <li>Explain the role of pure <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming style in managing <span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span></li>
+  <li>See how <span class="glossary-term" data-term="pure functions">pure functions<span class="glossary-popup">A function that always produces the same output for the same input and has no side effects.
+</span></span> can be used to <a href="#computation-with-pure-functions">model sophisticated computation</a></li>
+</ul>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>The elements of JavaScript covered in <a href="/javascript1">our introduction</a>, specifically:</p>
+
+<ul>
+  <li><a href="/javascript1#functions-are-objects">Binding functions to variables</a></li>
+  <li><a href="/javascript1#anonymous-functions"><span class="glossary-term" data-term="anonymous functions">Anonymous functions<span class="glossary-popup">A function defined without a name, often used as an argument to other functions. Also known as a lambda function.
+</span></span></a></li>
+  <li><a href="/higherorderfunctions"><span class="glossary-term" data-term="higher-order functions">Higher-order functions<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span></a></li>
+</ul>
+
+<p>are sufficient for us to explore a paradigm called <em><span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming</em>.  In the <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming paradigm, the primary model of computation is through the evaluation of functions.  <span class="glossary-term" data-term="functional">Functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> Programming is highly inspired by the <a href="/lambdacalculus/"><span class="glossary-term" data-term="lambda calculus">Lambda Calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span></a>, a theory which develops a model for computation based on the application and evaluation of mathematical functions.</p>
+
+<p>While JavaScript (and many—but not all, as we shall see—other languages inspired by the <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> paradigm) do not enforce it, true <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming mandates the functions be pure in the sense of not causing <em><span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span></em>.</p>
+
+<h2 id="side-effects">Side Effects</h2>
+
+<div class="alert-box alert-info">
+<span class="glossary-term" data-term="side effects">Side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span> of a function are changes to state outside of the result explicitly returned by the function.
+</div>
+<p>Examples of <span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span> from inside a function:</p>
+
+<ul>
+  <li>changing the value of a variable declared outside the function scope
+    <ul>
+      <li>mutating global state in this way can cause difficult-to-diagnose bugs: for example, an effective debugging strategy is dividing the program up into little pieces which can easily be proven correct or unit tested—sources of <span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span> deep inside functions are a hidden form of coupling making such a strategy very difficult.</li>
+    </ul>
+  </li>
+  <li>printing to the console—changing the state of the world in such a way can also be dangerous
+    <ul>
+      <li>for example, filling a disk with log messages is a good way to crash the whole computer!</li>
+    </ul>
+  </li>
+</ul>
+
+<p>In languages without compilers that specifically guard against them, <span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span> can occur:</p>
+
+<ul>
+  <li>intentionally through sloppy coding practices, where a misguided programmer may think it’s more convenient to have a function do multiple things at once;</li>
+  <li>unintentionally, for example by accidentally setting a global variable instead of a local one.</li>
+</ul>
+
+<p>We’ll see more examples in actual code below.</p>
+
+<h2 id="function-purity-and-referential-transparency">Function Purity and Referential Transparency</h2>
+
+<div class="alert-box alert-info">
+  <p>A <em><span class="glossary-term" data-term="pure function">pure function<span class="glossary-popup">A function that always produces the same output for the same input and has no side effects.
+</span></span></em>:</p>
+
+  <ul>
+    <li>has no <em><span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span></em>: i.e. it has no effects other than to create a return value;</li>
+    <li>always produces the same result for the same input.</li>
+  </ul>
+
+</div>
+<p>In the context of <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> programming, <a href="https://soundcloud.com/tim-dwyer-17038309/referentialtransparency-lessboringmix"><em><span class="glossary-term" data-term="referential transparency">referential transparency<span class="glossary-popup">An expression that can be replaced with its value without changing the program’s behaviour, indicating no side effects and consistent results.
+</span></span></em></a> is:</p>
+
+<ul>
+  <li>the property of being able to substitute an expression that evaluates to some value, with that value, without affecting the behaviour of the program.</li>
+</ul>
+
+<h3 id="trivial-example">Trivial Example</h3>
+
+<p>Imagine a simple function:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">square</span> <span class="o">=</span> <span class="nx">x</span><span class="o">=&gt;</span><span class="nx">x</span><span class="o">*</span><span class="nx">x</span>
+</code></pre></div></div>
+
+<p>And some code that uses it:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">four</span> <span class="o">=</span> <span class="nf">square</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The expression <code class="language-plaintext highlighter-rouge">square(2)</code> evaluates to <code class="language-plaintext highlighter-rouge">4</code>.  Can we replace the expression <code class="language-plaintext highlighter-rouge">square(2)</code> with the value <code class="language-plaintext highlighter-rouge">4</code> in the program above without changing the behaviour of the program?  YES!  So is the expression <code class="language-plaintext highlighter-rouge">square(2)</code> referentially transparent? YES!</p>
+
+<p>But what if the <code class="language-plaintext highlighter-rouge">square</code> function depends on some other data stored somewhere in memory and may return a different result if that data mutates? (An example might be using a global variable or reading an environment variable from IO or requiring user input.)  What if <code class="language-plaintext highlighter-rouge">square</code> performs some other action instead of simply returning the result of a mathematical computation?  What if it sends a message to the console or mutates a global variable?  That is, what if it has <span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span> (is not a <span class="glossary-term" data-term="pure function">pure function<span class="glossary-popup">A function that always produces the same output for the same input and has no side effects.
+</span></span>)?  In that case is replacing <code class="language-plaintext highlighter-rouge">square(2)</code> with the value <code class="language-plaintext highlighter-rouge">4</code> still going to leave our program behaving the same way?  Possibly not!</p>
+
+<p>Put another way, if the <code class="language-plaintext highlighter-rouge">square</code> function is not pure—i.e. it produces <span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span> (meaning it has hidden output other than its return value) or it is affected by <span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span> from other code (meaning it has hidden inputs)—then the expression <code class="language-plaintext highlighter-rouge">square(2)</code> would not be referentially transparent.</p>
+
+<h3 id="realistic-examples">Realistic Examples</h3>
+
+<p>A real-life example where this might be useful would be when a cached result for a given input already exists and can be returned without further computation.  Imagine a <span class="glossary-term" data-term="pure function">pure function<span class="glossary-popup">A function that always produces the same output for the same input and has no side effects.
+</span></span> that computes π (pi) to a specified number of decimal points of precision.  It takes an argument <code class="language-plaintext highlighter-rouge">n</code>, the number of decimal points, and returns the computed value.  We could modify the function to instantly return a precomputed value for π from a lookup table if <code class="language-plaintext highlighter-rouge">n</code> is less than <code class="language-plaintext highlighter-rouge">10</code>.  This substitution is trivial and is guaranteed not to break our program, because its effects are strictly locally contained.</p>
+
+<p><span class="glossary-term" data-term="pure functions">Pure functions<span class="glossary-popup">A function that always produces the same output for the same input and has no side effects.
+</span></span> and <span class="glossary-term" data-term="referential transparency">referential transparency<span class="glossary-popup">An expression that can be replaced with its value without changing the program’s behaviour, indicating no side effects and consistent results.
+</span></span> are perhaps most easily illustrated with some examples and counterexamples.
+Consider the following <em>impure</em> function:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="kd">function</span> <span class="nf">impureSquares</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span> <span class="p">{</span>
+       <span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+       <span class="k">while </span><span class="p">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">a</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+<span class="o">*</span>          <span class="nx">a</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">a</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">*</span> <span class="nx">a</span><span class="p">[</span><span class="nx">i</span><span class="o">++</span><span class="p">];</span>
+       <span class="p">}</span>
+   <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Since the function modifies <code class="language-plaintext highlighter-rouge">a</code> in place, we get a different outcome if we call it more than once.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">myArray</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="nf">impureSquares</span><span class="p">(</span><span class="nx">myArray</span><span class="p">)</span>
+<span class="c1">// now myArray = [1,4,9]</span>
+<span class="nf">impureSquares</span><span class="p">(</span><span class="nx">myArray</span><span class="p">)</span>
+<span class="c1">// now myArray = [1,16,81]</span>
+</code></pre></div></div>
+
+<p>Furthermore, the very <span class="glossary-term" data-term="imperative">imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span> style computation in <code class="language-plaintext highlighter-rouge">impureSquares</code> at the line marked with <code class="language-plaintext highlighter-rouge">*</code> is not pure.
+It has two effects: incrementing <code class="language-plaintext highlighter-rouge">i</code> and mutating <code class="language-plaintext highlighter-rouge">a</code>.
+You could not simply replace the expression with the value computed by the expression and have the program work in the same way.
+This piece of code does not have the property of <em><span class="glossary-term" data-term="referential transparency">referential transparency<span class="glossary-popup">An expression that can be replaced with its value without changing the program’s behaviour, indicating no side effects and consistent results.
+</span></span></em>.</p>
+
+<p>True pure <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> languages (such as Haskell) enforce <span class="glossary-term" data-term="referential transparency">referential transparency<span class="glossary-popup">An expression that can be replaced with its value without changing the program’s behaviour, indicating no side effects and consistent results.
+</span></span> through <span class="glossary-term" data-term="immutable variables">immutable variables<span class="glossary-popup">A variable declared with const whose value cannot be reassigned.
+</span></span> (<em>note: yes, “<span class="glossary-term" data-term="immutable variable">immutable variable<span class="glossary-popup">A variable declared with const whose value cannot be reassigned.
+</span></span>” sounds like an oxymoron—two words with opposite meanings put together</em>).  That is, once any variable in such a language is bound to a value, it cannot be reassigned.</p>
+
+<p>In JavaScript we can opt in to <span class="glossary-term" data-term="immutable variables">immutable variables<span class="glossary-popup">A variable declared with const whose value cannot be reassigned.
+</span></span> by declaring them <code class="language-plaintext highlighter-rouge">const</code>, but it is only a shallow immutability.  Thus, the variable <code class="language-plaintext highlighter-rouge">myArray</code> above cannot be reassigned to reference a different array.  However, we can change the contents of the array as shown above.</p>
+
+<p>A more <span class="glossary-term" data-term="functional">functional<span class="glossary-popup">Functional languages are built around the concept of composable functions.  Such languages support <em>higher-order functions</em> which can take other functions as arguments or return new functions as their result, following the rules of the <em>Lambda Calculus</em>.
+</span></span> way to implement the <code class="language-plaintext highlighter-rouge">squares</code> function would be more like the examples we have seen previously:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">squares</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">a</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="nx">x</span><span class="o">=&gt;</span> <span class="nx">x</span><span class="o">*</span><span class="nx">x</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The above function is pure.  Its result is a new array containing the squares of the input array, and the input array itself is unchanged.  It has no <span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span> changing values of variables, memory or the world, outside of its own scope.  You could replace the computation of the result with a different calculation returning the same result for a given input and the program would be unchanged.  It is <em>referentially transparent</em>.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="kd">const</span> <span class="nx">mySquares</span> <span class="o">=</span> <span class="nf">squares</span><span class="p">(</span><span class="nx">myArray</span><span class="p">)</span>
+<span class="kd">const</span> <span class="nx">myRaisedToTheFours</span> <span class="o">=</span> <span class="nf">squares</span><span class="p">(</span><span class="nx">mySquares</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>We could make the following substitution in the last line with no unintended consequences:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">const</span> <span class="nx">myRaisedToTheFours</span> <span class="o">=</span> <span class="nf">squares</span><span class="p">(</span><span class="nf">squares</span><span class="p">(</span><span class="nx">myArray</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>An impure function typical of something you may see in OO code:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">messagesSent</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kd">function</span> <span class="nf">send</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">recipient</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">success</span> <span class="o">=</span> <span class="nx">recipient</span><span class="p">.</span><span class="nf">notify</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">success</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">++</span><span class="nx">messagesSent</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">send failed! </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">message</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">messages sent </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">messagesSent</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This function is impure in three ways:</p>
+
+<ul>
+  <li>it mutates the state of the count variable <code class="language-plaintext highlighter-rouge">messagesSent</code> from the enclosing scope</li>
+  <li>it (likely) does something (what exactly is unclear) to <code class="language-plaintext highlighter-rouge">recipient</code></li>
+  <li>finally, it sends output to the console.  Outputting to a device (although only for display purposes) is definitely a side effect.</li>
+</ul>
+
+<p><span class="glossary-term" data-term="side effects">Side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span> are bad for transparency (knowing everything about what a function is going to do) and maintainability.  When state in your program is being changed from all over the place bugs become very difficult to track down.</p>
+
+<h3 id="exercises">Exercises</h3>
+
+<p>Do the following functions have <span class="glossary-term" data-term="side effects">side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span>?</p>
+
+<ol>
+  <li>
+    <p>Yes/No and why?</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">let</span> <span class="nx">counter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+ <span class="kd">function</span> <span class="nf">incrementCounter</span><span class="p">()</span> <span class="p">{</span>
+     <span class="nx">counter</span><span class="o">++</span><span class="p">;</span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Yes/No and why?</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">greet</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s2">`Hello, </span><span class="p">${</span><span class="nx">name</span><span class="p">}</span><span class="s2">!`</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Yes/No and why?</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">multiplyArray</span><span class="p">(</span><span class="nx">numbers</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">numbers</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">numbers</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">numbers</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">numbers</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Yes/No and why?</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">logMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Yes/No and why?</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">doubleNumbers</span><span class="p">(</span><span class="nx">numbers</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">numbers</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Yes/No and why?</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">getRandomNumber</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nf">random</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<div class="solutions">
+    
+<h4 id="solutions">Solutions</h4>
+
+<ol>
+  <li>
+    <p>Yes, it modifies the global variable counter.</p>
+  </li>
+  <li>
+    <p>No, it simply returns a new string and does not modify any external state.</p>
+  </li>
+  <li>
+    <p>Yes, it modifies the input array numbers in place.</p>
+  </li>
+  <li>
+    <p>Yes, it writes to the console, which is an external action.</p>
+  </li>
+  <li>
+    <p>No, it returns a new array without modifying the input array.</p>
+  </li>
+  <li>
+    <p>Yes, it relies on and modifies a global seed for random number generation.</p>
+  </li>
+</ol>
+
+
+</div>
+
+<h2 id="functional-patterns">Functional Patterns</h2>
+
+<p>Passing functions around, anonymous or not, is incredibly useful and pops up in many practical programming situations.</p>
+
+<h3 id="eliminating-loops">Eliminating Loops</h3>
+
+<p>Loops are the source of many bugs: fence-post errors, range errors, typos, incrementing the wrong counter, etc.</p>
+
+<p>A typical for loop has four distinct places where it’s easy to make errors that can cause critical problems:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for </span><span class="p">([</span><span class="nx">initialisation</span><span class="p">];</span> <span class="p">[</span><span class="nx">condition</span><span class="p">];</span> <span class="p">[</span><span class="nx">final</span><span class="o">-</span><span class="nx">expression</span><span class="p">])</span>
+    <span class="nx">statement</span>
+</code></pre></div></div>
+
+<ul>
+  <li>The <strong>initialisation</strong> can initialise to the wrong value (e.g. n instead of n-1, 1 instead of 0) or initialise the wrong variable.</li>
+  <li>The <strong>condition</strong> test can use = instead of ==, &lt;= instead of &lt; or test the wrong variable, etc.</li>
+  <li>The <strong>final-expression</strong> can (again) increment the wrong variable</li>
+  <li>The <strong>statement</strong> body might change the state of variables being tested in the termination condition since they are in scope.</li>
+</ul>
+
+<p>For many standard loops, however, the logic is the same every time and can easily be abstracted into a function.  Examples: <code class="language-plaintext highlighter-rouge">Array.map</code>, <code class="language-plaintext highlighter-rouge">Array.reduce</code>, <code class="language-plaintext highlighter-rouge">Array.forEach</code>, etc.  The logic of the loop body is specified with a function which can execute in its own scope, without the risk of breaking the loop logic.</p>
+
+<h4 id="examples">Examples</h4>
+
+<ol>
+  <li>
+    <p>Consider this loop to multiply each item in the <code class="language-plaintext highlighter-rouge">someArray</code> by two. Try to find the mistake in this code:</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">const</span> <span class="nx">someArray</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
+ <span class="kd">let</span> <span class="nx">newArray</span> <span class="o">=</span> <span class="p">[];</span>
+ <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">someArray</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+     <span class="nx">newArray</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="nx">someArray</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
+
+    <p class="spoiler">The condition should be <code class="language-plaintext highlighter-rouge">&lt;</code>, not <code class="language-plaintext highlighter-rouge">&lt;=</code>.</p>
+
+    <p>To avoid the likelihood of errors, we can replace the <code class="language-plaintext highlighter-rouge">for</code> loop with the use of <code class="language-plaintext highlighter-rouge">.map</code>.</p>
+
+    <p>We use the <code class="language-plaintext highlighter-rouge">map</code> function since we want to apply a function to every element in the list.</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">const</span> <span class="nx">someArray</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
+ <span class="kd">const</span> <span class="nx">newArray</span> <span class="o">=</span> <span class="nx">someArray</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+</code></pre></div>    </div>
+
+    <p>We use an arrow function here to allow our function definition to be short and to the point!</p>
+  </li>
+  <li>
+    <p>Consider this code which aims to compute the product of a list. Try to find the mistake in this code:</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">const</span> <span class="nx">someArray</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
+ <span class="kd">let</span> <span class="nx">result</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+ <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">someArray</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+     <span class="nx">result</span> <span class="o">*=</span> <span class="nx">i</span><span class="p">;</span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
+
+    <p class="spoiler">We should multiply by <code class="language-plaintext highlighter-rouge">someArray[i]</code>, not <code class="language-plaintext highlighter-rouge">i</code>.</p>
+
+    <p>Again, to avoid the likelihood of errors, we can replace the <code class="language-plaintext highlighter-rouge">for</code> loop with the use of <code class="language-plaintext highlighter-rouge">.reduce</code>.</p>
+
+    <p>We use the <code class="language-plaintext highlighter-rouge">reduce</code> function since we want to reduce the list to a singular value.</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">const</span> <span class="nx">someArray</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
+ <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">someArray</span><span class="p">.</span><span class="nf">reduce</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span> <span class="nx">el</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">el</span> <span class="o">*</span> <span class="nx">acc</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<hr>
+
+<h4 id="exercises-1">Exercises</h4>
+
+<ol>
+  <li>
+    <p>Refactor this code to use <code class="language-plaintext highlighter-rouge">map</code> and <code class="language-plaintext highlighter-rouge">filter</code> instead of a loop:</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">const</span> <span class="nx">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">];</span>
+ <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">[];</span>
+ <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">numbers</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+     <span class="k">if </span><span class="p">(</span><span class="nx">numbers</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+         <span class="nx">result</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="nx">numbers</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+     <span class="p">}</span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Refactor this code to remove the loop:</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">const</span> <span class="nx">words</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">apple</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">banana</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">cherry</span><span class="dl">"</span><span class="p">];</span>
+ <span class="kd">let</span> <span class="nx">totalLength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+ <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">words</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+     <span class="nx">totalLength</span> <span class="o">+=</span> <span class="nx">words</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">length</span><span class="p">;</span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Refactor this code to remove the loop:</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">const</span> <span class="nx">people</span> <span class="o">=</span> <span class="p">[</span>
+     <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Alice</span><span class="dl">"</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">20</span><span class="p">},</span>
+     <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Bob</span><span class="dl">"</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">15</span><span class="p">},</span>
+     <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Charlie</span><span class="dl">"</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">30</span><span class="p">},</span>
+     <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">David</span><span class="dl">"</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+ <span class="p">];</span>
+ <span class="kd">let</span> <span class="nx">firstChildName</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
+ <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">people</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+     <span class="k">if </span><span class="p">(</span><span class="nx">people</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">age</span> <span class="o">&lt;</span> <span class="mi">18</span><span class="p">)</span> <span class="p">{</span>
+         <span class="nx">firstChildName</span> <span class="o">=</span> <span class="nx">people</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span><span class="p">;</span>
+         <span class="k">break</span><span class="p">;</span>
+     <span class="p">}</span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Refactor this code to remove the loop:</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">const</span> <span class="nx">people</span> <span class="o">=</span> <span class="p">[</span>
+     <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Alice</span><span class="dl">"</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">20</span><span class="p">},</span>
+     <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Bob</span><span class="dl">"</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">15</span><span class="p">},</span>
+     <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Charlie</span><span class="dl">"</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">30</span><span class="p">},</span>
+     <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">David</span><span class="dl">"</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+ <span class="p">];</span>
+ <span class="kd">let</span> <span class="nx">result</span> <span class="o">=</span> <span class="dl">""</span><span class="p">;</span>
+ <span class="k">for </span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">people</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+     <span class="nx">result</span> <span class="o">+=</span> <span class="s2">`Person #</span><span class="p">${</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">}</span><span class="s2">: </span><span class="p">${</span><span class="nx">people</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span><span class="p">}</span><span class="s2"> is </span><span class="p">${</span><span class="nx">people</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">age</span><span class="p">}</span><span class="s2"> years old`</span><span class="p">;</span>
+     <span class="k">if </span><span class="p">(</span><span class="nx">i</span> <span class="o">!=</span> <span class="nx">people</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+         <span class="nx">result</span> <span class="o">+=</span> <span class="dl">"</span><span class="se">\n</span><span class="dl">"</span><span class="p">;</span>
+     <span class="p">}</span>
+ <span class="p">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Identify what is wrong with this code and correct it:</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c1">// Don’t worry about this line</span>
+ <span class="kd">const</span> <span class="nx">value</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">some-input-element</span><span class="dl">'</span><span class="p">).</span><span class="nx">value</span><span class="p">.</span><span class="nf">toLowerCase</span><span class="p">();</span>
+
+ <span class="kd">const</span> <span class="nx">filteredNames</span> <span class="o">=</span> <span class="p">[];</span>
+
+ <span class="nx">roleNames</span><span class="p">.</span><span class="nf">forEach</span><span class="p">(</span><span class="nx">role</span> <span class="o">=&gt;</span> <span class="p">{</span>
+     <span class="k">if </span><span class="p">(</span><span class="nx">role</span><span class="p">.</span><span class="nf">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">value</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nf">toLowerCase</span><span class="p">()</span> <span class="o">===</span> <span class="nx">value</span><span class="p">)</span>
+         <span class="nx">filteredNames</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="nx">role</span><span class="p">);</span>
+ <span class="p">});</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<div class="solutions">
+    
+<h4 id="solutions">Solutions</h4>
+
+<ol>
+  <li>
+    <p>We can use <code class="language-plaintext highlighter-rouge">filter</code> to get the even numbers, then <code class="language-plaintext highlighter-rouge">map</code> to divide each of those numbers by 2:</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">const</span> <span class="nx">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">];</span>
+ <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">numbers</span><span class="p">.</span><span class="nf">filter</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">).</span><span class="nf">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>We need to sum up the lengths of each word. One way to do that would be to use <code class="language-plaintext highlighter-rouge">reduce</code>:</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">const</span> <span class="nx">words</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">apple</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">banana</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">cherry</span><span class="dl">"</span><span class="p">];</span>
+ <span class="kd">const</span> <span class="nx">totalLength</span> <span class="o">=</span> <span class="nx">words</span><span class="p">.</span><span class="nf">reduce</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span> <span class="nx">x</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">acc</span> <span class="o">+</span> <span class="nx">x</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</code></pre></div>    </div>
+
+    <p>Here, we initialise the accumulator to 0, and then add the length of the string <code class="language-plaintext highlighter-rouge">x</code> to the accumulator for each string in the <code class="language-plaintext highlighter-rouge">words</code> array.</p>
+  </li>
+  <li>
+    <p>We want to get the name of the first person under 18 years old. We can get the person with the <code class="language-plaintext highlighter-rouge">find</code> method and then access the <code class="language-plaintext highlighter-rouge">name</code> property if the person exists:</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">const</span> <span class="nx">people</span> <span class="o">=</span> <span class="p">[</span>
+     <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Alice</span><span class="dl">"</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">20</span><span class="p">},</span>
+     <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Bob</span><span class="dl">"</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">15</span><span class="p">},</span>
+     <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Charlie</span><span class="dl">"</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">30</span><span class="p">},</span>
+     <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">David</span><span class="dl">"</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+ <span class="p">];</span>
+ <span class="kd">const</span> <span class="nx">firstChild</span> <span class="o">=</span> <span class="nx">people</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span><span class="p">.</span><span class="nx">age</span> <span class="o">&lt;</span> <span class="mi">18</span><span class="p">);</span>
+ <span class="kd">const</span> <span class="nx">firstChildName</span> <span class="o">=</span> <span class="nx">firstChild</span> <span class="o">!==</span> <span class="kc">undefined</span> <span class="p">?</span> <span class="nx">firstChild</span><span class="p">.</span><span class="nx">name</span> <span class="p">:</span> <span class="kc">undefined</span><span class="p">;</span>
+</code></pre></div>    </div>
+
+    <p>We could also do the last part more succinctly using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining">optional chaining</a> (<code class="language-plaintext highlighter-rouge">?.</code>):</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">const</span> <span class="nx">firstChildName</span> <span class="o">=</span> <span class="nx">people</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span><span class="p">.</span><span class="nx">age</span> <span class="o">&lt;</span> <span class="mi">18</span><span class="p">)?.</span><span class="nx">name</span><span class="p">;</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>We can use the second parameter in the function passed to <code class="language-plaintext highlighter-rouge">map</code> to get the index of each element, and then combine the resulting array of strings into one string with <code class="language-plaintext highlighter-rouge">join</code>:</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">const</span> <span class="nx">people</span> <span class="o">=</span> <span class="p">[</span>
+     <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Alice</span><span class="dl">"</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">20</span><span class="p">},</span>
+     <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Bob</span><span class="dl">"</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">15</span><span class="p">},</span>
+     <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Charlie</span><span class="dl">"</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">30</span><span class="p">},</span>
+     <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">David</span><span class="dl">"</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>
+ <span class="p">];</span>
+ <span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">people</span>
+     <span class="p">.</span><span class="nf">map</span><span class="p">((</span><span class="nx">x</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="s2">`Person #</span><span class="p">${</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">}</span><span class="s2">: </span><span class="p">${</span><span class="nx">x</span><span class="p">.</span><span class="nx">name</span><span class="p">}</span><span class="s2"> is </span><span class="p">${</span><span class="nx">x</span><span class="p">.</span><span class="nx">age</span><span class="p">}</span><span class="s2"> years old`</span><span class="p">)</span>
+     <span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="dl">"</span><span class="se">\n</span><span class="dl">"</span><span class="p">);</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>We should use the <code class="language-plaintext highlighter-rouge">filter</code> method to get a new array with only the roles that match <code class="language-plaintext highlighter-rouge">value</code>:</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c1">// Don’t worry about this line</span>
+ <span class="kd">const</span> <span class="nx">value</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">'</span><span class="s1">some-input-element</span><span class="dl">'</span><span class="p">).</span><span class="nx">value</span><span class="p">.</span><span class="nf">toLowerCase</span><span class="p">();</span>
+
+ <span class="kd">const</span> <span class="nx">filteredNames</span> <span class="o">=</span> <span class="nx">roleNames</span>
+     <span class="p">.</span><span class="nf">filter</span><span class="p">(</span><span class="nx">role</span> <span class="o">=&gt;</span> <span class="nx">role</span><span class="p">.</span><span class="nf">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">value</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nf">toLowerCase</span><span class="p">()</span> <span class="o">===</span> <span class="nx">value</span><span class="p">);</span>
+</code></pre></div>    </div>
+
+    <p>We should reuse existing methods and functions wherever possible, and <code class="language-plaintext highlighter-rouge">filter</code> does exactly what we want to do without having to manually and impurely <code class="language-plaintext highlighter-rouge">push</code> each matching element into a new array.</p>
+
+    <p>Generally, you should only use <code class="language-plaintext highlighter-rouge">forEach</code> when you don’t care about the result and thus want to do something that will cause a side effect, such as printing each element (e.g. <code class="language-plaintext highlighter-rouge">roleNames.forEach(role =&gt; console.log(role))</code>). While the function passed to <code class="language-plaintext highlighter-rouge">forEach</code> in the original code does technically cause a side effect (appending to the <code class="language-plaintext highlighter-rouge">filteredNames</code> array), the overall effect of the lines below</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">const</span> <span class="nx">filteredNames</span> <span class="o">=</span> <span class="p">[];</span>
+
+ <span class="nx">roleNames</span><span class="p">.</span><span class="nf">forEach</span><span class="p">(</span><span class="nx">role</span> <span class="o">=&gt;</span> <span class="p">{</span>
+     <span class="k">if </span><span class="p">(</span><span class="nx">role</span><span class="p">.</span><span class="nf">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">value</span><span class="p">.</span><span class="nx">length</span><span class="p">).</span><span class="nf">toLowerCase</span><span class="p">()</span> <span class="o">===</span> <span class="nx">value</span><span class="p">)</span>
+         <span class="nx">filteredNames</span><span class="p">.</span><span class="nf">push</span><span class="p">(</span><span class="nx">role</span><span class="p">);</span>
+ <span class="p">});</span>
+</code></pre></div>    </div>
+
+    <p>is to simply create a new array, which can be done purely with <code class="language-plaintext highlighter-rouge">filter</code>.</p>
+  </li>
+</ol>
+
+
+</div>
+
+<hr>
+
+<h3 id="callbacks">Callbacks</h3>
+
+<p>In JavaScript and HTML5, events trigger actions associated with all mouse clicks and other interactions with the page.  You subscribe to an event on a given <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> element as follows:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">element</span><span class="p">.</span><span class="nf">addEventHandler</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">,</span>
+<span class="nx">e</span><span class="o">=&gt;</span><span class="p">{</span>
+<span class="c1">// do something when the event occurs,</span>
+<span class="c1">// maybe using the result of the event e</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Note that <span class="glossary-term" data-term="callback">callback<span class="glossary-popup">A function passed as an argument to another function, to be executed after some event or action has occurred.
+</span></span> functions passed as event handlers are a situation where the one semantic difference between the arrow <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> and regular <span class="glossary-term" data-term="anonymous function">anonymous function<span class="glossary-popup">A function defined without a name, often used as an argument to other functions. Also known as a lambda function.
+</span></span> <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> really matters.  In the body of the arrow function above, <code class="language-plaintext highlighter-rouge">this</code> will be bound to the context of the <em>caller</em>, which is probably what you want if you are coding a class for a reusable component.  For functions defined with the <code class="language-plaintext highlighter-rouge">function</code> keyword, the object that <code class="language-plaintext highlighter-rouge">this</code> refers to will depend on the context of the <em>callee</em>, although the precise behaviour of <code class="language-plaintext highlighter-rouge">this</code> for functions defined with <code class="language-plaintext highlighter-rouge">function</code> <a href="https://www.codementor.io/@dariogarciamoya/understanding--this--in-javascript-du1084lyn">may vary with the particular JavaScript engine and the mode of execution</a>.</p>
+
+<p>Here’s a situation where this makes a difference.  Recall that JavaScript functions are just objects.  Therefore, we can also assign properties to them.  We can do this from within the function itself using the <code class="language-plaintext highlighter-rouge">this</code> keyword:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">Counter</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="nf">setInterval</span><span class="p">(</span><span class="kd">function</span> <span class="nf">increment</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">count</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kd">const</span> <span class="nx">ctr</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Counter</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>But, if I run this program at a console, I get the following, each line emitted 500 milliseconds apart:</p>
+
+<blockquote>
+  <p>NaN<br>
+NaN<br>
+NaN<br>
+…</p>
+</blockquote>
+
+<p>This occurs because the <code class="language-plaintext highlighter-rouge">this</code> inside the function passed to <code class="language-plaintext highlighter-rouge">setInterval</code> is referring to the first function enclosing its scope, i.e. the <code class="language-plaintext highlighter-rouge">increment</code> function.  Since <code class="language-plaintext highlighter-rouge">increment</code> has no count property, we are trying to apply <code class="language-plaintext highlighter-rouge">++</code> to <code class="language-plaintext highlighter-rouge">undefined</code> and the result is <code class="language-plaintext highlighter-rouge">NaN</code> (Not a Number).</p>
+
+<p>Arrow functions have different scoping rules for <code class="language-plaintext highlighter-rouge">this</code>. That is, they take the <code class="language-plaintext highlighter-rouge">this</code> of the enclosing scope (outside the arrow function), so in the following we get the expected behaviour:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">Counter</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="nf">setInterval</span><span class="p">(()</span><span class="o">=&gt;</span><span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">count</span><span class="o">++</span><span class="p">),</span> <span class="mi">500</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">new</span> <span class="nc">Counter</span><span class="p">();</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>0<br>
+1<br>
+2<br>
+…</p>
+</blockquote>
+
+<h3 id="continuations">Continuations</h3>
+
+<p>Continuations are functions that, instead of returning the result of a computation directly to the caller, pass the result on to another function, specified by the caller.<br>
+We can rewrite basically any function to pass their result to a user-specified continuation function instead of returning the result directly.  The parameter <code class="language-plaintext highlighter-rouge">done</code> in the <code class="language-plaintext highlighter-rouge">continuationPlus</code> function below will be a function specified by the caller to do something with the result.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">simplePlus</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nf">continuationPlus</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">done</span><span class="p">(</span><span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>An example of using this to log the result:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">continuationPlus</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This will output “8” to the console.</p>
+
+<p>We can also rewrite tail-recursive functions to end with continuations, which specify some custom action to perform when the recursion is complete:</p>
+
+<p>Consider a tail-recursive implementation of factorial:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">tailRecFactorial</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="p">?</span> <span class="nx">a</span> <span class="p">:</span> <span class="nf">tailRecFactorial</span><span class="p">(</span><span class="nx">n</span> <span class="o">*</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The function <code class="language-plaintext highlighter-rouge">tailRecFactorial</code> is tail recursive because the final operation in the function is the recursive call to itself, with no additional computation after this call. We can convert this function into a continuation version by adding an extra parameter <code class="language-plaintext highlighter-rouge">finalAction</code>:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">continuationFactorial</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">n</span><span class="p">,</span> <span class="nx">finalAction</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">n</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="nf">finalAction</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+    <span class="k">else</span> <span class="nf">continuationFactorial</span><span class="p">(</span><span class="nx">n</span> <span class="o">*</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">finalAction</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">continuationFactorial</code> function uses a continuation by passing a <code class="language-plaintext highlighter-rouge">finalAction</code> <span class="glossary-term" data-term="callback">callback<span class="glossary-popup">A function passed as an argument to another function, to be executed after some event or action has occurred.
+</span></span> that gets called with the result when the recursion reaches the base case (<code class="language-plaintext highlighter-rouge">n &lt;= 1</code>), allowing further actions to be specified and executed upon completion.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">continuationFactorial</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">);</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>120</p>
+</blockquote>
+
+<div class="alert-box">
+  <p><strong>Optional reading: Making functions tail-recursive</strong></p>
+
+  <p>Consider this non-tail-recursive version of factorial:</p>
+
+  <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">factorial</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="p">?</span> <span class="mi">1</span> <span class="p">:</span> <span class="nx">n</span> <span class="o">*</span> <span class="nf">factorial</span><span class="p">(</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>  </div>
+
+  <p>We can rewrite it to take in a continuation <code class="language-plaintext highlighter-rouge">done</code> continuation/<span class="glossary-term" data-term="callback">callback<span class="glossary-popup">A function passed as an argument to another function, to be executed after some event or action has occurred.
+</span></span> function and to return the result of the <span class="glossary-term" data-term="callback">callback<span class="glossary-popup">A function passed as an argument to another function, to be executed after some event or action has occurred.
+</span></span>:</p>
+
+  <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">factorialCPS</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="p">?</span> <span class="nf">done</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">:</span> <span class="nf">factorialCPS</span><span class="p">(</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">result</span> <span class="o">=&gt;</span> <span class="nf">done</span><span class="p">(</span><span class="nx">n</span> <span class="o">*</span> <span class="nx">result</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div>  </div>
+
+  <p>Functions written this way are said to be written in <em>continuation-passing style (CPS)</em>. Notice how <code class="language-plaintext highlighter-rouge">factorialCPS</code> is a tail-recursive function. We just got a tail-recursive function for free without having to rewrite the logic of the function or add an accumulator parameter!</p>
+
+  <p>This might not seem that useful for <code class="language-plaintext highlighter-rouge">factorial</code>, but imagine you had a more complex recursive function, such as <code class="language-plaintext highlighter-rouge">fibonacci</code> which calculates the <code class="language-plaintext highlighter-rouge">n</code>th Fibonacci number (ignoring that there are more efficient ways of computing this without recursion):</p>
+
+  <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">n</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 0th Fibonacci number is 0</span>
+        <span class="c1">// 1st Fibonacci number is 1</span>
+        <span class="k">return</span> <span class="nx">n</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">const</span> <span class="nx">x</span> <span class="o">=</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">y</span> <span class="o">=</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">x</span> <span class="o">+</span> <span class="nx">y</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>  </div>
+
+  <p>This is harder to convert to a tail-recursive function like we did with <code class="language-plaintext highlighter-rouge">tailRecFactorial</code> above. However, we can rewrite it with CPS to get a tail-recursive function for free:</p>
+
+  <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">fibonacciCPS</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">n</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">done</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nf">fibonacciCPS</span><span class="p">(</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">x</span> <span class="o">=&gt;</span>
+        <span class="nf">fibonacciCPS</span><span class="p">(</span><span class="nx">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">y</span> <span class="o">=&gt;</span>
+            <span class="nf">done</span><span class="p">(</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">y</span><span class="p">)));</span>
+<span class="p">}</span>
+</code></pre></div>  </div>
+
+  <p>In languages that support <a href="/purescript/#tail-call-optimisation">tail call optimisation</a>, the compiler will be able to optimise the tail call <code class="language-plaintext highlighter-rouge">fibonacciCPS(n - 1, x =&gt; ...)</code> into a loop so that it doesn’t add a frame to the call stack, avoiding stack overflow errors. However, it’s important to note that CPS doesn’t magically make a function use less space; even though a tail-call-optimised <code class="language-plaintext highlighter-rouge">fibonacciCPS</code> will use less space on the stack than <code class="language-plaintext highlighter-rouge">fibonacci</code>, it will instead use space on the heap due to the continuation functions/<span class="glossary-term" data-term="closures">closures<span class="glossary-popup">A function and the set of variables it accesses from its enclosing scope.
+</span></span> capturing their variables.</p>
+
+  <p>If you are interested in learning more, <a href="https://www.gresearch.com/news/continuation-passing-style">this article</a> goes through a more complex example.</p>
+</div>
+
+<p>Continuations are essential in asynchronous processing, which abounds in web programming.  For example, when an HTTP request is dispatched by a client to a server, there is no knowing precisely when the response will be returned (it depends on the speed of the server, the network between client and server, and load on that network).  However, we can be sure that it will not be instant and certainly not before the line of code following the dispatch is executed by the interpreter.  Thus, continuation-style <span class="glossary-term" data-term="callback">callback<span class="glossary-popup">A function passed as an argument to another function, to be executed after some event or action has occurred.
+</span></span> functions are typically passed through to functions that trigger such asynchronous behaviour, for those <span class="glossary-term" data-term="callback">callback<span class="glossary-popup">A function passed as an argument to another function, to be executed after some event or action has occurred.
+</span></span> functions to be invoked when the action is completed.  A simple example of an asynchronous function invocation is the built-in <code class="language-plaintext highlighter-rouge">setTimeout</code> function, which schedules an action to occur after a certain delay.  The <code class="language-plaintext highlighter-rouge">setTimeout</code> function itself returns immediately after dispatching the job, e.g. to the JavaScript event loop:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">setTimeout</span><span class="p">(()</span><span class="o">=&gt;</span><span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">done.</span><span class="dl">'</span><span class="p">),</span> <span class="mi">0</span><span class="p">);</span>
+<span class="c1">// the above tells the event loop to execute</span>
+<span class="c1">// the continuation after 0 milliseconds delay.</span>
+<span class="c1">// even with a zero-length delay, the synchronous code</span>
+<span class="c1">// after the setTimeout will be run first…</span>
+<span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">job queued on the event loop…</span><span class="dl">'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>job queued on the event loop…<br>
+done.</p>
+</blockquote>
+
+<h3 id="function-and-method-chaining">Function and Method Chaining</h3>
+
+<p><em><span class="glossary-term" data-term="chained functions">Chained functions<span class="glossary-popup">A programming pattern where multiple function calls are made sequentially, with each function returning an object that allows the next function to be called.
+</span></span></em> are a common pattern.<br>
+Take a simple linked-list data structure as an example.  We’ll hard-code a list object to start off with:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">l</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">data</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="na">next</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">data</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="na">next</span><span class="p">:</span> <span class="p">{</span>
+            <span class="na">data</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="na">next</span><span class="p">:</span> <span class="kc">null</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>We can create simple functions similar to <a href="/javascript1#array-cheatsheet">those of Array</a>, which we can chain:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span>
+  <span class="nx">map</span> <span class="o">=</span> <span class="p">(</span><span class="nx">f</span><span class="p">,</span><span class="nx">l</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">l</span> <span class="p">?</span> <span class="p">({</span><span class="na">data</span><span class="p">:</span> <span class="nf">f</span><span class="p">(</span><span class="nx">l</span><span class="p">.</span><span class="nx">data</span><span class="p">),</span> <span class="na">next</span><span class="p">:</span> <span class="nf">map</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span><span class="nx">l</span><span class="p">.</span><span class="nx">next</span><span class="p">)})</span> <span class="p">:</span> <span class="kc">null</span>
+<span class="p">,</span> <span class="nx">filter</span> <span class="o">=</span> <span class="p">(</span><span class="nx">f</span><span class="p">,</span><span class="nx">l</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="o">!</span><span class="nx">l</span> <span class="p">?</span> <span class="kc">null</span> <span class="p">:</span>
+                    <span class="p">(</span><span class="nx">next</span> <span class="o">=&gt;</span>
+                        <span class="nf">f</span><span class="p">(</span><span class="nx">l</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">?</span> <span class="p">({</span><span class="na">data</span><span class="p">:</span> <span class="nx">l</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="nx">next</span><span class="p">})</span>
+                                  <span class="p">:</span> <span class="nx">next</span>
+                    <span class="p">)</span> <span class="p">(</span><span class="nf">filter</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span><span class="nx">l</span><span class="p">.</span><span class="nx">next</span><span class="p">))</span>
+                    <span class="c1">// the above is using an immediately invoked</span>
+                    <span class="c1">// function expression (IIFE) such that the function</span>
+                    <span class="c1">// parameter `next` is used like a local variable for</span>
+                    <span class="c1">// filter(f,l.next)</span>
+<span class="p">,</span> <span class="nx">take</span> <span class="o">=</span> <span class="p">(</span><span class="nx">n</span><span class="p">,</span><span class="nx">l</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">l</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="p">?</span> <span class="p">({</span><span class="na">data</span><span class="p">:</span> <span class="nx">l</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span> <span class="na">next</span><span class="p">:</span> <span class="nf">take</span><span class="p">(</span><span class="nx">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="nx">l</span><span class="p">.</span><span class="nx">next</span><span class="p">)})</span>
+                         <span class="p">:</span> <span class="kc">null</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>(An IIFE is an immediately invoked function expression.)</p>
+
+<p>We can chain calls to these functions like so:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">take</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span>
+    <span class="nf">filter</span><span class="p">(</span><span class="nx">x</span><span class="o">=&gt;</span> <span class="nx">x</span><span class="o">%</span><span class="mi">2</span> <span class="o">===</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nf">map</span><span class="p">(</span><span class="nx">x</span><span class="o">=&gt;</span> <span class="nx">x</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nx">l</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>{ data: 2, next: { data: 4, next: null }}</p>
+</blockquote>
+
+<h4 id="aside-dive-in-to-the-definition-of-map">Aside: Dive in to the definition of Map</h4>
+
+<p>The definition of <code class="language-plaintext highlighter-rouge">map</code> (and friends) may look scary, but let’s break it down. We will write it in a more verbose way for now:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">map</span><span class="p">(</span><span class="nx">func</span><span class="p">,</span> <span class="nx">list</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if </span><span class="p">(</span><span class="nx">list</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="na">data</span><span class="p">:</span> <span class="nf">func</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">data</span><span class="p">),</span>
+            <span class="na">next</span><span class="p">:</span> <span class="nf">map</span><span class="p">(</span><span class="nx">func</span><span class="p">,</span> <span class="nx">list</span><span class="p">.</span><span class="nx">next</span><span class="p">)</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The map function will recursively apply the given <code class="language-plaintext highlighter-rouge">func</code> to each element of the linked list <code class="language-plaintext highlighter-rouge">list</code>, constructing and returning a new linked list where each element is the result of applying <code class="language-plaintext highlighter-rouge">func</code> to the corresponding data element in the original list.</p>
+
+<p>Try to expand and step through the <code class="language-plaintext highlighter-rouge">filter</code> and <code class="language-plaintext highlighter-rouge">take</code> and see if you can understand how they work.</p>
+
+<h2 id="fluent-interfaces-pure-vs-impure">Fluent Interfaces (pure vs impure)</h2>
+
+<p>In the chained function calls above, you have to read them inside-out to understand the flow.  Also, keeping track of how many brackets to close gets a bit annoying.  Thus, in <span class="glossary-term" data-term="object-oriented">object-oriented<span class="glossary-popup">Object-oriented languages are built around the concept of <em>objects</em> where an object captures the set of data (state) and behaviours (methods) associated with entities in the system.
+</span></span> languages, you will often see class definitions that allow for method chaining by providing methods that return an instance of the class itself or another chainable class.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">List</span> <span class="p">{</span>
+    <span class="nf">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">head</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="nf">map</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span> <span class="p">{</span>
+         <span class="k">return</span> <span class="k">new</span> <span class="nc">List</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">head</span><span class="p">));</span>
+    <span class="p">}</span>
+  <span class="p">...</span>
+</code></pre></div></div>
+
+<p>Then the same flow as above is possible without the nesting and can be read left-to-right, top-to-bottom:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">new</span> <span class="nc">List</span><span class="p">(</span><span class="nx">l</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="nx">x</span><span class="o">=&gt;</span><span class="nx">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">filter</span><span class="p">(</span><span class="nx">x</span><span class="o">=&gt;</span><span class="nx">x</span><span class="o">%</span><span class="mi">2</span><span class="o">===</span><span class="mi">0</span><span class="p">)</span>
+    <span class="p">.</span><span class="nf">take</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This is called <em>fluent</em> programming style.
+Interfaces in <span class="glossary-term" data-term="object-oriented">object-oriented<span class="glossary-popup">Object-oriented languages are built around the concept of <em>objects</em> where an object captures the set of data (state) and behaviours (methods) associated with entities in the system.
+</span></span> languages that chain a sequence of method calls (as above) are often called <em><span class="glossary-term" data-term="fluent interfaces">fluent interfaces<span class="glossary-popup">A method chaining pattern where a sequence of method calls is made on the same object, with each method returning the object itself or another chainable object.
+</span></span></em>.  One thing to be careful about <span class="glossary-term" data-term="fluent interfaces">fluent interfaces<span class="glossary-popup">A method chaining pattern where a sequence of method calls is made on the same object, with each method returning the object itself or another chainable object.
+</span></span> in languages that do not enforce purity is that the methods may or may not be pure.</p>
+
+<p>That is, the type system does not warn you whether the method mutates the object upon which it is invoked and simply returns <code class="language-plaintext highlighter-rouge">this</code>, or creates a new object, leaving the original object untouched.  We can see,  however, that <code class="language-plaintext highlighter-rouge">List.map</code> as defined above creates a new list and is pure.</p>
+
+<h2 id="computation-with-pure-functions">Computation with Pure Functions</h2>
+
+<p><span class="glossary-term" data-term="pure functions">Pure functions<span class="glossary-popup">A function that always produces the same output for the same input and has no side effects.
+</span></span> may seem restrictive, but in fact <span class="glossary-term" data-term="pure function">pure function<span class="glossary-popup">A function that always produces the same output for the same input and has no side effects.
+</span></span> expressions and <span class="glossary-term" data-term="higher-order functions">higher-order functions<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span> can be combined into powerful programs.  In fact, anything you can compute with an <span class="glossary-term" data-term="imperative">imperative<span class="glossary-popup">Imperative programs are a sequence of statements that change a program’s state.  This is probably the dominant paradigm for programming languages today.  Languages from Assembly to Python are built around this concept and most modern languages still allow you to program in this style.
+</span></span> program can be computed through function composition. <span class="glossary-term" data-term="side effects">Side effects<span class="glossary-popup">Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.
+</span></span> are required eventually, but they can be managed and the places they occur can be isolated. Let’s do a little demonstration; although it might be a bit impractical, we’ll make a list processing environment with just functions:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">cons</span> <span class="o">=</span> <span class="p">(</span><span class="nx">_head</span><span class="p">,</span> <span class="nx">_rest</span><span class="p">)</span><span class="o">=&gt;</span> <span class="nx">selector</span><span class="o">=&gt;</span> <span class="nf">selector</span><span class="p">(</span><span class="nx">_head</span><span class="p">,</span> <span class="nx">_rest</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>With just the above definition we can construct a list (the term “cons” dates back to LISP) with three elements, terminated with null, like so:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">list123</span> <span class="o">=</span> <span class="nf">cons</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nf">cons</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nf">cons</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="kc">null</span><span class="p">)));</span>
+</code></pre></div></div>
+
+<p>The data element and the reference to the next node in the list are stored in the <span class="glossary-term" data-term="closure">closure<span class="glossary-popup">A function and the set of variables it accesses from its enclosing scope.
+</span></span> returned by the <code class="language-plaintext highlighter-rouge">cons</code> function.  Created like this, the only side effect of growing the list is the creation of new cons <span class="glossary-term" data-term="closures">closures<span class="glossary-popup">A function and the set of variables it accesses from its enclosing scope.
+</span></span>.  Mutation of more complex structures such as trees can be managed in a similarly “pure” way, and surprisingly efficiently, as we will see later in this course.</p>
+
+<p><code class="language-plaintext highlighter-rouge">cons</code> is a function that takes two parameters <code class="language-plaintext highlighter-rouge">_head</code> and <code class="language-plaintext highlighter-rouge">_rest</code> (the <code class="language-plaintext highlighter-rouge">_</code> prefix is just to differentiate them from the functions I create below), and returns a function that itself takes a function (selector) as argument.  The selector function is then applied to <code class="language-plaintext highlighter-rouge">_head</code> and <code class="language-plaintext highlighter-rouge">_rest</code>.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">selector</code> function that we pass to the list is our ticket to accessing its elements:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">list123</span><span class="p">((</span><span class="nx">_head</span><span class="p">,</span> <span class="nx">_rest</span><span class="p">)</span><span class="o">=&gt;</span> <span class="nx">_head</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>1</p>
+</blockquote>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">list123</span><span class="p">((</span><span class="nx">_</span><span class="p">,</span><span class="nx">r</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">r</span><span class="p">)((</span><span class="nx">h</span><span class="p">,</span><span class="nx">_</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">h</span><span class="p">)</span> <span class="c1">// we can call the parameters whatever we like</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>2</p>
+</blockquote>
+
+<p>We can create accessor functions to operate on a given list (by passing the list the appropriate selector function):</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span>
+    <span class="nx">head</span> <span class="o">=</span> <span class="nx">list</span><span class="o">=&gt;</span> <span class="nf">list</span><span class="p">((</span><span class="nx">h</span><span class="p">,</span><span class="nx">_</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">h</span><span class="p">),</span>
+    <span class="nx">rest</span> <span class="o">=</span> <span class="nx">list</span><span class="o">=&gt;</span> <span class="nf">list</span><span class="p">((</span><span class="nx">_</span><span class="p">,</span><span class="nx">r</span><span class="p">)</span><span class="o">=&gt;</span><span class="nx">r</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Now, <code class="language-plaintext highlighter-rouge">head</code> gives us the first data element from the list, and <code class="language-plaintext highlighter-rouge">rest</code> gives us another list.  Now we can access things in the list like so:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">one</span> <span class="o">=</span> <span class="nf">head</span><span class="p">(</span><span class="nx">list123</span><span class="p">),</span> <span class="c1">// ===1</span>
+    <span class="nx">list23</span> <span class="o">=</span> <span class="nf">rest</span><span class="p">(</span><span class="nx">list123</span><span class="p">),</span>
+    <span class="nx">two</span> <span class="o">=</span> <span class="nf">head</span><span class="p">(</span><span class="nx">list23</span><span class="p">),</span> <span class="c1">// ===2</span>
+    <span class="p">...</span> <span class="c1">// and so on</span>
+</code></pre></div></div>
+
+<p>Now, here’s the ubiquitous map function:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">map</span> <span class="o">=</span> <span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="nx">list</span><span class="p">)</span><span class="o">=&gt;</span> <span class="o">!</span><span class="nx">list</span> <span class="p">?</span> <span class="kc">null</span>
+                              <span class="p">:</span> <span class="nf">cons</span><span class="p">(</span><span class="nf">f</span><span class="p">(</span><span class="nf">head</span><span class="p">(</span><span class="nx">list</span><span class="p">)),</span> <span class="nf">map</span><span class="p">(</span><span class="nx">f</span><span class="p">,</span> <span class="nf">rest</span><span class="p">(</span><span class="nx">list</span><span class="p">)));</span>
+</code></pre></div></div>
+
+<p>We can now apply our map function to <code class="language-plaintext highlighter-rouge">list123</code> to perform some transformation of the data</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">list234</span> <span class="o">=</span> <span class="nf">map</span><span class="p">(</span><span class="nx">x</span> <span class="o">=&gt;</span> <span class="nx">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">list123</span><span class="p">);</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">cons(2, cons(3, cons(4, null)));</code></p>
+</blockquote>
+
+<p>In the above, we are using <span class="glossary-term" data-term="closures">closures<span class="glossary-popup">A function and the set of variables it accesses from its enclosing scope.
+</span></span> to store data.  It’s just a trick to show the power of functions and to put us into the right state of mind for the <span class="glossary-term" data-term="lambda calculus">Lambda Calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span>, which provides a complete model of computation using only <span class="glossary-term" data-term="anonymous functions">anonymous functions<span class="glossary-popup">A function defined without a name, often used as an argument to other functions. Also known as a lambda function.
+</span></span> like those above.  In a real program I would expect you would use JavaScript’s class and object facilities to create data structures.</p>
+
+<h3 id="towards-lambda-calculus-and-church-encoding">Towards Lambda Calculus and Church Encoding</h3>
+
+<p>Thus, with only <span class="glossary-term" data-term="pure function">pure function<span class="glossary-popup">A function that always produces the same output for the same input and has no side effects.
+</span></span> expressions and JavaScript conditional expressions (<code class="language-plaintext highlighter-rouge">?:</code>), we can begin to perform complex computations.  We can actually go further and eliminate the conditional expressions with more functions! Here’s the gist of it: we wrap list nodes with another function of two arguments, one argument, <code class="language-plaintext highlighter-rouge">whenempty</code>, is a function to apply when the list is empty, the other argument, <code class="language-plaintext highlighter-rouge">notempty</code>, is applied by all internal nodes in the list.  An empty list node (instead of <code class="language-plaintext highlighter-rouge">null</code>) applies the <code class="language-plaintext highlighter-rouge">whenempty</code> function when visited; a non-empty node applies the <code class="language-plaintext highlighter-rouge">notempty</code> function. The implementations of each of these functions then form the two conditions to be handled by a recursive algorithm like <code class="language-plaintext highlighter-rouge">map</code> or <code class="language-plaintext highlighter-rouge">reduce</code>.  See <a href="https://leanpub.com/javascriptallongesix/read#leanpub-auto-making-data-out-of-functions">“Making Data out of Functions” by Braithwaite</a> for a more detailed exposition of this idea.</p>
+
+<p>These ideas, of computation through <span class="glossary-term" data-term="pure function">pure function<span class="glossary-popup">A function that always produces the same output for the same input and has no side effects.
+</span></span> expressions, are inspired by Alonzo Church’s <em><span class="glossary-term" data-term="lambda calculus">lambda calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span></em>.   We’ll be looking again at the <span class="glossary-term" data-term="lambda calculus">lambda calculus<span class="glossary-popup">A model of computation based on mathematical functions proposed by Alonzo Church in the 1930s.
+</span></span> later.  Obviously, for the program to be at all useful, you will need some sort of side effect, such as outputting the results of a computation to a display device.  When we begin to explore PureScript and Haskell later in this course we will discuss how such languages manage this trick while remaining “pure”.</p>
+
+<hr>
+
+<h2 id="exercises-2">Exercises</h2>
+
+<ul>
+  <li>Implement a <code class="language-plaintext highlighter-rouge">fromArray</code> function to construct a <code class="language-plaintext highlighter-rouge">cons</code> list from an array.</li>
+  <li>Implement a <code class="language-plaintext highlighter-rouge">filter</code> function, which takes a function and a cons list, and returns another cons list populated only with those elements of the list for which the function returns true.</li>
+  <li>Implement a <code class="language-plaintext highlighter-rouge">reduce</code> function for these cons lists, similar to JavasScript’s <code class="language-plaintext highlighter-rouge">Array.reduce</code>.</li>
+  <li>Implement a <code class="language-plaintext highlighter-rouge">reduceRight</code> function for these cons lists, similar to JavaScript’s <code class="language-plaintext highlighter-rouge">Array.reduceRight</code>.</li>
+  <li>Implement a <code class="language-plaintext highlighter-rouge">concat</code> function that takes two lists as arguments and returns a new list of their concatenation.</li>
+  <li>How can we update just one element in this list without mutating any data and what is the run-time complexity of such an operation?</li>
+</ul>
+
+<p>The solutions for this exercise will be discussed in class.</p>
+
+<hr>
+
+<h2 id="updating-data-structures-with-pure-functions">Updating Data Structures With Pure Functions</h2>
+
+<p>We saw in the <a href="javascript1">introduction to JavaScript</a> that one can create objects with a straightforward chunk of JSON:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">studentVersion1</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Tim</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">assignmentMark</span><span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+  <span class="na">examMark</span><span class="p">:</span> <span class="mi">15</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>studentVersion1<br>
+{name: “Tim”, assignmentMark: 20, examMark: 15}</p>
+</blockquote>
+
+<p>Conveniently, one can copy all of the properties from an existing object into a new object using the “spread” operator <code class="language-plaintext highlighter-rouge">...</code>, followed by more JSON properties that can potentially overwrite those of the original.  For example, the following creates a new object with all the properties of the first, but with a different assignmentMark:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">studentVersion2</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">...</span><span class="nx">studentVersion1</span><span class="p">,</span>
+    <span class="na">assignmentMark</span><span class="p">:</span> <span class="mi">19</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>studentVersion2<br>
+{name: “Tim”, assignmentMark: 19, examMark: 15}</p>
+</blockquote>
+
+<p>One can encapsulate such updates in a succinct <span class="glossary-term" data-term="pure function">pure function<span class="glossary-popup">A function that always produces the same output for the same input and has no side effects.
+</span></span>:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">updateExamMark</span><span class="p">(</span><span class="nx">student</span><span class="p">,</span> <span class="nx">newMark</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{...</span><span class="nx">student</span><span class="p">,</span> <span class="na">examMark</span><span class="p">:</span> <span class="nx">newMark</span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">studentVersion3</span> <span class="o">=</span> <span class="nf">updateExamMark</span><span class="p">(</span><span class="nx">studentVersion2</span><span class="p">,</span> <span class="mi">19</span><span class="p">);</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>studentVersion3<br>
+{name: “Tim”, assignmentMark: 19, examMark: 19}</p>
+</blockquote>
+
+<p>Note that when we declared each of the variables <code class="language-plaintext highlighter-rouge">studentVersion1-3</code> as <code class="language-plaintext highlighter-rouge">const</code>, these variables are only constant in the sense that the object reference cannot be changed.  That is, they cannot be reassigned to refer to different objects:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">studentVersion1</span> <span class="o">=</span> <span class="nx">studentVersion2</span><span class="p">;</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>VM430:1 Uncaught TypeError: Assignment to constant variable.</p>
+</blockquote>
+
+<p>However, there is nothing in these definitions to prevent the properties of those objects from being changed:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">studentVersion1</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Tom</span><span class="dl">"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>studentVersion1<br>
+{name: “Tom”, assignmentMark: 20, examMark: 15}</p>
+</blockquote>
+
+<p>We will see later how the <a href="/typescript1">TypeScript compiler</a> allows us to create deeply immutable objects that will trigger compile errors if we try to change their properties.</p>
+
+<p>You may wonder how <span class="glossary-term" data-term="pure functions">pure functions<span class="glossary-popup">A function that always produces the same output for the same input and has no side effects.
+</span></span> can be efficient if the only way to mutate data structures is by returning a modified copy of the original.  There are two responses to such a question, one is: “purity helps us avoid errors in state management through wanton mutation effects—in modern programming correctness is often a bigger concern than efficiency”, the other is “properly structured data permits log(n) time copy-updates, which should be good enough for most purposes”.  We’ll explore what is meant by the latter in later sections of these notes.</p>
+
+<div class="glossary">
+  <h2 id="glossary">Glossary</h2>
+
+  <p><em>Callback</em>: A function passed as an argument to another function, to be executed after some event or action has occurred.</p>
+
+  <p><em>Chained Functions</em>: A programming pattern where multiple function calls are made sequentially, with each function returning an object that allows the next function to be called.</p>
+
+  <p><em>Continuation:</em> A function that takes a result and performs some action with it, instead of returning the result directly. Used extensively in asynchronous programming.</p>
+
+  <p><em>Fluent Interface</em>: A method chaining pattern where a sequence of method calls is made on the same object, with each method returning the object itself or another chainable object.</p>
+
+  <p><em>Pure Function</em>: A function that always produces the same output for the same input and has no side effects.</p>
+
+  <p><em>Referential Transparency</em>: An expression that can be replaced with its value without changing the program’s behaviour, indicating no side effects and consistent results.</p>
+
+  <p><em>Side Effects</em>: Any state change that occurs outside of a function’s local environment or any observable interaction with the outside world, such as modifying a global variable, writing to a file, or printing to a console.</p>
+
+</div>
+
+	</div>
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/html/">&lt; <span class="glossary-term" data-term="html">HTML<span class="glossary-popup">Hyper-Text Markup Language - the declarative language for specifying web page content.
+</span></span> as a <span class="glossary-term" data-term="declarative">Declarative<span class="glossary-popup">Declarative languages focus on declaring <em>what</em> a procedure (or function) should do rather than <em>how</em> it should do it.
+</span></span> Language</a>
+      
+      
+        
+        
+        <a id="right" href="/typescript1/">TypeScript Introduction &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+</article>
+
+      </div>
+    </main><link id="fa-stylesheet" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css">
+<footer class="site-footer h-card">
+    <data class="u-url" href="/"></data>
+
+    <div class="wrapper">
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col">
+                <!-- <p class="feed-subscribe">
+                <a href="/feed.xml">
+                    <svg class="svg-icon orange">
+                        <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+                    </svg><span>Subscribe</span>
+                </a>
+                </p> -->
+        </div>
+        <div class="footer-col">
+            <p>Examples and tutorials for various programming paradigms.</p>
+        </div>
+    </div>
+
+    <!-- <div class="social-links"><ul class="social-media-list"><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li>
+  <li>
+    <a href="/feed.xml" target="_blank" title="Subscribe to syndication feed">
+      <svg class="svg-icon grey" viewbox="0 0 16 16">
+        <path d="M12.8 16C12.8 8.978 7.022 3.2 0 3.2V0c8.777 0 16 7.223 16 16h-3.2zM2.194
+          11.61c1.21 0 2.195.985 2.195 2.196 0 1.21-.99 2.194-2.2 2.194C.98 16 0 15.017 0
+          13.806c0-1.21.983-2.195 2.194-2.195zM10.606
+          16h-3.11c0-4.113-3.383-7.497-7.496-7.497v-3.11c5.818 0 10.606 4.79 10.606 10.607z"
+        />
+      </svg>
+    </a>
+  </li>
+</ul>
+</div> -->
+
+    </div>
+
+</footer>
+
+
+
+</body></html>

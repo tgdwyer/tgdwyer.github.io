@@ -1,0 +1,629 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Data Types and Type Classes | Good Times Paradigms</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="Data Types and Type Classes">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Learning Outcomes">
+<meta property="og:description" content="Learning Outcomes">
+<meta property="og:site_name" content="Good Times Paradigms">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-09-30T03:56:06+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="Data Types and Type Classes">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-30T03:56:06+00:00","datePublished":"2025-09-30T03:56:06+00:00","description":"Learning Outcomes","headline":"Data Types and <span class="glossary-term" data-term="type classes">Type Classes<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span>","mainEntityOfPage":{"@type":"WebPage","@id":"/haskell2/"},"url":"/haskell2/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Good Times Paradigms"><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-159840333-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159840333-1');
+</script><!-- MathJax v3 -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true }
+  };
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+  <script src="/assets/js/spoilers.js" defer=""></script></head>
+
+  <body><header class="site-header">
+
+    <div class="wrapper"><!-- Lambda icon and site title aligned left in a flex container -->
+        <div style="display: flex; align-items: center;">
+            <button id="play-theme-song" style="background:none;border:none;cursor:pointer;vertical-align:middle;margin-right:2px;" title="Play theme song">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="currentColor" viewBox="0 0 48 24" style="vertical-align:middle;">
+                    <text x="4" y="20" font-size="20" font-family="serif">ΓΤΠ</text>
+                    <!-- γτπ -->
+                </svg>
+            </button>
+            <a class="site-title" rel="author" href="/" style="margin:0;">Good Times Paradigms</a>
+        </div>
+        <script src="/assets/js/hide_solutions.js" defer=""></script>
+        <audio id="theme-song" src="/assets/themesong.mp3"></audio>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var btn = document.getElementById('play-theme-song');
+                var audio = document.getElementById('theme-song');
+                btn.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play();
+                    } else {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                });
+            });
+        </script><nav class="site-nav">
+            <input type="checkbox" id="nav-trigger" class="nav-trigger">
+            <label for="nav-trigger">
+                <span class="menu-icon">
+                </span>
+            </label>
+
+            <div class="nav-items"><a class="page-link nav-item" href="/about/">About</a><a class="page-link nav-item" href="/">Notes on Programming Paradigms</a><!-- Radio Switch -->
+                <div id="toggle-div" style="display: none;">
+                    <div class="solutions-toggle">
+                        <p class="page-link" style="margin-bottom: 0px;">Show Solutions?</p>
+                        <label class="switch" style="vertical-align: middle;">
+                            <input type="checkbox" id="toggle-switch">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/haskell1/">&lt; Creating and Running Haskell Programs</a>
+      
+      
+        
+        
+        <a id="right" href="/haskell3/">Functor and Applicative &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+	<header class="post-header">
+		<h1 class="post-title">Data Types and Type Classes</h1>
+	</header>
+	<p id="readingTime">
+
+  
+  20
+
+ min read</p>
+	<div class="post-content">
+		<h2 id="learning-outcomes">Learning Outcomes</h2>
+
+<ul>
+  <li>Define data structures using Haskell’s <a href="#algebraic-data-types"><span class="glossary-term" data-term="algebraic data types">Algebraic Data Types<span class="glossary-popup">(or ADTs) Custom data types in Haskell defined using the data keyword, allowing the combination of different types into one composite type using the | operator.
+</span></span></a> and use <a href="#pattern-matching"><span class="glossary-term" data-term="pattern matching">pattern matching<span class="glossary-popup">A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
+</span></span></a> to define functions that handle each of the possible instances</li>
+  <li>Use the alternate <a href="#record-syntax"><span class="glossary-term" data-term="record syntax">record syntax<span class="glossary-popup">An alternate way to define data structures in Haskell with named fields, automatically creating accessor functions for those fields.
+</span></span></a> to define data structures with named fields</li>
+  <li>Understand that Haskell <a href="#typeclasses"><span class="glossary-term" data-term="type classes">type classes<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span></a> are similar to TypeScript <span class="glossary-term" data-term="interfaces">interfaces<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span> in providing a definition for the set of functions that must be available for instances of those <span class="glossary-term" data-term="type classes">type classes<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span> and that typeclasses can extend upon one another to create rich hierarchies</li>
+  <li>Understand that the <a href="#maybe"><span class="glossary-term" data-term="maybe">Maybe<span class="glossary-popup">A built-in type in Haskell used to represent optional values, allowing functions to return either Just a value or Nothing to handle cases where no value is available.
+</span></span></a> type provides an elegant way to handle <em><span class="glossary-term" data-term="partial functions">partial functions<span class="glossary-popup">Functions that do not have a mapping for every input, potentially failing for some inputs.
+</span></span></em>.</li>
+</ul>
+
+<h2 id="algebraic-data-types-adts">Algebraic Data Types (ADTs)</h2>
+
+<p>We can declare custom types for data in Haskell using the <code class="language-plaintext highlighter-rouge">data</code> keyword.  Consider the following declaration of our familiar cons list:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">ConsList</span> <span class="o">=</span> <span class="kt">Nil</span> <span class="o">|</span> <span class="kt">Cons</span> <span class="kt">Int</span> <span class="kt">ConsList</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">|</code> operator looks rather like the <span class="glossary-term" data-term="union type">union type<span class="glossary-popup">A TypeScript construct that allows a variable to hold values of multiple specified types, separated by the <code>|</code> symbol.
+</span></span> operator in TypeScript, and indeed it serves a similar purpose.  Here, a <code class="language-plaintext highlighter-rouge">ConsList</code> is defined as being a composite type, composed of either <code class="language-plaintext highlighter-rouge">Nil</code> or a <code class="language-plaintext highlighter-rouge">Cons</code> of an <code class="language-plaintext highlighter-rouge">Int</code> value and another <code class="language-plaintext highlighter-rouge">ConsList</code>.  This is called an “algebraic data type” because <code class="language-plaintext highlighter-rouge">|</code> is like an “or”, or algebraic “sum” operation for combining elements of the type while separating them with a space is akin to “and” or a “product” operation.</p>
+
+<p>Note that neither <code class="language-plaintext highlighter-rouge">Nil</code> or <code class="language-plaintext highlighter-rouge">Cons</code> are built-in.  They are simply labels for constructor functions for the different versions of a <code class="language-plaintext highlighter-rouge">ConsList</code> node.  You could equally well call them <code class="language-plaintext highlighter-rouge">EndOfList</code> and <code class="language-plaintext highlighter-rouge">MakeList</code> or anything else that’s meaningful to you. <code class="language-plaintext highlighter-rouge">Nil</code> is a function with no parameters, <code class="language-plaintext highlighter-rouge">Cons</code> is a function with two parameters.  <code class="language-plaintext highlighter-rouge">Int</code> is a built-in primitive type for limited-precision integers.</p>
+
+<p>Now we can create a small list like so:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">l</span> <span class="o">=</span> <span class="kt">Cons</span> <span class="mi">1</span> <span class="o">$</span> <span class="kt">Cons</span> <span class="mi">2</span> <span class="o">$</span> <span class="kt">Cons</span> <span class="mi">3</span> <span class="kt">Nil</span>
+</code></pre></div></div>
+
+<div class="alert-box alert-info">
+  <p><strong><code class="language-plaintext highlighter-rouge">data</code> vs <code class="language-plaintext highlighter-rouge">newtype</code></strong></p>
+
+  <p>We can construct a type <code class="language-plaintext highlighter-rouge">UserId</code> with one parameter, <code class="language-plaintext highlighter-rouge">Int</code></p>
+
+  <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">UserId</span> <span class="o">=</span> <span class="kt">UserId</span> <span class="kt">Int</span>
+<span class="kr">newtype</span> <span class="kt">UserId</span> <span class="o">=</span> <span class="kt">UserId</span> <span class="kt">Int</span>
+</code></pre></div>  </div>
+
+  <p>These are almost identical, and we can use them both equivalently, e.g.,</p>
+
+  <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">student</span> <span class="o">::</span> <span class="kt">UserId</span>
+<span class="n">student</span> <span class="o">=</span> <span class="kt">UserId</span> <span class="mi">1337</span>
+</code></pre></div>  </div>
+
+  <p>The <code class="language-plaintext highlighter-rouge">newtype</code> keyword is used to define a type that has <em>exactly</em> one constructor with <em>exactly</em> one field. It is primarily used for creating a distinct type from an existing type with <em>zero runtime</em> overhead. This can be useful for adding type safety to your code by creating new types that are distinct from their underlying types or giving types a greater semantic meaning, e.g., a UserId compared to an Int.</p>
+
+  <p>The data keyword is used to define an algebraic data type (ADT). This allows for the creation of complex data structures that can have multiple constructors. Each constructor can take zero or more arguments, and these arguments can be of any type.</p>
+</div>
+
+<h2 id="pattern-matching">Pattern Matching</h2>
+
+<p>In Haskell, we can define multiple versions of a function to handle the instances of an algebraic data type.  This is done by providing a <em>pattern</em> in the parameter list of the function definition, in the form of an expression beginning with the constructor of the data instance (e.g. <code class="language-plaintext highlighter-rouge">Cons</code> or <code class="language-plaintext highlighter-rouge">Nil</code>) and variable names which will be bound to the different fields of the data instance.</p>
+
+<p>For example, we can create a function to determine a <code class="language-plaintext highlighter-rouge">ConsList</code>’s length using <em><span class="glossary-term" data-term="pattern matching">pattern matching<span class="glossary-popup">A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
+</span></span></em>; to not only create different definitions of the function for each of the possible instances of a <code class="language-plaintext highlighter-rouge">ConsList</code>, but also to destructure the non-empty <code class="language-plaintext highlighter-rouge">Cons</code>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">consLength</span> <span class="o">::</span> <span class="kt">ConsList</span> <span class="o">-&gt;</span> <span class="kt">Int</span>
+<span class="n">consLength</span> <span class="kt">Nil</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">consLength</span> <span class="p">(</span><span class="kt">Cons</span> <span class="kr">_</span> <span class="n">rest</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">consLength</span> <span class="n">rest</span>
+</code></pre></div></div>
+
+<p>Since we don’t care about the head value in this function, we match it with <code class="language-plaintext highlighter-rouge">_</code>, an unnamed variable, which effectively ignores it.  Note that another way to conditionally destructure with <span class="glossary-term" data-term="pattern matching">pattern matching<span class="glossary-popup">A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
+</span></span> is using a <a href="/haskell1#conditional-code-constructs-cheatsheet">case statement</a>.</p>
+
+<p>Note that such a definition for lists is made completely redundant by Haskell’s wonderful built-in lists, where <code class="language-plaintext highlighter-rouge">[]</code> is the empty list, and <code class="language-plaintext highlighter-rouge">:</code> is an infix cons operator.  We can pattern match the empty list or destructure <code class="language-plaintext highlighter-rouge">(head:rest)</code>, e.g.:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">intListLength</span> <span class="o">::</span> <span class="p">[</span><span class="kt">Int</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="c1">-- takes a list of Int as input and returns an Int</span>
+<span class="n">intListLength</span> <span class="kt">[]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">intListLength</span> <span class="p">(</span><span class="kr">_</span><span class="o">:</span><span class="n">rest</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">intListLength</span> <span class="n">rest</span>
+</code></pre></div></div>
+
+<h2 id="type-parameters-and-polymorphism">Type Parameters and Polymorphism</h2>
+
+<p>Similar to TypeScript, Haskell provides <em><span class="glossary-term" data-term="parametric polymorphism">parametric polymorphism<span class="glossary-popup">A type of polymorphism where functions or data types can be written generically so that they can handle values uniformly without depending on their type.
+</span></span></em>.  That is, the type definitions for functions and data structures (defined with <code class="language-plaintext highlighter-rouge">data</code> like the <code class="language-plaintext highlighter-rouge">ConsList</code> above) can have <span class="glossary-term" data-term="type parameters">type parameters<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> (AKA type variables).  For example, the definition <code class="language-plaintext highlighter-rouge">intListLength</code> above is defined to only work with lists with <code class="language-plaintext highlighter-rouge">Int</code> elements.  This seems a silly restriction because in this function we don’t actually do anything with the elements themselves.  Below, we introduce the <span class="glossary-term" data-term="type parameter">type parameter<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> <code class="language-plaintext highlighter-rouge">a</code> so that the <code class="language-plaintext highlighter-rouge">length</code> function will be able to work with lists of any type of elements.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">length</span> <span class="o">::</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="c1">-- a is a type parameter</span>
+<span class="n">length</span> <span class="kt">[]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">length</span> <span class="p">(</span><span class="kr">_</span><span class="o">:</span><span class="n">rest</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">length</span> <span class="n">rest</span>
+</code></pre></div></div>
+
+<p>The following visual summary shows pair data structures with accessor functions <code class="language-plaintext highlighter-rouge">fst</code> and <code class="language-plaintext highlighter-rouge">sec</code> defined using <a href="#record-syntax"><span class="glossary-term" data-term="record syntax">Record Syntax<span class="glossary-popup">An alternate way to define data structures in Haskell with named fields, automatically creating accessor functions for those fields.
+</span></span></a> with varying degrees of type flexibility, and compared with the equivalent <a href="/typescript1#generic-types">TypeScript generic notation</a>:</p>
+
+<ul>
+  <li>hard-coded for <code class="language-plaintext highlighter-rouge">Int</code> pairs only</li>
+  <li>with one <span class="glossary-term" data-term="type parameter">type parameter<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> (by convention called <code class="language-plaintext highlighter-rouge">a</code> in Haskell, and <code class="language-plaintext highlighter-rouge">T</code> in TypeScript)</li>
+  <li>with two <span class="glossary-term" data-term="type parameters">type parameters<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> such that the two elements may be different types</li>
+</ul>
+
+<p><img src="/assets/images/chapterImages/haskell2/haskellPolymorphism.png" alt="Polymorphism Summary"></p>
+
+<h2 id="type-kinds">Type Kinds</h2>
+
+<p>GHCi allows you to use the <code class="language-plaintext highlighter-rouge">:kind</code> (or <code class="language-plaintext highlighter-rouge">:k</code>) command to interrogate the <em>Kind</em> of types – think of it as “meta information” about types and their <span class="glossary-term" data-term="type parameters">type parameters<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span>.  The kind <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> indicates the <em>arity</em> or number of <span class="glossary-term" data-term="type parameters">type parameters<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> a type has.  Note that it is like the <span class="glossary-term" data-term="syntax">syntax<span class="glossary-popup">The set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in a computer language.
+</span></span> for function types (with the <code class="language-plaintext highlighter-rouge">-&gt;</code>), you can think of it as information about what is required in terms of <span class="glossary-term" data-term="type parameters">type parameters<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> to instantiate the type.  If the constructor takes no <span class="glossary-term" data-term="type parameters">type parameters<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> the kind is just <code class="language-plaintext highlighter-rouge">*</code>, (it returns a type), <code class="language-plaintext highlighter-rouge">*-&gt;*</code> if it takes one <span class="glossary-term" data-term="type parameter">type parameter<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span>, <code class="language-plaintext highlighter-rouge">*-&gt;*-&gt;*</code> for two <span class="glossary-term" data-term="type parameters">type parameters<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> and so on.</p>
+
+<p><img src="/assets/images/chapterImages/haskell2/kinds.png" alt="Polymorphism Summary"></p>
+
+<p>Another sort of “kind” is for <a href="#typeclasses"><span class="glossary-term" data-term="type classes">type classes<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span></a> which we will introduce more properly in a moment.
+For example, the “kind” for the <code class="language-plaintext highlighter-rouge">Ord</code> <span class="glossary-term" data-term="type class">type class<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span> (the class of things that are Orderable and which we came across in <a href="/haskell1#functional-programming-in-haskell-versus-javascript">our simple  implementation of quicksort</a>) is:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="o">:</span><span class="n">k</span> <span class="kt">Ord</span>
+<span class="kt">Ord</span> <span class="o">::</span> <span class="o">*</span> <span class="o">-&gt;</span> <span class="kt">Constraint</span>
+</code></pre></div></div>
+
+<p>This tells us that <code class="language-plaintext highlighter-rouge">Ord</code> takes one <span class="glossary-term" data-term="type parameter">type parameter<span class="glossary-popup">A placeholder for a type that is specified when a generic function or class is used, allowing for type-safe but flexible code.
+</span></span> (for example it could be an <code class="language-plaintext highlighter-rouge">Int</code> or other numeric type, or something more complex like the <code class="language-plaintext highlighter-rouge">Student</code> type below), and returns a <code class="language-plaintext highlighter-rouge">Constraint</code> rather than an actual type.  Such a <span class="glossary-term" data-term="constraint">constraint<span class="glossary-popup">A restriction on type parameters in Haskell, specifying that a type must belong to a certain type class.
+</span></span> is used to narrow the set of types to which a function may be applied, just as we saw <code class="language-plaintext highlighter-rouge">Ord</code> being used as the type <span class="glossary-term" data-term="constraint">constraint<span class="glossary-popup">A restriction on type parameters in Haskell, specifying that a type must belong to a certain type class.
+</span></span> for <code class="language-plaintext highlighter-rouge">sort</code>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="o">:</span><span class="n">t</span> <span class="n">sort</span>
+<span class="n">sort</span> <span class="o">::</span> <span class="kt">Ord</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">t</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h2 id="record-syntax">Record Syntax</h2>
+
+<p>Consider the following simple record data type:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">Student</span> <span class="o">=</span> <span class="kt">Student</span> <span class="kt">Int</span> <span class="kt">String</span> <span class="kt">Int</span>
+</code></pre></div></div>
+
+<p>A <code class="language-plaintext highlighter-rouge">Student</code> has three fields, mysteriously typed <code class="language-plaintext highlighter-rouge">Int</code>, <code class="language-plaintext highlighter-rouge">String</code> and <code class="language-plaintext highlighter-rouge">Int</code>.  Let’s say my intention in creating the above data type was to store a student’s id, name and mark.  I would create a record like so:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="n">t</span> <span class="o">=</span> <span class="kt">Student</span> <span class="mi">123</span> <span class="s">"Tim"</span> <span class="mi">95</span>
+</code></pre></div></div>
+
+<p>Here’s how one would search for the student with the best mark:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">best</span> <span class="o">::</span> <span class="p">[</span><span class="kt">Student</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="kt">Student</span> <span class="o">-&gt;</span> <span class="kt">Student</span>
+<span class="n">best</span> <span class="kt">[]</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+<span class="n">best</span> <span class="p">(</span><span class="n">a</span><span class="o">@</span><span class="p">(</span><span class="kt">Student</span> <span class="kr">_</span> <span class="kr">_</span> <span class="n">am</span><span class="p">)</span><span class="o">:</span><span class="n">rest</span><span class="p">)</span> <span class="n">b</span><span class="o">@</span><span class="p">(</span><span class="kt">Student</span> <span class="kr">_</span> <span class="kr">_</span> <span class="n">bm</span><span class="p">)</span> <span class="o">=</span>
+  <span class="kr">if</span> <span class="n">am</span> <span class="o">&gt;</span> <span class="n">bm</span>
+  <span class="kr">then</span> <span class="n">best</span> <span class="n">rest</span> <span class="n">a</span>
+  <span class="kr">else</span> <span class="n">best</span> <span class="n">rest</span> <span class="n">b</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">@</code> notation, as in <code class="language-plaintext highlighter-rouge">b@(Student _ _ bm)</code> stores the record itself in the variable b but also allows you to unpack its elements, e.g. <code class="language-plaintext highlighter-rouge">bm</code> is bound to mark.</p>
+
+<p>To get the data out of a record I would need to either destructure using <span class="glossary-term" data-term="pattern matching">pattern matching<span class="glossary-popup">A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
+</span></span>, as above, every time, or create some accessor functions:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">id</span> <span class="p">(</span><span class="kt">Student</span> <span class="n">n</span> <span class="kr">_</span> <span class="kr">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">n</span>
+<span class="n">name</span> <span class="p">(</span><span class="kt">Student</span> <span class="kr">_</span> <span class="n">n</span> <span class="kr">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">n</span>
+<span class="n">mark</span> <span class="p">(</span><span class="kt">Student</span> <span class="kr">_</span> <span class="kr">_</span> <span class="n">n</span><span class="p">)</span> <span class="o">=</span> <span class="n">n</span>
+<span class="o">&gt;</span> <span class="n">name</span> <span class="n">t</span>
+<span class="s">"Tim"</span>
+</code></pre></div></div>
+
+<p>It’s starting to look a bit like annoying boilerplate code.  Luckily, Haskell has another way to define such record types, called <span class="glossary-term" data-term="record syntax">record syntax<span class="glossary-popup">An alternate way to define data structures in Haskell with named fields, automatically creating accessor functions for those fields.
+</span></span>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">Student</span> <span class="o">=</span> <span class="kt">Student</span> <span class="p">{</span> <span class="n">id</span><span class="o">::</span><span class="kt">Int</span><span class="p">,</span> <span class="n">name</span><span class="o">::</span><span class="kt">String</span><span class="p">,</span> <span class="n">mark</span><span class="o">::</span><span class="kt">Int</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<p>This creates a record type in every way the same as the above, but the accessor functions <code class="language-plaintext highlighter-rouge">id</code>, <code class="language-plaintext highlighter-rouge">name</code> and <code class="language-plaintext highlighter-rouge">mark</code> are created automatically.</p>
+
+<h2 id="typeclasses">Typeclasses</h2>
+
+<p>Haskell uses “<span class="glossary-term" data-term="type classes">type classes<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span>” as a way to associate functions with types.  A <span class="glossary-term" data-term="type class">type class<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span> is like a promise that a certain type will have specific operations and functions available.  You can think of it as being similar to a <a href="/typescript1#interfaces">TypeScript <span class="glossary-term" data-term="interface">interface<span class="glossary-popup">A TypeScript construct that defines the shape of an object, specifying the types of its properties and methods.
+</span></span></a>.</p>
+
+<p>Despite the name however, it is not like an ES6/TypeScript class, since a Haskell <span class="glossary-term" data-term="type class">type class<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span> does not actually give definitions for the functions themselves, only their type signatures.<br>
+The function bodies are defined in “instances” of the <span class="glossary-term" data-term="type class">type class<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span>.  A good starting point for gaining familiarity with <span class="glossary-term" data-term="type classes">type classes<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span> is seeing how they are used in the standard Haskell <span class="glossary-term" data-term="prelude">prelude<span class="glossary-popup">The default library loaded in Haskell that includes basic functions and operators.
+</span></span>.  From GHCi we can ask for information about a specific typeclass with the <code class="language-plaintext highlighter-rouge">:i</code> command, for example, <code class="language-plaintext highlighter-rouge">Num</code> is a typeclass common to numeric types:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">GHCi</span><span class="o">&gt;</span> <span class="o">:</span><span class="n">i</span> <span class="kt">Num</span>
+<span class="kr">class</span> <span class="kt">Num</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span>
+  <span class="p">(</span><span class="o">-</span><span class="p">)</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span>
+  <span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span>
+  <span class="n">negate</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span>
+  <span class="n">abs</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span>
+  <span class="n">signum</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span>
+  <span class="n">fromInteger</span> <span class="o">::</span> <span class="kt">Integer</span> <span class="o">-&gt;</span> <span class="n">a</span>
+  <span class="cp">{-# MINIMAL (+), (*), abs, signum, fromInteger, (negate | (-)) #-}</span>
+        <span class="c1">-- Defined in `GHC.Num'</span>
+<span class="kr">instance</span> <span class="kt">Num</span> <span class="kt">Word</span> <span class="c1">-- Defined in `GHC.Num'</span>
+<span class="kr">instance</span> <span class="kt">Num</span> <span class="kt">Integer</span> <span class="c1">-- Defined in `GHC.Num'</span>
+<span class="kr">instance</span> <span class="kt">Num</span> <span class="kt">Int</span> <span class="c1">-- Defined in `GHC.Num'</span>
+<span class="kr">instance</span> <span class="kt">Num</span> <span class="kt">Float</span> <span class="c1">-- Defined in `GHC.Float'</span>
+<span class="kr">instance</span> <span class="kt">Num</span> <span class="kt">Double</span> <span class="c1">-- Defined in `GHC.Float'</span>
+</code></pre></div></div>
+
+<p>The first line (beginning <code class="language-plaintext highlighter-rouge">class</code>) tells us that for a type to be an instance of the <code class="language-plaintext highlighter-rouge">Num</code> typeclass, it must provide the operators <code class="language-plaintext highlighter-rouge">+</code>, <code class="language-plaintext highlighter-rouge">*</code> and the functions <code class="language-plaintext highlighter-rouge">abs</code>, <code class="language-plaintext highlighter-rouge">signum</code> and <code class="language-plaintext highlighter-rouge">fromInteger</code>, and either <code class="language-plaintext highlighter-rouge">(-)</code> or <code class="language-plaintext highlighter-rouge">negate</code>.  The last is an option because a default definition exists for each in terms of the other.  The last five lines (beginning with “<code class="language-plaintext highlighter-rouge">instance</code>”) tell us which types have been declared as instances of <code class="language-plaintext highlighter-rouge">Num</code> and hence have definitions of the necessary functions.  These are <code class="language-plaintext highlighter-rouge">Word</code>, <code class="language-plaintext highlighter-rouge">Integer</code>, <code class="language-plaintext highlighter-rouge">Int</code>, <code class="language-plaintext highlighter-rouge">Float</code> and <code class="language-plaintext highlighter-rouge">Double</code>.  Obviously this is a much more finely grained set of types than JavaScript’s universal “<code class="language-plaintext highlighter-rouge">number</code>” type.  This granularity allows the type system to guard against improper use of numbers that might result in loss of precision or division by zero.</p>
+
+<p>The main numeric type we will use in this course is <code class="language-plaintext highlighter-rouge">Int</code>, i.e. fixed-precision integers.</p>
+
+<p>Note some obvious operations we would likely need to perform on numbers that are missing from the <code class="language-plaintext highlighter-rouge">Num</code> typeclass.  For example, equality checking.  This is defined in a separate <span class="glossary-term" data-term="type class">type class<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span> <code class="language-plaintext highlighter-rouge">Eq</code> that is also instanced by concrete numeric types like <code class="language-plaintext highlighter-rouge">Int</code>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="o">:</span><span class="n">i</span> <span class="kt">Eq</span>
+<span class="kr">class</span> <span class="kt">Eq</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="p">(</span><span class="o">==</span><span class="p">)</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
+  <span class="p">(</span><span class="o">/=</span><span class="p">)</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
+  <span class="cp">{-# MINIMAL (==) | (/=) #-}</span>
+<span class="o">...</span>
+<span class="kr">instance</span> <span class="kt">Eq</span> <span class="kt">Int</span>
+<span class="o">...</span>
+</code></pre></div></div>
+
+<p>Note again that instances need only implement <code class="language-plaintext highlighter-rouge">==</code> or <code class="language-plaintext highlighter-rouge">/=</code> (not equal to), since each can be easily defined in terms of the other.  Still we are missing some obviously important operations, e.g., what about greater-than and less-than?  These are defined in the <code class="language-plaintext highlighter-rouge">Ord</code> <span class="glossary-term" data-term="type class">type class<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="o">:</span><span class="n">i</span> <span class="kt">Ord</span>
+<span class="kr">class</span> <span class="kt">Eq</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="kt">Ord</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="n">compare</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Ordering</span>
+  <span class="p">(</span><span class="o">&lt;</span><span class="p">)</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
+  <span class="p">(</span><span class="o">&lt;=</span><span class="p">)</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
+  <span class="p">(</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
+  <span class="p">(</span><span class="o">&gt;=</span><span class="p">)</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
+  <span class="n">max</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span>
+  <span class="n">min</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span>
+  <span class="cp">{-# MINIMAL compare | (&lt;=) #-}</span>
+</code></pre></div></div>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- The compare function returns an Ordering:</span>
+<span class="o">&gt;</span> <span class="o">:</span><span class="n">i</span> <span class="kt">Ordering</span>
+<span class="kr">data</span> <span class="kt">Ordering</span> <span class="o">=</span> <span class="kt">LT</span> <span class="o">|</span> <span class="kt">EQ</span> <span class="o">|</span> <span class="kt">GT</span>
+</code></pre></div></div>
+
+<p>A custom data type can be made an instance of <code class="language-plaintext highlighter-rouge">Ord</code> by implementing either <code class="language-plaintext highlighter-rouge">compare</code> or <code class="language-plaintext highlighter-rouge">&lt;=</code>.  The definition <code class="language-plaintext highlighter-rouge">Eq a =&gt; Ord a</code> means that anything that is an instance of <code class="language-plaintext highlighter-rouge">Ord</code> must also be an instance of <code class="language-plaintext highlighter-rouge">Eq</code>.   Thus, typeclasses can build upon each other into rich hierarchies:</p>
+
+<p><img src="/assets/images/chapterImages/haskell2/numericTypeClasses.png" alt="Numeric Typeclasses"></p>
+
+<h2 id="creating-custom-instances-of-type-classes">Creating custom instances of type classes</h2>
+
+<p>If we have our own data types, how can we make standard operations like equality and inequality testing work with them?  Luckily, the most common <span class="glossary-term" data-term="type classes">type classes<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span> can easily be instanced automatically through the <code class="language-plaintext highlighter-rouge">deriving</code> keyword. For example, if we want to define a <code class="language-plaintext highlighter-rouge">Suit</code> type for a card game we can automatically generate default instances of the functions (and operators) associated with <code class="language-plaintext highlighter-rouge">Eq</code>uality testing, <code class="language-plaintext highlighter-rouge">Ord</code>inal comparisons, <code class="language-plaintext highlighter-rouge">Enum</code>erating the different possible values of the type, and <code class="language-plaintext highlighter-rouge">Show</code>ing them (or converting them to string):</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">Suit</span> <span class="o">=</span> <span class="kt">Spade</span><span class="o">|</span><span class="kt">Club</span><span class="o">|</span><span class="kt">Diamond</span><span class="o">|</span><span class="kt">Heart</span>
+ <span class="kr">deriving</span> <span class="p">(</span><span class="kt">Eq</span><span class="p">,</span><span class="kt">Ord</span><span class="p">,</span><span class="kt">Enum</span><span class="p">,</span><span class="kt">Show</span><span class="p">)</span>
+
+<span class="o">&gt;</span> <span class="kt">Spade</span> <span class="o">&lt;</span> <span class="kt">Heart</span>
+<span class="kt">True</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">Show</code> typeclass allows the data to be converted to strings with the <code class="language-plaintext highlighter-rouge">show</code> function (e.g. so that GHCi can display it).  The <code class="language-plaintext highlighter-rouge">Enum</code> typeclass allows enumeration, e.g.:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="p">[</span><span class="kt">Spade</span> <span class="o">..</span> <span class="kt">Heart</span><span class="p">]</span>
+<span class="p">[</span><span class="kt">Spade</span><span class="p">,</span><span class="kt">Club</span><span class="p">,</span><span class="kt">Diamond</span><span class="p">,</span><span class="kt">Heart</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>We can also create custom instances of typeclasses by providing our own implementation of the necessary functions, e.g.:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Show</span> <span class="kt">Suit</span> <span class="kr">where</span>
+ <span class="n">show</span> <span class="kt">Spade</span> <span class="o">=</span> <span class="s">"^"</span>     <span class="c1">-- OK, these characters are not</span>
+ <span class="n">show</span> <span class="kt">Club</span> <span class="o">=</span> <span class="s">"&amp;"</span>      <span class="c1">-- brilliant approximations of the</span>
+ <span class="n">show</span> <span class="kt">Diamond</span> <span class="o">=</span> <span class="s">"O"</span>   <span class="c1">-- actual playing card symbols ♠ ♣ ♦ ♥</span>
+ <span class="n">show</span> <span class="kt">Heart</span> <span class="o">=</span> <span class="s">"V"</span>     <span class="c1">-- but GHCi support for unicode</span>
+                      <span class="c1">-- characters is a bit sketch</span>
+<span class="o">&gt;</span> <span class="p">[</span><span class="kt">Spade</span> <span class="o">..</span> <span class="kt">Heart</span><span class="p">]</span>
+<span class="p">[</span><span class="o">^</span><span class="p">,</span><span class="o">&amp;</span><span class="p">,</span><span class="kt">O</span><span class="p">,</span><span class="kt">V</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h2 id="maybe">Maybe</h2>
+
+<p>Another important built-in type is <code class="language-plaintext highlighter-rouge">Maybe</code>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="o">:</span><span class="n">i</span> <span class="kt">Maybe</span>
+<span class="kr">data</span> <span class="kt">Maybe</span> <span class="n">a</span> <span class="o">=</span> <span class="kt">Nothing</span> <span class="o">|</span> <span class="kt">Just</span> <span class="n">a</span>
+</code></pre></div></div>
+
+<p>All the functions we have considered so far are assumed to be <em>total</em>.  That is, the function provides a mapping for every element in the input type to an element in the output type.  <code class="language-plaintext highlighter-rouge">Maybe</code> allows us to have a sensible return type for <em>partial</em> functions, that is, functions which do not have a mapping for every input:</p>
+
+<p><img src="/assets/images/chapterImages/haskell2/partialFunctions.png" alt="Total and Partial Functions"></p>
+
+<p>For example, the built-in function <code class="language-plaintext highlighter-rouge">lookup</code> can be used to search a list of key-value pairs, and fail gracefully by returning <code class="language-plaintext highlighter-rouge">Nothing</code> if there is no matching key.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">phonebook</span> <span class="o">::</span> <span class="p">[(</span><span class="kt">String</span><span class="p">,</span> <span class="kt">String</span><span class="p">)]</span>
+<span class="n">phonebook</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="s">"Bob"</span><span class="p">,</span>   <span class="s">"01788 665242"</span><span class="p">),</span> <span class="p">(</span><span class="s">"Fred"</span><span class="p">,</span>  <span class="s">"01624 556442"</span><span class="p">),</span> <span class="p">(</span><span class="s">"Alice"</span><span class="p">,</span> <span class="s">"01889 985333"</span><span class="p">)</span> <span class="p">]</span>
+
+<span class="o">&gt;</span> <span class="o">:</span><span class="n">t</span> <span class="n">lookup</span>
+<span class="n">lookup</span> <span class="o">::</span> <span class="kt">Eq</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="p">[(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)]</span> <span class="o">-&gt;</span> <span class="kt">Maybe</span> <span class="n">b</span>
+
+<span class="o">&gt;</span> <span class="n">lookup</span> <span class="s">"Fred"</span> <span class="n">phonebook</span>
+<span class="kt">Just</span> <span class="s">"01624 556442"</span>
+
+<span class="o">&gt;</span> <span class="n">lookup</span> <span class="s">"Tim"</span> <span class="n">phonebook</span>
+<span class="kt">Nothing</span>
+</code></pre></div></div>
+
+<p>We can use <span class="glossary-term" data-term="pattern matching">pattern matching<span class="glossary-popup">A mechanism in functional programming languages to check a value against a pattern and to deconstruct data.
+</span></span> to extract values from a <code class="language-plaintext highlighter-rouge">Maybe</code> (when we have <code class="language-plaintext highlighter-rouge">Just</code> a value), or to perform some sensible default behaviour when we have <code class="language-plaintext highlighter-rouge">Nothing</code>.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">printNumber</span> <span class="o">::</span> <span class="kt">String</span> <span class="o">-&gt;</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="n">printNumber</span> <span class="n">name</span> <span class="o">=</span> <span class="n">msg</span> <span class="o">$</span> <span class="n">lookup</span> <span class="n">name</span> <span class="n">phonebook</span>
+<span class="kr">where</span>
+   <span class="n">msg</span> <span class="p">(</span><span class="kt">Just</span> <span class="n">number</span><span class="p">)</span>  <span class="o">=</span> <span class="n">print</span> <span class="n">number</span>
+   <span class="n">msg</span> <span class="kt">Nothing</span>        <span class="o">=</span> <span class="n">print</span> <span class="o">$</span> <span class="n">name</span> <span class="o">++</span> <span class="s">" not found in database"</span>
+
+<span class="o">*</span><span class="kt">GHCi</span><span class="o">&gt;</span> <span class="n">printNumber</span> <span class="s">"Fred"</span>
+<span class="s">"01624 556442"</span>
+<span class="o">*</span><span class="kt">GHCi</span><span class="o">&gt;</span> <span class="n">printNumber</span> <span class="s">"Tim"</span>
+<span class="s">"Tim not found in database"</span>
+</code></pre></div></div>
+
+<p>We can also do this using a <a href="/haskell1#conditional-code-constructs-cheatsheet">case statement</a>.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">printNumber</span> <span class="o">::</span> <span class="kt">String</span> <span class="o">-&gt;</span> <span class="kt">IO</span> <span class="nb">()</span>
+<span class="n">printNumber</span> <span class="n">name</span> <span class="o">=</span> <span class="n">msg</span> <span class="o">$</span> <span class="n">lookup</span> <span class="n">name</span> <span class="n">phonebook</span>
+<span class="kr">where</span>
+   <span class="n">msg</span> <span class="n">value</span> <span class="o">=</span> <span class="kr">case</span> <span class="n">value</span> <span class="kr">of</span>
+    <span class="p">(</span><span class="kt">Just</span> <span class="n">number</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">print</span> <span class="n">number</span>
+    <span class="kr">_</span>             <span class="o">-&gt;</span> <span class="n">print</span> <span class="o">$</span> <span class="n">name</span> <span class="o">++</span> <span class="s">" not found in database"</span>
+</code></pre></div></div>
+
+<p>Here we use the wildcard <code class="language-plaintext highlighter-rouge">_</code> to match any other possible value; in this case, there is only one other value, <code class="language-plaintext highlighter-rouge">Nothing</code>.</p>
+
+<div class="glossary">
+  <h2 id="glossary">Glossary</h2>
+
+  <p><em>Algebraic Data Types</em>: (or ADTs) Custom data types in Haskell defined using the data keyword, allowing the combination of different types into one composite type using the | operator.</p>
+
+  <p><em>Record Syntax</em>: An alternate way to define data structures in Haskell with named fields, automatically creating accessor functions for those fields.</p>
+
+  <p><em>Type Classes</em>: A way in Haskell to associate functions with types, similar to TypeScript interfaces. They define a set of functions that must be available for instances of those type classes.</p>
+
+  <p><em>Constraint</em>: A restriction on type parameters in Haskell, specifying that a type must belong to a certain type class.</p>
+
+  <p><em>Type Kind</em>: Meta-information about types and their type parameters in Haskell, indicating the number of type parameters a type has and the type it returns.</p>
+
+  <p><em>Maybe</em>: A built-in type in Haskell used to represent optional values, allowing functions to return either Just a value or Nothing to handle cases where no value is available.</p>
+
+  <p><em>Total Functions</em>: Functions that provide a mapping for every element in the input type to an element in the output type.</p>
+
+  <p><em>Partial Functions</em>: Functions that do not have a mapping for every input, potentially failing for some inputs.</p>
+
+</div>
+
+	</div>
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/haskell1/">&lt; Creating and Running Haskell Programs</a>
+      
+      
+        
+        
+        <a id="right" href="/haskell3/">Functor and Applicative &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+</article>
+
+      </div>
+    </main><link id="fa-stylesheet" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css">
+<footer class="site-footer h-card">
+    <data class="u-url" href="/"></data>
+
+    <div class="wrapper">
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col">
+                <!-- <p class="feed-subscribe">
+                <a href="/feed.xml">
+                    <svg class="svg-icon orange">
+                        <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+                    </svg><span>Subscribe</span>
+                </a>
+                </p> -->
+        </div>
+        <div class="footer-col">
+            <p>Examples and tutorials for various programming paradigms.</p>
+        </div>
+    </div>
+
+    <!-- <div class="social-links"><ul class="social-media-list"><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li>
+  <li>
+    <a href="/feed.xml" target="_blank" title="Subscribe to syndication feed">
+      <svg class="svg-icon grey" viewbox="0 0 16 16">
+        <path d="M12.8 16C12.8 8.978 7.022 3.2 0 3.2V0c8.777 0 16 7.223 16 16h-3.2zM2.194
+          11.61c1.21 0 2.195.985 2.195 2.196 0 1.21-.99 2.194-2.2 2.194C.98 16 0 15.017 0
+          13.806c0-1.21.983-2.195 2.194-2.195zM10.606
+          16h-3.11c0-4.113-3.383-7.497-7.496-7.497v-3.11c5.818 0 10.606 4.79 10.606 10.607z"
+        />
+      </svg>
+    </a>
+  </li>
+</ul>
+</div> -->
+
+    </div>
+
+</footer>
+
+
+
+</body></html>

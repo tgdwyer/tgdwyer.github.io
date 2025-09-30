@@ -1,0 +1,1052 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Foldable and Traversable | Good Times Paradigms</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="Foldable and Traversable">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="In this chapter we will meet some more typeclasses that abstract common coding patterns for dealing with data.">
+<meta property="og:description" content="In this chapter we will meet some more typeclasses that abstract common coding patterns for dealing with data.">
+<meta property="og:site_name" content="Good Times Paradigms">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-09-30T03:56:06+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="Foldable and Traversable">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-30T03:56:06+00:00","datePublished":"2025-09-30T03:56:06+00:00","description":"In this chapter we will meet some more typeclasses that abstract common coding patterns for dealing with data.","headline":"<span class="glossary-term" data-term="foldable">Foldable<span class="glossary-popup">A type class for data structures that can be folded (reduced) to a single value. It includes functions like foldr, foldl, length, null, elem, maximum, minimum, sum, product, and foldMap.
+</span></span> and <span class="glossary-term" data-term="traversable">Traversable<span class="glossary-popup">A type class for data structures that can be traversed, applying a function with an Applicative effect to each element. It extends both Foldable and Functor and includes functions like traverse and sequenceA.
+</span></span>","mainEntityOfPage":{"@type":"WebPage","@id":"/haskell4/"},"url":"/haskell4/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Good Times Paradigms"><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-159840333-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159840333-1');
+</script><!-- MathJax v3 -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true }
+  };
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+  <script src="/assets/js/spoilers.js" defer=""></script></head>
+
+  <body><header class="site-header">
+
+    <div class="wrapper"><!-- Lambda icon and site title aligned left in a flex container -->
+        <div style="display: flex; align-items: center;">
+            <button id="play-theme-song" style="background:none;border:none;cursor:pointer;vertical-align:middle;margin-right:2px;" title="Play theme song">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="currentColor" viewBox="0 0 48 24" style="vertical-align:middle;">
+                    <text x="4" y="20" font-size="20" font-family="serif">ΓΤΠ</text>
+                    <!-- γτπ -->
+                </svg>
+            </button>
+            <a class="site-title" rel="author" href="/" style="margin:0;">Good Times Paradigms</a>
+        </div>
+        <script src="/assets/js/hide_solutions.js" defer=""></script>
+        <audio id="theme-song" src="/assets/themesong.mp3"></audio>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var btn = document.getElementById('play-theme-song');
+                var audio = document.getElementById('theme-song');
+                btn.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play();
+                    } else {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                });
+            });
+        </script><nav class="site-nav">
+            <input type="checkbox" id="nav-trigger" class="nav-trigger">
+            <label for="nav-trigger">
+                <span class="menu-icon">
+                </span>
+            </label>
+
+            <div class="nav-items"><a class="page-link nav-item" href="/about/">About</a><a class="page-link nav-item" href="/">Notes on Programming Paradigms</a><!-- Radio Switch -->
+                <div id="toggle-div" style="display: none;">
+                    <div class="solutions-toggle">
+                        <p class="page-link" style="margin-bottom: 0px;">Show Solutions?</p>
+                        <label class="switch" style="vertical-align: middle;">
+                            <input type="checkbox" id="toggle-switch">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/haskell3/">&lt; <span class="glossary-term" data-term="functor">Functor<span class="glossary-popup">A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the fmap function, which applies a function to every element in a structure.
+</span></span> and <span class="glossary-term" data-term="applicative">Applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span></a>
+      
+      
+        
+        
+        <a id="right" href="/monad/">Monad &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+	<header class="post-header">
+		<h1 class="post-title">Foldable and Traversable</h1>
+	</header>
+	<p id="readingTime">
+
+  
+  42
+
+ min read</p>
+	<div class="post-content">
+		<p>In this chapter we will meet some more typeclasses that abstract common coding patterns for dealing with data.</p>
+
+<h2 id="learning-outcomes">Learning Outcomes</h2>
+
+<ul>
+  <li>Understand that the “reduce” function we met for arrays and other data structures in JavaScript is referred to as <a href="/haskell4/#folds">“folding”</a> in Haskell and there are two variants <code class="language-plaintext highlighter-rouge">foldl</code> and <code class="language-plaintext highlighter-rouge">foldr</code> for left and right folds respectively</li>
+  <li>Understand that the <a href="#monoid"><span class="glossary-term" data-term="monoid">Monoid<span class="glossary-popup">A type class for types that have an associative binary operation (mappend) and an identity element (mempty). Instances of Monoid can be concatenated using mconcat.
+</span></span></a> typeclass for things that have a predefined rule for aggregation (concatenation), making containers of <code class="language-plaintext highlighter-rouge">Monoid</code> values trivial to <code class="language-plaintext highlighter-rouge">fold</code></li>
+  <li>Understand that <a href="#foldable"><span class="glossary-term" data-term="foldable">Foldable<span class="glossary-popup">A type class for data structures that can be folded (reduced) to a single value. It includes functions like foldr, foldl, length, null, elem, maximum, minimum, sum, product, and foldMap.
+</span></span></a> generalises containers that may be folded (or reduced) into values</li>
+  <li>Understand that <a href="#traversable"><span class="glossary-term" data-term="traversable">Traversable<span class="glossary-popup">A type class for data structures that can be traversed, applying a function with an Applicative effect to each element. It extends both Foldable and Functor and includes functions like traverse and sequenceA.
+</span></span></a> generalises containers over which we can traverse, applying a function with an <span class="glossary-term" data-term="applicative">Applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> effect</li>
+</ul>
+
+<h2 id="folds">Folds</h2>
+
+<p>Recall the “<code class="language-plaintext highlighter-rouge">reduce</code>” function that is a member of JavaScript’s <code class="language-plaintext highlighter-rouge">Array</code> type, and which we implemented ourselves for linked and cons lists, was a way to generalise loops over enumerable types.
+In Haskell, this concept is once again generalised with a typeclass called <code class="language-plaintext highlighter-rouge">Foldable</code> – the class of things which can be “folded” over to produce a single value.<br>
+We will come back to <a href="#foldable">the <code class="language-plaintext highlighter-rouge">Foldable</code> typeclass</a>, but first let’s limit our conversation to the familiar <code class="language-plaintext highlighter-rouge">Foldable</code> instance, basic lists.<br>
+Although in JavaScript <code class="language-plaintext highlighter-rouge">reduce</code> always associates elements from left to right, Haskell’s <code class="language-plaintext highlighter-rouge">Foldable</code> typeclass offers both <code class="language-plaintext highlighter-rouge">foldl</code> (which folds left-to-right) and <code class="language-plaintext highlighter-rouge">foldr</code> (which folds right-to-left):</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="o">:</span><span class="n">t</span> <span class="n">foldl</span>
+<span class="n">foldl</span> <span class="o">::</span> <span class="kt">Foldable</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">b</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="o">-&gt;</span> <span class="n">t</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span>
+
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="o">:</span><span class="n">t</span> <span class="n">foldr</span>
+<span class="n">foldr</span> <span class="o">::</span> <span class="kt">Foldable</span> <span class="n">t</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="o">-&gt;</span> <span class="n">t</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span>
+</code></pre></div></div>
+
+<p>In the following examples, the <code class="language-plaintext highlighter-rouge">Foldable t</code> instance is a list. Here’s how we right-fold over a list to sum its elements:</p>
+
+<p><img src="/assets/images/chapterImages/haskell4/rightFold.png" alt="Left Fold"></p>
+
+<p>While the lambda above makes it explicit which parameter is the accumulator and which is the list element, this is a classic example where point-free coding style makes this expression very succinct:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">foldr</span> <span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="mi">0</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>32</p>
+</blockquote>
+
+<p>Here’s a left fold with a picture of the fold:</p>
+
+<p><img src="/assets/images/chapterImages/haskell4/leftFold.png" alt="Left Fold"></p>
+
+<p>Note that since the <code class="language-plaintext highlighter-rouge">(+)</code> operator is associative—a+(b+c) = (a+b)+c—<code class="language-plaintext highlighter-rouge">foldr</code> and <code class="language-plaintext highlighter-rouge">foldl</code> return the same result.  For functions that are not associative, however, this is not necessarily the case.</p>
+
+<hr>
+
+<h3 id="exercises">Exercises</h3>
+
+<ol>
+  <li>Predict what the results of a left- and right-fold will be for <code class="language-plaintext highlighter-rouge">(-)</code> folded over <code class="language-plaintext highlighter-rouge">[1,2,3,4]</code> with initial value <code class="language-plaintext highlighter-rouge">0</code>.</li>
+  <li>What is the result of <code class="language-plaintext highlighter-rouge">foldr (:) []</code> applied to any list?</li>
+  <li>Implement <code class="language-plaintext highlighter-rouge">map</code> using <code class="language-plaintext highlighter-rouge">foldr</code>.</li>
+</ol>
+
+<div class="solutions">
+    
+<h4 id="solutions">Solutions</h4>
+
+<!-- markdownlint-disable MD029 -->
+<ol>
+  <li>The right fold processes the list from the right (end) to the left (beginning). The result of each application of the function is passed as the accumulator to the next application.</li>
+</ol>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">foldr</span> <span class="p">(</span><span class="o">-</span><span class="p">)</span> <span class="mi">0</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+   <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="mi">3</span> <span class="o">-</span> <span class="p">(</span><span class="mi">4</span> <span class="o">-</span> <span class="mi">0</span><span class="p">)))</span>
+   <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="mi">3</span> <span class="o">-</span> <span class="mi">4</span><span class="p">))</span>
+   <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+   <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">3</span>
+   <span class="o">=</span> <span class="o">-</span><span class="mi">2</span>
+</code></pre></div></div>
+
+<p>The left fold processes the list from the left (beginning) to the right (end). The result of each application of the function is passed as the accumulator to the next application.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="n">foldl</span> <span class="p">(</span><span class="o">-</span><span class="p">)</span> <span class="mi">0</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+   <span class="o">=</span> <span class="p">(((</span><span class="mi">0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="mi">4</span>
+   <span class="o">=</span> <span class="p">((</span><span class="o">-</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="mi">4</span>
+   <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">3</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="mi">4</span>
+   <span class="o">=</span> <span class="o">-</span><span class="mi">6</span> <span class="o">-</span> <span class="mi">4</span>
+   <span class="o">=</span> <span class="o">-</span><span class="mi">10</span>
+</code></pre></div></div>
+
+<ol>
+  <li>The function foldr <code class="language-plaintext highlighter-rouge">(:)</code> <code class="language-plaintext highlighter-rouge">[]</code> applied to any list essentially reconstructs the list</li>
+</ol>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">foldr</span> <span class="p">(</span><span class="o">:</span><span class="p">)</span> <span class="kt">[]</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+   <span class="o">=</span> <span class="mi">1</span> <span class="o">:</span> <span class="p">(</span><span class="mi">2</span> <span class="o">:</span> <span class="p">(</span><span class="mi">3</span> <span class="o">:</span> <span class="p">(</span><span class="mi">4</span> <span class="o">:</span> <span class="kt">[]</span><span class="p">)))</span>
+</code></pre></div></div>
+
+<ol>
+  <li>Taking intuition from the previous question, we know that <code class="language-plaintext highlighter-rouge">(:)</code> does not change the list, but reconstructs it. Therefore, to implement <code class="language-plaintext highlighter-rouge">map</code>, we just apply the function <code class="language-plaintext highlighter-rouge">f</code> to the list as we go.</li>
+</ol>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">map</span> <span class="o">::</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">b</span><span class="p">]</span>
+  <span class="n">map</span> <span class="n">f</span> <span class="o">=</span> <span class="n">foldr</span> <span class="p">(</span><span class="nf">\</span><span class="n">x</span> <span class="n">acc</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="n">x</span> <span class="o">:</span> <span class="n">acc</span><span class="p">)</span> <span class="kt">[]</span>
+</code></pre></div></div>
+
+<p>Or, by making the lambda function point-free</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">map</span> <span class="o">::</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">b</span><span class="p">]</span>
+  <span class="n">map</span> <span class="n">f</span> <span class="o">=</span> <span class="n">foldr</span> <span class="p">((</span><span class="o">:</span><span class="p">)</span> <span class="o">.</span> <span class="n">f</span><span class="p">)</span> <span class="kt">[]</span>
+</code></pre></div></div>
+<!-- markdownlint-enable MD029 -->
+
+
+</div>
+
+<hr>
+
+<h2 id="monoid">Monoid</h2>
+
+<p>In the example fold above, we provide the <code class="language-plaintext highlighter-rouge">(+)</code> function to tell <code class="language-plaintext highlighter-rouge">foldl</code> how to aggregate elements of the list.  There is also a typeclass for things that are “automatically aggregable” or “concatenatable” called <code class="language-plaintext highlighter-rouge">Monoid</code> which declares a general function for <code class="language-plaintext highlighter-rouge">mappend</code> combining two <code class="language-plaintext highlighter-rouge">Monoid</code>s into one, a <code class="language-plaintext highlighter-rouge">mempty</code> value such that any <span class="glossary-term" data-term="monoid">Monoid<span class="glossary-popup">A type class for types that have an associative binary operation (mappend) and an identity element (mempty). Instances of Monoid can be concatenated using mconcat.
+</span></span> <code class="language-plaintext highlighter-rouge">mappend</code>‘ed with <code class="language-plaintext highlighter-rouge">mempty</code> is itself, and a concatenation function for lists of <code class="language-plaintext highlighter-rouge">Monoid</code> called <code class="language-plaintext highlighter-rouge">mconcat</code>.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="o">:</span><span class="n">i</span> <span class="kt">Monoid</span>
+<span class="kr">class</span> <span class="kt">Semigroup</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="kt">Monoid</span> <span class="n">a</span> <span class="kr">where</span>
+  <span class="n">mempty</span> <span class="o">::</span> <span class="n">a</span>
+  <span class="n">mappend</span> <span class="o">::</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span>
+  <span class="n">mconcat</span> <span class="o">::</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="n">a</span>
+  <span class="cp">{-# MINIMAL mempty #-}</span>
+<span class="o">...</span>
+</code></pre></div></div>
+
+<p>In the <code class="language-plaintext highlighter-rouge">Data.Monoid</code> library, there are some interesting instances of <span class="glossary-term" data-term="monoid">Monoid<span class="glossary-popup">A type class for types that have an associative binary operation (mappend) and an identity element (mempty). Instances of Monoid can be concatenated using mconcat.
+</span></span>. For example, <code class="language-plaintext highlighter-rouge">Sum</code> is an instance of <span class="glossary-term" data-term="monoid">Monoid<span class="glossary-popup">A type class for types that have an associative binary operation (mappend) and an identity element (mempty). Instances of Monoid can be concatenated using mconcat.
+</span></span> which wraps a <code class="language-plaintext highlighter-rouge">Num</code>, such that lists of <code class="language-plaintext highlighter-rouge">Sum</code> can be <code class="language-plaintext highlighter-rouge">mconcat</code>ed:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="kr">import</span> <span class="nn">Data.Monoid</span>
+<span class="kt">Data</span><span class="o">.</span><span class="kt">Monoid</span><span class="o">&gt;</span> <span class="n">mconcat</span> <span class="o">$</span> <span class="kt">Sum</span> <span class="o">&lt;$&gt;</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Sum {getSum = 32}</p>
+</blockquote>
+
+<p>So a sum is a data type with an accessor function getSum that we can use to get back the value:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Prelude</span> <span class="kt">Data</span><span class="o">.</span><span class="kt">Monoid</span><span class="o">&gt;</span> <span class="n">getSum</span> <span class="o">$</span> <span class="n">mconcat</span> <span class="o">$</span> <span class="kt">Sum</span> <span class="o">&lt;$&gt;</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>32</p>
+</blockquote>
+
+<p>We make a data type aggregable by instancing <code class="language-plaintext highlighter-rouge">Monoid</code> and providing definitions for the functions <code class="language-plaintext highlighter-rouge">mappend</code> and <code class="language-plaintext highlighter-rouge">mempty</code>.  For <code class="language-plaintext highlighter-rouge">Sum</code> these will be <code class="language-plaintext highlighter-rouge">(+)</code> and <code class="language-plaintext highlighter-rouge">0</code> respectively.
+Lists are also themselves Monoidal, with <code class="language-plaintext highlighter-rouge">mappend</code> defined as an alias for list concatenation <code class="language-plaintext highlighter-rouge">(++)</code>, and mempty as <code class="language-plaintext highlighter-rouge">[]</code>.  Thus, we can:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Prelude</span> <span class="kt">Data</span><span class="o">.</span><span class="kt">Monoid</span><span class="o">&gt;</span> <span class="n">mconcat</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]]</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>which has a simple alias <code class="language-plaintext highlighter-rouge">concat</code> defined in the <span class="glossary-term" data-term="prelude">Prelude<span class="glossary-popup">The default library loaded in Haskell that includes basic functions and operators.
+</span></span>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">concat</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]]</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>There is also an operator for <code class="language-plaintext highlighter-rouge">mappend</code> called <code class="language-plaintext highlighter-rouge">(&lt;&gt;)</code>, such that the following are equivalent:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Data</span><span class="o">.</span><span class="kt">Monoid</span><span class="o">&gt;</span> <span class="n">mappend</span> <span class="p">(</span><span class="kt">Sum</span> <span class="mi">1</span><span class="p">)</span> <span class="p">(</span><span class="kt">Sum</span> <span class="mi">2</span><span class="p">)</span>
+<span class="kt">Sum</span> <span class="p">{</span><span class="n">getSum</span> <span class="o">=</span> <span class="mi">3</span><span class="p">}</span>
+
+<span class="kt">Data</span><span class="o">.</span><span class="kt">Monoid</span><span class="o">&gt;</span> <span class="p">(</span><span class="kt">Sum</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;&gt;</span> <span class="p">(</span><span class="kt">Sum</span> <span class="mi">2</span><span class="p">)</span>
+<span class="kt">Sum</span> <span class="p">{</span><span class="n">getSum</span> <span class="o">=</span> <span class="mi">3</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>And for lists (and <code class="language-plaintext highlighter-rouge">String</code>) we have:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="n">mappend</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+
+<span class="o">&gt;</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;&gt;</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+
+<span class="o">&gt;</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">++</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h2 id="foldable">Foldable</h2>
+
+<p>So now we’ve already been introduced to <code class="language-plaintext highlighter-rouge">foldl</code> and <code class="language-plaintext highlighter-rouge">foldr</code> for lists, and we’ve also seen the <code class="language-plaintext highlighter-rouge">Monoid</code> typeclass. Let’s take a look at the general class of things that are <code class="language-plaintext highlighter-rouge">Foldable</code>.
+As always, your best friend for exploring a new typeclass in Haskell is GHCi’s <code class="language-plaintext highlighter-rouge">:i</code> command:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="o">:</span><span class="n">i</span> <span class="kt">Foldable</span>
+<span class="kr">class</span> <span class="kt">Foldable</span> <span class="p">(</span><span class="n">t</span> <span class="o">::</span> <span class="o">*</span> <span class="o">-&gt;</span> <span class="o">*</span><span class="p">)</span> <span class="kr">where</span>
+  <span class="n">foldr</span> <span class="o">::</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="o">-&gt;</span> <span class="n">t</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="c1">-- as described previously, but notice foldr and foldl</span>
+  <span class="n">foldl</span> <span class="o">::</span> <span class="p">(</span><span class="n">b</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="o">-&gt;</span> <span class="n">t</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="c1">-- are for any Foldable t, not only lists</span>
+  <span class="n">length</span> <span class="o">::</span> <span class="n">t</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="c1">-- number of items stored in the Foldable</span>
+  <span class="n">null</span> <span class="o">::</span> <span class="n">t</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="c1">-- True if empty</span>
+  <span class="n">elem</span> <span class="o">::</span> <span class="kt">Eq</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">t</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="c1">-- True if the a is an element of the t of a</span>
+  <span class="n">maximum</span> <span class="o">::</span> <span class="kt">Ord</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="n">t</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="c1">-- biggest element in the Foldable</span>
+  <span class="n">minimum</span> <span class="o">::</span> <span class="kt">Ord</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="n">t</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="c1">-- smallest element</span>
+  <span class="n">sum</span> <span class="o">::</span> <span class="kt">Num</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="n">t</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="c1">-- compute the sum of a Foldable of Num</span>
+  <span class="n">product</span> <span class="o">::</span> <span class="kt">Num</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="n">t</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="c1">-- compute the product of a Foldable of Num</span>
+  <span class="kt">Data</span><span class="o">.</span><span class="kt">Foldable</span><span class="o">.</span><span class="n">fold</span> <span class="o">::</span> <span class="kt">Monoid</span> <span class="n">m</span> <span class="o">=&gt;</span> <span class="n">t</span> <span class="n">m</span> <span class="o">-&gt;</span> <span class="n">m</span> <span class="c1">-- if the elements of t are Monoids then we don’t need an operator to aggregate them</span>
+  <span class="n">foldMap</span> <span class="o">::</span> <span class="kt">Monoid</span> <span class="n">m</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">m</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">t</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">m</span> <span class="c1">-- uses the specified function to convert elements to Monoid and then folds them</span>
+  <span class="kt">Data</span><span class="o">.</span><span class="kt">Foldable</span><span class="o">.</span><span class="n">toList</span> <span class="o">::</span> <span class="n">t</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="c1">-- convert any Foldable things to a list</span>
+  <span class="cp">{-# MINIMAL foldMap | foldr #-}</span>
+        <span class="c1">-- Defined in `Data.Foldable'</span>
+<span class="kr">instance</span> <span class="kt">Foldable</span> <span class="kt">[]</span> <span class="c1">-- Defined in `Data.Foldable'</span>
+<span class="kr">instance</span> <span class="kt">Foldable</span> <span class="kt">Maybe</span> <span class="c1">-- Defined in `Data.Foldable'</span>
+<span class="kr">instance</span> <span class="kt">Foldable</span> <span class="p">(</span><span class="kt">Either</span> <span class="n">a</span><span class="p">)</span> <span class="c1">-- Defined in `Data.Foldable'</span>
+<span class="kr">instance</span> <span class="kt">Foldable</span> <span class="p">((,)</span> <span class="n">a</span><span class="p">)</span> <span class="c1">-- Defined in `Data.Foldable'</span>
+</code></pre></div></div>
+
+<p>Note that I’ve reordered the list of functions to the order we want to discuss them, removed a few things we’re not interested in at the moment and the comments are mine.
+However, once you get used to reading types, the <code class="language-plaintext highlighter-rouge">:info</code> for this class is pretty self-explanatory.  Most of these functions are also familiar from their use with lists.  The surprise (OK, not really) is that lots of other things can be <code class="language-plaintext highlighter-rouge">Foldable</code> as well.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">foldr</span> <span class="p">(</span><span class="o">-</span><span class="p">)</span> <span class="mi">1</span> <span class="p">(</span><span class="kt">Just</span> <span class="mi">3</span><span class="p">)</span>
+<span class="mi">2</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">foldl</span> <span class="p">(</span><span class="o">-</span><span class="p">)</span> <span class="mi">1</span> <span class="p">(</span><span class="kt">Just</span> <span class="mi">3</span><span class="p">)</span>
+<span class="o">-</span><span class="mi">2</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">foldr</span> <span class="p">(</span><span class="o">+</span><span class="p">)</span> <span class="mi">1</span> <span class="p">(</span><span class="kt">Nothing</span><span class="p">)</span>
+<span class="mi">1</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">length</span> <span class="p">(</span><span class="kt">Just</span> <span class="mi">3</span><span class="p">)</span>
+<span class="mi">1</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">length</span> <span class="kt">Nothing</span>
+<span class="mi">0</span>
+<span class="c1">-- etc</span>
+</code></pre></div></div>
+
+<p>If we import the Data.<span class="glossary-term" data-term="foldable">Foldable<span class="glossary-popup">A type class for data structures that can be folded (reduced) to a single value. It includes functions like foldr, foldl, length, null, elem, maximum, minimum, sum, product, and foldMap.
+</span></span> namespace we also get <code class="language-plaintext highlighter-rouge">fold</code> and <code class="language-plaintext highlighter-rouge">foldMap</code>, which we can use with <code class="language-plaintext highlighter-rouge">Monoid</code> types which know how to aggregate themselves (with <code class="language-plaintext highlighter-rouge">mappend</code>):</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="kr">import</span> <span class="nn">Data.Foldable</span>
+
+<span class="kt">Prelude</span> <span class="kt">Data</span><span class="o">.</span><span class="kt">Foldable</span><span class="o">&gt;</span> <span class="n">fold</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]]</span> <span class="c1">-- since lists are also Monoids</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>The fun really starts though now that we can make new <code class="language-plaintext highlighter-rouge">Foldable</code> things:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">Tree</span> <span class="n">a</span> <span class="o">=</span> <span class="kt">Empty</span>
+            <span class="o">|</span> <span class="kt">Leaf</span> <span class="n">a</span>
+            <span class="o">|</span> <span class="kt">Node</span> <span class="p">(</span><span class="kt">Tree</span> <span class="n">a</span><span class="p">)</span> <span class="n">a</span> <span class="p">(</span><span class="kt">Tree</span> <span class="n">a</span><span class="p">)</span>
+  <span class="kr">deriving</span> <span class="p">(</span><span class="kt">Show</span><span class="p">)</span>
+
+<span class="n">tree</span> <span class="o">=</span> <span class="kt">Node</span> <span class="p">(</span><span class="kt">Node</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="mi">1</span><span class="p">)</span> <span class="mi">2</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="mi">3</span><span class="p">))</span> <span class="mi">4</span> <span class="p">(</span><span class="kt">Node</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="mi">5</span><span class="p">)</span> <span class="mi">6</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="mi">7</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>Which produces a tree with this structure:</p>
+
+<p><img src="/assets/images/chapterImages/haskell4/tree.drawio.png" alt="Tree"></p>
+
+<p>We make this type of binary tree an instance of <span class="glossary-term" data-term="foldable">foldable<span class="glossary-popup">A type class for data structures that can be folded (reduced) to a single value. It includes functions like foldr, foldl, length, null, elem, maximum, minimum, sum, product, and foldMap.
+</span></span> by implementing either of the minimum defining functions, <code class="language-plaintext highlighter-rouge">foldMap</code> or <code class="language-plaintext highlighter-rouge">foldr</code>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Foldable</span> <span class="kt">Tree</span> <span class="kr">where</span>
+  <span class="n">foldMap</span> <span class="o">::</span> <span class="kt">Monoid</span> <span class="n">m</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">m</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Tree</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">m</span>
+  <span class="n">foldMap</span> <span class="kr">_</span> <span class="kt">Empty</span> <span class="o">=</span> <span class="n">mempty</span>
+  <span class="n">foldMap</span> <span class="n">f</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">f</span> <span class="n">x</span>
+  <span class="n">foldMap</span> <span class="n">f</span> <span class="p">(</span><span class="kt">Node</span> <span class="n">l</span> <span class="n">x</span> <span class="n">r</span><span class="p">)</span> <span class="o">=</span> <span class="n">foldMap</span> <span class="n">f</span> <span class="n">l</span> <span class="o">&lt;&gt;</span> <span class="n">f</span> <span class="n">x</span> <span class="o">&lt;&gt;</span> <span class="n">foldMap</span> <span class="n">f</span> <span class="n">r</span>
+
+<span class="o">&gt;</span> <span class="n">length</span> <span class="n">tree</span>
+<span class="mi">7</span>
+<span class="o">&gt;</span> <span class="n">foldr</span> <span class="p">(</span><span class="o">:</span><span class="p">)</span> <span class="kt">[]</span> <span class="n">tree</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>We can use <code class="language-plaintext highlighter-rouge">foldMap</code> to map the values stored in the tree to an instance of <code class="language-plaintext highlighter-rouge">Monoid</code> and then concatenate these <code class="language-plaintext highlighter-rouge">Monoid</code>s.  For example, we could map and concatenate them as a <code class="language-plaintext highlighter-rouge">Sum</code>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="n">getSum</span> <span class="o">$</span> <span class="n">foldMap</span> <span class="kt">Sum</span> <span class="n">tree</span>
+<span class="mi">28</span>
+</code></pre></div></div>
+
+<p>Or we can compute the same conversion to a list as the above <code class="language-plaintext highlighter-rouge">foldr</code>, by providing <code class="language-plaintext highlighter-rouge">foldMap</code> with a function that places the values into singleton lists, e.g.:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="p">(</span><span class="o">:</span><span class="kt">[]</span><span class="p">)</span> <span class="mi">1</span> <span class="c1">-- cons 1 with an empty list, same as 1:[]</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Since list is an instance of <span class="glossary-term" data-term="monoid">Monoid<span class="glossary-popup">A type class for types that have an associative binary operation (mappend) and an identity element (mempty). Instances of Monoid can be concatenated using mconcat.
+</span></span>, <code class="language-plaintext highlighter-rouge">foldMap</code> will concatenate these singleton lists together:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="n">foldMap</span> <span class="p">(</span><span class="o">:</span><span class="kt">[]</span><span class="p">)</span> <span class="n">tree</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">]</span>
+</code></pre></div></div>
+
+<hr>
+
+<h3 id="exercise">Exercise</h3>
+
+<ul>
+  <li>Make an instance of <code class="language-plaintext highlighter-rouge">Foldable</code> for <code class="language-plaintext highlighter-rouge">Tree</code> in terms of <code class="language-plaintext highlighter-rouge">foldr</code> instead of <code class="language-plaintext highlighter-rouge">foldMap</code>.</li>
+</ul>
+
+<div class="solutions">
+    
+<h4 id="solutions">Solutions</h4>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Foldable</span> <span class="kt">Tree</span> <span class="kr">where</span>
+  <span class="n">foldr</span> <span class="o">::</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="o">-&gt;</span> <span class="kt">Tree</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span>
+  <span class="n">foldr</span> <span class="kr">_</span> <span class="n">z</span> <span class="kt">Empty</span> <span class="o">=</span> <span class="n">z</span> <span class="c1">-- base case, return accumulator</span>
+  <span class="n">foldr</span> <span class="n">f</span> <span class="n">z</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="n">f</span> <span class="n">x</span> <span class="n">z</span> <span class="c1">-- when we see a leaf, combine accumulator and leaf</span>
+  <span class="n">foldr</span> <span class="n">f</span> <span class="n">z</span> <span class="p">(</span><span class="kt">Node</span> <span class="n">l</span> <span class="n">x</span> <span class="n">r</span><span class="p">)</span> <span class="o">=</span> <span class="n">foldr</span> <span class="n">f</span> <span class="p">(</span><span class="n">f</span> <span class="n">x</span> <span class="p">(</span><span class="n">foldr</span> <span class="n">f</span> <span class="n">z</span> <span class="n">r</span><span class="p">))</span> <span class="n">l</span> <span class="c1">-- fold over right first, then over left</span>
+</code></pre></div></div>
+
+
+</div>
+
+<hr>
+
+<h2 id="traversable">Traversable</h2>
+
+<p><code class="language-plaintext highlighter-rouge">Traversable</code> extends both <code class="language-plaintext highlighter-rouge">Foldable</code> and <code class="language-plaintext highlighter-rouge">Functor</code>, in a typeclass for things that we can <code class="language-plaintext highlighter-rouge">traverse</code> a function with an <code class="language-plaintext highlighter-rouge">Applicative</code> effect over. Here’s a sneak peek of what this lets us do:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">traverse</span> <span class="n">putStrLn</span> <span class="p">[</span><span class="s">"tim"</span><span class="p">,</span><span class="s">"was"</span><span class="p">,</span><span class="s">"here"</span><span class="p">]</span>
+<span class="n">tim</span>
+<span class="n">was</span>
+<span class="n">here</span>
+<span class="p">[</span><span class="nb">()</span><span class="p">,</span><span class="nb">()</span><span class="p">,</span><span class="nb">()</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>The first three lines are the strings printed to the terminal (the side effect).  The result reported by GHCi is a list <code class="language-plaintext highlighter-rouge">[(),(),()]</code> as discussed below.</p>
+
+<p>Here, as usual, is what GHCi <code class="language-plaintext highlighter-rouge">:i</code> tells us about the <span class="glossary-term" data-term="traversable">Traversable<span class="glossary-popup">A type class for data structures that can be traversed, applying a function with an Applicative effect to each element. It extends both Foldable and Functor and includes functions like traverse and sequenceA.
+</span></span> <span class="glossary-term" data-term="type class">type class<span class="glossary-popup">A type system construct in Haskell that defines a set of functions that can be applied to different types, allowing for polymorphic functions.
+</span></span>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="o">:</span><span class="n">i</span> <span class="kt">Traversable</span>
+<span class="kr">class</span> <span class="p">(</span><span class="kt">Functor</span> <span class="n">t</span><span class="p">,</span> <span class="kt">Foldable</span> <span class="n">t</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="kt">Traversable</span> <span class="p">(</span><span class="n">t</span> <span class="o">::</span> <span class="o">*</span> <span class="o">-&gt;</span> <span class="o">*</span><span class="p">)</span> <span class="kr">where</span>
+  <span class="n">traverse</span> <span class="o">::</span> <span class="kt">Applicative</span> <span class="n">f</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">t</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="p">(</span><span class="n">t</span> <span class="n">b</span><span class="p">)</span>
+  <span class="n">sequenceA</span> <span class="o">::</span> <span class="kt">Applicative</span> <span class="n">f</span> <span class="o">=&gt;</span> <span class="n">t</span> <span class="p">(</span><span class="n">f</span> <span class="n">a</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="p">(</span><span class="n">t</span> <span class="n">a</span><span class="p">)</span>
+  <span class="o">...</span> <span class="c1">-- some other functions</span>
+  <span class="cp">{-# MINIMAL traverse | sequenceA #-}</span>
+        <span class="c1">-- Defined in `Data.Traversable'</span>
+<span class="kr">instance</span> <span class="kt">Traversable</span> <span class="kt">[]</span> <span class="c1">-- Defined in `Data.Traversable'</span>
+<span class="kr">instance</span> <span class="kt">Traversable</span> <span class="kt">Maybe</span> <span class="c1">-- Defined in `Data.Traversable'</span>
+<span class="kr">instance</span> <span class="kt">Traversable</span> <span class="p">(</span><span class="kt">Either</span> <span class="n">a</span><span class="p">)</span> <span class="c1">-- Defined in `Data.Traversable'</span>
+<span class="kr">instance</span> <span class="kt">Traversable</span> <span class="p">((,)</span> <span class="n">a</span><span class="p">)</span> <span class="c1">-- Defined in `Data.Traversable'</span>
+</code></pre></div></div>
+
+<p>The following map shows how all of these typeclasses are starting to come together to offer some real power:</p>
+
+<p><img src="/assets/images/chapterImages/haskell4/traversableTypeClasses.png" alt="Traversable Typeclasses"></p>
+
+<p>So what does the traverse function do?  By way of example, remember our safe modulo function we used to experiment with <a href="/haskell3/#functor"><span class="glossary-term" data-term="functor">Functor<span class="glossary-popup">A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the fmap function, which applies a function to every element in a structure.
+</span></span></a>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">safeMod</span> <span class="o">::</span> <span class="kt">Integral</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="n">a</span><span class="o">-&gt;</span> <span class="n">a</span><span class="o">-&gt;</span> <span class="kt">Maybe</span> <span class="n">a</span>
+<span class="n">safeMod</span> <span class="kr">_</span> <span class="mi">0</span> <span class="o">=</span> <span class="kt">Nothing</span>
+<span class="n">safeMod</span> <span class="n">numerator</span> <span class="n">divisor</span> <span class="o">=</span> <span class="kt">Just</span> <span class="o">$</span> <span class="n">mod</span> <span class="n">numerator</span> <span class="n">divisor</span>
+</code></pre></div></div>
+
+<p>It lets us map over a list of numbers without throwing divide-by-zero exceptions:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="n">map</span> <span class="p">(</span><span class="n">safeMod</span> <span class="mi">3</span><span class="p">)</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="p">[</span><span class="kt">Just</span> <span class="mi">0</span><span class="p">,</span><span class="kt">Just</span> <span class="mi">1</span><span class="p">,</span><span class="kt">Nothing</span><span class="p">,</span><span class="kt">Just</span> <span class="mi">1</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>But what if <code class="language-plaintext highlighter-rouge">0</code>s in the list really are indicative of disaster such that we should bail rather than proceeding?  The <code class="language-plaintext highlighter-rouge">traverse</code> function of the <code class="language-plaintext highlighter-rouge">Traversable</code> type-class gives us this kind of “all or nothing” capability:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="n">traverse</span> <span class="p">(</span><span class="n">safeMod</span> <span class="mi">3</span><span class="p">)</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="kt">Nothing</span>
+<span class="o">&gt;</span> <span class="n">traverse</span> <span class="p">(</span><span class="n">safeMod</span> <span class="mi">3</span><span class="p">)</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="kt">Just</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>So <code class="language-plaintext highlighter-rouge">map</code>ping a function with an <code class="language-plaintext highlighter-rouge">Applicative</code> effect over the values in a list gives us back a list with each of those values wrapped in the effect.  However, <code class="language-plaintext highlighter-rouge">traverse</code>ing such a function over a list gives us back the list of unwrapped values, with the whole list wrapped in the effect.</p>
+
+<p>Traverse applies a function with a result in an <code class="language-plaintext highlighter-rouge">Applicative</code> context (i.e. an <span class="glossary-term" data-term="applicative">Applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> effect) to the contents of a <code class="language-plaintext highlighter-rouge">Traversable</code> thing.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="o">:</span><span class="n">t</span> <span class="n">traverse</span>
+<span class="n">traverse</span>
+  <span class="o">::</span> <span class="p">(</span><span class="kt">Applicative</span> <span class="n">f</span><span class="p">,</span> <span class="kt">Traversable</span> <span class="n">t</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">t</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="p">(</span><span class="n">t</span> <span class="n">b</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>What are some other functions with <span class="glossary-term" data-term="applicative">Applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> effects?  Lots! E.g.:</p>
+
+<ul>
+  <li>Any constructor of a data type that instances <span class="glossary-term" data-term="applicative">Applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span>: e.g. <code class="language-plaintext highlighter-rouge">Just :: a -&gt; Maybe a</code></li>
+  <li>Anything that creates a list: <code class="language-plaintext highlighter-rouge">(take 5 $ repeat 1) :: Num a =&gt; [a]</code></li>
+  <li>IO is <span class="glossary-term" data-term="applicative">Applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span>, so a function like <code class="language-plaintext highlighter-rouge">print :: Show a =&gt; a -&gt; IO ()</code></li>
+  <li>etc…</li>
+</ul>
+
+<p>The <code class="language-plaintext highlighter-rouge">print</code> function converts values to strings (using show if available from an instance of <code class="language-plaintext highlighter-rouge">Show</code>) and sends them to standard-out.  The <code class="language-plaintext highlighter-rouge">print</code> function wraps this effect (there is an effect on the state of the console) in an <code class="language-plaintext highlighter-rouge">IO</code> computational context:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="o">:</span><span class="n">t</span> <span class="n">print</span>
+<span class="n">print</span> <span class="o">::</span> <span class="kt">Show</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">IO</span> <span class="nb">()</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">()</code> is like <code class="language-plaintext highlighter-rouge">void</code> in TypeScript—it’s a type with exactly one value <code class="language-plaintext highlighter-rouge">()</code>, and hence is called “<span class="glossary-term" data-term="unit">Unit<span class="glossary-popup">A type with exactly one value, (), used to indicate the absence of meaningful return value, similar to void in other languages.
+</span></span>”.  There is no return value from <code class="language-plaintext highlighter-rouge">print</code>, only the <code class="language-plaintext highlighter-rouge">IO</code> effect, and hence the return type is <code class="language-plaintext highlighter-rouge">()</code>.  <code class="language-plaintext highlighter-rouge">IO</code> is also an instance of <code class="language-plaintext highlighter-rouge">Applicative</code>.  This means we can use <code class="language-plaintext highlighter-rouge">traverse</code> to print out the contents of a list:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">traverse</span> <span class="n">print</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="mi">1</span>
+<span class="mi">2</span>
+<span class="mi">3</span>
+<span class="p">[</span><span class="nb">()</span><span class="p">,</span><span class="nb">()</span><span class="p">,</span><span class="nb">()</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Here <code class="language-plaintext highlighter-rouge">1,2,3</code> are printed to the console each on their own line (which is <code class="language-plaintext highlighter-rouge">print</code>’s IO effect), and <code class="language-plaintext highlighter-rouge">[(),(),()]</code> is the return value reported by GHCi—a list of <span class="glossary-term" data-term="unit">Unit<span class="glossary-popup">A type with exactly one value, (), used to indicate the absence of meaningful return value, similar to void in other languages.
+</span></span>.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="o">:</span><span class="n">t</span> <span class="n">traverse</span> <span class="n">print</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">traverse</span> <span class="n">print</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="o">::</span> <span class="kt">IO</span> <span class="p">[</span><span class="nb">()</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>When we ran this at the REPL, GHCi consumed the <code class="language-plaintext highlighter-rouge">IO</code> effect (because it runs all commands inside the <a href="/monad/"><code class="language-plaintext highlighter-rouge">IO Monad</code></a>).  However, inside a <span class="glossary-term" data-term="pure function">pure function<span class="glossary-popup">A function that always produces the same output for the same input and has no side effects.
+</span></span> there is no easy way to get rid of this <code class="language-plaintext highlighter-rouge">IO</code> return type—which protects you from creating <code class="language-plaintext highlighter-rouge">IO</code> effects unintentionally.</p>
+
+<p>A related function defined in <code class="language-plaintext highlighter-rouge">Traversable</code> is <code class="language-plaintext highlighter-rouge">sequenceA</code> which allows us to convert directly from <span class="glossary-term" data-term="traversables">Traversables<span class="glossary-popup">A type class for data structures that can be traversed, applying a function with an Applicative effect to each element. It extends both Foldable and Functor and includes functions like traverse and sequenceA.
+</span></span> of <span class="glossary-term" data-term="applicatives">Applicatives<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span>, to <span class="glossary-term" data-term="applicatives">Applicatives<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> of <span class="glossary-term" data-term="traversables">Traversables<span class="glossary-popup">A type class for data structures that can be traversed, applying a function with an Applicative effect to each element. It extends both Foldable and Functor and includes functions like traverse and sequenceA.
+</span></span>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="o">:</span><span class="n">t</span> <span class="n">sequenceA</span>
+<span class="n">sequenceA</span> <span class="o">::</span> <span class="p">(</span><span class="kt">Applicative</span> <span class="n">f</span><span class="p">,</span> <span class="kt">Traversable</span> <span class="n">t</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">t</span> <span class="p">(</span><span class="n">f</span> <span class="n">a</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="p">(</span><span class="n">t</span> <span class="n">a</span><span class="p">)</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">sequenceA</span> <span class="p">[</span><span class="kt">Just</span> <span class="mi">0</span><span class="p">,</span><span class="kt">Just</span> <span class="mi">1</span><span class="p">,</span><span class="kt">Just</span> <span class="mi">1</span><span class="p">]</span>
+<span class="kt">Just</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">sequenceA</span> <span class="p">[</span><span class="kt">Just</span> <span class="mi">0</span><span class="p">,</span><span class="kt">Just</span> <span class="mi">1</span><span class="p">,</span><span class="kt">Nothing</span><span class="p">,</span><span class="kt">Just</span> <span class="mi">1</span><span class="p">]</span>
+<span class="kt">Nothing</span>
+</code></pre></div></div>
+
+<p>The default <code class="language-plaintext highlighter-rouge">sequenceA</code> <a href="https://hackage.haskell.org/package/base-4.14.0.0/docs/src/Data.Traversable.html#sequenceA">is defined</a> very simply in terms of <code class="language-plaintext highlighter-rouge">traverse</code> (recall <code class="language-plaintext highlighter-rouge">id</code> is just <code class="language-plaintext highlighter-rouge">\x-&gt;x</code>):</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sequenceA</span> <span class="o">=</span> <span class="n">traverse</span> <span class="n">id</span>
+</code></pre></div></div>
+
+<p>A bit more fun with <code class="language-plaintext highlighter-rouge">sequenceA</code>, a list of functions:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="o">:</span><span class="n">t</span> <span class="p">[(</span><span class="o">+</span><span class="mi">3</span><span class="p">),(</span><span class="o">*</span><span class="mi">2</span><span class="p">),(</span><span class="o">+</span><span class="mi">6</span><span class="p">)]</span>
+<span class="p">[(</span><span class="o">+</span><span class="mi">3</span><span class="p">),(</span><span class="o">*</span><span class="mi">2</span><span class="p">),(</span><span class="o">+</span><span class="mi">6</span><span class="p">)]</span> <span class="o">::</span> <span class="kt">Num</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>is also a list of <code class="language-plaintext highlighter-rouge">Applicative</code>, because function <code class="language-plaintext highlighter-rouge">(-&gt;)r</code> is an instance of <code class="language-plaintext highlighter-rouge">Applicative</code>.  Therefore, we can apply <code class="language-plaintext highlighter-rouge">sequenceA</code> to a list of functions to make a single function that applies every function in the list to a given value and return a list of the results:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="o">:</span><span class="n">t</span> <span class="n">sequenceA</span> <span class="p">[(</span><span class="o">+</span><span class="mi">3</span><span class="p">),(</span><span class="o">*</span><span class="mi">2</span><span class="p">),(</span><span class="o">+</span><span class="mi">6</span><span class="p">)]</span>
+<span class="n">sequenceA</span> <span class="p">[(</span><span class="o">+</span><span class="mi">3</span><span class="p">),(</span><span class="o">*</span><span class="mi">2</span><span class="p">),(</span><span class="o">+</span><span class="mi">6</span><span class="p">)]</span> <span class="o">::</span> <span class="kt">Num</span> <span class="n">a</span> <span class="o">=&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span>
+<span class="o">&gt;</span> <span class="n">sequenceA</span> <span class="p">[(</span><span class="o">+</span><span class="mi">3</span><span class="p">),(</span><span class="o">*</span><span class="mi">2</span><span class="p">),(</span><span class="o">+</span><span class="mi">6</span><span class="p">)]</span> <span class="mi">2</span>
+<span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">8</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>To create our own instance of <code class="language-plaintext highlighter-rouge">Traversable</code> we need to implement <code class="language-plaintext highlighter-rouge">fmap</code> to make it a <code class="language-plaintext highlighter-rouge">Functor</code> and then either <code class="language-plaintext highlighter-rouge">foldMap</code> or <code class="language-plaintext highlighter-rouge">foldr</code> to make it <code class="language-plaintext highlighter-rouge">Foldable</code> and finally, either <code class="language-plaintext highlighter-rouge">traverse</code> or <code class="language-plaintext highlighter-rouge">sequenceA</code>.  So for our <code class="language-plaintext highlighter-rouge">Tree</code> type above, which we already made <code class="language-plaintext highlighter-rouge">Foldable</code> we add:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Functor</span> <span class="kt">Tree</span> <span class="kr">where</span>
+   <span class="n">fmap</span> <span class="o">::</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Tree</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Tree</span> <span class="n">b</span>
+   <span class="n">fmap</span> <span class="kr">_</span> <span class="kt">Empty</span> <span class="o">=</span> <span class="kt">Empty</span>
+   <span class="n">fmap</span> <span class="n">f</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="kt">Leaf</span> <span class="o">$</span> <span class="n">f</span> <span class="n">x</span>
+   <span class="n">fmap</span> <span class="n">f</span> <span class="p">(</span><span class="kt">Node</span> <span class="n">l</span> <span class="n">v</span> <span class="n">r</span><span class="p">)</span> <span class="o">=</span> <span class="kt">Node</span> <span class="p">(</span><span class="n">fmap</span> <span class="n">f</span> <span class="n">l</span><span class="p">)</span> <span class="p">(</span><span class="n">f</span> <span class="n">v</span><span class="p">)</span> <span class="p">(</span><span class="n">fmap</span> <span class="n">f</span> <span class="n">r</span><span class="p">)</span>
+
+<span class="kr">instance</span> <span class="kt">Traversable</span> <span class="kt">Tree</span> <span class="kr">where</span>
+   <span class="n">traverse</span> <span class="o">::</span> <span class="kt">Applicative</span> <span class="n">f</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Tree</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="p">(</span><span class="kt">Tree</span> <span class="n">b</span><span class="p">)</span>
+   <span class="n">traverse</span> <span class="kr">_</span> <span class="kt">Empty</span> <span class="o">=</span> <span class="n">pure</span> <span class="kt">Empty</span>
+   <span class="n">traverse</span> <span class="n">f</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="n">a</span><span class="p">)</span> <span class="o">=</span> <span class="kt">Leaf</span> <span class="o">&lt;$&gt;</span> <span class="n">f</span> <span class="n">a</span>
+   <span class="n">traverse</span> <span class="n">f</span> <span class="p">(</span><span class="kt">Node</span> <span class="n">l</span> <span class="n">x</span> <span class="n">r</span><span class="p">)</span> <span class="o">=</span> <span class="kt">Node</span> <span class="o">&lt;$&gt;</span> <span class="n">traverse</span> <span class="n">f</span> <span class="n">l</span> <span class="o">&lt;*&gt;</span> <span class="n">f</span> <span class="n">x</span> <span class="o">&lt;*&gt;</span> <span class="n">traverse</span> <span class="n">f</span> <span class="n">r</span>
+</code></pre></div></div>
+
+<p>So now we can traverse a function with an <code class="language-plaintext highlighter-rouge">Applicative</code> effect over the tree:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">Prelude</span><span class="o">&gt;</span> <span class="n">traverse</span> <span class="n">print</span> <span class="n">tree</span>
+<span class="mi">1</span>
+<span class="mi">2</span>
+<span class="mi">3</span>
+<span class="mi">4</span>
+<span class="mi">5</span>
+<span class="mi">6</span>
+<span class="mi">7</span>
+</code></pre></div></div>
+
+<p>And of course, we can sequence a <code class="language-plaintext highlighter-rouge">Tree</code> of <code class="language-plaintext highlighter-rouge">Maybe</code>s into a <code class="language-plaintext highlighter-rouge">Maybe Tree</code>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="n">treeOfMaybes</span> <span class="o">=</span> <span class="kt">Just</span> <span class="o">&lt;$&gt;</span> <span class="n">tree</span> <span class="c1">-- a tree of Maybes</span>
+<span class="o">&gt;</span> <span class="n">treeOfMaybes</span>
+<span class="kt">Node</span> <span class="p">(</span><span class="kt">Node</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="p">(</span><span class="kt">Just</span> <span class="mi">1</span><span class="p">))</span> <span class="p">(</span><span class="kt">Just</span> <span class="mi">2</span><span class="p">)</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="p">(</span><span class="kt">Just</span> <span class="mi">3</span><span class="p">)))</span> <span class="p">(</span><span class="kt">Just</span> <span class="mi">4</span><span class="p">)</span> <span class="p">(</span><span class="kt">Node</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="p">(</span><span class="kt">Just</span> <span class="mi">5</span><span class="p">))</span> <span class="p">(</span><span class="kt">Just</span> <span class="mi">6</span><span class="p">)</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="p">(</span><span class="kt">Just</span> <span class="mi">7</span><span class="p">)))</span>
+<span class="o">&gt;</span> <span class="n">sequenceA</span> <span class="n">treeOfMaybes</span>
+<span class="kt">Just</span> <span class="p">(</span><span class="kt">Node</span> <span class="p">(</span><span class="kt">Node</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="mi">1</span><span class="p">)</span> <span class="mi">2</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="mi">3</span><span class="p">))</span> <span class="mi">4</span> <span class="p">(</span><span class="kt">Node</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="mi">5</span><span class="p">)</span> <span class="mi">6</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="mi">7</span><span class="p">)))</span>
+</code></pre></div></div>
+
+<hr>
+
+<h2 id="applying-functions-over-contexts">Applying Functions Over Contexts</h2>
+
+<p>Thus far we have seen a variety of functions for applying functions in and over different contexts.  It is useful to note the similarities between these, and recognise that they are all doing conceptually the same thing, i.e. function application.  The difference is in the type of context.  The simplest function for applying functions is the ($) operator, with just a function (no context), applied directly to a value.  Then <code class="language-plaintext highlighter-rouge">fmap</code>, just a function, mapped over a <span class="glossary-term" data-term="functor">Functor<span class="glossary-popup">A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the fmap function, which applies a function to every element in a structure.
+</span></span> context/container.  Then <span class="glossary-term" data-term="applicative">Applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> (function also in the context).  Then, most recently <code class="language-plaintext highlighter-rouge">traverse</code>: the function produces a result in an <span class="glossary-term" data-term="applicative">Applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> context, applied (traversed) over some data structure, and the resulting data structure returned in an <span class="glossary-term" data-term="applicative">Applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> context.  Below, I line up all the types so that the similarities and differences are as clear as possible.  It’s worth making sure at this stage that you can read such type signatures, as they really do summarise everything that we have discussed.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="o">$</span><span class="p">)</span>      <span class="o">::</span>                                      <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">a</span>   <span class="o">-&gt;</span> <span class="n">b</span>
+<span class="p">(</span><span class="o">&lt;$&gt;</span><span class="p">)</span>    <span class="o">::</span> <span class="kt">Functor</span> <span class="n">f</span>                      <span class="o">=&gt;</span>    <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="n">b</span>
+<span class="p">(</span><span class="o">&lt;*&gt;</span><span class="p">)</span>    <span class="o">::</span> <span class="kt">Applicative</span> <span class="n">f</span>                  <span class="o">=&gt;</span>  <span class="n">f</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="n">b</span>
+<span class="n">traverse</span> <span class="o">::</span> <span class="p">(</span><span class="kt">Traversable</span> <span class="n">t</span><span class="p">,</span> <span class="kt">Applicative</span> <span class="n">f</span><span class="p">)</span> <span class="o">=&gt;</span>  <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">t</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="p">(</span><span class="n">t</span> <span class="n">b</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="parsing-a-string-using-traversable">Parsing a String Using Traversable?</h2>
+
+<p>What if we want to parse an exact match for a given string, for example, a token in a programming language like the word <code class="language-plaintext highlighter-rouge">function</code>.  Or, to look for a polite greeting at the start of an email before deciding whether to respond, such as “hello”.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;</span> <span class="n">parse</span> <span class="p">(</span><span class="n">string</span> <span class="s">"hello"</span><span class="p">)</span> <span class="s">"hello world"</span>
+<span class="kt">Just</span> <span class="p">(</span><span class="s">" world"</span><span class="p">,</span> <span class="s">"hello"</span><span class="p">)</span>
+
+<span class="o">&gt;</span> <span class="n">parse</span> <span class="p">(</span><span class="n">string</span> <span class="s">"hello"</span><span class="p">)</span> <span class="s">"world, hello"</span>
+<span class="kt">Nothing</span>
+</code></pre></div></div>
+
+<p>So the string “hello” is the prototype for the expected input.  How would we do this?</p>
+
+<p>Our <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> would have to process characters from the input stream and check if each successive character  <strong>is</strong> the one expected from the prototype.
+If it is the correct character, we would cons it to our result and then parse the next character.</p>
+
+<p>This can have a recursive solution:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="kt">[]</span> <span class="o">=</span> <span class="n">pure</span> <span class="s">""</span>
+<span class="n">string</span> <span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">xs</span><span class="p">)</span> <span class="o">=</span> <span class="n">liftA2</span> <span class="p">(</span><span class="o">:</span><span class="p">)</span> <span class="p">(</span><span class="n">is</span> <span class="n">x</span><span class="p">)</span> <span class="p">(</span><span class="n">string</span> <span class="n">xs</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>We parse the first character, <code class="language-plaintext highlighter-rouge">x</code>, then recursively parse the rest of the string. We <em>lift</em> the <code class="language-plaintext highlighter-rouge">(:)</code> operator into the <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> context to combine our results into a single list. This can also be written using a <code class="language-plaintext highlighter-rouge">foldr</code> to parse all the characters while checking with the <code class="language-plaintext highlighter-rouge">is</code> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span>.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="n">l</span> <span class="o">=</span> <span class="n">foldr</span> <span class="p">(</span><span class="nf">\</span><span class="n">c</span> <span class="n">acc</span> <span class="o">-&gt;</span> <span class="n">liftA2</span> <span class="p">(</span><span class="o">:</span><span class="p">)</span> <span class="p">(</span><span class="n">is</span> <span class="n">c</span><span class="p">)</span> <span class="n">acc</span><span class="p">)</span> <span class="p">(</span><span class="n">pure</span> <span class="s">""</span><span class="p">)</span> <span class="n">l</span>
+</code></pre></div></div>
+
+<p>Remembering <code class="language-plaintext highlighter-rouge">liftA2</code> is equivalent to <code class="language-plaintext highlighter-rouge">f &lt;$&gt; a &lt;*&gt; b</code>.</p>
+
+<p>Our <code class="language-plaintext highlighter-rouge">&lt;*&gt;</code> will allow for the sequencing of the <span class="glossary-term" data-term="applicative">applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> effect, so this will sequentially parse all characters, making sure they are correct.
+As soon as one <span class="glossary-term" data-term="applicative">applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> fails, the result of the parsing will fail.</p>
+
+<p>This could also be written as:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="n">l</span> <span class="o">=</span> <span class="n">foldr</span> <span class="n">cons</span> <span class="p">(</span><span class="n">pure</span> <span class="kt">[]</span><span class="p">)</span> <span class="n">l</span>
+  <span class="kr">where</span>
+    <span class="n">cons</span> <span class="n">c</span> <span class="n">acc</span> <span class="o">=</span> <span class="n">liftA2</span> <span class="p">(</span><span class="o">:</span><span class="p">)</span> <span class="p">(</span><span class="n">is</span> <span class="n">c</span><span class="p">)</span> <span class="n">acc</span>
+</code></pre></div></div>
+
+<p>But the title of this section was traverse?</p>
+
+<p>Well, let’s consider how we would define a list as an instance of the <span class="glossary-term" data-term="traversable">traversable<span class="glossary-popup">A type class for data structures that can be traversed, applying a function with an Applicative effect to each element. It extends both Foldable and Functor and includes functions like traverse and sequenceA.
+</span></span> operator. The traverse function is defined for lists <a href="https://hackage.haskell.org/package/ghc-internal-9.1001.0/docs/src/GHC.Internal.Data.Traversable.html#line-241">exactly</a> as follows:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Traversable</span> <span class="kt">[]</span> <span class="kr">where</span>
+  <span class="n">traverse</span> <span class="o">::</span> <span class="kt">Applicative</span> <span class="n">f</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="p">[</span><span class="n">b</span><span class="p">]</span>
+  <span class="n">traverse</span> <span class="n">f</span> <span class="o">=</span> <span class="n">foldr</span> <span class="n">cons</span> <span class="p">(</span><span class="n">pure</span> <span class="kt">[]</span><span class="p">)</span>
+    <span class="kr">where</span> <span class="n">cons</span> <span class="n">x</span> <span class="n">ys</span> <span class="o">=</span> <span class="n">liftA2</span> <span class="p">(</span><span class="o">:</span><span class="p">)</span> <span class="p">(</span><span class="n">f</span> <span class="n">x</span><span class="p">)</span> <span class="n">ys</span>
+</code></pre></div></div>
+
+<p>This is almost exactly the definition of our string <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> using <code class="language-plaintext highlighter-rouge">foldr</code> but the function <code class="language-plaintext highlighter-rouge">f</code> is exactly the <code class="language-plaintext highlighter-rouge">is</code> <span class="glossary-term" data-term="parser">Parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span>.</p>
+
+<p>Therefore, we can write <code class="language-plaintext highlighter-rouge">string = traverse is</code></p>
+
+<p>Let’s break down how the <code class="language-plaintext highlighter-rouge">string</code> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> using <code class="language-plaintext highlighter-rouge">traverse</code> and <code class="language-plaintext highlighter-rouge">is</code> works in terms of types:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="o">::</span> <span class="kt">String</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="kt">String</span>
+<span class="n">string</span> <span class="o">=</span> <span class="n">traverse</span> <span class="n">is</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">traverse</code> is a <span class="glossary-term" data-term="higher-order function">higher-order function<span class="glossary-popup">A function that takes other functions as arguments or returns a function as its result.
+</span></span> with the following type:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">traverse</span> <span class="o">::</span> <span class="p">(</span><span class="kt">Traversable</span> <span class="n">t</span><span class="p">,</span> <span class="kt">Applicative</span> <span class="n">f</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">t</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="p">(</span><span class="n">t</span> <span class="n">b</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">t</code> is a <span class="glossary-term" data-term="traversable">traversable<span class="glossary-popup">A type class for data structures that can be traversed, applying a function with an Applicative effect to each element. It extends both Foldable and Functor and includes functions like traverse and sequenceA.
+</span></span> data structure, which in our case is a <code class="language-plaintext highlighter-rouge">String</code> (since <code class="language-plaintext highlighter-rouge">String</code> is a list of characters).
+<code class="language-plaintext highlighter-rouge">a</code> is the element type of the <span class="glossary-term" data-term="traversable">traversable<span class="glossary-popup">A type class for data structures that can be traversed, applying a function with an Applicative effect to each element. It extends both Foldable and Functor and includes functions like traverse and sequenceA.
+</span></span> structure, which is <code class="language-plaintext highlighter-rouge">Char</code> (the individual characters in the <code class="language-plaintext highlighter-rouge">String</code>).
+<code class="language-plaintext highlighter-rouge">f</code> is an <span class="glossary-term" data-term="applicative">applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> <span class="glossary-term" data-term="functor">functor<span class="glossary-popup">A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the fmap function, which applies a function to every element in a structure.
+</span></span>, which is the <code class="language-plaintext highlighter-rouge">Parser</code> type in our case.
+The function <code class="language-plaintext highlighter-rouge">(a -&gt; f b)</code> is the <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> for a single character. In our case, it’s the <code class="language-plaintext highlighter-rouge">is</code> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span>.</p>
+
+<p>So, we will apply the <code class="language-plaintext highlighter-rouge">is</code> function to each element in the <span class="glossary-term" data-term="traversable">traversable<span class="glossary-popup">A type class for data structures that can be traversed, applying a function with an Applicative effect to each element. It extends both Foldable and Functor and includes functions like traverse and sequenceA.
+</span></span> <code class="language-plaintext highlighter-rouge">t</code> (the list) and collect the result into a <code class="language-plaintext highlighter-rouge">Parser [Char]</code>.</p>
+
+<p>Therefore, <code class="language-plaintext highlighter-rouge">traverse is</code> is of type <code class="language-plaintext highlighter-rouge">Parser String</code>, which is a <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> that attempts to parse the entire String and returns it as a result.</p>
+
+<p>Can we also write this using <code class="language-plaintext highlighter-rouge">sequenceA</code>?</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="o">::</span> <span class="kt">String</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="kt">String</span>
+<span class="n">string</span> <span class="n">str</span> <span class="o">=</span> <span class="n">sequenceA</span> <span class="p">(</span><span class="n">map</span> <span class="n">is</span> <span class="n">str</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Or in point-free form</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">string</span> <span class="o">::</span> <span class="kt">String</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="kt">String</span>
+<span class="n">string</span> <span class="o">=</span> <span class="n">sequenceA</span> <span class="o">.</span> <span class="n">map</span> <span class="n">is</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">map is str</code> maps the is <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> over each character in the input string <code class="language-plaintext highlighter-rouge">str</code>. This produces a list of <span class="glossary-term" data-term="parsers">parsers<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span>, where each <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> checks if the corresponding character in the input matches the character in the target string.</p>
+
+<p><code class="language-plaintext highlighter-rouge">sequenceA</code> is then used to turn the list of <span class="glossary-term" data-term="parsers">parsers<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> into a single <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span>. This function applies each <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> to the input string and collects the results. If all character <span class="glossary-term" data-term="parsers">parsers<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> succeed, it returns a list of characters; otherwise, it returns Nothing.</p>
+
+<p>In fact an equivalent definition of traverse can be written using the <code class="language-plaintext highlighter-rouge">sequenceA</code> as follows:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">traverse</span> <span class="o">::</span> <span class="p">(</span><span class="kt">Traversable</span> <span class="n">t</span><span class="p">,</span> <span class="kt">Applicative</span> <span class="n">f</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">t</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="p">(</span><span class="n">t</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">traverse</span> <span class="n">f</span> <span class="n">l</span> <span class="o">=</span> <span class="n">sequenceA</span> <span class="p">(</span><span class="n">f</span> <span class="o">&lt;$&gt;</span> <span class="n">l</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr>
+
+<h3 id="exercises-1">Exercises</h3>
+
+<ul>
+  <li>What would be the definition of <code class="language-plaintext highlighter-rouge">sequenceA</code> over a list? (without using traverse)</li>
+  <li>Can you make the <code class="language-plaintext highlighter-rouge">Maybe</code> data type an instance of <span class="glossary-term" data-term="traversable">traversable<span class="glossary-popup">A type class for data structures that can be traversed, applying a function with an Applicative effect to each element. It extends both Foldable and Functor and includes functions like traverse and sequenceA.
+</span></span>?</li>
+</ul>
+
+<div class="solutions">
+    
+<h4 id="solutions">Solutions</h4>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">sequenceA</code> takes a list of <span class="glossary-term" data-term="applicative">applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> actions and returns an <span class="glossary-term" data-term="applicative">applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> action that returns a list of results. For lists, this means that <code class="language-plaintext highlighter-rouge">sequenceA</code> should combine a list of <span class="glossary-term" data-term="applicative">applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> actions into a single <span class="glossary-term" data-term="applicative">applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> action that returns a list of results.</p>
+
+    <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sequenceA</span> <span class="o">::</span> <span class="p">(</span><span class="kt">Applicative</span> <span class="n">f</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="n">f</span> <span class="n">a</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span>
+<span class="n">sequenceA</span> <span class="kt">[]</span> <span class="o">=</span> <span class="n">pure</span> <span class="kt">[]</span>
+<span class="n">sequenceA</span> <span class="p">(</span><span class="n">x</span><span class="o">:</span><span class="n">xs</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="o">:</span><span class="p">)</span> <span class="o">&lt;$&gt;</span> <span class="n">x</span> <span class="o">&lt;*&gt;</span> <span class="n">sequenceA</span> <span class="n">xs</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>For <code class="language-plaintext highlighter-rouge">Maybe</code>, the definition of traverse function is <code class="language-plaintext highlighter-rouge">traverse :: (Applicative f) =&gt; (a -&gt; f b) -&gt; Maybe a -&gt; f (Maybe b)</code></p>
+
+    <div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">instance</span> <span class="kt">Traversable</span> <span class="kt">Maybe</span> <span class="kr">where</span>
+  <span class="n">traverse</span> <span class="o">::</span> <span class="p">(</span><span class="kt">Applicative</span> <span class="n">f</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="n">b</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Maybe</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">f</span> <span class="p">(</span><span class="kt">Maybe</span> <span class="n">b</span><span class="p">)</span>
+  <span class="n">traverse</span> <span class="kr">_</span> <span class="kt">Nothing</span> <span class="o">=</span> <span class="n">pure</span> <span class="kt">Nothing</span>
+  <span class="n">traverse</span> <span class="n">f</span> <span class="p">(</span><span class="kt">Just</span> <span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="kt">Just</span> <span class="o">&lt;$&gt;</span> <span class="n">f</span> <span class="n">x</span>
+</code></pre></div>    </div>
+
+    <ul>
+      <li>If the input is <code class="language-plaintext highlighter-rouge">Nothing</code>, we return pure <code class="language-plaintext highlighter-rouge">Nothing</code>, which is an <span class="glossary-term" data-term="applicative">applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span> action that produces <code class="language-plaintext highlighter-rouge">Nothing</code>.</li>
+      <li>If the input is <code class="language-plaintext highlighter-rouge">Just x</code>, we apply <code class="language-plaintext highlighter-rouge">f</code> to <code class="language-plaintext highlighter-rouge">x</code> and then wrap the result with <code class="language-plaintext highlighter-rouge">Just</code>.</li>
+    </ul>
+  </li>
+</ul>
+
+
+</div>
+
+<hr>
+
+<h2 id="bringing-it-all-together">Bringing it all together</h2>
+
+<p>We can also parse a tree by traversing a <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> over it, the same way we parsed <code class="language-plaintext highlighter-rouge">string</code> by traversing a list of <code class="language-plaintext highlighter-rouge">Char</code>!</p>
+
+<p>Recall from earlier in this section:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">Tree</span> <span class="n">a</span> <span class="o">=</span> <span class="kt">Empty</span>
+            <span class="o">|</span> <span class="kt">Leaf</span> <span class="n">a</span>
+            <span class="o">|</span> <span class="kt">Node</span> <span class="p">(</span><span class="kt">Tree</span> <span class="n">a</span><span class="p">)</span> <span class="n">a</span> <span class="p">(</span><span class="kt">Tree</span> <span class="n">a</span><span class="p">)</span>
+  <span class="kr">deriving</span> <span class="p">(</span><span class="kt">Show</span><span class="p">)</span>
+
+<span class="kr">instance</span> <span class="kt">Traversable</span> <span class="kt">Tree</span> <span class="kr">where</span>
+  <span class="c1">--  traverse :: Applicative f =&gt; (a -&gt; f b) -&gt; Tree a -&gt; f (Tree b)</span>
+  <span class="n">traverse</span> <span class="kr">_</span> <span class="kt">Empty</span> <span class="o">=</span> <span class="n">pure</span> <span class="kt">Empty</span>
+  <span class="n">traverse</span> <span class="n">f</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="n">a</span><span class="p">)</span> <span class="o">=</span> <span class="kt">Leaf</span> <span class="o">&lt;$&gt;</span> <span class="n">f</span> <span class="n">a</span>
+  <span class="n">traverse</span> <span class="n">f</span> <span class="p">(</span><span class="kt">Node</span> <span class="n">l</span> <span class="n">x</span> <span class="n">r</span><span class="p">)</span> <span class="o">=</span> <span class="kt">Node</span> <span class="o">&lt;$&gt;</span> <span class="n">traverse</span> <span class="n">f</span> <span class="n">l</span> <span class="o">&lt;*&gt;</span> <span class="n">f</span> <span class="n">x</span> <span class="o">&lt;*&gt;</span> <span class="n">traverse</span> <span class="n">f</span> <span class="n">r</span>
+</code></pre></div></div>
+
+<p>We can write a similar definition for parsing an exact tree compared to parsing a string!</p>
+
+<p>We will consider a Value which is either an integer, or an operator which can combine integers. We will assume the only possible combination operator is <code class="language-plaintext highlighter-rouge">+</code> to avoid complexities with ordering expressions.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">Value</span> <span class="o">=</span> <span class="kt">Value</span> <span class="kt">Int</span> <span class="o">|</span> <span class="kt">BinaryPlus</span>
+  <span class="kr">deriving</span> <span class="p">(</span><span class="kt">Show</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>We can generalise the <code class="language-plaintext highlighter-rouge">is</code> <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> to <code class="language-plaintext highlighter-rouge">satisfy</code>, which will run a given <span class="glossary-term" data-term="parser">parser<span class="glossary-popup">A function or program that interprets structured input, often used to convert strings into data structures.
+</span></span> <code class="language-plaintext highlighter-rouge">p</code>, and make sure the result satisfies a boolean condition.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">satisfy</span> <span class="o">::</span> <span class="kt">Parser</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">a</span> <span class="o">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="n">a</span>
+<span class="n">satisfy</span> <span class="n">p</span> <span class="n">f</span> <span class="o">=</span> <span class="kt">Parser</span> <span class="o">$</span> <span class="nf">\</span><span class="n">i</span> <span class="o">-&gt;</span> <span class="kr">case</span> <span class="n">parse</span> <span class="n">p</span> <span class="n">i</span> <span class="kr">of</span>
+  <span class="kt">Just</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+      <span class="o">|</span> <span class="n">f</span> <span class="n">v</span> <span class="o">-&gt;</span> <span class="kt">Just</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+  <span class="kr">_</span> <span class="o">-&gt;</span> <span class="kt">Nothing</span>
+</code></pre></div></div>
+
+<p>From this satisfy, we will use traverse to ensure our string <em>exactly</em> matches a wanted expression Tree.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">isValue</span> <span class="o">::</span> <span class="kt">Value</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="kt">Value</span>
+<span class="n">isValue</span> <span class="p">(</span><span class="kt">Value</span> <span class="n">v</span><span class="p">)</span> <span class="o">=</span> <span class="kt">Value</span> <span class="o">&lt;$&gt;</span> <span class="n">satisfy</span> <span class="n">int</span> <span class="p">(</span><span class="o">==</span><span class="n">v</span><span class="p">)</span>
+<span class="n">isValue</span> <span class="kt">BinaryPlus</span> <span class="o">=</span> <span class="kt">BinaryPlus</span> <span class="o">&lt;$</span> <span class="n">satisfy</span> <span class="n">char</span> <span class="p">(</span><span class="o">==</span><span class="sc">'+'</span><span class="p">)</span>
+
+<span class="n">stringTree</span> <span class="o">::</span> <span class="kt">Tree</span> <span class="kt">Value</span> <span class="o">-&gt;</span> <span class="kt">Parser</span> <span class="p">(</span><span class="kt">Tree</span> <span class="kt">Value</span><span class="p">)</span>
+<span class="n">stringTree</span> <span class="o">=</span> <span class="n">traverse</span> <span class="n">isValue</span>
+
+<span class="n">sampleTree</span> <span class="o">::</span> <span class="kt">Tree</span> <span class="kt">Value</span>
+<span class="n">sampleTree</span> <span class="o">=</span>
+  <span class="kt">Node</span>
+    <span class="p">(</span><span class="kt">Leaf</span> <span class="o">$</span> <span class="kt">Value</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="kt">BinaryPlus</span>
+    <span class="p">(</span><span class="kt">Node</span>
+      <span class="p">(</span><span class="kt">Leaf</span> <span class="p">(</span><span class="kt">Value</span> <span class="mi">5</span><span class="p">))</span>
+      <span class="kt">BinaryPlus</span>
+      <span class="p">(</span><span class="kt">Leaf</span> <span class="p">(</span><span class="kt">Value</span> <span class="mi">2</span><span class="p">)))</span>
+
+
+<span class="n">inputString</span> <span class="o">::</span> <span class="kt">String</span>
+<span class="n">inputString</span> <span class="o">=</span> <span class="s">"3+5+2"</span>
+
+<span class="n">parsedResult</span> <span class="o">::</span> <span class="kt">String</span> <span class="o">-&gt;</span> <span class="kt">Maybe</span> <span class="p">(</span><span class="kt">String</span><span class="p">,</span> <span class="kt">Tree</span> <span class="kt">Value</span><span class="p">)</span>
+<span class="n">parsedResult</span> <span class="o">=</span> <span class="n">parse</span> <span class="p">(</span><span class="n">stringTree</span> <span class="n">sampleTree</span><span class="p">)</span> <span class="n">inputString</span>
+</code></pre></div></div>
+
+<p>The parsedResult will only succeed if the input string <strong>exactly</strong> matches the desired tree.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&gt;&gt;&gt;</span> <span class="n">parsedResult</span>
+<span class="kt">Just</span> <span class="p">(</span><span class="s">""</span><span class="p">,</span><span class="kt">Node</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="p">(</span><span class="kt">Value</span> <span class="mi">3</span><span class="p">))</span> <span class="kt">BinaryPlus</span> <span class="p">(</span><span class="kt">Node</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="p">(</span><span class="kt">Value</span> <span class="mi">5</span><span class="p">))</span> <span class="kt">BinaryPlus</span> <span class="p">(</span><span class="kt">Leaf</span> <span class="p">(</span><span class="kt">Value</span> <span class="mi">2</span><span class="p">))))</span>
+</code></pre></div></div>
+
+<p>To evaluate the parsed expression we can use foldMap and the Sum <span class="glossary-term" data-term="monoid">monoid<span class="glossary-popup">A type class for types that have an associative binary operation (mappend) and an identity element (mempty). Instances of Monoid can be concatenated using mconcat.
+</span></span>:</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">evalTree</span> <span class="o">::</span> <span class="kt">Tree</span> <span class="kt">Value</span> <span class="o">-&gt;</span> <span class="kt">Int</span>
+<span class="n">evalTree</span> <span class="n">tree</span> <span class="o">=</span> <span class="n">getSum</span> <span class="o">$</span> <span class="n">foldMap</span> <span class="n">toSum</span> <span class="n">tree</span>
+  <span class="kr">where</span>
+    <span class="n">toSum</span> <span class="o">::</span> <span class="kt">Value</span> <span class="o">-&gt;</span> <span class="kt">Sum</span> <span class="kt">Int</span>
+    <span class="n">toSum</span> <span class="p">(</span><span class="kt">Value</span> <span class="n">v</span><span class="p">)</span> <span class="o">=</span> <span class="kt">Sum</span> <span class="n">v</span>
+    <span class="n">toSum</span> <span class="kt">BinaryPlus</span> <span class="o">=</span> <span class="kt">Sum</span> <span class="mi">0</span> <span class="c1">-- For BinaryPlus, we don’t need to add anything to the sum</span>
+
+<span class="n">evalResult</span> <span class="o">::</span> <span class="kt">Maybe</span> <span class="p">(</span><span class="kt">String</span><span class="p">,</span> <span class="kt">Int</span><span class="p">)</span>
+<span class="n">evalResult</span> <span class="o">=</span> <span class="p">(</span><span class="n">evalTree</span> <span class="o">&lt;$&gt;</span><span class="p">)</span> <span class="o">&lt;$&gt;</span> <span class="n">parsedResult</span>
+<span class="c1">-- &gt;&gt;&gt; evalResult = Just ("", 10)</span>
+</code></pre></div></div>
+
+<div class="glossary">
+  <h2 id="glossary">Glossary</h2>
+
+  <p><em>Folding:</em> The process of reducing a data structure to a single value by applying a function. Haskell provides two types of folds: foldl (left fold) and foldr (right fold).</p>
+
+  <p><em>foldl:</em> A left fold function that processes elements from left to right. Its type signature is foldl :: Foldable t =&gt; (b -&gt; a -&gt; b) -&gt; b -&gt; t a -&gt; b.</p>
+
+  <p><em>foldr:</em> A right fold function that processes elements from right to left. Its type signature is foldr :: Foldable t =&gt; (a -&gt; b -&gt; b) -&gt; b -&gt; t a -&gt; b.</p>
+
+  <p><em>Monoid</em>: A type class for types that have an associative binary operation (mappend) and an identity element (mempty). Instances of Monoid can be concatenated using mconcat.</p>
+
+  <p><em>Foldable</em>: A type class for data structures that can be folded (reduced) to a single value. It includes functions like foldr, foldl, length, null, elem, maximum, minimum, sum, product, and foldMap.</p>
+
+  <p><em>Traversable</em>: A type class for data structures that can be traversed, applying a function with an Applicative effect to each element. It extends both Foldable and Functor and includes functions like traverse and sequenceA.</p>
+
+  <p><em>Unit</em>: A type with exactly one value, (), used to indicate the absence of a meaningful return value, similar to void in other languages.</p>
+
+</div>
+
+	</div>
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+        
+        
+        <a id="left" href="/haskell3/">&lt; <span class="glossary-term" data-term="functor">Functor<span class="glossary-popup">A type class in Haskell that represents types that can be mapped over. Instances of Functor must define the fmap function, which applies a function to every element in a structure.
+</span></span> and <span class="glossary-term" data-term="applicative">Applicative<span class="glossary-popup">A type class in Haskell that extends Functor, allowing functions that are within a context to be applied to values that are also within a context. Applicative defines the functions pure and (&lt;*&gt;).
+</span></span></a>
+      
+      
+        
+        
+        <a id="right" href="/monad/">Monad &gt;</a>
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+</article>
+
+      </div>
+    </main><link id="fa-stylesheet" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css">
+<footer class="site-footer h-card">
+    <data class="u-url" href="/"></data>
+
+    <div class="wrapper">
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col">
+                <!-- <p class="feed-subscribe">
+                <a href="/feed.xml">
+                    <svg class="svg-icon orange">
+                        <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+                    </svg><span>Subscribe</span>
+                </a>
+                </p> -->
+        </div>
+        <div class="footer-col">
+            <p>Examples and tutorials for various programming paradigms.</p>
+        </div>
+    </div>
+
+    <!-- <div class="social-links"><ul class="social-media-list"><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li>
+  <li>
+    <a href="/feed.xml" target="_blank" title="Subscribe to syndication feed">
+      <svg class="svg-icon grey" viewbox="0 0 16 16">
+        <path d="M12.8 16C12.8 8.978 7.022 3.2 0 3.2V0c8.777 0 16 7.223 16 16h-3.2zM2.194
+          11.61c1.21 0 2.195.985 2.195 2.196 0 1.21-.99 2.194-2.2 2.194C.98 16 0 15.017 0
+          13.806c0-1.21.983-2.195 2.194-2.195zM10.606
+          16h-3.11c0-4.113-3.383-7.497-7.496-7.497v-3.11c5.818 0 10.606 4.79 10.606 10.607z"
+        />
+      </svg>
+    </a>
+  </li>
+</ul>
+</div> -->
+
+    </div>
+
+</footer>
+
+
+
+</body></html>

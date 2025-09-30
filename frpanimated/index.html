@@ -1,0 +1,347 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Functional Reactive Programming | Good Times Paradigms</title>
+<meta name="generator" content="Jekyll v4.4.1">
+<meta property="og:title" content="Functional Reactive Programming">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Introduction">
+<meta property="og:description" content="Introduction">
+<meta property="og:site_name" content="Good Times Paradigms">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-09-30T03:56:06+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="Functional Reactive Programming">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-09-30T03:56:06+00:00","datePublished":"2025-09-30T03:56:06+00:00","description":"Introduction","headline":"Functional Reactive Programming","mainEntityOfPage":{"@type":"WebPage","@id":"/frpanimated/"},"url":"/frpanimated/"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Good Times Paradigms"><!-- Global site tag (gtag.js) - Google Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-159840333-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159840333-1');
+</script><!-- MathJax v3 -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'], ['\\(','\\)']], processEscapes: true }
+  };
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+  <script src="/assets/js/spoilers.js" defer=""></script></head>
+
+  <body><header class="site-header">
+
+    <div class="wrapper"><!-- Lambda icon and site title aligned left in a flex container -->
+        <div style="display: flex; align-items: center;">
+            <button id="play-theme-song" style="background:none;border:none;cursor:pointer;vertical-align:middle;margin-right:2px;" title="Play theme song">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="24" fill="currentColor" viewBox="0 0 48 24" style="vertical-align:middle;">
+                    <text x="4" y="20" font-size="20" font-family="serif">ΓΤΠ</text>
+                    <!-- γτπ -->
+                </svg>
+            </button>
+            <a class="site-title" rel="author" href="/" style="margin:0;">Good Times Paradigms</a>
+        </div>
+        <script src="/assets/js/hide_solutions.js" defer=""></script>
+        <audio id="theme-song" src="/assets/themesong.mp3"></audio>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var btn = document.getElementById('play-theme-song');
+                var audio = document.getElementById('theme-song');
+                btn.addEventListener('click', function() {
+                    if (audio.paused) {
+                        audio.play();
+                    } else {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                });
+            });
+        </script><nav class="site-nav">
+            <input type="checkbox" id="nav-trigger" class="nav-trigger">
+            <label for="nav-trigger">
+                <span class="menu-icon">
+                </span>
+            </label>
+
+            <div class="nav-items"><a class="page-link nav-item" href="/about/">About</a><a class="page-link nav-item" href="/">Notes on Programming Paradigms</a><!-- Radio Switch -->
+                <div id="toggle-div" style="display: none;">
+                    <div class="solutions-toggle">
+                        <p class="page-link" style="margin-bottom: 0px;">Show Solutions?</p>
+                        <label class="switch" style="vertical-align: middle;">
+                            <input type="checkbox" id="toggle-switch">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </nav></div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+	<header class="post-header">
+		<h1 class="post-title">Functional Reactive Programming</h1>
+	</header>
+	<p id="readingTime">
+
+  
+  5
+
+ min read</p>
+	<div class="post-content">
+		<h2 id="introduction">Introduction</h2>
+
+<p>This page will support the workshop solutions with a worked example of how we can use the observables, filled with pretty animations.</p>
+
+<h2 id="animation-generation">Animation Generation</h2>
+
+<p>Consider the definitions for ranks, suits and cards, as per the workshop:</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">ranks</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">A</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">2</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">3</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">4</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">5</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">6</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">7</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">8</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">9</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">10</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">J</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">Q</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">K</span><span class="dl">'</span><span class="p">]</span> <span class="kd">as const</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">suits</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">♠</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">♣</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">♦</span><span class="dl">'</span><span class="p">,</span><span class="dl">'</span><span class="s1">♥</span><span class="dl">'</span><span class="p">]</span> <span class="kd">as const</span><span class="p">;</span>
+
+<span class="c1">// use typeof to define string literal types</span>
+<span class="kd">type</span> <span class="nx">Rank</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">ranks</span><span class="p">[</span><span class="kr">number</span><span class="p">];</span>
+<span class="kd">type</span> <span class="nx">Suit</span> <span class="o">=</span> <span class="k">typeof</span> <span class="nx">suits</span><span class="p">[</span><span class="kr">number</span><span class="p">];</span>
+
+<span class="kd">type</span> <span class="nx">Card</span> <span class="o">=</span> <span class="nb">Readonly</span><span class="o">&lt;</span><span class="p">{</span>
+  <span class="k">readonly</span> <span class="na">suit</span><span class="p">:</span> <span class="nx">Suit</span><span class="p">;</span>
+  <span class="k">readonly</span> <span class="na">rank</span><span class="p">:</span> <span class="nx">Rank</span><span class="p">;</span>
+<span class="p">}</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">suits$</span> <span class="o">=</span> <span class="k">from</span><span class="p">(</span><span class="nx">suits</span><span class="p">)</span>
+<span class="kd">const</span> <span class="nx">ranks$</span> <span class="o">=</span> <span class="k">from</span><span class="p">(</span><span class="nx">ranks</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Using the webtool, we can visualise each of these streams.</p>
+
+<p><img src="/assets/images/chapterImages/frpanimated/rank.gif" alt="Rank Observable Visualised">
+<img src="/assets/images/chapterImages/frpanimated/suit.gif" alt="Suit Observable Visualised"></p>
+
+<p>To create a card, for each suit, we can look through each rank, and create a string of suits and rank.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">deck</span> <span class="o">=</span> <span class="nx">suits$</span><span class="p">.</span><span class="nf">pipe</span><span class="p">(</span>
+    <span class="nf">map</span><span class="p">(</span><span class="nx">suit</span> <span class="o">=&gt;</span> <span class="nx">rank$</span><span class="p">.</span><span class="nf">pipe</span><span class="p">(</span>
+      <span class="nf">map</span><span class="p">(</span><span class="nx">rank</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">suit</span><span class="p">}${</span><span class="nx">rank</span><span class="p">}</span><span class="s2">`</span><span class="p">)))))</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/chapterImages/frpanimated/mapDeck.gif" alt="Deck Observable Visualised"></p>
+
+<p>However, this exists as four nested streams rather than one continuous flat stream. How do we fix this? We use mergeMap to merge the sub-streams into a single long continuous stream of cards. We now have a lovely little deck of cards :)</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">deck</span> <span class="o">=</span> <span class="nx">suits$</span><span class="p">.</span><span class="nf">pipe</span><span class="p">(</span>
+    <span class="nf">mergeMap</span><span class="p">(</span><span class="nx">suit</span> <span class="o">=&gt;</span> <span class="nx">rank$</span><span class="p">.</span><span class="nf">pipe</span><span class="p">(</span>
+      <span class="nf">map</span><span class="p">(</span><span class="nx">rank</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="s2">`</span><span class="p">${</span><span class="nx">suit</span><span class="p">}${</span><span class="nx">rank</span><span class="p">}</span><span class="s2">`</span><span class="p">)))))</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/chapterImages/frpanimated/mergeMapDeck.gif" alt="Deck Observable Visualised"></p>
+
+<p>However, this is only one deck? How can we create multiple decks. We will create a range, which will create a fixed range of numbers, and for each of those we can create a deck.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">decks</span> <span class="o">=</span> <span class="p">(</span><span class="nx">numDecks</span> <span class="p">:</span> <span class="kr">number</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">numDecks</span><span class="p">).</span><span class="nf">pipe</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nx">_</span> <span class="o">=&gt;</span> <span class="nx">deck</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/chapterImages/frpanimated/mapDecks.gif" alt="Deck Observable Visualised"></p>
+
+<p>But this poses a similar problem to the above issue with nested streams. So again, we use the power of mergeMap to flatten these streams in to one!</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">decks</span> <span class="o">=</span> <span class="p">(</span><span class="nx">numDecks</span> <span class="p">:</span> <span class="kr">number</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">numDecks</span><span class="p">).</span><span class="nf">pipe</span><span class="p">(</span><span class="nf">mergeMap</span><span class="p">(</span><span class="nx">_</span> <span class="o">=&gt;</span> <span class="nx">deck</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p><img src="/assets/images/chapterImages/frpanimated/mergemapDecks.gif" alt="Deck Observable Visualised"></p>
+
+<p>All in order, oh no, let us shuffle them. Assuming we have these functions, which can insert an element in to a random position in an array. We will use the reduce, and the randomInsertion to shuffle them.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nf">impureRandomNumberGenerator</span><span class="p">(</span><span class="nx">n</span><span class="p">:</span><span class="kr">number</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nf">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nf">random</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span><span class="nx">n</span><span class="o">+</span><span class="mi">1</span><span class="p">));</span> <span class="c1">// impure!!</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nf">randomInsert</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">a</span><span class="p">:</span><span class="k">readonly</span> <span class="nx">T</span><span class="p">[],</span><span class="nx">e</span><span class="p">:</span><span class="nx">T</span><span class="p">):</span> <span class="k">readonly</span> <span class="nx">T</span><span class="p">[]</span> <span class="p">{</span>
+  <span class="k">return </span><span class="p">(</span><span class="nx">i</span><span class="o">=&gt;</span><span class="p">[...</span><span class="nx">a</span><span class="p">.</span><span class="nf">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">i</span><span class="p">),</span><span class="nx">e</span><span class="p">,...</span><span class="nx">a</span><span class="p">.</span><span class="nf">slice</span><span class="p">(</span><span class="nx">i</span><span class="p">)])</span>
+    <span class="p">(</span><span class="nf">impureRandomNumberGenerator</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="kd">const</span> <span class="nx">shoe</span> <span class="o">=</span> <span class="p">(</span><span class="nx">numDecks</span> <span class="p">:</span> <span class="kr">number</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">numDecks</span><span class="p">).</span><span class="nf">pipe</span><span class="p">(</span>
+  <span class="nf">mergeMap</span><span class="p">(</span><span class="nx">_</span> <span class="o">=&gt;</span> <span class="nx">deck</span><span class="p">),</span>
+  <span class="nf">reduce</span><span class="p">(</span><span class="nx">randomInsert</span><span class="p">,</span> <span class="p">[])</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>This should be correct? Not quite, we <code class="language-plaintext highlighter-rouge">reduce</code> to a single value, an array. So, now our stream contains a <strong>single</strong> element, an array, Rather, then being a stream of elements. This array will be all of our cards, shuffled. You can see that as we hover over the element and it attempts to print the contents.</p>
+
+<p><img src="/assets/images/chapterImages/frpanimated/singleItem.gif" alt="Deck Observable Visualised"></p>
+
+<p>We need to turn this back into a stream. How can we do that, with the power of mergeMap! This will take our list and convert it to a stream, and then flatten it, such that our final result is a long stream of <em>shuffled</em> cards.</p>
+
+<div class="language-typescript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">shuffledShoe</span> <span class="o">=</span> <span class="p">(</span><span class="nx">numDecks</span> <span class="p">:</span> <span class="kr">number</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">numDecks</span><span class="p">).</span><span class="nf">pipe</span><span class="p">(</span>
+  <span class="nf">mergeMap</span><span class="p">(</span><span class="nx">_</span> <span class="o">=&gt;</span> <span class="nx">deck</span><span class="p">),</span>
+  <span class="nf">reduce</span><span class="p">(</span><span class="nx">randomInsert</span><span class="p">,</span> <span class="p">[]),</span>
+  <span class="nf">mergeMap</span><span class="p">(</span><span class="k">from</span><span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>Wow, now we have a beautiful, shiny, shuffled shoe of cards in an Observable!</p>
+
+<p><img src="/assets/images/chapterImages/frpanimated/final.gif" alt="Deck Observable Visualised"></p>
+
+	</div>
+	
+  
+
+  
+
+
+<div id="pagination">
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+</div>
+
+</article>
+
+      </div>
+    </main><link id="fa-stylesheet" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css">
+<footer class="site-footer h-card">
+    <data class="u-url" href="/"></data>
+
+    <div class="wrapper">
+
+        <div class="footer-col-wrapper">
+            <div class="footer-col">
+                <!-- <p class="feed-subscribe">
+                <a href="/feed.xml">
+                    <svg class="svg-icon orange">
+                        <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+                    </svg><span>Subscribe</span>
+                </a>
+                </p> -->
+        </div>
+        <div class="footer-col">
+            <p>Examples and tutorials for various programming paradigms.</p>
+        </div>
+    </div>
+
+    <!-- <div class="social-links"><ul class="social-media-list"><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li><li>
+    <a rel="me" href="" target="_blank" title="">
+      <span class="grey fa-brands fa- fa-lg"></span>
+    </a>
+  </li>
+  <li>
+    <a href="/feed.xml" target="_blank" title="Subscribe to syndication feed">
+      <svg class="svg-icon grey" viewbox="0 0 16 16">
+        <path d="M12.8 16C12.8 8.978 7.022 3.2 0 3.2V0c8.777 0 16 7.223 16 16h-3.2zM2.194
+          11.61c1.21 0 2.195.985 2.195 2.196 0 1.21-.99 2.194-2.2 2.194C.98 16 0 15.017 0
+          13.806c0-1.21.983-2.195 2.194-2.195zM10.606
+          16h-3.11c0-4.113-3.383-7.497-7.496-7.497v-3.11c5.818 0 10.606 4.79 10.606 10.607z"
+        />
+      </svg>
+    </a>
+  </li>
+</ul>
+</div> -->
+
+    </div>
+
+</footer>
+
+
+
+</body></html>
