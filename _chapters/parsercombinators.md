@@ -25,6 +25,57 @@ The parser combinator discussed here is based on one developed by Tony Morris an
 
 You can play with the example and the various parser bits and pieces in [this on-line playground](https://replit.com/@tgdwyer/Parser-Examples).
 
+## Why do we need Monads ?
+
+Consider the task of parsing the following string:
+
+```haskell
+5abcdefg
+```
+
+In this example, the number `5` specifies how many characters should be parsed from the rest of the string.
+The goal is to obtain the result:
+
+```haskell
+Just ("fg", "abcde")
+```
+
+The parser should first read the number 5, then use that value to determine how many characters to extract `"abcde"`, leaving the remainder `"fg"` unparsed. The key question here is: Can we achieve this using only `Functor` and `Applicative`?
+
+The answer is no. Both of these abstractions allow us to combine independent computations, but they do not allow one computation to depend on the result of another. Using a Monad, we can **sequence** computations where the output of one step influences the next step’s behavior, which is precisely what this parsing task requires.
+
+So, if we have these two parsers:
+
+```haskell
+parseInt :: Parser Int
+parseInt = int
+
+parseNCharacters :: Int -> Parser String
+parseNCharacters 0 = pure ""
+parseNCharacters n = liftA2 (:) char (parseNCharacters (n-1))
+```
+
+We want a way to combine these two parsers — first run `parseInt`, then pass its result to `parseNCharacters`. Let’s imagine a new operator that could do this:
+
+```haskell
+newOperator :: Parser Int -> (Int -> Parser String) -> Parser String
+```
+
+Using this operator, we could write:
+
+```haskell
+parse (newOperator parseInt parseNCharacters) "5abcdefg"
+  = Just ("fg", "abcde")
+```
+
+When we generalize this `newOperator` idea, to any container, we get:
+
+```haskell
+(>>=) :: f a -> (a -> f b) -> f b
+```
+
+This operator is called `bind`, and it is the core of the `Monad` type class. This is a very powerful concept, it allows you to chain dependent computations — where the output of one step determines the next step. This is exactly why `Monads` go beyond `Functors` and `Applicatives`: they enable sequencing with dependency.
+
 ## Context-free Grammars and BNF
 
 Fundamental to analysis of human natural language but also to the design of programming languages is the idea of a *grammar*, or a set of rules for how elements of the language may be composed.  A context-free grammar (CFG) is one in which the set of rules for what is produced for a given input (*production rules*) completely cover the set of possible input symbols (i.e. there is no additional context required to parse the input).  Backus-Naur Form (or BNF) is a notation that has become standard for writing CFGs since the 1960s.  We will use BNF notation from now on.  There are two types of symbols in a CFG: *terminal* and *non-terminal*.  In BNF non-terminal symbols are `<nameInsideAngleBrackets>` and can be converted into a mixture of terminals and/or nonterminals by production rules:
