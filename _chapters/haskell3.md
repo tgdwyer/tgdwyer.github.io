@@ -1119,7 +1119,7 @@ instance Functor Parser where
   fmap f (Parser p) = Parser (\i -> ((f <$>) <$>) (p i))
 ```
 
-This is now in the form  `(f . g) i)` where `f` is equal to `((f <$>) <$>)` and g is equal to `p`. Therefore:
+If we define `g=((f <$>) <$>)`, then we can rewrite the body of the lambda `g (p i)`, which is simply the composition of `g` and `p`. Therefore:
 
 ```haskell
 instance Functor Parser where
@@ -1134,7 +1134,7 @@ instance Functor Parser where
 ```
 
 **`fmap` over `Function`:**
-The last thing we notice is that the `Functor` instance for functions is defined as compose. Therefore, we have finally reached the end of our journey and can rewrite this as follows.
+As discussed [earlier](/haskell3/#Functor), the `Functor` instance for functions defines `fmap` of functions as their composition. Therefore, we have finally reached the end of our journey and can rewrite this as follows.
 
 ```haskell
 -- >>> parse ((*2) <$> int) "123+456"
@@ -1143,7 +1143,7 @@ instance Functor Parser where
   fmap f (Parser p) = Parser (((f <$>) <$>) <$> p)
 ```
 
-The whacky triple-nested application of `<$>` comes about because the result type `a` in our `Parser` type is nested inside a Tuple (`(,a)`), nested inside a `Maybe`, nested inside a function (`->r`).  
+Thus, the whacky triple-nested application of `<$>` comes about because the result type `a` in our `Parser` type is nested inside a Tuple (`(,a)`), nested inside a `Maybe`, nested inside a function (`->r`) -- all of which are instances of Functor and can therefore be mapped over.  
 
 ---
 
