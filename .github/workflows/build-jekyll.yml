@@ -1,48 +1,50 @@
-name: Build and Deploy to Github Pages
+name: Build and Deploy to GitHub Pages
 
 on:
   push:
-    branches:
-      - master  # Here source code branch is `master`, it could be other branch
+    branches: [ master ]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      # Use GitHub Actions' cache to cache dependencies on servers
-      - uses: actions/cache@v4
-        with:
-          path: |
-            .asdf/**
-            vendor/bundle
-          key: ${{ runner.os }}-cache-${{ hashFiles('**/cache.key') }}
-          restore-keys: |
-            ${{ runner.os }}-cache-
-
+      # Python only if you need to run the glossary script
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.8'
+          python-version: '3.12'
 
       - name: Generate Glossary
-        run: python scripts/generate_glossary.py
+        run: |
+          python -m pip install --upgrade pip
+          # pip install -r scripts/requirements.txt   # if you have one
+          python scripts/generate_glossary.py
 
-      # Use GitHub Deploy Action to build and deploy to Github
-      # For latest version: `jeffreytse/jekyll-deploy-action@master`
-      - uses: jeffreytse/jekyll-deploy-action@v0.6.0
+      # Use GitHub's official Pages build/deploy (fast, maintained)
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
         with:
-          provider: 'github'         # Default is github
-          token: ${{ secrets.GITHUB_TOKEN }} # It's your Personal Access Token(PAT)
-          ssh_private_key: ''        # It's your SSH private key (SSH approach)
-          repository: ''             # Default is current repository
-          branch: 'gh-pages'         # Default is gh-pages for github provider
-          jekyll_src: './'           # Default is root directory
-          jekyll_cfg: '_config.yml'  # Default is _config.yml
-          jekyll_baseurl: ''         # Default is according to _config.yml
-          ruby_ver: ''               # Default is 3.2.0 version
-          bundler_ver: ''            # Default is compatible bundler version (~>2.5.0)
-          cname: ''                  # Default is to not use a cname
-          actor: ''                  # Default is the GITHUB_ACTOR
-          pre_build_commands: ''     # Installing additional dependencies (Arch Linux)
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Build site with Jekyll
+        run: |
+          bundle install
+          bundle exec jekyll build --trace --destination _site
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
