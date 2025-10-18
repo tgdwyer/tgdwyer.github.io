@@ -137,11 +137,30 @@ The first argument it expects is a value in a context `m a`.  What if that we ap
 
 ```haskell
 > x = 1::Float
-> :t (Just x>>=)
-(Just x>>=) :: (Float -> Maybe b) -> Maybe b
+> :t (Just x >>=)
+(Just x >>=) :: (Float -> Maybe b) -> Maybe b
 ```
 
 So GHCi is telling us that the next argument has to be a function that takes a `Float` as input, and gives back anything in a `Maybe`.  Our `safeSqrt` definitely fits this description, as does `safeDiv` partially applied to a `Float`.  So, here’s a `safeSolve` which uses `(>>=)` to remove the need for `case`s:
+
+```haskell
+safeSolve :: Float -> Float -> Float -> Maybe (Float, Float)
+safeSolve a b c =
+    safeSqrt (b*b - 4 * a * c) >>= \s -> (
+      safeDiv (-b + s) (2*a) >>= \x1 -> (
+        safeDiv (-b - s) (2*a) >>= \x2 -> (
+          pure (x1,x2)
+        )
+      )
+    )
+
+> safeSolve 1 3 2
+Just (-1.0,-2.0)
+> safeSolve 1 1 2
+Nothing
+```
+
+We actually don't need all the brackets, so we could have written `safeSolve` as the following:
 
 ```haskell
 safeSolve :: Float -> Float -> Float -> Maybe (Float, Float)
@@ -150,11 +169,6 @@ safeSolve a b c =
     safeDiv (-b + s) (2*a) >>= \x1 ->
     safeDiv (-b - s) (2*a) >>= \x2 ->
     pure (x1,x2)
-
-> safeSolve 1 3 2
-Just (-1.0,-2.0)
-> safeSolve 1 1 2
-Nothing
 ```
 
 Note that Haskell has a special notation for such multi-line use of bind, called “`do` notation”.  The above code in a `do` block looks like:
@@ -337,13 +351,15 @@ do
 which is itself syntactic sugar for:
 
 ```haskell
+['a'..'d'] >>= \i -> ([1..4] >>= \j -> pure (i,j))
+-- without the brackets:
 ['a'..'d'] >>= \i -> [1..4] >>= \j -> pure (i,j)
 ```
 
 List comprehensions can also include conditional expressions which must evaluate to true for terms to be included in the list result.  For example, we can limit the above comprehension to only pairs with even `j`:
 
 ```haskell
-[(i,j) | i<-['a'..'d'], j<-[1..4], j `mod` 2 == 0]
+[(i, j) | i <- ['a'..'d'], j <- [1..4], j `mod` 2 == 0]
 ```
 
 This comprehension syntax desugars to a `do`-block using the `guard` function from `Control.Monad` like so:
