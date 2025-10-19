@@ -38,11 +38,11 @@ For example:
 ```haskell
 -- | Roll a six-sided die once.
 -- >>> rollDie1 123
--- (5,1218640798)
+-- (1218640798,5)
 -- >>> rollDie1 1218640798
--- (4,1868869221)
+-- (1868869221,4)
 -- >>> rollDie1 1868869221
--- (1,166005888)
+-- (166005888,1)
 rollDie1 :: Seed -> (Seed, Int)
 rollDie1 s =
   let s' = nextSeed s
@@ -55,7 +55,7 @@ And if we want a sequence of dice rolls:
 ```haskell
 -- | Roll a six-sided die `n` times.
 -- >>> diceRolls1 3 123
--- ([5,4,1],166005888)
+-- (166005888,[5,4,1])
 diceRolls1 :: Int -> Seed -> (Seed, [Int])
 diceRolls1 0 s = ([], s)
 diceRolls1 n s =
@@ -276,8 +276,8 @@ Now, here's how we get a list of dice rolls using a direct adaptation of our pre
 
 ```haskell
 -- | Roll a six-sided die `n` times.
--- >>> runState (diceRolls 3) 123
--- ([5,4,1],166005888)
+-- >>> next (diceRolls 3) 123
+-- (166005888,[5,4,1])
 diceRolls :: Int -> Rand [Int]
 diceRolls 0 = pure []
 diceRolls n = do
