@@ -57,7 +57,7 @@ And if we want a sequence of dice rolls:
 -- >>> diceRolls1 3 123
 -- (166005888,[5,4,1])
 diceRolls1 :: Int -> Seed -> (Seed, [Int])
-diceRolls1 0 s = ([], s)
+diceRolls1 0 s = (s, [])
 diceRolls1 n s =
   let (s', r) = rollDie1 s
       (s'', rolls) = diceRolls1 (n-1) s'
