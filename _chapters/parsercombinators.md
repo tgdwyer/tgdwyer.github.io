@@ -6,7 +6,7 @@ title: "Parser Combinators"
 ## Learning Outcomes
 
 - Understand that a parser is a program that extracts information from structured text
-- Apply what we have learned about Haskell typeclasses and other functional programming concepts to create solutions to real-world problems
+- Apply what we have learnt about Haskell typeclasses and other functional programming concepts to create solutions to real-world problems
 - In particular, we learn to use parser combinators and see how they are put together
 
 ## Introduction
@@ -42,7 +42,7 @@ Just ("fg", "abcde")
 
 The parser should first read the number 5, then use that value to determine how many characters to extract `"abcde"`, leaving the remainder `"fg"` unparsed. The key question here is: Can we achieve this using only `Functor` and `Applicative`?
 
-The answer is no. Both of these abstractions allow us to combine independent computations, but they do not allow one computation to depend on the result of another. Using a Monad, we can **sequence** computations where the output of one step influences the next step’s behavior, which is precisely what this parsing task requires.
+The answer is no. Both of these abstractions allow us to combine independent computations, but they do not allow one computation to depend on the result of another. Using a Monad, we can **sequence** computations where the output of one step influences the next step’s behaviour, which is precisely what this parsing task requires.
 
 So, if we have these two parsers:
 
@@ -68,7 +68,7 @@ parse (newOperator parseInt parseNCharacters) "5abcdefg"
   = Just ("fg", "abcde")
 ```
 
-When we generalize this `newOperator` idea, to any container, we get:
+When we generalise this `newOperator` idea, to any container, we get:
 
 ```haskell
 (>>=) :: f a -> (a -> f b) -> f b

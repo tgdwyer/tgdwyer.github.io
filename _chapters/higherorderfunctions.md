@@ -234,7 +234,7 @@ const add1ThenDouble = compose(double, add1);
 console.log(add1ThenDouble(5)); // Output: 12
 ```
 
-Using TypeScript to create a flexible compose function requires accommodating varying input and output types for each function in the chain. To achieve this flexibility without losing type safety, we need to ensure that the output type of one function matches the input type of the next function. However, if we try to type this correctly without using any, we face significant complexity with the lack of expressiveness in typescripts type system. `pipe` in RxJS solves this issue by [hardcoding up to 9 functions inside the pipe](https://rxjs.dev/api/index/function/pipe), any functions larger then this will not be typed correctly.
+Using TypeScript to create a flexible compose function requires accommodating varying input and output types for each function in the chain. To achieve this flexibility without losing type safety, we need to ensure that the output type of one function matches the input type of the next function. However, if we try to type this correctly without using any, we face significant complexity with the lack of expressiveness in typescript's type system. `pipe` in RxJS solves this issue by [hardcoding up to 9 functions inside the pipe](https://rxjs.dev/api/index/function/pipe), any functions larger than this will not be typed correctly.
 
 ```javascript
 const pipe = (...funcs) => (initialArg) =>

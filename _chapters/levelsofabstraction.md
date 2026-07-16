@@ -116,7 +116,7 @@ These notes focus on introducing programmers who are familiar with the OO paradi
 
 |  | Functional | Object-Oriented |
 |--|------------|-----------------|
-| Unit of Composition  | [Functions](/javascript1/#functions)  |  [Objects](javascript1#objects) ([classes](/javascript1/#ecmascript-6-class-syntax)) |
+| Unit of Composition  | [Functions](/javascript1/#functions)  |  [Objects](/javascript1/#objects) ([classes](/javascript1/#ecmascript-6-class-syntax)) |
 | Programming Style    | Declarative | Imperative |
 | Control Flow         |  [Functions, recursion](/javascript1/#functions) and [chaining](/functionaljavascript/#method-chaining) | [Loops and conditionals](/javascript1/) |
 |  [Polymorphism](/javascript1/#polymorphism)        | [Parametric](/typescript1/#generic-types) | [Sub-Typing](/javascript1/#polymorphism) |

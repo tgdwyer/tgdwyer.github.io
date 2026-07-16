@@ -21,7 +21,7 @@ Part of the appeal of JavaScript is that being able to run the source code direc
 TypeScript is interesting because it forms a relatively minimal augmentation, or superset, of ECMAScript syntax that simply adds type annotations.  For the most part, the compilation process just performs validation on the declared types and strips away the type annotations, rendering just the legal JavaScript ready for deployment.  This lightweight compilation into a language with a similar level of abstraction to the source is also known as transpiling (as opposed to C++ or Java where the compiled code is much closer to the machine execution model).
 
 The following is intended as a minimally sufficient intro to TypeScript features such that we can type some fairly rich data structures and higher-order functions.
-An excellent free resource for learning the TypeScript language in depth is the [TypeScript Deep-dive book](https://basarat.gitbooks.io/typescript/content/docs/getting-started.html).
+An excellent free resource for learning the TypeScript language in depth is the [TypeScript Deep-dive book](https://basarat.gitbook.io/typescript/getting-started).
 
 ## Type annotations
 
@@ -626,7 +626,7 @@ If we have an array of numbers, and we wanted to keep only even numbers, we coul
 const isEven = num => num % 2 === 0
 ```
 
-If you do not know how to write an `isEven` function, luckily there are [libraries](https://www.npmjs.com/package/is-even) for that. But, we know how to do it know.
+If you do not know how to write an `isEven` function, luckily there are [libraries](https://www.npmjs.com/package/is-even) for that. But, we know how to do it now.
 
 We can provide the type of our function as:
 
