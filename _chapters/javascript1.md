@@ -214,7 +214,7 @@ a & b   // bitwise and
 a | b   // bitwise or
 ```
 
-¹ Same as modulo for positive integers, but differs with negative signs, unlike, for example, Python (e.g., `-11 % 4` is `-3` in JS, not `1`). See [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Remainder#description).
+¹ Not true modulo. It keeps the sign of the first number, so `-11 % 4` is `-3` (unlike Python, Ruby, Perl, etc. which return `1`).
 
 ² Loose (in)equality means type conversion may occur
 
