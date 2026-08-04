@@ -201,11 +201,11 @@ Here’s a cheatsheet:
 ### Binary Operators
 
 ```javascript
-x % y   // modulo
-x == y  // loose* equality
-x != y  // loose* inequality
-x === y // strict+ equality
-x !== y // strict+ inequality
+x % y   // remainder¹
+x == y  // loose² equality
+x != y  // loose² inequality
+x === y // strict³ equality
+x !== y // strict³ inequality
 
 a && b   // logical and
 a || b   // logical or
@@ -214,9 +214,11 @@ a & b   // bitwise and
 a | b   // bitwise or
 ```
 
-\* Loose (in)equality means type conversion may occur
+¹ Not true modulo. It keeps the sign of the first number, so `-11 % 4` is `-3` (unlike Python, Ruby, Perl, etc. which return `1`).
 
-\+ Use strict (in)equality if type is expected to be the same
+² Loose (in)equality means type conversion may occur
+
+³ Use strict (in)equality if type is expected to be the same
 
 ### Unary Operators
 
