@@ -430,11 +430,20 @@ What’s really cool about this is that obviously the strings “cat” and “c
 
 ### Solutions
 
-- To create `stringTok`, we can make use of `<<` or `>>` to ignore parts of the result:
+- To create `stringTok`, we can make use of `>>` to ignore a result on the left, but there's no equivalent built into our `Parser` for ignoring a result on the right. We can define `<<` ourselves, using `(>>=)` to sequence the two parsers and keep only the first result:
 
 ```haskell
+(<<) :: Parser a -> Parser b -> Parser a
+p << q = p >>= \x -> q >> pure x
+
 stringTok :: String -> Parser String
 stringTok s = spaces >> string s << spaces
+```
+
+Note: since `Parser` is an `Applicative`, an applicative style using `(*>)` and `(<*)` would work as well here, without needing to define a new operator:
+
+```haskell
+stringTok s = spaces *> string s <* spaces
 ```
 
 - Messy imperative JavaScript to parse animals and construct appropriate class instances:
