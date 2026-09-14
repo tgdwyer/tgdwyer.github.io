@@ -23,7 +23,7 @@ More traditional approaches to parsing typically involve special-purpose program
 
 The parser combinator discussed here is based on one developed by Tony Morris and Mark Hibberd as part of their [“System F” Functional Programming Course](https://github.com/system-f/fp-course), which in turn is a simplified version of official Haskell parser combinators such as [parsec](https://hackage.haskell.org/package/parsec) by Daan Leijen.
 
-You can play with the example and the various parser bits and pieces in [this online playground](https://replit.com/@timdwyer/ParserExamples).
+You can play with the example and the various parser bits and pieces in [this online playground](https://replit.com/join#t=hytyraghhdxfaqm-timdwyer).
 
 ## Why do we need Monads ?
 
