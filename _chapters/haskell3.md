@@ -1083,7 +1083,7 @@ If we take advantage of the fact that everything buried away inside the `Parser`
 
 ```haskell
 instance Functor Parser where
-  fmap f (Parser p) = Parser $ f (fmap.fmap.fmap) p
+  fmap f (Parser p) = Parser $ (fmap.fmap.fmap) f p
 ```
 
 ---
@@ -1142,6 +1142,15 @@ As discussed [earlier](/haskell3/#Functor), the `Functor` instance for functions
 -- Just ("+456",246)
 instance Functor Parser where
   fmap f (Parser p) = Parser (((f <$>) <$>) <$> p)
+```
+
+Replacing `<$>` with `fmap` and using function composition gives:
+
+```haskell
+    Parser (((f <$>) <$>) <$> p)
+  = Parser (fmap (fmap (fmap f)) p)
+  = Parser ((fmap.fmap.fmap) f p)
+  = Parser $ (fmap.fmap.fmap) f p
 ```
 
 Thus, the whacky triple-nested application of `<$>` comes about because the result type `a` in our `Parser` type is nested inside a Tuple (`(,a)`), nested inside a `Maybe`, nested inside a function (`->r`) -- all of which are instances of Functor and can therefore be mapped over.  
