@@ -678,7 +678,7 @@ sampleTree =
 inputString :: String
 inputString = "3+5+2"
 
-parsedResult :: String -> Maybe (String, Tree Value)
+parsedResult :: Maybe (String, Tree Value)
 parsedResult = parse (stringTree sampleTree) inputString
 ```
 
