@@ -63,7 +63,7 @@ module Jekyll
 
       doc.traverse do |node|
         if node.text?
-          unless node.ancestors.any? { |ancestor| ancestor.name.match?(/^h[1-6]$/i) || ancestor.name == 'pre' || ancestor.name == 'blockquote' || ancestor['class'] == 'glossary' || ancestor.name == 'code' || ancestor['class'] == 'glossary-term' || ancestor.name == 'title' }
+          unless node.ancestors.any? { |ancestor| ancestor.name.match?(/^h[1-6]$/i) || ancestor.name == 'pre' || ancestor.name == 'blockquote' || ancestor['class'] == 'glossary' || ancestor.name == 'code' || ancestor['class'] == 'glossary-term' || ancestor['data-no-glossary'] == 'true' || ancestor.name == 'title' }
             new_content = node.content.gsub(@@glossary_term_regex) do |match|
               term = match.downcase
               definition, first_appeared = @@glossary_terms[term]
