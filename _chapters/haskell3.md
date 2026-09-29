@@ -1041,11 +1041,11 @@ is c = Parser $
   \inputString -> case parse char inputString of
     Just (rest, result)
       | result == c -> Just (rest, result)
-      | otherwise = Nothing
+      | otherwise -> Nothing
     _ -> Nothing
 ```
 
-In this example, the `otherwise = Nothing` guard is not needed, as our `case` statement can handle that in the wildcard statement
+In this example, the `otherwise -> Nothing` guard is not needed, as our `case` statement can handle that in the wildcard statement
 
 ```haskell
 is :: Char -> Parser Char
