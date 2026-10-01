@@ -639,9 +639,9 @@ instance Show Rank where
 
 ## Equivalent Definition of Applicative
 
-Feel free to skip this definition if the previous one made sense. But, here is an alternative definition if it helps you.
+Feel free to skip this definition if the previous one made sense. But, here is an {% nogloss alternative %} definition if it helps you.
 
-There is an alternative way to think about applicatives, which highlights (arguably) the main usage of applicative.
+There is an {% nogloss alternative %} way to think about applicatives, which highlights (arguably) the main usage of applicative.
 
 ```haskell
 class Functor f => Applicative f where
@@ -880,7 +880,7 @@ square = apply (*)
 
 ## Alternative
 
-The Alternative typeclass is another important typeclass in Haskell, which is closely related to the Applicative typeclass. It introduces a set of operators and functions that are particularly useful when dealing with computations that can fail or have multiple possible outcomes. Alternative is also considered a “subclass” of Applicative, and it provides additional capabilities beyond what Applicative offers. It introduces two main functions, `empty` and `<|>` (pronounced “alt” or “alternative”)
+The Alternative typeclass is another important typeclass in Haskell, which is closely related to the Applicative typeclass. It introduces a set of operators and functions that are particularly useful when dealing with computations that can fail or have multiple possible outcomes. Alternative is also considered a “subclass” of Applicative, and it provides additional capabilities beyond what Applicative offers. It introduces two main functions, `empty` and `<|>` (pronounced “alt” or “{% nogloss alternative %}”)
 
 ```haskell
 class Applicative f => Alternative (f :: * -> *) where
@@ -890,9 +890,9 @@ class Applicative f => Alternative (f :: * -> *) where
 
 `empty`: This function represents a computation with either *no result, or a failure*. It serves as the identity element. For different data types that are instances of Alternative, `empty` represents an empty container or a *failed computation*, depending on the context.
 
-`(<|>)`: The `<|>` operator combines two computations, and it’s used to express alternatives. It takes two computations of the same type and returns a computation that will produce a result from the first computation if it succeeds, or if it fails, it will produce a result from the second computation. This operator allows you to handle branching logic and alternative paths in your code.
+`(<|>)`: The `<|>` operator combines two computations, and it’s used to express {% nogloss alternatives %}. It takes two computations of the same type and returns a computation that will produce a result from the first computation if it succeeds, or if it fails, it will produce a result from the second computation. This operator allows you to handle branching logic and {% nogloss alternative %} paths in your code.
 
-Like Functor and Applicative, instances of the Alternative typeclass must also adhere to specific laws, ensuring predictable behaviour when working with alternatives. Common instances of the Alternative typeclass include Maybe and lists (`[]`). Alternatives are also very useful for *Parsers*, where we try to run first parser, if it fails, we run the second parser.
+Like Functor and Applicative, instances of the Alternative typeclass must also adhere to specific laws, ensuring predictable behaviour when working with {% nogloss alternatives %}. Common instances of the Alternative typeclass include Maybe and lists (`[]`). Alternatives are also very useful for *Parsers*, where we try to run first parser, if it fails, we run the second parser.
 
 ```haskell
 > Just 2 <|> Just 5
@@ -1267,7 +1267,7 @@ plus :: Parser Int
 plus = (+) <$> int <* is '+'  <*> int
 ```
 
-Obviously, the above is not a fully featured parsing system.  A real parser would need to give us more information in the case of failure, so a `Maybe` is not really a sufficiently rich type to package the result.  Also, a real language would need to be able to handle alternatives - e.g. `minus` or `plus`, as well as expressions with an arbitrary number of terms.  We will revisit all of these topics with a more feature-rich set of [parser combinators later](/parsercombinators).
+Obviously, the above is not a fully featured parsing system.  A real parser would need to give us more information in the case of failure, so a `Maybe` is not really a sufficiently rich type to package the result.  Also, a real language would need to be able to handle {% nogloss alternatives %} - e.g. `minus` or `plus`, as well as expressions with an arbitrary number of terms.  We will revisit all of these topics with a more feature-rich set of [parser combinators later](/parsercombinators).
 
 ### Left and Right Applicatives
 
