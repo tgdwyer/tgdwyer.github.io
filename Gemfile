@@ -19,3 +19,5 @@ gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem "wdm", "~> 0.1.0" if Gem.win_platform?
 
 gem "jekyll-remote-theme"
+
+gem "bigdecimal", "~> 4.1"
