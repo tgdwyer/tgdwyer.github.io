@@ -5,7 +5,11 @@ title: "What is a Function?"
 
 ## Introduction
 
-This chapter serves as a very brief intro/overview of some important and practical aspects of functional programming.  It is both a deep-dive but also glosses over much of the background and scope of the paradigm.  You are not expected to understand everything, but will hopefully come away excited about the concepts and potential.  Please ask questions if you are unsure - don't be shy.  For those who want more, the full course notes are [here](https://tgdwyer.github.io).  [Here](https://stackblitz.com/edit/asteroids2023) is a teaser of where we might get to by the end of the workshop if everything goes smoothly.
+This chapter serves as a very brief intro/overview of some important and practical aspects of functional programming.  It is both a deep-dive but also glosses over much of the background and scope of the paradigm.  You are not expected to understand everything, but will hopefully come away excited about the concepts and potential.  Please ask questions if you are unsure - don't be shy.  
+
+For those who want to go further in their own time, here are the full ["Good Times Paradigms" course notes](https://tgdwyer.github.io).
+
+[Here is a teaser](https://stackblitz.com/edit/asteroids2023) of where we might get to by the end of the workshop if everything goes smoothly.
 
 ## What is a function?
 
