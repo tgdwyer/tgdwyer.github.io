@@ -738,3 +738,7 @@ fromEvent(document, "click")
   )
   .subscribe(console.log)
 ```
+
+## Asteroids Example
+
+[Workshop Code](https://stackblitz.com/edit/asteroids2023-np9nfhaa?file=src%2Fmain.ts)
