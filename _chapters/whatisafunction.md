@@ -5,7 +5,7 @@ title: "What is a Function?"
 
 ## Introduction
 
-This chapter serves as a very brief intro/overview of some important and practical aspects of functional programming.
+This chapter serves as a very brief intro/overview of some important and practical aspects of functional programming.  It is both a deep-dive but also glosses over much of the background and scope of the paradigm.  You are not expected to understand everything, but will hopefully come away excited about the concepts and potential.  Please ask questions if you are unsure - don't be shy.  For those who want more, the full course notes are [here](https://tgdwyer.github.io).
 
 ## What is a function?
 
@@ -741,4 +741,7 @@ fromEvent(document, "click")
 
 ## Asteroids Example
 
+As a fun, non-trivial example of how Functional Reactive Programming can help help us build complex asynchronous and interactive applications, we will work through an implementation of the classic Asteroids game.
+Here is the full [Chapter](https://tgdwyer.github.io/asteroids/) from the Good Times Paradigms coursenotes that walks through the motivation behind this example.
+[Finished Game](you can jump straight to playing the final result)
 [Workshop Code](https://stackblitz.com/edit/asteroids2023-np9nfhaa?file=src%2Fmain.ts)
