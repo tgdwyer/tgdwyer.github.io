@@ -72,6 +72,8 @@ Open the console by pressing:
 
 For each exercise, replace the comment with an arrow function, then press **Enter** to run the expression.
 
+Share your answers [here](https://codeshare.io/ar08LE)
+
 #### 1. Double every number with `map`
 
 Use `map` to transform each number into twice its original value.
@@ -243,13 +245,496 @@ Here are some possible solutions. Other solutions may also work.
   .reduce((total, fahrenheit) => total + fahrenheit, 0)
 ```
 
-## Curried Functions
+## Functional Reactive Programming with RxJS
 
-A curried `plus` function is an example of the other type of higher-order function, one that returns a new function.
+So far, we have used functions to transform arrays:
 
 ```javascript
-const plus = x=>y=>x+y
-const plusOne = plus(1)
-plusOne(2)
-> 3
+[1, 2, 3, 4, 5]
+  .filter(x => x % 2 === 0)
+  .map(x => x * 2)
+```
+
+An array contains values that are already available. However, many programs must respond to values that arrive over time:
+
+- keyboard presses;
+- mouse clicks;
+- messages from a server;
+- measurements from a sensor;
+- frames in an animation.
+
+We do not know in advance exactly when these values will arrive. A program is **reactive** when it responds to values or events as they arrive.
+
+[RxJS](https://rxjs.dev/) is a JavaScript library for working with sequences of values called **Observables**. An Observable can represent a fixed collection of values, but it can also represent a stream of future events.
+
+### From arrays to Observables
+
+The following array contains three values:
+
+```javascript
+[1, 2, 3]
+```
+
+We can turn it into an Observable using `from`:
+
+```javascript
+from([1, 2, 3])
+```
+
+Instead of producing one array, this Observable emits the values one at a time:
+
+```text
+1
+2
+3
+```
+
+We use `subscribe` to provide a function that will be called whenever the Observable emits a value:
+
+```javascript
+from([1, 2, 3]).subscribe(console.log)
+```
+
+Calling `subscribe` starts the Observable. In this example, `console.log` prints each emitted value.
+
+### Transforming a stream
+
+RxJS provides familiar operations such as `map`, `filter`, and `reduce`. Observable operators are placed inside `pipe`:
+
+```javascript
+from([1, 2, 3, 4, 5])
+  .pipe(
+    filter(x => x % 2 === 0),
+    map(x => x * 2)
+  )
+  .subscribe(console.log)
+```
+
+This prints:
+
+```text
+4
+8
+```
+
+The operations have similar purposes for arrays and Observables:
+
+| Array | Observable |
+|---|---|
+| `.map(f)` | `.pipe(map(f))` |
+| `.filter(f)` | `.pipe(filter(f))` |
+| `.reduce(f, start)` | `.pipe(reduce(f, start))` |
+| produces a result immediately | emits results to a subscriber |
+
+Each operator creates a new Observable rather than changing the original one. This lets us build programs by composing small transformations.
+
+### `reduce` and `scan`
+
+The Observable `reduce` operator behaves like array `reduce`: it waits for the source to finish, then emits its final result.
+
+```javascript
+from([1, 2, 3, 4])
+  .pipe(
+    reduce((total, value) => total + value, 0)
+  )
+  .subscribe(console.log)
+```
+
+This emits only:
+
+```text
+10
+```
+
+Some streams, such as mouse clicks, might continue indefinitely. For these streams, `scan` is often more useful. It emits every intermediate result:
+
+```javascript
+from([1, 2, 3, 4])
+  .pipe(
+    scan((total, value) => total + value, 0)
+  )
+  .subscribe(console.log)
+```
+
+This emits:
+
+```text
+1
+3
+6
+10
+```
+
+You can think of `scan` as a running `reduce`.
+
+## Setting up the Chrome console
+
+Open this page in Chrome, then open the Developer Tools console:
+
+- **Windows/Linux:** `Ctrl` + `Shift` + `J`
+- **macOS:** `Command` + `Option` + `J`
+
+Paste the following code into the console. Wait until it prints `RxJS is ready`.
+
+```javascript
+if (!window.rxjs) {
+  await new Promise((resolve, reject) => {
+    const script = document.createElement("script")
+    script.src =
+      "https://unpkg.com/rxjs@7.8.2/dist/bundles/rxjs.umd.min.js"
+    script.onload = resolve
+    script.onerror = reject
+    document.head.appendChild(script)
+  })
+}
+
+var { from, fromEvent, interval } = rxjs
+var { map, filter, reduce, scan, take } = rxjs.operators
+
+console.log("RxJS is ready")
+```
+
+The setup uses `var` so that it can safely be run again after an error.
+
+## Worksheet
+
+For each exercise, replace the comments with suitable arrow functions and run the expression in the console.
+
+Remember the general structure:
+
+```javascript
+sourceObservable
+  .pipe(
+    operator(/* a function */),
+    operator(/* another function */)
+  )
+  .subscribe(console.log)
+```
+
+### 1. Double every number with `map`
+
+Use the RxJS `map` operator to double each emitted number.
+
+```javascript
+from([1, 2, 3, 4, 5])
+  .pipe(
+    map(/* your function here */)
+  )
+  .subscribe(console.log)
+```
+
+Expected output:
+
+```text
+2
+4
+6
+8
+10
+```
+
+### 2. Find word lengths with `map`
+
+Replace each emitted word with the number of letters it contains.
+
+```javascript
+from(["cat", "elephant", "mouse"])
+  .pipe(
+    map(/* your function here */)
+  )
+  .subscribe(console.log)
+```
+
+Expected output:
+
+```text
+3
+8
+5
+```
+
+### 3. Keep the even numbers with `filter`
+
+Allow only even numbers to continue through the stream.
+
+```javascript
+from([1, 2, 3, 4, 5, 6])
+  .pipe(
+    filter(/* your function here */)
+  )
+  .subscribe(console.log)
+```
+
+Expected output:
+
+```text
+2
+4
+6
+```
+
+### 4. Find the passing marks with `filter`
+
+Assume that a mark of 50 or more is a pass.
+
+```javascript
+from([37, 82, 49, 50, 68, 91])
+  .pipe(
+    filter(/* your function here */)
+  )
+  .subscribe(console.log)
+```
+
+Expected output:
+
+```text
+82
+50
+68
+91
+```
+
+### 5. Add the numbers with `reduce`
+
+Use `reduce` to add all the emitted numbers. The final total should be emitted after the source completes.
+
+```javascript
+from([4, 7, 2, 9])
+  .pipe(
+    reduce(/* your function here */, 0)
+  )
+  .subscribe(console.log)
+```
+
+Expected output:
+
+```text
+22
+```
+
+### 6. Combine `filter`, `map`, and `reduce`
+
+A player has the following scores:
+
+```javascript
+[5, -2, 8, 0, 3]
+```
+
+Complete the stream so that it:
+
+1. removes scores of zero or less;
+2. adds 10 bonus points to each remaining score;
+3. adds the new scores together.
+
+```javascript
+from([5, -2, 8, 0, 3])
+  .pipe(
+    filter(/* keep positive scores */),
+    map(/* add 10 to each score */),
+    reduce(/* add the scores */, 0)
+  )
+  .subscribe(console.log)
+```
+
+Expected output:
+
+```text
+46
+```
+
+### 7. Create a stream that changes over time
+
+The `interval` function creates an Observable that emits a number at regular intervals. It begins with zero.
+
+The `take(5)` operator allows only five values through, then completes the stream automatically.
+
+Complete the `map` so that the stream counts from 1 to 5 instead of from 0 to 4.
+
+```javascript
+interval(1000)
+  .pipe(
+    take(5),
+    map(/* change 0, 1, 2, 3, 4 into 1, 2, 3, 4, 5 */)
+  )
+  .subscribe(seconds => console.log(`${seconds} second(s)`))
+```
+
+Expected output, with one line appearing each second:
+
+```text
+1 second(s)
+2 second(s)
+3 second(s)
+4 second(s)
+5 second(s)
+```
+
+This example is reactive: the subscriber responds whenever the timer emits a new value.
+
+### 8. Count mouse clicks with `scan`
+
+The `fromEvent` function creates an Observable from events on a web page.
+
+Complete the `scan` operator so that it counts mouse clicks. After starting the stream, click five times on the web page itself.
+
+```javascript
+fromEvent(document, "click")
+  .pipe(
+    scan(/* increase the count */, 0),
+    take(5)
+  )
+  .subscribe(count => console.log(`Click number ${count}`))
+```
+
+Expected output:
+
+```text
+Click number 1
+Click number 2
+Click number 3
+Click number 4
+Click number 5
+```
+
+Unlike `reduce`, `scan` emits the updated count after every click.
+
+### 9. Keyboard challenge
+
+Create a stream that:
+
+1. listens for keyboard events;
+2. extracts the name of each key;
+3. keeps only single-character keys;
+4. converts each character to uppercase;
+5. completes after five characters.
+
+Click the web page after starting the stream, then type five letters.
+
+```javascript
+fromEvent(document, "keydown")
+  .pipe(
+    map(/* extract the key from the event */),
+    filter(/* keep single-character keys */),
+    map(/* convert the character to uppercase */),
+    take(5)
+  )
+  .subscribe(console.log)
+```
+
+For example, typing `h`, `e`, `l`, `l`, `o` should print:
+
+```text
+H
+E
+L
+L
+O
+```
+
+### 10. Extension: describe each click
+
+Create an Observable that prints the horizontal and vertical position of the first three clicks on the page.
+
+A mouse event has `clientX` and `clientY` properties.
+
+```javascript
+fromEvent(document, "click")
+  .pipe(
+    map(/* create an object containing x and y */),
+    take(3)
+  )
+  .subscribe(console.log)
+```
+
+Each result should have this form, although the numbers will depend on where you click:
+
+```javascript
+{ x: 250, y: 180 }
+```
+
+### Solutions
+
+Here are some possible solutions. Other solutions may also work.
+
+```javascript
+// Exercise 1
+from([1, 2, 3, 4, 5])
+  .pipe(
+    map(x => x * 2)
+  )
+  .subscribe(console.log)
+
+// Exercise 2
+from(["cat", "elephant", "mouse"])
+  .pipe(
+    map(word => word.length)
+  )
+  .subscribe(console.log)
+
+// Exercise 3
+from([1, 2, 3, 4, 5, 6])
+  .pipe(
+    filter(x => x % 2 === 0)
+  )
+  .subscribe(console.log)
+
+// Exercise 4
+from([37, 82, 49, 50, 68, 91])
+  .pipe(
+    filter(mark => mark >= 50)
+  )
+  .subscribe(console.log)
+
+// Exercise 5
+from([4, 7, 2, 9])
+  .pipe(
+    reduce((total, x) => total + x, 0)
+  )
+  .subscribe(console.log)
+
+// Exercise 6
+from([5, -2, 8, 0, 3])
+  .pipe(
+    filter(x => x > 0),
+    map(x => x + 10),
+    reduce((total, x) => total + x, 0)
+  )
+  .subscribe(console.log)
+
+// Exercise 7
+interval(1000)
+  .pipe(
+    take(5),
+    map(x => x + 1)
+  )
+  .subscribe(seconds => console.log(`${seconds} second(s)`))
+
+// Exercise 8
+fromEvent(document, "click")
+  .pipe(
+    scan(count => count + 1, 0),
+    take(5)
+  )
+  .subscribe(count => console.log(`Click number ${count}`))
+
+// Exercise 9
+fromEvent(document, "keydown")
+  .pipe(
+    map(event => event.key),
+    filter(key => key.length === 1),
+    map(key => key.toUpperCase()),
+    take(5)
+  )
+  .subscribe(console.log)
+
+// Exercise 10
+fromEvent(document, "click")
+  .pipe(
+    map(event => ({
+      x: event.clientX,
+      y: event.clientY
+    })),
+    take(3)
+  )
+  .subscribe(console.log)
 ```
